@@ -1,7 +1,7 @@
 <template>
   <main class="container">
     <transition-group
-      class="grid grid-cols-4 gap-4 my-12"
+      class="grid grid-cols-2 gap-4 my-12 lg:grid-cols-4"
       name="layout"
       tag="ul"
       mode="out-in"

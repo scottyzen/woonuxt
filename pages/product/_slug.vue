@@ -3,11 +3,12 @@
     <div class="flex flex-wrap mx-auto">
       <nuxt-img
         alt="ecommerce"
-        class="object-cover w-full h-64"
+        class="object-cover w-full h-64 rounded lg:w-1/2 lg:h-auto"
         width="600"
         height="600"
         format="webp"
         fit="cover"
+        :src="product.image.sourceUrl"
       />
       <div class="w-full mt-6 lg:w-1/2 lg:pl-10 lg:py-6 lg:mt-0">
         <h2 class="text-sm tracking-widest text-gray-500 title-font">
