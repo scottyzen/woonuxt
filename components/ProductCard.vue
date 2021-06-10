@@ -5,9 +5,9 @@
       :src="node.image.sourceUrl"
       format="webp"
       fit="cover"
-      sizes="sm:296px md:376px lg:400px"
+      width="200"
+      height="200"
       loading="lazy"
-      quality="95"
     />
     <h3 class="text-sm">{{ node.name }}</h3>
     <strong>{{ node.price }}</strong>
