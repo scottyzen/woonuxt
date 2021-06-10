@@ -3,8 +3,6 @@
     <nuxt-img
       class="w-full mb-2"
       :src="node.image.sourceUrl"
-      width="300"
-      height="300"
       format="webp"
       fit="cover"
       sizes="xs:136px sm:296px md:376px lg:400px"
