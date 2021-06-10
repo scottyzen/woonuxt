@@ -5,8 +5,6 @@
       :src="node.image.sourceUrl"
       format="webp"
       fit="cover"
-      width="136"
-      hidden="136"
       sizes="sm:296px md:376px lg:400px"
       loading="lazy"
       quality="95"
