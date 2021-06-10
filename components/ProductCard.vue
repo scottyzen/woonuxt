@@ -7,7 +7,9 @@
       height="300"
       format="webp"
       fit="cover"
-      sizes="xs:50vw sm:50vw md:50vw lg:400px"
+      sizes="xs:136px sm:296px md:376px lg:400px"
+      loading="lazy"
+      quality="95"
     />
     <h3 class="text-sm">{{ node.name }}</h3>
     <strong>{{ node.price }}</strong>
