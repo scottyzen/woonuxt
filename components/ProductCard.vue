@@ -1,6 +1,13 @@
 <template>
   <nuxt-link :to="`/product/${node.slug}`">
-    <img class="w-full" :src="node.image.sourceUrl" width="100" height="100" />
+    <nuxt-img
+      class="w-full"
+      :src="node.image.sourceUrl"
+      width="300"
+      height="300"
+      format="webp"
+      fit="cover"
+    />
     <h3 class="text-sm">{{ node.name }}</h3>
     <strong>{{ node.price }}</strong>
   </nuxt-link>

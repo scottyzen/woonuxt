@@ -1,10 +1,13 @@
 <template>
   <main class="container py-12 mx-auto">
     <div class="flex flex-wrap mx-auto">
-      <img
+      <nuxt-img
         alt="ecommerce"
-        class="object-cover w-full h-64 rounded lg:w-1/2 lg:h-auto"
-        :src="product.image.sourceUrl"
+        class="object-cover w-full h-64"
+        width="600"
+        height="600"
+        format="webp"
+        fit="cover"
       />
       <div class="w-full mt-6 lg:w-1/2 lg:pl-10 lg:py-6 lg:mt-0">
         <h2 class="text-sm tracking-widest text-gray-500 title-font">
