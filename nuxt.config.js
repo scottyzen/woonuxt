@@ -43,6 +43,10 @@ export default {
     includeNodeModules: true,
   },
 
+  image: {
+    domains: ['http://testing.2cubedtest.com'],
+  },
+
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/pwa
