@@ -1,6 +1,7 @@
 // const colors = require('tailwindcss/colors')
 module.exports = {
-  darkMode: 'class', // or 'media' or 'class'
+  mode: 'jit',
+  // darkMode: 'class', // or 'media' or 'class'
   theme: {
     container: {
       center: true,
