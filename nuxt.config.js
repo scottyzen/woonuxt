@@ -43,10 +43,10 @@ export default {
     includeNodeModules: true,
   },
 
-  // image: {
-  //   provider: 'static',
-  //   dir: 'assets/images',
-  // },
+  image: {
+    provider: 'static',
+    dir: 'static/images',
+  },
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
