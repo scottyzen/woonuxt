@@ -41,4 +41,6 @@ export default {
       lang: 'en',
     },
   },
+
+  css: ['~/assets/css/main.css'],
 }
