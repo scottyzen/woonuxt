@@ -16,19 +16,13 @@
       Test Image
       <nuxt-img
         class="w-full mb-2"
-        src="/wp-content/uploads/2019/01/logo-1.jpg"
+        src="https://testing.2cubedtest.com/wp-content/uploads/2019/01/logo-1.jpg"
         fit="cover"
         width="200"
         height="200"
         sizes="xs:296px sm:296px md:376px lg:400px"
         loading="lazy"
         quality="95"
-      />
-      <nuxt-picture
-        src="https://testing.2cubedtest.com/wp-content/uploads/2019/01/logo-1.jpg"
-        width="750"
-        height="500"
-        sizes="xs:200px md:500px lg:750"
       />
     </div>
   </main>
