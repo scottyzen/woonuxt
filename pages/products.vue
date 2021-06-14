@@ -11,6 +11,9 @@
         :key="node.databaseId"
         :node="node"
       />
+    </transition-group>
+    <div>
+      Test Image
       <nuxt-img
         class="w-full mb-2"
         src="https://testing.2cubedtest.com/wp-content/uploads/2019/01/logo-1.jpg"
@@ -23,7 +26,7 @@
         loading="lazy"
         quality="95"
       />
-    </transition-group>
+    </div>
   </main>
 </template>
 
