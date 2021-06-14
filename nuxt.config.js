@@ -20,7 +20,7 @@ export default {
     // '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
-    '@nuxt/image',
+    // '@nuxt/image',
     'nuxt-graphql-request',
   ],
 
@@ -44,6 +44,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    '@nuxt/image',
   ],
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa

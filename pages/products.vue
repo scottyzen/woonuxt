@@ -16,7 +16,7 @@
       Test Image
       <nuxt-img
         class="w-full mb-2"
-        src="https://testing.2cubedtest.com/wp-content/uploads/2019/01/logo-1.jpg"
+        src="/wp-content/uploads/2019/01/logo-1.jpg"
         fit="cover"
         width="200"
         height="200"
