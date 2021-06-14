@@ -16,4 +16,14 @@
 .page-leave-active {
   opacity: 0;
 } */
+.layout-enter-active,
+.layout-leave-active {
+  transition: all 300ms ease-out;
+  will-change: opacity, transform;
+}
+.layout-enter,
+.layout-leave-active {
+  opacity: 0;
+  transform: scale(0);
+}
 </style>
