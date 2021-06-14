@@ -37,6 +37,7 @@ export default {
 
   image: {
     dir: 'static',
+    provider: 'static',
     domains: ['testing.2cubedtest.com', '2cubedtest.com'],
   },
 

@@ -13,7 +13,7 @@
   "dependencies": {
     "@nuxtjs/pwa": "^3.3.5",
     "core-js": "^3.14.0",
-    "nuxt": "^2.15.6"
+    "nuxt": "^2.15.7"
   },
   "devDependencies": {
     "@nuxt/image": "^0.4.14",
@@ -25,10 +25,10 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-vue": "^7.11.0",
+    "eslint-plugin-vue": "^7.11.1",
     "graphql": "^15.5.0",
     "nuxt-graphql-request": "^4.0.0",
-    "postcss": "^8.3.2",
+    "postcss": "^8.3.4",
     "prettier": "^2.3.1"
   }
 }
