@@ -1,6 +1,6 @@
 export default {
-  // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
+  components: true,
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -13,21 +13,17 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
-  plugins: [],
-  components: true,
-  buildModules: [
-    // https://go.nuxtjs.dev/eslint
-    // '@nuxtjs/eslint-module',
-    // https://go.nuxtjs.dev/tailwindcss
-    '@nuxtjs/tailwindcss',
-    // '@nuxt/image',
-    'nuxt-graphql-request',
-  ],
+  buildModules: ['@nuxtjs/tailwindcss', '@nuxt/image', 'nuxt-graphql-request'],
+
+  image: {
+    provider: 'static',
+    domains: ['https://testing.2cubedtest.com', 'https://2cubedtest.com'],
+  },
 
   graphql: {
     clients: {
       default: {
-        endpoint: 'http://testing.2cubedtest.com/graphql',
+        endpoint: 'https://testing.2cubedtest.com/graphql',
         options: {},
       },
     },
@@ -35,26 +31,12 @@ export default {
     includeNodeModules: true,
   },
 
-  image: {
-    dir: 'static',
-    provider: 'static',
-    domains: ['testing.2cubedtest.com', '2cubedtest.com'],
-  },
+  modules: ['@nuxtjs/pwa'],
 
-  // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa',
-    '@nuxt/image',
-  ],
-
-  // PWA module configuration: https://go.nuxtjs.dev/pwa
+  // https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
       lang: 'en',
     },
   },
-
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
 }
