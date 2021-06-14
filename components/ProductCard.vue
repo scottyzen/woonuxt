@@ -6,7 +6,6 @@
       format="webp"
       fit="cover"
       width="200"
-      provider="static"
       height="200"
       sizes="xs:136px sm:296px md:376px lg:400px"
       loading="lazy"

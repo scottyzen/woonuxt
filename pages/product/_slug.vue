@@ -146,20 +146,20 @@
           <div class="flex">
             <span class="mr-3">Color</span>
             <button
-              class="w-6 h-6 border-2 border-gray-300 rounded-full focus:outline-none"
+              class="w-6 h-6 border-2 border-gray-300 rounded-full  focus:outline-none"
             />
             <button
-              class="w-6 h-6 ml-1 bg-gray-700 border-2 border-gray-300 rounded-full focus:outline-none"
+              class="w-6 h-6 ml-1 bg-gray-700 border-2 border-gray-300 rounded-full  focus:outline-none"
             />
             <button
-              class="w-6 h-6 ml-1 bg-red-500 border-2 border-gray-300 rounded-full focus:outline-none"
+              class="w-6 h-6 ml-1 bg-red-500 border-2 border-gray-300 rounded-full  focus:outline-none"
             />
           </div>
           <div class="flex items-center ml-6">
             <span class="mr-3">Size</span>
             <div class="relative">
               <select
-                class="py-2 pl-3 pr-10 text-base border border-gray-300 rounded appearance-none focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-500"
+                class="py-2 pl-3 pr-10 text-base border border-gray-300 rounded appearance-none  focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-500"
               >
                 <option>SM</option>
                 <option>M</option>
@@ -167,7 +167,7 @@
                 <option>XL</option>
               </select>
               <span
-                class="absolute top-0 right-0 flex items-center justify-center w-10 h-full text-center text-gray-600 pointer-events-none"
+                class="absolute top-0 right-0 flex items-center justify-center w-10 h-full text-center text-gray-600 pointer-events-none "
               >
                 <svg
                   fill="none"
@@ -189,12 +189,12 @@
             {{ product.price }}
           </span>
           <button
-            class="flex px-6 py-2 ml-auto text-white bg-green-500 border-0 rounded focus:outline-none hover:bg-green-600"
+            class="flex px-6 py-2 ml-auto text-white bg-green-500 border-0 rounded  focus:outline-none hover:bg-green-600"
           >
             Button
           </button>
           <button
-            class="inline-flex items-center justify-center w-10 h-10 p-0 ml-4 text-gray-500 bg-gray-200 border-0 rounded-full"
+            class="inline-flex items-center justify-center w-10 h-10 p-0 ml-4 text-gray-500 bg-gray-200 border-0 rounded-full "
           >
             <svg
               fill="currentColor"
