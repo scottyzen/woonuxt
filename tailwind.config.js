@@ -1,6 +1,6 @@
 // const colors = require('tailwindcss/colors')
 module.exports = {
-  mode: 'jit',
+  // mode: 'jit',
   // darkMode: 'class', // or 'media' or 'class'
   theme: {
     container: {
@@ -15,5 +15,6 @@ module.exports = {
   purge: {
     enabled: process.env.NODE_ENV === 'production',
     content: ['./src/**/*.{vue,js,ts,jsx,tsx}'],
+    safelist: ['layout-enter-active', 'layout-leave-active', 'layout-enter'],
   },
 }

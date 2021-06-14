@@ -18,7 +18,7 @@
 <style>
 .layout-enter-active,
 .layout-leave-active {
-  transition: all 300ms ease;
+  transition: all 300ms ease-out;
   will-change: opacity, transform;
 }
 .layout-enter,
