@@ -8,9 +8,9 @@
       width="200"
       provider="static"
       height="200"
-      sizes="xs:296px sm:296px md:376px lg:400px"
+      sizes="xs:136px sm:296px md:376px lg:400px"
       loading="lazy"
-      quality="95"
+      quality="90"
     />
     <h3 class="text-sm">{{ node.name }}</h3>
     <strong>{{ node.price }}</strong>

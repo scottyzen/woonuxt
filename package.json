@@ -13,7 +13,6 @@
   "dependencies": {
     "@nuxtjs/pwa": "^3.3.5",
     "core-js": "^3.14.0",
-    "ipx": "^0.6.1",
     "nuxt": "^2.15.7"
   },
   "devDependencies": {

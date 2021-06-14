@@ -17,18 +17,15 @@ export default {
 
   image: {
     provider: 'static',
-    domains: ['https://testing.2cubedtest.com', 'https://2cubedtest.com'],
+    domains: [process.env.WORDPRESS_URL],
   },
 
   graphql: {
     clients: {
       default: {
-        endpoint: 'https://testing.2cubedtest.com/graphql',
-        options: {},
+        endpoint: `${process.env.WORDPRESS_URL}/graphql`,
       },
     },
-    options: {},
-    includeNodeModules: true,
   },
 
   modules: ['@nuxtjs/pwa'],
