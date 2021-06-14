@@ -11,6 +11,18 @@
         :key="node.databaseId"
         :node="node"
       />
+      <nuxt-img
+        class="w-full mb-2"
+        src="https://testing.2cubedtest.com/wp-content/uploads/2019/01/logo-1.jpg"
+        format="webp"
+        fit="cover"
+        width="200"
+        provider="static"
+        height="200"
+        sizes="xs:296px sm:296px md:376px lg:400px"
+        loading="lazy"
+        quality="95"
+      />
     </transition-group>
   </main>
 </template>
