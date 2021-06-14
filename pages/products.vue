@@ -24,6 +24,12 @@
         loading="lazy"
         quality="95"
       />
+      <nuxt-picture
+        src="https://testing.2cubedtest.com/wp-content/uploads/2019/01/logo-1.jpg"
+        width="750"
+        height="500"
+        sizes="xs:200px md:500px lg:750"
+      />
     </div>
   </main>
 </template>

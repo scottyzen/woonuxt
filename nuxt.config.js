@@ -36,7 +36,8 @@ export default {
   },
 
   image: {
-    domains: ['testing.2cubedtest.com'],
+    dir: 'static',
+    domains: ['testing.2cubedtest.com', '2cubedtest.com'],
   },
 
   // Modules: https://go.nuxtjs.dev/config-modules
