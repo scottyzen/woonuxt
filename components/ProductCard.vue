@@ -9,11 +9,11 @@
       fit="cover"
       width="136"
       height="136"
-      sizes="xs:136px sm:296px md:376px lg:400px"
+      sizes="xs:136px sm:296px md:325px xl:400px"
       loading="lazy"
       quality="90"
     />
-    <h3 class="text-sm">{{ node.name }}</h3>
+    <div class="text-sm">{{ node.name }}</div>
     <strong>{{ node.price }}</strong>
   </nuxt-link>
 </template>
