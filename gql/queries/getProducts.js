@@ -14,6 +14,8 @@ export default gql`
         databaseId
         image {
           sourceUrl
+          altText
+          title
         }
         averageRating
         reviewCount
