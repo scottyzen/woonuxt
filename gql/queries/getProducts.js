@@ -3,12 +3,6 @@ import { gql } from 'nuxt-graphql-request'
 export default gql`
   query getProducts($after: String) {
     products(first: 99, after: $after) {
-      pageInfo {
-        endCursor
-        hasNextPage
-        hasPreviousPage
-        startCursor
-      }
       nodes {
         name
         databaseId
@@ -16,6 +10,14 @@ export default gql`
           sourceUrl
           altText
           title
+        }
+        productCategories {
+          nodes {
+            databaseId
+            slug
+            name
+            count
+          }
         }
         averageRating
         reviewCount
