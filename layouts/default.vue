@@ -1,7 +1,7 @@
 <template>
   <div class="px-4">
     <Header />
-    <transition mode="out-in">
+    <transition name="page" mode="out-in">
       <Nuxt />
     </transition>
   </div>
