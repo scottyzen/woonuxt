@@ -6,7 +6,6 @@
         class="object-cover w-full h-64 rounded lg:w-1/2 lg:h-auto"
         width="600"
         height="600"
-        format="webp"
         fit="cover"
         :src="product.image.sourceUrl"
       />

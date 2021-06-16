@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="grid grid-cols-2 gap-4 my-12 lg:grid-cols-4">
+    <div class="grid grid-cols-2 gap-8 my-12 lg:grid-cols-4">
       <ProductCard
         v-for="node in products"
         :key="node.databaseId"
