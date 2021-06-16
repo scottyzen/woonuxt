@@ -1,7 +1,7 @@
 import { gql } from 'nuxt-graphql-request'
 
 export default gql`
-  query getProducts($after: String) {
+  query getProductCategories($after: String) {
     products(first: 99, after: $after) {
       nodes {
         name

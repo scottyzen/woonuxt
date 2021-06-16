@@ -1,17 +1,21 @@
 <template>
-  <header class="container flex justify-between py-4 border-b">
-    <nuxt-link to="/">
-      <h1 class="text-lg font-bold text-purple-700">WooNuxt</h1>
-    </nuxt-link>
-    <nav>
-      <nuxt-link class="ml-4" to="/products">All Products</nuxt-link>
-      <nuxt-link class="ml-4" to="/product-category/music">Music</nuxt-link>
-      <nuxt-link class="ml-4" to="/product-category/accessories">
-        Accessories
+  <header class="sticky top-0 bg-white shadow-sm">
+    <div class="container flex items-center justify-between py-4">
+      <nuxt-link to="/">
+        <h1 class="text-lg font-bold">WooNuxt</h1>
       </nuxt-link>
-      <nuxt-link class="ml-4" to="/product-category/tshirts">Tshirts</nuxt-link>
-      <nuxt-link class="ml-4" to="/product-category/hoodies">Hoodies</nuxt-link>
-      <nuxt-link class="ml-4" to="/product-category/decor">Decor</nuxt-link>
-    </nav>
+      <nav class="text-sm uppercase">
+        <nuxt-link class="ml-4" to="/products">All Products</nuxt-link>
+
+        <nuxt-link
+          v-for="category in $store.state.productCategories"
+          :key="category.id"
+          :to="`/product-category/${category.slug}`"
+          class="ml-4"
+        >
+          {{ category.name }}
+        </nuxt-link>
+      </nav>
+    </div>
   </header>
 </template>

@@ -12,8 +12,10 @@
       loading="lazy"
       quality="80"
     />
-    <div class="text-sm">{{ node.name }}</div>
-    <strong>{{ node.price }}</strong>
+    <div class="p-2">
+      <div class="text-sm">{{ node.name }}</div>
+      <strong>{{ node.price }}</strong>
+    </div>
   </nuxt-link>
 </template>
 
