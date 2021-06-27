@@ -17,7 +17,7 @@
     "nuxt": "^2.15.7"
   },
   "devDependencies": {
-    "@nuxt/image": "^0.4.14",
+    "@nuxt/image": "^0.4.17",
     "@nuxtjs/eslint-config": "^6.0.1",
     "@nuxtjs/eslint-module": "^3.0.2",
     "babel-eslint": "^10.1.0",
@@ -25,10 +25,10 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-vue": "^7.11.1",
+    "eslint-plugin-vue": "^7.12.1",
     "graphql": "^15.5.1",
     "nuxt-graphql-request": "^4.0.0",
     "postcss": "^8.3.5",
-    "prettier": "^2.3.1"
+    "prettier": "^2.3.2"
   }
 }
