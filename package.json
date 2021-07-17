@@ -12,22 +12,22 @@
   },
   "dependencies": {
     "@nuxtjs/pwa": "^3.3.5",
-    "@nuxtjs/tailwindcss": "^4.2.0",
-    "core-js": "^3.15.1",
+    "@nuxtjs/tailwindcss": "^4.2.1",
+    "core-js": "^3.15.2",
     "nuxt": "^2.15.7"
   },
   "devDependencies": {
-    "@nuxt/image": "^0.4.17",
+    "@nuxt/image": "^0.5.0",
     "@nuxtjs/eslint-config": "^6.0.1",
     "@nuxtjs/eslint-module": "^3.0.2",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.29.0",
+    "eslint": "^7.30.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-vue": "^7.12.1",
+    "eslint-plugin-vue": "^7.13.0",
     "graphql": "^15.5.1",
-    "nuxt-graphql-request": "^4.0.0",
+    "nuxt-graphql-request": "^4.0.1",
     "postcss": "^8.3.5",
     "prettier": "^2.3.2"
   }

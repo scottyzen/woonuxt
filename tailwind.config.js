@@ -13,11 +13,11 @@ module.exports = {
     extend: {},
   },
   //   plugins: [require('@tailwindcss/typography')],
-  purge: [
-    `~/components/**/*.{vue,js}`,
-    `~/layouts/**/*.vue`,
-    `~/pages/**/*.vue`,
-    `~/plugins/**/*.{js,ts}`,
-    `~~/nuxt.config.{js,ts}`,
-  ],
+  // purge: [
+  //   `~/components/**/*.{vue,js}`,
+  //   `~/layouts/**/*.vue`,
+  //   `~/pages/**/*.vue`,
+  //   `~/plugins/**/*.{js,ts}`,
+  //   `~~/nuxt.config.{js,ts}`,
+  // ],
 }

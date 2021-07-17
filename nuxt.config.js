@@ -61,5 +61,8 @@ export default {
         component: resolve(__dirname, 'pages/products'),
       })
     },
+    scrollBehavior(to, from, savedPosition) {
+      return { x: 0, y: 0 }
+    },
   },
 }

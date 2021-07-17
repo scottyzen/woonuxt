@@ -4,9 +4,8 @@
       <nuxt-link to="/">
         <h1 class="text-lg font-bold">WooNuxt</h1>
       </nuxt-link>
-      <nav class="text-sm uppercase">
+      <nav class="flex text-sm uppercase">
         <nuxt-link class="ml-4" to="/products">All Products</nuxt-link>
-
         <nuxt-link
           v-for="category in $store.state.productCategories"
           :key="category.id"
@@ -15,7 +14,19 @@
         >
           {{ category.name }}
         </nuxt-link>
+        <CartTrigger @icon-click="toggleCart" />
       </nav>
     </div>
   </header>
 </template>
+
+<script>
+export default {
+  methods: {
+    toggleCart() {
+      console.log('toggle cart')
+      this.$store.commit('toggleCart', !this.$store.state.showCart)
+    },
+  },
+}
+</script>
