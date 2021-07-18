@@ -1,0 +1,11 @@
+query getCategories {
+  productCategories(where: { orderby: COUNT, order: DESC, hideEmpty: true }) {
+    nodes {
+      count
+      databaseId
+      id
+      name
+      slug
+    }
+  }
+}

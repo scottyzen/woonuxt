@@ -1,10 +1,9 @@
 export default {
   target: 'static',
   components: true,
-
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'woonuxt',
+    title: 'WooNuxt',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -18,22 +17,21 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
-  buildModules: ['@nuxtjs/tailwindcss', '@nuxt/image', 'nuxt-graphql-request'],
+  modules: ['@nuxtjs/pwa', '@nuxtjs/apollo'],
+  buildModules: ['@nuxtjs/tailwindcss', '@nuxt/image'],
 
   image: {
     provider: 'static',
     domains: [process.env.WORDPRESS_URL],
   },
 
-  graphql: {
-    clients: {
+  apollo: {
+    clientConfigs: {
       default: {
-        endpoint: `${process.env.WORDPRESS_URL}/graphql`,
+        httpEndpoint: `${process.env.WORDPRESS_URL}/graphql`,
       },
     },
   },
-
-  modules: ['@nuxtjs/pwa'],
 
   // https://go.nuxtjs.dev/pwa
   pwa: {

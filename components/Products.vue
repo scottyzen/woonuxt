@@ -2,12 +2,12 @@
   <section>
     <div class="grid grid-cols-2 gap-8 my-12 lg:grid-cols-4">
       <ProductCard
-        v-for="node in products"
+        v-for="node in postWithPagination"
         :key="node.databaseId"
         :node="node"
       />
     </div>
-    <Pagination :category="category" :total="total" />
+    <Pagination :category="category" :total="products.length" />
   </section>
 </template>
 
@@ -17,25 +17,11 @@ export default {
     perPage: { type: Number, default: null },
     page: { type: Number, default: 1 },
     category: { type: String, default: null },
+    products: { type: Array, default: null },
   },
   computed: {
-    productsInCategory() {
-      return this.$store.state.products.filter((product) =>
-        product.productCategories.nodes.some(
-          (cat) => cat.slug === this.category
-        )
-      )
-    },
-    products() {
-      const products = this.category
-        ? this.productsInCategory
-        : this.$store.state.products
-      return this.pager(products)
-    },
-    total() {
-      return this.category
-        ? this.productsInCategory.length
-        : this.$store.state.products.length
+    postWithPagination() {
+      return this.pager(this.products)
     },
   },
   methods: {

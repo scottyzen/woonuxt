@@ -1,5 +1,5 @@
 <template>
-  <header class="sticky top-0 bg-white shadow-sm">
+  <header v-if="!$apollo.loading" class="sticky top-0 bg-white shadow-sm">
     <div class="container flex items-center justify-between py-4">
       <nuxt-link to="/">
         <h1 class="text-lg font-bold">WooNuxt</h1>
@@ -7,7 +7,7 @@
       <nav class="flex text-sm uppercase">
         <nuxt-link class="ml-4" to="/products">All Products</nuxt-link>
         <nuxt-link
-          v-for="category in $store.state.productCategories"
+          v-for="category in productCategories.nodes"
           :key="category.id"
           :to="`/product-category/${category.slug}`"
           class="ml-4"
@@ -21,10 +21,11 @@
 </template>
 
 <script>
+import getProductCategories from '~/gql/queries/getProductCategories'
 export default {
+  apollo: { productCategories: getProductCategories },
   methods: {
     toggleCart() {
-      console.log('toggle cart')
       this.$store.commit('toggleCart', !this.$store.state.showCart)
     },
   },
