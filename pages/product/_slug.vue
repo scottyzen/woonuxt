@@ -1,5 +1,5 @@
 <template>
-  <main class="container py-12 mx-auto">
+  <main v-if="!$apollo.loading" class="container py-12 mx-auto">
     <div class="flex flex-wrap mx-auto">
       <nuxt-img
         alt="ecommerce"
@@ -215,12 +215,16 @@
 </template>
 
 <script>
+import getProduct from '~/gql/queries/getProduct'
 export default {
-  computed: {
-    product() {
-      return this.$store.state.products.find(
-        (el) => el.slug === this.$route.params.slug
-      )
+  apollo: {
+    product: {
+      query: getProduct,
+      variables() {
+        return {
+          slug: this.$route.params.slug,
+        }
+      },
     },
   },
 }
