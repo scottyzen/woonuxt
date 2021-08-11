@@ -1,0 +1,7 @@
+mutation registerCustomer($email: String!, $password: String!) {
+  registerCustomer(input: {email: $email, password: $password}) {
+    customer {
+      username
+    }
+  }
+}

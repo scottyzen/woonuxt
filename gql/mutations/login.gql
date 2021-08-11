@@ -1,0 +1,7 @@
+mutation Login($username: String!, $password: String!) {
+  login(input: {password: $password, username: $username}) {
+    user {
+      wooSessionToken
+    }
+  }
+}

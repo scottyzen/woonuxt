@@ -1,0 +1,19 @@
+query getCart {
+  cart {
+    total
+    contents {
+      nodes {
+        product {
+          node {
+            ... on SimpleProduct {
+              id
+              name
+              price
+            }
+          }
+        }
+        quantity
+      }
+    }
+  }
+}
