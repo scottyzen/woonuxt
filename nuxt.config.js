@@ -17,8 +17,41 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
-  modules: ['@nuxtjs/pwa', '@nuxtjs/apollo'],
-  buildModules: ['@nuxtjs/tailwindcss', '@nuxt/image'],
+  modules: [
+    '@nuxtjs/pwa',
+    '@nuxtjs/apollo',
+    '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
+  ],
+  buildModules: [
+    '@nuxtjs/tailwindcss',
+    '@nuxt/image',
+    'nuxt-graphql-request'
+  ],
+
+  graphql: {
+    clients: {
+      default: {
+        endpoint: `${process.env.WORDPRESS_URL}/graphql`,
+        options: {
+          headers: {
+            authorization: `Basic ${Buffer.from(`${process.env.USERNAME}:${process.env.PASSWORD}`).toString("base64")}`,
+          },
+        },
+      },
+    },
+  },
+
+  auth: {
+    strategies: {
+      google: {
+        responseType: 'id_token token',
+        codeChallengeMethod: '',
+        clientId: '428119855071-4qt3ubq38ig75hvhugn2urfq13ocahg5.apps.googleusercontent.com',
+        clientSecret: '51zdo1tdqR7xlmzZmfJIHQAe'
+      },
+    }
+  },
 
   image: {
     provider: 'static',

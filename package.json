@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "nuxt",
+    "dev:host": "nuxt --hostname '0' --port 8000",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate --modern",
@@ -12,9 +13,12 @@
   },
   "dependencies": {
     "@nuxtjs/apollo": "^4.0.1-rc.5",
+    "@nuxtjs/auth": "^4.9.1",
+    "@nuxtjs/auth-next": "5.0.0-1624817847.21691f1",
+    "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/tailwindcss": "^4.2.1",
-    "core-js": "^3.15.2",
+    "core-js": "^3.16.1",
     "graphql-tag": "^2.12.5",
     "nuxt": "^2.15.7"
   },
@@ -23,13 +27,14 @@
     "@nuxtjs/eslint-config": "^6.0.1",
     "@nuxtjs/eslint-module": "^3.0.2",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.31.0",
+    "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-vue": "^7.14.0",
+    "eslint-plugin-vue": "^7.15.1",
     "graphql": "^15.5.1",
-    "postcss": "^8.3.5",
+    "nuxt-graphql-request": "^4.1.0",
+    "postcss": "^8.3.6",
     "prettier": "^2.3.2"
   }
 }
