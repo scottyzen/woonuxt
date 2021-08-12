@@ -47,8 +47,8 @@ export default {
       google: {
         responseType: 'id_token token',
         codeChallengeMethod: '',
-        clientId: '428119855071-4qt3ubq38ig75hvhugn2urfq13ocahg5.apps.googleusercontent.com',
-        clientSecret: '51zdo1tdqR7xlmzZmfJIHQAe'
+        clientId: process.env.GOOGLEID,
+        clientSecret: process.env.GOOGLESECRET
       },
     }
   },
