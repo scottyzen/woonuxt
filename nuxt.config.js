@@ -19,9 +19,9 @@ export default {
 
   modules: [
     '@nuxtjs/pwa',
-    // '@nuxtjs/apollo',
+    '@nuxtjs/apollo',
     '@nuxtjs/axios',
-    // '@nuxtjs/auth-next',
+    '@nuxtjs/auth-next',
   ],
   buildModules: [
     '@nuxtjs/tailwindcss',
@@ -37,37 +37,39 @@ export default {
           credentials: 'include',
           mode: 'cors',
           headers: {
+            "Access-Control-Allow-Origin": true,
+            "Access-Control-Allow-Credentials": true
             // authorization: `Basic ${Buffer.from(`${process.env.USERNAME}:${process.env.PASSWORD}`).toString("base64")}`,
-            'Access-Control-Allow-Origin': true,
           },
         },
+        useFetchPolyfill: true,
       },
     },
   },
 
-  // auth: {
-  //   strategies: {
-  //     google: {
-  //       responseType: 'id_token token',
-  //       codeChallengeMethod: '',
-  //       clientId: process.env.GOOGLEID,
-  //       clientSecret: process.env.GOOGLESECRET
-  //     },
-  //   }
-  // },
+  auth: {
+    strategies: {
+      google: {
+        responseType: 'id_token token',
+        codeChallengeMethod: '',
+        clientId: process.env.GOOGLEID,
+        clientSecret: process.env.GOOGLESECRET
+      },
+    }
+  },
 
   image: {
     provider: 'static',
     domains: [process.env.WORDPRESS_URL],
   },
 
-  // apollo: {
-  //   clientConfigs: {
-  //     default: {
-  //       httpEndpoint: `${process.env.WORDPRESS_URL}/graphql`,
-  //     },
-  //   },
-  // },
+  apollo: {
+    clientConfigs: {
+      default: {
+        httpEndpoint: `${process.env.WORDPRESS_URL}/graphql`,
+      },
+    },
+  },
 
   // https://go.nuxtjs.dev/pwa
   pwa: {
