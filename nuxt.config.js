@@ -37,7 +37,7 @@ export default {
           credentials: 'include',
           mode: 'cors',
           headers: {
-            "Access-Control-Allow-Origin": true
+            "Access-Control-Allow-Origin": `${process.env.WORDPRESS_URL}`
           },
         },
       },
