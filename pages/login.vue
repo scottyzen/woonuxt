@@ -7,24 +7,22 @@
 </template>
 
 <script>
-import { gql } from 'nuxt-graphql-request'
+import login from '~/gql/mutations/login'
 
 export default {
 	methods: {
 		async loginUser(logininfo) {
 			try {
-				const query = gql`
-					mutation MyMutation($username: String!, $password: String!) {
-						loginWithCookies(input: { login: $username, password: $password, rememberMe: true }) {
-							status
-						}
-					}
-				`
 				const variables = {
 					username: logininfo.email,
 					password: logininfo.password
 				}
-				const data = await this.$graphql.default.rawRequest(query, variables)
+				const headers = {
+					'Access-Control-Allow-Origin': true,
+					'Content-Type': 'application/json',
+					Accept: 'application/json'
+				}
+				const data = await this.$graphql.default.request(login, variables, headers)
 				console.log(data)
 			} catch (error) {
 				console.error(JSON.stringify(error, undefined, 2))

@@ -36,9 +36,6 @@ export default {
         options: {
           credentials: 'include',
           mode: 'cors',
-          headers: {
-            "Access-Control-Allow-Origin": true
-          },
         },
       },
     },

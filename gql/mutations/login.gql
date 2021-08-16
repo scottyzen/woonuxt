@@ -1,7 +1,5 @@
-mutation Login($username: String!, $password: String!) {
-  login(input: {password: $password, username: $username}) {
-    user {
-      wooSessionToken
-    }
+mutation login ($username: String!, $password: String!) {
+  loginWithCookies(input: { login: $username, password: $password, rememberMe: true }) {
+    status
   }
 }
