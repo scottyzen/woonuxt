@@ -18,7 +18,6 @@ export default {
 					password: logininfo.password
 				}
 				const headers = {
-					'Access-Control-Allow-Origin': true,
 					'Content-Type': 'application/json',
 					Accept: 'application/json'
 				}
