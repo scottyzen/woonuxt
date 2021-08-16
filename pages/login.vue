@@ -17,11 +17,7 @@ export default {
 					username: logininfo.email,
 					password: logininfo.password
 				}
-				const headers = {
-					'Content-Type': 'application/json',
-					Accept: 'application/json'
-				}
-				const data = await this.$graphql.default.request(login, variables, headers)
+				const data = await this.$graphql.default.request(login, variables)
 				console.log(data)
 			} catch (error) {
 				console.error(JSON.stringify(error, undefined, 2))

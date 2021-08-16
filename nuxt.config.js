@@ -37,8 +37,10 @@ export default {
           credentials: 'include',
           mode: 'cors',
           headers: {
-            "Access-Control-Allow-Origin": true,
-            "Access-Control-Allow-Credentials": true
+            "Access-Control-Allow-Origin": "https://testing.2cubedtest.com",
+            "Access-Control-Allow-Credentials": true,
+            "Access-Control-Allow-Headers": "Authorization, Content-Type, woocommerce-session, graphql_cors_settings",
+
             // authorization: `Basic ${Buffer.from(`${process.env.USERNAME}:${process.env.PASSWORD}`).toString("base64")}`,
           },
         },
