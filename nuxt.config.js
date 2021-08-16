@@ -34,8 +34,11 @@ export default {
       default: {
         endpoint: `${process.env.WORDPRESS_URL}/graphql`,
         options: {
-          // credentials: 'include',
-          // mode: 'cors',
+          credentials: 'include',
+          mode: 'cors',
+          headers: {
+            "Access-Control-Allow-Origin": true
+          },
         },
       },
     },
