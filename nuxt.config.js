@@ -34,9 +34,8 @@ export default {
       default: {
         endpoint: `${process.env.WORDPRESS_URL}/graphql`,
         options: {
-          headers: {
-            authorization: `Basic ${Buffer.from(`${process.env.USERNAME}:${process.env.PASSWORD}`).toString("base64")}`,
-          },
+          // credentials: 'include',
+          // mode: 'cors',
         },
       },
     },
