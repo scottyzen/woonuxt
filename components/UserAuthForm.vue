@@ -1,8 +1,8 @@
 <template>
   <div class="max-w-md mx-auto">
     <form class="grid gap-4 mb-4" @submit.prevent="submitForm(userInfo)">
-      <input placeholder="Username/Email" type="email" v-model="userInfo.email" />
-      <input placeholder="Password" type="text" v-model="userInfo.password" />
+      <input placeholder="Username/Email" type="text" v-model="userInfo.email" />
+      <input placeholder="Password" type="password" v-model="userInfo.password" />
       <button>{{ buttonText }}</button>
     </form>
     <button @click="googleSSO">Sign in with Google</button>
