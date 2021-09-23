@@ -1,42 +1,32 @@
 export default {
-  target: 'static',
+  target: "static",
   components: true,
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'WooNuxt',
+    title: "WooNuxt",
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { charset: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
       {
-        hid: 'description',
-        name: 'description',
-        content:
-          'Next generation front end for WooCommerce thats build with Nuxt.',
+        hid: "description",
+        name: "description",
+        content: "Next generation front end for WooCommerce thats build with Nuxt.",
       },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: "icon", type: "image/x-icon", href: "/icon.svg" }],
   },
 
-  modules: [
-    '@nuxtjs/pwa',
-    '@nuxtjs/apollo',
-    '@nuxtjs/axios',
-    '@nuxtjs/auth-next',
-  ],
-  buildModules: [
-    '@nuxtjs/tailwindcss',
-    '@nuxt/image',
-    'nuxt-graphql-request'
-  ],
+  modules: ["@nuxtjs/pwa", "@nuxtjs/apollo", "@nuxtjs/axios", "@nuxtjs/auth-next"],
+  buildModules: ["@nuxtjs/tailwindcss", "@nuxt/image", "nuxt-graphql-request"],
 
   graphql: {
     clients: {
       default: {
         endpoint: `${process.env.WORDPRESS_URL}/graphql`,
         options: {
-          credentials: 'include',
-          mode: 'cors',
-        }
+          credentials: "include",
+          mode: "cors",
+        },
       },
     },
   },
@@ -44,16 +34,16 @@ export default {
   auth: {
     strategies: {
       google: {
-        responseType: 'id_token token',
-        codeChallengeMethod: '',
+        responseType: "id_token token",
+        codeChallengeMethod: "",
         clientId: process.env.GOOGLEID,
-        clientSecret: process.env.GOOGLESECRET
+        clientSecret: process.env.GOOGLESECRET,
       },
-    }
+    },
   },
 
   image: {
-    provider: 'static',
+    provider: "static",
     domains: [process.env.WORDPRESS_URL],
   },
 
@@ -68,7 +58,7 @@ export default {
   // https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
-      lang: 'en',
+      lang: "en",
     },
   },
 
@@ -79,17 +69,17 @@ export default {
   router: {
     extendRoutes(routes, resolve) {
       routes.push({
-        path: '/products/page/:pageNumber',
-        component: resolve(__dirname, 'pages/products'),
-      })
+        path: "/products/page/:pageNumber",
+        component: resolve(__dirname, "pages/products"),
+      });
       routes.push({
-        path: '/product-category/:categorySlug',
-        component: resolve(__dirname, 'pages/products'),
-      })
+        path: "/product-category/:categorySlug",
+        component: resolve(__dirname, "pages/products"),
+      });
       routes.push({
-        path: '/product-category/:categorySlug/page/:pageNumber',
-        component: resolve(__dirname, 'pages/products'),
-      })
+        path: "/product-category/:categorySlug/page/:pageNumber",
+        component: resolve(__dirname, "pages/products"),
+      });
     },
   },
-}
+};
