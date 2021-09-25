@@ -19,7 +19,7 @@
   [headers.values]
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Headers = "Content-Type"
-    X-Frame-Options = "DENY"
+    X-Frame-Options = "ALLOW-FROM https://testing.2cubedtest.com"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "no-referrer"
     X-Content-Type-Options = "nosniff"
@@ -32,3 +32,8 @@
   from = "/*"
   to = "https://testing.2cubedtest.com/:splat"
   status = 200
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Credentials = "true"
+    Access-Control-Allow-Headers = "Content-Type"
+    Access-Control-Allow-Method = "GET, POST"

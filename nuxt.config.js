@@ -15,7 +15,7 @@ export default {
     link: [{ rel: "icon", type: "image/x-icon", href: "/icon.svg" }],
   },
 
-  modules: ["@nuxtjs/pwa", "@nuxtjs/apollo", "@nuxtjs/axios", "@nuxtjs/auth-next"],
+  modules: ["@nuxtjs/pwa", "@nuxtjs/axios", "@nuxtjs/auth-next"],
   buildModules: ["@nuxtjs/tailwindcss", "@nuxt/image", "nuxt-graphql-request"],
 
   graphql: {
@@ -44,14 +44,6 @@ export default {
   image: {
     provider: "static",
     domains: [process.env.WORDPRESS_URL],
-  },
-
-  apollo: {
-    clientConfigs: {
-      default: {
-        httpEndpoint: `${process.env.WORDPRESS_URL}/graphql`,
-      },
-    },
   },
 
   // https://go.nuxtjs.dev/pwa
