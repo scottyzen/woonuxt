@@ -65,9 +65,12 @@ export default {
 			const options = {
 				method: 'POST',
 				withCredentials: true,
-				headers: { 'content-type': 'application/json' },
+				headers: {
+					'content-type': 'application/json',
+					Accept: 'application/json'
+				},
 				data,
-				url: 'https://testing.2cubedtest.com/grapghql'
+				url: 'https://testing.2cubedtest.com/graphql'
 			}
 
 			try {
