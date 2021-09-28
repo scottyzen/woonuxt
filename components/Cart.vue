@@ -24,6 +24,12 @@ export default {
 	},
 	methods: {
 		async getUser() {
+			// Override all existing headers
+			this.$graphql.default.setHeaders({
+				credentials: 'include',
+				mode: 'cors'
+			})
+
 			const query = gql`
 				query {
 					viewer {
