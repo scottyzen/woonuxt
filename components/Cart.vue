@@ -4,6 +4,7 @@
 		<pre class="text-xs" v-if="cart">{{ cart }}</pre>
 		<pre class="text-xs" v-if="viewer">{{ viewer }}</pre>
 		<button @click="getUser">Get User</button>
+		<button @click="clearout">Clear out</button>
 	</section>
 </template>
 
@@ -23,13 +24,14 @@ export default {
 		this.cart = cart
 	},
 	methods: {
-		async getUser() {
+		clearout() {
 			// Override all existing headers
 			this.$graphql.default.setHeaders({
 				credentials: 'include',
 				mode: 'cors'
 			})
-
+		},
+		async getUser() {
 			const query = gql`
 				query {
 					viewer {
