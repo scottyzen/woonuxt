@@ -7,7 +7,7 @@
     "dev:host": "nuxt --hostname '0' --port 8000",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate --modern",
+    "generate": "nuxt generate -m",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint": "npm run lint:js"
   },
@@ -18,7 +18,7 @@
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/tailwindcss": "^4.2.1",
-    "core-js": "^3.18.0",
+    "core-js": "^3.18.1",
     "graphql-tag": "^2.12.5",
     "nuxt": "^2.15.8"
   },
@@ -34,7 +34,7 @@
     "eslint-plugin-vue": "^7.18.0",
     "graphql": "^15.6.0",
     "nuxt-graphql-request": "^4.1.0",
-    "postcss": "^8.3.7",
+    "postcss": "^8.3.8",
     "prettier": "^2.4.1"
   }
 }

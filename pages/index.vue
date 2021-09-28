@@ -6,6 +6,7 @@
 				<h1 class="mb-4 text-6xl font-bold">Just landed.</h1>
 				<div class="max-w-sm mb-12 font-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde nam dignissimos nostrum veritatis nisi autem accusantium modi? Enim, voluptatibus consectetur.</div>
 				<nuxt-link class="inline-block p-4 px-6 leading-none text-black bg-white rounded shadow-sm" to="/products">Shop New Arrivals</nuxt-link>
+				<!-- <nuxt-link class="big-button" to="/products">Shop New Arrivals</nuxt-link> -->
 			</div>
 		</section>
 		<section class="container my-32">

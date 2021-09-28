@@ -1,48 +1,48 @@
 <template>
-  <section v-if="!$apollo.loading" class="fixed top-0 right-0 h-screen p-12 bg-white shadow-lg w-96">
-    <CloseCart />
-    <pre class="text-xs" v-if="cart">{{ cart }}</pre>
-    <pre class="text-xs" v-if="viewer">{{ viewer }}</pre>
-    <button @click="getUser">Get User</button>
-  </section>
+	<section v-if="!$apollo.loading" class="fixed top-0 right-0 h-screen p-12 bg-white shadow-lg w-96">
+		<CloseCart />
+		<pre class="text-xs" v-if="cart">{{ cart }}</pre>
+		<pre class="text-xs" v-if="viewer">{{ viewer }}</pre>
+		<button @click="getUser">Get User</button>
+	</section>
 </template>
 
 <script>
-import { gql } from "nuxt-graphql-request";
-import getCart from "~/gql/queries/getCart";
+import { gql } from 'nuxt-graphql-request'
+import getCart from '~/gql/queries/getCart'
 const requestHeaders = {
-  "Content-Type": "application/json",
-  Accept: "application/json",
-};
+	'Content-Type': 'application/json',
+	Accept: 'application/json'
+}
 
 export default {
-  data() {
-    return {
-      cart: null,
-      viewer: null,
-    };
-  },
-  async fetch() {
-    const cart = await this.$graphql.default.request(getCart);
-    this.cart = cart;
-  },
-  methods: {
-    async getUser() {
-      const query = gql`
-        query {
-          viewer {
-            email
-            firstName
-          }
-        }
-      `;
+	data() {
+		return {
+			cart: null,
+			viewer: null
+		}
+	},
+	async fetch() {
+		const cart = await this.$graphql.default.request(getCart)
+		this.cart = cart
+	},
+	methods: {
+		async getUser() {
+			const query = gql`
+				query {
+					viewer {
+						email
+						firstName
+					}
+				}
+			`
 
-      const data = await this.$graphql.default.rawRequest(query);
-      const cart = await this.$graphql.default.request(getCart);
-      this.cart = cart;
-      this.viewer = data.data.viewer;
-      console.log(data);
-    },
-  },
-};
+			const data = await this.$graphql.default.rawRequest(query)
+			const cart = await this.$graphql.default.request(getCart)
+			this.cart = cart
+			this.viewer = data.data.viewer
+			console.log(data)
+		}
+	}
+}
 </script>

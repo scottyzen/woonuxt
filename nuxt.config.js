@@ -15,7 +15,7 @@ export default {
     link: [{ rel: "icon", type: "image/x-icon", href: "/icon.svg" }],
   },
 
-  modules: ["@nuxtjs/pwa", "@nuxtjs/axios", "@nuxtjs/auth-next"],
+  modules: ["@nuxtjs/pwa", "@nuxtjs/axios", "@nuxtjs/auth-next", '@nuxtjs/apollo'],
   buildModules: ["@nuxtjs/tailwindcss", "@nuxt/image", "nuxt-graphql-request"],
 
   graphql: {
@@ -28,6 +28,14 @@ export default {
         },
       },
     },
+  },
+
+  apollo: {
+    clientConfigs: {
+      default:{
+        httpEndpoint: `${process.env.WORDPRESS_URL}/graphql`
+      }
+    }
   },
 
   auth: {
