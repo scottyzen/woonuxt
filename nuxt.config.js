@@ -12,7 +12,7 @@ export default {
         content: "Next generation front end for WooCommerce thats build with Nuxt.",
       },
     ],
-    link: [{ rel: "icon", type: "image/x-icon", href: "/icon.svg" }],
+    link: [{ rel: "icon", type: "image/x-icon", href: "/icon.svg" }, { rel: "apple-touch-icon", sizes: "128x128", href: "/icon_maskable.png" }],
   },
 
   modules: ["@nuxtjs/pwa", "@nuxtjs/axios", "@nuxtjs/auth-next", '@nuxtjs/apollo'],
@@ -54,11 +54,23 @@ export default {
     domains: [process.env.WORDPRESS_URL],
   },
 
-  // https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
+      name: "WooNuxt",
+      short_name: "WooNuxt",
+      display: "standalone",
       lang: "en",
+      theme_color: "#ffffff",
+      background_color: "#ffffff"
     },
+    meta: {
+      mobileAppIOS: true,
+      theme_color: "#ffffff",
+      nativeUI: true
+    },
+    workbox: {
+      // swURL: 'OneSignalSDKWorker.js',
+    }
   },
 
   publicRuntimeConfig: {
