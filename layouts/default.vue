@@ -3,7 +3,7 @@
 		<div class="text-xs text-white bg-gray-600">
 			<div class="container flex justify-between py-1.5">
 				<div>NEXT DAY DELIVERY</div>
-				<nuxt-link to="/soo/" v-if="!this.$auth.loggedIn"> LOGIN / SIGN UP </nuxt-link>
+				<a href="/soo/" v-if="!this.$auth.loggedIn"> LOGIN / SIGN UP </a>
 				<div @click="logOut" v-else>LOGOUT</div>
 			</div>
 		</div>
