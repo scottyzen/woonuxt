@@ -8,7 +8,7 @@
 			</nuxt-link>
 			<nav class="flex text-sm uppercase">
 				<nuxt-link class="ml-4" to="/products">All Products</nuxt-link>
-				<nuxt-link v-for="category in productCategories.nodes.slice(0, 2)" :key="category.id" :to="`/product-category/${category.slug}`" class="ml-4">
+				<nuxt-link class="hidden md:block md:ml-4" v-for="category in productCategories.nodes.slice(0, 2)" :key="category.id" :to="`/product-category/${category.slug}`">
 					{{ category.name }}
 				</nuxt-link>
 				<CartTrigger @icon-click="toggleCart" />
