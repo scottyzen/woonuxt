@@ -39,6 +39,7 @@ export default {
 			`
 			const { logout } = await this.$graphql.default.request(query)
 			console.log(logout.status)
+			this.$nuxt.refresh()
 		},
 		async getUser() {
 			const query = gql`
