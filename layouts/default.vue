@@ -5,7 +5,7 @@
 				<div>NEXT DAY DELIVERY</div>
 				<div class="flex gap-4">
 					<a href="https://woonuxt.com/soo/"> SIGN IN </a>
-					<a class="cursor-pointer" @click="logOut" href="/">LOG OUT</a>
+					<a class="cursor-pointer" @click="logOut" href="https://woonuxt.com">LOG OUT</a>
 				</div>
 			</div>
 		</div>
@@ -49,6 +49,7 @@ export default {
 				credentials: 'include',
 				mode: 'cors'
 			})
+			this.$graphql.default.setHeader('authorization', 'Bearer MY_TOKEN')
 		}
 	}
 }
