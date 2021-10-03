@@ -3,8 +3,10 @@
 		<div class="text-xs text-white bg-gray-600">
 			<div class="container flex justify-between py-1.5">
 				<div>NEXT DAY DELIVERY</div>
-				<a href="https://woonuxt.com/soo/" v-if="!this.$auth.loggedIn"> LOGIN / SIGN UP </a>
-				<div @click="logOut" v-else>LOGOUT</div>
+				<div class="flex gap-4">
+					<a href="https://woonuxt.com/soo/"> SIGN IN </a>
+					<a class="cursor-pointer" @click="logOut" href="/">LOG OUT</a>
+				</div>
 			</div>
 		</div>
 		<Header />
@@ -33,7 +35,16 @@ export default {
 			this.$store.commit('toggleCart', false)
 		},
 		async logOut() {
-			const data = await this.$auth.logout()
+			console.log('Clear all cookies')
+			const deleteAllCookies = () => {
+				const cookies = document.cookie.split(';')
+				for (const cookie of cookies) {
+					const eqPos = cookie.indexOf('=')
+					const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie
+					document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT'
+				}
+			}
+			deleteAllCookies()
 		}
 	}
 }
