@@ -32,7 +32,7 @@ export default {
 			// })
 			const query = gql`
 				mutation Logout {
-					logout {
+					logout(input: { clientMutationId: "kjnasljxnaslk" }) {
 						status
 					}
 				}
