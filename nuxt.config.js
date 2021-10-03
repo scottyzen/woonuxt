@@ -15,7 +15,7 @@ export default {
     link: [{ rel: "icon", type: "image/x-icon", href: "/icon.svg" }, { rel: "apple-touch-icon", sizes: "128x128", href: "/icon_maskable.png" }],
   },
 
-  modules: ["@nuxtjs/pwa", "@nuxtjs/axios", "@nuxtjs/auth-next", '@nuxtjs/apollo'],
+  modules: ["@nuxtjs/pwa", "@nuxtjs/axios", '@nuxtjs/apollo'],
   buildModules: ["@nuxtjs/tailwindcss", "@nuxt/image", "nuxt-graphql-request"],
 
   graphql: {
@@ -36,17 +36,6 @@ export default {
         httpEndpoint: `${process.env.WORDPRESS_URL}/graphql`
       }
     }
-  },
-
-  auth: {
-    strategies: {
-      google: {
-        responseType: "id_token token",
-        codeChallengeMethod: "",
-        clientId: process.env.GOOGLEID,
-        clientSecret: process.env.GOOGLESECRET,
-      },
-    },
   },
 
   image: {

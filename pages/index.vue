@@ -36,24 +36,24 @@ export default {
 		}
 	},
 	methods: {
-		async startWooSession() {
-			const password = this.$auth.user.sub
-			const email = this.$auth.user.email
-			const data = await this.$graphql.default.request(registerCustomer, { email, password })
-			const username = data.registerCustomer.customer.username
-			if (username) {
-				this.login(username, password)
-			}
-		},
-		async login(username, password) {
-			const data = await this.$graphql.default.request(login, { username, password })
-			console.log(data)
-		}
+		// async startWooSession() {
+		// 	const password = this.$auth.user.sub
+		// 	const email = this.$auth.user.email
+		// 	const data = await this.$graphql.default.request(registerCustomer, { email, password })
+		// 	const username = data.registerCustomer.customer.username
+		// 	if (username) {
+		// 		this.login(username, password)
+		// 	}
+		// },
+		// async login(username, password) {
+		// 	const data = await this.$graphql.default.request(login, { username, password })
+		// 	console.log(data)
+		// }
 	},
 	mounted() {
-		if (this.$auth.loggedIn && this.$auth.strategy.options.name == 'google') {
-			this.startWooSession()
-		}
+		// if (this.$auth.loggedIn && this.$auth.strategy.options.name == 'google') {
+		// 	this.startWooSession()
+		// }
 	}
 }
 </script>
