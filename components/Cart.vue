@@ -24,7 +24,7 @@ export default {
 		this.cart = cart
 	},
 	methods: {
-		clearout() {
+		async clearout() {
 			// Override all existing headers
 			// this.$graphql.default.setHeaders({
 			// 	credentials: 'include',
