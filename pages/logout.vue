@@ -1,7 +1,8 @@
 <template>
 	<div class="container flex items-center justify-center min-h-[300px] text-2xl">
-		<h2 v-if="hasLoggedOut">You have been successfully logged out.</h2>
-		<h2 v-else>Something went wrong. Please try again</h2>
+		<LoadingIcon v-if="hasLoggedOut == null" />
+		<h2 v-if="hasLoggedOut == true">You have been successfully logged out.</h2>
+		<h2 v-if="hasLoggedOut == false">Something went wrong. Please try again</h2>
 	</div>
 </template>
 
@@ -11,7 +12,7 @@ import { gql } from 'nuxt-graphql-request'
 export default {
 	data() {
 		return {
-			hasLoggedOut: false
+			hasLoggedOut: null
 		}
 	},
 	methods: {
@@ -24,12 +25,7 @@ export default {
 				}
 			`
 			const { logout } = await this.$graphql.default.request(query)
-			// SUCCESS
-			if (logout.status == 'SUCCESS') {
-				this.hasLoggedOut = true
-			}
-
-			console.log(logout.status)
+			this.hasLoggedOut = logout.status == 'SUCCESS' ? true : false
 		}
 	},
 	mounted() {
