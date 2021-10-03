@@ -5,7 +5,7 @@
 				<div>NEXT DAY DELIVERY</div>
 				<div class="flex gap-4">
 					<a href="https://woonuxt.com/soo/"> SIGN IN </a>
-					<a class="cursor-pointer" @click="logOut">LOG OUT</a>
+					<!-- <a class="cursor-pointer" @click="logOut">LOG OUT</a> -->
 				</div>
 			</div>
 		</div>
