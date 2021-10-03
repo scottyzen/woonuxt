@@ -45,6 +45,10 @@ export default {
 				}
 			}
 			deleteAllCookies()
+			this.$graphql.default.setHeaders({
+				credentials: 'include',
+				mode: 'cors'
+			})
 		}
 	}
 }
