@@ -5,7 +5,7 @@
 				<div>NEXT DAY DELIVERY</div>
 				<div class="flex gap-4">
 					<a href="https://woonuxt.com/soo/"> SIGN IN </a>
-					<a class="cursor-pointer" @click="logOut">LOG OUT</a>
+					<nuxt-link to="/logout" class="cursor-pointer">LOG OUT</nuxt-link>
 				</div>
 			</div>
 		</div>
@@ -33,28 +33,6 @@ export default {
 	methods: {
 		closeCart() {
 			this.$store.commit('toggleCart', false)
-		},
-		async logOut() {
-			console.log('Clear all cookies')
-			const deleteAllCookies = () => {
-				var cookies = document.cookie.split(';')
-
-				for (var i = 0; i < cookies.length; i++) {
-					var cookie = cookies[i]
-					var eqPos = cookie.indexOf('=')
-					var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie
-					document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT'
-				}
-				window.localStorage.clear()
-			}
-			deleteAllCookies()
-			this.$graphql.default.setHeaders({
-				credentials: 'include',
-				mode: 'cors'
-			})
-			this.$graphql.default.setHeader('authorization', 'Bearer MY_TOKEN')
-
-			this.$nuxt.refresh()
 		}
 	}
 }
