@@ -26,10 +26,19 @@ export default {
 	methods: {
 		clearout() {
 			// Override all existing headers
-			this.$graphql.default.setHeaders({
-				credentials: 'include',
-				mode: 'cors'
-			})
+			// this.$graphql.default.setHeaders({
+			// 	credentials: 'include',
+			// 	mode: 'cors'
+			// })
+			const query = gql`
+				mutation Logout {
+					logout {
+						status
+					}
+				}
+			`
+			const { logout } = await this.$graphql.default.request(query)
+			console.log(logout.status)
 		},
 		async getUser() {
 			const query = gql`
