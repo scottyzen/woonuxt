@@ -31,6 +31,5 @@
   from = "/*"
   to = "https://testing.2cubedtest.com/:splat"
   status = 200
-  force = true
   headers = {Access-Control-Allow-Origin = "*", Access-Control-Allow-Headers = "Content-Type, *", Access-Control-Allow-Methods = "GET, POST", Access-Control-Allow-Credentials= "true"}
     
