@@ -1,4 +1,4 @@
-import { gql } from 'nuxt-graphql-request';
+import { gql } from 'nuxt-graphql-request'
 
 export const state = () => ({
   showCart: false,
@@ -14,7 +14,7 @@ export const mutations = {
 }
 
 export const actions = {
-  async nuxtServerInit ({ dispatch, commit }) {
+  async nuxtServerInit({commit}) {
 
     console.log('nuxtServerInit');
 
