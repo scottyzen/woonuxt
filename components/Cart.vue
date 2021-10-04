@@ -1,7 +1,7 @@
 <template>
 	<section v-if="!$apollo.loading" class="fixed top-0 right-0 h-screen p-12 bg-white shadow-lg w-96">
 		<CloseCart />
-		<pre class="text-xs" v-if="cart">{{ cart }}</pre>
+		<pre class="text-xs" v-if="$store.state.cart">{{ $store.state.cart }}</pre>
 		<pre class="text-xs" v-if="viewer">{{ viewer }}</pre>
 		<button @click="getUser">Get User</button>
 	</section>
@@ -14,14 +14,12 @@ import getCart from '~/gql/queries/getCart'
 export default {
 	data() {
 		return {
-			cart: null,
 			viewer: null
 		}
 	},
 	async fetch() {
 		const { cart } = await this.$graphql.default.request(getCart)
-		this.$store.commit('updateItemCount', cart.contents.itemCount)
-		this.cart = cart
+		this.$store.commit('updateCart', cart)
 	},
 	methods: {
 		async getUser() {

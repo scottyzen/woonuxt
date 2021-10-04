@@ -24,11 +24,16 @@
 </template>
 
 <script>
+import getCart from '~/gql/queries/getCart'
 export default {
 	computed: {
 		showCart() {
 			return this.$store.state.showCart
 		}
+	},
+	async fetch() {
+		const { cart } = await this.$graphql.default.request(getCart)
+		this.$store.commit('updateCart', cart)
 	},
 	methods: {
 		closeCart() {
