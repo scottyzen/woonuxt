@@ -8,5 +8,8 @@
 				<a href="https://woonuxt.com">Refresh</a>
 			</nav>
 		</div>
+		<a href="https://woonuxt.com" class="block p-3 text-xs text-center text-gray-400 border-t">
+			WOONUXT v0.1.4
+		</a>
 	</footer>
 </template>
