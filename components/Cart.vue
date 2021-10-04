@@ -19,7 +19,8 @@ export default {
 		}
 	},
 	async fetch() {
-		const cart = await this.$graphql.default.request(getCart)
+		const { cart } = await this.$graphql.default.request(getCart)
+		this.$store.commit('updateItemCount', cart.contents.itemCount)
 		this.cart = cart
 	},
 	methods: {
