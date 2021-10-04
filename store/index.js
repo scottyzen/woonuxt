@@ -14,6 +14,29 @@ export const mutations = {
 }
 
 export const actions = {
+  async myAction({dispatch, state, commit}){
+
+    console.log('App start.');
+
+    const cartQuery = gql`query {
+      cart {
+        total
+        contents {
+          itemCount
+        }
+      }
+    }`;
+
+    try {
+      const { cart } = await this.$graphql.default.request(cartQuery)
+      console.log(cart);
+      commit("updateItemCount", cart.contents.itemCount);
+    } catch (error) {
+      console.log(error);
+    }
+    
+},
+
   async nuxtServerInit({commit}) {
 
     console.log('nuxtServerInit');
