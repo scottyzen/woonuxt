@@ -16,7 +16,9 @@ export const mutations = {
 export const actions = {
   async nuxtServerInit ({ dispatch, commit }) {
 
-      const cartQuery = gql`query getCart {
+    console.log('nuxtServerInit');
+
+      const cartQuery = gql`query {
         cart {
           total
           contents {
