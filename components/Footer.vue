@@ -8,8 +8,6 @@
 				<a href="https://woonuxt.com">Refresh</a>
 			</nav>
 		</div>
-		<a href="https://woonuxt.com" class="block p-4 text-xs text-center text-gray-400 border-t">
-			WooNuxt Version 0.1.5
-		</a>
+		<a href="https://woonuxt.com" class="block p-4 text-xs text-center text-gray-400 border-t">WooNuxt Version 0.1.7</a>
 	</footer>
 </template>

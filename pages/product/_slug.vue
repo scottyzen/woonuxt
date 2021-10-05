@@ -1,5 +1,5 @@
 <template>
-	<main v-if="!$apollo.loading" class="container py-12 mx-auto">
+	<main class="container py-12 mx-auto">
 		<div class="flex flex-wrap mx-auto">
 			<nuxt-img alt="ecommerce" class="object-cover w-full h-64 rounded lg:w-1/2 lg:h-auto" width="600" height="600" fit="cover" :src="product.image.sourceUrl" />
 			<div class="w-full mt-6 lg:w-1/2 lg:pl-10 lg:py-6 lg:mt-0">
@@ -98,15 +98,10 @@
 <script>
 import getProduct from '~/gql/queries/getProduct'
 export default {
-	apollo: {
-		product: {
-			query: getProduct,
-			variables() {
-				return {
-					slug: this.$route.params.slug
-				}
-			}
-		}
+	async asyncData({ $graphql, params }) {
+		const variables = { slug: params.slug }
+		const { product } = await $graphql.default.request(getProduct, variables)
+		return { product }
 	}
 }
 </script>

@@ -17,4 +17,7 @@ query getCart {
       itemCount
     }
   }
+  viewer{
+    username
+  }
 }

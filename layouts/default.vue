@@ -4,8 +4,8 @@
 			<div class="container flex justify-between py-1.5">
 				<div>NEXT DAY DELIVERY</div>
 				<div class="flex gap-4">
-					<a href="https://woonuxt.com/soo/"> SIGN IN </a>
-					<nuxt-link to="/logout" class="cursor-pointer">LOG OUT</nuxt-link>
+					<a v-if="$store.state.user === null" href="https://woonuxt.com/soo/"> SIGN IN </a>
+					<nuxt-link v-else to="/logout" class="cursor-pointer">LOG OUT</nuxt-link>
 				</div>
 			</div>
 		</div>
@@ -38,8 +38,9 @@ export default {
 		async getCart() {
 			console.log('getCart')
 			try {
-				const { cart } = await this.$graphql.default.request(getCart)
+				const { cart, viewer } = await this.$graphql.default.request(getCart)
 				this.$store.commit('updateCart', cart)
+				this.$store.commit('updateUser', viewer)
 			} catch (error) {
 				console.log(error)
 			}

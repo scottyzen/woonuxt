@@ -1,5 +1,5 @@
 <template>
-	<section v-if="!$apollo.loading" class="fixed top-0 right-0 h-screen p-12 bg-white shadow-lg w-96">
+	<section class="fixed top-0 right-0 h-screen p-12 bg-white shadow-lg w-96">
 		<CloseCart />
 		<pre class="text-xs" v-if="$store.state.cart">{{ $store.state.cart }}</pre>
 		<pre class="text-xs" v-if="viewer">{{ viewer }}</pre>
