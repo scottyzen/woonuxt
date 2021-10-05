@@ -12,7 +12,9 @@ export default {
         content: "Next generation front end for WooCommerce thats build with Nuxt.",
       },
     ],
-    link: [{ rel: "icon", type: "image/x-icon", href: "/icon.svg" }, { rel: "apple-touch-icon", sizes: "128x128", href: "/icon_maskable.png" }],
+    link: [
+      { rel: "icon", type: "image/x-icon", href: "/icon.svg" }, 
+      { rel: "apple-touch-icon", sizes: "512x512", href: "/icon_maskable.png" }],
   },
 
   modules: ["@nuxtjs/pwa", '@nuxtjs/localtunnel'],

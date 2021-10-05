@@ -15,11 +15,11 @@
 		</section>
 
 		<ul class="my-4 scslider" :style="cssVars">
-			<li class="relative flex justify-center overflow-hidden border border-white rounded h-36 md:h-64 item" v-for="(cat, i) in categories" :key="i">
+			<nuxt-link class="relative flex justify-center overflow-hidden border border-white rounded h-36 md:h-64 item" v-for="(cat, i) in categories" :key="i" :to="`/product-category/${cat}`">
 				<NuxtImg class="absolute inset-0 object-cover w-full h-full" :src="`/images/${cat}.jpg`" />
 				<div class="absolute inset-0 hover:opacity-50 opacity-40 top-1/2 bg-gradient-to-t from-black to-transparent"></div>
-				<nuxt-link :to="`/product-category/${cat}`" class="relative z-10 mt-auto mb-2 text-sm font-semibold text-white capitalize md:mb-4 md:text-base">{{cat}}</nuxt-link>
-			</li>
+				<span class="relative z-10 mt-auto mb-2 text-sm font-semibold text-white capitalize md:mb-4 md:text-base">{{cat}}</span>
+			</nuxt-link>
 		</ul>
 	</div>
 </template>
