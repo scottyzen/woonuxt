@@ -17,7 +17,7 @@
 		<ul class="my-4 scslider" :style="cssVars">
 			<nuxt-link class="relative flex justify-center overflow-hidden border border-white rounded h-36 md:h-64 item" v-for="(cat, i) in categories" :key="i" :to="`/product-category/${cat}`">
 				<NuxtImg class="absolute inset-0 object-cover w-full h-full" :src="`/images/${cat}.jpg`" />
-				<div class="absolute inset-0 hover:opacity-50 opacity-40 top-1/2 bg-gradient-to-t from-black to-transparent"></div>
+				<div class="overlay"></div>
 				<span class="relative z-10 mt-auto mb-2 text-sm font-semibold text-white capitalize md:mb-4 md:text-base">{{cat}}</span>
 			</nuxt-link>
 		</ul>
@@ -88,5 +88,8 @@ export default {
 	max-width: var(--containerFromLeft);
 	scroll-snap-align: start;
 	scroll-snap-stop: always;
+}
+.overlay {
+	@apply absolute inset-x-0 bottom-0 opacity-30 h-1/3 bg-gradient-to-t from-black to-transparent;
 }
 </style>
