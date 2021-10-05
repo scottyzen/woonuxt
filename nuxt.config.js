@@ -15,7 +15,7 @@ export default {
     link: [{ rel: "icon", type: "image/x-icon", href: "/icon.svg" }, { rel: "apple-touch-icon", sizes: "128x128", href: "/icon_maskable.png" }],
   },
 
-  modules: ["@nuxtjs/pwa"],
+  modules: ["@nuxtjs/pwa", '@nuxtjs/localtunnel'],
   buildModules: ["@nuxtjs/tailwindcss", "@nuxt/image", "nuxt-graphql-request"],
 
   graphql: {

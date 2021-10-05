@@ -6,9 +6,10 @@
 					<nuxt-img class="mr-2" width="32" height="32" src="icon.svg"></nuxt-img> WooNuxt
 				</h1>
 			</nuxt-link>
-			<nav class="flex text-sm uppercase">
+			<nav class="flex items-center text-sm uppercase">
 				<nuxt-link class="ml-4" to="/products">All Products</nuxt-link>
 				<CartTrigger @icon-click="toggleCart" />
+				<MenuTrigger class="md:hidden" @icon-click="console.log('menu')" />
 			</nav>
 		</div>
 	</header>

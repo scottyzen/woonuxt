@@ -1,26 +1,24 @@
 <template>
 	<div>
-		<section class="relative flex items-center justify-center">
+		<nuxt-link class="relative flex items-center justify-center" to="/products">
 			<NuxtImg class="object-cover w-full rounded h-64 lg:h-[580px]" src="/images/hero.jpeg" loading="lazy" />
 			<div class="container absolute text-gray-900">
-				<h1 class="mb-12 text-3xl font-bold md:mb-4 lg:text-6xl">Just landed.</h1>
+				<h1 class="mb-24 text-2xl font-bold md:mb-4 lg:text-6xl">Just landed.</h1>
 				<div class="hidden max-w-sm mb-12 font-light md:block">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde nam dignissimos nostrum veritatis nisi autem accusantium modi? Enim, voluptatibus consectetur.</div>
-				<nuxt-link class="inline-block p-4 px-6 leading-none text-black bg-white rounded shadow-sm" to="/products">Shop New Arrivals</nuxt-link>
-				<!-- <nuxt-link class="big-button" to="/products">Shop New Arrivals</nuxt-link> -->
 			</div>
-		</section>
-		<section class="container mt-16">
+		</nuxt-link>
+		<section class="container mt-8 md:mt-16">
 			<div class="flex items-end justify-between">
-				<h2 class="text-2xl font-semibold">Shop by category</h2>
-				<nuxt-link class="text-green-700" to="/products">Browse all categories</nuxt-link>
+				<h2 class="text-lg font-semibold md:text-2xl">Shop by category</h2>
+				<nuxt-link class="text-green-700" to="/products">View All</nuxt-link>
 			</div>
 		</section>
 
-		<ul class="my-8 scslider" :style="cssVars">
-			<li class="relative flex justify-center h-64 overflow-hidden border border-white rounded item" v-for="(cat, i) in categories" :key="i">
+		<ul class="my-4 scslider" :style="cssVars">
+			<li class="relative flex justify-center overflow-hidden border border-white rounded h-36 md:h-64 item" v-for="(cat, i) in categories" :key="i">
 				<NuxtImg class="absolute inset-0 object-cover w-full h-full" :src="`/images/${cat}.jpg`" />
 				<div class="absolute inset-0 hover:opacity-50 opacity-40 top-1/2 bg-gradient-to-t from-black to-transparent"></div>
-				<nuxt-link :to="`/product-category/${cat}`" class="relative z-10 my-4 mt-auto font-semibold text-white capitalize">{{cat}}</nuxt-link>
+				<nuxt-link :to="`/product-category/${cat}`" class="relative z-10 mt-auto mb-2 text-sm font-semibold text-white capitalize md:mb-4 md:text-base">{{cat}}</nuxt-link>
 			</li>
 		</ul>
 	</div>
@@ -64,30 +62,19 @@ export default {
 
 <style lang="postcss">
 .scslider {
-	display: flex;
-	gap: 20px;
-	flex-flow: row nowrap;
-	align-items: center;
-	overflow-x: scroll;
+	@apply flex gap-4 overflow-x-scroll;
 	scroll-snap-type: x mandatory;
 	scroll-behavior: smooth;
 	scroll-padding-inline: calc(var(--containerFromLeft) + 1rem);
-	/* margin: 0 1rem; */
-	/* cursor: ew-resize; */
 }
 .scslider::-webkit-scrollbar {
 	display: none;
 }
 .scslider .item {
-	/* flex: 0 0 20%; */
 	width: 20%;
-	min-width: 180px;
-	display: inherit;
-	justify-content: center;
-	align-items: center;
+	min-width: 25vw;
 	scroll-snap-align: start;
 	scroll-snap-stop: always;
-	/* margin-left: 20px; */
 }
 @media (min-width: 768px) {
 	.scslider .item {
