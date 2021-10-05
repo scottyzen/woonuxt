@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<nuxt-link class="relative flex items-center justify-center" to="/products">
-			<NuxtImg class="object-cover w-full rounded h-64 lg:h-[580px]" src="/images/hero.jpeg" width="1400" height="909" sizes="sm:100vw md:100vw lg:1200px" />
+			<NuxtImg class="object-cover w-full rounded h-64 lg:h-[580px]" src="/images/hero.jpeg" width="1400" height="909" sizes="sm:100vw md:100vw lg:1200px" alt="Hero image" />
 			<div class="container absolute text-gray-900">
 				<h1 class="mb-24 text-2xl font-bold md:mb-4 lg:text-6xl">Just landed.</h1>
 				<div class="hidden max-w-sm mb-12 font-light md:block">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde nam dignissimos nostrum veritatis nisi autem accusantium modi? Enim, voluptatibus consectetur.</div>
@@ -16,7 +16,7 @@
 
 		<ul class="my-4 scslider" :style="cssVars">
 			<nuxt-link class="relative flex justify-center overflow-hidden border border-white rounded h-36 md:h-64 item" v-for="(cat, i) in categories" :key="i" :to="`/product-category/${cat}`">
-				<NuxtImg width="200" height="200" class="absolute inset-0 object-cover w-full h-full" :src="`/images/${cat}.jpg`" loading="lazy" />
+				<NuxtImg sizes="sm:50vw md:200px" width="400" height="400" class="absolute inset-0 object-cover w-full h-full" :src="`/images/${cat}.jpg`" loading="lazy" :alt="cat" />
 				<div class="overlay"></div>
 				<span class="relative z-10 mt-auto mb-2 text-sm font-semibold text-white capitalize md:mb-4 md:text-base">{{cat}}</span>
 			</nuxt-link>

@@ -3,7 +3,7 @@
 		<div class="container flex items-center justify-between py-4">
 			<nuxt-link to="/">
 				<h1 class="flex items-center text-lg font-bold">
-					<nuxt-img class="mr-2" width="32" height="32" src="icon.svg"></nuxt-img> WooNuxt
+					<nuxt-img class="mr-2" width="32" height="32" src="icon.svg" alt="Logo"></nuxt-img> WooNuxt
 				</h1>
 			</nuxt-link>
 			<nav class="flex items-center text-sm uppercase">
