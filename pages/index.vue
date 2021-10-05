@@ -71,7 +71,7 @@ export default {
 	overflow-x: scroll;
 	scroll-snap-type: x mandatory;
 	scroll-behavior: smooth;
-	scroll-padding-inline-start: calc(var(--containerFromLeft) + 1rem);
+	scroll-padding-inline: calc(var(--containerFromLeft) + 1rem);
 	/* margin: 0 1rem; */
 	/* cursor: ew-resize; */
 }
@@ -88,6 +88,11 @@ export default {
 	scroll-snap-align: start;
 	scroll-snap-stop: always;
 	/* margin-left: 20px; */
+}
+@media (min-width: 768px) {
+	.scslider .item {
+		min-width: 200px;
+	}
 }
 .scslider::before,
 .scslider::after {
