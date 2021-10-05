@@ -14,13 +14,13 @@
 			</div>
 		</section>
 
-		<ul class="my-4 scslider" :style="cssVars">
+		<div class="my-4 scslider" :style="cssVars">
 			<nuxt-link class="relative flex justify-center overflow-hidden border border-white rounded h-36 md:h-64 item" v-for="(cat, i) in categories" :key="i" :to="`/product-category/${cat}`">
 				<NuxtImg sizes="sm:50vw md:200px" width="400" height="400" class="absolute inset-0 object-cover w-full h-full" :src="`/images/${cat}.jpg`" loading="lazy" :alt="cat" />
 				<div class="overlay"></div>
 				<span class="relative z-10 mt-auto mb-2 text-sm font-semibold text-white capitalize md:mb-4 md:text-base">{{cat}}</span>
 			</nuxt-link>
-		</ul>
+		</div>
 	</div>
 </template>
 
