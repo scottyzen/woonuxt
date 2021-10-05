@@ -31,14 +31,22 @@ export default {
 			return this.$store.state.showCart
 		}
 	},
-	async fetch() {
-		const { cart } = await this.$graphql.default.request(getCart)
-		this.$store.commit('updateCart', cart)
-	},
 	methods: {
 		closeCart() {
 			this.$store.commit('toggleCart', false)
+		},
+		async getCart() {
+			console.log('getCart')
+			try {
+				const { cart } = await this.$graphql.default.request(getCart)
+				this.$store.commit('updateCart', cart)
+			} catch (error) {
+				console.log(error)
+			}
 		}
+	},
+	mounted() {
+		this.getCart()
 	}
 }
 </script>
