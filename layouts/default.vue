@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div id="top">
 		<div class="text-xs text-white bg-gray-600">
 			<div class="container flex justify-between py-1.5">
 				<div>NEXT DAY DELIVERY</div>
@@ -61,8 +61,10 @@ export default {
 .page-leave-active {
 	opacity: 0;
 }
+html,
 body {
 	@apply bg-gray-50;
+	scroll-behavior: smooth;
 }
 
 /* Enter and leave animations can use different */

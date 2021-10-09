@@ -1,13 +1,5 @@
 <template>
-	<footer>
-		<div class="container py-8">
-			<nav class="grid gap-1">
-				<a href="https://woonuxt.com/my-account/">My Account</a>
-				<a href="https://woonuxt.com/cart/">Cart</a>
-				<a href="https://woonuxt.com/checkout/">Checkout</a>
-				<a href="https://woonuxt.com">Refresh</a>
-			</nav>
-		</div>
+	<footer class="bg-white">
 		<a href="https://woonuxt.com" class="block py-8 text-xs text-center text-gray-700 border-t">WooNuxt Version 0.1.7.3</a>
 	</footer>
 </template>

@@ -1,7 +1,6 @@
 <template>
 	<main class="container flex ">
 		<aside id="filters">
-
 			<!-- Price Range -->
 			<h3 class="mb-3">Price Range</h3>
 			<div class="flex justify-between gap-4">
@@ -65,7 +64,7 @@ export default {
 <style lang="postcss">
 #filters {
 	@apply border-r border-gray-100 py-8 pr-8 bg-white;
-	width: 250px;
+	width: 260px;
 	box-shadow: -100px 0 0 white, -200px 0 0 white, -300px 0 0 white;
 }
 .price-input {
