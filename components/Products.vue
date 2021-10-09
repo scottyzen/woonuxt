@@ -1,11 +1,12 @@
 <template>
 	<section class="relative w-full h-full min-h-screen">
-		<div v-if="products" class="mt-8 text-sm">{{products.length}} products</div>
-		<div v-if="products" class="grid grid-cols-2 gap-8 my-8 lg:grid-cols-4">
-			<ProductCard v-for="node in postWithPagination" :key="node.databaseId" :node="node" />
-		</div>
-		<div v-else class="p-8">
-			No Products Found
+		<div v-if="products.length" class="mt-8 text-sm">{{products.length}} products</div>
+		<transition-group name="shrink" mode="in-out" tag="div" v-if="products.length > 0" class="grid grid-cols-4 gap-8 my-8">
+			<ProductCard class="w-full" v-for="node in postWithPagination" :key="node.databaseId" :node="node" />
+		</transition-group>
+		<div v-else class="flex flex-col items-center justify-center p-8">
+			<nuxt-img width="400" height="400" src="/images/empty.svg"></nuxt-img>
+			<span>No Products Found</span>
 		</div>
 		<Pagination v-if="products" :category="category" :total="products.length" />
 	</section>
@@ -33,3 +34,22 @@ export default {
 	}
 }
 </script>
+
+<style>
+.shrink-move {
+	transition: all 500ms;
+}
+.shrink-leave-active {
+	transition: transform 300ms;
+	position: absolute;
+	opacity: 0;
+}
+.shrink-enter-active {
+	transition: opacity 500ms ease-out 250ms, transform 500ms ease-out;
+}
+.shrink-enter,
+.shrink-leave-to {
+	opacity: 0;
+	transform: scale(0.75) translateY(25%);
+}
+</style>
