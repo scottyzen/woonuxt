@@ -1,6 +1,6 @@
 <template>
-	<main class="container flex">
-		<aside id="filters">
+	<main class="container flex items-stretch h-full">
+		<aside id="filters" class="h-full ">
 
 			<!-- Price Range -->
 			<h3 class="mb-3">Price Range</h3>
@@ -12,7 +12,7 @@
 		</aside>
 
 		<div class="w-full pl-8">
-			<pre class="text-xs">{{products}}</pre>
+			<!-- <pre class="text-xs">{{products}}</pre> -->
 			<Products :category="$route.params.categorySlug" :page="parseInt($route.params.pageNumber) || 1" :products="products" />
 		</div>
 
