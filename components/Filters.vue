@@ -33,7 +33,7 @@
 			</label>
 		</div>
 
-		<nuxt-link v-if="showRestButton" to="/products" class="block w-full p-2 mt-8 leading-tight text-center text-white bg-purple-600 hover:bg-purple-700 rounded-xl">Clear all filters</nuxt-link>
+		<a v-if="showRestButton" @click="reset" class="block w-full p-2 mt-8 leading-tight text-center text-white bg-purple-600 cursor-pointer hover:bg-purple-700 rounded-xl">Clear all filters</a>
 
 	</aside>
 </template>
@@ -41,13 +41,23 @@
 <script>
 export default {
 	data() {
+		const initialState = {
+			minPrice: null,
+			maxPrice: 90,
+			starRating: null
+		}
 		return {
 			products: [],
-			filter: {
+			filter: initialState,
+			untouched: JSON.stringify(initialState)
+		}
+	},
+	methods: {
+		reset() {
+			this.filter = {
 				minPrice: null,
 				maxPrice: 90,
-				starRating: null,
-				showRestButton: false
+				starRating: null
 			}
 		}
 	},
@@ -55,9 +65,13 @@ export default {
 		filter: {
 			handler() {
 				this.$emit('filter-updated', this.filter)
-				this.showRestButton = true
 			},
 			deep: true
+		}
+	},
+	computed: {
+		showRestButton() {
+			return JSON.stringify(this.filter) !== this.untouched
 		}
 	}
 }
