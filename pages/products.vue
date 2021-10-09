@@ -1,25 +1,10 @@
 <template>
-	<main class="container flex ">
-		<aside id="filters">
-			<!-- Price Range -->
-			<h3 class="mb-3">Price Range</h3>
-			<div class="flex justify-between gap-4">
-				<div class="relative flex items-center w-1/2 ">
-					<span v-if="filter.minPrice" class="absolute p-2">€</span>
-					<input class="price-input" type="number" placeholder="Min" min="0" v-model.number="filter.minPrice" step="1" :class="{'active': filter.minPrice}">
-				</div>
-				<div class="relative flex items-center w-1/2 ">
-					<span v-if="filter.maxPrice" class="absolute p-2">€</span>
-					<input class="price-input" type="number" placeholder="Max" max="90" v-model.number="filter.maxPrice" step="1" :class="{'active': filter.maxPrice}">
-				</div>
-			</div>
+	<main class="container flex">
+		<Filters @filter-updated="filterProducts" />
 
-		</aside>
-
-		<div class="w-full pl-8">
-			<Products :category="$route.params.categorySlug" :page="parseInt($route.params.pageNumber) || 1" :products="products" />
+		<div class="flex flex-col flex-1 md:pl-12">
+			<Products :category="$route.params.categorySlug" :page="parseInt($route.params.pageNumber) || page" :products="products" />
 		</div>
-
 	</main>
 </template>
 
@@ -29,10 +14,7 @@ export default {
 	data() {
 		return {
 			products: [],
-			filter: {
-				minPrice: null,
-				maxPrice: 90
-			}
+			page: 1
 		}
 	},
 	async asyncData({ $graphql, params }) {
@@ -41,36 +23,28 @@ export default {
 		return { products: products.nodes }
 	},
 	methods: {
-		filterProducts() {
+		filterProducts(filter) {
 			this.products = this.$store.state.products.filter((product) => {
-				const min = this.filter.minPrice
-				const max = this.filter.maxPrice || 999999999
+				let { minPrice, maxPrice, starRating } = filter
+
+				maxPrice = maxPrice > 0 ? maxPrice : 9999999999
 				const price = product.price ? product.price.replace(/\€/g, '').split(' - ') : []
-				return price.some((el) => el >= min) && price.some((el) => el <= max)
+				const priceCondition = price.some((el) => el >= minPrice || 0) && price.some((el) => el <= maxPrice)
+
+				const ratingCondition = product.averageRating >= starRating
+
+				return priceCondition && ratingCondition
 			})
-		}
-	},
-	watch: {
-		filter: {
-			handler(after, before) {
-				this.filterProducts()
-			},
-			deep: true
 		}
 	}
 }
 </script>
 
 <style lang="postcss">
-#filters {
-	@apply border-r border-gray-100 py-8 pr-8 bg-white;
-	width: 260px;
-	box-shadow: -100px 0 0 white, -200px 0 0 white, -300px 0 0 white;
+.pagination {
+	@apply flex items-center justify-center gap-2 p-8 mb-8;
 }
-.price-input {
-	@apply p-2 leading-tight border rounded-xl w-full transition-all outline-none;
-}
-.price-input.active {
-	@apply pl-6 border-gray-400;
+.pagination a {
+	@apply px-4 py-2 leading-none text-purple-900 bg-purple-100 hover:bg-purple-200 rounded-xl;
 }
 </style>
