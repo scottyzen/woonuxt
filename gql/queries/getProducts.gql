@@ -1,5 +1,5 @@
 query getProductCategories($after: String, $slug: [String]) {
-  products(first: 99, after: $after, where: { categoryIn: $slug }) {
+  products( first: 99 after: $after where: {categoryIn: $slug, typeNotIn: EXTERNAL, visibility: VISIBLE} ) {
     nodes {
       name
       databaseId
@@ -20,10 +20,10 @@ query getProductCategories($after: String, $slug: [String]) {
       reviewCount
       slug
       ... on SimpleProduct {
-        price
+        price(format: RAW)
       }
       ... on VariableProduct {
-        price
+        price(format: RAW)
       }
     }
   }
