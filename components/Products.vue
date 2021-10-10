@@ -11,7 +11,7 @@
 		</div>
 
 		<transition-group v-else name="shrink" mode="in-out" class="grid grid-cols-2 xl:grid-cols-3  gap-8 my-8 min-h-[600px]">
-			<ProductCard class="w-full" v-for="node in newProducts" :key="node.databaseId" :node="node" />
+			<ProductCard class="w-full" v-for="(node, i) in newProducts" :key="i" :node="node" :index="i" />
 		</transition-group>
 
 		<!-- <Pagination v-if="products" :category="category" :total="products.length" /> -->
