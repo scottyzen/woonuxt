@@ -8,9 +8,9 @@
 			</nuxt-link>
 			<nav id="main-nav" class="items-center hidden text-sm text-gray-500 uppercase md:flex lg:flex-1 lg:pl-12">
 				<nuxt-link class="mr-4" to="/products">Shop</nuxt-link>
-				<nuxt-link class="mr-4" to="/">About us</nuxt-link>
-				<nuxt-link class="mr-4" to="/">News</nuxt-link>
-				<nuxt-link class="mr-4" to="/">Contact</nuxt-link>
+				<nuxt-link class="mr-4" to="/about">About us</nuxt-link>
+				<nuxt-link class="mr-4" to="/news">News</nuxt-link>
+				<nuxt-link class="mr-4" to="/contact">Contact</nuxt-link>
 			</nav>
 			<div class="flex items-center">
 				<a v-if="$store.state.user === null" href="https://woonuxt.com/soo/" class="flex mr-1 text-sm text-gray-500">
