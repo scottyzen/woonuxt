@@ -13,8 +13,7 @@ import getProducts from '~/gql/queries/getProducts'
 export default {
 	data() {
 		return {
-			products: [],
-			page: 1
+			products: []
 		}
 	},
 	async asyncData({ $graphql, params }) {

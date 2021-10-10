@@ -1,11 +1,14 @@
 query getCategories {
-  productCategories(where: { orderby: COUNT, order: DESC, hideEmpty: true }) {
+  productCategories( where: {orderby: COUNT, order: DESC, hideEmpty: true, exclude: "15"} ) {
     nodes {
       count
       databaseId
       id
       name
       slug
+      image {
+        sourceUrl
+      }
     }
   }
 }

@@ -10,7 +10,7 @@
 			<span>No Products Found</span>
 		</div>
 
-		<transition-group v-else name="shrink" mode="in-out" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 my-8 min-h-[600px]">
+		<transition-group v-else name="shrink" mode="in-out" class="grid grid-cols-2 xl:grid-cols-3  gap-8 my-8 min-h-[600px]">
 			<ProductCard class="w-full" v-for="node in newProducts" :key="node.databaseId" :node="node" />
 		</transition-group>
 

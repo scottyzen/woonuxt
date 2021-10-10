@@ -47,18 +47,13 @@ export default {
 			starRating: null
 		}
 		return {
-			products: [],
 			filter: initialState,
-			untouched: JSON.stringify(initialState)
+			initialState: JSON.stringify(initialState)
 		}
 	},
 	methods: {
 		reset() {
-			this.filter = {
-				minPrice: null,
-				maxPrice: 90,
-				starRating: null
-			}
+			this.filter = JSON.parse(this.initialState)
 		}
 	},
 	watch: {
@@ -71,7 +66,7 @@ export default {
 	},
 	computed: {
 		showRestButton() {
-			return JSON.stringify(this.filter) !== this.untouched
+			return JSON.stringify(this.filter) !== this.initialState
 		}
 	}
 }
@@ -79,8 +74,7 @@ export default {
 
 <style lang="postcss">
 #filters {
-	@apply border-r border-gray-100 py-8 pr-12 bg-white;
-	width: 260px;
+	@apply border-r border-gray-100 py-8 pr-12 bg-white w-[260px];
 	box-shadow: -100px 0 0 white, -200px 0 0 white, -300px 0 0 white;
 }
 .price-input {

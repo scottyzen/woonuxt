@@ -1,14 +1,5 @@
 <template>
 	<div id="top">
-		<div class="text-xs text-white bg-gray-600">
-			<div class="container flex justify-between py-1.5">
-				<div>NEXT DAY DELIVERY</div>
-				<div class="flex gap-4">
-					<a v-if="$store.state.user === null" href="https://woonuxt.com/soo/"> SIGN IN </a>
-					<nuxt-link v-else to="/logout" class="cursor-pointer">LOG OUT</nuxt-link>
-				</div>
-			</div>
-		</div>
 		<Header />
 		<transition name="slide">
 			<Cart v-if="showCart" class="z-50" />
@@ -17,7 +8,7 @@
 			<Nuxt />
 		</transition>
 		<transition name="page">
-			<div v-if="showCart" class="fixed inset-0 bg-black opacity-25" @click="closeCart"></div>
+			<div v-if="showCart" class="fixed inset-0 z-40 bg-black opacity-25" @click="closeCart"></div>
 		</transition>
 		<Footer />
 	</div>
@@ -63,7 +54,7 @@ export default {
 }
 html,
 body {
-	@apply bg-gray-50;
+	@apply bg-gray-50 text-gray-900;
 	scroll-behavior: smooth;
 }
 
