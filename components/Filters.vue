@@ -2,7 +2,7 @@
 	<aside id="filters" class="hidden md:block">
 		<span class="block mb-8 text-xl">Filter</span>
 		<!-- Price Range -->
-		<h3 class="mb-3">Price Range</h3>
+		<div class="mb-3">Price Range</div>
 		<div class="flex justify-between gap-4">
 			<div class="relative flex items-center w-1/2 ">
 				<span v-if="filter.minPrice" class="absolute p-2">€</span>
@@ -14,26 +14,33 @@
 			</div>
 		</div>
 
-		<h3 class="mt-8 mb-3">Rating</h3>
+		<div class="mt-8 mb-3">Rating</div>
 		<div class="grid gap-1">
-			<label class="flex items-center"><input type="radio" :value="5" v-model="filter.starRating">
+			<label for="star-five" class="flex items-center">
+				<input id="star-five" type="radio" :value="5" v-model="filter.starRating">
 				<Stars :number="5" />
 			</label>
-			<label class="flex items-center"><input type="radio" :value="4" v-model="filter.starRating">
+			<label for="star-four" class="flex items-center">
+				<input id="star-four" type="radio" :value="4" v-model="filter.starRating">
 				<Stars :number="4" />
 			</label>
-			<label class="flex items-center"><input type="radio" :value="3" v-model="filter.starRating">
+			<label for="star-three" class="flex items-center">
+				<input id="star-three" type="radio" :value="3" v-model="filter.starRating">
 				<Stars :number="3" />
 			</label>
-			<label class="flex items-center"><input type="radio" :value="2" v-model="filter.starRating">
+			<label for="star-two" class="flex items-center">
+				<input id="star-two" type="radio" :value="2" v-model="filter.starRating">
 				<Stars :number="2" />
 			</label>
-			<label class="flex items-center"><input type="radio" :value="1" v-model="filter.starRating">
+			<label for="star-one" class="flex items-center">
+				<input id="star-one" type="radio" :value="1" v-model="filter.starRating">
 				<Stars :number="1" />
 			</label>
 		</div>
 
-		<a v-if="showRestButton" @click="reset" class="block w-full p-2 mt-12 leading-tight text-center text-white bg-purple-600 cursor-pointer hover:bg-purple-700 rounded-xl">Clear all filters</a>
+		<transition name="fadeUp">
+			<a v-if="showRestButton" @click="reset" class="block w-full p-2 mt-12 leading-tight text-center text-white bg-purple-600 cursor-pointer hover:bg-purple-700 rounded-xl">Clear all filters</a>
+		</transition>
 
 	</aside>
 </template>
@@ -82,5 +89,14 @@ export default {
 }
 .price-input.active {
 	@apply pl-6 border-gray-400;
+}
+.fadeUp-enter-active,
+.fadeUp-leave-active {
+	transition: all 300ms;
+}
+.fadeUp-enter,
+.fadeUp-leave-active {
+	opacity: 0;
+	transform: translateY(10px);
 }
 </style>

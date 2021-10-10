@@ -73,6 +73,7 @@ export default {
 }
 .shrink-enter-active {
 	transition: opacity 500ms ease-out 250ms, transform 500ms ease-out;
+	will-change: opacity, transform;
 }
 .shrink-enter,
 .shrink-leave-to {

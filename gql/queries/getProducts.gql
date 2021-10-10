@@ -8,14 +8,6 @@ query getProductCategories($after: String, $slug: [String]) {
         altText
         title
       }
-      productCategories {
-        nodes {
-          databaseId
-          slug
-          name
-          count
-        }
-      }
       averageRating
       reviewCount
       slug
