@@ -33,7 +33,7 @@
 			</label>
 		</div>
 
-		<a v-if="showRestButton" @click="reset" class="block w-full p-2 mt-8 leading-tight text-center text-white bg-purple-600 cursor-pointer hover:bg-purple-700 rounded-xl">Clear all filters</a>
+		<a v-if="showRestButton" @click="reset" class="block w-full p-2 mt-12 leading-tight text-center text-white bg-purple-600 cursor-pointer hover:bg-purple-700 rounded-xl">Clear all filters</a>
 
 	</aside>
 </template>
@@ -74,7 +74,7 @@ export default {
 
 <style lang="postcss">
 #filters {
-	@apply border-r border-gray-100 py-8 pr-12 bg-white w-[260px];
+	@apply border-r border-gray-100 py-8 pr-12 bg-white w-[240px];
 	box-shadow: -100px 0 0 white, -200px 0 0 white, -300px 0 0 white;
 }
 .price-input {

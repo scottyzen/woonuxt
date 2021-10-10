@@ -1,7 +1,7 @@
 <template>
 	<header class="sticky top-0 z-40 bg-white shadow-sm">
 		<div class="container flex items-center justify-between py-4">
-			<nuxt-link to="/" class="md:w-[260px]">
+			<nuxt-link to="/" class="md:w-[240px]">
 				<h1 class="flex items-center text-lg font-bold">
 					<nuxt-img class="mr-2" width="32" height="32" src="icon.svg" alt="Logo"></nuxt-img> WooNuxt
 				</h1>

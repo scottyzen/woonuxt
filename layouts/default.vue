@@ -1,5 +1,5 @@
 <template>
-	<div id="top">
+	<div>
 		<Header />
 		<transition name="slide">
 			<Cart v-if="showCart" class="z-50" />

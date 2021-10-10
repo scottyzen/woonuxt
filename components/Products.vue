@@ -1,7 +1,7 @@
 <template>
 	<section class="relative w-full h-full min-h-screen">
 
-		<div v-if="products.length" class="mt-8 text-sm font-light">
+		<div v-if="products.length" class="absolute right-0 hidden mt-8 text-sm font-light -top-16 lg:block ">
 			Showing <strong>{{small + 1}}</strong> to <strong>{{large}}</strong> of <strong>{{this.products.length}}</strong> products
 		</div>
 
@@ -18,8 +18,8 @@
 
 		<!-- Pagination -->
 		<div class="pagination">
-			<a href="#top" v-if="page > 1" @click="page--">Previous</a>
-			<a href="#top" v-if="large != products.length" @click="page++">Next</a>
+			<a href="#" v-if="page > 1" @click="page--">Previous</a>
+			<a href="#" v-if="large != products.length" @click="page++">Next</a>
 		</div>
 
 	</section>

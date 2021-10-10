@@ -3,6 +3,7 @@
 		<Filters @filter-updated="filterProducts" />
 
 		<div class="flex flex-col flex-1 md:pl-12">
+			<input type="search" class="w-full max-w-md p-2 px-4 mt-8 leading-tight transition-all border outline-none rounded-xl" placeholder="Search products...">
 			<Products :category="$route.params.categorySlug" :page="parseInt($route.params.pageNumber) || page" :products="products" />
 		</div>
 	</main>
@@ -13,7 +14,8 @@ import getProducts from '~/gql/queries/getProducts'
 export default {
 	data() {
 		return {
-			products: []
+			products: [],
+			page: 1
 		}
 	},
 	async asyncData({ $graphql, params }) {
