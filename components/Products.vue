@@ -59,7 +59,12 @@ export default {
 
 <style lang="postcss">
 .product-grid {
-	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	grid-template-columns: repeat(2, 1fr);
+}
+@media (min-width: 768px) {
+	.product-grid {
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	}
 }
 .pagination {
 	@apply flex items-center justify-center gap-2 p-8 mb-8;
