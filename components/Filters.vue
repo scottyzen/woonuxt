@@ -81,7 +81,7 @@ export default {
 
 <style lang="postcss">
 #filters {
-	@apply border-r border-gray-100 py-8 pr-12 bg-white w-[240px];
+	@apply border-r border-gray-100 py-8 pr-8 bg-white w-[225px];
 	box-shadow: -100px 0 0 white, -200px 0 0 white, -300px 0 0 white;
 }
 .price-input {

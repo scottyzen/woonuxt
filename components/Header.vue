@@ -1,16 +1,17 @@
 <template>
 	<header class="sticky top-0 z-40 bg-white shadow-sm">
 		<div class="container flex items-center justify-between py-4">
-			<nuxt-link to="/" class="md:w-[240px]">
+			<nuxt-link to="/">
 				<h1 class="flex items-center text-lg font-bold">
 					<nuxt-img class="mr-2" width="32" height="32" src="icon.svg" alt="Logo"></nuxt-img> WooNuxt
 				</h1>
 			</nuxt-link>
-			<nav id="main-nav" class="items-center hidden text-sm text-gray-500 uppercase md:flex lg:flex-1 lg:pl-12">
-				<nuxt-link class="mr-4" to="/products">Shop</nuxt-link>
-				<nuxt-link class="mr-4" to="/about">About us</nuxt-link>
-				<nuxt-link class="mr-4" to="/news">News</nuxt-link>
-				<nuxt-link class="mr-4" to="/contact">Contact</nuxt-link>
+			<nav id="main-nav" class="items-center hidden gap-6 text-sm text-gray-500 md:flex lg:pl-12">
+				<nuxt-link to="/">Home</nuxt-link>
+				<nuxt-link to="/products">Shop</nuxt-link>
+				<nuxt-link to="/about">About us</nuxt-link>
+				<nuxt-link to="/news">News</nuxt-link>
+				<nuxt-link to="/contact">Contact</nuxt-link>
 			</nav>
 			<div class="flex items-center">
 				<a v-if="$store.state.user === null" href="https://woonuxt.com/soo/" class="flex mr-1 text-sm text-gray-500">

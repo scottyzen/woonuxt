@@ -58,6 +58,10 @@ body {
 	scroll-behavior: smooth;
 }
 
+.container {
+	max-width: 1440px;
+}
+
 /* Enter and leave animations can use different */
 /* durations and timing functions.              */
 .slide-leave-active,

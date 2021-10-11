@@ -1,12 +1,25 @@
-query getProductCategories($after: String, $slug: [String]) {
-  products( first: 99 after: $after where: {categoryIn: $slug, typeNotIn: EXTERNAL, visibility: VISIBLE, minPrice: 0} ) {
+query getProducts($after: String, $slug: [String]) {
+  products(
+    first: 99
+    after: $after
+    where: {categoryIn: $slug, typeNotIn: EXTERNAL, visibility: VISIBLE, minPrice: 0}
+  ) {
     nodes {
       name
+      onSale
       databaseId
       image {
         sourceUrl
         altText
         title
+      }
+      productCategories {
+        nodes {
+          databaseId
+          slug
+          name
+          count
+        }
       }
       averageRating
       reviewCount
