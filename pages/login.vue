@@ -11,14 +11,15 @@ import login from '~/gql/mutations/login'
 export default {
 	methods: {
 		async loginUser(logininfo) {
-			console.log('Loggin in')
 			try {
 				const variables = {
 					username: logininfo.email,
 					password: logininfo.password
 				}
-				const data = await this.$graphql.default.request(login, variables)
-				console.log(data)
+				const { loginWithCookies } = await this.$graphql.default.request(login, variables)
+				if (loginWithCookies.status == 'SUCCESS') {
+					this.$router.push('/')
+				}
 			} catch (error) {
 				console.error(JSON.stringify(error, undefined, 2))
 			}

@@ -18,7 +18,11 @@ export default {
   },
 
   modules: ["@nuxtjs/pwa", '@nuxtjs/localtunnel'],
-  buildModules: ["@nuxtjs/tailwindcss", "@nuxt/image", "nuxt-graphql-request"],
+  buildModules: ['nuxt-windicss', "@nuxt/image", "nuxt-graphql-request"],
+
+  css: [
+    'virtual:windi.css'
+  ],
 
   graphql: {
     clients: {
@@ -50,9 +54,6 @@ export default {
       mobileAppIOS: true,
       theme_color: "#ffffff",
       nativeUI: true
-    },
-    workbox: {
-      // swURL: 'OneSignalSDKWorker.js',
     }
   },
 
@@ -76,4 +77,4 @@ export default {
       });
     },
   },
-};
+}

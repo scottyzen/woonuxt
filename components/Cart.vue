@@ -1,9 +1,21 @@
 <template>
-	<section class="fixed top-0 bottom-0 right-0 p-12 bg-white shadow-lg w-96">
-		<CloseCart />
-		<pre class="text-xs" v-if="$store.state.cart">{{ $store.state.cart }}</pre>
-		<pre class="text-xs" v-if="viewer">{{ viewer }}</pre>
-		<button @click="getUser">Get User</button>
+	<section class="fixed top-0 bottom-0 right-0 flex flex-col max-w-lg bg-white shadow-lg w-9/10">
+		<CloseCart class="p-1.5 bg-white shadow-xl rounded-xl" />
+		<EmptyCart class="p-1.5 bg-red-400 text-white shadow-xl rounded-xl" />
+
+		<div class="mt-8 text-center">Basket</div>
+
+		<ul class="flex flex-col flex-1 gap-4 p-8">
+			<CartCard v-for="item in $store.state.cart.contents.nodes" :key="item.databaseId" :item="item" />
+		</ul>
+
+		<div class="p-8 bg-white">
+			<nuct-link class="block p-3 text-lg text-center text-white bg-purple-500 justify-evenly rounded-2xl hover:bg-purple-600" to="/">
+				<span class="mx-2">Checkout</span>
+				<span>{{$store.state.cart.total}}</span>
+			</nuct-link>
+		</div>
+
 	</section>
 </template>
 
@@ -41,3 +53,10 @@ export default {
 	}
 }
 </script>
+
+
+<style scoped>
+section {
+	background: linear-gradient(#fff, #f5f5f9);
+}
+</style>

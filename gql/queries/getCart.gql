@@ -1,23 +1,48 @@
 query getCart {
   cart {
     total
+    isEmpty
     contents {
+      itemCount
       nodes {
+        quantity
         product {
           node {
+            name
+            slug
+            sku
+            databaseId
+            type
+            image {
+              sourceUrl(size: SHOP_THUMBNAIL)
+            }
+            ... on VariableProduct {
+              name
+              price
+            }
             ... on SimpleProduct {
-              id
               name
               price
             }
           }
         }
-        quantity
+        variation{
+          node{
+            name
+            price
+            image{
+              sourceUrl(size: SHOP_THUMBNAIL)
+            }
+          }
+        }
       }
-      itemCount
+      productCount
     }
   }
-  viewer{
+  customer {
+    lastName
+    email
+    firstName
     username
   }
 }

@@ -1,7 +1,6 @@
-const colors = require("tailwindcss/colors");
+// const colors = require("tailwindcss/colors");
+// const colors = require('windicss/colors')
 module.exports = {
-  mode: "jit",
-  // darkMode: 'class', // or 'media' or 'class'
   theme: {
     container: {
       center: true,
@@ -9,7 +8,7 @@ module.exports = {
     },
     extend: {
       colors: {
-        violet: colors.purple,
+        // violet: colors.purple,
       },
     },
   },
