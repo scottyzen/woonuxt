@@ -1,5 +1,6 @@
-query getCart {
-  cart {
+mutation UpDateCartQuantity ($key: ID!, $quantity: Int!) {
+  updateItemQuantities(input: {items: {key: $key, quantity: $quantity}}) {
+    cart {
     total
     isEmpty
     contents {
@@ -40,10 +41,5 @@ query getCart {
       productCount
     }
   }
-  customer {
-    lastName
-    email
-    firstName
-    username
   }
 }

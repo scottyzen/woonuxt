@@ -5,16 +5,34 @@
 			<div>{{item[productType].node.name}}</div>
 			<div class="text-sm font-semibold">{{item[productType].node.price}}</div>
 		</div>
-		<QuantityButtons :quantity="item.quantity" />
+		<QuantityButtons :quantity="quantity" @quantity-change="updateQuantity" />
 	</li>
 </template>
 
 <script>
+import updateCartQuantity from '~/gql/mutations/updateCartQuantity'
 export default {
+	data() {
+		return {
+			isLoading: false
+		}
+	},
 	props: ['item'],
+	methods: {
+		async updateQuantity(quantity) {
+			const { updateItemQuantities } = await this.$graphql.default.request(updateCartQuantity, {
+				key: this.item.key,
+				quantity
+			})
+			this.$store.commit('updateCart', updateItemQuantities.cart)
+		}
+	},
 	computed: {
 		productType() {
 			return this.item.product.node.type == 'SIMPLE' ? 'product' : 'variation'
+		},
+		quantity() {
+			return this.item.quantity
 		}
 	}
 }
