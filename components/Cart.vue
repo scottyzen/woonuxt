@@ -9,11 +9,11 @@
 			<CartCard v-for="item in $store.state.cart.contents.nodes" :key="item.databaseId" :item="item" />
 		</ul>
 
-		<div class="p-8 bg-white">
-			<nuct-link class="block p-3 text-lg text-center text-white bg-purple-500 justify-evenly rounded-2xl hover:bg-purple-600" to="/">
+		<div class="p-8">
+			<nuxt-link class="block p-3 text-lg text-center bg-white shadow-md justify-evenly rounded-2xl hover:(bg-purple-500 text-white)" to="/">
 				<span class="mx-2">Checkout</span>
 				<span>{{$store.state.cart.total}}</span>
-			</nuct-link>
+			</nuxt-link>
 		</div>
 
 	</section>
@@ -57,6 +57,6 @@ export default {
 
 <style scoped>
 section {
-	background: linear-gradient(#fff, #f5f5f9);
+	background: linear-gradient(#fff, #ececf1);
 }
 </style>

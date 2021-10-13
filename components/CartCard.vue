@@ -5,7 +5,7 @@
 			<div>{{item[productType].node.name}}</div>
 			<div class="text-sm font-semibold">{{item[productType].node.price}}</div>
 		</div>
-		<QuantityButtons />
+		<QuantityButtons :quantity="item.quantity" />
 	</li>
 </template>
 

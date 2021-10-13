@@ -1,10 +1,18 @@
 <template>
 	<div class="flex w-24">
 		<button class="inline-block text-lg bg-white rounded-full shadow w-7 h-7">-</button>
-		<input class="flex-1 w-full text-center bg-transparent border-none outline-none apperance-none" type="number" value="1">
+		<input class="flex-1 w-full text-center bg-transparent border-none outline-none apperance-none" type="number" :value="quantity">
 		<button class="inline-block text-lg bg-white rounded-full shadow w-7 h-7">+</button>
 	</div>
 </template>
+
+<script>
+export default {
+	props: {
+		quantity: { default: 1, type: Number }
+	}
+}
+</script>
 
 <style scoped>
 input::-webkit-outer-spin-button,
