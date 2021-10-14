@@ -1,0 +1,51 @@
+mutation ADD_TO_CART($input: AddToCartInput!) {
+  addToCart(input: $input) {
+    cart {
+      subtotal
+      total
+      shippingTotal
+      contents {
+        itemCount
+        edges {
+          node {
+            extraData {
+              key
+              value
+            }
+          }
+        }
+        nodes {
+          variation {
+            attributes {
+              attributeId
+              name
+              value
+            }
+          }
+          product {
+            node {
+              name
+              sku
+              databaseId
+              ... on SimpleProduct {
+                id
+                name
+                price
+              }
+              ... on GroupProduct {
+                id
+                name
+                price
+              }
+              ... on VariableProduct {
+                id
+                name
+                price
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

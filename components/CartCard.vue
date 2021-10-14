@@ -29,7 +29,7 @@ export default {
 	},
 	computed: {
 		productType() {
-			return this.item.product.node.type == 'SIMPLE' ? 'product' : 'variation'
+			return this.item.variation ? 'variation' : 'product'
 		},
 		quantity() {
 			return this.item.quantity

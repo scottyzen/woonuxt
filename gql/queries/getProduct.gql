@@ -7,6 +7,14 @@ query getProduct($slug: ID!) {
       altText
       title
     }
+    localAttributes {
+      nodes {
+        variation
+        name
+        label
+        options
+      }
+    }
     productCategories {
       nodes {
         databaseId
