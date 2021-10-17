@@ -2,6 +2,9 @@
 	<main class="container py-8">
 		<div class="flex flex-col gap-8 md:flex-row md:items-center md:justify-evenly">
 			<nuxt-img class="object-contain w-full rounded-2xl md:w-auto" width="500" height="500" :src="type.image.sourceUrl" />
+			<!-- 
+			<pre>{{attrValues}}</pre>
+			<pre>{{activeVariation}}</pre> -->
 
 			<div class="max-w-lg">
 				<div class="flex items-center justify-between mb-4">
@@ -51,7 +54,8 @@ export default {
 			quantity: 1,
 			variation: [],
 			activeVariation: null,
-			indexOfTypeAny: []
+			indexOfTypeAny: [],
+			attrValues: []
 		}
 	},
 	async asyncData({ $graphql, params }) {
@@ -83,34 +87,37 @@ export default {
 			}
 		},
 		updateSelectedVariations(variations) {
+			this.attrValues = variations.map((el) => {
+				return { attributeName: el.name, attributeValue: el.value }
+			})
+			let cloneArray = JSON.parse(JSON.stringify(variations))
+
 			const activeVariation = this.product.variations.nodes.filter((variation) => {
 				// If there is any variation of type ANY set the value to ''
-				this.indexOfTypeAny.forEach((index) => {
-					variations[index].value = ''
-				})
+				this.indexOfTypeAny.forEach((index) => (cloneArray[index].value = ''))
 
-				return arraysEqual(formatArray(variation.attributes.nodes), formatArray(variations))
+				return arraysEqual(formatArray(variation.attributes.nodes), formatArray(cloneArray))
 			})
 			this.activeVariation = activeVariation[0]
 			// this.variation = variations
 		},
 		async triggerAddToCart() {
 			// { attributeName: 'size', attributeValue: 'Large' }
-			if (this.product.variations) {
-				const variationInput = this.activeVariation.attributes.nodes.map((el) => {
-					return { attributeName: el.name, attributeValue: el.value }
-				})
-			}
+			const variationInput = this.activeVariation ? this.attrValues : null
 
 			const input = {
 				productId: this.product.databaseId,
 				quantity: this.quantity,
 				variationId: this.product.variations ? this.activeVariation.databaseId : null,
-				variation: this.product.variations ? variationInpu : null
+				variation: variationInput
 			}
 
-			const { addToCart } = await this.$graphql.default.request(ADD_TO_CART, { input })
-			this.$store.commit('updateCart', addToCart.cart)
+			try {
+				const { addToCart } = await this.$graphql.default.request(ADD_TO_CART, { input })
+				this.$store.commit('updateCart', addToCart.cart)
+			} catch (error) {
+				console.error(error)
+			}
 		}
 	},
 	computed: {

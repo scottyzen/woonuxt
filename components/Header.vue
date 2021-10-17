@@ -13,7 +13,7 @@
 				<nuxt-link to="/news">News</nuxt-link>
 				<nuxt-link to="/contact">Contact</nuxt-link>
 			</nav>
-			<div class="flex items-center">
+			<div class="flex justify-end items-center md:min-w-[120px]">
 				<nuxt-link v-if="$store.state.user === null" to="/login" class="flex mr-1 text-sm text-gray-500">
 					<span class="mr-1 ">Sign in</span>
 					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 512 512">

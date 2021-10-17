@@ -9,7 +9,7 @@
 			<CartCard v-for="item in cart.contents.nodes" :key="item.databaseId" :item="item" />
 		</ul>
 
-		<div class="flex flex-col items-center justify-center flex-1 mb-12" @click="closeCart">
+		<div v-else class="flex flex-col items-center justify-center flex-1 mb-12" @click="closeCart">
 			<div class="mb-20 text-xl text-gray-300">Cart is empty</div>
 			<nuxt-link class="p-2 text-white bg-purple-500 rounded-2xl min-w-[180px] text-center" to="/products">Continue Shopping</nuxt-link>
 		</div>

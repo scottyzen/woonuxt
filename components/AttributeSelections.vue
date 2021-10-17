@@ -37,6 +37,8 @@ export default {
 				let radioValue = document.querySelector(`.name-${name}:checked`)
 				let value = radioValue ? radioValue.value : this.$refs[row.name][0].value
 
+				// console.log({ name: name.toLowerCase(), value: value })
+
 				return { name: name.toLowerCase(), value: value }
 			})
 
