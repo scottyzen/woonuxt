@@ -7,7 +7,7 @@
 				<div class="flex items-center justify-between mb-4">
 					<div class="flex-1">
 						<h1 class="mb-0.5 text-lg ">{{ type.name }}</h1>
-						<StarRating :rating="type.averageRating" :count="type.reviewCount" />
+						<StarRating :rating="product.averageRating" :count="product.reviewCount" />
 					</div>
 					<QuantityButtons @quantity-change="updateQuantity" :quantity="quantity" :min="1" />
 				</div>
