@@ -27,7 +27,6 @@ export default {
 			this.$store.commit('toggleCart', false)
 		},
 		async getCart() {
-			console.log('getCart')
 			try {
 				const { cart, viewer } = await this.$graphql.default.request(getCart)
 				this.$store.commit('updateCart', cart)

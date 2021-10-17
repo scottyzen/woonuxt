@@ -1,18 +1,23 @@
 <template>
 	<section class="fixed top-0 bottom-0 right-0 flex flex-col max-w-lg bg-white shadow-lg w-9/10">
 		<CloseCart class="p-1.5 bg-white shadow-xl rounded-xl" />
-		<EmptyCart class="p-1.5 bg-red-400 text-white shadow-xl rounded-xl" />
+		<EmptyCart v-if="cart" class="p-1.5 bg-red-400 text-white shadow-xl rounded-xl" />
 
 		<div class="mt-8 text-center">Basket</div>
 
-		<ul class="flex flex-col flex-1 gap-4 p-8">
-			<CartCard v-for="item in $store.state.cart.contents.nodes" :key="item.databaseId" :item="item" />
+		<ul v-if="cart" class="flex flex-col flex-1 gap-4 p-8 overflow-y-scroll">
+			<CartCard v-for="item in cart.contents.nodes" :key="item.databaseId" :item="item" />
 		</ul>
 
-		<div class="p-8">
+		<div class="flex flex-col items-center justify-center flex-1 mb-12" @click="closeCart">
+			<div class="mb-20 text-xl text-gray-300">Cart is empty</div>
+			<nuxt-link class="p-2 text-white bg-purple-500 rounded-2xl min-w-[180px] text-center" to="/products">Continue Shopping</nuxt-link>
+		</div>
+
+		<div v-if="cart" class="p-8">
 			<nuxt-link class="block p-3 text-lg text-center bg-white shadow-md justify-evenly rounded-2xl hover:(bg-purple-500 text-white)" to="/">
 				<span class="mx-2">Checkout</span>
-				<span>{{$store.state.cart.total}}</span>
+				<span>{{cart.total}}</span>
 			</nuxt-link>
 		</div>
 
@@ -20,35 +25,15 @@
 </template>
 
 <script>
-import { gql } from 'nuxt-graphql-request'
-import getCart from '~/gql/queries/getCart'
-
 export default {
-	data() {
-		return {
-			viewer: null
+	computed: {
+		cart() {
+			return this.$store.state.cart
 		}
 	},
-	async fetch() {
-		const { cart } = await this.$graphql.default.request(getCart)
-		this.$store.commit('updateCart', cart)
-	},
 	methods: {
-		async getUser() {
-			const query = gql`
-				query {
-					viewer {
-						email
-						firstName
-					}
-				}
-			`
-
-			const data = await this.$graphql.default.rawRequest(query)
-			const cart = await this.$graphql.default.request(getCart)
-			this.cart = cart
-			this.viewer = data.data.viewer
-			console.log(data)
+		closeCart() {
+			this.$store.commit('toggleCart', false)
 		}
 	}
 }

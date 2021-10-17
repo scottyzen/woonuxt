@@ -1,9 +1,10 @@
 <template>
 	<li class="flex items-center gap-4">
-		<NuxtImg class="w-16 h-16 rounded-xl" v-if="item[productType].node.image" :src="item[productType].node.image.sourceUrl" />
+
+		<NuxtImg class="w-16 h-16 rounded-xl" v-if="productType.image" :src="productType.image.sourceUrl" />
 		<div class="flex-1">
-			<div>{{item[productType].node.name}}</div>
-			<div class="text-sm font-semibold">{{item[productType].node.price}}</div>
+			<div class="leading-tight">{{productType.name}}</div>
+			<div class="text-xs font-semibold">{{productType.price}}</div>
 		</div>
 		<QuantityButtons :quantity="quantity" @quantity-change="updateQuantity" />
 	</li>
@@ -29,10 +30,13 @@ export default {
 	},
 	computed: {
 		productType() {
-			return this.item.variation ? 'variation' : 'product'
+			return this.item.product.node.type == 'VARIABLE' ? this.item.variation.node : this.item.product.node
 		},
 		quantity() {
 			return this.item.quantity
+		},
+		product() {
+			return this.item.variation ? this.item.variation : this.item.product
 		}
 	}
 }

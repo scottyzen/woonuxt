@@ -22,7 +22,7 @@
 					</svg>
 				</nuxt-link>
 				<CartTrigger @icon-click="toggleCart" />
-				<MenuTrigger class="md:hidden" @icon-click="console.log('menu')" />
+				<!-- <MenuTrigger class="md:hidden" @icon-click="console.log('menu')" /> -->
 			</div>
 		</div>
 	</header>
@@ -33,6 +33,11 @@ export default {
 	methods: {
 		toggleCart() {
 			this.$store.commit('toggleCart', !this.$store.state.showCart)
+		}
+	},
+	watch: {
+		$route() {
+			this.$store.commit('toggleCart', false)
 		}
 	}
 }
