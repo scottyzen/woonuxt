@@ -1,4 +1,9 @@
-export default {
+import { defineNuxtConfig } from '@nuxt/bridge'
+
+export default defineNuxtConfig({
+  bridge: {
+    // vite: true,
+  },
   target: "static",
   components: true,
   head: {
@@ -17,7 +22,7 @@ export default {
       { rel: "apple-touch-icon", sizes: "512x512", href: "/icon_maskable.png" }],
   },
 
-  modules: ["@nuxtjs/pwa", '@nuxtjs/localtunnel'],
+  // modules: ["@nuxtjs/pwa"],
   buildModules: ['nuxt-windicss', "@nuxt/image", "nuxt-graphql-request"],
 
   css: [
@@ -61,20 +66,20 @@ export default {
     perPage: 12,
   },
 
-  router: {
-    extendRoutes(routes, resolve) {
-      routes.push({
-        path: "/products/page/:pageNumber",
-        component: resolve(__dirname, "pages/products"),
-      });
-      routes.push({
-        path: "/product-category/:categorySlug",
-        component: resolve(__dirname, "pages/products"),
-      });
-      routes.push({
-        path: "/product-category/:categorySlug/page/:pageNumber",
-        component: resolve(__dirname, "pages/products"),
-      });
-    },
-  },
-}
+  // router: {
+  //   extendRoutes(routes, resolve) {
+  //     routes.push({
+  //       path: "/products/page/:pageNumber",
+  //       component: resolve(__dirname, "pages/products"),
+  //     });
+  //     routes.push({
+  //       path: "/product-category/:categorySlug",
+  //       component: resolve(__dirname, "pages/products"),
+  //     });
+  //     routes.push({
+  //       path: "/product-category/:categorySlug/page/:pageNumber",
+  //       component: resolve(__dirname, "pages/products"),
+  //     });
+  //   },
+  // }
+})
