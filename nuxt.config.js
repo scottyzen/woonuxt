@@ -72,7 +72,7 @@ export default {
         component: resolve(__dirname, "pages/products"),
       });
     },
-  }
+  },
 
   build: {
     extend (config) {
