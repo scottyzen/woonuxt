@@ -6,7 +6,7 @@
 		<div class="mt-8 text-center">Basket</div>
 
 		<TransitionGroup v-if="cart" tag="ul" name="shrink" mode="in-out" class="flex flex-col flex-1 p-8 gap-4 overflow-y-scroll">
-			<SwipeCard v-for="item in cart.contents.nodes" :key="item.key">
+			<SwipeCard v-for="item in cart.contents.nodes" :key="item">
 				<CartCard :item="item" />
 			</SwipeCard>
 		</TransitionGroup>
