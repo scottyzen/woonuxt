@@ -5,11 +5,11 @@
 
 		<div class="mt-8 text-center">Basket</div>
 
-		<TransitionGroup v-if="cart" tag="ul" name="shrink" mode="in-out" class="flex flex-col flex-1 p-8 gap-4 overflow-y-scroll">
+		<ul v-if="cart" class="flex flex-col flex-1 p-8 gap-4 overflow-y-scroll">
 			<SwipeCard v-for="item in cart.contents.nodes" :key="item">
 				<CartCard :item="item" />
 			</SwipeCard>
-		</TransitionGroup>
+		</ul>
 
 		<div v-else class="flex flex-col flex-1 mb-12 items-center justify-center" @click="closeCart">
 			<div class="text-xl mb-20 text-gray-300">Cart is empty</div>
