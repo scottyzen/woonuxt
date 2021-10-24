@@ -57,22 +57,22 @@ export default {
     perPage: 12,
   },
 
-  // router: {
-  //   extendRoutes(routes, resolve) {
-  //     routes.push({
-  //       path: "/products/page/:pageNumber",
-  //       component: resolve(__dirname, "pages/products"),
-  //     });
-  //     routes.push({
-  //       path: "/product-category/:categorySlug",
-  //       component: resolve(__dirname, "pages/products"),
-  //     });
-  //     routes.push({
-  //       path: "/product-category/:categorySlug/page/:pageNumber",
-  //       component: resolve(__dirname, "pages/products"),
-  //     });
-  //   },
-  // }
+  router: {
+    extendRoutes(routes, resolve) {
+      routes.push({
+        path: "/products/page/:pageNumber",
+        component: resolve(__dirname, "pages/products"),
+      });
+      routes.push({
+        path: "/product-category/:categorySlug",
+        component: resolve(__dirname, "pages/products"),
+      });
+      routes.push({
+        path: "/product-category/:categorySlug/page/:pageNumber",
+        component: resolve(__dirname, "pages/products"),
+      });
+    },
+  }
 
   build: {
     extend (config) {
