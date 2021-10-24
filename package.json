@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "nuxi dev",
     "dev:host": "nuxt --hostname '0' --port 8000",
     "build": "nuxt build",
     "start": "nuxt start",
@@ -13,14 +13,15 @@
   },
   "dependencies": {
     "@nuxtjs/pwa": "^3.3.5",
+    "@vueuse/core": "^6.7.3",
     "core-js": "^3.18.3",
     "graphql-tag": "^2.12.5",
     "nuxt-edge": "latest"
   },
   "devDependencies": {
-    "@nuxt/bridge": "npm:@nuxt/bridge-edge@^3.0.0-27243104.5e903ae",
+    "@nuxt/bridge": "npm:@nuxt/bridge-edge@^3.0.0-27251455.110b2b2",
     "@nuxt/image": "^0.6.0",
     "nuxt-graphql-request": "^4.2.1",
-    "nuxt-windicss": "^2.0.1"
+    "nuxt-windicss": "^2.0.5"
   }
 }

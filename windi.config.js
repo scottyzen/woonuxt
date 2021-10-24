@@ -1,5 +1,4 @@
-// const colors = require("tailwindcss/colors");
-// const colors = require('windicss/colors')
+const colors = require('windicss/colors')
 module.exports = {
   theme: {
     container: {
@@ -8,14 +7,8 @@ module.exports = {
     },
     extend: {
       colors: {
-        // violet: colors.purple,
+        violet: colors.purple,
       },
     },
-  },
-  variants: {
-    extend: {},
-  },
-  plugins: [
-    // require('@tailwindcss/forms'),
-  ],
+  }
 };

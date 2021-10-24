@@ -23,28 +23,22 @@ export default defineNuxtConfig({
   },
 
   // modules: ["@nuxtjs/pwa"],
-  buildModules: ['nuxt-windicss', "@nuxt/image", "nuxt-graphql-request"],
+  buildModules: ['nuxt-windicss', "@nuxt/image", "nuxt-graphql-request", '@vueuse/core/nuxt'],
 
-  css: [
-    'virtual:windi.css'
-  ],
+  css: [ 'virtual:windi.css' ],
+
+  preflight: false,
 
   graphql: {
     clients: {
       default: {
         endpoint: `${process.env.WORDPRESS_URL}/graphql`,
-        options: {
-          credentials: "include",
-          mode: "cors",
-        },
+        options: { credentials: "include", mode: "cors" },
       },
     },
   },
 
-  image: {
-    provider: "static",
-    domains: [process.env.WORDPRESS_URL],
-  },
+  image: { provider: "static", domains: [process.env.WORDPRESS_URL] },
 
   pwa: {
     manifest: {
