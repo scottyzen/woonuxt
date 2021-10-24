@@ -49,18 +49,4 @@ section {
 .shrink-move {
 	transition: all 500ms;
 }
-.shrink-leave-active {
-	transition: transform 300ms;
-	position: absolute;
-	opacity: 0;
-}
-.shrink-enter-active {
-	transition: opacity 500ms ease-out 250ms, transform 500ms ease-out;
-	will-change: opacity, transform;
-}
-.shrink-enter,
-.shrink-leave-to {
-	opacity: 0;
-	transform: scale(0.75) translateY(25%);
-}
 </style>
