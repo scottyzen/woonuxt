@@ -7,15 +7,23 @@
 	</div>
 </template>
 
-<script setup>
-const el = ref(null);
-const isAlive = ref(true);
-const { isSwiping, lengthX, direction } = useSwipe(el, {
-	passive: false,
-	onSwipeEnd() {
-		if (lengthX.value > 80) {
-			isAlive.value = false;
-		}
+<script>
+import { ref, defineComponent, computed } from '@nuxtjs/composition-api';
+import { useSwipe } from '@vueuse/core';
+
+export default defineComponent({
+	setup() {
+		const isAlive = ref(true);
+		const el = ref(null);
+		const { isSwiping, lengthX, direction } = useSwipe(el, {
+			passive: true,
+			onSwipeEnd() {
+				if (lengthX.value > 80) {
+					isAlive.value = false;
+				}
+			},
+		});
+		return { el, isAlive, isSwiping, lengthX };
 	},
 });
 </script>

@@ -1,12 +1,12 @@
 <template>
-	<section class="bg-white flex flex-col max-w-lg shadow-lg top-0 right-0 bottom-0 w-9/10 fixed">
+	<section class="bg-white flex flex-col max-w-lg shadow-lg top-0 right-0 bottom-0 w-9/10 fixed overflow-x-hidden">
 		<CloseCart class="bg-white rounded-xl shadow-xl p-1.5" />
 		<EmptyCart v-if="cart" class="rounded-xl bg-red-400 shadow-xl text-white p-1.5" />
 
 		<div class="mt-8 text-center">Basket</div>
 
 		<TransitionGroup v-if="cart" tag="ul" name="shrink" mode="in-out" class="flex flex-col flex-1 p-8 gap-4 overflow-y-scroll">
-			<SwipeCard v-for="item in cart.contents.nodes" :key="item.databaseId">
+			<SwipeCard v-for="item in cart.contents.nodes" :key="item.key">
 				<CartCard :item="item" />
 			</SwipeCard>
 		</TransitionGroup>
