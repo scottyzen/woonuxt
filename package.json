@@ -16,6 +16,7 @@
     "@nuxtjs/pwa": "^3.3.5",
     "@vueuse/core": "^6.7.3",
     "core-js": "^3.18.3",
+    "graphql": "^15.6.1",
     "graphql-tag": "^2.12.5",
     "nuxt-edge": "latest"
   },
