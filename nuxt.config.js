@@ -74,13 +74,13 @@ export default {
     },
   },
 
-  // build: {
-  //   extend (config) {
-  //     config.module.rules.push({
-  //       test: /\.mjs$/,
-  //       include: /node_modules/,
-  //       type: "javascript/auto"
-  //     })
-  //   }
-  // }
+  build: {
+    extend (config) {
+      config.module.rules.push({
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: "javascript/auto"
+      })
+    }
+  }
 }
