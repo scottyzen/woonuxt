@@ -16,7 +16,8 @@ export default {
     ],
     link: [
       { rel: "icon", type: "image/x-icon", href: "/logo.svg" },
-      { rel: "apple-touch-icon", sizes: "512x512", href: "/icon_maskable.png" }
+      { rel: "apple-touch-icon", sizes: "512x512", href: "/icon_maskable.png" },
+      { rel: "manifest", crossorigin: "use-credentials", href: "/manifest.json" }
     ],
   },
 
