@@ -29,6 +29,7 @@ export default {
 
 			if (this.hasLoggedOut) {
 				this.$store.commit('updateUser', undefined);
+				this.$store.commit('updateCart', null);
 				this.deleteAllCookies();
 				setTimeout(() => {
 					this.$router.push('/login');
