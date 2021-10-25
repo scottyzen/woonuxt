@@ -37,9 +37,6 @@ export default {
 		closeCart() {
 			this.$store.commit('toggleCart', false);
 		},
-		updateQuantity() {
-			console.log('has-swiped. No change the quantity');
-		},
 	},
 };
 </script>

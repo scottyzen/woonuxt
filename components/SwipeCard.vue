@@ -1,5 +1,5 @@
 <template>
-	<div class="rounded-lg flex h-16 w-full overflow-hidden relative items-center">
+	<div v-if="isAlive" class="rounded-lg flex h-16 w-full overflow-hidden relative items-center">
 		<TrashIcon class=" transform transition-all right-0 w-6 scale-0 absolute" :class="{'scale-100' : lengthX > 40, 'delete-ready': lengthX > 80}" />
 		<div class="rounded-lg inset-0 absolute" :class="{'transition-all' : !isSwiping}" ref="el" :style="{'transform' : isSwiping ? `translateX(-${lengthX}px)` : `none`}">
 			<slot :remove="false"></slot>
@@ -9,20 +9,16 @@
 
 <script>
 import updateCartQuantity from '~/gql/mutations/updateCartQuantity';
-import { ref, defineComponent } from '@nuxtjs/composition-api';
+import {
+	ref,
+	toRefs,
+	defineComponent,
+	computed,
+} from '@nuxtjs/composition-api';
 import { useSwipe } from '@vueuse/core';
 
 export default defineComponent({
-	setup(context) {
-		// VUEUSE
-		const el = ref(null);
-		const { isSwiping, lengthX, direction } = useSwipe(el, {
-			passive: true,
-			async onSwipeEnd() {
-				if (lengthX.value > 80) removeItemFromCart();
-			},
-		});
-
+	setup(props, context) {
 		const removeItemFromCart = async () => {
 			const key = context.attrs.item.key;
 			const quantity = 0;
@@ -33,11 +29,23 @@ export default defineComponent({
 				});
 			context.root.$store.commit('updateCart', updateItemQuantities.cart);
 		};
-
+		const isAlive = ref(true);
+		const el = ref(null);
+		const { isSwiping, lengthX, direction } = useSwipe(el, {
+			passive: true,
+			onSwipeEnd() {
+				if (lengthX.value > 80) {
+					isAlive.value = false;
+					removeItemFromCart();
+				}
+			},
+		});
 		return { el, isAlive, isSwiping, lengthX };
 	},
 });
 </script>
+
+
 
 <style lang="postcss">
 .underlay {
