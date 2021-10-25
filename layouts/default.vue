@@ -38,7 +38,7 @@ export default {
 		},
 	},
 	mounted() {
-		// this.getCart();
+		this.getCart();
 	},
 };
 </script>

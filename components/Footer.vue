@@ -6,6 +6,6 @@
 			<nuxt-link to="/logout">Log out</nuxt-link>
 			<a href="https://woonuxt.com/soo/">SSO</a>
 		</div>
-		<a href="https://woonuxt.com" class="border-t text-xs text-center py-8 text-gray-700 block">WooNuxt Version 0.1.8.1</a>
+		<a href="https://woonuxt.com" class="border-t text-xs text-center py-8 text-gray-700 block">WooNuxt Version 0.1.8.2</a>
 	</footer>
 </template>

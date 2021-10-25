@@ -6,7 +6,7 @@
 		<div class="mt-8 text-center">Basket</div>
 
 		<ul v-if="cart" class="flex flex-col flex-1 p-8 gap-4 overflow-y-scroll">
-			<SwipeCard v-for="item in cart.contents.nodes" :key="item">
+			<SwipeCard v-for="item in cart.contents.nodes" :key="item.key" :item="item">
 				<CartCard :item="item" />
 			</SwipeCard>
 		</ul>
@@ -36,6 +36,9 @@ export default {
 	methods: {
 		closeCart() {
 			this.$store.commit('toggleCart', false);
+		},
+		updateQuantity() {
+			console.log('has-swiped. No change the quantity');
 		},
 	},
 };

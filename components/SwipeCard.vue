@@ -2,25 +2,35 @@
 	<div v-if="isAlive" class="rounded-lg flex h-16 w-full overflow-hidden relative items-center">
 		<TrashIcon class=" transform transition-all right-0 w-6 scale-0 absolute" :class="{'scale-100' : lengthX > 40, 'delete-ready': lengthX > 80}" />
 		<div class="rounded-lg inset-0 absolute" :class="{'transition-all' : !isSwiping}" ref="el" :style="{'transform' : isSwiping ? `translateX(-${lengthX}px)` : `none`}">
-			<slot></slot>
+			<slot :remove="false"></slot>
 		</div>
 	</div>
 </template>
 
 <script>
-import { ref, defineComponent, computed } from '@nuxtjs/composition-api';
+import updateCartQuantity from '~/gql/mutations/updateCartQuantity';
+import { ref, defineComponent } from '@nuxtjs/composition-api';
 import { useSwipe } from '@vueuse/core';
 
 export default defineComponent({
-	setup() {
-		const isAlive = ref(true);
+	setup(context) {
+		const removeItemFromCart = async () => {
+			const key = context.attrs.item.key;
+			const quantity = 0;
+			const { updateItemQuantities } =
+				await context.root.$graphql.default.request(updateCartQuantity, {
+					key,
+					quantity,
+				});
+			context.root.$store.commit('updateCart', updateItemQuantities.cart);
+		};
+
+		// VUEUSE
 		const el = ref(null);
 		const { isSwiping, lengthX, direction } = useSwipe(el, {
 			passive: true,
-			onSwipeEnd() {
-				if (lengthX.value > 80) {
-					isAlive.value = false;
-				}
+			async onSwipeEnd() {
+				if (lengthX.value > 80) removeItemFromCart();
 			},
 		});
 		return { el, isAlive, isSwiping, lengthX };
