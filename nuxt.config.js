@@ -16,8 +16,7 @@ export default {
     ],
     link: [
       { rel: "icon", type: "image/x-icon", href: "/logo.svg" },
-      { rel: "apple-touch-icon", sizes: "512x512", href: "/icon_maskable.png" },
-      { rel: "manifest", crossorigin: "use-credentials", href: "/manifest.json" }
+      // { rel: "apple-touch-icon", sizes: "512x512", href: "/icon_maskable.png" }
     ],
   },
 
@@ -43,7 +42,8 @@ export default {
       display: "standalone",
       lang: "en",
       theme_color: "#ffffff",
-      background_color: "#ffffff"
+      background_color: "#ffffff",
+      crossorigin: "use-credentials"
     },
     meta: {
       mobileAppIOS: true,
