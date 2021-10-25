@@ -4,8 +4,8 @@
 			<nuxt-link to="/news">News</nuxt-link>
 			<nuxt-link to="/login">Sign In</nuxt-link>
 			<nuxt-link to="/logout">Log out</nuxt-link>
-			<a href="/soo/">SSO</a>
+			<a href="https://woonext.com/soo/">SSO</a>
 		</div>
-		<a href="https://woonuxt.com" class="border-t text-xs text-center py-8 text-gray-700 block">WooNuxt Version 0.1.8.0</a>
+		<a href="https://woonuxt.com" class="border-t text-xs text-center py-8 text-gray-700 block">WooNuxt Version 0.1.8.1</a>
 	</footer>
 </template>
