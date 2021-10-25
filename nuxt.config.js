@@ -16,7 +16,7 @@ export default {
     ],
     link: [
       { rel: "icon", type: "image/x-icon", href: "/logo.svg" },
-      // { rel: "apple-touch-icon", sizes: "512x512", href: "/icon_maskable.png" }
+      { rel: "apple-touch-icon", sizes: "512x512", href: "/icon_maskable.png"} 
     ],
   },
 
@@ -43,7 +43,8 @@ export default {
       lang: "en",
       theme_color: "#ffffff",
       background_color: "#ffffff",
-      crossorigin: "use-credentials"
+      crossorigin: "use-credentials",
+      start_url: 'https://woonuxt.com',
     },
     meta: {
       mobileAppIOS: true,
@@ -73,13 +74,13 @@ export default {
     },
   },
 
-  build: {
-    extend (config) {
-      config.module.rules.push({
-        test: /\.mjs$/,
-        include: /node_modules/,
-        type: "javascript/auto"
-      })
-    }
-  }
+  // build: {
+  //   extend (config) {
+  //     config.module.rules.push({
+  //       test: /\.mjs$/,
+  //       include: /node_modules/,
+  //       type: "javascript/auto"
+  //     })
+  //   }
+  // }
 }
