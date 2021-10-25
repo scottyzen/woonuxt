@@ -21,9 +21,7 @@ export default {
     ],
   },
 
-  modules: ["@nuxtjs/pwa"],
-
-  buildModules: ['@nuxtjs/composition-api/module' ,'nuxt-windicss', "@nuxt/image", "nuxt-graphql-request", '@vueuse/core/nuxt'],
+  buildModules: ["@nuxtjs/pwa", '@nuxtjs/composition-api/module' ,'nuxt-windicss', "@nuxt/image", "nuxt-graphql-request", '@vueuse/core/nuxt'],
 
   // css: [ 'virtual:windi.css' ],
 
