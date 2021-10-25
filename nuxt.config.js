@@ -15,12 +15,13 @@ export default {
       },
     ],
     link: [
-      { rel: "icon", type: "image/x-icon", href: "/icon.svg" }, 
-      { rel: "apple-touch-icon", sizes: "512x512", href: "/icon_maskable.png" }],
+      { rel: "icon", type: "image/x-icon", href: "/logo.svg" },
+      { rel: "apple-touch-icon", sizes: "512x512", href: "/icon_maskable.png" }
+    ],
   },
 
   modules: ["@nuxtjs/pwa"],
-  
+
   buildModules: ['@nuxtjs/composition-api/module' ,'nuxt-windicss', "@nuxt/image", "nuxt-graphql-request", '@vueuse/core/nuxt'],
 
   // css: [ 'virtual:windi.css' ],

@@ -3,7 +3,7 @@ import getProducts from '../gql/queries/getProducts'
 export const state = () => ({
   showCart: false,
   cart: null,
-  user: null,
+  user: undefined,
   products: [],
   productCategories: [],
 })

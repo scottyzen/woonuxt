@@ -29,7 +29,7 @@ export default {
 		async getCart() {
 			try {
 				const { cart, viewer } = await this.$graphql.default.request(getCart);
-				console.log(cart, viewer);
+				console.log({ cart }, { viewer });
 				this.$store.commit('updateCart', cart);
 				this.$store.commit('updateUser', viewer);
 			} catch (error) {
