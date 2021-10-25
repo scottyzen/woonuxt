@@ -21,6 +21,7 @@ export default {
 					login,
 					variables
 				);
+				console.log(loginWithCookies);
 				if (loginWithCookies.status == 'SUCCESS') {
 					const { cart, viewer } = await this.$graphql.default.request(getCart);
 					console.log({ cart }, { viewer });
