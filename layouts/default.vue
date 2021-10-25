@@ -8,38 +8,39 @@
 			<Nuxt />
 		</transition>
 		<transition name="page">
-			<div v-if="showCart" class="fixed inset-0 z-40 bg-black opacity-25" @click="closeCart"></div>
+			<div v-if="showCart" class="bg-black opacity-25 inset-0 z-40 fixed" @click="closeCart"></div>
 		</transition>
 		<Footer />
 	</div>
 </template>
 
 <script>
-import getCart from '~/gql/queries/getCart'
+import getCart from '~/gql/queries/getCart';
 export default {
 	computed: {
 		showCart() {
-			return this.$store.state.showCart
-		}
+			return this.$store.state.showCart;
+		},
 	},
 	methods: {
 		closeCart() {
-			this.$store.commit('toggleCart', false)
+			this.$store.commit('toggleCart', false);
 		},
 		async getCart() {
 			try {
-				const { cart, viewer } = await this.$graphql.default.request(getCart)
-				this.$store.commit('updateCart', cart)
-				this.$store.commit('updateUser', viewer)
+				const { cart, viewer } = await this.$graphql.default.request(getCart);
+				console.log(cart, viewer);
+				this.$store.commit('updateCart', cart);
+				this.$store.commit('updateUser', viewer);
 			} catch (error) {
-				console.log(error)
+				console.log(error);
 			}
-		}
+		},
 	},
 	mounted() {
-		this.getCart()
-	}
-}
+		this.getCart();
+	},
+};
 </script>
 
 <style lang="postcss">
@@ -73,9 +74,11 @@ body {
 }
 
 .big-button {
-	@apply rounded inline-flex justify-center items-center text-sm leading-tight uppercase py-3 font-semibold;
-	box-shadow: 0 2px 0 #025e47, inset 0 0 8px rgb(255 210 0 / 10%), inset 0 1px 0 #37ff91, inset 0 -1px 0 #06c465;
-	background: linear-gradient(to bottom, #37ff91 0%, #06c465 100%) no-repeat 0, linear-gradient(to bottom, #37ff91 0%, #06c465 100%) no-repeat 100%,
+	@apply rounded font-semibold text-sm leading-tight py-3 inline-flex justify-center items-center uppercase;
+	box-shadow: 0 2px 0 #025e47, inset 0 0 8px rgb(255 210 0 / 10%),
+		inset 0 1px 0 #37ff91, inset 0 -1px 0 #06c465;
+	background: linear-gradient(to bottom, #37ff91 0%, #06c465 100%) no-repeat 0,
+		linear-gradient(to bottom, #37ff91 0%, #06c465 100%) no-repeat 100%,
 		#06994f linear-gradient(to bottom, #25ca85 0%, #057a40 100%) no-repeat;
 	background-size: 1px 100%, 1px 100%, cover;
 	color: #f9f5e1;
