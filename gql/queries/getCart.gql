@@ -46,4 +46,10 @@ query getCart {
     firstName
     username
   }
+  viewer{
+    lastName
+    email
+    firstName
+    username
+  }
 }

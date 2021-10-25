@@ -1,70 +1,88 @@
 <template>
 	<div>
-		<nuxt-link class="relative flex items-center justify-center" to="/products">
-			<NuxtImg class="object-cover w-full rounded h-64 lg:h-[580px]" src="/images/hero.jpeg" width="1400" height="909" sizes="sm:100vw md:100vw lg:1200px" alt="Hero image" />
-			<div class="container absolute text-gray-900">
-				<h1 class="mb-24 text-2xl font-bold md:mb-4 lg:text-6xl">Just landed.</h1>
-				<div class="hidden max-w-sm mb-12 font-light md:block">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde nam dignissimos nostrum veritatis nisi autem accusantium modi? Enim, voluptatibus consectetur.</div>
+		<nuxt-link class="flex relative items-center justify-center" to="/products">
+			<NuxtImg class="rounded object-cover h-64 w-full lg:h-[580px]" src="/images/hero.jpeg" width="1400" height="909" sizes="sm:100vw md:100vw lg:1200px" alt="Hero image" />
+			<div class="container text-gray-900 absolute">
+				<h1 class="font-bold mb-24 text-2xl md:mb-4 lg:text-6xl">Just landed.</h1>
+				<div class="font-light max-w-sm mb-12 hidden md:block">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde nam dignissimos nostrum veritatis nisi autem accusantium modi? Enim, voluptatibus consectetur.</div>
 			</div>
 		</nuxt-link>
 		<section class="container mt-8 md:mt-16">
 			<div class="flex items-end justify-between">
-				<h2 class="text-lg font-semibold md:text-2xl">Shop by category</h2>
+				<h2 class="font-semibold text-lg md:text-2xl">Shop by category</h2>
 				<nuxt-link class="text-green-700" to="/products">View All</nuxt-link>
 			</div>
 		</section>
 
 		<div class="my-4 scslider" :style="cssVars">
-			<nuxt-link class="relative flex justify-center overflow-hidden border border-white rounded h-36 md:h-64 item" v-for="(cat, i) in productCategories.nodes" :key="i" :to="`/product-category/${cat.slug}`">
-				<NuxtImg v-if="cat.image" sizes="sm:50vw md:200px" width="400" height="400" class="absolute inset-0 object-cover w-full h-full" :src="cat.image.sourceUrl" loading="lazy" :alt="cat.name" />
+			<nuxt-link class="border border-white rounded flex h-36 relative justify-center overflow-hidden item md:h-64" v-for="(cat, i) in productCategories.nodes" :key="i" :to="`/product-category/${cat.slug}`">
+				<NuxtImg v-if="cat.image" sizes="sm:50vw md:200px" width="400" height="400" class="h-full object-cover w-full inset-0 absolute" :src="cat.image.sourceUrl" loading="lazy" :alt="cat.name" />
 				<div class="overlay"></div>
-				<span class="relative z-10 mt-auto mb-2 text-sm font-semibold text-white capitalize md:mb-4 md:text-base">{{cat.name}}</span>
+				<span class="font-semibold mt-auto text-sm text-white mb-2 z-10 relative capitalize md:text-base md:mb-4">{{cat.name}}</span>
 			</nuxt-link>
+		</div>
+
+		<div class="container py-8">
+			<pre class="font-light bg-gray-800 my-4 text-white p-4 text-[10px] whitespace-pre-wrap">{{$store.state.cart}}</pre>
+			<pre class="font-light bg-gray-800 my-4 text-white p-4 text-[10px] whitespace-pre-wrap">{{$store.state.user}}</pre>
 		</div>
 	</div>
 </template>
 
 <script>
-import registerCustomer from '~/gql/mutations/registerCustomer'
-import login from '~/gql/mutations/login'
-import getProductCategories from '../gql/queries/getProductCategories'
+import registerCustomer from '~/gql/mutations/registerCustomer';
+import login from '~/gql/mutations/login';
+import getProductCategories from '../gql/queries/getProductCategories';
 
 export default {
 	data() {
 		return {
-			categories: ['accessories', 'hoodies', 'music', 'clothing', 'tshirts', 'accessories', 'hoodies', 'music'],
+			categories: [
+				'accessories',
+				'hoodies',
+				'music',
+				'clothing',
+				'tshirts',
+				'accessories',
+				'hoodies',
+				'music',
+			],
 			// categories: ['accessories', 'hoodies', 'music'],
-			containerFromLeft: 0
-		}
+			containerFromLeft: 0,
+		};
 	},
 	async asyncData({ $graphql, params }) {
-		const { productCategories } = await $graphql.default.request(getProductCategories)
+		const { productCategories } = await $graphql.default.request(
+			getProductCategories
+		);
 		return {
-			productCategories
-		}
+			productCategories,
+		};
 	},
 	mounted() {
-		window.addEventListener('resize', this.handleResize)
-		this.handleResize()
+		window.addEventListener('resize', this.handleResize);
+		this.handleResize();
 	},
 	destroyed() {
-		window.removeEventListener('resize', this.handleResize)
+		window.removeEventListener('resize', this.handleResize);
 	},
 	methods: {
 		handleResize() {
 			if (process.client) {
-				this.containerFromLeft = document.querySelector('.container').getBoundingClientRect().left
+				this.containerFromLeft = document
+					.querySelector('.container')
+					.getBoundingClientRect().left;
 			}
-		}
+		},
 	},
 	computed: {
 		cssVars() {
 			return {
-				'--containerFromLeft': this.containerFromLeft + 'px'
-			}
-		}
-	}
-}
+				'--containerFromLeft': this.containerFromLeft + 'px',
+			};
+		},
+	},
+};
 </script>
 
 <style lang="postcss">
@@ -97,6 +115,6 @@ export default {
 	scroll-snap-stop: always;
 }
 .overlay {
-	@apply absolute inset-x-0 bottom-0 opacity-50 h-1/2 bg-gradient-to-t from-black to-transparent;
+	@apply bg-gradient-to-t from-black to-transparent h-1/2 opacity-50 inset-x-0 bottom-0 absolute;
 }
 </style>
