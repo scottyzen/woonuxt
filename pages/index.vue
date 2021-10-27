@@ -15,17 +15,17 @@
 		</section>
 
 		<div class="my-4 scslider" :style="cssVars">
-			<nuxt-link class="border border-white rounded flex h-36 relative justify-center overflow-hidden item md:h-64" v-for="(cat, i) in productCategories.nodes" :key="i" :to="`/product-category/${cat.slug}`">
+			<nuxt-link class=" item" v-for="(cat, i) in productCategories.nodes" :key="i" :to="`/product-category/${cat.slug}`">
 				<NuxtImg v-if="cat.image" sizes="sm:50vw md:200px" width="400" height="400" class="h-full object-cover w-full inset-0 absolute" :src="cat.image.sourceUrl" loading="lazy" :alt="cat.name" />
 				<div class="overlay"></div>
 				<span class="font-semibold mt-auto text-sm text-white mb-2 z-10 relative capitalize md:text-base md:mb-4">{{cat.name}}</span>
 			</nuxt-link>
 		</div>
 
-		<!-- <div class="container py-8">
+		<div class="container py-8">
 			<pre class="font-light bg-gray-800 my-4 text-white p-4 text-[10px] whitespace-pre-wrap">{{$store.state.cart}}</pre>
 			<pre class="font-light bg-gray-800 my-4 text-white p-4 text-[10px] whitespace-pre-wrap">{{$store.state.user}}</pre>
-		</div> -->
+		</div>
 	</div>
 </template>
 
@@ -37,17 +37,6 @@ import getProductCategories from '../gql/queries/getProductCategories';
 export default {
 	data() {
 		return {
-			categories: [
-				'accessories',
-				'hoodies',
-				'music',
-				'clothing',
-				'tshirts',
-				'accessories',
-				'hoodies',
-				'music',
-			],
-			// categories: ['accessories', 'hoodies', 'music'],
 			containerFromLeft: 0,
 		};
 	},
@@ -69,9 +58,12 @@ export default {
 	methods: {
 		handleResize() {
 			if (process.client) {
-				this.containerFromLeft = document
-					.querySelector('.container')
-					.getBoundingClientRect().left;
+				const container = document.querySelector('.container');
+				const containerLeftPadding = parseInt(
+					window.getComputedStyle(container).paddingLeft
+				);
+				this.containerFromLeft =
+					container.getBoundingClientRect().left + containerLeftPadding / 2;
 			}
 		},
 	},
@@ -96,10 +88,12 @@ export default {
 	display: none;
 }
 .scslider .item {
+	@apply border border-white rounded flex relative justify-center overflow-hidden;
 	width: 20%;
 	min-width: 25vw;
 	scroll-snap-align: start;
 	scroll-snap-stop: always;
+	aspect-ratio: 4 / 5;
 }
 @media (min-width: 768px) {
 	.scslider .item {
