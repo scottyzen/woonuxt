@@ -1,6 +1,9 @@
-// import { defineNuxtConfig } from '@nuxt/bridge'
+import { defineNuxtConfig } from '@nuxt/bridge'
 
-export default {
+export default defineNuxtConfig({
+  // bridge: {
+  //   vite: true,
+  // },
   target: "static",
   components: true,
   head: {
@@ -20,7 +23,7 @@ export default {
     ],
   },
 
-  buildModules: ["@nuxtjs/pwa", '@nuxtjs/composition-api/module' ,'nuxt-windicss', "@nuxt/image", "nuxt-graphql-request", '@vueuse/core/nuxt'],
+  buildModules: ["@nuxtjs/pwa",'nuxt-windicss', "@nuxt/image", "nuxt-graphql-request", '@vueuse/core/nuxt'],
 
   // css: [ 'virtual:windi.css' ],
 
@@ -83,4 +86,4 @@ export default {
       })
     }
   }
-}
+})
