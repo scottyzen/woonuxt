@@ -9,12 +9,8 @@
 
 <script>
 import updateCartQuantity from '~/gql/mutations/updateCartQuantity';
-import {
-	ref,
-	toRefs,
-	defineComponent,
-	computed,
-} from '@nuxtjs/composition-api';
+import { ref, defineComponent } from '@nuxtjs/composition-api';
+// import { ref, defineComponent } from '@nuxt/bridge';
 import { useSwipe } from '@vueuse/core';
 
 export default defineComponent({

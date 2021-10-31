@@ -3,17 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt dev",
-    "build": "nuxt nuild",
+    "dev": "nuxt",
     "dev:host": "nuxt --hostname '0' --port 8000",
-    "start": "node .output/server/index.mjs",
+    "build": "nuxt build",
+    "start": "nuxt start",
     "generate": "nuxt generate -m"
   },
   "dependencies": {
     "@nuxtjs/composition-api": "^0.29.3",
-    "@vueuse/core": "^6.7.4",
+    "@vueuse/core": "^6.7.3",
     "core-js": "^3.19.0",
-    "graphql": "^16.0.0",
+    "graphql": "^15.6.1",
     "graphql-tag": "^2.12.5",
     "nuxt-edge": "latest"
   },
@@ -22,6 +22,6 @@
     "@nuxt/image": "^0.6.0",
     "@nuxtjs/pwa": "^3.3.5",
     "nuxt-graphql-request": "^4.2.1",
-    "nuxt-windicss": "^2.0.9"
+    "nuxt-windicss": "^2.0.5"
   }
 }
