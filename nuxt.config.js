@@ -1,6 +1,6 @@
 import { defineNuxtConfig } from '@nuxt/bridge'
 
-export default defineNuxtConfig({
+export default {
   // bridge: {
   //   vite: true,
   // },
@@ -88,4 +88,4 @@ export default defineNuxtConfig({
       })
     }
   }
-})
+}
