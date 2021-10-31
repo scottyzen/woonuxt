@@ -3,23 +3,22 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxi dev",
-    "build": "nuxi build",
+    "dev": "nuxt dev",
+    "build": "nuxt nuild",
     "dev:host": "nuxt --hostname '0' --port 8000",
-    "start": "nuxt start",
-    "generate": "nuxt generate -m",
-    "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
-    "lint": "npm run lint:js"
+    "start": "node .output/server/index.mjs",
+    "generate": "nuxt generate -m"
   },
   "dependencies": {
+    "@nuxtjs/composition-api": "^0.29.3",
     "@vueuse/core": "^6.7.4",
     "core-js": "^3.19.0",
-    "graphql": "^15.7.2",
+    "graphql": "^16.0.0",
     "graphql-tag": "^2.12.5",
     "nuxt-edge": "latest"
   },
   "devDependencies": {
-    "@nuxt/bridge": "npm:@nuxt/bridge-edge@^3.0.0-27257216.f5aea9f",
+    "@nuxt/bridge": "npm:@nuxt/bridge-edge@^3.0.0-27258467.4e424d0",
     "@nuxt/image": "^0.6.0",
     "@nuxtjs/pwa": "^3.3.5",
     "nuxt-graphql-request": "^4.2.1",

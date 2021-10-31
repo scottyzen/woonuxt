@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   // bridge: {
   //   vite: true,
   // },
+  bridge: false,
   target: "static",
   components: true,
   head: {
@@ -24,7 +25,7 @@ export default defineNuxtConfig({
     ],
   },
 
-  buildModules: ["@nuxtjs/pwa",'nuxt-windicss', "@nuxt/image", "nuxt-graphql-request", '@vueuse/core/nuxt'],
+  buildModules: ["@nuxtjs/pwa",'nuxt-windicss', "@nuxt/image", "nuxt-graphql-request", '@vueuse/core/nuxt', "@nuxtjs/composition-api"],
 
   // css: [ 'virtual:windi.css' ],
 
