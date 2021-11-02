@@ -1,9 +1,9 @@
 import { defineNuxtConfig } from '@nuxt/bridge'
 
 export default defineNuxtConfig({
-  // bridge: {
-  //   vite: true,
-  // },
+  bridge: {
+    vite: true,
+  },
   bridge: false,
   target: "static",
   components: true,

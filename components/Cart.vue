@@ -6,7 +6,7 @@
 		<div class="mt-8 text-center">Basket</div>
 
 		<ul v-if="cart" class="flex flex-col flex-1 p-8 gap-4 overflow-y-scroll">
-			<SwipeCard v-for="item in cart.contents.nodes" :key="item.key" :item="item">
+			<SwipeCard v-for="item in cart.contents.nodes" :key="item.key" :item="item" @has-swiped="removeItemFromCart(item.key)">
 				<CartCard :item="item" />
 			</SwipeCard>
 		</ul>
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import UPDATE_CART_QUANTITY from '~/gql/mutations/updateCartQuantity';
 export default {
 	computed: {
 		cart() {
@@ -36,6 +37,13 @@ export default {
 	methods: {
 		closeCart() {
 			this.$store.commit('toggleCart', false);
+		},
+		async removeItemFromCart(key) {
+			const { updateItemQuantities } = await this.$graphql.default.request(
+				UPDATE_CART_QUANTITY,
+				{ key, quantity: 0 }
+			);
+			this.$store.commit('updateCart', updateItemQuantities.cart);
 		},
 	},
 };

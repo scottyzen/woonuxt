@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "npx nuxi dev",
     "dev:host": "nuxt --hostname '0' --port 8000",
-    "build": "nuxt build",
-    "start": "nuxt start",
+    "build": "nuxi build",
+    "start": "node .output/server/index.mjs",
     "generate": "nuxt generate -m"
   },
   "dependencies": {
