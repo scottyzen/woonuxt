@@ -18,7 +18,7 @@
     "nuxt-edge": "latest"
   },
   "devDependencies": {
-    "@nuxt/bridge": "npm:@nuxt/bridge-edge@^3.0.0-27265876.3cd4494",
+    "@nuxt/bridge": "npm:@nuxt/bridge-edge@^3.0.0-27267528.292b524",
     "@nuxt/image": "^0.6.0",
     "@nuxtjs/pwa": "^3.3.5",
     "nuxt-graphql-request": "^4.2.2",
