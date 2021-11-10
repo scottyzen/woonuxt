@@ -10,18 +10,18 @@
     "generate": "nuxt generate -m"
   },
   "dependencies": {
-    "@nuxtjs/composition-api": "^0.29.3",
-    "@vueuse/core": "^6.7.5",
+    "@nuxtjs/composition-api": "^0.30.0",
+    "@vueuse/core": "^6.8.0",
     "core-js": "^3.19.1",
     "graphql": "^15.6.1",
-    "graphql-tag": "^2.12.5",
+    "graphql-tag": "^2.12.6",
     "nuxt-edge": "latest"
   },
   "devDependencies": {
-    "@nuxt/bridge": "npm:@nuxt/bridge-edge@^3.0.0-27267528.292b524",
+    "@nuxt/bridge": "npm:@nuxt/bridge-edge@^3.0.0-27276275.abfbd2f",
     "@nuxt/image": "^0.6.0",
     "@nuxtjs/pwa": "^3.3.5",
     "nuxt-graphql-request": "^4.2.2",
-    "nuxt-windicss": "^2.0.11"
+    "nuxt-windicss": "^2.0.12"
   }
 }
