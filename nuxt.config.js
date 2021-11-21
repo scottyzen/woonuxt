@@ -25,6 +25,10 @@ export default defineNuxtConfig({
     ],
   },
 
+  router: {
+    middleware: 'pages'
+  },
+
   buildModules: ["@nuxtjs/pwa",'nuxt-windicss', "@nuxt/image", "nuxt-graphql-request", '@vueuse/core/nuxt'],
 
   // css: [ 'virtual:windi.css' ],

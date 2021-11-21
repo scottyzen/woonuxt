@@ -8,7 +8,7 @@
 			<Nuxt />
 		</transition>
 		<transition name="page">
-			<div v-if="showCart" class="bg-black opacity-25 inset-0 z-40 fixed" @click="closeCart"></div>
+			<div v-if="showCart" class="fixed inset-0 z-40 bg-black opacity-25" @click="closeCart"></div>
 		</transition>
 		<Footer />
 	</div>
@@ -84,5 +84,27 @@ body {
 	color: #f9f5e1;
 	text-shadow: 0 -1px rgb(0 71 0 / 30%);
 	min-width: 200px;
+}
+
+.slide-left-enter-active,
+.slide-left-leave-active,
+.slide-right-enter-active,
+.slide-right-leave-active {
+	transition-duration: 0.5s;
+	transition-property: height, opacity, transform;
+	transition-timing-function: cubic-bezier(0.55, 0, 0.1, 1);
+	overflow: hidden;
+}
+
+.slide-left-enter,
+.slide-right-leave-active {
+	opacity: 0;
+	transform: translate(2em, 0);
+}
+
+.slide-left-leave-active,
+.slide-right-enter {
+	opacity: 0;
+	transform: translate(-2em, 0);
 }
 </style>

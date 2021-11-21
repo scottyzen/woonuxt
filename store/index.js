@@ -6,6 +6,7 @@ export const state = () => ({
   user: undefined,
   products: [],
   productCategories: [],
+  page: 'index'
 })
 
 
@@ -14,6 +15,7 @@ export const mutations = {
   updateCart: (state, cart) => (state.cart = cart),
   updateUser: (state, user) => (state.user = user),
   updateProducts: (state, products) => (state.products = products),
+  updatePage(state, pageName) { state.page = pageName}
 }
 
 export const actions = {
