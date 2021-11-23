@@ -3,15 +3,15 @@
 </template>
 
 <script>
-import EMPTY_CART from '../gql/mutations/EMPTY_CART'
+import EMPTY_CART from '~/gql/mutations/EMPTY_CART';
 export default {
 	methods: {
 		async EmptyCart() {
-			console.log('empty cart')
-			const { emptyCart } = await this.$graphql.default.request(EMPTY_CART)
-			console.log(emptyCart)
-			this.$store.commit('updateCart', null)
-		}
-	}
-}
+			const { emptyCart } = await this.$graphql.default.request(EMPTY_CART);
+			if (emptyCart) {
+				this.$store.commit('updateCart', null);
+			}
+		},
+	},
+};
 </script>

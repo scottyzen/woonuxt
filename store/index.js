@@ -1,4 +1,4 @@
-import getProducts from '../gql/queries/getProducts'
+import GET_PRODUCTS from '~/gql/queries/getProducts'
 
 export const state = () => ({
   showCart: false,
@@ -20,7 +20,7 @@ export const mutations = {
 
 export const actions = {
   async nuxtServerInit({commit}) {
-    const {products} = await this.$graphql.default.request(getProducts);
+    const {products} = await this.$graphql.default.request(GET_PRODUCTS);
       commit('updateProducts', products.nodes);
   },
 }

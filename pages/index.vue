@@ -30,9 +30,9 @@
 </template>
 
 <script>
-import registerCustomer from '~/gql/mutations/registerCustomer';
-import login from '~/gql/mutations/login';
-import getProductCategories from '../gql/queries/getProductCategories';
+// import registerCustomer from '~/gql/mutations/registerCustomer';
+// import login from '~/gql/mutations/login';
+import GET_PRODUCT_CATEGORIES from '~/gql/queries/getProductCategories';
 
 export default {
 	data() {
@@ -42,7 +42,7 @@ export default {
 	},
 	async asyncData({ $graphql, params }) {
 		const { productCategories } = await $graphql.default.request(
-			getProductCategories
+			GET_PRODUCT_CATEGORIES
 		);
 		return {
 			productCategories,

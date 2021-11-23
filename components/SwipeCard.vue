@@ -1,5 +1,5 @@
-<script setup>
-import { ref, defineComponent } from '@vue/composition-api';
+<script>
+// import { ref, defineComponent } from '@vue/composition-api';
 import { useSwipe } from '@vueuse/core';
 
 export default defineComponent({

@@ -1,9 +1,9 @@
 import { defineNuxtConfig } from '@nuxt/bridge'
 
 export default defineNuxtConfig({
-  bridge: {
-    vite: true,
-  },
+  // bridge: {
+  //   vite: true,
+  // },
   bridge: false,
   target: "static",
   components: true,
@@ -29,7 +29,11 @@ export default defineNuxtConfig({
     middleware: 'pages'
   },
 
-  buildModules: ["@nuxtjs/pwa",'nuxt-windicss', "@nuxt/image", "nuxt-graphql-request", '@vueuse/core/nuxt'],
+  buildModules: [
+    // "@nuxtjs/pwa",
+    'nuxt-windicss',
+    "@nuxt/image",
+    "nuxt-graphql-request", '@vueuse/core/nuxt'],
 
   // css: [ 'virtual:windi.css' ],
 
@@ -44,23 +48,23 @@ export default defineNuxtConfig({
 
   image: { provider: "static", domains: [process.env.WORDPRESS_URL] },
 
-  pwa: {
-    manifest: {
-      name: "WooNuxt",
-      short_name: "WooNuxt",
-      display: "standalone",
-      lang: "en",
-      theme_color: "#ffffff",
-      background_color: "#ffffff",
-      crossorigin: "use-credentials",
-      start_url: 'https://woonuxt.com',
-    },
-    meta: {
-      mobileAppIOS: true,
-      theme_color: "#ffffff",
-      nativeUI: true
-    }
-  },
+  // pwa: {
+  //   manifest: {
+  //     name: "WooNuxt",
+  //     short_name: "WooNuxt",
+  //     display: "standalone",
+  //     lang: "en",
+  //     theme_color: "#ffffff",
+  //     background_color: "#ffffff",
+  //     crossorigin: "use-credentials",
+  //     start_url: 'https://woonuxt.com',
+  //   },
+  //   meta: {
+  //     mobileAppIOS: true,
+  //     theme_color: "#ffffff",
+  //     nativeUI: true
+  //   }
+  // },
 
   publicRuntimeConfig: {
     perPage: 12,
