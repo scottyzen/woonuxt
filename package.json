@@ -10,7 +10,7 @@
     "generate": "nuxt generate -m"
   },
   "dependencies": {
-    "@nuxtjs/composition-api": "^0.30.0",
+    "@nuxtjs/composition-api": "^0.31.0",
     "@vueuse/core": "^7.1.2",
     "core-js": "^3.19.2",
     "graphql": "^15.6.1",
@@ -18,7 +18,7 @@
     "nuxt-edge": "latest"
   },
   "devDependencies": {
-    "@nuxt/bridge": "npm:@nuxt/bridge-edge@^3.0.0-27303148.ac98373",
+    "@nuxt/bridge": "npm:@nuxt/bridge-edge@^3.0.0-27304790.cad09fe",
     "@nuxt/image": "^0.6.0",
     "@nuxtjs/pwa": "^3.3.5",
     "nuxt-graphql-request": "^4.2.2",

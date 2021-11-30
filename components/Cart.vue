@@ -39,6 +39,7 @@ export default {
 			this.$store.commit('toggleCart', false);
 		},
 		async removeItemFromCart(key) {
+			console.log('removeItemFromCart', key);
 			const { updateItemQuantities } = await this.$graphql.default.request(
 				UPDATE_CART_QUANTITY,
 				{ key, quantity: 0 }

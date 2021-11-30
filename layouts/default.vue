@@ -8,7 +8,7 @@
 			<Nuxt />
 		</transition>
 		<transition name="page">
-			<div v-if="showCart" class="fixed inset-0 z-40 bg-black opacity-25" @click="closeCart"></div>
+			<div v-if="showCart" class="bg-black opacity-25 inset-0 z-40 fixed" @click="closeCart"></div>
 		</transition>
 		<Footer />
 	</div>
@@ -29,7 +29,7 @@ export default {
 		async getCart() {
 			try {
 				const { cart, viewer } = await this.$graphql.default.request(getCart);
-				console.log({ cart }, { viewer });
+				// console.log({ cart }, { viewer });
 				this.$store.commit('updateCart', cart);
 				this.$store.commit('updateUser', viewer);
 			} catch (error) {

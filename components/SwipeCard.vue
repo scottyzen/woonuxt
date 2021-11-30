@@ -1,22 +1,17 @@
-<script>
-// import { ref, defineComponent } from '@vue/composition-api';
+<script setup>
 import { useSwipe } from '@vueuse/core';
+import { ref, getCurrentInstance } from '#app';
+const { emit } = getCurrentInstance();
 
-export default defineComponent({
-	setup(props, { emit }) {
-		const isAlive = ref(true);
-		const el = ref(null);
-		const { isSwiping, lengthX } = useSwipe(el, {
-			passive: true,
-			onSwipeEnd() {
-				if (lengthX.value > 80) {
-					isAlive.value = false;
-					emit('has-swiped');
-				}
-			},
-		});
-
-		return { el, isAlive, isSwiping, lengthX };
+const isAlive = ref(true);
+const el = ref(null);
+const { isSwiping, lengthX } = useSwipe(el, {
+	passive: true,
+	onSwipeEnd() {
+		if (isSwiping && lengthX.value > 80) {
+			isAlive.value = false;
+			emit('has-swiped');
+		}
 	},
 });
 </script>
