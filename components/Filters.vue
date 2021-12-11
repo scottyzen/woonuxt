@@ -46,7 +46,6 @@
 </template>
 
 <script>
-import RangeSlider from './RangeSlider.vue';
 export default {
 	data() {
 		const initialState = {
@@ -77,7 +76,6 @@ export default {
 			return JSON.stringify(this.filter) !== this.initialState;
 		},
 	},
-	components: { RangeSlider },
 };
 </script>
 
