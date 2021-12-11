@@ -11,17 +11,17 @@
   },
   "dependencies": {
     "@nuxtjs/composition-api": "^0.31.0",
-    "@vueuse/core": "^7.1.2",
-    "core-js": "^3.19.2",
+    "@vueuse/core": "^7.2.2",
+    "core-js": "^3.19.3",
     "graphql": "^15.6.1",
     "graphql-tag": "^2.12.6",
     "nuxt-edge": "latest"
   },
   "devDependencies": {
-    "@nuxt/bridge": "npm:@nuxt/bridge-edge@^3.0.0-27304790.cad09fe",
+    "@nuxt/bridge": "npm:@nuxt/bridge-edge@^3.0.0-27319101.3e82f0f",
     "@nuxt/image": "^0.6.0",
     "@nuxtjs/pwa": "^3.3.5",
-    "nuxt-graphql-request": "^4.2.2",
-    "nuxt-windicss": "^2.0.12"
+    "nuxt-graphql-request": "^4.3.0",
+    "nuxt-windicss": "^2.1.1"
   }
 }

@@ -31,7 +31,7 @@ export default defineNuxtConfig({
   },
 
   buildModules: [
-    // "@nuxtjs/pwa",
+    "@nuxtjs/pwa",
     'nuxt-windicss',
     "@nuxt/image",
     "nuxt-graphql-request", '@vueuse/core/nuxt'],
@@ -49,23 +49,23 @@ export default defineNuxtConfig({
 
   image: { provider: "static", domains: [process.env.WORDPRESS_URL] },
 
-  // pwa: {
-  //   manifest: {
-  //     name: "WooNuxt",
-  //     short_name: "WooNuxt",
-  //     display: "standalone",
-  //     lang: "en",
-  //     theme_color: "#ffffff",
-  //     background_color: "#ffffff",
-  //     crossorigin: "use-credentials",
-  //     start_url: 'https://woonuxt.com',
-  //   },
-  //   meta: {
-  //     mobileAppIOS: true,
-  //     theme_color: "#ffffff",
-  //     nativeUI: true
-  //   }
-  // },
+  pwa: {
+    manifest: {
+      name: "WooNuxt",
+      short_name: "WooNuxt",
+      display: "standalone",
+      lang: "en",
+      theme_color: "#ffffff",
+      background_color: "#ffffff",
+      crossorigin: "use-credentials",
+      start_url: 'https://woonuxt.com',
+    },
+    meta: {
+      mobileAppIOS: true,
+      theme_color: "#ffffff",
+      nativeUI: true
+    }
+  },
 
   publicRuntimeConfig: {
     perPage: 12,

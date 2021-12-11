@@ -1,15 +1,15 @@
 <template>
 	<aside id="filters" class="hidden md:block">
-		<span class="block mb-8 text-xl">Filter</span>
+		<span class="text-xl mb-8 block">Filter</span>
 		<!-- Price Range -->
 		<div class="mb-3">Price Range</div>
-		<div class="flex justify-between gap-4">
-			<div class="relative flex items-center w-1/2 ">
-				<span v-if="filter.minPrice" class="absolute p-2">€</span>
+		<div class="flex gap-4 justify-between">
+			<div class="flex w-1/2 relative items-center ">
+				<span v-if="filter.minPrice" class="p-2 absolute">€</span>
 				<input class="price-input" type="number" placeholder="Min" min="0" v-model.number="filter.minPrice" step="1" :class="{'active': filter.minPrice}">
 			</div>
-			<div class="relative flex items-center w-1/2 ">
-				<span v-if="filter.maxPrice" class="absolute p-2">€</span>
+			<div class="flex w-1/2 relative items-center ">
+				<span v-if="filter.maxPrice" class="p-2 absolute">€</span>
 				<input class="price-input" type="number" placeholder="Max" min="0" max="90" v-model.number="filter.maxPrice" step="1" :class="{'active': filter.maxPrice}">
 			</div>
 		</div>
@@ -39,56 +39,58 @@
 		</div>
 
 		<transition name="fadeUp">
-			<a v-if="showRestButton" @click="reset" class="block w-full p-2 mt-12 leading-tight text-center text-white bg-purple-600 cursor-pointer hover:bg-purple-700 rounded-xl">Clear all filters</a>
+			<a v-if="showRestButton" @click="reset" class="rounded-xl cursor-pointer bg-purple-600 mt-12 text-center text-white leading-tight w-full p-2 block hover:bg-purple-700">Clear all filters</a>
 		</transition>
 
 	</aside>
 </template>
 
 <script>
+import RangeSlider from './RangeSlider.vue';
 export default {
 	data() {
 		const initialState = {
 			minPrice: null,
 			maxPrice: 90,
-			starRating: null
-		}
+			starRating: null,
+		};
 		return {
 			filter: initialState,
-			initialState: JSON.stringify(initialState)
-		}
+			initialState: JSON.stringify(initialState),
+		};
 	},
 	methods: {
 		reset() {
-			this.filter = JSON.parse(this.initialState)
-		}
+			this.filter = JSON.parse(this.initialState);
+		},
 	},
 	watch: {
 		filter: {
 			handler() {
-				this.$emit('filter-updated', this.filter)
+				this.$emit('filter-updated', this.filter);
 			},
-			deep: true
-		}
+			deep: true,
+		},
 	},
 	computed: {
 		showRestButton() {
-			return JSON.stringify(this.filter) !== this.initialState
-		}
-	}
-}
+			return JSON.stringify(this.filter) !== this.initialState;
+		},
+	},
+	components: { RangeSlider },
+};
 </script>
 
 <style lang="postcss">
 #filters {
-	@apply border-r border-gray-100 py-8 pr-8 bg-white w-[225px];
+	@apply bg-white border-r border-gray-100 py-8 pr-8 w-[225px];
 	box-shadow: -100px 0 0 white, -200px 0 0 white, -300px 0 0 white;
 }
 .price-input {
-	@apply p-2 leading-tight border rounded-xl w-full transition-all outline-none;
+	@apply border rounded-xl outline-none leading-tight w-full p-2 transition-all;
 }
 .price-input.active {
-	@apply pl-6 border-gray-400;
+	@apply border-gray-400 pl-6;
 }
 .fadeUp-enter-active,
 .fadeUp-leave-active {

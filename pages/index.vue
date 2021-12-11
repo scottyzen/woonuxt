@@ -22,10 +22,10 @@
 			</nuxt-link>
 		</div>
 
-		<div class="container py-8">
+		<!-- <div class="container py-8">
 			<pre class="font-light bg-gray-800 my-4 text-white p-4 text-[10px] whitespace-pre-wrap">{{$store.state.cart}}</pre>
 			<pre class="font-light bg-gray-800 my-4 text-white p-4 text-[10px] whitespace-pre-wrap">{{$store.state.user}}</pre>
-		</div>
+		</div> -->
 	</div>
 </template>
 
