@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   // bridge: {
   //   vite: true,
   // },
-  // bridge: false,
+  bridge: false,
   target: "static",
   // dev: true,
   components: true,
