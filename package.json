@@ -7,7 +7,7 @@
     "dev:host": "nuxt --hostname '0' --port 8000",
     "build": "nuxi build",
     "start": "node .output/server/index.mjs",
-    "generate": "nuxt generate"
+    "generate": "nuxi generate"
   },
   "dependencies": {
     "@nuxtjs/composition-api": "^0.31.0",
