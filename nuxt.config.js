@@ -4,9 +4,9 @@ export default defineNuxtConfig({
   // bridge: {
   //   vite: true,
   // },
-  bridge: false,
+  // bridge: false,
   target: "static",
-  dev: true,
+  // dev: true,
   components: true,
   head: {
     title: "WooNuxt",
@@ -36,6 +36,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "nuxt-graphql-request", 
     '@vueuse/core/nuxt'
+  
   ],
 
   // css: [ 'virtual:windi.css' ],
