@@ -1,12 +1,9 @@
 import { defineNuxtConfig } from '@nuxt/bridge'
 
 export default defineNuxtConfig({
-  // bridge: {
-  //   vite: true,
-  // },
   bridge: false,
   target: "static",
-  // dev: true,
+  
   components: true,
   head: {
     title: "WooNuxt",
@@ -30,6 +27,10 @@ export default defineNuxtConfig({
     middleware: 'pages'
   },
 
+  modules: [
+    'cookie-universal-nuxt'
+ ],
+
   buildModules: [
     "@nuxtjs/pwa",
     'nuxt-windicss',
@@ -38,8 +39,6 @@ export default defineNuxtConfig({
     '@vueuse/core/nuxt',
     '@nuxtjs/composition-api/module'
   ],
-
-  // css: [ 'virtual:windi.css' ],
 
   graphql: {
     clients: {

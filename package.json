@@ -12,6 +12,7 @@
   "dependencies": {
     "@nuxtjs/composition-api": "^0.31.0",
     "@vueuse/core": "^7.4.0",
+    "cookie-universal-nuxt": "^2.1.5",
     "core-js": "^3.20.0",
     "graphql": "^15.6.1",
     "graphql-tag": "^2.12.6",

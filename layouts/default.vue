@@ -1,11 +1,11 @@
 <template>
-	<div>
+	<div class="flex flex-col min-h-screen">
 		<Header />
 		<transition name="slide">
 			<Cart v-if="showCart" class="z-50" />
 		</transition>
 		<transition name="page" mode="out-in">
-			<Nuxt />
+			<Nuxt class="flex-1" />
 		</transition>
 		<transition name="page">
 			<div v-if="showCart" class="bg-black opacity-25 inset-0 z-40 fixed" @click="closeCart"></div>
@@ -28,12 +28,37 @@ export default {
 		},
 		async getCart() {
 			try {
-				const { cart, viewer } = await this.$graphql.default.request(getCart);
-				// console.log({ cart }, { viewer });
+				const wooCookie = this.$cookies.get('woo');
+				this.setCookieIfAvailable(wooCookie);
+				const { cart, viewer, customer } = await this.$graphql.default.request(
+					getCart
+				);
 				this.$store.commit('updateCart', cart);
-				this.$store.commit('updateUser', viewer);
+				if (viewer) {
+					this.$store.commit('updateUser', viewer);
+				} else {
+					const token = customer.sessionToken;
+					if (!wooCookie) {
+						this.$cookies.set(
+							'woo',
+							{ token },
+							{ path: '/', maxAge: 60 * 60 * 24 * 14 }
+						);
+
+						this.$graphql.default.setHeaders({
+							'woocommerce-session': `Session ${token}`,
+						});
+					}
+				}
 			} catch (error) {
 				console.log(error);
+			}
+		},
+		setCookieIfAvailable(wooCookie) {
+			if (!this.$store.state.viewer) {
+				this.$graphql.default.setHeaders({
+					'woocommerce-session': `Session ${wooCookie.token}`,
+				});
 			}
 		},
 	},

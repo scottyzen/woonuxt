@@ -45,11 +45,13 @@ query getCart {
     email
     firstName
     username
+    sessionToken
   }
   viewer{
     lastName
     email
     firstName
     username
+    wooSessionToken
   }
 }
