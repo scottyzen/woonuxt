@@ -36,7 +36,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "nuxt-graphql-request", 
     '@vueuse/core/nuxt',
-    '@nuxtjs/composition-api',
+    '@nuxtjs/composition-api/module'
   ],
 
   // css: [ 'virtual:windi.css' ],
