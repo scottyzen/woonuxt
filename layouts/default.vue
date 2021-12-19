@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import getCart from '~/gql/queries/getCart';
+import GET_CART from '~/gql/queries/getCart';
 export default {
 	computed: {
 		showCart() {
@@ -30,9 +30,11 @@ export default {
 			try {
 				const wooCookie = this.$cookies.get('woo');
 				this.setCookieIfAvailable(wooCookie);
+
 				const { cart, viewer, customer } = await this.$graphql.default.request(
-					getCart
+					GET_CART
 				);
+
 				this.$store.commit('updateCart', cart);
 				if (viewer) {
 					this.$store.commit('updateUser', viewer);
@@ -44,7 +46,6 @@ export default {
 							{ token },
 							{ path: '/', maxAge: 60 * 60 * 24 * 14 }
 						);
-
 						this.$graphql.default.setHeaders({
 							'woocommerce-session': `Session ${token}`,
 						});
@@ -55,7 +56,7 @@ export default {
 			}
 		},
 		setCookieIfAvailable(wooCookie) {
-			if (this.$store.state.viewer) {
+			if (this.$store.state.viewer || !wooCookie) {
 				return;
 			}
 			this.$graphql.default.setHeaders({
