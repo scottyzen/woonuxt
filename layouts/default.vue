@@ -55,11 +55,12 @@ export default {
 			}
 		},
 		setCookieIfAvailable(wooCookie) {
-			if (!this.$store.state.viewer) {
-				this.$graphql.default.setHeaders({
-					'woocommerce-session': `Session ${wooCookie.token}`,
-				});
+			if (this.$store.state.viewer) {
+				return;
 			}
+			this.$graphql.default.setHeaders({
+				'woocommerce-session': `Session ${wooCookie.token}`,
+			});
 		},
 	},
 	mounted() {
