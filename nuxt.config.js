@@ -1,8 +1,11 @@
 import { defineNuxtConfig } from '@nuxt/bridge'
 
 export default defineNuxtConfig({
-  bridge: false,
+  // bridge: false,
   target: "static",
+  // bridge: {
+  //   vite: true
+  // },
   
   components: true,
   head: {
@@ -37,7 +40,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "nuxt-graphql-request", 
     '@vueuse/core/nuxt',
-    '@nuxtjs/composition-api/module'
+    // '@nuxtjs/composition-api/module'
   ],
 
   graphql: {
@@ -91,7 +94,10 @@ export default defineNuxtConfig({
   },
 
   build: {
-    extend (config) {
+    extend(config, { isDev, isClient }) {
+      config.node = {
+        fs: 'empty'
+      },
       config.module.rules.push({
         test: /\.mjs$/,
         include: /node_modules/,

@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import updateCartQuantity from '~/gql/mutations/updateCartQuantity';
-import { ref, defineComponent } from '@nuxtjs/composition-api';
+import UPDATE_CART_QUANTITY from '~/gql/mutations/updateCartQuantity';
+// import { ref, defineComponent } from '@nuxtjs/composition-api';
 // import { ref, defineComponent } from '@nuxt/bridge';
 import { useSwipe } from '@vueuse/core';
 export default defineComponent({
@@ -18,7 +18,7 @@ export default defineComponent({
 			const key = context.attrs.item.key;
 			const quantity = 0;
 			const { updateItemQuantities } =
-				await context.root.$graphql.default.request(updateCartQuantity, {
+				await context.root.$graphql.default.request(UPDATE_CART_QUANTITY, {
 					key,
 					quantity,
 				});
