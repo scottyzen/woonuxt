@@ -1,9 +1,17 @@
 <template>
 	<li class="flex gap-4 items-center">
-		<NuxtImg class="rounded-xl h-16 w-16" v-if="productType.image" :src="productType.image.sourceUrl" />
+		<NuxtImg
+			class="rounded-xl h-16 w-16"
+			v-if="productType.image"
+			:src="productType.image.sourceUrl"
+		/>
 		<div class="flex-1">
-			<div class="leading-tight">{{productType.name}}</div>
-			<div class="font-semibold text-xs">{{productType.price}}</div>
+			<div class="leading-tight">{{ productType.name }}</div>
+			<ProductPrice
+				class="mt-1 text-xs"
+				:salePrice="productType.salePrice"
+				:regularPrice="productType.regularPrice"
+			/>
 		</div>
 		<QuantityButtons :quantity="quantity" @quantity-change="updateQuantity" />
 	</li>

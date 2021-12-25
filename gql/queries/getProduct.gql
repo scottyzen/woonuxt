@@ -1,3 +1,6 @@
+#import "~/gql/fragments/SimpleProduct.gql"
+#import "~/gql/fragments/VariableProduct.gql"
+
 query getProduct($slug: ID!) {
   product(id: $slug, idType: SLUG) {
     name
@@ -27,51 +30,7 @@ query getProduct($slug: ID!) {
     averageRating
     reviewCount
     slug
-    ... on SimpleProduct {
-      price
-      stockStatus
-      stockQuantity
-    }
-    ... on VariableProduct {
-      price
-      stockStatus
-      stockQuantity
-      attributes {
-        nodes {
-          name
-          options
-          variation
-          visible
-        }
-      }
-      defaultAttributes {
-        nodes {
-          name
-          attributeId
-        }
-      }
-      variations {
-        nodes {
-          name
-          databaseId
-          price
-          slug
-          stockQuantity
-          stockStatus
-          hasAttributes
-          image {
-            sourceUrl
-            altText
-            title
-          }
-          attributes {
-            nodes {
-              value
-              name
-            }
-          }
-        }
-      }
-    }
+    ... SimpleProduct
+    ... VariableProduct
   }
 }

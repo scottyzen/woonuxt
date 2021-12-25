@@ -1,30 +1,38 @@
 <template>
-	<main class="container py-8">
+	<main class="container py-4">
 		<div class="flex flex-col gap-8 md:flex-row md:items-center md:justify-evenly">
-			<nuxt-img class="object-contain w-full rounded-2xl md:w-auto" width="500" height="500" :src="type.image.sourceUrl" />
-			<!-- 
-			<pre>{{attrValues}}</pre>
-			<pre>{{activeVariation}}</pre> -->
+			<div class="-mx-4">
+				<nuxt-img
+					class="object-contain rounded-2xl w-full md:w-auto"
+					width="500"
+					height="500"
+					:src="type.image.sourceUrl"
+				/>
+			</div>
 
 			<div class="max-w-lg">
-				<div class="flex items-center justify-between mb-4">
+				<div class="flex mb-4 items-center justify-between">
 					<div class="flex-1">
-						<h1 class="mb-0.5 text-lg ">{{ type.name }}</h1>
+						<h1 class="text-lg mb-0.5">{{ type.name }}</h1>
 						<StarRating :rating="product.averageRating" :count="product.reviewCount" />
 					</div>
 					<QuantityButtons @quantity-change="updateQuantity" :quantity="quantity" :min="1" />
 				</div>
 
-				<div v-html="product.description" class="mb-8 text-sm font-light"></div>
+				<div v-html="product.description" class="font-light text-sm mb-8"></div>
 
 				<form @submit.prevent="triggerAddToCart">
-					<AttributeSelections class="mt-4 mb-8" v-if="product.attributes" :attrs="product.attributes.nodes" @attrs-changed="updateSelectedVariations" />
-					<div class="flex items-center justify-between gap-2 mt-12">
-						<div class="text-lg font-semibold">{{ type.price }}</div>
+					<AttributeSelections
+						class="mt-4 mb-8"
+						v-if="product.attributes"
+						:attrs="product.attributes.nodes"
+						@attrs-changed="updateSelectedVariations"
+					/>
+					<div class="flex mt-12 gap-2 items-center justify-between">
+						<ProductPrice class="text-lg" :salePrice="type.salePrice" :regularPrice="type.regularPrice" />
 						<AddToCartButton :disabled="!activeVariation && product.variations" />
 					</div>
 				</form>
-
 			</div>
 		</div>
 	</main>
@@ -130,6 +138,6 @@ export default {
 
 <style lang="postcss">
 pre {
-	@apply p-4 my-8 text-xs text-white bg-gray-800 rounded;
+	@apply rounded bg-gray-800 my-8 text-xs text-white p-4;
 }
 </style>

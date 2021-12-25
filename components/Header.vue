@@ -11,7 +11,7 @@
 			</nav>
 			<div class="flex justify-end items-center md:min-w-[120px]">
 				<SignInLink />
-				<CartTrigger v-if="$store.state.cart" @icon-click="toggleCart" />
+				<CartTrigger @icon-click="toggleCart" />
 				<!-- <MenuTrigger class="md:hidden" @icon-click="console.log('menu')" /> -->
 			</div>
 		</div>

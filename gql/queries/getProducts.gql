@@ -1,3 +1,6 @@
+#import "~/gql/fragments/SimpleProduct.gql"
+#import "~/gql/fragments/VariableProduct.gql"
+
 query getProducts($after: String, $slug: [String]) {
   products(
     first: 99
@@ -24,12 +27,8 @@ query getProducts($after: String, $slug: [String]) {
       averageRating
       reviewCount
       slug
-      ... on SimpleProduct {
-        price
-      }
-      ... on VariableProduct {
-        price
-      }
+      ... SimpleProduct
+      ... VariableProduct
     }
   }
 }

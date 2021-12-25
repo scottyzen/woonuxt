@@ -1,14 +1,28 @@
 <template>
-	<nuxt-link :to="`/product/${node.slug}`" class="relative ">
+	<nuxt-link :to="`/product/${node.slug}`" class="relative">
+		<span
+			v-if="node.onSale"
+			class="rounded-md bg-yellow-300 text-xs tracking-tight px-1.5 top-2 right-2 text-yellow-700 leading-5 z-10 absolute"
+		>SALE</span>
 
-		<span v-if="node.onSale" class="absolute z-10 px-1.5 text-xs leading-5 text-yellow-700 bg-yellow-300 tracking-tight  rounded-md top-2 right-2">SALE</span>
-
-		<nuxt-picture class="w-full mb-2" :src="node.image.sourceUrl" :alt="node.name" :title="node.name" fit="cover" width="136" height="136" sizes="xs:128px sm:296px md:325px xl:400px" :loading="index == 0 ? 'eager': 'lazy'" quality="90" format="webp" />
+		<nuxt-picture
+			class="mb-2 w-full"
+			:src="node.image.sourceUrl"
+			:alt="node.name"
+			:title="node.name"
+			fit="cover"
+			width="136"
+			height="136"
+			sizes="xs:128px sm:296px md:325px xl:400px"
+			:loading="index == 0 ? 'eager' : 'lazy'"
+			quality="90"
+			format="webp"
+		/>
 
 		<div class="p-2">
 			<StarRating :rating="node.averageRating" :count="node.reviewCount" />
-			<h2 class="mb-2 font-light leading-tight">{{ node.name }}</h2>
-			<div class="text-sm font-semibold">{{ node.price }}</div>
+			<h2 class="font-light mb-2 leading-tight">{{ node.name }}</h2>
+			<ProductPrice class="text-sm" :salePrice="node.salePrice" :regularPrice="node.regularPrice" />
 		</div>
 	</nuxt-link>
 </template>
@@ -30,6 +44,6 @@ export default {
 
 <style lang="postcss">
 picture.w-full img {
-	@apply w-full rounded-xl;
+	@apply rounded-xl w-full;
 }
 </style>

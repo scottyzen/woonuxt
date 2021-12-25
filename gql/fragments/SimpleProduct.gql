@@ -1,0 +1,7 @@
+fragment SimpleProduct on SimpleProduct {
+  price
+  salePrice
+  regularPrice
+  stockStatus
+  stockQuantity
+}

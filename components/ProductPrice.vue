@@ -1,0 +1,24 @@
+<template>
+    <div class="flex">
+        <span
+            class="font-semibold"
+            :class="{ 'text-gray-400 line-through font-normal': salePrice }"
+        >{{ regularPrice }}</span>
+        <span v-if="salePrice" class="font-semibold ml-2">{{ salePrice }}</span>
+    </div>
+</template>
+
+<script>
+export default {
+    props: {
+        regularPrice: {
+            type: Number,
+            required: true
+        },
+        salePrice: {
+            type: Number,
+            required: true
+        }
+    }
+}
+</script>

@@ -1,0 +1,43 @@
+fragment VariableProduct on VariableProduct {
+  price
+  salePrice
+  regularPrice
+  stockStatus
+  stockQuantity
+  attributes {
+    nodes {
+      name
+      options
+      variation
+      visible
+    }
+  }
+  defaultAttributes {
+    nodes {
+      name
+      attributeId
+    }
+  }
+  variations {
+    nodes {
+      name
+      databaseId
+      price
+      slug
+      stockQuantity
+      stockStatus
+      hasAttributes
+      image {
+        sourceUrl
+        altText
+        title
+      }
+      attributes {
+        nodes {
+          value
+          name
+        }
+      }
+    }
+  }
+}

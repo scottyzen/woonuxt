@@ -1,6 +1,6 @@
 <template>
-	<div class="relative ">
-		<svg width="20" height="20" class="ml-4 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" @click="iconClick" :data-itemCount="$store.state.itemCount">
+	<div class="relative cursor-pointer" @click="iconClick">
+		<svg width="20" height="20" class="ml-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"  :data-itemCount="$store.state.itemCount">
 			<circle cx="176" cy="416" r="16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
 			<circle cx="400" cy="416" r="16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
 			<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M48 80h64l48 272h256" />

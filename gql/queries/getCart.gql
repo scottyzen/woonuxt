@@ -1,3 +1,6 @@
+#import "~/gql/fragments/SimpleProduct.gql"
+#import "~/gql/fragments/VariableProduct.gql"
+
 query getCart {
   cart {
     total
@@ -17,14 +20,8 @@ query getCart {
             image {
               sourceUrl(size: SHOP_THUMBNAIL)
             }
-            ... on VariableProduct {
-              name
-              price
-            }
-            ... on SimpleProduct {
-              name
-              price
-            }
+            ... SimpleProduct
+            ... VariableProduct
           }
         }
         variation{
