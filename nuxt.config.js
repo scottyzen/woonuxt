@@ -3,9 +3,6 @@ import { defineNuxtConfig } from '@nuxt/bridge'
 export default defineNuxtConfig({
   // bridge: false,
   target: "static",
-  // bridge: {
-  //   vite: true
-  // },
   
   components: true,
   head: {
