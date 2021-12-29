@@ -4,7 +4,7 @@
 			<nuxt-link
 				to="/products"
 				v-if="showBackButton"
-				class="bg-white rounded-full shadow-lg m-8 leading-tight p-2 px-4 top-0 left-0 gap-1 inline-flex absolute item-center justify-center md:top-4 md:left-16"
+				class="bg-white rounded-full shadow-lg m-8 leading-tight p-2 px-4 top-0 left-0 gap-1 inline-flex absolute item-center justify-center md:top-4 lg:left-16"
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

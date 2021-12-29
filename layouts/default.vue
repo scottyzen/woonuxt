@@ -107,22 +107,22 @@ pre {
 .slide-right-enter-active,
 .slide-right-leave-active {
 	transition-duration: 300ms;
-	transition-property: height, opacity, transform;
-	transition-timing-function: cubic-bezier(0.55, 0, 0.1, 1);
+	transition-property: opacity, transform;
+	transition-timing-function: ease-in-out;
 	overflow: hidden;
-	will-change: transform, opacity, height;
+	will-change: transform, opacity;
 }
 
 .slide-left-enter,
 .slide-right-leave-active {
 	opacity: 0;
-	transform: translate(2em, 0);
+	transform: translate(1em, 0);
 }
 
 .slide-left-leave-active,
 .slide-right-enter {
 	opacity: 0;
-	transform: translate(-2em, 0);
+	transform: translate(-1em, 0);
 }
 
 // slide-up
