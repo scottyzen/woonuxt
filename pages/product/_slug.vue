@@ -66,6 +66,9 @@ export default {
 			attrValues: []
 		}
 	},
+	transition(to, from) {
+		return to.name === 'products' ? 'slide-right' : 'slide-left'
+	},
 	async asyncData({ $graphql, params }) {
 		const variables = { slug: params.slug }
 		const { product } = await $graphql.default.request(getProduct, variables)

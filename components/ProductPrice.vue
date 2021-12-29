@@ -12,12 +12,11 @@
 export default {
     props: {
         regularPrice: {
-            type: Number,
+            type: String,
             required: true
         },
         salePrice: {
-            type: Number,
-            required: true
+            default: null
         }
     }
 }

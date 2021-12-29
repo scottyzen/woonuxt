@@ -24,7 +24,12 @@ export default defineNuxtConfig({
   },
 
   router: {
-    middleware: 'pages'
+    middleware: 'pages',
+  },
+
+  pageTransition: {
+    name: 'fade',
+    mode: 'out-in',
   },
 
   modules: [
