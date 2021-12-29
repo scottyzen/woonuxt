@@ -124,4 +124,35 @@ pre {
 	opacity: 0;
 	transform: translate(-2em, 0);
 }
+
+// slide-up
+.slide-up-enter-active,
+.slide-up-leave-active {
+	transition-duration: 300ms;
+	transition-property: height, opacity, transform;
+	transition-timing-function: cubic-bezier(0.55, 0, 0.1, 1);
+	overflow: hidden;
+	will-change: transform, opacity, height;
+}
+
+.scale-y-leave-active {
+	transition: transform 300ms, max-height 300ms;
+	opacity: 0;
+	max-height: 0;
+	overflow: hidden;
+}
+.scale-y-enter-active {
+	transition: max-height 500ms ease-out, opacity 500ms ease-out 250ms,
+		transform 500ms ease-out;
+	will-change: opacity, transform, max-height;
+	max-height: 600px;
+	overflow: hidden;
+}
+.scale-y-enter,
+.scale-y-leave-to {
+	opacity: 0;
+	transform: scale(0.75) translateY(25%);
+	max-height: 0;
+	position: absolute;
+}
 </style>

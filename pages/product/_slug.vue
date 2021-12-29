@@ -1,26 +1,29 @@
 <template>
 	<main class="container py-4 relative">
-		<nuxt-link
-			to="/products"
-			class="bg-white rounded-full shadow-lg m-8 leading-tight p-2 px-4 top-0 left-0 gap-1 inline-flex absolute item-center justify-center"
-		>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="18"
-				height="18"
-				viewBox="0 0 512 512"
-				clsss="-ml-1"
+		<transition name="scale-y">
+			<nuxt-link
+				to="/products"
+				v-if="showBackButton"
+				class="bg-white rounded-full shadow-lg m-8 leading-tight p-2 px-4 top-0 left-0 gap-1 inline-flex absolute item-center justify-center md:top-4 md:left-16"
 			>
-				<path
-					fill="none"
-					stroke="currentColor"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="48"
-					d="M244 400L100 256l144-144M120 256h292"
-				/>
-			</svg> Back
-		</nuxt-link>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="18"
+					height="18"
+					viewBox="0 0 512 512"
+					clsss="-ml-1"
+				>
+					<path
+						fill="none"
+						stroke="currentColor"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="48"
+						d="M244 400L100 256l144-144M120 256h292"
+					/>
+				</svg> Back
+			</nuxt-link>
+		</transition>
 		<div class="flex flex-col gap-8 md:flex-row md:items-center md:justify-evenly">
 			<div class="-mx-4">
 				<nuxt-img
@@ -103,6 +106,7 @@ export default {
 		return { product: product }
 	},
 	mounted() {
+		this.showBackButton = true
 		if (this.product.variations) {
 			this.checkForVariationTypeOfAny()
 		}
