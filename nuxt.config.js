@@ -27,9 +27,8 @@ export default defineNuxtConfig({
     middleware: 'pages',
   },
 
-  pageTransition: {
-    name: 'fade',
-    mode: 'out-in',
+  pageTransition:{
+    name: 'page',
   },
 
   modules: [
