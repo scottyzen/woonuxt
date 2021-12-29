@@ -81,6 +81,7 @@ const formatArray = (arr) => {
 }
 
 export default {
+	scrollToTop: true,
 	data() {
 		return {
 			quantity: 1,
