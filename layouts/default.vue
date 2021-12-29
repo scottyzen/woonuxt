@@ -87,6 +87,10 @@ body {
 	max-width: 1440px;
 }
 
+pre {
+	@apply rounded bg-gray-800 my-8 text-xs text-white p-4;
+}
+
 /* Enter and leave animations can use different */
 /* durations and timing functions.              */
 .slide-leave-active,

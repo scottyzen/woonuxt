@@ -1,5 +1,26 @@
 <template>
-	<main class="container py-4">
+	<main class="container py-4 relative">
+		<nuxt-link
+			to="/products"
+			class="bg-white rounded-full shadow-lg m-8 leading-tight p-2 px-4 top-0 left-0 gap-1 inline-flex absolute item-center justify-center"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="18"
+				height="18"
+				viewBox="0 0 512 512"
+				clsss="-ml-1"
+			>
+				<path
+					fill="none"
+					stroke="currentColor"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="48"
+					d="M244 400L100 256l144-144M120 256h292"
+				/>
+			</svg> Back
+		</nuxt-link>
 		<div class="flex flex-col gap-8 md:flex-row md:items-center md:justify-evenly">
 			<div class="-mx-4">
 				<nuxt-img
@@ -39,7 +60,7 @@
 </template>
 
 <script>
-import getProduct from '~/gql/queries/getProduct'
+import GET_PRODUCT from '~/gql/queries/getProduct'
 import ADD_TO_CART from '~/gql/mutations/ADD_TO_CART'
 
 function arraysEqual(a1, a2) {
@@ -63,7 +84,8 @@ export default {
 			variation: [],
 			activeVariation: null,
 			indexOfTypeAny: [],
-			attrValues: []
+			attrValues: [],
+			showBackButton: false,
 		}
 	},
 	transition(to, from) {
@@ -73,10 +95,11 @@ export default {
 		if (to.name === 'products') {
 			return 'slide-right'
 		}
+		return 'page'
 	},
 	async asyncData({ $graphql, params }) {
 		const variables = { slug: params.slug }
-		const { product } = await $graphql.default.request(getProduct, variables)
+		const { product } = await $graphql.default.request(GET_PRODUCT, variables)
 		return { product: product }
 	},
 	mounted() {
@@ -143,9 +166,3 @@ export default {
 	}
 }
 </script>
-
-<style lang="postcss">
-pre {
-	@apply rounded bg-gray-800 my-8 text-xs text-white p-4;
-}
-</style>
