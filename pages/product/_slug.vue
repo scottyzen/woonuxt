@@ -92,13 +92,12 @@ export default {
 		}
 	},
 	transition(to, from) {
-		if (from.name === 'products') {
+		if (from && from.name === 'products') {
 			return 'slide-left'
 		}
 		if (to.name === 'products') {
 			return 'slide-right'
 		}
-		return 'page'
 	},
 	async asyncData({ $graphql, params }) {
 		const variables = { slug: params.slug }
