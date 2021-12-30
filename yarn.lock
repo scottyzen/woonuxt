@@ -2013,12 +2013,12 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.26.tgz#7acd1621783571b9a82eca1f041b4a0a983481d9"
   integrity sha512-vPV6Cq+NIWbH5pZu+V+2QHE9y1qfuTq49uNWw4f7FDEeZaDU2H2cx5jcUZOAKW7qTrUS4k6qZPbMy1x4N96nbA==
 
-"@vueuse/core@^7.4.1":
-  version "7.4.1"
-  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-7.4.1.tgz#81ede3f67dfd58af8284c910ac2fee25458892c6"
-  integrity sha512-8UeLPCAieeQLXFHF1/28SIEK6ILLPb/4hp03hR+xkXF00gB/YUp0CEVcRAL9uQ8HTZa3S2T/jTISMc1ZjilM0A==
+"@vueuse/core@^7.4.3":
+  version "7.4.3"
+  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-7.4.3.tgz#cf5b616605c6d9641715889c462d31da36226e11"
+  integrity sha512-OflPLlQ7eqaDJgKYw9DpRCbtfpkFkg1EqHFq7CFrbIEElB39wIfB9ccNypCar8e5KRDrAbOJLIOOvDZO6aC2Gg==
   dependencies:
-    "@vueuse/shared" "7.4.1"
+    "@vueuse/shared" "7.4.3"
     vue-demi "*"
 
 "@vueuse/head@^0.7.4":
@@ -2026,10 +2026,10 @@
   resolved "https://registry.yarnpkg.com/@vueuse/head/-/head-0.7.4.tgz#2eec185ebe52e634400dfe2a8b1a18f788c06bcf"
   integrity sha512-cmps+wrdgL77V72vtjU6kaAunkG6GhswaMIQoh7Twc52ql4/p7i1Amd31LqnnvNF/bfuvzcXgYvsH8I7kimZmA==
 
-"@vueuse/shared@7.4.1":
-  version "7.4.1"
-  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-7.4.1.tgz#0aa090147fbd66ba56334ada1ffa2dafab815c1b"
-  integrity sha512-Pzb7XoHIcgPwwBJ5Ow9lZb0HTDyaLDV3pgxKauPGTMN9qvEylG06kUG+VTjJXkPsRtiGu46di8XyFeMw2dongA==
+"@vueuse/shared@7.4.3":
+  version "7.4.3"
+  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-7.4.3.tgz#59ef90ea27a1ee4d08e001be293c821849252f0c"
+  integrity sha512-tNOCbpD3uZyzxNuw2GX5LTVkMB//IZ7GS452F7TwlY07aIoGjPgixi2Yfk/xSR4CcC9iU56zprZW33aEGj1O1Q==
   dependencies:
     vue-demi "*"
 
@@ -7725,10 +7725,10 @@ nuxt-graphql-request@^4.3.0:
     graphql-request "^3.7.0"
     ramda "^0.27.1"
 
-nuxt-windicss@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/nuxt-windicss/-/nuxt-windicss-2.2.1.tgz#0d853e43d49e9aa85feedcf589af5e1971364211"
-  integrity sha512-K8Fq+iHBoCZt/Z8LF6REe6vAlkxdVvSMN5kEcF+36qfZoIJYasVErfZqWoBHTW1x7MkK9yiLsxrQIlfl/vvSZg==
+nuxt-windicss@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/nuxt-windicss/-/nuxt-windicss-2.2.2.tgz#22c1129376b4f33366dbb4f8abc82f2cd7a67fea"
+  integrity sha512-4tvzk9d2TUFxloty187D+wmO8ZNAvpSmRJ5HQO3/AvZdMMhAl4gomXR9fCgFKQe7Fxcj9nIKNInOx8TWowjiqA==
   dependencies:
     "@nuxt/kit" "npm:@nuxt/kit-edge@latest"
     "@windicss/plugin-utils" "^1.6.1"
@@ -7740,7 +7740,7 @@ nuxt-windicss@^2.2.1:
     read-cache "^1.0.0"
     sirv "^1.0.19"
     vite-plugin-windicss "^1.6.1"
-    windicss "^3.4.0"
+    windicss "^3.4.2"
     windicss-analysis "^0.3.5"
     windicss-webpack-plugin "^1.6.2"
 
@@ -11481,6 +11481,11 @@ windicss@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/windicss/-/windicss-3.4.0.tgz#2da63739089b5c6f6ca1b7cc28bd855cd5bc95cc"
   integrity sha512-X+9Y1/FPxX253Xo4Hk/qfVuvoAxgKx686Z6yHxmBFMH7wRCPdRO42na9k/yEnrW6EqCFJP/GcMIHn3QENaE42g==
+
+windicss@^3.4.2:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/windicss/-/windicss-3.4.2.tgz#257795c9be8b6e93117ffa3fb27874d225da6679"
+  integrity sha512-YieqWaXiwPu0JJoB7z03RXdjZjQQJtMZAeXUXu/j3JXSMhIgV/2rUXu4Q7QrworRlbaASZlFhxjnL/78aAty+Q==
 
 workbox-cdn@^5.1.4:
   version "5.1.4"
