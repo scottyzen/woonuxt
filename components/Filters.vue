@@ -1,51 +1,73 @@
 <template>
 	<aside id="filters" class="hidden md:block">
 		<span class="text-xl mb-8 block">Filter</span>
+
 		<!-- Price Range -->
 		<div class="mb-3">Price Range</div>
 		<div class="flex gap-4 justify-between">
-			<div class="flex w-1/2 relative items-center ">
+			<div class="flex w-1/2 relative items-center">
 				<span v-if="filter.minPrice" class="p-2 absolute">€</span>
-				<input class="price-input" type="number" placeholder="Min" min="0" v-model.number="filter.minPrice" step="1" :class="{'active': filter.minPrice}">
+				<input
+					class="price-input"
+					type="number"
+					placeholder="Min"
+					min="0"
+					v-model.number="filter.minPrice"
+					step="1"
+					:class="{ 'active': filter.minPrice }"
+				/>
 			</div>
-			<div class="flex w-1/2 relative items-center ">
+			<div class="flex w-1/2 relative items-center">
 				<span v-if="filter.maxPrice" class="p-2 absolute">€</span>
-				<input class="price-input" type="number" placeholder="Max" min="0" max="90" v-model.number="filter.maxPrice" step="1" :class="{'active': filter.maxPrice}">
+				<input
+					class="price-input"
+					type="number"
+					placeholder="Max"
+					min="0"
+					max="90"
+					v-model.number="filter.maxPrice"
+					step="1"
+					:class="{ 'active': filter.maxPrice }"
+				/>
 			</div>
 		</div>
 
 		<div class="mt-8 mb-3">Rating</div>
 		<div class="grid gap-1">
 			<label for="star-five" class="flex items-center">
-				<input id="star-five" type="radio" :value="5" v-model="filter.starRating">
+				<input id="star-five" type="radio" :value="5" v-model="filter.starRating" />
 				<Stars :number="5" />
 			</label>
 			<label for="star-four" class="flex items-center">
-				<input id="star-four" type="radio" :value="4" v-model="filter.starRating">
+				<input id="star-four" type="radio" :value="4" v-model="filter.starRating" />
 				<Stars :number="4" />
 			</label>
 			<label for="star-three" class="flex items-center">
-				<input id="star-three" type="radio" :value="3" v-model="filter.starRating">
+				<input id="star-three" type="radio" :value="3" v-model="filter.starRating" />
 				<Stars :number="3" />
 			</label>
 			<label for="star-two" class="flex items-center">
-				<input id="star-two" type="radio" :value="2" v-model="filter.starRating">
+				<input id="star-two" type="radio" :value="2" v-model="filter.starRating" />
 				<Stars :number="2" />
 			</label>
 			<label for="star-one" class="flex items-center">
-				<input id="star-one" type="radio" :value="1" v-model="filter.starRating">
+				<input id="star-one" type="radio" :value="1" v-model="filter.starRating" />
 				<Stars :number="1" />
 			</label>
 		</div>
 
 		<transition name="fadeUp">
-			<a v-if="showRestButton" @click="reset" class="rounded-xl cursor-pointer bg-purple-600 mt-12 text-center text-white leading-tight w-full p-2 block hover:bg-purple-700">Clear all filters</a>
+			<a
+				v-if="showRestButton"
+				@click="reset"
+				class="rounded-xl cursor-pointer bg-purple-600 mt-12 text-center text-white leading-tight w-full p-2 block hover:bg-purple-700"
+			>Clear all filters</a>
 		</transition>
-
 	</aside>
 </template>
 
 <script>
+
 export default {
 	data() {
 		const initialState = {
@@ -58,9 +80,15 @@ export default {
 			initialState: JSON.stringify(initialState),
 		};
 	},
+	mounted() {
+		if (this.$store.state.filter) {
+			this.filter = this.$store.state.filter
+		}
+	},
 	methods: {
 		reset() {
 			this.filter = JSON.parse(this.initialState);
+			this.$emit('clear-filters');
 		},
 	},
 	watch: {
@@ -69,14 +97,14 @@ export default {
 				this.$emit('filter-updated', this.filter);
 			},
 			deep: true,
-		},
+		}
 	},
 	computed: {
 		showRestButton() {
 			return JSON.stringify(this.filter) !== this.initialState;
 		},
 	},
-};
+}
 </script>
 
 <style lang="postcss">

@@ -1,10 +1,23 @@
 <template>
 	<main class="container flex">
-		<Filters @filter-updated="filterProducts" />
+		<Filters
+			@filter-updated="filterProducts"
+			@clear-filters="resetFilter"
+			:activeFilters="this.$store.state.filter"
+		/>
 
 		<div class="flex flex-col flex-1 md:pl-8">
-			<input type="search" placeholder="Search products..." :class="{'border-gray-400': search}" v-model="search">
-			<Products :category="$route.params.categorySlug" :page="parseInt($route.params.pageNumber) || page" :products="products" />
+			<input
+				type="search"
+				placeholder="Search products..."
+				:class="{ 'border-gray-400': search }"
+				v-model="search"
+			/>
+			<Products
+				:category="$route.params.categorySlug"
+				:page="parseInt($route.params.pageNumber) || page"
+				:products="products"
+			/>
 		</div>
 	</main>
 </template>
@@ -24,11 +37,19 @@ export default {
 		const { products } = await $graphql.default.request(getProducts, variables)
 		return { products: products.nodes }
 	},
+	mounted() {
+		console.log(this.$store.state.filter);
+		if (this.$store.state.filter) {
+			this.filterProducts(this.$store.state.filter)
+		}
+	},
 	methods: {
 		filterProducts(filter) {
 			const categorySlug = this.$route.params.categorySlug
 			this.products = this.$store.state.products.filter((product) => {
 				let { minPrice, maxPrice, starRating } = filter
+
+				// console.log(minPrice, maxPrice, starRating);
 
 				// Category
 				const categpryCondition = categorySlug ? product.productCategories.nodes.map((cat) => cat.slug).some((slug) => slug == categorySlug) : true
@@ -43,6 +64,12 @@ export default {
 
 				return priceCondition && ratingCondition && categpryCondition
 			})
+
+			this.$store.commit('setFilter', filter);
+		},
+		resetFilter() {
+			console.log('reset');
+			this.$store.commit('clearFilter');
 		}
 	}
 }
@@ -50,13 +77,13 @@ export default {
 
 <style lang="postcss">
 .pagination {
-	@apply flex items-center justify-center gap-2 p-8 mb-8;
+	@apply flex mb-8 p-8 gap-2 items-center justify-center;
 }
 .pagination a {
-	@apply px-4 py-2 leading-none text-purple-900 bg-purple-100 hover:bg-purple-200 rounded-xl;
+	@apply rounded-xl bg-purple-100 leading-none py-2 px-4 text-purple-900 hover:bg-purple-200;
 }
-input[type='search'] {
-	@apply w-full max-w-md p-2 px-4 mt-8 leading-tight transition-all border outline-none rounded-xl pl-10;
-	background: url('/images/search.svg') no-repeat center left 0.75em;
+input[type="search"] {
+	@apply border rounded-xl max-w-md outline-none mt-8 leading-tight w-full p-2 px-4 pl-10 transition-all;
+	background: url("/images/search.svg") no-repeat center left 0.75em;
 }
 </style>
