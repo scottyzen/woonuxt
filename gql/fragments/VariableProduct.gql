@@ -1,5 +1,14 @@
 fragment VariableProduct on VariableProduct {
   price
+  slug
+  description
+  image {
+    sourceUrl
+    altText
+    title
+  }
+  averageRating
+  reviewCount
   salePrice
   regularPrice
   stockStatus

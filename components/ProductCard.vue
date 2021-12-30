@@ -6,6 +6,7 @@
 		>SALE</span>
 
 		<nuxt-picture
+			v-if="node.image"
 			class="mb-2 w-full"
 			:src="node.image.sourceUrl"
 			:alt="node.name"

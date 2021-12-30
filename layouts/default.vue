@@ -86,6 +86,9 @@ body {
 .container {
 	max-width: 1440px;
 }
+.container-sm {
+	max-width: 1200px;
+}
 
 pre {
 	@apply rounded bg-gray-800 my-8 text-xs text-white p-4;

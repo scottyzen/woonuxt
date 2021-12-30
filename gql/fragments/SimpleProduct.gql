@@ -1,7 +1,16 @@
 fragment SimpleProduct on SimpleProduct {
   price
+  slug
   salePrice
   regularPrice
   stockStatus
   stockQuantity
+  description
+  averageRating
+  reviewCount
+  image {
+    sourceUrl
+    altText
+    title
+  }
 }

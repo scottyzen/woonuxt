@@ -1,10 +1,10 @@
 <template>
-	<main class="container py-4 relative">
+	<main class="container container-sm py-4 relative md:py-12">
 		<transition name="scale-y">
 			<nuxt-link
 				to="/products"
 				v-if="showBackButton"
-				class="bg-white rounded-full shadow-lg m-8 leading-tight p-2 px-4 top-0 left-0 gap-1 inline-flex absolute item-center justify-center md:top-4 lg:left-16"
+				class="bg-white rounded-full shadow-lg m-8 leading-tight p-2 px-4 top-0 left-0 gap-1 inline-flex absolute item-center justify-center md:top-8 lg:-left-8"
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -24,26 +24,26 @@
 				</svg> Back
 			</nuxt-link>
 		</transition>
-		<div class="flex flex-col gap-8 md:flex-row md:items-center md:justify-evenly">
+		<div class="flex flex-col gap-8 md:flex-row md:justify-evenly">
 			<div class="-mx-4">
 				<nuxt-img
-					class="object-contain rounded-2xl w-full md:w-auto"
+					class="object-contain rounded-2xl w-full md:w-auto md:w-[500px]"
 					width="500"
 					height="500"
 					:src="type.image.sourceUrl"
 				/>
 			</div>
 
-			<div class="max-w-lg">
+			<div class="md:max-w-xl">
 				<div class="flex mb-4 items-center justify-between">
 					<div class="flex-1">
-						<h1 class="text-lg mb-0.5">{{ type.name }}</h1>
+						<h1 class="font-semibold text-xl mb-0.5">{{ type.name }}</h1>
 						<StarRating :rating="product.averageRating" :count="product.reviewCount" />
 					</div>
 					<QuantityButtons @quantity-change="updateQuantity" :quantity="quantity" :min="1" />
 				</div>
 
-				<div v-html="product.description" class="font-light text-sm mb-8"></div>
+				<div v-html="product.description" class="font-light mb-8"></div>
 
 				<form @submit.prevent="triggerAddToCart">
 					<AttributeSelections
@@ -57,6 +57,22 @@
 						<AddToCartButton :disabled="!activeVariation && product.variations" />
 					</div>
 				</form>
+			</div>
+		</div>
+		<div class="my-16">
+			<h3 class="font-semibold text-lg mb-2">Related Products</h3>
+			<div class="min-h-[600px] grid gap-8 product-grid">
+				<ProductCard
+					class="w-full"
+					v-for="(node, i) in  product.related.nodes"
+					:key="node.databaseId"
+					:node="node"
+					:index="i"
+					:class="{
+						'hidden': i === product.related.nodes.length - 1,
+						'lg:block': i === product.related.nodes.length - 1
+					}"
+				/>
 			</div>
 		</div>
 	</main>

@@ -1,28 +1,34 @@
 <template>
-	<div class="flex flex-col gap-2">
-		<div class="relative " v-for="(attr, i) in attrs" :key="i">
-
+	<div class="flex flex-col gap-4">
+		<div class="relative" v-for="(attr, i) in attrs" :key="i">
 			<div v-if="attr.options.length > 3" class="flex items-center justify-between">
-				<div>{{attr.label}}</div>
+				<div>{{ attr.label }}</div>
 				<select :name="attr.name" :id="attr.name" @change="updateAttrs" :ref="attr.name" required>
-					<option selected disabled hidden :value="null">Choose {{attr.label}}</option>
-					<option v-for="option in attr.options" :key="option" :value="option">{{option}}</option>
+					<option selected disabled hidden :value="null">Choose {{ attr.label }}</option>
+					<option v-for="option in attr.options" :key="option" :value="option">{{ option }}</option>
 				</select>
 			</div>
 
 			<div v-else class="flex items-center justify-between">
-				<div>{{attr.label}}</div>
+				<div>{{ attr.label }}</div>
 				<div class="flex gap-2">
 					<span v-for="(option, i) in attr.options" :key="option.id">
 						<label>
-							<input class="hidden" :checked="i == 0" @change="updateAttrs($event)" type="radio" :class="`name-${attr.name}`" :name="attr.name" :value="option" :ref="attr.name" />
+							<input
+								class="hidden"
+								:checked="i == 0"
+								@change="updateAttrs($event)"
+								type="radio"
+								:class="`name-${attr.name}`"
+								:name="attr.name"
+								:value="option"
+								:ref="attr.name"
+							/>
 							<span class="radio-button" :class="`picker-${option}`">{{ option }}</span>
 						</label>
 					</span>
-
 				</div>
 			</div>
-
 		</div>
 	</div>
 </template>
@@ -53,17 +59,17 @@ export default {
 
 <style lang="postcss">
 select {
-	@apply appearance-none py-2 px-4 border border-white shadow rounded-2xl;
-	background: url('/images/chevron-down.svg') center right 10px no-repeat;
+	@apply border border-white rounded-2xl shadow py-2 px-4 appearance-none;
+	background: url("/images/chevron-down.svg") center right 10px no-repeat;
 	background-size: 1rem;
 	padding-right: 2.5rem;
 }
 
 .radio-button {
-	@apply inline-block rounded-2xl py-1.5 px-3 text-sm text-center text-gray-800 bg-gray-50 border border-white shadow cursor-pointer;
+	@apply border border-white cursor-pointer bg-gray-50 rounded-2xl shadow text-sm text-center py-1.5 px-3 text-gray-800 inline-block;
 }
 
-input[type='radio']:checked ~ span {
+input[type="radio"]:checked ~ span {
 	@apply bg-purple-500 text-white;
 }
 </style>
