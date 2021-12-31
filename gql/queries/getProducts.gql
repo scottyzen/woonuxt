@@ -1,11 +1,11 @@
 #import "~/gql/fragments/SimpleProduct.gql"
 #import "~/gql/fragments/VariableProduct.gql"
 
-query getProducts($after: String, $slug: [String]) {
+query getProducts($after: String, $slug: [String], $first: Int = 99,  $orderby: [ProductsOrderbyInput] = {field: DATE, order: DESC}) {
   products(
-    first: 99
+    first: $first
     after: $after
-    where: {categoryIn: $slug, typeNotIn: EXTERNAL, visibility: VISIBLE, minPrice: 0}
+    where: {categoryIn: $slug, typeNotIn: EXTERNAL, visibility: VISIBLE, minPrice: 0, orderby: $orderby}
   ) {
     nodes {
       name
@@ -27,8 +27,8 @@ query getProducts($after: String, $slug: [String]) {
       averageRating
       reviewCount
       slug
-      ... SimpleProduct
-      ... VariableProduct
+      ...SimpleProduct
+      ...VariableProduct
     }
   }
 }

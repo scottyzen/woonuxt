@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import getProducts from '~/gql/queries/getProducts'
+import GET_PRODUCTS from '~/gql/queries/getProducts'
 export default {
 	data() {
 		return {
@@ -34,7 +34,7 @@ export default {
 	},
 	async asyncData({ $graphql, params }) {
 		const variables = { slug: params.categorySlug }
-		const { products } = await $graphql.default.request(getProducts, variables)
+		const { products } = await $graphql.default.request(GET_PRODUCTS, variables)
 		return { products: products.nodes }
 	},
 	mounted() {

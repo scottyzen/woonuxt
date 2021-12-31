@@ -1,20 +1,36 @@
 <template>
-	<section class="relative w-full h-full min-h-screen">
-
+	<section class="h-full min-h-screen w-full relative">
 		<!-- Count Description -->
-		<div v-if="products.length" class="absolute right-0 hidden mt-8 text-sm font-light -top-16 lg:block ">
-			Showing <strong>{{small + 1}}</strong> to <strong>{{large}}</strong> of <strong>{{this.products.length}}</strong> products
+		<div
+			v-if="products.length"
+			class="font-light mt-8 text-sm -top-16 right-0 absolute hidden lg:block"
+		>
+			Showing
+			<strong>{{ small + 1 }}</strong> to
+			<strong>{{ large }}</strong> of
+			<strong>{{ this.products.length }}</strong> products
 		</div>
 
 		<!-- No Products Found  -->
-		<div v-if="products.length == 0" class="flex flex-col items-center justify-center p-8">
+		<div v-if="products.length == 0" class="flex flex-col p-8 items-center justify-center">
 			<nuxt-img width="400" height="400" src="/images/empty.svg"></nuxt-img>
 			<span>No Products Found</span>
 		</div>
 
 		<!-- Products -->
-		<transition-group v-else name="shrink" mode="in-out" class="product-grid grid gap-8 my-8 min-h-[600px] transition-all">
-			<ProductCard class="w-full" v-for="(node, i) in newProducts" :key="node.databaseId" :node="node" :index="i" />
+		<transition-group
+			v-else
+			name="shrink"
+			mode="in-out"
+			class="my-8 min-h-[600px] grid transition-all gap-8 product-grid"
+		>
+			<ProductCard
+				class="w-full"
+				v-for="(node, i) in newProducts"
+				:key="node.databaseId"
+				:node="node"
+				:index="i"
+			/>
 		</transition-group>
 
 		<!-- Pagination -->
@@ -22,7 +38,6 @@
 			<a href="#" v-if="page > 1" @click="page--">Previous</a>
 			<a href="#" v-if="large != products.length" @click="page++">Next</a>
 		</div>
-
 	</section>
 </template>
 
@@ -67,10 +82,10 @@ export default {
 	}
 }
 .pagination {
-	@apply flex items-center justify-center gap-2 p-8 mb-8;
+	@apply flex mb-8 p-8 gap-2 items-center justify-center;
 }
 .pagination a {
-	@apply px-4 py-2 leading-none text-purple-900 bg-purple-100 hover:bg-purple-200 rounded-xl;
+	@apply rounded-xl bg-purple-100 leading-none py-2 px-4 text-purple-900 hover:bg-purple-200;
 }
 .shrink-move {
 	transition: all 500ms;

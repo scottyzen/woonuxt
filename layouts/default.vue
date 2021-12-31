@@ -87,7 +87,7 @@ body {
 	max-width: 1440px;
 }
 .container-sm {
-	max-width: 1200px;
+	max-width: 1280px;
 }
 
 pre {

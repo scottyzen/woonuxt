@@ -24,8 +24,8 @@
 				</svg> Back
 			</nuxt-link>
 		</transition>
-		<div class="flex flex-col gap-8 md:flex-row md:justify-evenly">
-			<div class="-mx-4">
+		<div class="flex flex-col gap-8 md:flex-row md:justify-between">
+			<div class="-mx-4 md:m-0">
 				<nuxt-img
 					class="object-contain rounded-2xl w-full md:w-auto md:w-[500px]"
 					width="500"
@@ -34,7 +34,7 @@
 				/>
 			</div>
 
-			<div class="md:max-w-xl">
+			<div class="md:max-w-xl md:py-8">
 				<div class="flex mb-4 items-center justify-between">
 					<div class="flex-1">
 						<h1 class="font-semibold text-xl mb-0.5">{{ type.name }}</h1>
@@ -61,19 +61,7 @@
 		</div>
 		<div class="my-16">
 			<h3 class="font-semibold text-lg mb-2">Related Products</h3>
-			<div class="min-h-[600px] grid gap-8 product-grid">
-				<ProductCard
-					class="w-full"
-					v-for="(node, i) in  product.related.nodes"
-					:key="node.databaseId"
-					:node="node"
-					:index="i"
-					:class="{
-						'hidden': i === product.related.nodes.length - 1,
-						'lg:block': i === product.related.nodes.length - 1
-					}"
-				/>
-			</div>
+			<ProductRow :products="product.related.nodes" />
 		</div>
 	</main>
 </template>
