@@ -7,12 +7,17 @@
 		/>
 
 		<div class="flex flex-col flex-1 md:pl-8">
-			<input
-				type="search"
-				placeholder="Search products..."
-				:class="{ 'border-gray-400': search }"
-				v-model="search"
-			/>
+			<div class="flex mt-8 gap-4 items-center">
+				<span class="bg-primary rounded-xl text-white p-1.5 md:hidden">
+					<Icon width="22" height="22" />
+				</span>
+				<input
+					type="search"
+					placeholder="Search products..."
+					:class="{ 'border-gray-400': search }"
+					v-model="search"
+				/>
+			</div>
 			<Products
 				:category="$route.params.categorySlug"
 				:page="parseInt($route.params.pageNumber) || page"
@@ -83,7 +88,7 @@ export default {
 	@apply rounded-xl bg-purple-100 leading-none py-2 px-4 text-purple-900 hover:bg-purple-200;
 }
 input[type="search"] {
-	@apply border rounded-xl max-w-md outline-none mt-8 leading-tight w-full p-2 px-4 pl-10 transition-all;
+	@apply border rounded-xl max-w-md outline-none leading-tight w-full p-2 px-4 pl-10 transition-all;
 	background: url("/images/search.svg") no-repeat center left 0.75em;
 }
 </style>

@@ -3,6 +3,6 @@
 		<a
 			href="https://woonuxt.com"
 			class="border-t text-xs text-center py-8 text-gray-700 block"
-		>WooNuxt Version 0.1.44</a>
+		>WooNuxt Version 0.1.45</a>
 	</footer>
 </template>

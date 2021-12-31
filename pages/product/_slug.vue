@@ -6,22 +6,7 @@
 				v-if="showBackButton"
 				class="bg-white rounded-full shadow-lg m-8 leading-tight p-2 px-4 top-0 left-0 gap-1 inline-flex absolute item-center justify-center md:top-8 lg:-left-8"
 			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="18"
-					height="18"
-					viewBox="0 0 512 512"
-					clsss="-ml-1"
-				>
-					<path
-						fill="none"
-						stroke="currentColor"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="48"
-						d="M244 400L100 256l144-144M120 256h292"
-					/>
-				</svg> Back
+				<Icon name="back-arrow" width="18" class="-ml-1" />Back
 			</nuxt-link>
 		</transition>
 		<div class="flex flex-col gap-8 md:flex-row md:justify-between">
