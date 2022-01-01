@@ -1,6 +1,6 @@
 {
   "name": "woonuxt",
-  "version": "1.0.0",
+  "version": "0.1.46",
   "private": true,
   "scripts": {
     "dev": "nuxi dev",
@@ -20,7 +20,7 @@
     "nuxt-edge": "latest"
   },
   "devDependencies": {
-    "@nuxt/bridge": "npm:@nuxt/bridge-edge@^3.0.0-27338323.1e98259",
+    "@nuxt/bridge": "npm:@nuxt/bridge-edge",
     "@nuxt/image": "^0.6.0",
     "@nuxtjs/pwa": "^3.3.5",
     "nuxt-graphql-request": "^4.3.0",

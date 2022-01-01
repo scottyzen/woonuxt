@@ -1042,7 +1042,7 @@
     core-js-compat "^3.19.1"
     regenerator-runtime "^0.13.9"
 
-"@nuxt/bridge@npm:@nuxt/bridge-edge@^3.0.0-27338323.1e98259":
+"@nuxt/bridge@npm:@nuxt/bridge-edge":
   version "3.0.0-27338323.1e98259"
   resolved "https://registry.yarnpkg.com/@nuxt/bridge-edge/-/bridge-edge-3.0.0-27338323.1e98259.tgz#39b6c1c4a3a174f217545eb01acf851ca2918762"
   integrity sha512-wVImaafw7M46jw/hgoD4Z3ai2FFefT5vu7MKkpBGnk4UDDA7VAz3lUpOrvcvNHDwhodsCJfzaC708q90f24THA==
@@ -11176,18 +11176,6 @@ vue-demi@*:
   version "0.12.1"
   resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.12.1.tgz#f7e18efbecffd11ab069d1472d7a06e319b4174c"
   integrity sha512-QL3ny+wX8c6Xm1/EZylbgzdoDolye+VpCXRhI2hug9dJTP3OUJ3lmiKN3CsVV3mOJKwFi0nsstbgob0vG7aoIw==
-
-vue-demi@^0.11.4:
-  version "0.11.4"
-  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.11.4.tgz#6101992fe4724cf5634018a16e953f3052e94e2a"
-  integrity sha512-/3xFwzSykLW2HiiLie43a+FFgNOcokbBJ+fzvFXd0r2T8MYohqvphUyDQ8lbAwzQ3Dlcrb1c9ykifGkhSIAk6A==
-
-vue-fuse@^4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/vue-fuse/-/vue-fuse-4.0.3.tgz#b14d58ef3612ced46544929d17557efac7e57d7c"
-  integrity sha512-nHayExsFCInRKd1RfQgAf5AS6DAYgPpfMIDkAQ6Y0GK4qnUCH0WI89yFSemB8Yz23RaU1DACUxNbO7WnLhJOog==
-  dependencies:
-    vue-demi "^0.11.4"
 
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"

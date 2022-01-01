@@ -1,4 +1,5 @@
 import { defineNuxtConfig } from '@nuxt/bridge'
+import pkg from './package.json'
 
 export default defineNuxtConfig({
   bridge: false,
@@ -75,6 +76,7 @@ export default defineNuxtConfig({
 
   publicRuntimeConfig: {
     perPage: 12,
+    clientVersion: pkg.version,
   },
 
   router: {
