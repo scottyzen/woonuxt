@@ -11,11 +11,6 @@ query getProducts($after: String, $slug: [String], $first: Int = 99,  $orderby: 
       name
       onSale
       databaseId
-      image {
-        sourceUrl
-        altText
-        title
-      }
       productCategories {
         nodes {
           databaseId

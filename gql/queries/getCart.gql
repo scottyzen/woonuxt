@@ -17,9 +17,6 @@ query getCart {
             sku
             databaseId
             type
-            image {
-              sourceUrl(size: SHOP_THUMBNAIL)
-            }
             ... SimpleProduct
             ... VariableProduct
           }

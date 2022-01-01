@@ -8,20 +8,15 @@
 
 		<div class="flex flex-col flex-1 md:pl-8">
 			<div class="flex mt-8 gap-4 items-center">
-				<span class="bg-primary rounded-xl text-white p-1.5 md:hidden">
-					<Icon width="22" height="22" />
+				<span class="rounded-xl bg-gray-500 text-white p-1.5 md:hidden">
+					<Icon name="filter" width="22" height="22" />
 				</span>
-				<input
-					type="search"
-					placeholder="Search products..."
-					:class="{ 'border-gray-400': search }"
-					v-model="search"
-				/>
+				<Search :products="products" @search="filterSearch" />
 			</div>
 			<Products
 				:category="$route.params.categorySlug"
 				:page="parseInt($route.params.pageNumber) || page"
-				:products="products"
+				:products="searchedProducts || products"
 			/>
 		</div>
 	</main>
@@ -33,6 +28,7 @@ export default {
 	data() {
 		return {
 			products: [],
+			searchedProducts: null,
 			page: 1,
 			search: ''
 		}
@@ -43,7 +39,6 @@ export default {
 		return { products: products.nodes }
 	},
 	mounted() {
-		console.log(this.$store.state.filter);
 		if (this.$store.state.filter) {
 			this.filterProducts(this.$store.state.filter)
 		}
@@ -73,8 +68,11 @@ export default {
 			this.$store.commit('setFilter', filter);
 		},
 		resetFilter() {
-			console.log('reset');
 			this.$store.commit('clearFilter');
+		},
+		filterSearch(payload) {
+			const { search, results } = payload
+			this.searchedProducts = search ? results : null
 		}
 	}
 }

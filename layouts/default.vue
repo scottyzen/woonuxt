@@ -26,6 +26,7 @@ export default {
 		},
 		async getCart() {
 			try {
+				console.log('getCart');
 				const wooCookie = this.$cookies.get('woo');
 				this.setCookieIfAvailable(wooCookie);
 
