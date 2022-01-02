@@ -1,18 +1,10 @@
 <template>
-	<main class="container container-sm py-4 relative md:py-12">
-		<transition name="scale-y">
-			<nuxt-link
-				to="/products"
-				v-if="showBackButton"
-				class="bg-white rounded-full shadow-lg m-8 leading-tight p-2 px-4 top-0 left-0 gap-1 inline-flex absolute item-center justify-center md:top-8 lg:-left-8"
-			>
-				<Icon name="back-arrow" width="18" class="-ml-1" />Back
-			</nuxt-link>
-		</transition>
+	<main class="container container-sm py-4 relative lg:py-12">
+		<ProductBackButton :page="$route.params.page" />
 		<div class="flex flex-col gap-8 md:flex-row md:justify-between">
 			<div class="-mx-4 md:m-0">
 				<nuxt-img
-					class="object-contain rounded-2xl w-full md:w-auto md:w-[500px]"
+					class="object-contain rounded-2xl w-full min-w-[350px] md:w-auto md:w-[500px]"
 					width="500"
 					height="500"
 					:src="type.image.sourceUrl"
@@ -95,7 +87,6 @@ export default {
 		return { product: product }
 	},
 	mounted() {
-		this.showBackButton = true
 		if (this.product.variations) {
 			this.checkForVariationTypeOfAny()
 		}
@@ -119,10 +110,15 @@ export default {
 			}
 		},
 		updateSelectedVariations(variations) {
+			if (!this.product.variations) {
+				return
+			}
+
 			this.attrValues = variations.map((el) => {
 				return { attributeName: el.name, attributeValue: el.value }
 			})
 			let cloneArray = JSON.parse(JSON.stringify(variations))
+			console.log(this.product);
 
 			const activeVariation = this.product.variations.nodes.filter((variation) => {
 				// If there is any variation of type ANY set the value to ''
@@ -131,7 +127,7 @@ export default {
 				return arraysEqual(formatArray(variation.attributes.nodes), formatArray(cloneArray))
 			})
 			this.activeVariation = activeVariation[0]
-			// this.variation = variations
+			this.variation = variations
 		},
 		async triggerAddToCart() {
 			// { attributeName: 'size', attributeValue: 'Large' }

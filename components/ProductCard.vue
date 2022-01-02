@@ -1,5 +1,5 @@
 <template>
-	<nuxt-link :to="`/product/${node.slug}`" class="relative">
+	<nuxt-link :to="{ name: 'product-slug', params: { slug: node.slug, page: page } }" class="relative">
 		<span
 			v-if="node.onSale"
 			class="rounded-md bg-yellow-300 text-xs tracking-tight px-1.5 top-2 right-2 text-yellow-700 leading-5 z-10 absolute"
@@ -36,6 +36,10 @@ export default {
 			default: null
 		},
 		index: {
+			type: Number,
+			default: 1
+		},
+		page: {
 			type: Number,
 			default: 1
 		}

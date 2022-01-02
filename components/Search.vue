@@ -17,9 +17,6 @@ export default {
             results: null
         }
     },
-    props: {
-        products: { type: Array, required: true }
-    },
     methods: {
         searchProducts() {
             const options = {
@@ -34,7 +31,7 @@ export default {
                     "description"
                 ]
             }
-            const fuse = new Fuse(this.products, options)
+            const fuse = new Fuse(this.$store.state.products, options)
             const results = fuse.search(this.search)
             if (results.length > 0) {
                 // keet in original format
@@ -42,7 +39,6 @@ export default {
             } else {
                 this.results = []
             }
-
 
             this.$emit('search', {
                 search: this.search,

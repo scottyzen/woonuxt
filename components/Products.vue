@@ -30,13 +30,14 @@
 				:key="node.databaseId"
 				:node="node"
 				:index="i"
+				:page="page"
 			/>
 		</transition-group>
 
 		<!-- Pagination -->
 		<div class="pagination">
-			<a href="#" v-if="page > 1" @click="page--">Previous</a>
-			<a href="#" v-if="large != products.length" @click="page++">Next</a>
+			<a v-if="page > 1" @click="page--">Previous</a>
+			<a v-if="large != products.length" @click="page++">Next</a>
 		</div>
 	</section>
 </template>
@@ -61,6 +62,12 @@ export default {
 		},
 		large() {
 			return Math.min(this.products.length, this.perPage * this.page)
+		},
+	},
+	watch: {
+		page() {
+			console.log('Products.vue page', this.page);
+			this.$emit('setPage', this.page)
 		}
 	},
 	methods: {
@@ -85,7 +92,7 @@ export default {
 	@apply flex mb-8 p-8 gap-2 items-center justify-center;
 }
 .pagination a {
-	@apply rounded-xl bg-purple-100 leading-none py-2 px-4 text-purple-900 hover:bg-purple-200;
+	@apply rounded-xl cursor-pointer bg-purple-100 leading-none py-2 px-4 text-purple-900 hover:bg-purple-200 hover:text-purple-900;
 }
 .shrink-move {
 	transition: all 500ms;

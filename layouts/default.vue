@@ -4,7 +4,7 @@
 		<transition name="slide">
 			<Cart v-if="showCart" class="z-50" />
 		</transition>
-		<Nuxt class="flex-1" />
+		<Nuxt class="flex-1" keek-alive />
 		<transition name="page">
 			<div v-if="showCart" class="bg-black opacity-25 inset-0 z-40 fixed" @click="closeCart"></div>
 		</transition>

@@ -11,12 +11,13 @@
 				<span class="rounded-xl bg-gray-500 text-white p-1.5 md:hidden">
 					<Icon name="filter" width="22" height="22" />
 				</span>
-				<Search :products="products" @search="filterSearch" />
+				<Search @search="filterSearch" />
 			</div>
 			<Products
 				:category="$route.params.categorySlug"
 				:page="parseInt($route.params.pageNumber) || page"
-				:products="searchedProducts || products"
+				:products="products"
+				@setPage="setPage"
 			/>
 		</div>
 	</main>
@@ -29,7 +30,7 @@ export default {
 		return {
 			products: [],
 			searchedProducts: null,
-			page: 1,
+			page: this.$route.params.page || 1,
 			search: ''
 		}
 	},
@@ -44,15 +45,15 @@ export default {
 		}
 	},
 	methods: {
+		setPage(number) {
+			this.page = number
+		},
 		filterProducts(filter) {
-			const categorySlug = this.$route.params.categorySlug
-			this.products = this.$store.state.products.filter((product) => {
+			const filteredProducts = this.$store.state.products.filter((product) => {
 				let { minPrice, maxPrice, starRating } = filter
 
-				// console.log(minPrice, maxPrice, starRating);
-
 				// Category
-				const categpryCondition = categorySlug ? product.productCategories.nodes.map((cat) => cat.slug).some((slug) => slug == categorySlug) : true
+				const categoryCondition = this.$route.params.categorySlug ? product.productCategories.nodes.map((cat) => cat.slug).some((slug) => slug == categorySlug) : true
 
 				// Price
 				maxPrice = maxPrice > 0 ? maxPrice : 9999999999
@@ -62,17 +63,34 @@ export default {
 				// Rating
 				const ratingCondition = product.averageRating >= starRating
 
-				return priceCondition && ratingCondition && categpryCondition
+				return priceCondition && ratingCondition && categoryCondition
 			})
-
+			this.refreshProducts(filteredProducts);
 			this.$store.commit('setFilter', filter);
+
+			// If they are no products on Page change page number to 1
+			if (this.products.length < this.$config.perPage) {
+				this.page = 1
+			}
+		},
+		refreshProducts(productsFilteresd, productsFound) {
+			this.products = !productsFound ? productsFilteresd : productsFilteresd.filter((product) => {
+				return productsFound.some((productFound) => productFound.databaseId == product.databaseId)
+			})
+			// If they are no products on Page change page number to 1
+			if (this.products.length < this.$config.perPage) { this.page = 1 }
 		},
 		resetFilter() {
 			this.$store.commit('clearFilter');
 		},
 		filterSearch(payload) {
 			const { search, results } = payload
-			this.searchedProducts = search ? results : null
+			if (!search && this.$store.state.filter) {
+				this.filterProducts(this.$store.state.filter)
+				return
+			}
+			this.refreshProducts(this.products, results);
+
 		}
 	}
 }
