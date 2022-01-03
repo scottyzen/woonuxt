@@ -35,7 +35,7 @@ export default {
 			page: this.$route.params.page || 1,
 			fuseOptions: {
 				shouldSort: true,
-				threshold: 0.3,
+				threshold: 0.4,
 				maxPatternLength: 32,
 				minMatchCharLength: 1,
 				// findAllMatches: true,
@@ -79,6 +79,7 @@ export default {
 				// Rating
 				const ratingCondition = product.averageRating >= starRating
 
+				// Sale items only
 				const saleItemsOnlyCondition = saleItemsOnly ? product.onSale : true
 
 
@@ -86,7 +87,7 @@ export default {
 			}) : this.$store.state.products
 
 
-
+			// https://fusejs.io/examples.html#extended-search
 			const fuse = new Fuse(this.$store.state.products, this.fuseOptions)
 			const searchTags = this.$store.state.searchTags.join(" '");
 			const SEARCHED_PRODUCTS = searchTags.length ? fuse.search(searchTags).map((result) => result.item) : this.$store.state.products

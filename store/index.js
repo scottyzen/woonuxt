@@ -25,7 +25,18 @@ export const mutations = {
 
 export const actions = {
   async nuxtServerInit({commit}) {
-    const {products} = await this.$graphql.default.request(GET_PRODUCTS);
-      commit('updateProducts', products.nodes);
+    let temperayArray = []
+
+    // IF query had endCursor LOOP THROUGH PRODUCTS AND ADD TO ARRAY
+    const addProductsToArray = async (after) => {
+      const {products} = await this.$graphql.default.request(GET_PRODUCTS, { first: 20, after })
+      temperayArray = [...temperayArray, ...products.nodes]
+      return products.pageInfo.hasNextPage ? addProductsToArray(products.pageInfo.endCursor) : temperayArray
+    }
+
+    commit('updateProducts', await addProductsToArray())
+
+    // const {products} = await this.$graphql.default.request(GET_PRODUCTS);
+      // commit('updateProducts', products.nodes);
   },
 }

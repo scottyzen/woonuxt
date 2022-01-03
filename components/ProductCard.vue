@@ -1,5 +1,8 @@
 <template>
-	<nuxt-link :to="{ name: 'product-slug', params: { slug: node.slug, page: page } }" class="relative">
+	<nuxt-link
+		:to="{ name: 'product-slug', params: { slug: node.slug, page: page } }"
+		class="relative"
+	>
 		<span
 			v-if="node.onSale"
 			class="rounded-md bg-yellow-300 text-xs tracking-tight px-1.5 top-2 right-2 text-yellow-700 leading-5 z-10 absolute"
@@ -7,11 +10,11 @@
 
 		<nuxt-picture
 			v-if="node.image"
-			class="mb-2 w-full"
+			class="w-full"
 			:src="node.image.sourceUrl"
 			:alt="node.name"
 			:title="node.name"
-			fit="cover"
+			fit="inside"
 			width="136"
 			height="136"
 			sizes="xs:128px sm:296px md:325px xl:400px"
@@ -49,6 +52,7 @@ export default {
 
 <style lang="postcss">
 picture.w-full img {
-	@apply rounded-xl w-full;
+	@apply rounded-xl object-top w-full aspect-square cover;
+	aspect-ratio: 1/1.125;
 }
 </style>
