@@ -31,6 +31,8 @@ export default {
     },
     mounted() {
         this.selected = this.activeTags
+        // add enterkeyhint="search" to input
+        document.querySelector('.multiselect__input').setAttribute('enterkeyhint', 'search')
     },
     methods: {
         updateSelected(newSelected) {
