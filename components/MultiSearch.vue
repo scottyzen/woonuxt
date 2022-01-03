@@ -64,7 +64,7 @@ export default {
 }
 .multiselect__input,
 .multiselect__placeholder {
-    @apply bg-transparent flex m-0 text-sm p-0 text-gray-600 w-36;
+    @apply bg-transparent flex m-0 text-base p-0 text-gray-600 w-36 md:text-sm;
     display: flex !important;
     position: static !important;
     width: auto !important;
