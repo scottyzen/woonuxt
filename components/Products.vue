@@ -68,6 +68,8 @@ export default {
 		page() {
 			console.log('Products.vue page', this.page);
 			this.$emit('setPage', this.page)
+			// scroll to top
+			window.scrollTo(0, 0)
 		}
 	},
 	methods: {
