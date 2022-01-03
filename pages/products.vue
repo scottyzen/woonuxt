@@ -11,8 +11,8 @@
 			@click="showFilters = false"
 		></div>
 
-		<div class="flex flex-col flex-1 md:pl-8">
-			<div class="flex mt-8 gap-4 items-center">
+		<div class="flex flex-col max-w-full flex-1 w-full md:pl-8">
+			<div class="flex mt-4 gap-4 items-center lg:mt-8">
 				<MultiSearch
 					class="flex-1"
 					@has-changed="filterProducts"

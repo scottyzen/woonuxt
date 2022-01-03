@@ -22,7 +22,7 @@
 			v-else
 			name="shrink"
 			mode="in-out"
-			class="my-8 min-h-[600px] grid transition-all gap-8 product-grid"
+			class="my-4 min-h-[600px] grid transition-all gap-8 product-grid lg:my-8"
 		>
 			<ProductCard
 				class="w-full"

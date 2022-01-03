@@ -4,12 +4,13 @@
         :hide-selected="true"
         v-model="selected"
         :options="[]"
-        placeholder="Search Products..."
+        placeholder="Search..."
         ref="multisearch"
         :taggable="true"
         :maxHeight="0"
         @tag="addTag"
         @update="updateSelected"
+        class="flex-1 box-border"
     ></Multiselect>
 </template>
 
@@ -58,16 +59,14 @@ export default {
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style lang="postcss">
 .multiselect__tags {
-    @apply border rounded-xl flex max-w-md outline-none leading-tight w-full p-2 pr-10 items-center overflow-hidden;
+    @apply border rounded-xl flex max-w-md outline-none flex-1 leading-tight w-full p-2 pr-10 items-center overflow-hidden;
     background: url("/images/search.svg") no-repeat center right 0.75em;
     border-radius: 0.75rem !important;
 }
 .multiselect__input,
 .multiselect__placeholder {
-    @apply bg-transparent flex m-0 text-base p-0 text-gray-600 w-36 md:text-sm;
-    display: flex !important;
+    @apply bg-transparent flex flex-1 m-0 text-base w-full p-0 text-gray-600 w-36 md:text-sm;
     position: static !important;
-    width: auto !important;
 }
 .multiselect__placeholder {
     display: none !important;
@@ -84,9 +83,8 @@ export default {
 }
 
 .multiselect__tag {
-    @apply bg-primary-light mb-0;
+    @apply bg-primary-light max-w-full mb-0;
     animation: scale-in-left 300ms ease-out;
-    max-width: 500px;
     transform-origin: left;
 }
 @keyframes scale-in-left {
