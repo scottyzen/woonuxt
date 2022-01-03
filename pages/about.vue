@@ -1,3 +1,5 @@
 <template>
-	<h1>About</h1>
+	<div class="container my-4">
+		<h1 class="font-semibold text-xl mb-8">About</h1>
+	</div>
 </template>
