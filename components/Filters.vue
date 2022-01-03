@@ -1,5 +1,5 @@
 <template>
-	<aside id="filters" class="hidden md:block">
+	<aside id="filters" :class="{ 'active': showFilters }">
 		<span class="text-xl mb-8 block">Filter</span>
 
 		<!-- Price Range -->
@@ -89,6 +89,12 @@ export default {
 			initialState: JSON.stringify(initialState),
 		};
 	},
+	props: {
+		showFilters: {
+			type: Boolean,
+			default: false,
+		},
+	},
 	mounted() {
 		if (this.$store.state.filter) {
 			this.filter = this.$store.state.filter
@@ -140,5 +146,14 @@ export default {
 .fadeUp-leave-active {
 	opacity: 0;
 	transform: translateY(10px);
+}
+
+@media (max-width: 768px) {
+	#filters {
+		@apply h-full transform transition-all top-16 ease-in-out bottom-0 left-8 z-20 -translate-x-[110vw] duration-500 fixed;
+	}
+	#filters.active {
+		@apply transform-none;
+	}
 }
 </style>

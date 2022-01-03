@@ -1,18 +1,30 @@
 <template>
 	<main class="container flex">
-		<Filters @filter-updated="filterProducts" :activeFilters="this.$store.state.filter" />
+		<Filters
+			@filter-updated="filterProducts"
+			:activeFilters="this.$store.state.filter"
+			:showFilters="showFilters"
+		/>
+		<div
+			class="bg-gray-900 w opacity-0 inset-0 transition-opacity z-10 duration-300 hidden fixed"
+			:class="{ 'show-overlay': showFilters }"
+			@click="showFilters = false"
+		></div>
 
 		<div class="flex flex-col flex-1 md:pl-8">
 			<div class="flex mt-8 gap-4 items-center">
-				<span class="rounded-xl bg-gray-500 text-white p-1.5 md:hidden">
-					<Icon name="filter" width="22" height="22" />
-				</span>
 				<MultiSearch
 					class="flex-1"
 					@has-changed="filterProducts"
 					:activeTags="this.$store.state.searchTags"
 				/>
-				<!-- <Search @search="filterSearch" /> -->
+				<span
+					@click="showFilters = !showFilters"
+					class="rounded-xl cursor-pointer bg-gray-500 text-white p-1.5 md:hidden"
+					:class="{ 'bg-primary': showFilters }"
+				>
+					<Icon name="filter" width="22" height="22" />
+				</span>
 			</div>
 			<Products
 				:page="parseInt($route.params.pageNumber) || page"
@@ -33,12 +45,13 @@ export default {
 			products: [],
 			categorySlug: this.$route.params.categorySlug,
 			page: this.$route.params.page || 1,
+			showFilters: false,
 			fuseOptions: {
 				shouldSort: true,
 				threshold: 0.3,
 				maxPatternLength: 32,
 				minMatchCharLength: 1,
-				// findAllMatches: true,
+				findAllMatches: true,
 				// ignoreLocation: true,
 				useExtendedSearch: true,
 				keys: [
@@ -57,6 +70,11 @@ export default {
 	mounted() {
 		if (this.$store.state.filter || this.$store.state.searchTags.length) {
 			this.filterProducts()
+		}
+	},
+	watch: {
+		$route() {
+			this.showFilters = false
 		}
 	},
 	methods: {
@@ -89,7 +107,7 @@ export default {
 
 			// https://fusejs.io/examples.html#extended-search
 			const fuse = new Fuse(this.$store.state.products, this.fuseOptions)
-			const searchTags = this.$store.state.searchTags.map(item => `${item}' `).join(" | ");
+			const searchTags = this.$store.state.searchTags.map(item => `${item}' `).join(" ");
 			const SEARCHED_PRODUCTS = searchTags.length ? fuse.search(searchTags).map((result) => result.item) : this.$store.state.products
 
 			const PRODUCTS_IN_BOTH = SEARCHED_PRODUCTS.filter((product) => FILTERED_PRODUCTS.some((filteredProduct) => filteredProduct.databaseId == product.databaseId))
@@ -115,5 +133,8 @@ export default {
 input[type="search"] {
 	@apply border rounded-xl max-w-md outline-none leading-tight w-full p-2 px-4 pl-10 transition-all;
 	background: url("/images/search.svg") no-repeat center left 0.75em;
+}
+.show-overlay {
+	@apply opacity-10 block md:hidden;
 }
 </style>

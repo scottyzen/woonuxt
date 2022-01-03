@@ -104,7 +104,7 @@ export default {
 }
 .multiselect__tag-icon:focus,
 .multiselect__tag-icon:hover {
-    @apply bg-primary;
+    @apply bg-primary-light;
 }
 .form-group {
     margin-bottom: 0;
