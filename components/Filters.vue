@@ -56,6 +56,14 @@
 			</label>
 		</div>
 
+		<!-- Products On Sale -->
+		<div class="mt-8 mb-3 grid gap-1">
+			<label for="on-sale" class="flex items-center">
+				<input id="on-sale" type="checkbox" v-model="filter.saleItemsOnly" />
+				<span class="ml-2">Products On Sale</span>
+			</label>
+		</div>
+
 		<transition name="fadeUp">
 			<a
 				v-if="showRestButton"
@@ -74,6 +82,7 @@ export default {
 			minPrice: null,
 			maxPrice: 90,
 			starRating: null,
+			saleItemsOnly: false,
 		};
 		return {
 			filter: initialState,

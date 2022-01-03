@@ -7,11 +7,14 @@
 				<span class="rounded-xl bg-gray-500 text-white p-1.5 md:hidden">
 					<Icon name="filter" width="22" height="22" />
 				</span>
-				<MultiSearch @has-changed="filterProducts" :activeTags="this.$store.state.searchTags" />
+				<MultiSearch
+					class="flex-1"
+					@has-changed="filterProducts"
+					:activeTags="this.$store.state.searchTags"
+				/>
 				<!-- <Search @search="filterSearch" /> -->
 			</div>
 			<Products
-				:category="$route.params.categorySlug"
 				:page="parseInt($route.params.pageNumber) || page"
 				:products="products"
 				@setPage="setPage"
@@ -28,16 +31,19 @@ export default {
 	data() {
 		return {
 			products: [],
+			categorySlug: this.$route.params.categorySlug,
 			page: this.$route.params.page || 1,
 			fuseOptions: {
 				shouldSort: true,
 				threshold: 0.3,
-				location: 0,
-				distance: 100,
 				maxPatternLength: 32,
 				minMatchCharLength: 1,
+				// findAllMatches: true,
+				// ignoreLocation: true,
+				useExtendedSearch: true,
 				keys: [
 					"name",
+					"databaseId",
 					"productCategories.nodes.name"
 				]
 			}
@@ -60,10 +66,10 @@ export default {
 		filterProducts() {
 
 			const FILTERED_PRODUCTS = this.$store.state.filter ? this.$store.state.products.filter((product) => {
-				let { minPrice, maxPrice, starRating } = this.$store.state.filter
+				let { minPrice, maxPrice, starRating, saleItemsOnly } = this.$store.state.filter
 
 				// Category
-				const categoryCondition = this.$route.params.categorySlug ? product.productCategories.nodes.map((cat) => cat.slug).some((slug) => slug == categorySlug) : true
+				const categoryCondition = this.categorySlug ? product.productCategories.nodes.map((cat) => cat.slug).some((slug) => slug == this.categorySlug) : true
 
 				// Price
 				maxPrice = maxPrice > 0 ? maxPrice : 9999999999
@@ -73,15 +79,17 @@ export default {
 				// Rating
 				const ratingCondition = product.averageRating >= starRating
 
+				const saleItemsOnlyCondition = saleItemsOnly ? product.onSale : true
 
-				return priceCondition && ratingCondition && categoryCondition
+
+				return priceCondition && categoryCondition && ratingCondition && saleItemsOnlyCondition
 			}) : this.$store.state.products
 
 
 
 			const fuse = new Fuse(this.$store.state.products, this.fuseOptions)
-			const searchTags = this.$store.state.searchTags;
-			const SEARCHED_PRODUCTS = searchTags.length ? fuse.search(searchTags.join(' | ')).map((result) => result.item) : this.$store.state.products
+			const searchTags = this.$store.state.searchTags.join(" '");
+			const SEARCHED_PRODUCTS = searchTags.length ? fuse.search(searchTags).map((result) => result.item) : this.$store.state.products
 
 			const PRODUCTS_IN_BOTH = SEARCHED_PRODUCTS.filter((product) => FILTERED_PRODUCTS.some((filteredProduct) => filteredProduct.databaseId == product.databaseId))
 
@@ -89,7 +97,7 @@ export default {
 
 		},
 		refreshProducts(products) {
-			this.products = products;
+			this.products = this.categorySlug ? products.filter((product) => product.productCategories.nodes.map((cat) => cat.slug).some((slug) => slug == this.categorySlug)) : products;
 			if (this.products.length < this.$config.perPage) { this.page = 1 }
 		},
 	},

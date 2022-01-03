@@ -42,9 +42,14 @@ export default {
         },
     },
     watch: {
-        selected() {
+        selected(newVal, oldVal) {
             this.$store.commit('setSearchTags', this.selected)
             this.$emit('has-changed')
+        }
+    },
+    computed: {
+        searchTags() {
+            return this.$store.state.searchTags
         }
     }
 }
@@ -56,7 +61,6 @@ export default {
     @apply border rounded-xl flex max-w-md outline-none leading-tight w-full p-2 pr-10 items-center overflow-hidden;
     background: url("/images/search.svg") no-repeat center right 0.75em;
     border-radius: 0.75rem !important;
-    min-width: 400px;
 }
 .multiselect__input,
 .multiselect__placeholder {
