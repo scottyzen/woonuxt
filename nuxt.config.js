@@ -20,7 +20,8 @@ export default defineNuxtConfig({
     ],
     link: [
       { rel: "icon", type: "image/x-icon", href: "/logo.svg" },
-      { rel: "apple-touch-icon", sizes: "512x512", href: "/icon_maskable.png"} 
+      { rel: "apple-touch-icon", sizes: "512x512", href: "/icon_maskable.png"} ,
+      // { rel: "stylesheet", href: "https://unpkg.com/vue-multiselect@2.1.0/dist/vue-multiselect.min.css"}
     ],
   },
 

@@ -7,7 +7,8 @@ export const state = () => ({
   products: [],
   productCategories: [],
   page: 'index',
-  filter: null
+  filter: null,
+  searchTags: [],
 })
 
 
@@ -17,9 +18,9 @@ export const mutations = {
   updateUser: (state, user) => (state.user = user),
   updateProducts: (state, products) => (state.products = products),
   updatePage(state, pageName) { state.page = pageName},
-  setFilter(state, filter) { state.filter = filter },
-  setFilter(state, payload) {state.filter = {...payload}},
-  clearFilter(state) { state.filter = null }
+  setFilter(state, filter) {state.filter = filter ? {...filter} : null},
+  clearFilter(state) { state.filter = null },
+  setSearchTags(state, tags) { state.searchTags = [...tags] },
 }
 
 export const actions = {

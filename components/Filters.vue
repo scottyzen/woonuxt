@@ -88,13 +88,18 @@ export default {
 	methods: {
 		reset() {
 			this.filter = JSON.parse(this.initialState);
-			this.$emit('clear-filters');
 		},
 	},
 	watch: {
 		filter: {
-			handler() {
-				this.$emit('filter-updated', this.filter);
+			handler(newVal, oldVal) {
+				// check if newVal is equal to initialState
+				if (JSON.stringify(newVal) === this.initialState) {
+					this.$store.commit('setFilter', null);
+				} else {
+					this.$store.commit('setFilter', newVal);
+				}
+				this.$emit('filter-updated');
 			},
 			deep: true,
 		}
