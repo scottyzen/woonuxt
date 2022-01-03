@@ -52,7 +52,7 @@ export default {
 
 <style lang="postcss">
 picture.w-full img {
-	@apply rounded-xl object-top w-full aspect-square cover;
+	@apply rounded-xl object-top object-cover w-full aspect-square;
 	aspect-ratio: 1/1.125;
 }
 </style>
