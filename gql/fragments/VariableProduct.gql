@@ -32,6 +32,8 @@ fragment VariableProduct on VariableProduct {
       name
       databaseId
       price
+      regularPrice
+      salePrice
       slug
       stockQuantity
       stockStatus
@@ -47,6 +49,11 @@ fragment VariableProduct on VariableProduct {
           name
         }
       }
+    }
+  }
+  galleryImages {
+    nodes {
+      sourceUrl
     }
   }
 }

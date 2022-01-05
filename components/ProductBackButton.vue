@@ -3,7 +3,7 @@
         <nuxt-link
             v-if="showButton"
             :to="{ name: 'products', params: { page: this.page } }"
-            class="bg-white rounded-full shadow-lg m-4 leading-tight p-2 px-4 top-4 left-4 gap-1 inline-flex absolute item-center justify-center md:left-0"
+            class="bg-white rounded-full shadow-lg m-4 leading-tight p-2 px-4 top-4 left-4 z-10 gap-1 inline-flex absolute item-center justify-center md:left-0"
         >
             <Icon name="back-arrow" width="18" class="-ml-1" />Back
         </nuxt-link>

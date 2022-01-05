@@ -159,4 +159,14 @@ pre {
 	max-height: 0;
 	position: absolute;
 }
+
+// fade
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 300ms ease-in-out;
+}
+.fade-enter,
+.fade-leave-to {
+	opacity: 0;
+}
 </style>

@@ -2,22 +2,48 @@
 	<main class="container container-sm py-4 relative lg:py-12">
 		<ProductBackButton :page="$route.params.page" />
 		<div class="flex flex-col gap-8 md:flex-row md:justify-between">
-			<div class="-mx-4 md:m-0">
-				<nuxt-img
-					class="object-contain rounded-2xl w-full min-w-[350px] md:w-auto md:w-[500px]"
-					width="500"
-					height="500"
-					:src="type.image.sourceUrl"
-				/>
+			<div class="-mx-4 md:m-0 md:w-[500px]">
+				<transition name="fade" mode="out-in">
+					<nuxt-img
+						class="object-contain rounded-2xl w-full min-w-[350px]"
+						width="600"
+						height="600"
+						format="webp"
+						fit="outside"
+						:src="selectedGalleryImage || type.image.sourceUrl"
+					/>
+				</transition>
+				<div v-if="product.galleryImages" class="my-4 gallery-images">
+					<nuxt-img
+						class="cursor-pointer rounded-2xl"
+						width="110"
+						height="140"
+						format="webp"
+						fit="outside"
+						:src="product.image.sourceUrl"
+						@click.native="selectedGalleryImage = product.image.sourceUrl"
+					></nuxt-img>
+					<nuxt-img
+						class="cursor-pointer rounded-2xl"
+						width="110"
+						height="140"
+						format="webp"
+						fit="outside"
+						v-for="(node, i) in product.galleryImages.nodes"
+						:key="i"
+						:src="node.sourceUrl"
+						@click.native="changeGalleryImage(i)"
+					></nuxt-img>
+				</div>
 			</div>
 
-			<div class="md:max-w-xl md:py-8">
+			<div class="md:max-w-xl md:py-4">
 				<div class="flex mb-4 items-center justify-between">
 					<div class="flex-1">
 						<h1 class="font-semibold text-xl mb-0.5">{{ type.name }}</h1>
 						<StarRating :rating="product.averageRating" :count="product.reviewCount" />
 					</div>
-					<QuantityButtons @quantity-change="updateQuantity" :quantity="quantity" :min="1" />
+					<ProductPrice class="text-lg" :salePrice="type.salePrice" :regularPrice="type.regularPrice" />
 				</div>
 
 				<div v-html="product.description" class="font-light mb-8"></div>
@@ -29,9 +55,9 @@
 						:attrs="product.attributes.nodes"
 						@attrs-changed="updateSelectedVariations"
 					/>
-					<div class="flex mt-12 gap-2 items-center justify-between">
-						<ProductPrice class="text-lg" :salePrice="type.salePrice" :regularPrice="type.regularPrice" />
-						<AddToCartButton :disabled="!activeVariation && product.variations" />
+					<div class="flex mt-12 gap-8 items-center justify-between">
+						<AddToCartButton class="flex-1" :disabled="!activeVariation && product.variations" />
+						<QuantityButtons @quantity-change="updateQuantity" :quantity="quantity" :min="1" />
 					</div>
 				</form>
 			</div>
@@ -71,6 +97,7 @@ export default {
 			indexOfTypeAny: [],
 			attrValues: [],
 			showBackButton: false,
+			selectedGalleryImage: null,
 		}
 	},
 	transition(to, from) {
@@ -114,20 +141,22 @@ export default {
 				return
 			}
 
-			this.attrValues = variations.map((el) => {
-				return { attributeName: el.name, attributeValue: el.value }
-			})
+			this.attrValues = variations.map(el => ({ attributeName: el.name, attributeValue: el.value }))
 			let cloneArray = JSON.parse(JSON.stringify(variations))
-			console.log(this.product);
-
 			const activeVariation = this.product.variations.nodes.filter((variation) => {
 				// If there is any variation of type ANY set the value to ''
 				this.indexOfTypeAny.forEach((index) => (cloneArray[index].value = ''))
 
 				return arraysEqual(formatArray(variation.attributes.nodes), formatArray(cloneArray))
 			})
+
 			this.activeVariation = activeVariation[0]
 			this.variation = variations
+
+			// Overwrite the selected gallery image if the variation has a featured image
+			if (this.activeVariation && this.activeVariation.image.sourceUrl) {
+				this.selectedGalleryImage = null
+			}
 		},
 		async triggerAddToCart() {
 			// { attributeName: 'size', attributeValue: 'Large' }
@@ -146,6 +175,9 @@ export default {
 			} catch (error) {
 				console.error(error)
 			}
+		},
+		changeGalleryImage(index) {
+			this.selectedGalleryImage = this.product.galleryImages.nodes[index].sourceUrl
 		}
 	},
 	computed: {
@@ -155,3 +187,16 @@ export default {
 	}
 }
 </script>
+
+<style>
+.gallery-images {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+	gap: 1rem;
+}
+.gallery-images img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+</style>

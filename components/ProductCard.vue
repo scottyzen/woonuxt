@@ -34,18 +34,9 @@
 <script>
 export default {
 	props: {
-		node: {
-			type: Object,
-			default: null
-		},
-		index: {
-			type: Number,
-			default: 1
-		},
-		page: {
-			type: Number,
-			default: 1
-		}
+		node: { type: Object, default: null },
+		index: { type: Number, default: 1 },
+		page: { type: Number, default: 1 }
 	}
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
-	<div class="flex flex-col gap-4">
-		<div class="relative" v-for="(attr, i) in attrs" :key="i">
+	<div class="divide-y flex flex-col divide-gray-100 divide-y-2">
+		<div class="py-2 relative" v-for="(attr, i) in attrs" :key="i">
 			<div v-if="attr.options.length > 3" class="flex items-center justify-between">
 				<div>{{ attr.label }}</div>
 				<select :name="attr.name" :id="attr.name" @change="updateAttrs" :ref="attr.name" required>
