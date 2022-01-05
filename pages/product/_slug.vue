@@ -3,16 +3,14 @@
 		<ProductBackButton :page="$route.params.page" />
 		<div class="flex flex-col gap-8 md:flex-row md:justify-between">
 			<div class="-mx-4 md:m-0 md:w-[500px]">
-				<transition name="fade" mode="out-in">
-					<nuxt-img
-						class="object-contain rounded-2xl w-full min-w-[350px]"
-						width="600"
-						height="600"
-						format="webp"
-						fit="outside"
-						:src="selectedGalleryImage || type.image.sourceUrl"
-					/>
-				</transition>
+				<nuxt-img
+					class="object-contain rounded-2xl w-full min-w-[350px]"
+					width="600"
+					height="600"
+					format="webp"
+					fit="outside"
+					:src="selectedGalleryImage || type.image.sourceUrl"
+				/>
 				<div v-if="product.galleryImages" class="my-4 gallery-images">
 					<nuxt-img
 						class="cursor-pointer rounded-2xl"
