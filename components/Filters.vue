@@ -68,7 +68,7 @@
 			<a
 				v-if="showRestButton"
 				@click="reset"
-				class="rounded-xl cursor-pointer bg-purple-600 mt-12 text-center text-white leading-tight w-full p-2 block hover:bg-purple-700"
+				class="bg-primary-light rounded-xl cursor-pointer mt-12 text-center text-white leading-tight w-full p-2 block hover:bg-purple-700"
 			>Clear all filters</a>
 		</transition>
 	</aside>

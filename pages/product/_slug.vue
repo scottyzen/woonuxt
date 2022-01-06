@@ -2,38 +2,11 @@
 	<main class="container container-sm py-4 relative lg:py-12">
 		<ProductBackButton :page="$route.params.page" />
 		<div class="flex flex-col gap-8 md:flex-row md:justify-between">
-			<div class="-mx-4 md:m-0 md:w-[500px]">
-				<nuxt-img
-					class="object-contain rounded-2xl w-full min-w-[350px]"
-					width="600"
-					height="600"
-					format="webp"
-					fit="outside"
-					:src="selectedGalleryImage || type.image.sourceUrl"
-				/>
-				<div v-if="product.galleryImages" class="my-4 gallery-images">
-					<nuxt-img
-						class="cursor-pointer rounded-2xl"
-						width="110"
-						height="140"
-						format="webp"
-						fit="outside"
-						:src="product.image.sourceUrl"
-						@click.native="selectedGalleryImage = product.image.sourceUrl"
-					></nuxt-img>
-					<nuxt-img
-						class="cursor-pointer rounded-2xl"
-						width="110"
-						height="140"
-						format="webp"
-						fit="outside"
-						v-for="(node, i) in product.galleryImages.nodes"
-						:key="i"
-						:src="node.sourceUrl"
-						@click.native="changeGalleryImage(i)"
-					></nuxt-img>
-				</div>
-			</div>
+			<ProductImageGallery
+				:first-image="product.image.sourceUrl"
+				:main-image="type.image.sourceUrl"
+				:gallery="product.galleryImages"
+			/>
 
 			<div class="md:max-w-xl md:py-4">
 				<div class="flex mb-4 items-center justify-between">
@@ -60,7 +33,7 @@
 				</form>
 			</div>
 		</div>
-		<div class="my-16">
+		<div class="my-24">
 			<h3 class="font-semibold text-lg mb-2">Related Products</h3>
 			<ProductRow :products="product.related.nodes" />
 		</div>
@@ -89,13 +62,13 @@ export default {
 	scrollToTop: true,
 	data() {
 		return {
+			imageToShow: 0,
 			quantity: 1,
 			variation: [],
 			activeVariation: null,
 			indexOfTypeAny: [],
 			attrValues: [],
 			showBackButton: false,
-			selectedGalleryImage: null,
 		}
 	},
 	transition(to, from) {
@@ -152,9 +125,9 @@ export default {
 			this.variation = variations
 
 			// Overwrite the selected gallery image if the variation has a featured image
-			if (this.activeVariation && this.activeVariation.image.sourceUrl) {
-				this.selectedGalleryImage = null
-			}
+			// if (this.activeVariation && this.activeVariation.image.sourceUrl) {
+			// 	this.selectedGalleryImage = null
+			// }
 		},
 		async triggerAddToCart() {
 			// { attributeName: 'size', attributeValue: 'Large' }
@@ -174,9 +147,9 @@ export default {
 				console.error(error)
 			}
 		},
-		changeGalleryImage(index) {
-			this.selectedGalleryImage = this.product.galleryImages.nodes[index].sourceUrl
-		}
+		// changeGalleryImage(index) {
+		// 	this.selectedGalleryImage = this.product.galleryImages.nodes[index].sourceUrl
+		// }
 	},
 	computed: {
 		type() {
