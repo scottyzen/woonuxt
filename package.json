@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@nuxtjs/composition-api": "^0.31.0",
-    "@vueuse/core": "^7.5.1",
+    "@vueuse/core": "^7.5.3",
     "cookie-universal-nuxt": "^2.1.5",
     "core-js": "^3.20.2",
     "fuse.js": "^6.5.3",
