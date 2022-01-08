@@ -5,7 +5,13 @@ export default defineNuxtConfig({
   bridge: false,
   target: "static",
   
-  components: true,
+  components: {
+    dirs: [
+      "~/components",
+      "~/components/elements",
+    ]
+  },
+
   head: {
     title: "WooNuxt",
     meta: [
