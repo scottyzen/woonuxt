@@ -1,6 +1,12 @@
 <template>
     <div>
-        <div class="my-4 gap-4 scslider relative" :style="cssVars" ref="scslider">
+        <div
+            class="my-4 gap-4 scslider relative"
+            :style="cssVars"
+            ref="scslider"
+            @scroll="handleScroll($event)"
+            :class="!extraClass ? extraClass : ''"
+        >
             <slot />
         </div>
         <div class="container flex my-6 text-gray-500 gap-1 justify-end">
@@ -13,11 +19,16 @@
                     xmlns="http://www.w3.org/2000/svg"
                     width="28"
                     height="28"
-                    viewBox="0 0 512 512"
                     fill="currentColor"
+                    viewBox="0 0 512 512"
                 >
                     <path
-                        d="M321.94 98L158.82 237.78a24 24 0 000 36.44L321.94 414c15.57 13.34 39.62 2.28 39.62-18.22v-279.6c0-20.5-24.05-31.56-39.62-18.18z"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="48"
+                        d="M328 112L184 256l144 144"
                     />
                 </svg>
             </div>
@@ -30,11 +41,16 @@
                     xmlns="http://www.w3.org/2000/svg"
                     width="28"
                     height="28"
-                    viewBox="0 0 512 512"
                     fill="currentColor"
+                    viewBox="0 0 512 512"
                 >
                     <path
-                        d="M190.06 414l163.12-139.78a24 24 0 000-36.44L190.06 98c-15.57-13.34-39.62-2.28-39.62 18.22v279.6c0 20.5 24.05 31.56 39.62 18.18z"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="48"
+                        d="M184 112l144 144-144 144"
                     />
                 </svg>
             </div>
@@ -54,6 +70,7 @@ export default {
     },
     props: {
         alignTo: { type: String, default: 'container' },
+        extraClass: { type: String, default: '' }
     },
     mounted() {
         this.handleResize();
@@ -66,34 +83,33 @@ export default {
             window.addEventListener('resize', this.handleResize);
             if (process.client) {
                 const container = document.querySelector(`.${this.alignTo}`);
-                const containerLeftPadding = parseInt(window.getComputedStyle(container).paddingLeft);
-                this.containerFromLeft = container.getBoundingClientRect().left + containerLeftPadding / 2;
+                const containerFromLeft = container.getBoundingClientRect().left;
+                const containerPaddingLeft = parseInt(window.getComputedStyle(container).getPropertyValue('padding-left')) / 2;
+                this.containerFromLeft = containerFromLeft + containerPaddingLeft;
                 this.childWidth = this.$refs.scslider.children[0].offsetWidth
             }
+        },
+        handleScroll(e) {
+            const { scrollLeft, scrollWidth, offsetWidth } = e.target;
+            this.hasPrev = scrollLeft > 0;
+            this.hasNext = scrollLeft + offsetWidth < scrollWidth;
         },
         prev() {
             if (this.$refs.scslider.scrollLeft > 0) {
                 this.$refs.scslider.scrollLeft = this.$refs.scslider.scrollLeft - this.childWidth;
             }
-            this.checkforNextAndPrev()
         },
         next() {
             if (this.$refs.scslider.scrollLeft < this.$refs.scslider.scrollWidth - this.$refs.scslider.clientWidth) {
                 this.$refs.scslider.scrollLeft = this.$refs.scslider.scrollLeft + this.childWidth;
             }
-            this.checkforNextAndPrev()
         },
-        checkforNextAndPrev() {
-            setTimeout(() => {
-                this.hasPrev = this.$refs.scslider.scrollLeft > 0 ? true : false;
-                this.hasNext = this.$refs.scslider.scrollLeft < this.$refs.scslider.scrollWidth - this.$refs.scslider.clientWidth ? true : false;
-            }, 300);
-        }
     },
     computed: {
         cssVars() {
             return {
                 '--containerFromLeft': this.containerFromLeft + 'px',
+
             };
         },
     },

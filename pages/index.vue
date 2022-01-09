@@ -37,13 +37,12 @@
 				<h2 class="font-semibold text-lg md:text-2xl">Best Sellers</h2>
 				<nuxt-link class="text-primary" to="/products">View All</nuxt-link>
 			</div>
-			<SCSlider class="lg:gap-8">
+			<SCSlider>
 				<ProductCard
 					class="min-w-[160px] lg:min-w-[280px]"
-					v-for="(node, i) in  bestSellers.nodes"
+					v-for="node in  bestSellers.nodes"
 					:key="node.databaseId"
 					:node="node"
-					:index="i"
 				/>
 			</SCSlider>
 		</section>
@@ -53,13 +52,13 @@
 				<h2 class="font-semibold text-lg md:text-2xl">Latest Products</h2>
 				<nuxt-link class="text-primary" to="/products">View All</nuxt-link>
 			</div>
-			<SCSlider class="lg:gap-8">
+			<SCSlider>
 				<ProductCard
 					class="min-w-[160px] lg:min-w-[280px]"
-					v-for="(node, i) in  latesProducts.nodes"
+					v-for="node in  latesProducts.nodes"
 					:key="node.databaseId"
 					:node="node"
-					:index="i"
+					extraClass="lg:gap-8"
 				/>
 			</SCSlider>
 		</section>

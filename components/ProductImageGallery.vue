@@ -29,7 +29,7 @@
             :src="node.sourceUrl"
             v-show="imageToShow === i + 1"
         ></nuxt-img>
-        <div v-if="gallery" class="my-4 gallery-images">
+        <div v-if="gallery.nodes.length" class="my-4 gallery-images">
             <nuxt-img
                 class="cursor-pointer rounded-2xl"
                 width="110"
