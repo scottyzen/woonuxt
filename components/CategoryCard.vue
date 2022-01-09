@@ -1,6 +1,6 @@
 <template>
     <NuxtLink
-        :to="`/product-nodeegory/${node.slug}`"
+        :to="`/product-category/${node.slug}`"
         class="border border-white rounded-xl flex item relative justify-center overflow-hidden snap-mandatory snap-x"
     >
         <NuxtImg

@@ -17,14 +17,14 @@
 			</div>
 		</nuxt-link>
 
-		<section class="mt-16 md:my-24">
+		<section class="my-16 md:my-24">
 			<div class="container flex items-end justify-between">
 				<h2 class="font-semibold text-lg md:text-2xl">Shop by category</h2>
 				<nuxt-link class="text-primary" to="/categories">View All</nuxt-link>
 			</div>
 			<SCSlider>
 				<CategoryCard
-					class="min-w-[180px] lg:min-w-[200px]"
+					class="min-w-[140px] lg:min-w-[200px]"
 					v-for="(category, i) in productCategories.nodes"
 					:key="i"
 					:node="category"
@@ -32,14 +32,14 @@
 			</SCSlider>
 		</section>
 
-		<section class="mt-16 md:my-24">
+		<section class="my-16 md:my-24">
 			<div class="container flex items-end justify-between">
 				<h2 class="font-semibold text-lg md:text-2xl">Best Sellers</h2>
 				<nuxt-link class="text-primary" to="/products">View All</nuxt-link>
 			</div>
-			<SCSlider>
+			<SCSlider class="lg:gap-8">
 				<ProductCard
-					class="min-w-[200px] lg:min-w-[280px]"
+					class="min-w-[160px] lg:min-w-[280px]"
 					v-for="(node, i) in  bestSellers.nodes"
 					:key="node.databaseId"
 					:node="node"
@@ -48,14 +48,14 @@
 			</SCSlider>
 		</section>
 
-		<section class="mt-16 md:my-24">
+		<section class="my-16 md:my-24">
 			<div class="container flex items-end justify-between">
 				<h2 class="font-semibold text-lg md:text-2xl">Latest Products</h2>
 				<nuxt-link class="text-primary" to="/products">View All</nuxt-link>
 			</div>
-			<SCSlider>
+			<SCSlider class="lg:gap-8">
 				<ProductCard
-					class="min-w-[200px] lg:min-w-[280px]"
+					class="min-w-[160px] lg:min-w-[280px]"
 					v-for="(node, i) in  latesProducts.nodes"
 					:key="node.databaseId"
 					:node="node"
@@ -65,7 +65,7 @@
 		</section>
 		<!-- <ProductRow :products="bestSellers.nodes" /> -->
 
-		<!-- <section class="container  mt-16 md:my-24">
+		<!-- <section class="container  my-16 md:my-24">
 			<h2 class="font-semibold text-lg mb-4 md:text-2xl">Latest Products</h2>
 			<ProductRow :products="latesProducts.nodes" />
 		</section>-->
