@@ -3,7 +3,7 @@
 		class="bg-white flex flex-col max-w-lg shadow-lg top-0 right-0 bottom-0 w-9/10 fixed overflow-x-hidden"
 		v-if="cart"
 	>
-		<CloseCart class="bg-white rounded-xl shadow-xl p-1.5" />
+		<CloseModals class="bg-white rounded-xl shadow-xl p-1.5" />
 		<EmptyCart v-if="!cart.isEmpty" class="rounded-xl bg-red-400 shadow-xl text-white p-1.5" />
 
 		<div class="mt-8 text-center">Basket</div>

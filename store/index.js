@@ -2,6 +2,7 @@ import GET_PRODUCTS from '~/gql/queries/getProducts'
 
 export const state = () => ({
   showCart: false,
+  showMenu: false,
   cart: null,
   user: undefined,
   products: [],
@@ -14,6 +15,7 @@ export const state = () => ({
 
 export const mutations = {
   toggleCart: (state, bool) => { state.showCart = bool },
+  toggleMenu: (state, bool) => { state.showMenu = bool },
   updateCart: (state, cart) => (state.cart = cart),
   updateUser: (state, user) => (state.user = user),
   updateProducts: (state, products) => (state.products = products),
