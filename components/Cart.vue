@@ -20,13 +20,13 @@
 				</SwipeCard>
 			</ul>
 			<div class="p-8">
-				<nuxt-link
+				<NuxtLink
 					class="bg-white rounded-2xl shadow-md text-lg text-center p-3 block justify-evenly hover:(bg-purple-500 text-white) "
 					to="/"
 				>
 					<span class="mx-2">Checkout</span>
 					<span>{{ cart.total }}</span>
-				</nuxt-link>
+				</NuxtLink>
 			</div>
 		</template>
 

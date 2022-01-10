@@ -12,6 +12,7 @@
             :src="node.image.sourceUrl"
             loading="lazy"
             :alt="node.name"
+            format="webp"
         />
         <div
             class="bg-gradient-to-t from-black to-transparent h-1/2 opacity-50 inset-x-0 bottom-0 absolute"

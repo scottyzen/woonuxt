@@ -1,9 +1,9 @@
 <template>
     <nav>
-        <nuxt-link to="/">Home</nuxt-link>
-        <nuxt-link to="/products">Shop</nuxt-link>
-        <nuxt-link to="/about">About us</nuxt-link>
-        <nuxt-link to="/news">News</nuxt-link>
-        <nuxt-link to="/contact">Contact</nuxt-link>
+        <NuxtLink to="/">Home</NuxtLink>
+        <NuxtLink to="/products">Shop</NuxtLink>
+        <NuxtLink to="/about">About us</NuxtLink>
+        <NuxtLink to="/news">News</NuxtLink>
+        <NuxtLink to="/contact">Contact</NuxtLink>
     </nav>
 </template>

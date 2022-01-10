@@ -1,14 +1,11 @@
 <template>
-	<nuxt-link
-		:to="{ name: 'product-slug', params: { slug: node.slug, page: page } }"
-		class="relative"
-	>
+	<NuxtLink :to="{ name: 'product-slug', params: { slug: node.slug, page: page } }" class="relative">
 		<span
 			v-if="node.onSale"
 			class="rounded-md bg-yellow-300 text-xs tracking-tight px-1.5 top-2 right-2 text-yellow-700 leading-5 z-10 absolute"
 		>SALE</span>
 
-		<nuxt-picture
+		<NuxtPicture
 			v-if="node.image"
 			class="w-full"
 			:src="node.image.sourceUrl"
@@ -28,7 +25,7 @@
 			<h2 class="font-light mb-2 leading-tight">{{ node.name }}</h2>
 			<ProductPrice class="text-sm" :salePrice="node.salePrice" :regularPrice="node.regularPrice" />
 		</div>
-	</nuxt-link>
+	</NuxtLink>
 </template>
 
 <script>

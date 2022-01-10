@@ -1,11 +1,25 @@
 <template>
-	<nuxt-link v-if="user == undefined" to="/login" class="flex mr-1 text-sm text-gray-500">
+	<NuxtLink v-if="user == undefined" to="/login" class="flex mr-1 text-sm text-gray-500">
 		<span class="mr-1">Sign in</span>
 		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 512 512">
-			<path d="M192 176v-40a40 40 0 0140-40h160a40 40 0 0140 40v240a40 40 0 01-40 40H240c-22.09 0-48-17.91-48-40v-40" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
-			<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M288 336l80-80-80-80M80 256h272" />
+			<path
+				d="M192 176v-40a40 40 0 0140-40h160a40 40 0 0140 40v240a40 40 0 01-40 40H240c-22.09 0-48-17.91-48-40v-40"
+				fill="none"
+				stroke="currentColor"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				stroke-width="32"
+			/>
+			<path
+				fill="none"
+				stroke="currentColor"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				stroke-width="32"
+				d="M288 336l80-80-80-80M80 256h272"
+			/>
 		</svg>
-	</nuxt-link>
+	</NuxtLink>
 </template>
 
 <script>

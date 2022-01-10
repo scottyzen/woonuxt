@@ -1,11 +1,11 @@
 <template>
-    <div>
+    <div class="gap-4">
         <div
-            class="my-4 gap-4 scslider relative"
+            class="my-4 scslider relative"
             :style="cssVars"
             ref="scslider"
             @scroll="handleScroll($event)"
-            :class="!extraClass ? extraClass : ''"
+            :class="extraClass ? extraClass : ''"
         >
             <slot />
         </div>
@@ -91,7 +91,7 @@ export default {
         },
         handleScroll(e) {
             const { scrollLeft, scrollWidth, offsetWidth } = e.target;
-            this.hasPrev = scrollLeft > 0;
+            this.hasPrev = scrollLeft > this.childWidth;
             this.hasNext = scrollLeft + offsetWidth < scrollWidth;
         },
         prev() {
@@ -123,6 +123,7 @@ export default {
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     scroll-padding-inline: calc(var(--containerFromLeft) + 1rem);
+    gap: inherit;
 }
 .scslider::-webkit-scrollbar {
     display: none;
@@ -141,7 +142,5 @@ export default {
     content: "";
     min-width: var(--containerFromLeft);
     max-width: var(--containerFromLeft);
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
 }
 </style>

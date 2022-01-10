@@ -1,8 +1,7 @@
 <template>
-	<nuxt-link to="/">
+	<NuxtLink to="/">
 		<h1 class="flex font-bold text-lg items-center">
-			<nuxt-img class="mr-2" width="32" height="32" src="logo.svg" alt="Logo"></nuxt-img>
-			WooNuxt
+			<NuxtImg class="mr-2" width="32" height="32" src="logo.svg" alt="Logo"></NuxtImg>WooNuxt
 		</h1>
-	</nuxt-link>
+	</NuxtLink>
 </template>

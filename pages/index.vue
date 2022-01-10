@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<nuxt-link class="flex relative items-center justify-center" to="/products">
+		<NuxtLink class="flex relative items-center justify-center" to="/products">
 			<NuxtImg
 				class="rounded object-cover h-64 w-full lg:h-[580px]"
 				src="/images/hero.jpeg"
@@ -15,12 +15,12 @@
 					class="font-light max-w-sm mb-12 hidden md:block"
 				>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde nam dignissimos nostrum veritatis nisi autem accusantium modi? Enim, voluptatibus consectetur.</div>
 			</div>
-		</nuxt-link>
+		</NuxtLink>
 
 		<section class="my-16 md:my-24">
 			<div class="container flex items-end justify-between">
 				<h2 class="font-semibold text-lg md:text-2xl">Shop by category</h2>
-				<nuxt-link class="text-primary" to="/categories">View All</nuxt-link>
+				<NuxtLink class="text-primary" to="/categories">View All</NuxtLink>
 			</div>
 			<SCSlider>
 				<CategoryCard
@@ -35,9 +35,9 @@
 		<section class="my-16 md:my-24">
 			<div class="container flex items-end justify-between">
 				<h2 class="font-semibold text-lg md:text-2xl">Best Sellers</h2>
-				<nuxt-link class="text-primary" to="/products">View All</nuxt-link>
+				<NuxtLink class="text-primary" to="/products">View All</NuxtLink>
 			</div>
-			<SCSlider>
+			<SCSlider class="lg:gap-6">
 				<ProductCard
 					class="min-w-[160px] lg:min-w-[280px]"
 					v-for="node in  bestSellers.nodes"
@@ -50,15 +50,14 @@
 		<section class="my-16 md:my-24">
 			<div class="container flex items-end justify-between">
 				<h2 class="font-semibold text-lg md:text-2xl">Latest Products</h2>
-				<nuxt-link class="text-primary" to="/products">View All</nuxt-link>
+				<NuxtLink class="text-primary" to="/products">View All</NuxtLink>
 			</div>
-			<SCSlider>
+			<SCSlider class="lg:gap-6">
 				<ProductCard
 					class="min-w-[160px] lg:min-w-[280px]"
 					v-for="node in  latesProducts.nodes"
 					:key="node.databaseId"
 					:node="node"
-					extraClass="lg:gap-8"
 				/>
 			</SCSlider>
 		</section>
