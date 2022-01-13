@@ -1,6 +1,6 @@
 <template>
 	<aside id="filters" :class="{ 'active': showFilters }">
-		<span class="text-xl mb-8 block">Filter</span>
+		<span class="text-xl mb-8 block">Filters</span>
 
 		<!-- Price Range -->
 		<div class="mb-3">Price Range</div>
@@ -31,6 +31,9 @@
 				/>
 			</div>
 		</div>
+
+		<div class="mt-8 mb-3">Categories</div>
+		<CategoryFilter />
 
 		<div class="mt-8 mb-3">Rating</div>
 		<div class="grid gap-1">

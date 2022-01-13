@@ -26,7 +26,7 @@
 					<Icon name="filter" width="22" height="22" />
 				</span>
 			</div>
-			<Products
+			<ProductGrid
 				:page="parseInt($route.params.pageNumber) || page"
 				:products="products"
 				@setPage="setPage"

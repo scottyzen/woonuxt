@@ -61,12 +61,6 @@
 				/>
 			</SCSlider>
 		</section>
-		<!-- <ProductRow :products="bestSellers.nodes" /> -->
-
-		<!-- <section class="container  my-16 md:my-24">
-			<h2 class="font-semibold text-lg mb-4 md:text-2xl">Latest Products</h2>
-			<ProductRow :products="latesProducts.nodes" />
-		</section>-->
 	</div>
 </template>
 
@@ -81,11 +75,7 @@ export default {
 		const { productCategories } = await $graphql.default.request(GET_PRODUCT_CATEGORIES);
 		const { products: bestSellers } = await $graphql.default.request(GET_PRODUCTS, { first: 8, orderby: [{ field: "TOTAL_SALES", order: "DESC" }] })
 		const { products: latesProducts } = await $graphql.default.request(GET_PRODUCTS, { first: 8, orderby: [{ field: "DATE", order: "DESC" }] })
-		return {
-			productCategories,
-			bestSellers,
-			latesProducts
-		};
+		return { productCategories, bestSellers, latesProducts };
 	}
 };
 </script>
