@@ -19,9 +19,17 @@
 					<CartCard :item="item" />
 				</SwipeCard>
 			</ul>
+
+			<ShippingOptions
+				:options="cart.availableShippingMethods[0].rates"
+				:active-option="cart.chosenShippingMethods[0]"
+				class="px-8"
+				@setActiveOption="setActiveOption"
+			/>
+
 			<div class="p-8">
 				<NuxtLink
-					class="bg-white rounded-2xl shadow-md text-lg text-center p-3 block justify-evenly hover:(bg-purple-500 text-white) "
+					class="bg-white rounded-2xl shadow-md text-lg text-center p-3 block justify-evenly hover:(bg-purple-500 text-white)"
 					to="/"
 				>
 					<span class="mx-2">Checkout</span>
@@ -39,6 +47,7 @@
 
 <script>
 import UPDATE_CART_QUANTITY from '~/gql/mutations/updateCartQuantity';
+import CHANGE_SHIPPING_METHOD from '~/gql/mutations/changeShippingMethod';
 export default {
 	methods: {
 		closeCart() {
@@ -51,6 +60,12 @@ export default {
 			);
 			this.$store.commit('updateCart', updateItemQuantities.cart);
 		},
+		async setActiveOption(id) {
+			console.log('ShippingOptions.vue setActiveOption', id);
+			const { updateShippingMethod } = await this.$graphql.default.request(CHANGE_SHIPPING_METHOD, { shippingMethods: id });
+			console.log({ updateShippingMethod });
+			this.$store.commit('updateCart', updateShippingMethod.cart);
+		}
 	},
 	computed: {
 		cart() {

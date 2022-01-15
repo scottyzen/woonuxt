@@ -1,38 +1,10 @@
 #import "~/gql/fragments/SimpleProduct.gql"
 #import "~/gql/fragments/VariableProduct.gql"
+#import "~/gql/fragments/CartFragment.gql"
 
 query getCart {
   cart {
-    total
-    isEmpty
-    contents {
-      itemCount
-      nodes {
-        quantity
-        key
-        product {
-          node {
-            name
-            slug
-            sku
-            databaseId
-            type
-            ... SimpleProduct
-            ... VariableProduct
-          }
-        }
-        variation{
-          node{
-            name
-            price
-            image{
-              sourceUrl(size: SHOP_THUMBNAIL)
-            }
-          }
-        }
-      }
-      productCount
-    }
+    ...CartFragment
   }
   customer {
     lastName
