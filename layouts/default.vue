@@ -140,6 +140,15 @@ pre {
 	transform: translate(-1em, 0);
 }
 
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
 // slide-up
 .slide-up-enter-active,
 .slide-up-leave-active {
