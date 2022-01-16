@@ -23,14 +23,14 @@ export default {
         };
     },
     props: {
-        activeCategories: { type: Array, default: null },
+        activeCategories: { type: Array, default: [] },
     },
     mounted() {
-        this.selectedCategories = this.activeCategories ? this.activeCategories : [];
+        this.selectedCategories = this.activeCategories.length ? this.activeCategories : [];
     },
     methods: {
         checkboxChanged() {
-            this.$emit('checkbox-changed', this.selectedCategories);
+            this.$emit('checkbox-changed', this.selectedCategories.filter(Boolean));
         },
     },
     async fetch() {

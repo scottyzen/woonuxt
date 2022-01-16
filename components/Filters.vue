@@ -132,7 +132,6 @@ export default {
 	},
 	computed: {
 		showRestButton() {
-			console.log(JSON.stringify(this.filter), this.initialState);
 			return JSON.stringify(this.filter) !== this.initialState;
 		},
 		activeCategories() {
