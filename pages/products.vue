@@ -88,7 +88,7 @@ export default {
 				let { minPrice, maxPrice, starRating, saleItemsOnly, categories } = this.$store.state.filter
 
 				// Categories
-				const catsSlugs = [...categories, this.categorySlug]
+				const catsSlugs = [...categories, this.categorySlug].filter(Boolean) // Remove nulls
 				const categoryCondition = catsSlugs.length ? catsSlugs.some(category => product.productCategories.nodes.some(productCategory => productCategory.slug === category)) : true
 
 				// Price
