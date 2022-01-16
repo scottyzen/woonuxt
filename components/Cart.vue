@@ -4,7 +4,10 @@
 		v-if="cart"
 	>
 		<CloseModals class="bg-white rounded-xl shadow-xl p-1.5" />
-		<EmptyCart v-if="!cart.isEmpty" class="rounded-xl bg-red-400 shadow-xl text-white p-1.5" />
+		<EmptyCart
+			v-if="!cart.isEmpty"
+			class="rounded-xl hover:bg-red-400 shadow-xl hover:text-white p-1.5"
+		/>
 
 		<div class="mt-8 text-center">Basket</div>
 
@@ -30,7 +33,7 @@
 			<div class="p-8">
 				<NuxtLink
 					class="bg-white rounded-2xl shadow-md text-lg text-center p-3 block justify-evenly hover:(bg-purple-500 text-white)"
-					to="/"
+					to="/checkout"
 				>
 					<span class="mx-2">Checkout</span>
 					<span>{{ cart.total }}</span>

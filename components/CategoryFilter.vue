@@ -4,9 +4,9 @@
             <input
                 :id="cat.slug"
                 type="checkbox"
-                :value="cat.databaseId"
+                :value="cat.slug"
                 v-model="selectedCategories"
-                @change="filterProducts"
+                @change="checkboxChanged"
             />
             <label :for="cat.slug">{{ cat.name }}</label>
         </div>
@@ -29,8 +29,8 @@ export default {
         this.selectedCategories = this.selected ? [this.selected] : [];
     },
     methods: {
-        filterProducts() {
-            this.$emit('filter', this.selectedCategories);
+        checkboxChanged() {
+            this.$emit('checkbox-changed', this.selectedCategories);
         },
     },
     async fetch() {

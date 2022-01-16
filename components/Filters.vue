@@ -33,7 +33,7 @@
 		</div>
 
 		<div class="mt-8 mb-3">Categories</div>
-		<CategoryFilter />
+		<CategoryFilter @checkbox-changed="updatedCategoryFilter" />
 
 		<div class="mt-8 mb-3">Rating</div>
 		<div class="grid gap-1">
@@ -86,6 +86,7 @@ export default {
 			maxPrice: 90,
 			starRating: null,
 			saleItemsOnly: false,
+			categories: [],
 		};
 		return {
 			filter: initialState,
@@ -106,6 +107,9 @@ export default {
 	methods: {
 		reset() {
 			this.filter = JSON.parse(this.initialState);
+		},
+		updatedCategoryFilter(categories) {
+			this.filter.categories = categories;
 		},
 	},
 	watch: {

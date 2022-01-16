@@ -1,45 +1,11 @@
+#import "~/gql/fragments/SimpleProduct.gql"
+#import "~/gql/fragments/VariableProduct.gql"
+#import "~/gql/fragments/CartFragment.gql"
+
 mutation ADD_TO_CART($input: AddToCartInput!) {
   addToCart(input: $input) {
     cart {
-    total
-    isEmpty
-    contents {
-      itemCount
-      nodes {
-        quantity
-        key
-        product {
-          node {
-            name
-            slug
-            sku
-            databaseId
-            type
-            image {
-              sourceUrl(size: SHOP_THUMBNAIL)
-            }
-            ... on VariableProduct {
-              name
-              price
-            }
-            ... on SimpleProduct {
-              name
-              price
-            }
-          }
-        }
-        variation{
-          node{
-            name
-            price
-            image{
-              sourceUrl(size: SHOP_THUMBNAIL)
-            }
-          }
-        }
-      }
-      productCount
+    ...CartFragment
     }
-  }
   }
 }

@@ -82,12 +82,20 @@ export default {
 			this.page = number
 		},
 		filterProducts() {
+			// Merge
+
+			if (this.$store.state.filter && this.$store.state.filter.categories.length) {
+				this.categorySlug = [...this.$store.state.filter.categories, ...[this.categorySlug]]
+			}
 
 			const FILTERED_PRODUCTS = this.$store.state.filter ? this.$store.state.products.filter((product) => {
 				let { minPrice, maxPrice, starRating, saleItemsOnly } = this.$store.state.filter
 
-				// Category
-				const categoryCondition = this.categorySlug ? product.productCategories.nodes.map((cat) => cat.slug).some((slug) => slug == this.categorySlug) : true
+
+
+				// Categories array [  "clothing", "hoodies-clothing" ]
+				// Categories
+				const categoryCondition = this.categorySlug.length ? this.categorySlug.some(category => product.productCategories.nodes.some(productCategory => productCategory.slug === category)) : true
 
 				// Price
 				maxPrice = maxPrice > 0 ? maxPrice : 9999999999
@@ -116,7 +124,8 @@ export default {
 
 		},
 		refreshProducts(products) {
-			this.products = this.categorySlug ? products.filter((product) => product.productCategories.nodes.map((cat) => cat.slug).some((slug) => slug == this.categorySlug)) : products;
+			// this.products = this.categorySlug ? products.filter((product) => product.productCategories.nodes.map((cat) => cat.slug).some((slug) => slug == this.categorySlug)) : products;
+			this.products = this.categorySlug ? products.filter((product) => product.productCategories.nodes.map((cat) => cat.slug).some((slug) => this.categorySlug.includes(slug))) : products;
 			if (this.products.length < this.$config.perPage) { this.page = 1 }
 		},
 	},

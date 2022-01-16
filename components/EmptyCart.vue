@@ -1,5 +1,7 @@
 <template>
-	<TrashIcon class="cursor-pointer top-6 right-8 absolute" @click="EmptyCart" />
+	<button class="cursor-pointer top-6 right-8 absolute" @click="EmptyCart" title="Empty Cart">
+		<TrashIcon />
+	</button>
 </template>
 
 <script>
