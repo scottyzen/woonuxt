@@ -52,16 +52,16 @@ button .icon {
 	max-width: 0;
 }
 button.loading .icon {
-	display: inline-block;
+	@apply animate-spin inline-block rounded-full;
 	border: 2px solid #fff;
 	border-top: 2px solid transparent;
-	border-radius: 100%;
 	width: 12px;
 	height: 12px;
 	transition: all 150ms ease-in;
-	animation: spin 600ms infinite forwards linear;
+	/* animation: spin 600ms infinite forwards linear; */
 	transform: scale(1);
 	max-width: 100px;
+	will-change: transform;
 }
 button.success {
 	@apply bg-green-500;

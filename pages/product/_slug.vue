@@ -155,7 +155,7 @@ export default {
 			try {
 				const { addToCart } = await this.$graphql.default.request(ADD_TO_CART, { input })
 				this.addToCartState = 'success';
-				this.addToCartButtonText = 'Done!';
+				this.addToCartButtonText = 'Added to Cart';
 				setTimeout(() => {
 					this.addToCartState = null
 					this.addToCartButtonText = 'Add to Cart';
