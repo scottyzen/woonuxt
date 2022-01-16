@@ -13,6 +13,9 @@ module.exports = {
           dark: '#754fa3',
         },
       },
+      animation: {
+        'spin-fast': 'spin 600ms linear infinite',
+      }
     },
   }
 };

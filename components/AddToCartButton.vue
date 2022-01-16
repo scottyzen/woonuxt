@@ -11,28 +11,9 @@
 </template>
 
 <script>
-// import ADD_TO_CART from '~/gql/mutations/ADD_TO_CART'
-
 export default {
 	props: ['addToCartButtonText', 'disabled']
-	// methods: {
-	// 	async triggerAddToCart() {
-	// 		const input = {
-	// 			productId: this.productId,
-	// 			quantity: this.quantity,
-	// 			variation: this.variation
-	// 		}
-	// 		const { addToCart } = await this.$graphql.default.request(ADD_TO_CART, { input })
-	// 		this.$store.commit('updateCart', addToCart.cart)
-	// 	}
-	// }
 }
-
-// variation: [
-//     { attributeName: 'pa_color', attributeValue: 'Green' },
-//     { attributeName: 'logo', attributeValue: 'No' },
-//     { attributeName: 'size', attributeValue: 'Large' }
-// ]
 </script>
 
 <style lang="postcss">
@@ -52,13 +33,12 @@ button .icon {
 	max-width: 0;
 }
 button.loading .icon {
-	@apply animate-spin inline-block rounded-full;
+	@apply animate-spin-fast inline-block rounded-full;
 	border: 2px solid #fff;
-	border-top: 2px solid transparent;
+	border-left: 2px solid transparent;
 	width: 12px;
 	height: 12px;
 	transition: all 150ms ease-in;
-	/* animation: spin 600ms infinite forwards linear; */
 	transform: scale(1);
 	max-width: 100px;
 	will-change: transform;
@@ -73,13 +53,5 @@ button.success .icon {
 	transform: rotate(45deg) scale(1);
 	transition: all 150ms ease-in;
 	max-width: 100px;
-}
-@keyframes spin {
-	0% {
-		transform: rotate(0deg);
-	}
-	100% {
-		transform: rotate(360deg);
-	}
 }
 </style>
