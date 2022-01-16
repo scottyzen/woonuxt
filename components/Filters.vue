@@ -1,6 +1,6 @@
 <template>
 	<aside id="filters" :class="{ 'active': showFilters }">
-		<span class="text-xl mb-8 block">Filters</span>
+		<span class="text-xl mb-8 hidden md:block">Filters</span>
 
 		<!-- Price Range -->
 		<div class="mb-3">Price Range</div>
@@ -71,7 +71,7 @@
 			<a
 				v-if="showRestButton"
 				@click="reset"
-				class="bg-primary-light rounded-xl cursor-pointer mt-12 text-center text-white leading-tight w-full p-2 block hover:bg-purple-700"
+				class="bg-primary-light rounded-xl cursor-pointer my-12 text-center text-white leading-tight w-full p-2 block hover:bg-purple-700"
 			>Clear all filters</a>
 		</transition>
 	</aside>

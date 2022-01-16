@@ -7,10 +7,10 @@ module.exports = {
     },
     extend: {
       colors: {
-        violet: colors.purple,
         primary: {
           light: "#AE7DDD",
-          DEFAULT: "#7F54B2"
+          DEFAULT: "#7F54B2",
+          dark: '#754fa3',
         },
       },
     },

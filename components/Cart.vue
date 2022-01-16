@@ -26,13 +26,13 @@
 			<ShippingOptions
 				:options="cart.availableShippingMethods[0].rates"
 				:active-option="cart.chosenShippingMethods[0]"
-				class="px-8"
+				class="px-8 mb-4"
 				@setActiveOption="setActiveOption"
 			/>
 
-			<div class="p-8">
+			<div class="px-8 mb-8">
 				<NuxtLink
-					class="bg-white rounded-2xl shadow-md text-lg text-center p-3 block justify-evenly hover:(bg-purple-500 text-white)"
+					class="bg-primary text-white rounded-2xl shadow-md text-lg text-center p-3 block justify-evenly hover:bg-primary-dark"
 					to="/checkout"
 				>
 					<span class="mx-2">Checkout</span>

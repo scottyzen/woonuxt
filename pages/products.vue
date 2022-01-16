@@ -21,7 +21,7 @@
 				/>
 				<span
 					@click="showFilters = !showFilters"
-					class="rounded-xl cursor-pointer bg-gray-500 text-white p-1.5 md:hidden"
+					class="rounded-xl cursor-pointer bg-gray-400 text-white p-1.5 md:hidden"
 					:class="{ 'bg-primary': this.$store.state.filter }"
 				>
 					<Icon name="filter" width="22" height="22" />
