@@ -5,9 +5,9 @@
 			class="rounded-md bg-yellow-300 text-xs tracking-tight px-1.5 top-2 right-2 text-yellow-700 leading-5 z-10 absolute"
 		>SALE</span>
 
-		<NuxtPicture
+		<NuxtImg
 			v-if="node.image"
-			class="w-full"
+			class="product-image"
 			:src="node.image.sourceUrl"
 			:alt="node.name"
 			:title="node.name"
@@ -39,7 +39,7 @@ export default {
 </script>
 
 <style lang="postcss">
-picture.w-full img {
+img.product-image {
 	@apply rounded-xl object-top object-cover w-full aspect-square;
 	aspect-ratio: 1/1.125;
 }
