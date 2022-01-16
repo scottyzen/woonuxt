@@ -82,7 +82,7 @@ export default defineNuxtConfig({
   },
 
   publicRuntimeConfig: {
-    perPage: 24,
+    perPage: 12,
     clientVersion: pkg.version,
   },
 
