@@ -33,7 +33,7 @@
 		</div>
 
 		<div class="mt-8 mb-3">Categories</div>
-		<CategoryFilter @checkbox-changed="updatedCategoryFilter" />
+		<CategoryFilter @checkbox-changed="updatedCategoryFilter" :active-categories="activeCategories" />
 
 		<div class="mt-8 mb-3">Rating</div>
 		<div class="grid gap-1">
@@ -98,6 +98,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		params: {
+			type: Object,
+			default: () => ({}),
+		},
 	},
 	mounted() {
 		if (this.$store.state.filter) {
@@ -128,7 +132,11 @@ export default {
 	},
 	computed: {
 		showRestButton() {
+			console.log(JSON.stringify(this.filter), this.initialState);
 			return JSON.stringify(this.filter) !== this.initialState;
+		},
+		activeCategories() {
+			return [...this.filter.categories, this.params.categorySlug];
 		},
 	},
 }

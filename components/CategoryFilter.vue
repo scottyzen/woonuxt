@@ -23,10 +23,10 @@ export default {
         };
     },
     props: {
-        selected: { type: Number, default: null },
+        activeCategories: { type: Array, default: null },
     },
     mounted() {
-        this.selectedCategories = this.selected ? [this.selected] : [];
+        this.selectedCategories = this.activeCategories ? this.activeCategories : [];
     },
     methods: {
         checkboxChanged() {
@@ -36,6 +36,11 @@ export default {
     async fetch() {
         const { productCategories } = await this.$graphql.default.request(GET_PRODUCT_CATEGORIES)
         this.productCategories = productCategories.nodes
+    },
+    watch: {
+        activeCategories(newCategories) {
+            this.selectedCategories = newCategories;
+        },
     },
 }
 </script>
