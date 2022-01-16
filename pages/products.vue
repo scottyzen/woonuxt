@@ -63,8 +63,8 @@ export default {
 			}
 		}
 	},
-	async asyncData({ $graphql, params }) {
-		const variables = { slug: params.categorySlug }
+	async asyncData({ $graphql, params, $config }) {
+		const variables = { slug: params.categorySlug, first: $config.perPage }
 		const { products } = await $graphql.default.request(GET_PRODUCTS, variables)
 		return { products: products.nodes }
 	},
