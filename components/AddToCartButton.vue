@@ -1,7 +1,7 @@
 <template>
 	<button
 		type="submit"
-		class="p-2 text-white bg-purple-500 rounded-2xl min-w-[150px] text-center flex items-center justify-center gap-4 focus:outline-none"
+		class="p-2.5 text-white bg-primary rounded-2xl min-w-[150px] text-center flex items-center justify-center gap-4 focus:outline-none"
 		:class="{ 'disabled': disabled }"
 		:disabled="disabled"
 	>
