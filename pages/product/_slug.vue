@@ -27,7 +27,15 @@
 						@attrs-changed="updateSelectedVariations"
 					/>
 					<div class="flex mt-12 gap-8 items-center justify-between">
-						<AddToCartButton class="flex-1" :disabled="!activeVariation && product.variations" />
+						<AddToCartButton
+							class="flex-1"
+							:add-to-cart-button-text="addToCartButtonText"
+							:disabled="!activeVariation && product.variations"
+							:class="{
+								'loading': addToCartState == 'loading',
+								'success': addToCartState == 'success'
+							}"
+						/>
 						<QuantityButtons @quantity-change="updateQuantity" :quantity="quantity" :min="1" />
 					</div>
 				</form>
@@ -69,6 +77,8 @@ export default {
 			indexOfTypeAny: [],
 			attrValues: [],
 			showBackButton: false,
+			addToCartState: null,
+			addToCartButtonText: 'Add to Cart',
 		}
 	},
 	transition(to, from) {
@@ -130,6 +140,8 @@ export default {
 			// }
 		},
 		async triggerAddToCart() {
+			this.addToCartState = 'loading';
+			this.addToCartButtonText = 'Adding to Cart...';
 			// { attributeName: 'size', attributeValue: 'Large' }
 			const variationInput = this.activeVariation ? this.attrValues : null
 
@@ -142,6 +154,13 @@ export default {
 
 			try {
 				const { addToCart } = await this.$graphql.default.request(ADD_TO_CART, { input })
+				this.addToCartState = 'success';
+				this.addToCartButtonText = 'Done!';
+				setTimeout(() => {
+					this.addToCartState = null
+					this.addToCartButtonText = 'Add to Cart';
+				}, 2500);
+
 				this.$store.commit('updateCart', addToCart.cart)
 			} catch (error) {
 				console.error(error)
