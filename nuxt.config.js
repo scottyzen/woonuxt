@@ -84,6 +84,7 @@ export default defineNuxtConfig({
   publicRuntimeConfig: {
     perPage: 12,
     clientVersion: pkg.version,
+    stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
   },
 
   router: {

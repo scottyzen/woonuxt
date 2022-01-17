@@ -33,11 +33,16 @@
             <BillingDetails :billing="billing" />
 
             <div>
-                <label for>Credit Card</label>
+                <label class="flex justify-between" for>
+                    Credit Card
+                    <span
+                        class="text-sm text-orange-400 capitalize"
+                    >Test mode: 4242 4242 4242 4242</span>
+                </label>
                 <StripeElements
                     v-if="loadStripe"
                     class="w-full"
-                    :stripe-key="'pk_test_PnccujKJJqnELQBTdWpHx5s900OzMpEh6o'"
+                    :stripe-key="$config.stripePublishableKey"
                     :instance-options="{}"
                     :elements-options="{}"
                     #default="{ elements }"
@@ -63,6 +68,7 @@
 <script>
 import { StripeElements, StripeElement } from 'vue-stripe-elements-plus'
 import CHECKOUT from '~/gql/mutations/checkout';
+import GET_CART from '~/gql/queries/getCart';
 
 export default {
     data() {
@@ -116,9 +122,11 @@ export default {
                 const { checkout } = await this.$graphql.default.request(CHECKOUT, variables)
                 if (checkout.result == 'success') {
                     this.buttonText = 'Order Successfull';
-                    setTimeout(() => {
+                    const { cart, viewer, customer } = await this.$graphql.default.request(GET_CART);
+                    this.$store.commit('updateCart', cart);
+                    if (cart) {
                         this.$router.push('/order/' + checkout.order.databaseId)
-                    }, 600);
+                    }
                 } else {
                     this.buttonText = 'Place Order';
                 }

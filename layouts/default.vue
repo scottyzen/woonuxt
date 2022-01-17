@@ -7,7 +7,7 @@
 		<transition name="slide">
 			<MobileMenu v-if="showMenu" class="z-50" />
 		</transition>
-		<Nuxt class="flex-1" keek-alive />
+		<Nuxt class="flex-1" />
 		<transition name="page">
 			<div
 				v-if="showCart || showMenu"
