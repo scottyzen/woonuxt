@@ -3,7 +3,14 @@
 		<div class="py-2 relative" v-for="(attr, i) in attrs" :key="i">
 			<div v-if="attr.options.length > 3" class="flex items-center justify-between">
 				<div>{{ attr.label }}</div>
-				<select :name="attr.name" :id="attr.name" @change="updateAttrs" :ref="attr.name" required>
+				<select
+					:name="attr.name"
+					:id="attr.name"
+					@change="updateAttrs"
+					:ref="attr.name"
+					required
+					class="border-white shadow"
+				>
 					<option selected disabled hidden :value="null">Choose {{ attr.label }}</option>
 					<option v-for="option in attr.options" :key="option" :value="option">{{ option }}</option>
 				</select>
@@ -59,7 +66,7 @@ export default {
 
 <style lang="postcss">
 select {
-	@apply border border-white rounded-2xl shadow py-2 px-4 appearance-none;
+	@apply border rounded-2xl shadow py-2 px-4 appearance-none;
 	background: url("/images/chevron-down.svg") center right 10px no-repeat;
 	background-size: 1rem;
 	padding-right: 2.5rem;

@@ -2,6 +2,7 @@ fragment CartFragment on Cart {
   subtotal
   total
   subtotal
+  totalTax
   shippingTotal
   chosenShippingMethods
   availableShippingMethods {

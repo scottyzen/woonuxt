@@ -1,0 +1,17 @@
+mutation Checkout($billing: CustomerAddressInput = {}, $metaData: [MetaDataInput] = {key: "", value: ""}) {
+  checkout(
+    input: {paymentMethod: "stripe", billing: $billing, metaData: $metaData}
+  ) {
+    result
+    redirect
+    order {
+      needsPayment
+      needsProcessing
+      status
+      databaseId
+      orderKey
+      total
+      paymentMethodTitle
+    }
+  }
+}

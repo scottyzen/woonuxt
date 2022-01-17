@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import login from '~/gql/mutations/login';
+import LOGIN from '~/gql/mutations/login';
 import getCart from '~/gql/queries/getCart';
 
 export default {
@@ -17,10 +17,7 @@ export default {
 					username: logininfo.email,
 					password: logininfo.password,
 				};
-				const { loginWithCookies } = await this.$graphql.default.request(
-					login,
-					variables
-				);
+				const { loginWithCookies } = await this.$graphql.default.request(LOGIN, variables);
 				console.log(loginWithCookies);
 				if (loginWithCookies.status == 'SUCCESS') {
 					const { cart, viewer } = await this.$graphql.default.request(getCart);
