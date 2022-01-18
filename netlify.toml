@@ -2,7 +2,8 @@
   # functions = "functions"
 
 [template.environment]
-  WORDPRESS_URL = "Set this to your WordPress URL"
+  WORDPRESS_URL = "Set this to your WordPress URL withoyt the trailing slash. Example: http://example.com"
+  STRIPE_PUBLISHABLE_KEY = "Set this to your Stripe publishable key"
   
 [[headers]]
   for = "*.js" # js files should be set this way
