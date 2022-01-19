@@ -4,6 +4,12 @@
 [template.environment]
   WORDPRESS_URL = "WordPress URL without trailing slash. http://example.com"
   STRIPE_PUBLISHABLE_KEY = "Stripe Publishable Key"
+
+
+[build]
+  command = "npm run generate"
+  publish = "dist"
+  
   
 [[headers]]
   for = "*.js" # js files should be set this way
