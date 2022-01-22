@@ -83,8 +83,7 @@ export default {
                 style: {
                     base: {
                         color: '#1F2937',
-                        fontSize: '16px',
-                        lineHeight: '20px',
+                        fontSize: '16px'
                     }
                 },
             }
@@ -93,11 +92,6 @@ export default {
     components: {
         StripeElements,
         StripeElement
-    },
-    head() {
-        return {
-            script: [{ src: 'https://js.stripe.com/v3/' }]
-        }
     },
     methods: {
         pay() {
@@ -123,15 +117,32 @@ export default {
                 if (checkout.result == 'success') {
                     this.buttonText = 'Order Successfull';
                     const { cart, viewer, customer } = await this.$graphql.default.request(GET_CART);
+                    console.log(checkout.order);
                     this.$store.commit('updateCart', cart);
                     if (cart) {
-                        this.$router.push('/order/' + checkout.order.databaseId)
+                        this.$router.push({ name: 'order-summary', params: { order: checkout.order } })
                     }
                 } else {
                     this.buttonText = 'Place Order';
                 }
             } catch (error) {
                 console.log(error);
+            }
+        },
+        addStripeScript() {
+            // Check if the stripe script is already added to the head
+            if (document.querySelector('script[src="https://js.stripe.com/v3/"]')) {
+                this.loadStripe = true
+            } else {
+                // Add the stripe script to the head
+                const script = document.createElement('script')
+                script.src = 'https://js.stripe.com/v3/'
+                script.async = true
+                document.head.appendChild(script)
+                // Wait for the stripe script to be loaded
+                script.onload = () => {
+                    this.loadStripe = true
+                }
             }
         }
     },
@@ -141,9 +152,7 @@ export default {
         },
     },
     mounted() {
-        setTimeout(() => {
-            this.loadStripe = true
-        }, 300);
+        this.addStripeScript()
     }
 }
 </script>
@@ -157,5 +166,8 @@ export default {
 }
 label {
     @apply text-xs mb-1 text-gray-600 inline-block uppercase block;
+}
+.checkout-form .StripeElement {
+    padding: 1rem 0.75rem;
 }
 </style>

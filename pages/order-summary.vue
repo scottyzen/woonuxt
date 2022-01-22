@@ -25,24 +25,11 @@
 </template>
 
 <script>
-import GET_ORDER from '~/gql/queries/getOrder'
 export default {
     data() {
         return {
-            order: null
+            order: this.$route.params.order
         }
-    },
-    mounted() {
-        this.getOrder()
-    },
-    methods: {
-        async getOrder() {
-            const variables = { id: this.$route.params.id }
-            const { order, customer } = await this.$graphql.default.request(GET_ORDER, variables)
-            const foundOrder = customer.orders.nodes.find(order => order.databaseId === this.$route.params.id)
-            this.order = order ? order : foundOrder
-            console.log(this.order);
-        },
     },
 }
 </script>

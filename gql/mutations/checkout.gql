@@ -12,6 +12,12 @@ mutation Checkout($billing: CustomerAddressInput = {}, $metaData: [MetaDataInput
       orderKey
       total
       paymentMethodTitle
+      paymentMethod
+      date
+      subtotal
+      customer {
+        email
+      }
     }
   }
 }
