@@ -74,21 +74,13 @@
 </template>
 
 <script>
-import GET_CART from '~/gql/queries/getCart';
 export default {
     data() {
         return {
             order: this.$route.params.order
         }
     },
-    mounted() {
-        this.getCart();
-    },
     methods: {
-        async getCart() {
-            const { cart } = await this.$graphql.default.request(GET_CART);
-            this.$store.commit('updateCart', cart);
-        },
         formatDate(date) {
             return new Date(date).toLocaleDateString();
         },

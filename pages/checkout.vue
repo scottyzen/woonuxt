@@ -68,7 +68,6 @@
 <script>
 import { StripeElements, StripeElement } from 'vue-stripe-elements-plus'
 import CHECKOUT from '~/gql/mutations/checkout';
-import GET_CART from '~/gql/queries/getCart';
 
 export default {
     data() {
@@ -116,12 +115,8 @@ export default {
                 const { checkout } = await this.$graphql.default.request(CHECKOUT, variables)
                 if (checkout.result == 'success') {
                     this.buttonText = 'Order Successfull';
-                    const { cart, viewer, customer } = await this.$graphql.default.request(GET_CART);
-                    console.log(checkout.order);
-                    this.$store.commit('updateCart', cart);
-                    if (cart) {
-                        this.$router.push({ name: 'order-summary', params: { order: checkout.order } })
-                    }
+                    this.$store.commit('updateCart', null);
+                    this.$router.push({ name: 'order-summary', params: { order: checkout.order } })
                 } else {
                     this.buttonText = 'Place Order';
                 }
