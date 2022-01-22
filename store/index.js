@@ -18,6 +18,7 @@ export const mutations = {
   toggleMenu: (state, bool) => { state.showMenu = bool },
   updateCart: (state, cart) => (state.cart = cart),
   updateUser: (state, user) => (state.user = user),
+  // updateUser(state, user) { state.user = [...user] },
   updateProducts: (state, products) => (state.products = products),
   updatePage(state, pageName) { state.page = pageName},
   setFilter(state, filter) {state.filter = filter ? {...filter} : null},

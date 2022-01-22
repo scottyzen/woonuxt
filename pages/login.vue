@@ -20,10 +20,9 @@ export default {
 				const { loginWithCookies } = await this.$graphql.default.request(LOGIN, variables);
 				console.log(loginWithCookies);
 				if (loginWithCookies.status == 'SUCCESS') {
-					const { cart, viewer } = await this.$graphql.default.request(getCart);
-					console.log({ cart }, { viewer });
+					const { cart, viewer, customer } = await this.$graphql.default.request(getCart);
 					this.$store.commit('updateCart', cart);
-					this.$store.commit('updateUser', viewer);
+					this.$store.commit('updateUser', customer);
 
 					this.$router.push('/');
 				}

@@ -46,7 +46,7 @@ export default {
 
 				this.$store.commit('updateCart', cart);
 				if (viewer) {
-					this.$store.commit('updateUser', viewer);
+					this.$store.commit('updateUser', customer);
 				} else {
 					const token = customer.sessionToken;
 					if (!wooCookie) {

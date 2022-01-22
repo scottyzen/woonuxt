@@ -10,13 +10,13 @@
  * Speed ✅
  * SEO 
  * Cart ✅
+ * Search ✅
+ * Shipping ✅
  * Checkout
    * Stripe ✅
    * Paypal
    * Click & Collect 
- * Search ✅
  * Filtering ✅
  * Wishlists
  * Account
  * Coupons
- * Shipping

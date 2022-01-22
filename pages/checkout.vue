@@ -3,21 +3,21 @@
         class="container flex flex-wrap my-12 gap-8 justify-evenly items-start md:flex-row-reverse"
     >
         <div
-            class="bg-white border-b rounded-2xl shadow-sm w-full p-6 top-20 text-gray-700 md:max-w-sm md:sticky"
+            class="bg-white border-b rounded-2xl shadow-sm w-full p-6 top-20 text-gray-700 md:max-w-sm md:mt-16 md:sticky"
         >
             <h2 class="font-semibold mb-4">Order Summary</h2>
-            <div v-if="cart">
+            <div v-if="cart" class>
                 <div class="flex justify-between">
                     <span class="text-gray-600">Subtotal</span>
-                    <span class="font-semibold">{{ cart.subtotal }}</span>
+                    <span>{{ cart.subtotal }}</span>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-gray-600">Tax</span>
-                    <span class="font-semibold">{{ cart.totalTax }}</span>
+                    <span>{{ cart.totalTax }}</span>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-gray-600">Shipping</span>
-                    <span class="font-semibold">{{ cart.shippingTotal }}</span>
+                    <span>{{ cart.shippingTotal }}</span>
                 </div>
                 <hr class="my-4" />
                 <div class="flex justify-between">
@@ -28,7 +28,7 @@
         </div>
 
         <form @submit.prevent="pay" class="w-full max-w-3xl grid gap-4 checkout-form md:flex-1">
-            <h2 class="text-xl w-full">Billing Details</h2>
+            <h2 class="text-xl mb-2 w-full">Billing Details</h2>
 
             <BillingDetails :billing="billing" />
 
@@ -95,6 +95,9 @@ export default {
     methods: {
         pay() {
             this.buttonText = 'Processing...';
+            setTimeout(() => {
+                this.proccessingMessages();
+            }, 2500);
             // ref in template
             const groupComponent = this.$refs.elms
             const cardComponent = this.$refs.card
@@ -139,7 +142,16 @@ export default {
                     this.loadStripe = true
                 }
             }
-        }
+        },
+        proccessingMessages() {
+            if (this.buttonText == 'Order Successfull' || this.buttonText == 'Place Order') {
+                return
+            }
+            const messgaes = ['Processing Payment...', 'Updating Order Status...', 'Almost there...']
+            this.timer = setInterval(() => {
+                this.buttonText = messgaes[Math.floor(Math.random() * messgaes.length)]
+            }, 2500)
+        },
     },
     computed: {
         cart() {

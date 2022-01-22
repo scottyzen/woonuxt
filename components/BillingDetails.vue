@@ -1,5 +1,6 @@
 <template>
     <div class="w-full grid gap-4 lg:grid-cols-2">
+        <!-- <pre>{{ $store.state.user }}</pre> -->
         <div class="w-full">
             <label for="first-name">First Name</label>
             <input placeholder="John" type="text" required v-model="billing.firstName" />
@@ -54,6 +55,18 @@ export default {
         updateBilling(billing) {
             this.$emit('update-billing', billing);
         },
+        prefillAvailableBilling() {
+            const interval = setInterval(() => {
+                const user = this.$store.state.user;
+                if (user) {
+                    this.billing = JSON.parse(JSON.stringify(user.billing));
+                    clearInterval(interval);
+                }
+            }, 1000);
+        },
+    },
+    mounted() {
+        this.prefillAvailableBilling();
     },
     watch: {
         billing: {

@@ -12,6 +12,19 @@ query getCart {
     firstName
     username
     sessionToken
+    billing {
+      address1
+      address2
+      city
+      company
+      country
+      email
+      firstName
+      lastName
+      phone
+      postcode
+      state
+    }
   }
   viewer{
     lastName
