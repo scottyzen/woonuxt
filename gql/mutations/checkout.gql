@@ -1,3 +1,6 @@
+#import "~/gql/fragments/SimpleProduct.gql"
+#import "~/gql/fragments/VariableProduct.gql"
+
 mutation Checkout($billing: CustomerAddressInput = {}, $metaData: [MetaDataInput] = {key: "", value: ""}) {
   checkout(
     input: {paymentMethod: "stripe", billing: $billing, metaData: $metaData}
@@ -10,13 +13,33 @@ mutation Checkout($billing: CustomerAddressInput = {}, $metaData: [MetaDataInput
       status
       databaseId
       orderKey
+      subtotal
       total
+      subtotal
+      totalTax
+      shippingTotal
       paymentMethodTitle
       paymentMethod
       date
       subtotal
       customer {
         email
+      }
+      lineItems {
+        nodes {
+          quantity
+          total
+          subtotal
+          product {
+            name
+            slug
+            sku
+            databaseId
+            type
+            ...SimpleProduct
+            ...VariableProduct
+          }
+        }
       }
     }
   }
