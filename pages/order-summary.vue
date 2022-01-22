@@ -1,6 +1,6 @@
 <template>
     <div
-        class="bg-white rounded-xl mx-auto shadow my-12 w-full max-w-3xl p-8 p-16 text-gray-800"
+        class="w-full p-8 text-gray-800 md:bg-white md:rounded-xl md:mx-auto md:shadow md:my-12 md:max-w-3xl md:p-16"
         v-if="order"
     >
         <h1 class="font-semibold text-xl mb-2">Order received</h1>
