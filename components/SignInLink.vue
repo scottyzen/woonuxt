@@ -1,9 +1,8 @@
 <template>
-	<NuxtLink v-if="user == undefined" to="/login" class="flex mr-1 text-sm text-gray-500">
-		<span class="mr-1">Sign in</span>
+	<NuxtLink :to="user ? '/account' : '/login'" class="mr-1" title="My Account">
 		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 512 512">
 			<path
-				d="M192 176v-40a40 40 0 0140-40h160a40 40 0 0140 40v240a40 40 0 01-40 40H240c-22.09 0-48-17.91-48-40v-40"
+				d="M344 144c-3.92 52.87-44 96-88 96s-84.15-43.12-88-96c-4-55 35-96 88-96s92 42 88 96z"
 				fill="none"
 				stroke="currentColor"
 				stroke-linecap="round"
@@ -11,12 +10,11 @@
 				stroke-width="32"
 			/>
 			<path
+				d="M256 304c-87 0-175.3 48-191.64 138.6C62.39 453.52 68.57 464 80 464h352c11.44 0 17.62-10.48 15.65-21.4C431.3 352 343 304 256 304z"
 				fill="none"
 				stroke="currentColor"
-				stroke-linecap="round"
-				stroke-linejoin="round"
+				stroke-miterlimit="10"
 				stroke-width="32"
-				d="M288 336l80-80-80-80M80 256h272"
 			/>
 		</svg>
 	</NuxtLink>

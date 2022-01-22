@@ -11,19 +11,19 @@
         <div class="flex justify-between">
             <div>
                 <div class="text-xs text-gray-400 uppercase">Order number</div>
-                <div class="font-semibold">{{ order.databaseId }}</div>
+                <div>{{ order.databaseId }}</div>
             </div>
             <div>
                 <div class="text-xs text-gray-400 uppercase">Date</div>
-                <div class="font-semibold">{{ formatDate(order.date) }}</div>
+                <div>{{ formatDate(order.date) }}</div>
             </div>
             <div>
                 <div class="text-xs text-gray-400 uppercase">Status</div>
-                <div class="font-semibold">{{ order.status }}</div>
+                <div>{{ order.status }}</div>
             </div>
             <div>
                 <div class="text-xs text-gray-400 uppercase">Payment Method</div>
-                <div class="font-semibold">{{ order.paymentMethod }}</div>
+                <div>{{ order.paymentMethod }}</div>
             </div>
         </div>
 
@@ -38,15 +38,13 @@
                 <NuxtImg
                     class="rounded-xl h-16 w-16"
                     v-if="item.product.image"
-                    :src="item.product.image.sourceUrl"
+                    :src="item.variation ? item.variation.image.sourceUrl : item.product.image.sourceUrl"
                 />
-                <div class="flex-1 leading-tight">{{ item.product.name }}</div>
-                <div class="text-sm text-gray-600">Qty. {{ item.quantity || 1 }}</div>
-                <ProductPrice
-                    class="text-sm"
-                    :salePrice="item.product.salePrice"
-                    :regularPrice="item.product.regularPrice"
-                />
+                <div
+                    class="flex-1 leading-tight"
+                >{{ item.variation ? item.variation.name : item.product.name }}</div>
+                <div class="text-sm text-gray-600">Qty. {{ item.quantity }}</div>
+                <span class="font-semibold text-sm">{{ formatPrice(item.total) }}</span>
             </div>
         </div>
 
@@ -65,6 +63,7 @@
                 <span>Shipping</span>
                 <span>{{ order.shippingTotal }}</span>
             </div>
+            <hr class="my-8" />
             <div class="flex justify-between">
                 <span class>Total</span>
                 <span class="font-semibold">{{ order.total }}</span>
@@ -84,6 +83,13 @@ export default {
         formatDate(date) {
             return new Date(date).toLocaleDateString();
         },
+        formatPrice(price) {
+            price = parseFloat(price);
+            return price.toLocaleString('nl-NL', {
+                style: 'currency',
+                currency: 'EUR'
+            });
+        }
     },
 }
 </script>

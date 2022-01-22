@@ -1,6 +1,6 @@
 {
   "name": "woonuxt",
-  "version": "0.3.19",
+  "version": "0.3.20",
   "private": true,
   "scripts": {
     "dev": "nuxi dev",
