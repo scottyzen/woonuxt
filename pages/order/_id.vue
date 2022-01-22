@@ -1,27 +1,26 @@
 <template>
-    <div class="container my-12 text-gray-700">
-        <h1 class="font-semibold text-lg mb-8">
-            Order Summary
-            <span class="font-semibold text-gray-800">#{{ $route.params.id }}</span>
-        </h1>
-        <div class="grid gap-2" v-if="order">
-            <div>
-                <span>Order Number:</span>
-                <span>{{ order.databaseId }}</span>
-            </div>
-            <div>
-                <span>Order Date:</span>
-                <span>{{ order.date }}</span>
-            </div>
-            <div>
-                <span>Order Status:</span>
-                <span>{{ order.status }}</span>
-            </div>
-            <div>
-                <span>Order Total:</span>
-                <span>{{ order.total }}</span>
-            </div>
-        </div>
+    <div class="container my-12 text-gray-800">
+        <h1 class="font-semibold text-lg mb-8">Order Summary</h1>
+        <table v-if="order" class="divide-y rounded-lg min-w-full overflow-hidden">
+            <tbody class="divide-y divide-gray-100">
+                <tr>
+                    <td class="py-3 whitespace-nowrap">Number</td>
+                    <td class="py-3 whitespace-nowrap">{{ order.databaseId }}</td>
+                </tr>
+                <tr>
+                    <td class="py-3 whitespace-nowrap">Date</td>
+                    <td class="py-3 whitespace-nowrap">{{ order.date }}</td>
+                </tr>
+                <tr>
+                    <td class="py-3 whitespace-nowrap">Status</td>
+                    <td class="py-3 whitespace-nowrap">{{ order.status }}</td>
+                </tr>
+                <tr>
+                    <td class="py-3 whitespace-nowrap">Total</td>
+                    <td class="py-3 whitespace-nowrap">{{ order.total }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
@@ -39,9 +38,10 @@ export default {
     methods: {
         async getOrder() {
             const variables = { id: this.$route.params.id }
-            const { order } = await this.$graphql.default.request(GET_ORDER, variables)
-            this.order = order
+            const { order, customer } = await this.$graphql.default.request(GET_ORDER, variables)
+            const foundOrder = customer.orders.nodes.find(order => order.databaseId === this.$route.params.id)
+            this.order = order ? order : foundOrder
         },
-    }
+    },
 }
 </script>

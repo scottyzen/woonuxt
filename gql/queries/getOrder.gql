@@ -6,8 +6,23 @@ query getOrder($id: ID!) {
     databaseId
     subtotal
     total
-    customer{
+    customer {
       email
+    }
+  }
+  customer {
+    orders {
+      nodes {
+        paymentMethod
+        status
+        date
+        databaseId
+        subtotal
+        total
+        customer {
+          email
+        }
+      }
     }
   }
 }
