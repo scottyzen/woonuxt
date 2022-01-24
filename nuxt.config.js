@@ -40,8 +40,13 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    'cookie-universal-nuxt'
+    'cookie-universal-nuxt',
+    '@nuxtjs/gtm',
  ],
+
+  gtm: {
+    id: 'GTM-XXXXXXX'
+  },
 
   buildModules: [
     "@nuxtjs/pwa",
@@ -85,6 +90,11 @@ export default defineNuxtConfig({
     perPage: 12,
     clientVersion: pkg.version,
     stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+    gtm: {
+      id: process.env.GOOGLE_TAG_MANAGER_ID,
+      scriptDefer: true,
+      pageTracking: true,
+    }
   },
 
   router: {
