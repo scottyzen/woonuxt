@@ -30,31 +30,54 @@
         <form @submit.prevent="pay" class="w-full max-w-3xl grid gap-4 checkout-form md:flex-1">
             <h2 class="text-xl mb-2 w-full">Billing Details</h2>
 
-            <BillingDetails :billing="billing" />
+            <BillingDetails :billing="billing" @update-billing="updateBilling" />
 
-            <div>
-                <label class="flex justify-between" for>
-                    Credit Card
+            <!-- Pay methods -->
+            <div class="mt-2 col-span-full">
+                <div class="flex gap-4">
+                    <div class="flex gap-1">
+                        <input
+                            type="radio"
+                            name="paymentMethod"
+                            id="cc"
+                            value="stripe"
+                            v-model="paymentMethod"
+                        />
+                        <label for="cc">Credit or Debit Card</label>
+                    </div>
+                    <div class="flex gap-1">
+                        <input
+                            type="radio"
+                            name="paymentMethod"
+                            id="cod"
+                            value="cod"
+                            v-model="paymentMethod"
+                        />
+                        <label for="cod">Cash on Delivery</label>
+                    </div>
+                </div>
+
+                <div v-if="paymentMethod == 'stripe'">
+                    <StripeElements
+                        v-if="loadStripe"
+                        class="w-full"
+                        :stripe-key="$config.stripePublishableKey"
+                        :instance-options="{}"
+                        :elements-options="{}"
+                        #default="{ elements }"
+                        ref="elms"
+                    >
+                        <StripeElement
+                            type="card"
+                            :elements="elements"
+                            :options="cardOptions"
+                            ref="card"
+                        />
+                    </StripeElements>
                     <span
-                        class="text-sm text-orange-400 capitalize"
+                        class="mt-1 text-sm text-right text-orange-400 capitalize block"
                     >Test mode: 4242 4242 4242 4242</span>
-                </label>
-                <StripeElements
-                    v-if="loadStripe"
-                    class="w-full"
-                    :stripe-key="$config.stripePublishableKey"
-                    :instance-options="{}"
-                    :elements-options="{}"
-                    #default="{ elements }"
-                    ref="elms"
-                >
-                    <StripeElement
-                        type="card"
-                        :elements="elements"
-                        :options="cardOptions"
-                        ref="card"
-                    />
-                </StripeElements>
+                </div>
             </div>
 
             <button
@@ -77,13 +100,11 @@ export default {
             billing: {
                 country: 'IE',
             },
+            paymentMethod: 'stripe',
             cardOptions: {
                 hidePostalCode: true,
                 style: {
-                    base: {
-                        color: '#1F2937',
-                        fontSize: '16px'
-                    }
+                    base: { color: '#1F2937', fontSize: '16px' }
                 },
             }
         }
@@ -95,9 +116,15 @@ export default {
     methods: {
         pay() {
             this.buttonText = 'Processing...';
-            setTimeout(() => {
-                this.proccessingMessages();
-            }, 2500);
+            if (this.paymentMethod == 'stripe') {
+                this.payWithStripe();
+            } else {
+                this.checkout()
+            }
+        },
+        payWithStripe() {
+            this.buttonText = 'Processing...';
+
             // ref in template
             const groupComponent = this.$refs.elms
             const cardComponent = this.$refs.card
@@ -105,16 +132,18 @@ export default {
             const cardElement = cardComponent.stripeElement
 
             groupComponent.instance.createSource(cardElement).then(result => {
+                this.buttonText = 'Checking out...';
                 this.checkout(result.source.id)
             })
-
         },
         async checkout(sourceId) {
             try {
                 const variables = {
                     billing: this.billing,
-                    metaData: [{ key: "_stripe_source_id", value: sourceId }],
+                    metaData: sourceId ? [{ key: "_stripe_source_id", value: sourceId }] : null,
+                    paymentMethod: this.paymentMethod,
                 }
+                console.log(variables);
                 const { checkout } = await this.$graphql.default.request(CHECKOUT, variables)
                 if (checkout.result == 'success') {
                     this.buttonText = 'Order Successfull';
@@ -143,20 +172,14 @@ export default {
                 }
             }
         },
-        proccessingMessages() {
-            if (this.buttonText == 'Order Successfull' || this.buttonText == 'Place Order') {
-                return
-            }
-            const messgaes = ['Processing Payment...', 'Updating Order Status...', 'Almost there...']
-            this.timer = setInterval(() => {
-                this.buttonText = messgaes[Math.floor(Math.random() * messgaes.length)]
-            }, 2500)
-        },
+        updateBilling(billing) {
+            this.billing = billing
+        }
     },
     computed: {
         cart() {
             return this.$store.state.cart
-        },
+        }
     },
     mounted() {
         this.addStripeScript()
@@ -165,14 +188,16 @@ export default {
 </script>
 
 <style lang="postcss">
-.checkout-form input,
+.checkout-form input[type="text"],
+.checkout-form input[type="email"],
+.checkout-form input[type="tel"],
 .checkout-form textarea,
 .checkout-form .StripeElement,
 .checkout-form select {
     @apply bg-white border rounded-xl outline-none w-full p-3 block;
 }
 label {
-    @apply text-xs mb-1 text-gray-600 inline-block uppercase block;
+    @apply text-xs mb-1.5 text-gray-600 inline-block uppercase block;
 }
 .checkout-form .StripeElement {
     padding: 1rem 0.75rem;

@@ -1,6 +1,6 @@
-mutation Checkout($billing: CustomerAddressInput = {}, $metaData: [MetaDataInput] = {key: "", value: ""}) {
+mutation Checkout($billing: CustomerAddressInput = {}, $metaData: [MetaDataInput] = {key: "", value: ""}, $paymentMethod: String = "cod") {
   checkout(
-    input: {paymentMethod: "stripe", billing: $billing, metaData: $metaData}
+    input: {paymentMethod: $paymentMethod, billing: $billing, metaData: $metaData}
   ) {
     result
     redirect

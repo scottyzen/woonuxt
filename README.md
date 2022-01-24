@@ -16,6 +16,7 @@
    * Stripe ✅
    * Paypal
    * Click & Collect 
+   * Cash on Delivery ✅
  * Filtering ✅
  * Wishlists
  * Account

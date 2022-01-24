@@ -10,8 +10,8 @@
 
         <div class="flex justify-between">
             <div>
-                <div class="text-xs text-gray-400 uppercase">Order number</div>
-                <div>{{ order.databaseId }}</div>
+                <div class="text-xs text-gray-400 uppercase">Order</div>
+                <div>#{{ order.databaseId }}</div>
             </div>
             <div>
                 <div class="text-xs text-gray-400 uppercase">Date</div>
@@ -23,7 +23,7 @@
             </div>
             <div>
                 <div class="text-xs text-gray-400 uppercase">Payment Method</div>
-                <div>{{ order.paymentMethod }}</div>
+                <div>{{ order.paymentMethodTitle }}</div>
             </div>
         </div>
 
@@ -81,7 +81,12 @@ export default {
     },
     methods: {
         formatDate(date) {
-            return new Date(date).toLocaleDateString();
+            // Fotmat DD/MM/YY 
+            return new Date(date).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            })
         },
         formatPrice(price) {
             price = parseFloat(price);

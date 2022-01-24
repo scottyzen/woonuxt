@@ -45,11 +45,10 @@
 
 <script>
 export default {
-    props: {
-        billing: {
-            type: Object,
-            required: true,
-        },
+    data() {
+        return {
+            billing: {},
+        }
     },
     methods: {
         updateBilling(billing) {
@@ -66,7 +65,7 @@ export default {
         },
     },
     mounted() {
-        this.prefillAvailableBilling();
+        this.prefillAvailableBilling()
     },
     watch: {
         billing: {
