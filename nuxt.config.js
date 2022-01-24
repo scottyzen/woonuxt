@@ -45,7 +45,9 @@ export default defineNuxtConfig({
  ],
 
   gtm: {
-    id: 'GTM-XXXXXXX'
+    id: process.env.GOOGLE_TAG_MANAGER_ID,
+    scriptDefer: true,
+    pageTracking: true,
   },
 
   buildModules: [
@@ -90,11 +92,6 @@ export default defineNuxtConfig({
     perPage: 12,
     clientVersion: pkg.version,
     stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-    gtm: {
-      id: process.env.GOOGLE_TAG_MANAGER_ID,
-      scriptDefer: true,
-      pageTracking: true,
-    }
   },
 
   router: {
