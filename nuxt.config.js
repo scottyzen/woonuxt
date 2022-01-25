@@ -50,15 +50,13 @@ export default defineNuxtConfig({
         {
           name: 'Google Analitycs',
           identifier: 'ga',
-          initialState: true,
+          initialState: false,
           src: `https://www.googletagmanager.com/gtag/js?id=${process.env.GOOGLE_TAG_MANAGER_ID}`,
           async: true,
           cookies: ['_ga', '_gat', '_gid'],
           accepted: () => {
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', process.env.GOOGLE_TAG_MANAGER_ID);
+            window.dataLayer = window.dataLayer || []
+            window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
           },
         }
       ],
