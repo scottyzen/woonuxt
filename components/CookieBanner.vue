@@ -4,7 +4,7 @@
             <template v-slot:bar>
                 <div class="right-8 bottom-8 left-8 z-10 fixed">
                     <div
-                        class="border flex mx-auto bg-gray-800 border-gray-800 rounded-3xl shadow-xl text-white text-sm w-full max-w-[700px] p-3 px-6 gap-6 items-center justify-center"
+                        class="border flex flex-col mx-auto bg-gray-800 border-gray-800 rounded-3xl shadow-xl text-white text-sm text-center w-full max-w-[700px] p-3 px-6 gap-4 items-center justify-center md:flex-row md:text-left md:gap-6"
                     >
                         <div class="rounded-full bg-[#141d2a] p-0.5 text-orange-400">
                             <svg
