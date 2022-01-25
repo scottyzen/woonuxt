@@ -17,6 +17,7 @@
     "fuse.js": "^6.5.3",
     "graphql": "^16.2.0",
     "graphql-tag": "^2.12.6",
+    "nuxt-cookie-control": "^1.9.91",
     "nuxt-edge": "latest",
     "vue-multiselect": "^2.1.6"
   },

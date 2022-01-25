@@ -41,6 +41,28 @@ export default defineNuxtConfig({
 
   modules: [
     ['cookie-universal-nuxt', { alias: 'cookiz' }],
+    [ "nuxt-cookie-control", { 
+      barPosition: "bottom-left",
+      blockIframe: true,
+      controlButton: true,
+      css: false,
+      optional: [
+        {
+          name: 'Google Analitycs',
+          identifier: 'ga',
+          initialState: true,
+          src: `https://www.googletagmanager.com/gtag/js?id=${process.env.GOOGLE_TAG_MANAGER_ID}`,
+          async: true,
+          cookies: ['_ga', '_gat', '_gid'],
+          accepted: () => {
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', process.env.GOOGLE_TAG_MANAGER_ID);
+          },
+        }
+      ],
+    }],
  ],
 
   buildModules: [

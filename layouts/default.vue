@@ -16,6 +16,7 @@
 			></div>
 		</transition>
 		<Footer />
+		<CookieBanner />
 	</div>
 </template>
 
