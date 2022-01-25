@@ -37,7 +37,7 @@ export default {
 		},
 		async getCart() {
 			try {
-				const wooCookie = this.$cookies.get('woo');
+				const wooCookie = this.$cookiz.get('woo');
 				this.setCookieIfAvailable(wooCookie);
 
 				const { cart, viewer, customer } = await this.$graphql.default.request(
@@ -50,7 +50,7 @@ export default {
 				} else {
 					const token = customer.sessionToken;
 					if (!wooCookie) {
-						this.$cookies.set(
+						this.$cookiz.set(
 							'woo',
 							{ token },
 							{ path: '/', maxAge: 60 * 60 * 24 * 14 }

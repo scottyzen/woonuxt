@@ -40,7 +40,7 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    'cookie-universal-nuxt'
+    ['cookie-universal-nuxt', { alias: 'cookiz' }],
  ],
 
   buildModules: [

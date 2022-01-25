@@ -17,33 +17,25 @@ export default {
 	},
 	methods: {
 		async logOut() {
+
 			const query = gql`
 				mutation Logout {
-					logout(input: { clientMutationId: "kjnasljxnaslk" }) {
+					logout(input: { clientMutationId: "kjnasljdxnaslk" }) {
 						status
 					}
 				}
 			`;
+
 			const { logout } = await this.$graphql.default.request(query);
 			this.hasLoggedOut = logout.status == 'SUCCESS' ? true : false;
 
 			if (this.hasLoggedOut) {
 				this.$store.commit('updateUser', undefined);
 				this.$store.commit('updateCart', null);
-				this.deleteAllCookies();
+				this.$cookiz.removeAll()
 				setTimeout(() => {
 					this.$router.push('/login');
 				}, 500);
-			}
-		},
-		deleteAllCookies() {
-			if (process.client) {
-				const cookies = document.cookie.split(';');
-				for (const cookie of cookies) {
-					const eqPos = cookie.indexOf('=');
-					const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-					document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
-				}
 			}
 		},
 	},
