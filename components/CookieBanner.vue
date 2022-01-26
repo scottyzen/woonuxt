@@ -1,12 +1,14 @@
 <template>
-    <div>
+    <transition name="scale-y">
         <CookieControl ref="cookiecontrol" v-if="loaded">
             <template v-slot:bar>
                 <div class="right-8 bottom-8 left-8 z-10 fixed">
                     <div
-                        class="border flex flex-col mx-auto bg-gray-800 border-gray-800 rounded-3xl shadow-xl text-white text-sm text-center w-full max-w-[700px] p-3 px-6 gap-4 items-center justify-center md:flex-row md:text-left md:gap-6"
+                        class="border flex flex-col mx-auto bg-gray-800 border-gray-800 rounded-3xl shadow-xl text-white text-center text-xs w-full max-w-[720px] py-3 px-4 gap-4 items-center justify-center relative md:flex-row md:text-sm md:text-left md:px-6 md:gap-6"
                     >
-                        <div class="rounded-full bg-[#141d2a] p-0.5 text-orange-400">
+                        <div
+                            class="rounded-full bg-[#141d2a] p-0.5 -top-4 -left-4 text-orange-400 absolute"
+                        >
                             <svg
                                 viewBox="0 0 512 512"
                                 width="36"
@@ -20,10 +22,10 @@
                             </svg>
                         </div>
                         <span
-                            class="font-light flex-1"
+                            class="font-light flex-1 z-10"
                         >We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it.</span>
                         <button
-                            class="border bg-[#141d2a] border-gray-700 rounded-2xl p-3"
+                            class="border bg-[#141d2a] border-gray-700 rounded-2xl w-full p-2 md:w-auto md:p-3"
                             @click="accept"
                         >
                             <span class="font-light whitespace-nowrap">Got it</span>
@@ -32,7 +34,7 @@
                 </div>
             </template>
         </CookieControl>
-    </div>
+    </transition>
 </template>
 
 <script>
