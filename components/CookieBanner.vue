@@ -1,6 +1,6 @@
 <template>
     <div>
-        <CookieControl>
+        <CookieControl ref="cookiecontrol" v-if="loaded">
             <template v-slot:bar>
                 <div class="right-8 bottom-8 left-8 z-10 fixed">
                     <div
@@ -37,11 +37,21 @@
 
 <script>
 export default {
+    data() {
+        return {
+            loaded: false,
+        }
+    },
     methods: {
         accept() {
             const btn = document.querySelector('.cookieControl__BarButtons button:last-child');
             btn.click();
         },
+    },
+    mounted() {
+        setTimeout(() => {
+            this.loaded = true;
+        }, 3500);
     },
 }
 </script>
