@@ -15,13 +15,14 @@
 				@click="closeAllModals"
 			></div>
 		</transition>
-		<Footer />
-		<CookieBanner />
+		<LazyFooter />
+		<LazyCookieBanner />
 	</div>
 </template>
 
 <script>
 import GET_CART from '~/gql/queries/getCart';
+
 export default {
 	computed: {
 		showCart() {

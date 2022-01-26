@@ -22,14 +22,14 @@
 				<h2 class="font-semibold text-lg md:text-2xl">Shop by category</h2>
 				<NuxtLink class="text-primary" to="/categories">View All</NuxtLink>
 			</div>
-			<SCSlider>
+			<LazySCSlider>
 				<CategoryCard
 					class="min-w-[140px] lg:min-w-[200px]"
 					v-for="(category, i) in productCategories.nodes"
 					:key="i"
 					:node="category"
 				/>
-			</SCSlider>
+			</LazySCSlider>
 		</section>
 
 		<section class="my-16 md:my-24">
@@ -37,14 +37,14 @@
 				<h2 class="font-semibold text-lg md:text-2xl">Best Sellers</h2>
 				<NuxtLink class="text-primary" to="/products">View All</NuxtLink>
 			</div>
-			<SCSlider class="lg:gap-6">
+			<LazySCSlider class="lg:gap-6">
 				<ProductCard
 					class="min-w-[160px] lg:min-w-[280px]"
 					v-for="node in  bestSellers.nodes"
 					:key="node.databaseId"
 					:node="node"
 				/>
-			</SCSlider>
+			</LazySCSlider>
 		</section>
 
 		<section class="my-16 md:my-24">
@@ -52,14 +52,14 @@
 				<h2 class="font-semibold text-lg md:text-2xl">Latest Products</h2>
 				<NuxtLink class="text-primary" to="/products">View All</NuxtLink>
 			</div>
-			<SCSlider class="lg:gap-6">
+			<LazySCSlider class="lg:gap-6">
 				<ProductCard
 					class="min-w-[160px] lg:min-w-[280px]"
 					v-for="node in  latesProducts.nodes"
 					:key="node.databaseId"
 					:node="node"
 				/>
-			</SCSlider>
+			</LazySCSlider>
 		</section>
 	</div>
 </template>
