@@ -41,45 +41,27 @@
 export default {
     data() {
         return {
-            loaded: true,
+            loaded: false,
         }
     },
     methods: {
         accept() {
             const btn = document.querySelector('.cookieControl__BarButtons button:last-child');
             btn.click();
-            console.log(this.$refs.cookiecontrol.cookies.consent);
         },
         showCookieBar() {
             console.log('showCookieBar');
             this.loaded = true;
-            console.log(this.$refs.cookiecontrol.cookies.consent);
+            window.removeEventListener('scroll', this.showCookieBar)
+            window.removeEventListener('mousemove', this.showCookieBar)
         },
-        handleScroll() {
-            if (window.pageYOffset > 0) {
-                this.showCookieBar();
-                window.removeEventListener('scroll', this.handleScroll)
-            }
-        }
     },
     mounted() {
-        console.log(this.$refs.cookiecontrol.cookies.consent);
         if (this.loaded) return;
 
+        window.addEventListener('mousemove', this.showCookieBar)
+        window.addEventListener('scroll', this.showCookieBar)
 
-        window.addEventListener('scroll', this.handleScroll)
-
-        if (process.client) {
-            console.log('CookieBanner mounted');
-            window.requestIdleCallback(callback => {
-                setTimeout(() => {
-                    this.showCookieBar();
-                }, 5000);
-            });
-        }
-    },
-    destroyed() {
-        window.removeEventListener('scroll', this.handleScroll)
     },
     watch: {
         $route(to, from) {
