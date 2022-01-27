@@ -7,9 +7,12 @@
 
 <script>
 import LOGIN from '~/gql/mutations/login';
-import getCart from '~/gql/queries/getCart';
+import GET_CART from '~/gql/queries/getCart';
 
 export default {
+	head() {
+		return { title: 'Login' }
+	},
 	methods: {
 		async loginUser(logininfo) {
 			try {
@@ -20,7 +23,7 @@ export default {
 				const { loginWithCookies } = await this.$graphql.default.request(LOGIN, variables);
 				console.log(loginWithCookies);
 				if (loginWithCookies.status == 'SUCCESS') {
-					const { cart, viewer, customer } = await this.$graphql.default.request(getCart);
+					const { cart, viewer, customer } = await this.$graphql.default.request(GET_CART);
 					this.$store.commit('updateCart', cart);
 					this.$store.commit('updateUser', customer);
 

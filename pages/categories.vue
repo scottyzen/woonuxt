@@ -17,6 +17,9 @@
 import GET_PRODUCT_CATEGORIES from '~/gql/queries/getProductCategories';
 
 export default {
+    head() {
+        return { title: 'Product Categories' }
+    },
     async asyncData({ $graphql, params }) {
         const { productCategories } = await $graphql.default.request(GET_PRODUCT_CATEGORIES)
         return { productCategories }

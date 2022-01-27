@@ -71,6 +71,12 @@ import GET_PRODUCTS from '~/gql/queries/getProducts'
 import GET_PRODUCT_CATEGORIES from '~/gql/queries/getProductCategories';
 
 export default {
+	head() {
+		return {
+			title: 'Home',
+			meta: [{ name: 'description', content: 'Home page' }]
+		}
+	},
 	async asyncData({ $graphql, params }) {
 		const { productCategories } = await $graphql.default.request(GET_PRODUCT_CATEGORIES);
 		const { products: bestSellers } = await $graphql.default.request(GET_PRODUCTS, { first: 8, orderby: [{ field: "TOTAL_SALES", order: "DESC" }] })

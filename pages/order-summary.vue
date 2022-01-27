@@ -74,6 +74,9 @@
 
 <script>
 export default {
+    head() {
+        return { title: 'Order received' }
+    },
     data() {
         return {
             order: this.$route.params.order

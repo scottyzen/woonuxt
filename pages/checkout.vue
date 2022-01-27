@@ -93,6 +93,9 @@ import { StripeElements, StripeElement } from 'vue-stripe-elements-plus'
 import CHECKOUT from '~/gql/mutations/checkout';
 
 export default {
+    head() {
+        return { title: 'Checkout' }
+    },
     data() {
         return {
             loadStripe: false,

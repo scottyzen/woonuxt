@@ -68,6 +68,9 @@ const formatArray = (arr) => {
 
 export default {
 	scrollToTop: true,
+	head() {
+		return { title: this.product.name }
+	},
 	data() {
 		return {
 			imageToShow: 0,

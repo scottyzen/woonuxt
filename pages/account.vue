@@ -4,3 +4,10 @@
     </div>
 </template>
 
+<script>
+export default {
+    head() {
+        return { title: 'Account' }
+    },
+}
+</script>

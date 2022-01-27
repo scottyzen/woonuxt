@@ -41,6 +41,9 @@ import GET_PRODUCTS from '~/gql/queries/getProducts'
 import Fuse from 'fuse.js'
 
 export default {
+	head() {
+		return { title: 'Shop' }
+	},
 	data() {
 		return {
 			products: [],
