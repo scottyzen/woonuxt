@@ -63,6 +63,10 @@ export default defineNuxtConfig({
     }],
     '@nuxtjs/sitemap',
  ],
+ sitemap: {
+  hostname: 'https://example.com',
+  gzip: true,
+ },
 
   buildModules: [
     "@nuxtjs/pwa",
