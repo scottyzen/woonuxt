@@ -61,7 +61,7 @@ export default defineNuxtConfig({
         }
       ],
     }],
-    '@nuxtjs/sitemap'
+    '@nuxtjs/sitemap',
  ],
 
   buildModules: [
