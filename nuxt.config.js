@@ -55,8 +55,10 @@ export default defineNuxtConfig({
           async: true,
           cookies: ['_ga', '_gat', '_gid'],
           accepted: () => {
-            window.dataLayer = window.dataLayer || []
-            window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', process.env.GOOGLE_TAG_MANAGER_ID);
           },
         }
       ],
@@ -64,7 +66,7 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
  ],
  sitemap: {
-  hostname: 'https://example.com',
+  hostname: 'https://woonuxt.com',
   gzip: true,
  },
 

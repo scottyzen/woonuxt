@@ -2050,12 +2050,12 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.26.tgz#7acd1621783571b9a82eca1f041b4a0a983481d9"
   integrity sha512-vPV6Cq+NIWbH5pZu+V+2QHE9y1qfuTq49uNWw4f7FDEeZaDU2H2cx5jcUZOAKW7qTrUS4k6qZPbMy1x4N96nbA==
 
-"@vueuse/core@^7.5.4":
-  version "7.5.4"
-  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-7.5.4.tgz#c515c6795f1b8ab9a50e62e2f1aa75aac5f1ca14"
-  integrity sha512-PKmyHN2lZuttGgKmsoMMqiSojSYYKraszilP0gpQIGcLt2YoLABaG3VFjdPs2tY6DM+HG3o70HuzOMEQCY8fqQ==
+"@vueuse/core@^7.5.5":
+  version "7.5.5"
+  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-7.5.5.tgz#c2f2a8783de0884acfb0be25e71ec3c6d1f9c42e"
+  integrity sha512-RBDqmIoGfak4h3xdXa/Av+ibkb8NY044wEy6+PG2FAWNaID8/FkqmSFjbxogrbmpSX1yZ1PBHrM8DUp/FrIpbg==
   dependencies:
-    "@vueuse/shared" "7.5.4"
+    "@vueuse/shared" "7.5.5"
     vue-demi "*"
 
 "@vueuse/head@^0.7.4":
@@ -2063,10 +2063,10 @@
   resolved "https://registry.yarnpkg.com/@vueuse/head/-/head-0.7.4.tgz#2eec185ebe52e634400dfe2a8b1a18f788c06bcf"
   integrity sha512-cmps+wrdgL77V72vtjU6kaAunkG6GhswaMIQoh7Twc52ql4/p7i1Amd31LqnnvNF/bfuvzcXgYvsH8I7kimZmA==
 
-"@vueuse/shared@7.5.4":
-  version "7.5.4"
-  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-7.5.4.tgz#4285e5c47fe5f2d608f115bf2aa26154f474e881"
-  integrity sha512-750RnGUEgg1+K4jGVkv7M5UOStAa/IjAInV6BugyBOvRYL2l1lcIDUi4V/qIKTlhd2oUAByCEnlqIpFD2a3tfw==
+"@vueuse/shared@7.5.5":
+  version "7.5.5"
+  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-7.5.5.tgz#0e5c16b848b4a19e5b9ee9199a997e1f6dd39679"
+  integrity sha512-mzzTsotHQRPnPAChy8iCv6ek/90CKYhAFyMRgNsMxpT0afZJkbMO/X0OaOu/1NuGbgb8UVjlsWKmCUgKTOF5hA==
   dependencies:
     vue-demi "*"
 
@@ -5984,10 +5984,10 @@ graphql-tag@^2.12.6:
   dependencies:
     tslib "^2.1.0"
 
-graphql@^16.2.0:
-  version "16.2.0"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.2.0.tgz#de3150e80f1fc009590b92a9d16ab1b46e12b656"
-  integrity sha512-MuQd7XXrdOcmfwuLwC2jNvx0n3rxIuNYOxUtiee5XOmfrWo613ar2U8pE7aHAKh8VwfpifubpD9IP+EdEAEOsA==
+graphql@^16.3.0:
+  version "16.3.0"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.3.0.tgz#a91e24d10babf9e60c706919bb182b53ccdffc05"
+  integrity sha512-xm+ANmA16BzCT5pLjuXySbQVFwH3oJctUVdy81w1sV0vBU0KgDdBGtxQOUd5zqOBk/JayAFeG8Dlmeq74rjm/A==
 
 gzip-size@^6.0.0:
   version "6.0.0"
