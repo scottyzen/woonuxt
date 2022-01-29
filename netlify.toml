@@ -45,16 +45,3 @@
   to = "https://testing.2cubedtest.com/:splat"
   status = 200
   headers = {Access-Control-Allow-Origin = "*", Access-Control-Allow-Headers = "Content-Type, *", Access-Control-Allow-Methods = "GET, POST", Access-Control-Allow-Credentials= "true"}
-
-[[redirects]]
-  from = "http://woonuxt.com/*"
-  to = "https://woonuxt.com/:splat"
-  status = 301
-  headers = {Access-Control-Allow-Origin = "*", Access-Control-Allow-Headers = "Content-Type, *", Access-Control-Allow-Methods = "GET, POST", Access-Control-Allow-Credentials= "true"}
-
-[[redirects]]
-  from = "http://www.woonuxt.com/*"
-  to = "https://woonuxt.com/:splat"
-  status = 301
-  headers = {Access-Control-Allow-Origin = "*", Access-Control-Allow-Headers = "Content-Type, *", Access-Control-Allow-Methods = "GET, POST", Access-Control-Allow-Credentials= "true"}
-    
