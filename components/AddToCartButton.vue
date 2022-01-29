@@ -1,7 +1,7 @@
 <template>
 	<button
 		type="submit"
-		class="p-2.5 text-white bg-primary rounded-2xl min-w-[150px] text-center flex items-center justify-center gap-4 focus:outline-none"
+		class="bg-primary flex rounded-2xl text-white text-center min-w-[150px] p-2.5 gap-4 items-center justify-center focus:outline-none"
 		:class="{ 'disabled': disabled }"
 		:disabled="disabled"
 	>
@@ -22,7 +22,7 @@ button {
 	transition: all 150ms ease-in;
 }
 button.disabled {
-	@apply bg-gray-400 cursor-not-allowed;
+	@apply cursor-not-allowed bg-gray-400;
 }
 button .icon {
 	display: inline-block;
@@ -33,7 +33,7 @@ button .icon {
 	max-width: 0;
 }
 button.loading .icon {
-	@apply animate-spin-fast inline-block rounded-full;
+	@apply rounded-full animate-spin-fast inline-block;
 	border: 2px solid #fff;
 	border-left: 2px solid transparent;
 	width: 12px;
@@ -43,9 +43,9 @@ button.loading .icon {
 	max-width: 100px;
 	will-change: transform;
 }
-button.success {
+/* button.success {
 	@apply bg-green-500;
-}
+} */
 button.success .icon {
 	display: inline-block;
 	border-bottom: 2px solid #fff;

@@ -50,7 +50,6 @@ export default {
             btn.click();
         },
         showCookieBar() {
-            console.log('showCookieBar');
             this.loaded = true;
             window.removeEventListener('scroll', this.showCookieBar)
             window.removeEventListener('mousemove', this.showCookieBar)

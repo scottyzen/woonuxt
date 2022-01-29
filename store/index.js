@@ -7,7 +7,6 @@ export const state = () => ({
   user: undefined,
   products: [],
   productCategories: [],
-  page: 'index',
   filter: null,
   searchTags: [],
 })

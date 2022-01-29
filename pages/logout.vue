@@ -34,7 +34,7 @@ export default {
 				this.$store.commit('updateCart', null);
 				this.$cookiz.removeAll()
 				setTimeout(() => {
-					this.$router.push('/login');
+					this.$router.push('/');
 				}, 500);
 			}
 		},
