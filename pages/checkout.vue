@@ -1,6 +1,6 @@
 <template>
     <div
-        class="container flex flex-wrap my-12 gap-8 justify-evenly items-start md:flex-row-reverse"
+        class="container flex flex-wrap my-12 gap-8 justify-evenly items-start md:flex-row-reverse lg:gap-12"
     >
         <div
             class="bg-white border-b rounded-2xl shadow-sm w-full p-6 top-20 text-gray-700 md:max-w-sm md:mt-16 md:sticky"
@@ -197,7 +197,7 @@ export default {
 .checkout-form textarea,
 .checkout-form .StripeElement,
 .checkout-form select {
-    @apply bg-white border rounded-xl outline-none w-full p-3 block;
+    @apply bg-white border rounded-xl outline-none w-full py-2.5 px-4 block;
 }
 label {
     @apply text-xs mb-1.5 text-gray-600 inline-block uppercase block;

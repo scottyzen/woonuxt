@@ -42,13 +42,12 @@ export default {
 				const wooCookie = this.$cookiz.get('woo');
 				this.setCookieIfAvailable(wooCookie);
 
-				const { cart, viewer, customer } = await this.$graphql.default.request(
-					GET_CART
-				);
+				const { cart, viewer, customer } = await this.$graphql.default.request(GET_CART);
 
 				this.$store.commit('updateCart', cart);
 				if (viewer) {
 					this.$store.commit('updateUser', customer);
+					console.log('%cUPDATE USER', 'color: LightGreen; font-weight: bold');
 				} else {
 					const token = customer.sessionToken;
 					if (!wooCookie) {
@@ -104,7 +103,7 @@ body {
 }
 
 pre {
-	@apply rounded bg-gray-800 my-8 text-xs text-white p-4;
+	@apply rounded bg-gray-800 my-8 text-xs text-white p-4 whitespace-pre-wrap;
 }
 
 /* Enter and leave animations can use different */
