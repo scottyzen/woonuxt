@@ -1,47 +1,20 @@
 #import "~/gql/fragments/SimpleProduct.gql"
 #import "~/gql/fragments/VariableProduct.gql"
 #import "~/gql/fragments/CartFragment.gql"
+#import "~/gql/fragments/CustomerFragment.gql"
 
 query getCart {
   cart {
     ...CartFragment
   }
   customer {
-    lastName
-    email
-    firstName
-    username
-    sessionToken
-    billing {
-      address1
-      address2
-      city
-      company
-      country
-      email
-      firstName
-      lastName
-      phone
-      postcode
-      state
-    }
-    shipping {
-      address1
-      address2
-      city
-      company
-      country
-      email
-      firstName
-      lastName
-      phone
-      postcode
-      state
-    }
+    ...CustomerFragment
   }
   viewer{
     lastName
     email
+    databaseId
+    id
     firstName
     username
     wooSessionToken

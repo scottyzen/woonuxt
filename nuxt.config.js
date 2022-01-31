@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     dirs: [
       "~/components",
       "~/components/elements",
+      "~/components/forms",
     ]
   },
 

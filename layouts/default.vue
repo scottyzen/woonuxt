@@ -46,19 +46,14 @@ export default {
 
 				this.$store.commit('updateCart', cart);
 				if (viewer) {
-					this.$store.commit('updateUser', customer);
+					const user = { ...customer, userId: viewer.id };
+					this.$store.commit('updateUser', user);
 					console.log('%cUPDATE USER', 'color: LightGreen; font-weight: bold');
 				} else {
 					const token = customer.sessionToken;
 					if (!wooCookie) {
-						this.$cookiz.set(
-							'woo',
-							{ token },
-							{ path: '/', maxAge: 60 * 60 * 24 * 14 }
-						);
-						this.$graphql.default.setHeaders({
-							'woocommerce-session': `Session ${token}`,
-						});
+						this.$cookiz.set('woo', { token }, { path: '/', maxAge: 60 * 60 * 24 * 14 });
+						this.$graphql.default.setHeaders({ 'woocommerce-session': `Session ${token}` });
 					}
 				}
 			} catch (error) {

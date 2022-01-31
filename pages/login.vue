@@ -16,18 +16,15 @@ export default {
 	methods: {
 		async loginUser(logininfo) {
 			try {
-				const variables = {
-					username: logininfo.email,
-					password: logininfo.password,
-				};
+				const variables = { username: logininfo.email, password: logininfo.password };
 				const { loginWithCookies } = await this.$graphql.default.request(LOGIN, variables);
-				console.log(loginWithCookies);
+
 				if (loginWithCookies.status == 'SUCCESS') {
 					const { cart, viewer, customer } = await this.$graphql.default.request(GET_CART);
 					this.$store.commit('updateCart', cart);
 					this.$store.commit('updateUser', customer);
-
 					this.$router.push('/');
+					this.$cookiz.remove('woo');
 				}
 			} catch (error) {
 				console.error(JSON.stringify(error, undefined, 2));
