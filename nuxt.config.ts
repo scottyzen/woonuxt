@@ -4,7 +4,6 @@ import pkg from './package.json'
 export default defineNuxtConfig({
   bridge: false,
   target: "static",
-  dev: process.env.NODE_ENV !== 'production',
   modern: true,
   
   components: {
@@ -77,7 +76,7 @@ export default defineNuxtConfig({
   },
   
   sitemap: { hostname: 'https://woonuxt.com',  gzip: true },
-  image: { provider: "static", domains: [process.env.WORDPRESS_URL] },
+  image: { provider: "static", domains: ['woonuxt.com'] },
 
   pwa: {
     manifest: {

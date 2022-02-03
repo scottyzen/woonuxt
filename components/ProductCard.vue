@@ -11,10 +11,12 @@
 			:src="node.image.sourceUrl"
 			:alt="node.name"
 			:title="node.name"
-			fit="outside"
-			sizes="xs:120px sm:300px"
+			fit="inside"
+			width="120"
+			height="120"
+			sizes="sm:120px sm:300px"
 			:loading="(index <= 1 || index == 5) ? 'eager' : 'lazy'"
-			quality="90"
+			quality="100"
 			format="webp"
 		/>
 
