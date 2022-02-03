@@ -15,7 +15,7 @@
 			width="136"
 			height="136"
 			sizes="xs:128px sm:296px"
-			:loading="index === 0 ? 'eager' : 'lazy'"
+			:loading="(index <= 1 || index == 5) ? 'eager' : 'lazy'"
 			quality="95"
 			format="webp"
 		/>

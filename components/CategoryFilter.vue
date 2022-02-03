@@ -1,5 +1,5 @@
 <template>
-    <div class="grid gap-0.5">
+    <div class="grid gap-1">
         <div v-for="cat in productCategories" :key="cat.databaseId" class="flex gap-2 items-center">
             <input
                 :id="cat.slug"
@@ -8,7 +8,7 @@
                 v-model="selectedCategories"
                 @change="checkboxChanged"
             />
-            <label :for="cat.slug">{{ cat.name }}</label>
+            <label :for="cat.slug" class="m-0">{{ cat.name }}</label>
         </div>
     </div>
 </template>
@@ -44,6 +44,3 @@ export default {
     },
 }
 </script>
-
-<style>
-</style>
