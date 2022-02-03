@@ -76,7 +76,7 @@ export default defineNuxtConfig({
   },
   
   sitemap: { hostname: 'https://woonuxt.com',  gzip: true },
-  image: { provider: "static", domains: ['woonuxt.com'] },
+  image: { provider: "static", domains: [process.env.WORDPRESS_URL] },
 
   pwa: {
     manifest: {
