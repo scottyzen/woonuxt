@@ -1,38 +1,34 @@
 <template>
-	<div class="container">
-		<h1 class="text-center py-12 text-3xl">Sign In</h1>
-		<UserAuthForm buttonText="Login" :submitForm="loginUser" />
+	<div class="flex bg-gray-100 w-full justify-center items-center">
+		<div class="max-w-md mb-32 w-full">
+			<h1 class="text-center py-8 text-3xl text-gray-700">{{ showRegister ? 'Register' : 'Login' }}</h1>
+			<LoginForm v-if="!showRegister" />
+			<RegisterForm v-else />
+			<p v-if="!showRegister" class="mt-8 text-center text-gray-700">
+				If you don't have an account, please
+				<a
+					@click="showRegister = true"
+					class="cursor-pointer font-semibold underline inline-block"
+				>register</a>.
+			</p>
+			<p v-else class="mt-8 text-center text-gray-700">
+				Already have an account?
+				<a
+					@click="showRegister = false"
+					class="cursor-pointer font-semibold underline inline-block"
+				>Login</a>
+			</p>
+		</div>
 	</div>
 </template>
 
 <script>
-import LOGIN from '~/gql/mutations/login';
-import GET_CART from '~/gql/queries/getCart';
-
 export default {
-	head() {
-		return { title: 'Login' }
-	},
-	methods: {
-		async loginUser(logininfo) {
-			try {
-				const variables = { username: logininfo.email, password: logininfo.password };
-				const { loginWithCookies } = await this.$graphql.default.request(LOGIN, variables);
-
-				if (loginWithCookies.status == 'SUCCESS') {
-					const { cart, viewer, customer } = await this.$graphql.default.request(GET_CART);
-					this.$store.commit('updateCart', cart);
-					this.$store.commit('updateUser', customer);
-					this.$router.push('/');
-					this.$cookiz.remove('woo');
-				}
-			} catch (error) {
-				console.error(JSON.stringify(error, undefined, 2));
-			}
-		},
-	},
-	created() {
-		// console.dir(this.$auth)
+	head() { return { title: 'My Account' } },
+	data() {
+		return {
+			showRegister: false,
+		};
 	},
 };
 </script>
