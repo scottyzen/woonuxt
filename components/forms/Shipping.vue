@@ -76,9 +76,13 @@ export default {
             this.loading = false;
             this.buttonText = 'Update';
         },
+        makeClone() {
+            this.user = JSON.parse(JSON.stringify(this.initialUser));
+        },
     },
     computed: {
         isUserChanged() {
+            console.log('isUserChanged');
             return JSON.stringify(this.user) !== JSON.stringify(this.initialUser);
         },
     },
