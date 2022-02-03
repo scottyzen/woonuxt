@@ -14,7 +14,7 @@
     "@nuxtjs/sitemap": "^2.4.0",
     "@vueuse/core": "^7.5.5",
     "cookie-universal-nuxt": "^2.1.5",
-    "core-js": "^3.20.3",
+    "core-js": "^3.21.0",
     "fuse.js": "^6.5.3",
     "graphql": "^16.3.0",
     "graphql-tag": "^2.12.6",
@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@nuxt/bridge": "npm:@nuxt/bridge-edge",
-    "@nuxt/image": "^0.6.0",
+    "@nuxt/image": "^0.6.1",
     "@nuxtjs/pwa": "^3.3.5",
     "nuxt-graphql-request": "^4.3.0",
     "nuxt-windicss": "^2.2.2",

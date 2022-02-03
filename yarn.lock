@@ -1283,7 +1283,7 @@
     node-html-parser "^5.1.0"
     ufo "^0.7.9"
 
-"@nuxt/image@^0.6.0":
+"@nuxt/image@^0.6.1":
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/@nuxt/image/-/image-0.6.1.tgz#e7c34a85f1ea0c42d2b153172b68d801e796063a"
   integrity sha512-djQ4k7Om5Q0vPqm16A4uchFeBuIYiX8mYJiMAC+tsuPzWebLZsN/ku2v7tu3uBXZsMiDaHvq+2L/lCh5NdzjhQ==
@@ -3632,7 +3632,7 @@ core-js-compat@^3.19.1, core-js-compat@^3.20.2, core-js-compat@^3.21.0:
     browserslist "^4.19.1"
     semver "7.0.0"
 
-core-js@^3.19.0, core-js@^3.19.1, core-js@^3.20.3:
+core-js@^3.19.0, core-js@^3.19.1, core-js@^3.21.0:
   version "3.21.0"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.21.0.tgz#f479dbfc3dffb035a0827602dd056839a774aa71"
   integrity sha512-YUdI3fFu4TF/2WykQ2xzSiTQdldLB4KVuL9WeAy5XONZYt5Cun/fpQvctoKbCgvPhmzADeesTk/j2Rdx77AcKQ==

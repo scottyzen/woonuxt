@@ -4,6 +4,8 @@
 			class="rounded-xl h-16 w-16"
 			v-if="productType.image"
 			:src="productType.image.sourceUrl"
+			:alt="productType.image.altText || productType.name"
+			:title="productType.image.altText || productType.name"
 		/>
 		<div class="flex-1">
 			<div class="leading-tight">{{ productType.name }}</div>
