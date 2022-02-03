@@ -36,7 +36,7 @@ export default defineNuxtConfig({
     [ "nuxt-cookie-control", { 
       barPosition: "bottom-left",
       blockIframe: true,
-      controlButton: true,
+      controlButton: false,
       css: false,
       optional: [{
         name: 'Google Analitycs',
@@ -66,6 +66,7 @@ export default defineNuxtConfig({
    '@nuxtjs/composition-api/module'
   ],
   
+
   graphql: {
     clients: {
       default: {

@@ -16,7 +16,7 @@ export default {
 }
 </script>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
 button {
 	outline: none !important;
 	transition: all 150ms ease-in;

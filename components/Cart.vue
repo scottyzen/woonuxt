@@ -6,7 +6,7 @@
 		<CloseModals class="bg-white rounded-xl shadow-xl p-1.5" />
 		<EmptyCart
 			v-if="!cart.isEmpty"
-			class="rounded-xl hover:bg-red-400 shadow-xl hover:text-white p-1.5"
+			class="rounded-xl shadow-xl p-1.5 hover:bg-red-400 hover:text-white"
 		/>
 
 		<div class="mt-8 text-center">Basket</div>
@@ -19,20 +19,20 @@
 					:item="item"
 					@has-swiped="removeItemFromCart(item.key)"
 				>
-					<CartCard :item="item" />
+					<LazyCartCard :item="item" />
 				</SwipeCard>
 			</ul>
 
 			<ShippingOptions
 				:options="cart.availableShippingMethods[0].rates"
 				:active-option="cart.chosenShippingMethods[0]"
-				class="px-8 mb-4"
+				class="mb-4 px-8"
 				@setActiveOption="setActiveOption"
 			/>
 
-			<div class="px-8 mb-8">
+			<div class="mb-8 px-8">
 				<NuxtLink
-					class="bg-primary text-white rounded-2xl shadow-md text-lg text-center p-3 block justify-evenly hover:bg-primary-dark"
+					class="bg-primary rounded-2xl shadow-md text-white text-lg text-center p-3 block justify-evenly hover:bg-primary-dark"
 					to="/checkout"
 				>
 					<span class="mx-2">Checkout</span>

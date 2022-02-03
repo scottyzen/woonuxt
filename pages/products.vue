@@ -1,6 +1,6 @@
 <template>
 	<main class="container flex">
-		<Filters
+		<LazyFilters
 			@filter-updated="filterProducts"
 			:activeFilters="this.$store.state.filter"
 			:showFilters="showFilters"
@@ -134,12 +134,6 @@ export default {
 </script>
 
 <style lang="postcss" >
-.pagination {
-	@apply flex mb-8 p-8 gap-2 items-center justify-center;
-}
-.pagination a {
-	@apply rounded-xl bg-purple-100 leading-none py-2 px-4 text-purple-900 hover:bg-purple-200;
-}
 input[type="search"] {
 	@apply border rounded-xl max-w-md outline-none leading-tight w-full p-2 px-4 pl-10 transition-all;
 	background: url("/images/search.svg") no-repeat center left 0.75em;

@@ -50,7 +50,6 @@ export default {
 		products: { type: Array, default: null }
 	},
 	computed: {
-		// postWithPagination() { return this.pager(this.products) },
 		perPage() {
 			return this.$config.perPage
 		},
@@ -66,18 +65,9 @@ export default {
 	},
 	watch: {
 		page() {
-			console.log('Products.vue page', this.page);
-			this.$emit('setPage', this.page)
-			// scroll to top
 			window.scrollTo(0, 0)
 		}
 	},
-	methods: {
-		// pager(products) {
-		// 	const pageNum = this.page || this.$route.params.pageNumber
-		// 	return products.slice(this.perPage * (pageNum - 1), this.perPage * pageNum)
-		// }
-	}
 }
 </script>
 
@@ -89,12 +79,6 @@ export default {
 	.product-grid {
 		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 	}
-}
-.pagination {
-	@apply flex mb-8 p-8 gap-2 items-center justify-center;
-}
-.pagination a {
-	@apply rounded-xl cursor-pointer bg-purple-100 leading-none py-2 px-4 text-purple-900 hover:bg-purple-200 hover:text-purple-900;
 }
 .shrink-move {
 	transition: all 500ms;
@@ -112,5 +96,11 @@ export default {
 .shrink-leave-to {
 	opacity: 0;
 	transform: scale(0.75) translateY(25%);
+}
+.pagination {
+	@apply flex mb-8 p-8 gap-2 items-center justify-center;
+}
+.pagination a {
+	@apply rounded-xl bg-purple-100 leading-none py-2 px-4 text-purple-900 hover:bg-purple-200;
 }
 </style>

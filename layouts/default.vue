@@ -78,7 +78,7 @@ export default {
 <style lang="postcss">
 .page-enter-active,
 .page-leave-active {
-	transition: opacity 300ms ease-in-out;
+	transition: opacity 250ms ease-in-out;
 }
 .page-enter,
 .page-leave-active {

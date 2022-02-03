@@ -1,15 +1,10 @@
-# [build]
-  # functions = "functions"
-
 [template.environment]
   WORDPRESS_URL = "WordPress URL without trailing slash. http://example.com"
   STRIPE_PUBLISHABLE_KEY = "Stripe Publishable Key"
 
-
 [build]
   command = "npm run generate"
   publish = "dist"
-  
   
 [[headers]]
   for = "*.js" # js files should be set this way
@@ -29,9 +24,6 @@
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "no-referrer"
     X-Content-Type-Options = "nosniff"
-    # Strict-Transport-Security = "max-age=15780000; includeSubDomains; preload"
-    # Feature-Policy = "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'none'; payment 'none'"
-    # Content-Security-Policy = "default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline'"
 
 [[headers]]
   for = "/_nuxt/*"
@@ -42,6 +34,6 @@
 
 [[redirects]]
   from = "/*"
-  to = "https://testing.2cubedtest.com/:splat"
+  to = "https://secure.woonuxt.com/:splat"
   status = 200
   headers = {Access-Control-Allow-Origin = "*", Access-Control-Allow-Headers = "Content-Type, *", Access-Control-Allow-Methods = "GET, POST", Access-Control-Allow-Credentials= "true"}

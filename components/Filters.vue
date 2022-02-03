@@ -141,7 +141,7 @@ export default {
 }
 </script>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
 #filters {
 	@apply bg-white border-r border-gray-100 py-8 pr-8 w-[225px];
 	box-shadow: -100px 0 0 white, -200px 0 0 white, -300px 0 0 white;
