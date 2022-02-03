@@ -1,6 +1,6 @@
 <template>
     <transition name="scale-y">
-        <CookieControl ref="cookiecontrol" v-if="loaded">
+        <LazyCookieControl ref="cookiecontrol" v-if="loaded">
             <template v-slot:bar>
                 <div class="right-8 bottom-8 left-8 z-10 fixed">
                     <div
@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </template>
-        </CookieControl>
+        </LazyCookieControl>
     </transition>
 </template>
 
