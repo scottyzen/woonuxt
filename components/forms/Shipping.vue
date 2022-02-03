@@ -82,7 +82,6 @@ export default {
     },
     computed: {
         isUserChanged() {
-            console.log('isUserChanged');
             return JSON.stringify(this.user) !== JSON.stringify(this.initialUser);
         },
     },
