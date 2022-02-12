@@ -24,7 +24,6 @@
 
 <script>
 export default {
-	head() { return { title: 'My Account' } },
 	data() {
 		return {
 			showRegister: false,

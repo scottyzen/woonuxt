@@ -1,5 +1,6 @@
 <template>
-    <div class="container container-sm">
+    <LoginAndRegisterForms v-if="!user" />
+    <div v-else class="container container-sm">
         <h1 class="font-semibold my-8 text-xl">My Account</h1>
 
         <div class="flex flex-col mb-24 w-full gap-8 items-start lg:flex-row" v-if="user">

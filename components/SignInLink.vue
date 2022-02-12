@@ -1,5 +1,5 @@
 <template>
-	<NuxtLink :to="user ? '/account' : '/login'" class="mr-1" title="My Account">
+	<NuxtLink to="/account" class="mr-1" title="My Account">
 		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 512 512">
 			<path
 				d="M344 144c-3.92 52.87-44 96-88 96s-84.15-43.12-88-96c-4-55 35-96 88-96s92 42 88 96z"
@@ -19,14 +19,3 @@
 		</svg>
 	</NuxtLink>
 </template>
-
-<script>
-export default {
-	name: 'SignInLink',
-	computed: {
-		user() {
-			return this.$store.state.user;
-		},
-	},
-};
-</script>
