@@ -31,10 +31,10 @@ export default {
     };
   },
   methods: {
-    async loginUser(logininfo) {
+    async loginUser() {
       try {
-        const variables = { username: logininfo.username, password: logininfo.password };
-        const { loginWithCookies } = await this.$graphql.default.request(LOGIN, variables);
+        this.buttonText = "Logging in...";
+        const { loginWithCookies } = await this.$graphql.default.request(LOGIN, this.userInfo);
 
         if (loginWithCookies.status == 'SUCCESS') {
           const { cart, viewer, customer } = await this.$graphql.default.request(GET_CART);
@@ -44,6 +44,7 @@ export default {
           this.$cookiz.remove('woo');
         }
       } catch (error) {
+        this.buttonText = "Login";
         console.error(JSON.stringify(error, undefined, 2));
       }
     },
