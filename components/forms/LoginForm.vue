@@ -4,7 +4,7 @@
       <input
         placeholder="Username or Email"
         type="text"
-        v-model="userInfo.email"
+        v-model="userInfo.username"
         id="email"
         required
       />
@@ -26,14 +26,14 @@ import GET_CART from '~/gql/queries/getCart';
 export default {
   data() {
     return {
-      userInfo: { email: "", password: "" },
+      userInfo: { username: "", password: "" },
       buttonText: "Login",
     };
   },
   methods: {
     async loginUser(logininfo) {
       try {
-        const variables = { username: logininfo.email, password: logininfo.password };
+        const variables = { username: logininfo.username, password: logininfo.password };
         const { loginWithCookies } = await this.$graphql.default.request(LOGIN, variables);
 
         if (loginWithCookies.status == 'SUCCESS') {
