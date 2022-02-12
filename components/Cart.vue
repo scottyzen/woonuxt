@@ -9,7 +9,7 @@
 			class="rounded-xl shadow-xl p-1.5 hover:bg-red-400 hover:text-white"
 		/>
 
-		<div class="mt-8 text-center">Basket</div>
+		<div class="mt-8 text-center">Cart</div>
 
 		<template v-if="!cart.isEmpty">
 			<ul class="flex flex-col flex-1 p-8 gap-4 overflow-y-scroll">
