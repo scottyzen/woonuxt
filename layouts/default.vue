@@ -9,11 +9,7 @@
 		</transition>
 		<Nuxt class="flex-1" />
 		<transition name="page">
-			<div
-				v-if="showCart || showMenu"
-				class="bg-black opacity-25 inset-0 z-40 fixed"
-				@click="closeAllModals"
-			></div>
+			<div v-if="showCart || showMenu" class="bg-black opacity-25 inset-0 z-40 fixed" @click="closeAllModals"></div>
 		</transition>
 		<LazyFooter />
 		<LazyCookieBanner />
@@ -42,7 +38,9 @@ export default {
 				const wooCookie = this.$cookiz.get('woo');
 				this.setCookieIfAvailable(wooCookie);
 
-				const { cart, viewer, customer } = await this.$graphql.default.request(GET_CART);
+				const { cart, viewer, customer } = await this.$graphql.default.request(
+					GET_CART
+				);
 
 				this.$store.commit('updateCart', cart);
 				if (viewer) {
@@ -52,8 +50,14 @@ export default {
 				} else {
 					const token = customer.sessionToken;
 					if (!wooCookie) {
-						this.$cookiz.set('woo', { token }, { path: '/', maxAge: 60 * 60 * 24 * 14 });
-						this.$graphql.default.setHeaders({ 'woocommerce-session': `Session ${token}` });
+						this.$cookiz.set(
+							'woo',
+							{ token },
+							{ path: '/', maxAge: 60 * 60 * 24 * 14 }
+						);
+						this.$graphql.default.setHeaders({
+							'woocommerce-session': `Session ${token}`,
+						});
 					}
 				}
 			} catch (error) {
