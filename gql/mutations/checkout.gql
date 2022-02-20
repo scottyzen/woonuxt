@@ -1,6 +1,6 @@
-mutation Checkout($billing: CustomerAddressInput = {}, $metaData: [MetaDataInput] = {key: "", value: ""}, $paymentMethod: String = "cod") {
+mutation Checkout($billing: CustomerAddressInput = {}, $metaData: [MetaDataInput] = {key: "", value: ""}, $paymentMethod: String = "stripe", $shipping: CustomerAddressInput = {}, $customerNote: String = "", $shipToDifferentAddress: Boolean = false) {
   checkout(
-    input: {paymentMethod: $paymentMethod, billing: $billing, metaData: $metaData}
+    input: {paymentMethod: $paymentMethod, billing: $billing, metaData: $metaData, shipping: $shipping, customerNote: $customerNote, shipToDifferentAddress: $shipToDifferentAddress}
   ) {
     result
     redirect
@@ -26,15 +26,15 @@ mutation Checkout($billing: CustomerAddressInput = {}, $metaData: [MetaDataInput
         nodes {
           quantity
           total
-          product{ 
+          product {
             name
-            image{
+            image {
               sourceUrl
             }
           }
-          variation{
+          variation {
             name
-            image{
+            image {
               sourceUrl
             }
           }

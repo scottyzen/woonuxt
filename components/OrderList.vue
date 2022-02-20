@@ -11,10 +11,12 @@
 			</thead>
 			<tbody>
 				<tr v-for="order in orders.nodes" :key="order.orderNumber">
-					<td>{{ order.orderNumber }}</td>
+					<td class="rounded-l-lg">
+						<NuxtLink :to="`/order/${order.orderNumber}`">{{ order.orderNumber }}</NuxtLink>
+					</td>
 					<td>{{ formatDate(order.date) }}</td>
 					<td :class="`order-${order.status}`" class="order-status">{{ order.status }}</td>
-					<td class="text-right">{{ order.total }}</td>
+					<td class="rounded-r-lg text-right">{{ order.total }}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -28,24 +30,24 @@ export default {
 	data() {
 		return {
 			orders: null,
-			loading: false,
-			error: null,
 		};
 	},
 	methods: {
 		async getOrders() {
 			try {
-				this.loading = true;
 				const { customer } = await this.$graphql.default.request(GET_ORDERS);
 				this.orders = customer.orders;
-				this.loading = false;
 			} catch (error) {
-				this.error = error;
-				this.loading = false;
+				console.log(error);
 			}
 		},
 		formatDate(date) {
-			return new Date(date).toLocaleDateString();
+			// Outputs date like: January 29, 2022
+			return new Date(date).toLocaleDateString('en-US', {
+				month: 'long',
+				day: 'numeric',
+				year: 'numeric',
+			});
 		},
 	},
 	mounted() {
@@ -57,7 +59,6 @@ export default {
 <style lang="postcss" scoped>
 tbody tr:nth-child(odd) {
 	background-color: #fafafa;
-	@apply rounded-lg;
 }
 tbody tr {
 	@apply text-sm text-gray-500;
