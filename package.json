@@ -1,6 +1,6 @@
 {
   "name": "woonuxt",
-  "version": "0.3.38",
+  "version": "0.3.39",
   "private": true,
   "scripts": {
     "dev": "nuxi dev",
@@ -10,9 +10,9 @@
     "generate": "nuxi generate -m"
   },
   "dependencies": {
-    "@nuxtjs/composition-api": "^0.31.0",
+    "@nuxtjs/composition-api": "^0.32.0",
     "@nuxtjs/sitemap": "^2.4.0",
-    "@vueuse/core": "^7.6.2",
+    "@vueuse/core": "^7.7.0",
     "cookie-universal-nuxt": "^2.1.5",
     "core-js": "^3.21.1",
     "fuse.js": "^6.5.3",
@@ -27,7 +27,7 @@
     "@nuxt/image": "^0.6.2",
     "@nuxtjs/pwa": "^3.3.5",
     "nuxt-graphql-request": "^4.3.0",
-    "nuxt-windicss": "^2.2.5",
+    "nuxt-windicss": "^2.2.7",
     "vue-stripe-elements-plus": "^1.0.3"
   }
 }
