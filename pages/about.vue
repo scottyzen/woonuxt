@@ -8,11 +8,12 @@
 			>WooNuxt combines the familiarity of WordPress with the performance of Vue by leveraging the modern JAMstack approach. That means building as many elements as possible during the build process, and then only rendering the elements that are actually needed. As a result, fewer server requests are made, meaning better performance and faster load times. This is a huge benefit for both the client and the server.</p>
 		</div>
 
-		<div class="flex flex-col my-16 w-full gap-8 justify-between md:gap-16 lg:flex-row">
+		<div class="flex flex-col my-16 w-full gap-8 justify-between lg:flex-row">
 			<div class="bg-white border rounded-xl flex-1 p-8 lg:max-w-lg">
-				<NuxtImg src="/images/logo-woocommerce.svg" width="120" class="mb-4" />
+				<NuxtImg src="/images/logo-woocommerce.svg" width="120" class="mb-8" />
 				<div>
-					<p class="font-light">
+					<h2 class="font-semibold text-lg">1. Store data</h2>
+					<p class="font-light text-gray-700">
 						Everything you know and love about WooCommerce stays the same. If you have a current shop or setting up a new one all you need todo is install and activate the following plugins.
 						<a
 							class="font-semibold"
@@ -22,23 +23,36 @@
 					</p>
 				</div>
 			</div>
-			<div class="flex">
+			<!-- <div class="flex">
 				<NuxtImg
 					src="/images/wpgraphql_logo.png"
 					width="100"
 					height="100"
 					class="bg-white border rounded-full m-auto object-contain p-2 w-[75px]"
 				/>
+			</div>-->
+			<div class="bg-white border rounded-xl flex-1 p-8 lg:max-w-lg">
+				<NuxtImg src="/images/nuxt_logo.svg" width="120" class="mb-8" />
+				<div>
+					<h2 class="font-semibold text-lg">2. Build</h2>
+					<p
+						class="font-light text-gray-700"
+					>Powered by Nuxt, WooNuxt connects to your WooCommerce store using WPGraphQL and outputs a highly optimized frontend. With code splitting, lazy loading and link prefetching out of the box. Lighthouse will love it!</p>
+				</div>
 			</div>
 			<div class="bg-white border rounded-xl flex-1 p-8 lg:max-w-lg">
-				<NuxtImg src="/images/nuxt_logo.svg" width="120" class="mb-4" />
+				<NuxtImg src="/images/netlify-logo.svg" width="120" class="mb-8" />
 				<div>
-					<p class="font-light">
-						WooNuxt connects to your WooCommerce store using WPGraphQL and outputs a highly optimized frontend with Nuxt.js. Once your WooCommerce is ready. Simply click
+					<h2 class="font-semibold text-lg">3. Deploy</h2>
+					<p class="font-light text-gray-700">
+						Deploy your entire site to a CDN and forget about it. Static site scale well, are blazingly fast, cheap, secure and accessible to the world. WooNuxt can be deployed to any static web hosting.
 						<a
-							class="font-semibold underline"
 							href="https://app.netlify.com/start/deploy?repository=https://github.com/scottyzen/woonuxt"
-						>here</a> to deploy to Netlify.
+							target="_blank"
+							class="block"
+						>
+							<img class="mt-4" src="https://www.netlify.com/img/deploy/button.svg" alt />
+						</a>
 					</p>
 				</div>
 			</div>
@@ -46,21 +60,31 @@
 
 		<div class="font-light mb-16">
 			<h2 class="font-semibold text-xl mb-2">Freqently Asked Questions</h2>
-			<div class="mb-4">
-				<h3 class="font-semibold">Is it optomized for SEO.</h3>
-				<p>Not yet. But it will be soon with Yoast SEO.</p>
-			</div>
-			<div class="mb-4">
-				<h3 class="font-semibold">What payment gateways are available?</h3>
-				<p>Stripe is the only payment gateway available at this time. PayPal is coming soon.</p>
-			</div>
-			<div class="mb-4">
-				<h3 class="font-semibold">Does the store support multiple currencies?</h3>
-				<p>Not at this time.</p>
-			</div>
-			<div class="mb-4">
-				<h3 class="font-semibold">Can it be install as a PWA?</h3>
-				<p>Yes it is fully ready to be installed as a PWA. However, on the login mutation needs the front and back end to be on the same domain for the cross-origin request to work.</p>
+			<div class="grid gap-4 gap-8 lg:grid-cols-2">
+				<div>
+					<h3 class="font-semibold">Where can it be hosted.</h3>
+					<p>Because WooNuxt is a JAMstack application, it can be hosted anywhere. You can host it on your own server, or you can deploy it to a static web hosting provider. You can also deploy it to a CDN.</p>
+				</div>
+				<div>
+					<h3 class="font-semibold">Can it be install as a PWA?</h3>
+					<p>Yes it is fully ready to be installed as a PWA. However, on the login mutation needs the front and back end to be on the same domain for the cross-origin request to work.</p>
+				</div>
+				<div>
+					<h3 class="font-semibold">Is it optomized for SEO.</h3>
+					<p>Not yet. But it will be soon with Yoast SEO.</p>
+				</div>
+				<div>
+					<h3 class="font-semibold">What payment gateways are available?</h3>
+					<p>Stripe is the only payment gateway available at this time. PayPal is coming soon.</p>
+				</div>
+				<div>
+					<h3 class="font-semibold">Dose it have a default WordPress theme?</h3>
+					<p>I'm working on a bacic theme that add some extra features to the store, like reward poinrs and a wishlist. It will be available soon.</p>
+				</div>
+				<div>
+					<h3 class="font-semibold">Does the store support multiple currencies?</h3>
+					<p>Not at this time.</p>
+				</div>
 			</div>
 		</div>
 	</div>
