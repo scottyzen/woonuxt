@@ -17,7 +17,7 @@
 
 <script>
 import UPDATE_CART_QUANTITY from '~/gql/mutations/updateCartQuantity';
-// import { ref, defineComponent } from '@nuxtjs/composition-api';
+import { ref, defineComponent } from '@nuxtjs/composition-api';
 // import { ref, defineComponent } from '@nuxt/bridge';
 import { useSwipe } from '@vueuse/core';
 export default defineComponent({
