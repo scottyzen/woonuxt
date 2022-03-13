@@ -64,7 +64,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "nuxt-graphql-request",
     '@vueuse/core/nuxt',
-    // '@nuxtjs/composition-api/module'
+    '@nuxtjs/composition-api/module'
   ],
 
 
