@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   bridge: false,
   target: "static",
   modern: true,
-  
+
   components: {
     dirs: [
       "~/components",
@@ -20,19 +20,21 @@ export default defineNuxtConfig({
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "theme-color", content: "#ffffff" },
-      { hid: "description", name: "description",  content: "Next generation front end for WooCommerce thats build with Nuxt." },
+      { hid: "description", name: "description", content: "Next generation front end for WooCommerce thats build with Nuxt." },
     ],
     link: [
       { rel: "icon", type: "image/x-icon", href: "/logo.svg" },
-      { rel: "apple-touch-icon", sizes: "512x512", href: "/icon_maskable.png" }
+      { rel: "apple-touch-icon", sizes: "512x512", href: "/icon_maskable.png" },
+      { rel: "preconnect", href: process.env.WORDPRESS_URL },
+      { rel: "dns-prefetch", href: process.env.WORDPRESS_URL },
     ],
   },
 
-  pageTransition:{ name: 'page' },
+  pageTransition: { name: 'page' },
 
   modules: [
     ['cookie-universal-nuxt', { alias: 'cookiz' }],
-    [ "nuxt-cookie-control", { 
+    ["nuxt-cookie-control", {
       barPosition: "bottom-left",
       blockIframe: true,
       controlButton: false,
@@ -46,25 +48,25 @@ export default defineNuxtConfig({
         cookies: ['_ga', '_gat', '_gid'],
         accepted: () => {
           window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
+          function gtag() { dataLayer.push(arguments); }
           gtag('js', new Date());
           gtag('config', process.env.GOOGLE_TAG_MANAGER_ID);
         }
       }],
     }],
     '@nuxtjs/sitemap',
- ],
-
- 
- buildModules: [
-   "@nuxtjs/pwa",
-   'nuxt-windicss',
-   "@nuxt/image",
-   "nuxt-graphql-request", 
-   '@vueuse/core/nuxt',
-   '@nuxtjs/composition-api/module'
   ],
-  
+
+
+  buildModules: [
+    "@nuxtjs/pwa",
+    'nuxt-windicss',
+    "@nuxt/image",
+    "nuxt-graphql-request",
+    '@vueuse/core/nuxt',
+    '@nuxtjs/composition-api/module'
+  ],
+
 
   graphql: {
     clients: {
@@ -74,8 +76,8 @@ export default defineNuxtConfig({
       },
     },
   },
-  
-  sitemap: { hostname: 'https://woonuxt.com',  gzip: true },
+
+  sitemap: { hostname: 'https://woonuxt.com', gzip: true },
   image: { provider: "static", domains: [process.env.WORDPRESS_URL] },
 
   pwa: {
