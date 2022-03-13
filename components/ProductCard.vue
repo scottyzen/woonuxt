@@ -16,6 +16,7 @@
 			height="120"
 			sizes="sm:120px sm:300px"
 			:loading="(index <= 1 || index == 5) ? 'eager' : 'lazy'"
+			:preload="(index <= 1) ? true : false"
 			quality="100"
 			format="webp"
 		/>

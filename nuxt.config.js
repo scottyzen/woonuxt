@@ -2,7 +2,7 @@ import { defineNuxtConfig } from '@nuxt/bridge'
 import pkg from './package.json'
 
 export default defineNuxtConfig({
-  bridge: false,
+  // bridge: false,
   target: "static",
   modern: true,
 
@@ -64,7 +64,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "nuxt-graphql-request",
     '@vueuse/core/nuxt',
-    '@nuxtjs/composition-api/module'
+    // '@nuxtjs/composition-api/module'
   ],
 
 
