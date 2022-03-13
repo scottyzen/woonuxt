@@ -2,7 +2,7 @@ import { defineNuxtConfig } from '@nuxt/bridge'
 import pkg from './package.json'
 
 export default defineNuxtConfig({
-  // bridge: false,
+  bridge: false,
   target: "static",
   modern: true,
 
