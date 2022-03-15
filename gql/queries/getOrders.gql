@@ -1,15 +1,17 @@
 query getOrders {
-  customer{
-    orders{
-      nodes{
+  customer {
+    orders {
+      nodes {
         orderNumber
         total
         date
         status
-        lineItems{
-          nodes{
-            product{
-              name
+        lineItems {
+          nodes {
+            product {
+              node{
+                name
+              }
             }
           }
         }

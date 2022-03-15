@@ -27,15 +27,19 @@ mutation Checkout($billing: CustomerAddressInput = {}, $metaData: [MetaDataInput
           quantity
           total
           product {
-            name
-            image {
-              sourceUrl
+            node {
+              name
+              image {
+                sourceUrl
+              }
             }
           }
           variation {
-            name
-            image {
-              sourceUrl
+            node {
+              name
+              image {
+                sourceUrl
+              }
             }
           }
         }
