@@ -38,11 +38,11 @@
                 <NuxtImg
                     class="rounded-xl h-16 w-16"
                     v-if="item.product.image"
-                    :src="item.variation ? item.variation.image.sourceUrl : item.product.image.sourceUrl"
+                    :src="item.variation ? item.variation.node.image.sourceUrl : item.product.node.image.sourceUrl"
                 />
                 <div
                     class="flex-1 leading-tight"
-                >{{ item.variation ? item.variation.name : item.product.name }}</div>
+                >{{ item.variation ? item.variation.node.name : item.product.node.name }}</div>
                 <div class="text-sm text-gray-600">Qty. {{ item.quantity }}</div>
                 <span class="font-semibold text-sm">{{ formatPrice(item.total) }}</span>
             </div>
