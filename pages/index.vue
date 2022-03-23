@@ -23,14 +23,15 @@
 				<h2 class="font-semibold text-lg md:text-2xl">Shop by category</h2>
 				<NuxtLink class="text-primary" to="/categories">View All</NuxtLink>
 			</div>
-			<LazySCSlider>
+
+			<SCSlider>
 				<CategoryCard
 					class="min-w-[140px] lg:min-w-[200px]"
 					v-for="(category, i) in productCategories.nodes"
 					:key="i"
 					:node="category"
 				/>
-			</LazySCSlider>
+			</SCSlider>
 		</section>
 
 		<section class="my-16 md:my-24">
@@ -38,14 +39,14 @@
 				<h2 class="font-semibold text-lg md:text-2xl">Best Sellers</h2>
 				<NuxtLink class="text-primary" to="/products">View All</NuxtLink>
 			</div>
-			<LazySCSlider class="lg:gap-6">
+			<SCSlider class="lg:gap-6">
 				<ProductCard
 					class="min-w-[160px] lg:min-w-[280px]"
 					v-for="node in  bestSellers.nodes"
 					:key="node.databaseId"
 					:node="node"
 				/>
-			</LazySCSlider>
+			</SCSlider>
 		</section>
 
 		<section class="my-16 md:my-24">
@@ -53,19 +54,25 @@
 				<h2 class="font-semibold text-lg md:text-2xl">Latest Products</h2>
 				<NuxtLink class="text-primary" to="/products">View All</NuxtLink>
 			</div>
-			<LazySCSlider class="lg:gap-6">
+			<SCSlider class="lg:gap-6">
 				<ProductCard
 					class="min-w-[160px] lg:min-w-[280px]"
 					v-for="node in  latesProducts.nodes"
 					:key="node.databaseId"
 					:node="node"
 				/>
-			</LazySCSlider>
+			</SCSlider>
 		</section>
 	</div>
 </template>
 
 <script>
+import {
+	hydrateOnInteraction,
+	hydrateNever,
+	hydrateWhenIdle,
+	hydrateWhenVisible,
+} from 'vue-lazy-hydration';
 // import registerCustomer from '~/gql/mutations/registerCustomer';
 // import login from '~/gql/mutations/login';
 import GET_PRODUCTS from '~/gql/queries/getProducts'
@@ -83,6 +90,9 @@ export default {
 		const { products: bestSellers } = await $graphql.default.request(GET_PRODUCTS, { first: 8, orderby: [{ field: "TOTAL_SALES", order: "DESC" }] })
 		const { products: latesProducts } = await $graphql.default.request(GET_PRODUCTS, { first: 8, orderby: [{ field: "DATE", order: "DESC" }] })
 		return { productCategories, bestSellers, latesProducts };
-	}
+	},
+	components: {
+		SCSlider: hydrateWhenVisible(() => import('../components/SCSlider.vue')),
+	},
 };
 </script>

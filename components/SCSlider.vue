@@ -88,6 +88,7 @@ export default {
                 this.containerFromLeft = containerFromLeft + containerPaddingLeft;
                 this.childWidth = this.$refs.scslider.children[0].offsetWidth
             }
+            this.$refs.scslider.scrollLeft = 0;
         },
         handleScroll(e) {
             const { scrollLeft, scrollWidth, offsetWidth } = e.target;
@@ -109,7 +110,6 @@ export default {
         cssVars() {
             return {
                 '--containerFromLeft': this.containerFromLeft + 'px',
-
             };
         },
     },

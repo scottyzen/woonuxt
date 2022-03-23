@@ -1,6 +1,6 @@
 {
   "name": "woonuxt",
-  "version": "0.3.43",
+  "version": "0.3.44",
   "private": true,
   "scripts": {
     "dev": "nuxi dev",
@@ -20,6 +20,7 @@
     "graphql-tag": "^2.12.6",
     "nuxt-cookie-control": "^1.9.91",
     "nuxt-edge": "latest",
+    "vue-lazy-hydration": "^2.0.0-beta.4",
     "vue-multiselect": "^2.1.6"
   },
   "devDependencies": {
