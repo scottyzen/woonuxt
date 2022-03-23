@@ -14,10 +14,10 @@
  * Shipping ✅
  * Checkout
    * Stripe ✅
-   * Paypal
+   * Paypal ⏳
    * Click & Collect 
    * Cash on Delivery ✅
  * Filtering ✅
  * Wishlists
- * Account
+ * Account ⏳
  * Coupons
