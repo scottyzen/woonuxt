@@ -22,7 +22,7 @@
 			</div>
 			<div>
 				<div class="text-xs text-gray-400 uppercase">Payment Method</div>
-				<div>{{ order.paymentMethodTitle }}</div>
+				<div>{{ order.paymentMethodTitle || order.paymentMethod }}</div>
 			</div>
 		</div>
 
@@ -69,7 +69,6 @@
 			</div>
 		</div>
 	</div>
-	<div class="container my-24 text-center text-lg" v-else>No order found.</div>
 </template>
 
 <script>
