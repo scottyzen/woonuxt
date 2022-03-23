@@ -6,8 +6,9 @@
 				src="/images/hero.jpeg"
 				width="1400"
 				height="909"
-				sizes="sm:100vw md:100vw lg:1200px"
+				sizes="xs:320px sm:100vw md:100vw lg:1200px"
 				alt="Hero image"
+				format="webp"
 				preload
 			/>
 			<div class="container text-gray-900 absolute">

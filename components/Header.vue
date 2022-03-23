@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import SignInLink from './SignInLink.vue';
 export default {
 	methods: {
 		toggleCart() {
@@ -32,12 +31,14 @@ export default {
 			this.$store.commit('toggleMenu', false);
 		},
 	},
-	components: { SignInLink },
 };
 </script>
 
 <style lang="postcss">
 #main-nav .nuxt-link-exact-active {
 	@apply text-gray-900;
+}
+#main-nav a {
+	@apply hover:text-gray-900;
 }
 </style>
