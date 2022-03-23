@@ -67,14 +67,7 @@
 </template>
 
 <script>
-import {
-	hydrateOnInteraction,
-	hydrateNever,
-	hydrateWhenIdle,
-	hydrateWhenVisible,
-} from 'vue-lazy-hydration';
-// import registerCustomer from '~/gql/mutations/registerCustomer';
-// import login from '~/gql/mutations/login';
+import { hydrateWhenIdle } from 'vue-lazy-hydration';
 import GET_PRODUCTS from '~/gql/queries/getProducts'
 import GET_PRODUCT_CATEGORIES from '~/gql/queries/getProductCategories';
 
@@ -92,7 +85,7 @@ export default {
 		return { productCategories, bestSellers, latesProducts };
 	},
 	components: {
-		SCSlider: hydrateWhenVisible(() => import('../components/SCSlider.vue')),
+		SCSlider: hydrateWhenIdle(() => import('../components/SCSlider.vue')),
 	},
 };
 </script>

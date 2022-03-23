@@ -53,14 +53,14 @@ export default {
             this.loaded = true;
             window.removeEventListener('scroll', this.showCookieBar)
             window.removeEventListener('mousemove', this.showCookieBar)
+            window.removeEventListener('focus', this.showCookieBar)
         },
     },
     mounted() {
         if (this.loaded) return;
-
         window.addEventListener('mousemove', this.showCookieBar)
         window.addEventListener('scroll', this.showCookieBar)
-
+        window.addEventListener('focus', this.showCookieBar)
     },
     watch: {
         $route(to, from) {
