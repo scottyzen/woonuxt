@@ -37,7 +37,7 @@
             >
                 <NuxtImg
                     class="rounded-xl h-16 w-16"
-                    v-if="item.product.image"
+                    v-if="item.product.node.image"
                     :src="item.variation ? item.variation.node.image.sourceUrl : item.product.node.image.sourceUrl"
                 />
                 <div

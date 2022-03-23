@@ -1,7 +1,11 @@
 <template>
-	<div class="container flex flex-wrap my-12 gap-8 justify-evenly items-start md:flex-row-reverse lg:gap-12">
+	<div
+		class="container flex flex-wrap my-12 gap-8 justify-evenly items-start md:flex-row-reverse lg:gap-12"
+	>
 		<!-- <pre>cart: {{cart}}</pre> -->
-		<div class="bg-white border-b rounded-2xl shadow-sm w-full p-6 top-20 text-gray-700 md:max-w-sm md:mt-16 md:sticky">
+		<div
+			class="bg-white border-b rounded-2xl shadow-sm w-full p-6 top-20 text-gray-700 md:max-w-sm md:mt-16 md:sticky"
+		>
 			<h2 class="font-semibold mb-4">Order Summary</h2>
 			<div v-if="cart" class>
 				<div class="flex justify-between">
@@ -25,7 +29,6 @@
 		</div>
 
 		<form @submit.prevent="pay" class="w-full max-w-2xl grid gap-8 checkout-form md:flex-1">
-
 			<div>
 				<h2 class="text-xl mb-3 w-full">Billing Details</h2>
 				<BillingDetails :billing="billing" @update-billing="updateBilling" />
@@ -33,7 +36,12 @@
 
 			<label for="shipToDifferentAddress" class="flex gap-2 items-center">
 				<span>Ship to a different address?</span>
-				<input type="checkbox" name="shipToDifferentAddress" id="shipToDifferentAddress" v-model="shipToDifferentAddress">
+				<input
+					type="checkbox"
+					name="shipToDifferentAddress"
+					id="shipToDifferentAddress"
+					v-model="shipToDifferentAddress"
+				/>
 			</label>
 
 			<transition name="scale-y" mode="out-in">
@@ -55,13 +63,27 @@
 						<input type="radio" name="paymentMethod" id="cod" value="cod" v-model="paymentMethod" />
 						<label for="cod">Cash on Delivery</label>
 					</div>
+					<div class="flex gap-1">
+						<input type="radio" name="paymentMethod" id="paypal" value="paypal" v-model="paymentMethod" />
+						<label for="paypal">PayPal</label>
+					</div>
 				</div>
 
 				<div v-if="paymentMethod == 'stripe'">
-					<StripeElements v-if="loadStripe" class="w-full" :stripe-key="$config.stripePublishableKey" :instance-options="{}" :elements-options="{}" #default="{ elements }" ref="elms">
+					<StripeElements
+						v-if="loadStripe"
+						class="w-full"
+						:stripe-key="$config.stripePublishableKey"
+						:instance-options="{}"
+						:elements-options="{}"
+						#default="{ elements }"
+						ref="elms"
+					>
 						<StripeElement type="card" :elements="elements" :options="cardOptions" ref="card" />
 					</StripeElements>
-					<span class="mt-1 text-sm text-right text-orange-400 capitalize block">Test mode: 4242 4242 4242 4242</span>
+					<span
+						class="mt-1 text-sm text-right text-orange-400 capitalize block"
+					>Test mode: 4242 4242 4242 4242</span>
 				</div>
 			</div>
 
@@ -70,7 +92,9 @@
 				<textarea name="order-note" id="order-note" class="w-full" v-model="orderNote"></textarea>
 			</div>
 
-			<button class="bg-primary rounded-2xl shadow-md my-4 text-white text-lg text-center mb-8 p-3 block justify-evenly hover:bg-primary-dark">{{ buttonText }}</button>
+			<button
+				class="bg-primary rounded-2xl shadow-md my-4 text-white text-lg text-center mb-8 p-3 block justify-evenly hover:bg-primary-dark"
+			>{{ buttonText }}</button>
 		</form>
 	</div>
 </template>
@@ -149,17 +173,12 @@ export default {
 					shipToDifferentAddress: this.shipToDifferentAddress,
 				};
 				console.log(variables);
-				const { checkout } = await this.$graphql.default.request(
-					CHECKOUT,
-					variables
-				);
+				const { checkout } = await this.$graphql.default.request(CHECKOUT, variables);
+				console.log(checkout);
 				if (checkout.result == 'success') {
 					this.buttonText = 'Order Successfull';
 					this.$store.commit('updateCart', null);
-					this.$router.push({
-						name: 'order-summary',
-						params: { order: checkout.order },
-					});
+					this.$router.push({ name: 'order-summary', params: { order: checkout.order } });
 				} else {
 					this.buttonText = 'Place Order';
 				}
@@ -202,9 +221,9 @@ export default {
 </script>
 
 <style lang="postcss">
-.checkout-form input[type='text'],
-.checkout-form input[type='email'],
-.checkout-form input[type='tel'],
+.checkout-form input[type="text"],
+.checkout-form input[type="email"],
+.checkout-form input[type="tel"],
 .checkout-form textarea,
 .checkout-form .StripeElement,
 .checkout-form select {

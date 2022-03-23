@@ -1,14 +1,44 @@
 query getOrder($id: ID!) {
   order(id: $id, idType: DATABASE_ID) {
-    paymentMethod
-    status
-    date
-    databaseId
-    subtotal
-    total
-    customer {
-      email
-    }
+    needsPayment
+      needsProcessing
+      status
+      databaseId
+      orderKey
+      subtotal
+      total
+      subtotal
+      totalTax
+      shippingTotal
+      paymentMethodTitle
+      paymentMethod
+      date
+      subtotal
+      customer {
+        email
+      }
+      lineItems {
+        nodes {
+          quantity
+          total
+          product {
+            node{
+              name
+              image {
+                sourceUrl
+              }
+            }
+          }
+          variation {
+            node{
+              name
+              image {
+                sourceUrl
+              }
+            }
+          }
+        }
+      }
   }
   customer {
     orders {

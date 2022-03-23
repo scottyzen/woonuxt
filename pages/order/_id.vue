@@ -1,15 +1,82 @@
 <template>
-	<div class="container my-4">
-		<h1 class="font-semibold text-xl mb-8">Order #{{$route.params.id}}</h1>
-		<pre>{{order}}</pre>
+	<div
+		class="w-full p-8 text-gray-800 md:bg-white md:rounded-xl md:mx-auto md:shadow md:my-12 md:max-w-3xl md:p-16"
+		v-if="order"
+	>
+		<h1 class="font-semibold text-xl mb-2">Order Summary</h1>
+
+		<hr class="my-8" />
+
+		<div class="flex justify-between">
+			<div>
+				<div class="text-xs text-gray-400 uppercase">Order</div>
+				<div>#{{ order.databaseId }}</div>
+			</div>
+			<div>
+				<div class="text-xs text-gray-400 uppercase">Date</div>
+				<div>{{ formatDate(order.date) }}</div>
+			</div>
+			<div>
+				<div class="text-xs text-gray-400 uppercase">Status</div>
+				<div>{{ order.status }}</div>
+			</div>
+			<div>
+				<div class="text-xs text-gray-400 uppercase">Payment Method</div>
+				<div>{{ order.paymentMethodTitle }}</div>
+			</div>
+		</div>
+
+		<hr class="my-8" />
+
+		<div class="grid gap-2">
+			<div
+				v-for="item in order.lineItems.nodes"
+				:key="item.product.databaseId"
+				class="flex gap-8 items-center justify-between"
+			>
+				<NuxtImg
+					class="rounded-xl h-16 w-16"
+					v-if="item.product.node.image"
+					:src="item.variation ? item.variation.node.image.sourceUrl : item.product.node.image.sourceUrl"
+				/>
+				<div
+					class="flex-1 leading-tight"
+				>{{ item.variation ? item.variation.node.name : item.product.node.name }}</div>
+				<div class="text-sm text-gray-600">Qty. {{ item.quantity }}</div>
+				<span class="font-semibold text-sm">{{ formatPrice(item.total) }}</span>
+			</div>
+		</div>
+
+		<hr class="my-8" />
+
+		<div>
+			<div class="flex justify-between">
+				<span>Subtotal</span>
+				<span>{{ order.subtotal }}</span>
+			</div>
+			<div class="flex justify-between">
+				<span>Tax</span>
+				<span>{{ order.totalTax }}</span>
+			</div>
+			<div class="flex justify-between">
+				<span>Shipping</span>
+				<span>{{ order.shippingTotal }}</span>
+			</div>
+			<hr class="my-8" />
+			<div class="flex justify-between">
+				<span class>Total</span>
+				<span class="font-semibold">{{ order.total }}</span>
+			</div>
+		</div>
 	</div>
+	<div class="container my-24 text-center text-lg" v-else>No order found.</div>
 </template>
 
 <script>
 import GET_ORDER from '~/gql/queries/getOrder';
 export default {
 	head() {
-		return { title: 'Order #{{$route.params.id}}' };
+		return { title: `Order ${this.$route.params.id}` };
 	},
 	data() {
 		return {
@@ -26,9 +93,21 @@ export default {
 			});
 			this.order = order;
 		},
+		formatDate(date) {
+			// Fotmat DD/MM/YY 
+			return new Date(date).toLocaleDateString('en-US', {
+				day: 'numeric',
+				month: 'short',
+				year: 'numeric'
+			})
+		},
+		formatPrice(price) {
+			price = parseFloat(price);
+			return price.toLocaleString('nl-NL', {
+				style: 'currency',
+				currency: 'EUR'
+			});
+		}
 	},
 };
 </script>
-
-<style>
-</style>
