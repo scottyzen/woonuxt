@@ -2,23 +2,23 @@
 	<div class="flex flex-col min-h-screen">
 		<Header />
 		<delay-hydration>
-			<div>
+			<template>
 				<transition name="slide">
-					<Cart v-if="showCart" class="z-50" />
+					<LazyCart v-if="showCart" class="z-50" />
 				</transition>
 				<transition name="slide">
-					<MobileMenu v-if="showMenu" class="z-50" />
+					<LazyMobileMenu v-if="showMenu" class="z-50" />
 				</transition>
 				<Nuxt class="flex-1" />
 				<transition name="page">
 					<div
 						v-if="showCart || showMenu"
-						class="bg-black opacity-25 inset-0 z-40 fixed"
 						@click="closeAllModals"
+						class="bg-black opacity-25 inset-0 z-40 fixed"
 					></div>
 				</transition>
-				<CookieBanner />
-			</div>
+				<LazyCookieBanner />
+			</template>
 		</delay-hydration>
 		<Footer />
 	</div>
