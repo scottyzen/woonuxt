@@ -172,13 +172,16 @@ export default {
 					customerNote: this.orderNote,
 					shipToDifferentAddress: this.shipToDifferentAddress,
 				};
-				console.log(variables);
+
 				const { checkout } = await this.$graphql.default.request(CHECKOUT, variables);
-				console.log(checkout);
 				if (checkout.result == 'success') {
 					this.buttonText = 'Order Successfull';
 					this.$store.commit('updateCart', null);
-					this.$router.push({ name: 'order-summary', params: { order: checkout.order } });
+					if (this.paymentMethod == 'paypal') {
+						this.$router.push(checkout.redirect);
+					} else {
+						this.$router.push({ name: 'order-summary', params: { order: checkout.order } });
+					}
 				} else {
 					this.buttonText = 'Place Order';
 				}
