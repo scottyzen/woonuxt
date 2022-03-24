@@ -123,6 +123,8 @@ export default defineNuxtConfig({
 
   build: {
     aggressiveCodeRemoval: true,
-    extractCSS: true
+    extend (config, ctx) {
+      if (ctx && ctx.isClient) config.optimization.splitChunks.maxSize = 160000;
+    }
   }
 })
