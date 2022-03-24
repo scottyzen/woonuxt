@@ -12,7 +12,7 @@
 			<tbody>
 				<tr v-for="order in orders.nodes" :key="order.orderNumber">
 					<td class="rounded-l-lg">
-						<NuxtLink :to="`/order/${order.orderNumber}/`">{{ order.orderNumber }}</NuxtLink>
+						<NuxtLink :to="`/order-summary?id=${order.orderNumber}`">{{ order.orderNumber }}</NuxtLink>
 					</td>
 					<td>{{ formatDate(order.date) }}</td>
 					<td :class="`order-${order.status}`" class="order-status">{{ order.status }}</td>

@@ -3,8 +3,11 @@
         class="w-full p-8 text-gray-800 md:bg-white md:rounded-xl md:mx-auto md:shadow md:my-12 md:max-w-3xl md:p-16"
         v-if="order"
     >
-        <h1 class="font-semibold text-xl mb-2">Order received</h1>
-        <p class>Thank you for your order. We will send you an email with the order details.</p>
+        <h1 v-if="$route.params.order" class="font-semibold text-xl mb-2">Order received</h1>
+        <h1 v-else class="font-semibold text-xl mb-2">Order Summary</h1>
+        <p
+            v-if="$route.params.order"
+        >Thank you for your order. We will send you an email with the order details.</p>
 
         <hr class="my-8" />
 
@@ -73,6 +76,7 @@
 </template>
 
 <script>
+import GET_ORDER from '~/gql/queries/getOrder';
 export default {
     head() {
         return { title: 'Order received' }
@@ -82,7 +86,18 @@ export default {
             order: this.$route.params.order
         }
     },
+    mounted() {
+        if (this.$route.query.id) {
+            this.getOrder();
+        }
+    },
     methods: {
+        async getOrder() {
+            const { order } = await this.$graphql.default.request(GET_ORDER, {
+                id: this.$route.query.id,
+            });
+            this.order = order;
+        },
         formatDate(date) {
             // Fotmat DD/MM/YY 
             return new Date(date).toLocaleDateString('en-US', {
