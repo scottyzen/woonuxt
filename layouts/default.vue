@@ -2,7 +2,7 @@
 	<div class="flex flex-col min-h-screen">
 		<Header />
 		<delay-hydration>
-			<template>
+			<div>
 				<transition name="slide">
 					<Cart v-if="showCart" class="z-50" />
 				</transition>
@@ -18,7 +18,7 @@
 					></div>
 				</transition>
 				<CookieBanner />
-			</template>
+			</div>
 		</delay-hydration>
 		<Footer />
 	</div>
