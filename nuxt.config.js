@@ -64,8 +64,13 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "nuxt-graphql-request",
     '@vueuse/core/nuxt',
-    '@nuxtjs/composition-api/module'
+    '@nuxtjs/composition-api/module',
+    'nuxt-delay-hydration'
   ],
+
+  delayHydration: {
+    mode: 'init'
+  },
 
 
   graphql: {

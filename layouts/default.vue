@@ -1,36 +1,40 @@
 <template>
 	<div class="flex flex-col min-h-screen">
 		<Header />
-		<transition name="slide">
-			<Cart v-if="showCart" class="z-50" />
-		</transition>
-		<transition name="slide">
-			<MobileMenu v-if="showMenu" class="z-50" />
-		</transition>
-		<Nuxt class="flex-1" />
-		<transition name="page">
-			<div
-				v-if="showCart || showMenu"
-				class="bg-black opacity-25 inset-0 z-40 fixed"
-				@click="closeAllModals"
-			></div>
-		</transition>
+		<delay-hydration>
+			<template>
+				<transition name="slide">
+					<Cart v-if="showCart" class="z-50" />
+				</transition>
+				<transition name="slide">
+					<MobileMenu v-if="showMenu" class="z-50" />
+				</transition>
+				<Nuxt class="flex-1" />
+				<transition name="page">
+					<div
+						v-if="showCart || showMenu"
+						class="bg-black opacity-25 inset-0 z-40 fixed"
+						@click="closeAllModals"
+					></div>
+				</transition>
+				<CookieBanner />
+			</template>
+		</delay-hydration>
 		<Footer />
-		<CookieBanner />
 	</div>
 </template>
 
 <script>
-import { hydrateWhenIdle } from 'vue-lazy-hydration';
+// import { hydrateWhenIdle } from 'vue-lazy-hydration';
 import GET_CART from '~/gql/queries/getCart';
 
 export default {
-	components: {
-		CookieBanner: hydrateWhenIdle(() => import('../components/CookieBanner.vue')),
-		Cart: hydrateWhenIdle(() => import('../components/Cart.vue')),
-		MobileMenu: hydrateWhenIdle(() => import('../components/MobileMenu.vue')),
-		Header: hydrateWhenIdle(() => import('../components/Header.vue')),
-	},
+	// components: {
+	// 	CookieBanner: hydrateWhenIdle(() => import('../components/CookieBanner.vue')),
+	// 	Cart: hydrateWhenIdle(() => import('../components/Cart.vue')),
+	// 	MobileMenu: hydrateWhenIdle(() => import('../components/MobileMenu.vue')),
+	// 	Header: hydrateWhenIdle(() => import('../components/Header.vue')),
+	// },
 	computed: {
 		showCart() {
 			return this.$store.state.showCart;

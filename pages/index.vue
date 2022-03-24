@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { hydrateWhenIdle } from 'vue-lazy-hydration';
+// import { hydrateWhenIdle } from 'vue-lazy-hydration';
 import GET_PRODUCTS from '~/gql/queries/getProducts'
 import GET_PRODUCT_CATEGORIES from '~/gql/queries/getProductCategories';
 
@@ -85,8 +85,8 @@ export default {
 		const { products: latesProducts } = await $graphql.default.request(GET_PRODUCTS, { first: 8, orderby: [{ field: "DATE", order: "DESC" }] })
 		return { productCategories, bestSellers, latesProducts };
 	},
-	components: {
-		SCSlider: hydrateWhenIdle(() => import('../components/SCSlider.vue')),
-	},
+	// components: {
+	// 	SCSlider: hydrateWhenIdle(() => import('../components/SCSlider.vue')),
+	// },
 };
 </script>

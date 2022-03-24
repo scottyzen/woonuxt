@@ -7552,6 +7552,17 @@ nuxt-cookie-control@^1.9.91:
     sass-loader "^10.0"
     string-replace-loader "^2.1.1"
 
+nuxt-delay-hydration@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/nuxt-delay-hydration/-/nuxt-delay-hydration-0.3.2.tgz#1bc3eef5de028ee7823a52aa5fd16fd4f1babf4e"
+  integrity sha512-RqOInOauxmSSv2tkVRvFyoetlPKim7riqOlRMXRWcJv2puhu3GubE+vTPHuf34nGdINpgCFnwpc4cCRnmHJ0ew==
+  dependencies:
+    "@nuxt/kit" "npm:@nuxt/kit-edge@latest"
+    defu "^5.0.0"
+    lodash "^4.17.21"
+    upath "^2.0.1"
+    vue-lazy-hydration "^2.0.0-beta.4"
+
 nuxt-edge@latest:
   version "2.16.0-27358576.777a4b7f"
   resolved "https://registry.yarnpkg.com/nuxt-edge/-/nuxt-edge-2.16.0-27358576.777a4b7f.tgz#915edaf69657d8959270caf85153715b44ab3645"

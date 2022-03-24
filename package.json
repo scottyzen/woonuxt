@@ -19,6 +19,7 @@
     "graphql": "^16.3.0",
     "graphql-tag": "^2.12.6",
     "nuxt-cookie-control": "^1.9.91",
+    "nuxt-delay-hydration": "^0.3.2",
     "nuxt-edge": "latest",
     "vue-lazy-hydration": "^2.0.0-beta.4",
     "vue-multiselect": "^2.1.6"
