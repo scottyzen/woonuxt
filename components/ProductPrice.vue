@@ -2,7 +2,7 @@
     <div class="flex items-center">
         <span
             class="font-semibold"
-            :class="{ 'text-gray-500 line-through text-xs opacity-80': salePrice }"
+            :class="{ 'text-gray-500 line-through text-xs': salePrice }"
         >{{ regularPrice }}</span>
         <span v-if="salePrice" class="font-semibold ml-2">{{ salePrice }}</span>
     </div>

@@ -122,6 +122,7 @@ export default defineNuxtConfig({
   },
 
   build: {
-    aggressiveCodeRemoval: true
+    aggressiveCodeRemoval: true,
+    extractCSS: true
   }
 })
