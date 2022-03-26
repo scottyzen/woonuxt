@@ -25,14 +25,14 @@
 				<NuxtLink class="text-primary" to="/categories">View All</NuxtLink>
 			</div>
 
-			<LazySCSlider>
+			<SCSlider>
 				<CategoryCard
 					class="min-w-[140px] lg:min-w-[200px]"
 					v-for="(category, i) in productCategories.nodes"
 					:key="i"
 					:node="category"
 				/>
-			</LazySCSlider>
+			</SCSlider>
 		</section>
 
 		<section class="my-16 md:my-24">
@@ -40,14 +40,14 @@
 				<h2 class="font-semibold text-lg md:text-2xl">Best Sellers</h2>
 				<NuxtLink class="text-primary" to="/products">View All</NuxtLink>
 			</div>
-			<LazySCSlider class="lg:gap-6">
+			<SCSlider class="lg:gap-6">
 				<ProductCard
 					class="min-w-[160px] lg:min-w-[280px]"
 					v-for="node in  bestSellers.nodes"
 					:key="node.databaseId"
 					:node="node"
 				/>
-			</LazySCSlider>
+			</SCSlider>
 		</section>
 
 		<section class="my-16 md:my-24">
@@ -55,20 +55,20 @@
 				<h2 class="font-semibold text-lg md:text-2xl">Latest Products</h2>
 				<NuxtLink class="text-primary" to="/products">View All</NuxtLink>
 			</div>
-			<LazySCSlider class="lg:gap-6">
+			<SCSlider class="lg:gap-6">
 				<ProductCard
 					class="min-w-[160px] lg:min-w-[280px]"
 					v-for="node in  latesProducts.nodes"
 					:key="node.databaseId"
 					:node="node"
 				/>
-			</LazySCSlider>
+			</SCSlider>
 		</section>
 	</div>
 </template>
 
 <script>
-// import { hydrateWhenIdle } from 'vue-lazy-hydration';
+import { hydrateWhenIdle } from 'vue-lazy-hydration';
 import GET_PRODUCTS from '~/gql/queries/getProducts'
 import GET_PRODUCT_CATEGORIES from '~/gql/queries/getProductCategories';
 
@@ -85,8 +85,8 @@ export default {
 		const { products: latesProducts } = await $graphql.default.request(GET_PRODUCTS, { first: 8, orderby: [{ field: "DATE", order: "DESC" }] })
 		return { productCategories, bestSellers, latesProducts };
 	},
-	// components: {
-	// 	SCSlider: hydrateWhenIdle(() => import('../components/SCSlider.vue')),
-	// },
+	components: {
+		SCSlider: hydrateWhenIdle(() => import('../components/SCSlider.vue')),
+	},
 };
 </script>

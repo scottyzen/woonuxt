@@ -165,9 +165,7 @@ export default {
 				const variables = {
 					billing: this.billing,
 					shipping: this.shipToDifferentAddress ? this.shipping : this.billing,
-					metaData: sourceId
-						? [{ key: '_stripe_source_id', value: sourceId }]
-						: null,
+					metaData: sourceId ? [{ key: '_stripe_source_id', value: sourceId }] : null,
 					paymentMethod: this.paymentMethod,
 					customerNote: this.orderNote,
 					shipToDifferentAddress: this.shipToDifferentAddress,
