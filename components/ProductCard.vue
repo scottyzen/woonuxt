@@ -22,8 +22,8 @@
 		/>-->
 		<SCImg
 			v-if="node.image"
-			width="120"
-			height="120"
+			width="280"
+			height="280"
 			class="product-image"
 			:src="node.image.sourceUrl"
 			:alt="node.name"
