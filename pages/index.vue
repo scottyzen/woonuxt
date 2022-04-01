@@ -1,12 +1,21 @@
 <template>
 	<div>
 		<NuxtLink class="flex relative items-center justify-center" to="/products">
-			<SCImg
+			<!-- <NuxtImg
 				class="rounded object-cover w-full lg:h-[580px]"
 				src="/images/hero.jpeg"
 				width="1400"
 				height="909"
 				sizes="xs:320px sm:100vw md:100vw lg:100vw"
+				alt="Hero image"
+				format="webp"
+				preload
+			/>-->
+			<SCImg
+				class="rounded object-cover w-full lg:h-[580px]"
+				src="/images/hero.jpeg"
+				width="1400"
+				height="909"
 				alt="Hero image"
 				format="webp"
 			/>
