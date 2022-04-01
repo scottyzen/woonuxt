@@ -5,7 +5,7 @@
 			class="border rounded-md bg-yellow-200 border-yellow-300 text-xs tracking-tight px-1.5 top-2 right-2 text-orange-800 leading-5 z-10 absolute"
 		>SALE</span>
 
-		<NuxtImg
+		<!-- <NuxtImg
 			v-if="node.image"
 			class="product-image"
 			:src="node.image.sourceUrl"
@@ -19,6 +19,15 @@
 			:preload="(index <= 1) ? true : false"
 			quality="100"
 			format="webp"
+		/>-->
+		<SCImg
+			v-if="node.image"
+			width="120"
+			height="120"
+			class="product-image"
+			:src="node.image.sourceUrl"
+			:alt="node.name"
+			:loading="(index <= 1 || index == 5) ? 'eager' : 'lazy'"
 		/>
 
 		<div class="p-2">
