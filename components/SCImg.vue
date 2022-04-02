@@ -1,5 +1,5 @@
 <template>
-    <img :src="sourceUrl" :width="width" :height="height" :srcset="srcset" :sizes="sizes" />
+    <img :src="sourceUrl" :width="width" :height="height" :srcset="srcset" />
 </template>
 
 <script>
@@ -9,7 +9,7 @@ export default {
         src: { type: String, required: true },
         width: { type: String, default: '250' },
         height: { type: String, default: '250' },
-        quality: { type: String, default: '100' },
+        quality: { type: String, default: '90' },
         format: { type: String, default: 'webp' },
     },
     computed: {
@@ -24,17 +24,13 @@ export default {
             const sizes = ['320', '768', '1280']
             const sizesBelowMaxWidth = sizes.filter(size => size < this.width)
 
-            const srcset = sizesBelowMaxWidth.map(size => {
+            return sizesBelowMaxWidth.map(size => {
                 const ratio = this.width / this.height;
                 const width = parseInt(size) > parseInt(this.width) ? this.width : size;
                 const height = width / ratio;
                 return `${this.base}?w=${width}&h=${height}&output=${this.format} ${size}w`
-            })
+            }).join(', ')
 
-            return srcset.join(', ')
-        },
-        sizes() {
-            return `(max-width: ${this.width}px) 100vw, ${this.width}px`
         }
     }
 }

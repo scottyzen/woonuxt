@@ -36,8 +36,8 @@
 
 		<!-- Pagination -->
 		<div class="pagination">
-			<a v-if="page > 1" @click="page--">Previous</a>
-			<a v-if="large != products.length" @click="page++">Next</a>
+			<button v-if="page > 1" @click="page--">Previous</button>
+			<button v-if="large != products.length" @click="page++">Next</button>
 		</div>
 	</section>
 </template>
@@ -100,7 +100,7 @@ export default {
 .pagination {
 	@apply flex mb-8 p-8 gap-2 items-center justify-center;
 }
-.pagination a {
+.pagination button {
 	@apply rounded-xl bg-purple-100 leading-none py-2 px-4 text-purple-900 hover:bg-purple-200;
 }
 </style>
