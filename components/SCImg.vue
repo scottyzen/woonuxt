@@ -28,13 +28,13 @@ export default {
         height: { type: String, default: '250' },
         quality: { type: String, default: '75' },
         alt: { type: String, default: 'Image' },
-        quality: { type: String, default: '75' },
+        quality: { type: String, default: '100' },
         loading: { type: String, default: 'lazy' },
         mounted: { type: Boolean, default: false },
+        className: { type: String, default: '' },
     },
     mounted() {
-        this.mounted = true;
-        console.log(this.$refs.scimage.className);
+        this.className = this.$refs.scimage.className;
     },
     computed: {
         base() {
@@ -50,11 +50,6 @@ export default {
         srcset() {
             const sizes = ['320', '640', '960', '1280', '1920']
             return sizes.map(size => `${this.base}?w=${this.width}&h=${this.height}&output=webp ${size}w`).join(', ')
-        },
-        className() {
-            if (this.mounted) {
-                return this.$refs.scimage.className
-            }
         }
     }
 }

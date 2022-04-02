@@ -20,7 +20,7 @@
 			quality="100"
 			format="webp"
 		/>-->
-		<SCImg
+		<LazySCImg
 			v-if="node.image"
 			width="280"
 			height="280"

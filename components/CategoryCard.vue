@@ -14,14 +14,13 @@
             :alt="node.name"
             format="webp"
         />-->
-        <SCImg
+        <LazySCImg
             v-if="node.image"
             width="300"
             height="300"
             class="h-full object-cover w-full inset-0 absolute"
             :src="node.image.sourceUrl"
             :alt="node.name"
-            loading="lazy"
         />
         <div
             class="bg-gradient-to-t from-black to-transparent h-1/2 opacity-50 inset-x-0 bottom-0 absolute"
