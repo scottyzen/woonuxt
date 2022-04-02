@@ -1,7 +1,7 @@
 <template>
 	<NuxtLink to="/">
 		<h1 class="flex font-bold text-lg items-center">
-			<img class="mr-2" width="32" height="32" src="logo.svg" alt="Logo" />WooNuxt
+			<SCImg class="mr-2" width="32" height="32" src="logo.svg" alt="Logo" format="svg" />WooNuxt
 		</h1>
 	</NuxtLink>
 </template>
