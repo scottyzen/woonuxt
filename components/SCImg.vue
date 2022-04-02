@@ -27,7 +27,7 @@ export default {
             const sizes = ['320', '768', '1280']
             const srcset = sizes.map(size => {
                 const ratio = this.width / this.height;
-                const width = this.width > size ? size : this.width;
+                const width = parseInt(size) > parseInt(this.width) ? this.width : size;
                 const height = width / ratio;
                 return `${this.base}?w=${width}&h=${height}&output=webp ${size}w`
             })
