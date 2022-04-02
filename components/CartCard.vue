@@ -1,6 +1,6 @@
 <template>
 	<li class="flex gap-4 items-center">
-		<NuxtImg
+		<LazySCImg
 			class="rounded-xl h-16 w-16"
 			v-if="productType.image"
 			:src="productType.image.sourceUrl"

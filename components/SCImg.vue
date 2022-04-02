@@ -9,7 +9,6 @@ export default {
         src: { type: String, required: true },
         width: { type: String, default: '250' },
         height: { type: String, default: '250' },
-        quality: { type: String, default: '75' },
         quality: { type: String, default: '100' },
     },
     computed: {

@@ -3,17 +3,6 @@
         :to="`/product-category/${node.slug}`"
         class="border border-white rounded-xl flex item relative justify-center overflow-hidden snap-mandatory snap-x"
     >
-        <!-- <NuxtImg
-            v-if="node.image"
-            sizes="sm:50vw md:200px"
-            width="400"
-            height="400"
-            class="h-full object-cover w-full inset-0 absolute"
-            :src="node.image.sourceUrl"
-            loading="lazy"
-            :alt="node.name"
-            format="webp"
-        />-->
         <LazySCImg
             v-if="node.image"
             width="300"
