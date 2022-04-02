@@ -1,5 +1,5 @@
 <template>
-    <img :src="sourceUrl" :width="width" :height="height" :srcset="srcset" />
+    <img :src="sourceUrl" :width="width" :height="height" :srcset="srcset" :sizes="sizes" />
 </template>
 
 <script>
@@ -22,8 +22,9 @@ export default {
         },
         srcset() {
             const sizes = ['320', '768', '1280']
+            const sizesBelowMaxWidth = sizes.filter(size => size < this.width)
 
-            const srcset = sizes.filter(size => size < this.width).map(size => {
+            const srcset = sizesBelowMaxWidth.map(size => {
                 const ratio = this.width / this.height;
                 const width = parseInt(size) > parseInt(this.width) ? this.width : size;
                 const height = width / ratio;
@@ -32,6 +33,9 @@ export default {
 
             return srcset.join(', ')
         },
+        sizes() {
+            return `(max-width: ${this.width}px) 100vw, ${this.width}px`
+        }
     }
 }
 </script>
