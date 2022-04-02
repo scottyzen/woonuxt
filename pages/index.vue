@@ -17,6 +17,7 @@
 				class="object-cover w-full lg:h-[580px]"
 				src="/images/hero.jpeg"
 				alt="Hero image"
+				loading="eager"
 			/>
 			<div class="container text-gray-900 absolute">
 				<h1 class="font-bold mb-24 text-2xl md:mb-4 lg:text-6xl">Just landed.</h1>
