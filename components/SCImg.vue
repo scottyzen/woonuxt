@@ -25,7 +25,10 @@ export default {
         },
         srcset() {
             const sizes = ['320', '768', '1280']
-            const srcset = sizes.map(size => {
+            const maxWidth = this.width;
+            const sizesBelowMaxWidth = sizes.filter(size => size < maxWidth)
+
+            const srcset = sizesBelowMaxWidth.map(size => {
                 const ratio = this.width / this.height;
                 const width = parseInt(size) > parseInt(this.width) ? this.width : size;
                 const height = width / ratio;
