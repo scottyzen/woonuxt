@@ -1,7 +1,21 @@
 <template>
-    <picture :class="className">
-        <source :srcset="srcset" :width="width" :height="height" :alt="alt" :class="className" />
-        <img :src="sourceUrl" :width="width" :height="height" :alt="alt" :class="className" />
+    <picture ref="scimage">
+        <source
+            :srcset="srcset"
+            :width="width"
+            :height="height"
+            :alt="alt"
+            :class="className"
+            :loading="loading"
+        />
+        <img
+            :src="sourceUrl"
+            :width="width"
+            :height="height"
+            :alt="alt"
+            :class="className"
+            :loading="loading"
+        />
     </picture>
 </template>
 
@@ -14,8 +28,13 @@ export default {
         height: { type: String, default: '250' },
         quality: { type: String, default: '75' },
         alt: { type: String, default: 'Image' },
-        className: { type: String, default: '' },
         quality: { type: String, default: '75' },
+        loading: { type: String, default: 'lazy' },
+        mounted: { type: Boolean, default: false },
+    },
+    mounted() {
+        this.mounted = true;
+        console.log(this.$refs.scimage.className);
     },
     computed: {
         base() {
@@ -31,6 +50,11 @@ export default {
         srcset() {
             const sizes = ['320', '640', '960', '1280', '1920']
             return sizes.map(size => `${this.base}?w=${this.width}&h=${this.height}&output=webp ${size}w`).join(', ')
+        },
+        className() {
+            if (this.mounted) {
+                return this.$refs.scimage.className
+            }
         }
     }
 }

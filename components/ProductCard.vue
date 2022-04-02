@@ -24,7 +24,7 @@
 			v-if="node.image"
 			width="280"
 			height="280"
-			class="product-image"
+			class="rounded-xl object-top object-cover w-full product-image aspect-square"
 			:src="node.image.sourceUrl"
 			:alt="node.name"
 			:loading="(index <= 1 || index == 5) ? 'eager' : 'lazy'"
@@ -49,8 +49,7 @@ export default {
 </script>
 
 <style lang="postcss">
-img.product-image {
-	@apply rounded-xl object-top object-cover w-full aspect-square;
+.product-image {
 	aspect-ratio: 1/1.125;
 }
 </style>

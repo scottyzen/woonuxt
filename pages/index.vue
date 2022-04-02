@@ -14,7 +14,7 @@
 			<SCImg
 				width="1400"
 				height="909"
-				:className="'object-cover w-full lg:h-[580px]'"
+				class="object-cover w-full lg:h-[580px]"
 				src="/images/hero.jpeg"
 				alt="Hero image"
 			/>
