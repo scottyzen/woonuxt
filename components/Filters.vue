@@ -38,24 +38,24 @@
 		<div class="mt-8 mb-3">Rating</div>
 		<div class="grid gap-1">
 			<label for="star-five" class="flex items-center">
-				<input id="star-five" type="radio" :value="5" v-model="filter.starRating" />
+				<input id="star-five" type="radio" :value="5" v-model="filter.starRating" aria-label="5 stars" />
 				<Stars :number="5" />
 			</label>
 			<label for="star-four" class="flex items-center">
 				<input id="star-four" type="radio" :value="4" v-model="filter.starRating" />
-				<Stars :number="4" />
+				<Stars :number="4" aria-label="4 stars" />
 			</label>
 			<label for="star-three" class="flex items-center">
 				<input id="star-three" type="radio" :value="3" v-model="filter.starRating" />
-				<Stars :number="3" />
+				<Stars :number="3" aria-label="3 stars" />
 			</label>
 			<label for="star-two" class="flex items-center">
 				<input id="star-two" type="radio" :value="2" v-model="filter.starRating" />
-				<Stars :number="2" />
+				<Stars :number="2" aria-label="2 stars" />
 			</label>
 			<label for="star-one" class="flex items-center">
 				<input id="star-one" type="radio" :value="1" v-model="filter.starRating" />
-				<Stars :number="1" />
+				<Stars :number="1" aria-label="1 star" />
 			</label>
 		</div>
 

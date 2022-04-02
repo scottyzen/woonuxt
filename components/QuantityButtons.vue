@@ -2,18 +2,19 @@
 	<div class="flex w-24">
 		<button
 			@click.prevent="count > min ? count-- : null"
-			class="inline-block text-lg bg-white rounded-full shadow w-7 h-7 hover:bg-primary active:bg-primary-light hover:text-white"
+			class="bg-white rounded-full h-7 shadow text-lg w-7 inline-block hover:bg-primary hover:text-white active:bg-primary-light"
 		>-</button>
 		<input
-			class="flex-1 w-full text-center bg-transparent border-none outline-none apperance-none"
+			class="bg-transparent border-none outline-none flex-1 text-center w-full apperance-none"
 			type="number"
 			v-model.number="count"
 			min="0"
 			:max="max"
+			aria-label="Quantity"
 		/>
 		<button
 			@click.prevent="count < max ? count++ : null"
-			class="inline-block text-lg bg-white rounded-full shadow w-7 h-7 hover:bg-primary active:bg-primary-light hover:text-white"
+			class="bg-white rounded-full h-7 shadow text-lg w-7 inline-block hover:bg-primary hover:text-white active:bg-primary-light"
 		>+</button>
 	</div>
 </template>

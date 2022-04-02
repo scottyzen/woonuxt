@@ -10,7 +10,8 @@
 			height="280"
 			class="rounded-xl object-top object-cover w-full product-image aspect-square"
 			:src="node.image.sourceUrl"
-			:alt="node.name"
+			:alt="node.image.altText || node.name"
+			:title="node.image.title || node.name"
 			:loading="(index <= 1 || index == 5) ? 'eager' : 'lazy'"
 		/>
 
