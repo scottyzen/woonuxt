@@ -1,5 +1,5 @@
 <template>
-    <picture>
+    <picture :class="className">
         <source :srcset="srcset" :width="width" :height="height" :alt="alt" :class="className" />
         <img :src="sourceUrl" :width="width" :height="height" :alt="alt" :class="className" />
     </picture>
@@ -14,28 +14,23 @@ export default {
         height: { type: String, default: '250' },
         quality: { type: String, default: '75' },
         alt: { type: String, default: 'Image' },
-        className: { type: String, default: '' }
+        className: { type: String, default: '' },
+        quality: { type: String, default: '75' },
     },
     computed: {
-        sourceUrl() {
+        base() {
             if (this.src.startsWith('http')) {
-                return `https://images.weserv.nl/?url=${this.src}?w=${this.width}&h=${this.height}&output=webp`
+                return `https://images.weserv.nl/?url=${this.src}`
             } else {
-                if (process.env.NODE_ENV === 'production') {
-                    return `https://images.weserv.nl/?url=https://${this.$config.domain}/${this.src}&w=${this.width}&h=${this.height}&output=webp`
-                } else {
-                    return this.src
-                }
+                return (process.env.NODE_ENV === 'production') ? `https://images.weserv.nl/?url=https://${this.$config.domain}/${this.src}` : this.src
             }
-
+        },
+        sourceUrl() {
+            return `${this.base}?w=${this.width}&h=${this.height}&output=webp&q=${this.quality}`
         },
         srcset() {
             const sizes = ['320', '640', '960', '1280', '1920']
-            const srcset = sizes.map(size => {
-                return `https://images.weserv.nl/?url=${this.src}?w=${this.width}&h=${this.height}&output=webp ${size}w`
-            })
-            console.log(srcset);
-            return srcset.join(', ')
+            return sizes.map(size => `${this.base}?w=${this.width}&h=${this.height}&output=webp ${size}w`).join(', ')
         }
     }
 }
