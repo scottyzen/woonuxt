@@ -3,7 +3,7 @@
 		<NuxtLink class="flex relative items-center justify-center" to="/products">
 			<SCImg
 				width="1400"
-				height="909"
+				height="797"
 				class="object-cover w-full lg:h-[580px]"
 				src="/images/hero.jpeg"
 				alt="Hero image"
