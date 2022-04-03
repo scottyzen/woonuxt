@@ -38,68 +38,23 @@
 		<div class="mt-8 mb-3">Rating</div>
 		<div class="grid gap-1">
 			<label for="star-five" class="flex items-center">
-				<input
-					id="star-five"
-					type="radio"
-					:value="5"
-					v-model="filter.starRating"
-					role="presentation"
-					aria-hidden
-					:aria-selected="filter.starRating === 5"
-					aria-label="5 stars"
-				/>
+				<input id="star-five" type="radio" :value="5" v-model="filter.starRating" role="presentation" />
 				<Stars :number="5" />
 			</label>
 			<label for="star-four" class="flex items-center">
-				<input
-					id="star-four"
-					type="radio"
-					:value="4"
-					v-model="filter.starRating"
-					role="presentation"
-					aria-hidden
-					:aria-selected="filter.starRating === 4"
-					aria-label="4 stars"
-				/>
+				<input id="star-four" type="radio" :value="4" v-model="filter.starRating" role="presentation" />
 				<Stars :number="4" />
 			</label>
 			<label for="star-three" class="flex items-center">
-				<input
-					id="star-three"
-					type="radio"
-					:value="3"
-					v-model="filter.starRating"
-					role="presentation"
-					aria-hidden
-					:aria-selected="filter.starRating === 3"
-					aria-label="3 stars"
-				/>
+				<input id="star-three" type="radio" :value="3" v-model="filter.starRating" role="presentation" />
 				<Stars :number="3" />
 			</label>
 			<label for="star-two" class="flex items-center">
-				<input
-					id="star-two"
-					type="radio"
-					:value="2"
-					v-model="filter.starRating"
-					role="presentation"
-					aria-hidden
-					:aria-selected="filter.starRating === 2"
-					aria-label="2 stars"
-				/>
+				<input id="star-two" type="radio" :value="2" v-model="filter.starRating" role="presentation" />
 				<Stars :number="2" />
 			</label>
 			<label for="star-one" class="flex items-center">
-				<input
-					id="star-one"
-					type="radio"
-					:value="1"
-					v-model="filter.starRating"
-					role="presentation"
-					aria-hidden
-					:aria-selected="filter.starRating === 1"
-					aria-label="1 star"
-				/>
+				<input id="star-one" type="radio" :value="1" v-model="filter.starRating" role="presentation" />
 				<Stars :number="1" />
 			</label>
 		</div>
@@ -113,11 +68,11 @@
 		</div>
 
 		<transition name="fadeUp">
-			<a
+			<button
 				v-if="showRestButton"
 				@click="reset"
 				class="bg-primary-light rounded-xl cursor-pointer my-12 text-center text-white leading-tight w-full p-2 block hover:bg-purple-700"
-			>Clear all filters</a>
+			>Clear all filters</button>
 		</transition>
 	</aside>
 </template>
