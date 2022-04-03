@@ -18,11 +18,12 @@ export default {
 	methods: {
 		async logOut() {
 
+			// generate random token
+			const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
 			const query = gql`
 				mutation Logout {
-					logout(input: { clientMutationId: "kjnasljdxnaslk" }) {
-						status
-					}
+					logout(input: { clientMutationId: ${token} }) { status }
 				}
 			`;
 
@@ -40,7 +41,8 @@ export default {
 		},
 	},
 	mounted() {
-		this.logOut();
+		console.log(this.$store.state.user)
+		this.$store.state.user ? this.logOut() : this.$router.push('/');
 	},
 };
 </script>
