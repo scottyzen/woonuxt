@@ -45,6 +45,8 @@
 					v-model="filter.starRating"
 					role="presentation"
 					aria-hidden
+					:aria-selected="filter.starRating === 5"
+					aria-label="5 stars"
 				/>
 				<Stars :number="5" />
 			</label>
@@ -56,6 +58,8 @@
 					v-model="filter.starRating"
 					role="presentation"
 					aria-hidden
+					:aria-selected="filter.starRating === 4"
+					aria-label="4 stars"
 				/>
 				<Stars :number="4" />
 			</label>
@@ -67,6 +71,8 @@
 					v-model="filter.starRating"
 					role="presentation"
 					aria-hidden
+					:aria-selected="filter.starRating === 3"
+					aria-label="3 stars"
 				/>
 				<Stars :number="3" />
 			</label>
@@ -78,6 +84,8 @@
 					v-model="filter.starRating"
 					role="presentation"
 					aria-hidden
+					:aria-selected="filter.starRating === 2"
+					aria-label="2 stars"
 				/>
 				<Stars :number="2" />
 			</label>
@@ -89,6 +97,8 @@
 					v-model="filter.starRating"
 					role="presentation"
 					aria-hidden
+					:aria-selected="filter.starRating === 1"
+					aria-label="1 star"
 				/>
 				<Stars :number="1" />
 			</label>
