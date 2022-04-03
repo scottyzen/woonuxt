@@ -1,6 +1,6 @@
 <template>
 	<div class="flex bg-gray-100 w-full justify-center items-center">
-		<div class="max-w-md mb-32 w-full">
+		<div class="container max-w-md mb-32 w-full">
 			<h1 class="text-center py-8 text-3xl text-gray-700">{{ showRegister ? 'Register' : 'Login' }}</h1>
 			<LoginForm v-if="!showRegister" />
 			<RegisterForm v-else />
