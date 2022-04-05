@@ -42,7 +42,7 @@
 			</div>
 		</div>
 		<div class="my-24">
-			<h3 class="font-semibold text-lg mb-2">Related Products</h3>
+			<div class="font-semibold text-xl mb-4">Related Products</div>
 			<ProductRow :products="product.related.nodes" />
 		</div>
 	</main>

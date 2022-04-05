@@ -13,7 +13,7 @@
 
 		<!-- No Products Found  -->
 		<div v-if="products.length == 0" class="flex flex-col p-8 items-center justify-center">
-			<nuxt-img width="400" height="400" src="/images/empty.svg"></nuxt-img>
+			<SCImg width="400" height="400" src="/images/empty.svg" />
 			<span>No Products Found</span>
 		</div>
 
