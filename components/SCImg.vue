@@ -1,5 +1,19 @@
 <template>
-    <img :src="sourceUrl" :width="width" :height="height" :srcset="srcset" />
+    <img
+        v-if="mounted || loadding == 'egar'"
+        :src="sourceUrl"
+        :width="width"
+        :height="height"
+        :srcset="srcset"
+        :loading="loadding"
+    />
+    <img
+        v-else
+        :src="`${this.base}?w=${20}&h=${20}&output=webp&q=${20}&blur=5`"
+        :width="width / 10"
+        :height="height / 10"
+        :loading="loadding"
+    />
 </template>
 
 <script>
@@ -7,10 +21,15 @@ export default {
     name: 'SCImg',
     props: {
         src: { type: String, required: true },
-        width: { type: String, default: '250' },
-        height: { type: String, default: '250' },
+        width: { type: String, default: '200' },
+        height: { type: String, default: '200' },
         quality: { type: String, default: '90' },
         format: { type: String, default: 'webp' },
+        mounted: { type: Boolean, default: false },
+        loadding: { type: String, default: 'lazy' },
+    },
+    mounted() {
+        this.mounted = true;
     },
     computed: {
         base() {
@@ -30,7 +49,6 @@ export default {
                 const height = width / ratio;
                 return `${this.base}?w=${width}&h=${height}&output=${this.format} ${size}w`
             }).join(', ')
-
         }
     }
 }
