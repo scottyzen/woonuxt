@@ -3,7 +3,7 @@
         :to="`/product-category/${node.slug}`"
         class="border border-white rounded-xl flex item relative justify-center overflow-hidden snap-mandatory snap-x"
     >
-        <LazySCImg
+        <SCImg
             v-if="node.image"
             width="300"
             height="300"

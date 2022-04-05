@@ -1,5 +1,5 @@
 <template>
-    <div class="gap-4" :class="{ 'container': containerFromLeft === 0 }">
+    <div class="gap-4 scslider-wrap" :class="{ 'container': containerFromLeft === 0 }">
         <div
             class="my-4 scslider relative"
             :style="cssVars"
@@ -118,6 +118,9 @@ export default {
 
 
 <style lang="postcss">
+.container > .scslider {
+    @apply overflow-x-visible;
+}
 .scslider {
     @apply flex overflow-x-scroll;
     scroll-snap-type: x mandatory;
@@ -137,8 +140,8 @@ export default {
         scroll-snap-type: x proximity;
     }
 }
-.scslider::before,
-.scslider::after {
+.scslider-wrap:not(.container) .scslider::before,
+.scslider-wrap:not(.container) .scslider::after {
     content: "";
     min-width: var(--containerFromLeft);
     max-width: var(--containerFromLeft);
