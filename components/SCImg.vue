@@ -23,7 +23,7 @@ export default {
         src: { type: String, required: true },
         width: { type: String, default: '200' },
         height: { type: String, default: '200' },
-        quality: { type: String, default: '90' },
+        quality: { type: String, default: '100' },
         format: { type: String, default: 'webp' },
         mounted: { type: Boolean, default: false },
         loading: { type: String, default: 'lazy' },
@@ -39,8 +39,10 @@ export default {
             }] : [],
         };
     },
-    mounted() {
-        this.mounted = true;
+    async mounted() {
+        this.$nextTick(async () => {
+            this.mounted = true;
+        })
     },
     computed: {
         base() {
