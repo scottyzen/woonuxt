@@ -1,6 +1,6 @@
 <template>
     <img
-        v-if="mounted || loading == 'egar'"
+        v-if="mounted || loading == 'eager'"
         :src="sourceUrl"
         :width="width"
         :height="height"
@@ -27,6 +27,17 @@ export default {
         format: { type: String, default: 'webp' },
         mounted: { type: Boolean, default: false },
         loading: { type: String, default: 'lazy' },
+        preload: { type: Boolean, default: false },
+    },
+    head() {
+        return {
+            link: this.preload ? [{
+                rel: 'preload',
+                href: this.sourceUrl,
+                as: 'image',
+                type: 'image/webp',
+            }] : [],
+        };
     },
     mounted() {
         this.mounted = true;
