@@ -1,18 +1,18 @@
 <template>
     <img
-        v-if="mounted || loadding == 'egar'"
+        v-if="mounted || loading == 'egar'"
         :src="sourceUrl"
         :width="width"
         :height="height"
         :srcset="srcset"
-        :loading="loadding"
+        :loading="loading"
     />
     <img
         v-else
         :src="`${this.base}?w=${20}&h=${20}&output=webp&q=${20}&blur=5`"
         :width="width / 10"
         :height="height / 10"
-        :loading="loadding"
+        :loading="loading"
     />
 </template>
 
@@ -26,7 +26,7 @@ export default {
         quality: { type: String, default: '90' },
         format: { type: String, default: 'webp' },
         mounted: { type: Boolean, default: false },
-        loadding: { type: String, default: 'lazy' },
+        loading: { type: String, default: 'lazy' },
     },
     mounted() {
         this.mounted = true;
