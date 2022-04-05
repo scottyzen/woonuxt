@@ -40,7 +40,23 @@ export default {
         };
     },
     async mounted() {
-        this.mounted = true;
+        if (!this.preload) {
+            const rect = this.$el.getBoundingClientRect();
+            // check if an image is visible
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                this.mounted = true;
+            }
+            window.addEventListener('scroll', this.handleScroll);
+        }
+
+    },
+    methods: {
+        handleScroll() {
+            this.mounted = true;
+        },
+    },
+    destroyed() {
+        window.removeEventListener('scroll', this.handleScroll);
     },
     computed: {
         base() {

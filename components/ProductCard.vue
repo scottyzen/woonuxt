@@ -4,7 +4,7 @@
 			v-if="node.onSale"
 			class="border rounded-md bg-yellow-200 border-yellow-300 text-xs tracking-tight px-1.5 top-2 right-2 text-orange-800 leading-5 z-10 absolute"
 		>SALE</span>
-		<LazySCImg
+		<SCImg
 			v-if="node.image"
 			width="280"
 			height="280"
