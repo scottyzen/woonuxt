@@ -1,5 +1,5 @@
 <template>
-    <div class="gap-4">
+    <div class="gap-4" :class="{ 'container': containerFromLeft === 0 }">
         <div
             class="my-4 scslider relative"
             :style="cssVars"
