@@ -40,11 +40,7 @@ export default {
         };
     },
     async mounted() {
-        this.$nextTick(async () => {
-            setTimeout(async () => {
-                this.mounted = true;
-            }, 50);
-        })
+        this.mounted = true;
     },
     computed: {
         base() {
