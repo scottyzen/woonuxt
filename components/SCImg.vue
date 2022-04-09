@@ -10,8 +10,8 @@
     <img
         v-else
         :src="`${this.base}?w=${20}&h=${20}&output=webp&q=${20}&blur=5`"
-        :width="width / 10"
-        :height="height / 10"
+        :width="width"
+        :height="height"
         :loading="loading"
     />
 </template>
@@ -31,12 +31,7 @@ export default {
     },
     head() {
         return {
-            link: this.preload ? [{
-                rel: 'preload',
-                href: this.sourceUrl,
-                as: 'image',
-                type: 'image/webp',
-            }] : [],
+            link: this.preload ? [{ rel: 'preload', href: this.sourceUrl, as: 'image', type: 'image/webp' }] : [],
         };
     },
     async mounted() {

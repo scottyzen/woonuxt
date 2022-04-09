@@ -8,7 +8,7 @@
 				:gallery="product.galleryImages"
 			/>
 
-			<div class="md:max-w-xl md:py-4">
+			<div class="md:max-w-lg md:py-4">
 				<div class="flex mb-4 items-center justify-between">
 					<div class="flex-1">
 						<h1 class="font-semibold text-xl mb-0.5">{{ type.name }}</h1>
