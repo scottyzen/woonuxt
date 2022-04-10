@@ -8,7 +8,7 @@
 				:gallery="product.galleryImages"
 			/>
 
-			<div class="md:max-w-lg md:py-4">
+			<div class="md:max-w-xl md:py-4">
 				<div class="flex mb-4 items-center justify-between">
 					<div class="flex-1">
 						<h1 class="font-semibold text-xl mb-0.5">{{ type.name }}</h1>
@@ -26,9 +26,9 @@
 						:attrs="product.attributes.nodes"
 						@attrs-changed="updateSelectedVariations"
 					/>
-					<div class="flex mt-12 gap-8 items-center justify-between">
+					<div class="flex mt-12 gap-8 items-center">
 						<AddToCartButton
-							class="flex-1"
+							class="max-w-xs flex-1"
 							:add-to-cart-button-text="addToCartButtonText"
 							:disabled="!activeVariation && product.variations"
 							:class="{

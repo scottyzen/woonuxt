@@ -1,5 +1,5 @@
 <template>
-	<div class="divide-y flex flex-col divide-gray-100 divide-y-2">
+	<div class="flex flex-col gap-2">
 		<div class="py-2 relative" v-for="(attr, i) in attrs" :key="i">
 			<div v-if="attr.options.length > 3" class="flex items-center justify-between">
 				<div>{{ attr.label }}</div>
@@ -66,17 +66,17 @@ export default {
 
 <style lang="postcss">
 select {
-	@apply border rounded-2xl shadow py-2 px-4 appearance-none;
+	@apply border-2 rounded-2xl  py-2 px-4 appearance-none;
 	background: url("/images/chevron-down.svg") center right 10px no-repeat;
 	background-size: 1rem;
 	padding-right: 2.5rem;
 }
 
 .radio-button {
-	@apply border border-white cursor-pointer bg-gray-50 rounded-2xl shadow text-sm text-center py-1.5 px-3 text-gray-800 inline-block;
+	@apply cursor-pointer font-semibold bg-gray-50 border-2 border-gray-200 rounded-2xl text-sm text-center py-1.5 px-3 transition-all text-gray-800 inline-block;
 }
 
 input[type="radio"]:checked ~ span {
-	@apply bg-purple-500 text-white;
+	@apply border-purple-500;
 }
 </style>
