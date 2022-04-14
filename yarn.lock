@@ -5342,14 +5342,14 @@ h3@^0.3.3:
   integrity sha512-C9MbuWVQ88mGb3lmqtp/iqXdALBo34oyjrVT1hx+FYRgcQReNXiKWvzXM6eQdpp4MWQkMGNnp4tlRBT7wsgmmg==
 
 h3@^0.7.3:
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/h3/-/h3-0.7.3.tgz#e8222bb97a295a621fc7893fda05c47abf60b1c9"
-  integrity sha512-4Gz3vukxfZC53pMDfmzUI7mSb3HUqId6tmnrDGck9HuXQzG09tDWOOigfnIFODZrYmySaCUg7OnNnplrsoogKw==
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/h3/-/h3-0.7.4.tgz#e062de36e5b93256d97a43ad97857cb23476bf9d"
+  integrity sha512-hB/O4f0rPZ9356YBNu5LfQuk/cw78Fuh6vCGt3skysnvjLrprNLYWWrR6gLyB6JaY1NPvbHEWEBslWqT435lGw==
   dependencies:
     cookie-es "^0.5.0"
-    destr "^1.1.0"
+    destr "^1.1.1"
     radix3 "^0.1.1"
-    ufo "^0.7.11"
+    ufo "^0.8.3"
 
 hable@^3.0.0:
   version "3.0.0"
@@ -5662,9 +5662,9 @@ https-browserify@^1.0.0:
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
 https-proxy-agent@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-5.0.0.tgz#e2a90542abb68a762e0a0850f6c9edadfd8506b2"
-  integrity sha512-EkYm5BcKUGiduxzSt3Eppko+PiNWNEpa4ySk9vTC6wDsQJW9rHSa+UhGNJoRYp7bz6Ht1eaRIa6QaJqO5rCFbA==
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-5.0.1.tgz#c59ef224a04fe8b754f3db0063a25ea30d0005d6"
+  integrity sha512-dFcAjpTQFgoLMzC2VwU+C/CbS7uRL0lWmxDITmqm7C+7F0Odmj6s9l6alZc6AELXhrnggM2CeWSXHGOdX2YtwA==
   dependencies:
     agent-base "6"
     debug "4"

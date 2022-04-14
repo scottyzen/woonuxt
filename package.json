@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nuxi dev",
     "dev:host": "nuxt --hostname '0' --port 8000",
-    "build": "nuxi build",
+    "build": "nuxi generate",
     "start": "node .output/server/index.mjs",
     "generate": "nuxi generate -m"
   },
