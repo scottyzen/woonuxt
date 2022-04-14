@@ -4,7 +4,7 @@ import pkg from './package.json'
 export default defineNuxtConfig({
   bridge: false,
   target: "static",
-  modern: true,
+  modern: process.env.NODE_ENV !== "production",
 
   components: {
     dirs: [
