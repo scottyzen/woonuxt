@@ -63,7 +63,7 @@ export default defineNuxtConfig({
     'nuxt-windicss',
     // "@nuxt/image",
     "nuxt-graphql-request",
-    '@vueuse/core/nuxt',
+    // '@vueuse/core/nuxt',
     '@nuxtjs/composition-api/module',
     // 'nuxt-delay-hydration'
   ],
