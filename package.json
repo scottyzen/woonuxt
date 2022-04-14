@@ -12,7 +12,7 @@
   "dependencies": {
     "@nuxtjs/composition-api": "^0.32.0",
     "@nuxtjs/sitemap": "^2.4.0",
-    "@vueuse/core": "^8.2.5",
+    "@vueuse/core": "^8.2.6",
     "cookie-universal-nuxt": "^2.1.5",
     "core-js": "^3.21.1",
     "fuse.js": "^6.5.3",
@@ -29,7 +29,7 @@
     "@nuxt/image": "^0.6.2",
     "@nuxtjs/pwa": "^3.3.5",
     "nuxt-graphql-request": "^5.1.0",
-    "nuxt-windicss": "^2.2.8",
+    "nuxt-windicss": "^2.2.11",
     "vue-stripe-elements-plus": "^1.0.3"
   }
 }
