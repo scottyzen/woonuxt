@@ -1,37 +1,20 @@
 <template>
 	<main class="container flex">
-		<LazyFilters
-			@filter-updated="filterProducts"
-			:activeFilters="this.$store.state.filter"
-			:showFilters="showFilters"
-			:params="$route.params"
-		/>
-		<div
-			class="bg-gray-900 w opacity-0 inset-0 transition-opacity z-10 duration-300 hidden fixed"
-			:class="{ 'show-overlay': showFilters }"
-			@click="showFilters = false"
-		></div>
+		<LazyFilters @filter-updated="filterProducts" :activeFilters="this.$store.state.filter"
+			:showFilters="showFilters" :params="$route.params" />
+		<div class="bg-gray-900 w opacity-0 inset-0 transition-opacity z-10 duration-300 hidden fixed"
+			:class="{ 'show-overlay': showFilters }" @click="showFilters = false"></div>
 
 		<div class="flex flex-col max-w-full flex-1 w-full md:pl-8">
 			<div class="flex mt-4 gap-4 items-center lg:mt-8">
-				<MultiSearch
-					class="flex-1"
-					@has-changed="filterProducts"
-					:activeTags="this.$store.state.searchTags"
-				/>
-				<span
-					@click="showFilters = !showFilters"
+				<MultiSearch class="flex-1" @has-changed="filterProducts" :activeTags="this.$store.state.searchTags" />
+				<span @click="showFilters = !showFilters"
 					class="rounded-xl cursor-pointer bg-gray-400 text-white p-1.5 md:hidden"
-					:class="{ 'bg-primary': this.$store.state.filter }"
-				>
+					:class="{ 'bg-primary': this.$store.state.filter }">
 					<Icon name="filter" width="22" height="22" />
 				</span>
 			</div>
-			<ProductGrid
-				:page="parseInt($route.params.pageNumber) || page"
-				:products="products"
-				@setPage="setPage"
-			/>
+			<ProductGrid :page="parseInt($route.params.pageNumber) || page" :products="products" @setPage="setPage" />
 		</div>
 	</main>
 </template>
@@ -88,11 +71,14 @@ export default {
 		filterProducts() {
 
 			const FILTERED_PRODUCTS = this.$store.state.filter ? this.$store.state.products.filter((product) => {
-				let { minPrice, maxPrice, starRating, saleItemsOnly, categories } = this.$store.state.filter
+				let { minPrice, maxPrice, starRating, saleItemsOnly, categories, colors } = this.$store.state.filter
 
 				// Categories
 				const catsSlugs = [...categories, this.categorySlug].filter(Boolean) // Remove nulls
 				const categoryCondition = catsSlugs.length ? catsSlugs.some(category => product.productCategories.nodes.some(productCategory => productCategory.slug === category)) : true
+
+				// Colors
+				const colorCondition = colors.length ? colors.some(color => product.allPaColor ? product.allPaColor.nodes.some(productColor => productColor.slug === color) : false) : true
 
 				// Price
 				maxPrice = maxPrice > 0 ? maxPrice : 9999999999
@@ -106,7 +92,7 @@ export default {
 				const saleItemsOnlyCondition = saleItemsOnly ? product.onSale : true
 
 
-				return priceCondition && categoryCondition && ratingCondition && saleItemsOnlyCondition
+				return priceCondition && categoryCondition && ratingCondition && saleItemsOnlyCondition && colorCondition
 			}) : this.$store.state.products
 
 
@@ -138,7 +124,8 @@ input[type="search"] {
 	@apply border rounded-xl max-w-md outline-none leading-tight w-full p-2 px-4 pl-10 transition-all;
 	background: url("/images/search.svg") no-repeat center left 0.75em;
 }
+
 .show-overlay {
-	@apply opacity-10 block md:hidden;
+	@apply opacity-10 block md: hidden ;
 }
 </style>

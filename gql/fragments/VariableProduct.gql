@@ -56,4 +56,16 @@ fragment VariableProduct on VariableProduct {
       sourceUrl
     }
   }
+  allPaColor{
+    nodes{
+      name
+      slug
+    }
+  }
+  allPaSize{
+    nodes{
+      name
+      slug
+    }
+  }
 }
