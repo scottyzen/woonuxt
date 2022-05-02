@@ -1,26 +1,29 @@
 <template>
-    <img v-if="mounted || loading == 'egar'" :src="sourceUrl" :width="width" :height="height" :srcset="srcset"
-        :loading="loading" />
+    <img v-if="mounted || loading == 'egar'" :src="sourceUrl" :width="width" :height="height" :srcset="srcset" />
     <img v-else :src="`${this.base}?w=${20}&h=${20}&output=webp&q=${20}&blur=5`" :width="width" :height="height"
-        :loading="loading" />
+        loading="lazy" />
 </template>
 
 <script>
 export default {
     name: 'SCImg',
+    data() {
+        return {
+            mounted: false
+        }
+    },
     props: {
         src: { type: String, required: true },
         width: { type: String, default: '200' },
         height: { type: String, default: '200' },
         quality: { type: String, default: '100' },
         format: { type: String, default: 'webp' },
-        mounted: { type: Boolean, default: false },
-        loading: { type: String, default: 'lazy' },
+        loading: { type: String, default: 'egar' },
         preload: { type: Boolean, default: false },
     },
     head() {
         return {
-            // link: this.preload ? [{ rel: 'preload', href: this.sourceUrl, as: 'image', type: 'image/webp' }] : [],
+            link: this.preload ? [{ rel: 'preload', href: this.sourceUrl, as: 'image', type: 'image/webp' }] : [],
         };
     },
     async mounted() {
@@ -43,13 +46,12 @@ export default {
     methods: {
         handleScroll() {
             if (this.mounted) {
+                window.removeEventListener('scroll', this.handleScroll);
+                window.removeEventListener('resize', this.handleScroll);
+                window.removeEventListener('focus', this.handleScroll);
                 return;
             }
-            // this.mounted = true;
-            setTimeout(() => { this.mounted = true }, 50);
-            window.removeEventListener('scroll', this.handleScroll);
-            window.removeEventListener('resize', this.handleScroll);
-            window.removeEventListener('focus', this.handleScroll);
+            this.mounted = true;
         },
     },
     computed: {
