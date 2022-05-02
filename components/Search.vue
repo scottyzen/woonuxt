@@ -1,10 +1,5 @@
 <template>
-    <input
-        type="search"
-        placeholder="Search products..."
-        :class="{ 'border-purple-500': search }"
-        v-model="search"
-    />
+    <input type="search" placeholder="Search products..." :class="{ 'border-purple-500': search }" v-model="search" />
 </template>
 
 <script >
@@ -26,9 +21,11 @@ export default {
                 distance: 100,
                 maxPatternLength: 32,
                 minMatchCharLength: 1,
+                useExtendedSearch: true,
                 keys: [
                     "name",
-                    "description"
+                    "description",
+                    ['allPaColor', 'nodes', 'name']
                 ]
             }
             const fuse = new Fuse(this.$store.state.products, options)

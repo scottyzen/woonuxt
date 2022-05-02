@@ -62,7 +62,7 @@ export default {
             return (process.env.NODE_ENV === 'production') ? `https://images.weserv.nl/?url=https://${this.$config.domain}/${this.src}` : this.src;
         },
         sourceUrl() {
-            return `${this.base}?w=${this.width}&h=${this.height}&output=${this.format}&q=${this.quality}`
+            return `${this.base}?w=${this.width}&h=${this.height}&output=${this.format}&q=${this.quality}&dpr=2&fit=cover`
         },
         srcset() {
             const sizes = ['320', '768', '1280']
@@ -72,7 +72,7 @@ export default {
                 const ratio = this.width / this.height;
                 const width = parseInt(size) > parseInt(this.width) ? this.width : size;
                 const height = width / ratio;
-                return `${this.base}?w=${width}&h=${height}&output=${this.format} ${size}w`
+                return `${this.base}?w=${width}&h=${height}&output=${this.format} ${size}w&dpr=2&fit=cover`
             }).join(', ')
         }
     }

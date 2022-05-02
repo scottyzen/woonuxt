@@ -2,11 +2,8 @@
 	<main class="container container-sm py-4 relative lg:py-12">
 		<ProductBackButton :page="$route.params.page" />
 		<div class="flex flex-col gap-8 md:flex-row md:justify-between">
-			<ProductImageGallery
-				:first-image="product.image.sourceUrl"
-				:main-image="type.image.sourceUrl"
-				:gallery="product.galleryImages"
-			/>
+			<ProductImageGallery :first-image="product.image.sourceUrl" :main-image="type.image.sourceUrl"
+				:gallery="product.galleryImages" />
 
 			<div class="md:max-w-xl md:py-4">
 				<div class="flex mb-4 items-center justify-between">
@@ -20,22 +17,14 @@
 				<div v-html="product.description" class="font-light mb-8"></div>
 
 				<form @submit.prevent="triggerAddToCart">
-					<AttributeSelections
-						class="mt-4 mb-8"
-						v-if="product.attributes"
-						:attrs="product.attributes.nodes"
-						@attrs-changed="updateSelectedVariations"
-					/>
+					<AttributeSelections class="mt-4 mb-8" v-if="product.attributes" :attrs="product.attributes.nodes"
+						@attrs-changed="updateSelectedVariations" />
 					<div class="flex mt-12 gap-8 items-center">
-						<AddToCartButton
-							class="max-w-xs flex-1"
-							:add-to-cart-button-text="addToCartButtonText"
-							:disabled="!activeVariation && product.variations"
-							:class="{
+						<AddToCartButton class="max-w-xs flex-1" :add-to-cart-button-text="addToCartButtonText"
+							:disabled="!activeVariation && product.variations" :class="{
 								'loading': addToCartState == 'loading',
 								'success': addToCartState == 'success'
-							}"
-						/>
+							}" />
 						<QuantityButtons @quantity-change="updateQuantity" :quantity="quantity" :min="1" />
 					</div>
 				</form>
@@ -187,6 +176,7 @@ export default {
 	grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
 	gap: 1rem;
 }
+
 .gallery-images img {
 	width: 100%;
 	height: 100%;

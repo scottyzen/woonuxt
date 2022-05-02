@@ -1,0 +1,8 @@
+query getAllColors {
+  allPaColor{
+    nodes{
+      name
+      slug
+    }
+  }
+}
