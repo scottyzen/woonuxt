@@ -1,6 +1,5 @@
 <template>
-    <img v-if="mounted || loading == 'eager'" :src="sourceUrl" :width="width" :height="height" :srcset="srcset"
-        :loading="loading" />
+    <img v-if="mounted" :src="sourceUrl" :width="width" :height="height" :srcset="srcset" :loading="loading" />
     <img v-else :src="`${this.base}?w=${20}&h=${20}&output=webp&q=${20}&blur=5`" :width="width" :height="height"
         :loading="loading" />
 </template>
@@ -20,7 +19,7 @@ export default {
     },
     head() {
         return {
-            link: this.preload ? [{ rel: 'preload', href: this.sourceUrl, as: 'image', type: 'image/webp' }] : [],
+            // link: this.preload ? [{ rel: 'preload', href: this.sourceUrl, as: 'image', type: 'image/webp' }] : [],
         };
     },
     async mounted() {
@@ -33,11 +32,8 @@ export default {
             if (rect.top < window.innerHeight && rect.bottom > 0) {
                 this.mounted = true;
             } else {
-                // On scroll, check if an image is visible
                 window.addEventListener('scroll', this.handleScroll);
-                // On resize, check if an image is visible
                 window.addEventListener('resize', this.handleScroll);
-                // On focus, check if an image is visible
                 window.addEventListener('focus', this.handleScroll);
             }
         }
@@ -45,16 +41,15 @@ export default {
     },
     methods: {
         handleScroll() {
-            this.mounted = true;
+            if (this.mounted) {
+                return;
+            }
+            // this.mounted = true;
+            setTimeout(() => { this.mounted = true }, 50);
             window.removeEventListener('scroll', this.handleScroll);
             window.removeEventListener('resize', this.handleScroll);
             window.removeEventListener('focus', this.handleScroll);
         },
-    },
-    destroyed() {
-        window.removeEventListener('scroll', this.handleScroll);
-        window.removeEventListener('resize', this.handleScroll);
-        window.removeEventListener('focus', this.handleScroll);
     },
     computed: {
         base() {
