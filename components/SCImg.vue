@@ -72,7 +72,7 @@ export default {
                 const ratio = this.width / this.height;
                 const width = parseInt(size) > parseInt(this.width) ? this.width : size;
                 const height = width / ratio;
-                return `${this.base}?w=${width}&h=${height}&output=${this.format}w&dpr=2&fit=cover ${size}w`
+                return `${this.base}?w=${width}&h=${height}&output=${this.format}&dpr=2&fit=cover ${size}w`
             }).join(', ')
         }
     }
