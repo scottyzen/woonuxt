@@ -1,20 +1,13 @@
 <template>
 	<div>
 		<NuxtLink class="flex relative items-center justify-center" to="/products">
-			<SCImg
-				width="1400"
-				height="797"
-				class="object-cover w-full lg:h-[580px]"
-				src="/images/hero.jpeg"
-				alt="Hero image"
-				loading="eager"
-				preload
-			/>
+			<SCImg width="1400" height="797" class="object-cover w-full lg:h-[580px]" src="/images/hero.jpeg"
+				alt="Hero image" loading="eager" preload />
 			<div class="container text-gray-900 absolute">
 				<h1 class="font-bold mb-24 text-2xl md:mb-4 lg:text-6xl">Just landed.</h1>
-				<div
-					class="font-light max-w-sm mb-12 hidden md:block"
-				>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde nam dignissimos nostrum veritatis nisi autem accusantium modi? Enim, voluptatibus consectetur.</div>
+				<div class="font-light max-w-sm mb-12 hidden md:block">Lorem ipsum dolor sit amet, consectetur
+					adipisicing elit. Unde nam dignissimos nostrum veritatis nisi autem accusantium modi? Enim,
+					voluptatibus consectetur.</div>
 			</div>
 		</NuxtLink>
 
@@ -25,12 +18,8 @@
 			</div>
 
 			<SCSlider>
-				<CategoryCard
-					class="min-w-[140px] lg:min-w-[200px]"
-					v-for="(category, i) in productCategories.nodes"
-					:key="i"
-					:node="category"
-				/>
+				<CategoryCard class="min-w-[140px] lg:min-w-[200px]" v-for="(category, i) in productCategories.nodes"
+					:key="i" :node="category" />
 			</SCSlider>
 		</section>
 
@@ -40,12 +29,8 @@
 				<NuxtLink class="text-primary" to="/products">View All</NuxtLink>
 			</div>
 			<SCSlider class="lg:gap-6">
-				<ProductCard
-					class="min-w-[160px] lg:min-w-[280px]"
-					v-for="node in  bestSellers.nodes"
-					:key="node.databaseId"
-					:node="node"
-				/>
+				<ProductCard class="min-w-[160px] lg:min-w-[280px]" v-for="node in  bestSellers.nodes"
+					:key="node.databaseId" :node="node" />
 			</SCSlider>
 		</section>
 
@@ -55,12 +40,8 @@
 				<NuxtLink class="text-primary" to="/products">View All</NuxtLink>
 			</div>
 			<SCSlider class="lg:gap-6">
-				<ProductCard
-					class="min-w-[160px] lg:min-w-[280px]"
-					v-for="node in  latesProducts.nodes"
-					:key="node.databaseId"
-					:node="node"
-				/>
+				<ProductCard class="min-w-[160px] lg:min-w-[280px]" v-for="node in  latesProducts.nodes"
+					:key="node.databaseId" :node="node" />
 			</SCSlider>
 		</section>
 	</div>
