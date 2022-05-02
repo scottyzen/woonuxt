@@ -1,5 +1,6 @@
 <template>
-    <img v-if="mounted || loading == 'egar'" :src="sourceUrl" :width="width" :height="height" :srcset="srcset" />
+    <img v-if="mounted || loading == 'egar' || preload" :src="sourceUrl" :width="width" :height="height"
+        :srcset="srcset" />
     <img v-else :src="`${this.base}?w=${20}&h=${20}&output=webp&q=${20}&blur=5`" :width="width" :height="height"
         loading="lazy" />
 </template>
