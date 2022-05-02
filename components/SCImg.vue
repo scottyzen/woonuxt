@@ -66,7 +66,7 @@ export default {
             return `${this.base}?w=${this.width}&h=${this.height}&output=${this.format}&q=${this.quality}&dpr=2&fit=cover`
         },
         srcset() {
-            const sizes = ['320', '768', '1280']
+            const sizes = ['320', '768', '1280', '1920', '2560'];
             // const sizesBelowMaxWidth = sizes
 
             const sizesBelowMaxWidth = sizes.filter(size => {
