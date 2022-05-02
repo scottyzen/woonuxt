@@ -31,17 +31,11 @@ export default {
             return;
         }
         if (!this.preload) {
-            const rect = this.$el.getBoundingClientRect();
-            // check if an image is visible
-            if (rect.top < window.innerHeight && rect.bottom > 0) {
-                this.mounted = true;
-            } else {
-                window.addEventListener('scroll', this.handleScroll);
-                window.addEventListener('resize', this.handleScroll);
-                window.addEventListener('focus', this.handleScroll);
-            }
+            this.showImage();
+            window.addEventListener('scroll', this.handleScroll);
+            window.addEventListener('resize', this.handleScroll);
+            window.addEventListener('focus', this.handleScroll);
         }
-
     },
     methods: {
         handleScroll() {
@@ -51,7 +45,14 @@ export default {
                 window.removeEventListener('focus', this.handleScroll);
                 return;
             }
-            this.mounted = true;
+            this.showImage();
+        },
+        showImage() {
+            const rect = this.$el.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                console.log('image visible', this.src);
+                this.mounted = true;
+            }
         },
     },
     computed: {
