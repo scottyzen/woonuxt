@@ -21,6 +21,7 @@ export default {
         format: { type: String, default: 'webp' },
         loading: { type: String, default: 'egar' },
         preload: { type: Boolean, default: false },
+        sm: { type: Number, default: 0 },
     },
     head() {
         return {
@@ -51,7 +52,7 @@ export default {
         showImage() {
             const rect = this.$el.getBoundingClientRect();
             if (rect.top < window.innerHeight && rect.bottom > 0) {
-                console.log('image visible', this.src);
+                // console.log('image visible', this.src);
                 this.mounted = true;
             }
         },
@@ -72,6 +73,15 @@ export default {
                 const ratio = this.width / this.height;
                 const width = parseInt(size) > parseInt(this.width) ? this.width : size;
                 const height = width / ratio;
+
+                // get small size ratio
+                const smallWidth = this.sm;
+                const smallHeight = smallWidth / ratio;
+
+                if (size == '320' && this.sm) {
+                    return `${this.base}?w=${smallWidth}&h=${smallHeight}&output=${this.format}&dpr=2&fit=cover ${size}w`
+                }
+
                 return `${this.base}?w=${width}&h=${height}&output=${this.format}&dpr=2&fit=cover ${size}w`
             }).join(', ')
         }
