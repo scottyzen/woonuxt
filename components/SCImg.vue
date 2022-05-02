@@ -67,8 +67,8 @@ export default {
         },
         srcset() {
             const sizes = ['320', '768', '1280']
-            // const sizesBelowMaxWidth = sizes
-            const sizesBelowMaxWidth = sizes.filter(size => parseInt(size) < this.width)
+            const sizesBelowMaxWidth = sizes
+            // const sizesBelowMaxWidth = sizes.filter(size => parseInt(size) < this.width)
 
             const srsArray = sizesBelowMaxWidth.map(size => {
                 const ratio = this.width / this.height;
@@ -86,7 +86,7 @@ export default {
                 return `${this.base}?w=${width}&h=${height}&output=${this.format}&dpr=2&fit=cover ${size}w`
             })
 
-            return srsArray.length > 1 ? srsArray.join(', ') : null;
+            return srsArray.join(', ')
         }
     }
 }
