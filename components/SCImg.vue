@@ -13,19 +13,11 @@ export default {
         format: { type: String, default: 'webp' },
         preload: { type: Boolean, default: false },
         sm: { type: Number, default: 0 },
-        dpr: { type: Number, default: 1 },
     },
     head() {
         return {
             link: this.preload ? [{ rel: 'preload', href: this.sourceUrl, as: 'image' }] : [],
         };
-    },
-    mounted() {
-        this.$nextTick(() => {
-            setTimeout(() => {
-                this.dpr = window.devicePixelRatio;
-            }, 50);
-        });
     },
     computed: {
         base() {
@@ -37,13 +29,13 @@ export default {
                 const ratio = this.width / this.height;
                 const smallWidth = this.sm;
                 const smallHeight = smallWidth / ratio;
-                return `${this.base}?w=${smallWidth}&h=${smallHeight}&output=${this.format}&q=${this.quality}&dpr=${this.dpr}`;
+                return `${this.base}?w=${smallWidth}&h=${smallHeight}&output=${this.format}&q=${this.quality}`;
             } else {
-                return `${this.base}?w=${this.width}&h=${this.height}&output=${this.format}&q=${this.quality}&dpr=${this.dpr}`
+                return `${this.base}?w=${this.width}&h=${this.height}&output=${this.format}&q=${this.quality}`
             }
         },
         srcset() {
-            const sizes = ['320', '768', '1280', '1920', '2560'];
+            const sizes = ['320', '425', '768', '1280', '1920', '2560'];
 
             const sizesBelowMaxWidth = sizes.filter(size => {
                 if (size == '320' && this.sm) return true;
@@ -60,10 +52,10 @@ export default {
                 const smallHeight = smallWidth / ratio;
 
                 if (size == '320' && this.sm) {
-                    return `${this.base}?w=${smallWidth}&h=${smallHeight}&output=${this.format}&dpr=${this.dpr} ${size}w`
+                    return `${this.base}?w=${smallWidth}&h=${smallHeight}&output=${this.format} ${size}w`
                 }
 
-                return `${this.base}?w=${width}&h=${height}&output=${this.format}&dpr=${this.dpr} ${size}w`
+                return `${this.base}?w=${width}&h=${height}&output=${this.format}&dpr=2 ${size}w`
             })
 
 
