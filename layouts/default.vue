@@ -7,13 +7,10 @@
 		<transition name="slide">
 			<MobileMenu v-if="showMenu" class="z-50" />
 		</transition>
-		<Nuxt class="flex-1" />
+		<Nuxt class="flex-1" keep-alive />
 		<transition name="page">
-			<div
-				v-if="showCart || showMenu"
-				@click="closeAllModals"
-				class="bg-black opacity-25 inset-0 z-40 fixed"
-			></div>
+			<div v-if="showCart || showMenu" @click="closeAllModals" class="bg-black opacity-25 inset-0 z-40 fixed">
+			</div>
 		</transition>
 		<CookieBanner />
 		<Footer />
@@ -84,10 +81,12 @@ export default {
 .page-leave-active {
 	transition: opacity 250ms ease-in-out;
 }
+
 .page-enter,
 .page-leave-active {
 	opacity: 0;
 }
+
 html,
 body {
 	@apply bg-gray-50 text-gray-900;
@@ -97,6 +96,7 @@ body {
 .container {
 	max-width: 1440px;
 }
+
 .container-sm {
 	max-width: 1280px;
 }
@@ -111,6 +111,7 @@ pre {
 .slide-enter-active {
 	transition: transform 400ms ease-in-out;
 }
+
 .slide-enter,
 .slide-leave-to {
 	transform: translateX(500px);
@@ -143,6 +144,7 @@ pre {
 	0% {
 		transform: rotate(0deg);
 	}
+
 	100% {
 		transform: rotate(360deg);
 	}
@@ -164,6 +166,7 @@ pre {
 	max-height: 0;
 	overflow: hidden;
 }
+
 .scale-y-enter-active {
 	transition: max-height 500ms ease-out, opacity 500ms ease-out 250ms,
 		transform 500ms ease-out;
@@ -171,6 +174,7 @@ pre {
 	max-height: 600px;
 	overflow: hidden;
 }
+
 .scale-y-enter,
 .scale-y-leave-to {
 	opacity: 0;
