@@ -13,20 +13,20 @@ export default {
         format: { type: String, default: 'webp' },
         preload: { type: Boolean, default: false },
         sm: { type: Number, default: 0 },
-        dpr: { type: Number, default: 2 },
+        dpr: { type: Number, default: 1 },
     },
     head() {
         return {
             link: this.preload ? [{ rel: 'preload', href: this.sourceUrl, as: 'image' }] : [],
         };
     },
-    // mounted() {
-    //     this.$nextTick(() => {
-    //         setTimeout(() => {
-    //             this.dpr = window.devicePixelRatio;
-    //         }, 2000);
-    //     });
-    // },
+    mounted() {
+        this.$nextTick(() => {
+            setTimeout(() => {
+                this.dpr = window.devicePixelRatio;
+            }, 50);
+        });
+    },
     computed: {
         base() {
             if (this.src.startsWith('http')) return `https://images.weserv.nl/?url=${this.src}`;
@@ -41,20 +41,6 @@ export default {
             } else {
                 return `${this.base}?w=${this.width}&h=${this.height}&output=${this.format}&q=${this.quality}&dpr=${this.dpr}`
             }
-        },
-        isRetina() {
-            let mediaQuery
-            if (typeof window !== 'undefined' && window !== null) {
-                mediaQuery =
-                    '(-webkit-min-device-pixel-ratio: 1.25), (min--moz-device-pixel-ratio: 1.25), (-o-min-device-pixel-ratio: 5/4), (min-resolution: 1.25dppx)'
-                if (window.devicePixelRatio > 1.25) {
-                    return true
-                }
-                if (window.matchMedia && window.matchMedia(mediaQuery).matches) {
-                    return true
-                }
-            }
-            return false
         },
         srcset() {
             const sizes = ['320', '768', '1280', '1920', '2560'];
