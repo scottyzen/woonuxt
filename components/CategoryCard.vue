@@ -1,7 +1,7 @@
 <template>
     <NuxtLink :to="`/product-category/${node.slug}`"
         class="border border-white rounded-xl flex item relative justify-center overflow-hidden snap-mandatory snap-x">
-        <SCImg v-if="node.image" width="200" height="250" class="h-full object-cover w-full inset-0 absolute"
+        <SCImg v-if="node.image" width="200" height="240" class="h-full object-cover w-full inset-0 absolute"
             :src="node.image.sourceUrl" :alt="node.name" loading="lazy" :sm="138" />
         <div class="bg-gradient-to-t from-black to-transparent h-1/2 opacity-50 inset-x-0 bottom-0 absolute"></div>
         <span class="font-semibold mt-auto text-sm text-white mb-2 z-10 relative capitalize md:text-base md:mb-4">{{
