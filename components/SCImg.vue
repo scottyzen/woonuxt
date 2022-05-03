@@ -1,5 +1,5 @@
 <template>
-    <img :src="sourceUrl" :width="width" :height="height" :srcset="srcset" :data-dpr="dpr" />
+    <img :src="sourceUrl" :width="width" :height="height" :srcset="srcset" />
 </template>
 
 <script>
@@ -35,27 +35,29 @@ export default {
             }
         },
         srcset() {
-            const sizes = ['320', '425', '768', '1280', '1920', '2560'];
+            const sizes = [320, 768, 1280];
 
             const sizesBelowMaxWidth = sizes.filter(size => {
-                if (size == '320' && this.sm) return true;
-                return parseInt(size) < parseInt(this.width)
+                if (size == 320 && this.sm) return true;
+                return size < parseInt(this.width)
             });
+
+            console.log({ sizesBelowMaxWidth });
 
             const srsArray = sizes.slice(0, sizesBelowMaxWidth.length + 1).map(size => {
                 const ratio = this.width / this.height;
-                const width = parseInt(size) > parseInt(this.width) ? this.width : size;
+                const width = size > parseInt(this.width) ? this.width : size;
                 const height = width / ratio;
 
                 // get small size ratio
                 const smallWidth = this.sm;
                 const smallHeight = smallWidth / ratio;
 
-                if (size == '320' && this.sm) {
+                if (size <= 320 && this.sm) {
                     return `${this.base}?w=${smallWidth}&h=${smallHeight}&output=${this.format} ${size}w`
                 }
 
-                return `${this.base}?w=${width}&h=${height}&output=${this.format}&dpr=2 ${size}w`
+                return `${this.base}?w=${width}&h=${height}&output=${this.format} ${size}w`
             })
 
 
