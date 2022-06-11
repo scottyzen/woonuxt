@@ -1,6 +1,6 @@
 <template>
 	<div class="mx-auto my-4 w-full max-w-3xl px-4">
-		<h1 class="font-semibold my-12 text-xl text-center">Wishlist</h1>
+		<h1 class="border-b font-semibold my-4 text-center py-4 text-2xl">Wishlist</h1>
 		<ul v-if="wishlist.length" class="divide-y divide-gray-100 my-8 grid">
 			<WishListItem v-for="product in wishlist" :key="product.databaseId" :product="product" />
 		</ul>
@@ -13,7 +13,7 @@
 <script>
 export default {
 	head() {
-		return { title: 'FAQ' };
+		return { title: 'Wishlist' };
 	},
 	computed: {
 		wishlist() {

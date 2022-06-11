@@ -25,7 +25,10 @@
 						<QuantityButtons @quantity-change="updateQuantity" :quantity="quantity" :min="1" />
 					</div>
 				</form>
-				<WishlistButton :product="product" />
+				<div class="flex flex-wrap gap-4">
+					<WishlistButton :product="product" />
+					<ShareButton :product="product" />
+				</div>
 			</div>
 		</div>
 		<div class="my-24">

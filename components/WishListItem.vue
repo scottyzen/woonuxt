@@ -1,15 +1,17 @@
 <template>
-	<li class="flex py-4 gap-6 items-center">
+	<li class="flex py-4 gap-4 items-center">
 		<button @click="removeFromWishlist" title="Remove Item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="24" height="24">
 				<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368" />
 			</svg></button>
 		<NuxtLink :to="`/product/${product.slug}`">
-			<SCImg class="rounded-xl h-20 w-20" v-if="product.image" :src="product.image.sourceUrl" :alt="product.image.altText || product.name" :title="product.image.altText || product.name" />
+			<SCImg class="rounded-xl h-12 w-12 md:h-20 md:w-20" v-if="product.image" :src="product.image.sourceUrl" :alt="product.image.altText || product.name" :title="product.image.altText || product.name" />
 		</NuxtLink>
 		<NuxtLink class="flex-1 text-lg leading-tight" :to="`/product/${product.slug}`">{{ product.name }}</NuxtLink>
-		<ProductPrice :salePrice="product.salePrice" :regularPrice="product.regularPrice" />
-		<span class="font-semibold text-xs text-green-500" v-if="product.stockStatus == 'IN_STOCK'">In Stock</span>
-		<span class="font-semibold text-xs text-red-500" v-else>Out of Stock</span>
+		<div class="flex flex-col justify-end items-end md:flex-row md:gap-4 md:items-center">
+			<ProductPrice :salePrice="product.salePrice" :regularPrice="product.regularPrice" />
+			<span class="font-semibold text-xs text-green-500" v-if="product.stockStatus == 'IN_STOCK'">In Stock</span>
+			<span class="font-semibold text-xs text-red-500" v-else>Out of Stock</span>
+		</div>
 	</li>
 </template>
 
