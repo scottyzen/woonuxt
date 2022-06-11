@@ -1,5 +1,3 @@
-#import "~/gql/fragments/SimpleProduct.gql"
-#import "~/gql/fragments/VariableProduct.gql"
 #import "~/gql/fragments/CartFragment.gql"
 #import "~/gql/fragments/CustomerFragment.gql"
 

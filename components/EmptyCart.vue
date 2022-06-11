@@ -11,7 +11,7 @@ export default {
 		async EmptyCart() {
 			const { emptyCart } = await this.$graphql.default.request(EMPTY_CART);
 			if (emptyCart) {
-				this.$store.commit('updateCart', null);
+				this.$store.commit('updateCart', emptyCart.cart);
 			}
 		},
 	},

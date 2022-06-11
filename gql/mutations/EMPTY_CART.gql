@@ -1,8 +1,9 @@
+#import "~/gql/fragments/CartFragment.gql"
+
 mutation EmptyCart {
   emptyCart(input: {clearPersistentCart: true}) {
     cart {
-      total
-      isEmpty
+      ...CartFragment
     }
   }
 }

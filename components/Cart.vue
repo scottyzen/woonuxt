@@ -1,11 +1,11 @@
 <template>
 	<section class="bg-white flex flex-col max-w-lg shadow-lg top-0 right-0 bottom-0 w-9/10 fixed overflow-x-hidden" v-if="cart">
 		<CloseModals class="bg-white rounded-xl shadow-xl p-1.5" />
-		<EmptyCart v-if="!cart.isEmpty" class="rounded-xl shadow-xl p-1.5 hover:bg-red-400 hover:text-white" />
+		<EmptyCart v-if="cart && !cart.isEmpty" class="rounded-xl shadow-xl p-1.5 hover:bg-red-400 hover:text-white" />
 
 		<div class="mt-8 text-center">Cart</div>
 
-		<template v-if="!cart.isEmpty">
+		<template v-if="cart && !cart.isEmpty">
 			<ul class="flex flex-col flex-1 p-8 gap-4 overflow-y-scroll">
 				<SwipeCard v-for="item in cart.contents.nodes" :key="item.key" :item="item" @has-swiped="removeItemFromCart(item.key)">
 					<LazyCartCard :item="item" />
