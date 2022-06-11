@@ -1,5 +1,5 @@
 <template>
-	<div class="mx-auto my-4 w-full max-w-3xl">
+	<div class="mx-auto my-4 w-full max-w-3xl px-4">
 		<h1 class="font-semibold my-12 text-xl text-center">Wishlist</h1>
 		<ul v-if="wishlist.length" class="divide-y divide-gray-100 my-8 grid">
 			<WishListItem v-for="product in wishlist" :key="product.databaseId" :product="product" />
