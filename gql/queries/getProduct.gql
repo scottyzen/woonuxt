@@ -5,6 +5,7 @@ query getProduct($slug: ID!) {
   product(id: $slug, idType: SLUG) {
     name
     databaseId
+    type
     attributes {
       nodes {
         variation

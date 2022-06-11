@@ -1,4 +1,5 @@
 const colors = require('windicss/colors')
+const typography = require('windicss/plugin/typography')
 module.exports = {
   theme: {
     container: {
@@ -17,5 +18,8 @@ module.exports = {
         'spin-fast': 'spin 600ms linear infinite',
       }
     },
-  }
+  },
+  plugins: [ 
+    typography
+  ]
 };

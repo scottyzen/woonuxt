@@ -60,7 +60,7 @@ export default defineNuxtConfig({
   buildModules: [
     "@nuxtjs/pwa",
     'nuxt-windicss',
-    // "@nuxt/image",
+    "@nuxt/image",
     "nuxt-graphql-request",
     // '@vueuse/core/nuxt',
     '@nuxtjs/composition-api/module',
@@ -82,7 +82,7 @@ export default defineNuxtConfig({
   },
 
   sitemap: { hostname: 'https://woonuxt.com', gzip: true },
-  // image: { provider: "static", domains: [process.env.WORDPRESS_URL] },
+  image: { provider: "static", domains: [process.env.WORDPRESS_URL] },
 
   pwa: {
     manifest: {

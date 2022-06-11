@@ -1,11 +1,11 @@
 <template>
 	<div class="-mx-4 md:m-0 md:w-[500px]" v-if="mainImage">
-		<SCImg class="object-contain rounded-2xl w-full min-w-[350px]" width="600" height="600" :src="firstImage" v-show="imageToShow === null" />
-		<SCImg class="object-contain rounded-2xl w-full min-w-[350px]" width="600" height="600" :src="mainImage" v-show="imageToShow === 0" />
-		<SCImg class="object-contain rounded-2xl w-full min-w-[350px]" width="600" height="600" v-for="(node, i) in gallery.nodes" :key="i" :src="node.sourceUrl" v-show="imageToShow === i + 1" />
+		<NuxtImg class="object-contain rounded-2xl w-full min-w-[350px]" width="600" height="600" format="webp" fit="outside" :src="firstImage" v-show="imageToShow === null" />
+		<NuxtImg class="object-contain rounded-2xl w-full min-w-[350px]" width="600" height="600" format="webp" fit="outside" :src="mainImage" v-show="imageToShow === 0" />
+		<NuxtImg class="object-contain rounded-2xl w-full min-w-[350px]" width="600" height="600" format="webp" fit="outside" v-for="(node, i) in gallery.nodes" :key="i" :src="node.sourceUrl" v-show="imageToShow === i + 1" />
 		<div v-if="gallery.nodes.length" class="my-4 gallery-images">
-			<SCImg class="cursor-pointer rounded-2xl" width="110" height="140" :src="firstImage" @click.native="changeImage(null)" />
-			<SCImg class="cursor-pointer rounded-2xl" width="110" height="140" v-for="(node, i) in gallery.nodes" :key="i" :src="node.sourceUrl" @click.native="changeImage(i + 1)" />
+			<NuxtImg class="cursor-pointer rounded-2xl" width="110" height="140" format="webp" :src="firstImage" @click.native="changeImage(null)" />
+			<NuxtImg class="cursor-pointer rounded-2xl" width="110" height="140" fit="outside" v-for="(node, i) in gallery.nodes" :key="i" :src="node.sourceUrl" @click.native="changeImage(i + 1)" />
 		</div>
 	</div>
 </template>
