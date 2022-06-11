@@ -2116,7 +2116,7 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.37.tgz#8e6adc3f2759af52f0e85863dfb0b711ecc5c702"
   integrity sha512-4rSJemR2NQIo9Klm1vabqWjD8rs/ZaJSzMxkMNeJS6lHiUjjUeYFbooN19NgFjztubEKh3WlZUeOLVdbbUWHsw==
 
-"@vueuse/core@^8.3.1":
+"@vueuse/core@^8.6.0":
   version "8.6.0"
   resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-8.6.0.tgz#a8f80363cc63d17382423f16beae57696f376e67"
   integrity sha512-VirzExCm/N+QdrEWT7J4uSrvJ5hquKIAU9alQ37kUvIJk9XxCLxmfRnmekYc1kz2+6BnoyuKYXVmrMV351CB4w==
@@ -3688,7 +3688,7 @@ cookie-es@^0.5.0:
   resolved "https://registry.yarnpkg.com/cookie-es/-/cookie-es-0.5.0.tgz#a6ad89923e68c542fc9e760b07aefa5ab020d719"
   integrity sha512-RyZrFi6PNpBFbIaQjXDlFIhFVqV42QeKSZX1yQIl6ihImq6vcHNGMtqQ/QzY3RMPuYSkvsRwtnt5M9NeYxKt0g==
 
-cookie-universal-nuxt@^2.1.5:
+cookie-universal-nuxt@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/cookie-universal-nuxt/-/cookie-universal-nuxt-2.2.1.tgz#b544d0fb19670f765b3e42204f7d2157a95e6872"
   integrity sha512-pzk+CsmnNgcpFPNr8GO+B3dR0d0ovjnyFMC5Trx3zNUEEplw94CoEbv+SLSjxsXCMOF21Cmq202Od0zYbkOa+g==
@@ -3739,7 +3739,7 @@ core-js-compat@^3.19.1, core-js-compat@^3.21.0, core-js-compat@^3.22.1:
     browserslist "^4.20.3"
     semver "7.0.0"
 
-core-js@^3.19.0, core-js@^3.22.3:
+core-js@^3.19.0, core-js@^3.22.3, core-js@^3.22.8:
   version "3.22.8"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.22.8.tgz#23f860b1fe60797cc4f704d76c93fea8a2f60631"
   integrity sha512-UoGQ/cfzGYIuiq6Z7vWL1HfkE9U9IZ4Ub+0XSiJTCzvbZzgPA69oDF2f+lgJ6dFFLEdjW5O6svvoKzXX23xFkA==
@@ -5339,7 +5339,7 @@ functions-have-names@^1.2.2:
   resolved "https://registry.yarnpkg.com/functions-have-names/-/functions-have-names-1.2.3.tgz#0404fe4ee2ba2f607f0e0ec3c80bae994133b834"
   integrity sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==
 
-fuse.js@^6.5.3:
+fuse.js@^6.6.2:
   version "6.6.2"
   resolved "https://registry.yarnpkg.com/fuse.js/-/fuse.js-6.6.2.tgz#fe463fed4b98c0226ac3da2856a415576dc9a111"
   integrity sha512-cJaJkxCCxC8qIIcPBF9yGxY0W/tVZS3uEISDxhYIdtk8OL93pe+6Zj7LjCqVV4dzbqcriOZ+kQ/NE4RXZHsIGA==
@@ -5581,7 +5581,7 @@ graphql-tag@^2.12.6:
   dependencies:
     tslib "^2.1.0"
 
-graphql@^16.4.0:
+graphql@^16.5.0:
   version "16.5.0"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.5.0.tgz#41b5c1182eaac7f3d47164fb247f61e4dfb69c85"
   integrity sha512-qbHgh8Ix+j/qY+a/ZcJnFQ+j8ezakqPiHwPiZhV/3PgGlgf96QMBB5/f2rkiC9sgLoy/xvT6TSiaf2nTHJh5iA==
@@ -7956,7 +7956,7 @@ nuxt-edge@latest:
     "@nuxt/vue-renderer-edge" "2.16.0-27358576.777a4b7f"
     "@nuxt/webpack-edge" "2.16.0-27358576.777a4b7f"
 
-nuxt-graphql-request@^5.1.0:
+nuxt-graphql-request@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/nuxt-graphql-request/-/nuxt-graphql-request-5.2.0.tgz#06728befbf7c3f8c1bcbc451a937e30d2d9ac8c0"
   integrity sha512-ONfdICJBWBsHdIMMv+UEzoAzqrZwuR+xDlQobuhHnc2/PWI3W9reFGsvwk4AfFvJR3wuSQSf+ts90Y+OOuKR7Q==
@@ -7965,7 +7965,7 @@ nuxt-graphql-request@^5.1.0:
     graphql-request "^4.3.0"
     ramda "^0.28.0"
 
-nuxt-windicss@^2.3.1:
+nuxt-windicss@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/nuxt-windicss/-/nuxt-windicss-2.4.2.tgz#c46a08b6d4c9ef0e24be31d73346bc76aea4d7a4"
   integrity sha512-coHvXGw4CqkRqG47aJqNKbQKMO17ZGXFVyeOKGaRnvsS4FcdfKtYKukpDgJm0sCIG57z8CljfX3nBy71+vu3mg==
