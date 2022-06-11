@@ -64,7 +64,6 @@ export default defineNuxtConfig({
     "nuxt-graphql-request",
     // '@vueuse/core/nuxt',
     '@nuxtjs/composition-api/module',
-    // 'nuxt-delay-hydration'
   ],
 
   plugins: [
@@ -82,7 +81,7 @@ export default defineNuxtConfig({
   },
 
   sitemap: { hostname: 'https://woonuxt.com', gzip: true },
-  image: { provider: "static", domains: [process.env.WORDPRESS_URL] },
+  image: { provider: "static", domains: [process.env.WORDPRESS_URL, process.env.DOMAIN] },
 
   pwa: {
     manifest: {
