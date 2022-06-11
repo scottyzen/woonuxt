@@ -33,6 +33,8 @@ fragment CartFragment on Cart {
         node {
           name
           price
+          regularPrice
+          salePrice
           image {
             sourceUrl(size: SHOP_THUMBNAIL)
           }

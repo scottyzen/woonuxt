@@ -67,9 +67,9 @@ export default defineNuxtConfig({
     // 'nuxt-delay-hydration'
   ],
 
-  // delayHydration: {
-  //   mode: 'init'
-  // },
+  plugins: [
+    { src: "~/plugins/vuex-persist", ssr: false },
+  ],
 
 
   graphql: {
