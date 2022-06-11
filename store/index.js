@@ -9,6 +9,7 @@ export const state = () => ({
   productCategories: [],
   filter: null,
   searchTags: [],
+  wishlist: [],
 })
 
 
@@ -23,6 +24,16 @@ export const mutations = {
   setFilter(state, filter) {state.filter = filter ? {...filter} : null},
   clearFilter(state) { state.filter = null },
   setSearchTags(state, tags) { state.searchTags = [...tags] },
+  updateWishlist: (state, wishlist) => (state.wishlist = wishlist),
+  addToWishlist: (state, product) => {
+    if (!state.wishlist.find(p => p.databaseId === product.databaseId)) {
+      state.wishlist.push(product)
+    }
+  },
+  removeFromWishlist: (state, product) => {
+    state.wishlist = state.wishlist.filter(p => p.databaseId !== product.databaseId)
+  },
+  clearWishlist(state) { state.wishlist = [] }
 }
 
 export const actions = {

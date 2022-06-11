@@ -90,3 +90,6 @@ sw.*
 *.swp
 
 .output
+
+# VSCode
+.vscode

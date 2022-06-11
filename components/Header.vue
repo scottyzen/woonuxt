@@ -2,10 +2,7 @@
 	<header class="bg-white shadow-sm top-0 z-40 sticky">
 		<div class="container flex py-4 items-center justify-between">
 			<Logo />
-			<MenuItems
-				id="main-nav"
-				class="text-sm text-gray-500 gap-6 items-center hidden md:flex lg:pl-12"
-			/>
+			<MenuItems id="main-nav" class="text-sm text-gray-500 gap-6 items-center hidden md:flex lg:pl-12" />
 			<div class="flex justify-end items-center md:min-w-[120px]">
 				<SignInLink />
 				<CartTrigger @icon-click="toggleCart" />
