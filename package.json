@@ -11,9 +11,9 @@
   "dependencies": {
     "@nuxtjs/composition-api": "^0.32.0",
     "@nuxtjs/sitemap": "^2.4.0",
-    "@vueuse/core": "^8.6.0",
+    "@vueuse/core": "^8.7.3",
     "cookie-universal-nuxt": "^2.2.1",
-    "core-js": "^3.22.8",
+    "core-js": "^3.23.1",
     "fuse.js": "^6.6.2",
     "graphql": "^16.5.0",
     "graphql-tag": "^2.12.6",
