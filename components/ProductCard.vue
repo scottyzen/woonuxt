@@ -1,6 +1,7 @@
 <template>
 	<NuxtLink :to="{ name: 'product-slug', params: { slug: node.slug, page: page } }" class="relative">
-		<span v-if="node.onSale" class="border rounded-md bg-yellow-200 border-yellow-300 text-xs tracking-tight px-1.5 top-2 right-2 text-orange-800 leading-5 z-10 absolute">SALE</span>
+		<SaleBadge :node="node" class="top-2 right-2 absolute" />
+
 		<NuxtImg v-if="node.image" width="280" height="315" class="rounded-xl object-top object-cover w-full product-image aspect-square" :src="node.image.sourceUrl" :alt="node.image.altText || node.name" :title="node.image.title || node.name" :loading="(index <= 1 || index == 5) ? 'eager' : 'lazy'" format="webp" fit="outside" />
 
 		<div class="p-2">

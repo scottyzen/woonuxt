@@ -105,7 +105,7 @@ export default {
 				this.product.variations.nodes.forEach((element) => {
 					tempArray.push(element.attributes.nodes[index].value);
 				});
-				// console.log(tempArray)
+
 				if (!tempArray.some(Boolean)) {
 					this.indexOfTypeAny.push(index);
 				}

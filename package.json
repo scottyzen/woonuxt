@@ -1,6 +1,6 @@
 {
   "name": "woonuxt",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "private": true,
   "scripts": {
     "dev": "nuxi dev",
@@ -11,7 +11,7 @@
   "dependencies": {
     "@nuxtjs/composition-api": "^0.32.0",
     "@nuxtjs/sitemap": "^2.4.0",
-    "@vueuse/core": "^8.7.3",
+    "@vueuse/core": "^8.7.4",
     "cookie-universal-nuxt": "^2.2.1",
     "core-js": "^3.23.1",
     "fuse.js": "^6.6.2",
