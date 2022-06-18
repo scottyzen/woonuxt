@@ -1,10 +1,7 @@
 <template>
 	<section class="h-full min-h-screen w-full relative">
 		<!-- Count Description -->
-		<div
-			v-if="products.length"
-			class="font-light mt-8 text-sm -top-16 right-0 absolute hidden lg:block"
-		>
+		<div v-if="products.length" class="font-light mt-8 text-sm -top-16 right-0 absolute hidden lg:block">
 			Showing
 			<strong>{{ small + 1 }}</strong> to
 			<strong>{{ large }}</strong> of
@@ -13,25 +10,13 @@
 
 		<!-- No Products Found  -->
 		<div v-if="products.length == 0" class="flex flex-col p-8 items-center justify-center">
-			<SCImg width="400" height="400" src="/images/empty.svg" />
+			<NuxtImg width="400" height="400" src="/images/empty.svg" />
 			<span>No Products Found</span>
 		</div>
 
 		<!-- Products -->
-		<transition-group
-			v-else
-			name="shrink"
-			mode="in-out"
-			class="my-4 min-h-[600px] grid transition-all gap-8 product-grid lg:my-8"
-		>
-			<ProductCard
-				class="w-full"
-				v-for="(node, i) in newProducts"
-				:key="node.databaseId"
-				:node="node"
-				:index="i"
-				:page="page"
-			/>
+		<transition-group v-else name="shrink" mode="in-out" class="my-4 min-h-[600px] grid transition-all gap-8 product-grid lg:my-8">
+			<ProductCard class="w-full" v-for="(node, i) in newProducts" :key="node.databaseId" :node="node" :index="i" :page="page" />
 		</transition-group>
 
 		<!-- Pagination -->
@@ -47,28 +32,31 @@ export default {
 	props: {
 		page: { type: Number, default: 1 },
 		category: { type: String, default: null },
-		products: { type: Array, default: null }
+		products: { type: Array, default: null },
 	},
 	computed: {
 		perPage() {
-			return this.$config.perPage
+			return this.$config.perPage;
 		},
 		newProducts() {
-			return this.products.slice(this.perPage * this.page - this.perPage, this.perPage * this.page)
+			return this.products.slice(
+				this.perPage * this.page - this.perPage,
+				this.perPage * this.page
+			);
 		},
 		small() {
-			return this.perPage * this.page - this.perPage
+			return this.perPage * this.page - this.perPage;
 		},
 		large() {
-			return Math.min(this.products.length, this.perPage * this.page)
+			return Math.min(this.products.length, this.perPage * this.page);
 		},
 	},
 	watch: {
 		page() {
-			window.scrollTo(0, 0)
-		}
+			window.scrollTo(0, 0);
+		},
 	},
-}
+};
 </script>
 
 <style lang="postcss">
