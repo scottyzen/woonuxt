@@ -17,7 +17,7 @@ export default {
 	},
 	computed: {
 		wishlist() {
-			return this.$store.state.wishlist;
+			return this.$store.state?.wishlist;
 		},
 	},
 };
