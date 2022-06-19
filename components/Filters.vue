@@ -7,13 +7,11 @@
 		<div class="flex gap-4 justify-between">
 			<div class="flex w-1/2 relative items-center">
 				<span v-if="filter.minPrice" class="p-2 absolute">€</span>
-				<input class="price-input" type="number" placeholder="Min" min="0" v-model.number="filter.minPrice"
-					step="1" :class="{ 'active': filter.minPrice }" />
+				<input class="price-input" type="number" placeholder="Min" min="0" v-model.number="filter.minPrice" step="1" :class="{ 'active': filter.minPrice }" />
 			</div>
 			<div class="flex w-1/2 relative items-center">
 				<span v-if="filter.maxPrice" class="p-2 absolute">€</span>
-				<input class="price-input" type="number" placeholder="Max" min="0" max="90"
-					v-model.number="filter.maxPrice" step="1" :class="{ 'active': filter.maxPrice }" />
+				<input class="price-input" type="number" placeholder="Max" min="0" max="90" v-model.number="filter.maxPrice" step="1" :class="{ 'active': filter.maxPrice }" />
 			</div>
 		</div>
 
@@ -56,15 +54,13 @@
 		</div>
 
 		<transition name="fadeUp">
-			<button v-if="showRestButton" @click="reset"
-				class="bg-primary-light rounded-xl cursor-pointer my-8 text-center text-white leading-tight w-full p-2 block hover:bg-purple-700">Clear
+			<button v-if="showRestButton" @click="reset" class="bg-primary-light rounded-xl cursor-pointer my-8 text-center text-white leading-tight w-full p-2 block hover:bg-purple-700">Clear
 				all filters</button>
 		</transition>
 	</aside>
 </template>
 
 <script>
-
 export default {
 	data() {
 		const initialState = {
@@ -86,7 +82,7 @@ export default {
 	},
 	mounted() {
 		if (this.$store.state.filter) {
-			this.filter = this.$store.state.filter
+			this.filter = this.$store.state.filter;
 		}
 	},
 	methods: {
@@ -112,7 +108,7 @@ export default {
 				this.$emit('filter-updated');
 			},
 			deep: true,
-		}
+		},
 	},
 	computed: {
 		showRestButton() {
@@ -125,7 +121,7 @@ export default {
 			return [...this.filter.colors];
 		},
 	},
-}
+};
 </script>
 
 <style lang="postcss" scoped>

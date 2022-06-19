@@ -1,5 +1,5 @@
 <template>
-	<Multiselect :multiple="true" :hide-selected="true" v-model="selected" :options="[]" placeholder="Search..." ref="multisearch" :taggable="true" :maxHeight="0" @tag="addTag" @update="updateSelected" class="flex-1 box-border"></Multiselect>
+	<Multiselect :multiple="true" :hide-selected="true" v-model="selected" :options="[]" placeholder="Search..." ref="multisearch" :taggable="true" :maxHeight="0" @tag="addTag" @update="updateSelected" class="flex-1 box-border "></Multiselect>
 </template>
 
 <script>

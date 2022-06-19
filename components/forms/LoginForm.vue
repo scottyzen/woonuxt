@@ -1,28 +1,16 @@
 <template>
   <div class="mx-auto max-w-md">
     <form class="mb-4 grid gap-4" @submit.prevent="loginUser">
-      <input
-        placeholder="Username or Email"
-        type="text"
-        v-model="userInfo.username"
-        id="email"
-        required
-      />
-      <input
-        placeholder="Password"
-        type="password"
-        id="password"
-        v-model="userInfo.password"
-        required
-      />
+      <input placeholder="Username or Email" type="text" v-model="userInfo.username" id="email" required />
+      <input placeholder="Password" type="password" id="password" v-model="userInfo.password" required />
       <button class="mt-4 text-lg">{{ buttonText }}</button>
     </form>
   </div>
 </template>
 
 <script>
-import LOGIN from '~/gql/mutations/login';
-import GET_CART from '~/gql/queries/getCart';
+import LOGIN from "~/gql/mutations/login";
+import GET_CART from "~/gql/queries/getCart";
 export default {
   data() {
     return {
@@ -36,12 +24,12 @@ export default {
         this.buttonText = "Logging in...";
         const { loginWithCookies } = await this.$graphql.default.request(LOGIN, this.userInfo);
 
-        if (loginWithCookies.status == 'SUCCESS') {
+        if (loginWithCookies.status == "SUCCESS") {
           const { cart, viewer, customer } = await this.$graphql.default.request(GET_CART);
-          this.$store.commit('updateCart', cart);
-          this.$store.commit('updateUser', customer);
-          this.$router.push('/');
-          this.$cookiz.remove('woo');
+          this.$store.commit("updateCart", cart);
+          this.$store.commit("updateUser", customer);
+          this.$router.push("/");
+          this.$cookiz.remove("woo");
         }
       } catch (error) {
         this.buttonText = "Login";

@@ -10,6 +10,7 @@ export const state = () => ({
   filter: null,
   searchTags: [],
   wishlist: [],
+  orderBy: 'Latest',
 })
 
 
@@ -33,7 +34,8 @@ export const mutations = {
   removeFromWishlist: (state, product) => {
     state.wishlist = state.wishlist.filter(p => p.databaseId !== product.databaseId)
   },
-  clearWishlist(state) { state.wishlist = [] }
+  clearWishlist(state) { state.wishlist = [] },
+  updateOrderBy(state, orderBy) { state.orderBy = orderBy },
 }
 
 export const actions = {

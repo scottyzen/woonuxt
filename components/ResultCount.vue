@@ -1,7 +1,8 @@
 <template>
-  <div class="pagination">
-    <button v-if="page > 1" @click="page--">Previous</button>
-    <button v-if="large != products.length" @click="page++">Next</button>
+  <!-- Count Description -->
+  <div v-if="this.products.length" class="font-light text-sm hidden lg:block">
+    Showing
+    <strong>{{ small + 1 }}</strong> to <strong>{{ large }}</strong> of <strong>{{ this.products.length }}</strong> products
   </div>
 </template>
 
@@ -20,12 +21,6 @@ export default {
     },
     large() {
       return Math.min(this.products.length, this.perPage * this.page);
-    },
-  },
-  watch: {
-    page() {
-      window.scrollTo(0, 0);
-      this.$emit("pageChanged", this.page);
     },
   },
 };

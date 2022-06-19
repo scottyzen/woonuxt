@@ -1,6 +1,5 @@
 <template>
 	<li class="flex py-4 gap-4 items-center">
-		<!-- <pre>{{product}}</pre> -->
 		<button @click="removeFromWishlist" title="Remove Item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="24" height="24">
 				<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368" />
 			</svg></button>
@@ -10,10 +9,6 @@
 		<NuxtLink class=" text-lg leading-tight" :to="`/product/${product.slug}`">{{ product.name }}</NuxtLink>
 		<SaleBadge :node="product" />
 		<ProductPrice :salePrice="product.salePrice" :regularPrice="product.regularPrice" class="ml-auto" />
-		<!-- <div class="flex flex-col ml-auto justify-end items-end md:flex-row md:gap-4 md:items-center"> -->
-		<!-- <span class="font-semibold text-xs text-green-500" v-if="product.stockStatus == 'IN_STOCK'">In Stock</span>
-			<span class="font-semibold text-xs text-red-500" v-else>Out of Stock</span> -->
-		<!-- </div> -->
 	</li>
 </template>
 
