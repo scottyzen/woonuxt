@@ -1,27 +1,12 @@
 <template>
   <div class="-mx-4 md:m-0 md:w-[500px]" v-if="mainImage">
+    <SaleBadge :node="node" class="top-4 right-4 absolute text-base" />
+    <NuxtImg class="object-contain rounded-2xl w-full min-w-[350px]" width="700" height="700" format="webp" fit="outside" :src="firstImage" v-show="imageToShow === null" />
+    <NuxtImg class="object-contain rounded-2xl w-full min-w-[350px]" width="700" height="700" format="webp" fit="outside" :src="mainImage" v-show="imageToShow === 0" />
     <NuxtImg
       class="object-contain rounded-2xl w-full min-w-[350px]"
-      width="600"
-      height="600"
-      format="webp"
-      fit="outside"
-      :src="firstImage"
-      v-show="imageToShow === null"
-    />
-    <NuxtImg
-      class="object-contain rounded-2xl w-full min-w-[350px]"
-      width="600"
-      height="600"
-      format="webp"
-      fit="outside"
-      :src="mainImage"
-      v-show="imageToShow === 0"
-    />
-    <NuxtImg
-      class="object-contain rounded-2xl w-full min-w-[350px]"
-      width="600"
-      height="600"
+      width="700"
+      height="700"
       format="webp"
       fit="outside"
       v-for="(node, i) in gallery.nodes"
@@ -52,7 +37,7 @@ export default {
       imageToShow: 0,
     };
   },
-  props: ["firstImage", "mainImage", "gallery"],
+  props: ["firstImage", "mainImage", "gallery", "node"],
   methods: {
     changeImage(index) {
       this.imageToShow = index;

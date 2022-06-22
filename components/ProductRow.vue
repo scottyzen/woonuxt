@@ -8,7 +8,7 @@
       :index="i"
       :class="{
         hidden: i === products.length - 1,
-        'xl:block': i === products.length - 1,
+        'lg:block': i === products.length - 1,
       }"
     />
   </div>

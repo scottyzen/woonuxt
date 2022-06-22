@@ -8,6 +8,12 @@ fragment SimpleProduct on SimpleProduct {
   description
   averageRating
   reviewCount
+  productCategories{
+    nodes{
+      name
+      slug
+    }
+  }
   image {
     sourceUrl
     altText
