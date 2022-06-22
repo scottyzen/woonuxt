@@ -1,6 +1,8 @@
+import { defineNuxtConfig } from '@nuxt/bridge'
 import pkg from './package.json'
 
-export default {
+export default defineNuxtConfig({
+  bridge: false,
   target: "static",
 
   components: {
@@ -126,4 +128,4 @@ export default {
   build: {
     aggressiveCodeRemoval: true
   }
-}
+})
