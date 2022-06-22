@@ -1,9 +1,5 @@
 <template>
-  <div class="flex w-24">
-    <button @click.prevent="count > min ? count-- : null">-</button>
-    <input type="number" v-model.number="count" min="0" :max="max" aria-label="Quantity" />
-    <button @click.prevent="count < max ? count++ : null">+</button>
-  </div>
+  <input type="number" v-model.number="count" min="0" :max="max" aria-label="Quantity" />
 </template>
 
 <script>
@@ -29,8 +25,11 @@ export default {
 <style lang="postcss" scoped>
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+  /* -webkit-appearance: none;
+  margin: 0; */
+}
+input::-webkit-inner-spin-button {
+  opacity: 1;
 }
 
 button {
@@ -39,7 +38,6 @@ button {
 
 /* Firefox */
 input[type="number"] {
-  @apply bg-transparent border-none outline-none flex-1 text-center w-full appearance-none;
-  -moz-appearance: textfield;
+  @apply bg-white flex rounded-xl text-left  p-2.5 gap-4 items-center justify-center focus:outline-none border;
 }
 </style>

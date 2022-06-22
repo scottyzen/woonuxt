@@ -1,7 +1,15 @@
 <template>
   <main class="container container-sm py-4 relative lg:py-10">
     <!-- Breadcrumb -->
-    <Breadcrumb class="mb-6" :format="[{ name: 'Home', slug: '/' }, { name: 'Products', slug: '/products' }, { name: product.name }]" />
+    <Breadcrumb
+      class="mb-6"
+      :format="[
+        { name: 'Home', slug: '/' },
+        { name: 'Products', slug: '/products' },
+        { name: primaryCategory.name, slug: `/product-category/${primaryCategory.slug}` },
+        { name: product.name },
+      ]"
+    />
 
     <div class="flex flex-col gap-10 lg:gap-24 md:flex-row md:justify-between">
       <ProductImageGallery class="flex-1 relative" :first-image="product.image.sourceUrl" :main-image="type.image.sourceUrl" :gallery="product.galleryImages" :node="product" />
@@ -37,9 +45,10 @@
             :attrs="product.attributes.nodes"
             @attrs-changed="updateSelectedVariations"
           />
-          <div class="flex mt-12 gap-8 items-center">
+          <div class="flex mt-12 gap-4 items-center">
+            <QuantityButtons class="w-28" @quantity-change="updateQuantity" :quantity="quantity" :min="1" />
             <AddToCartButton
-              class="max-w-xs flex-1"
+              class="md:max-w-xs w-full flex-1"
               :add-to-cart-button-text="addToCartButtonText"
               :disabled="!activeVariation && product.variations"
               :class="{
@@ -47,7 +56,6 @@
                 success: addToCartState == 'success',
               }"
             />
-            <QuantityButtons @quantity-change="updateQuantity" :quantity="quantity" :min="1" />
           </div>
         </form>
         <div class="grid gap-2 my-8 text-sm">
@@ -173,7 +181,7 @@ export default {
     },
     async triggerAddToCart() {
       this.addToCartState = "loading";
-      this.addToCartButtonText = "Adding to Cart...";
+      this.addToCartButtonText = "Adding ...";
       // { attributeName: 'size', attributeValue: 'Large' }
       const variationInput = this.activeVariation ? this.attrValues : null;
 

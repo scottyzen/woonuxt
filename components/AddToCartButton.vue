@@ -1,7 +1,7 @@
 <template>
   <button
     type="submit"
-    class="bg-primary flex rounded-2xl text-white text-center min-w-[150px] p-2.5 gap-4 items-center justify-center focus:outline-none"
+    class="bg-primary flex rounded-xl text-white text-center min-w-[150px] p-2.5 gap-4 items-center justify-center focus:outline-none"
     :class="{ disabled: disabled }"
     :disabled="disabled"
   >
