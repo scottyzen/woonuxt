@@ -1,29 +1,40 @@
 <template>
-	<NuxtLink :to="{ name: 'product-slug', params: { slug: node.slug, page: page } }" class="relative">
-		<SaleBadge :node="node" class="top-2 right-2 absolute" />
+  <NuxtLink :to="{ name: 'product-slug', params: { slug: node.slug, page: page } }" class="relative">
+    <SaleBadge :node="node" class="top-2 right-2 absolute" />
 
-		<NuxtImg v-if="node.image" width="280" height="315" class=" rounded-xl object-top object-cover w-full product-image" :src="node.image.sourceUrl" :alt="node.image.altText || node.name" :title="node.image.title || node.name" :loading="(index <= 1 || index == 5) ? 'eager' : 'lazy'" format="webp" fit="outside" />
+    <NuxtImg
+      v-if="node.image"
+      width="280"
+      height="315"
+      class="rounded-xl object-top object-cover w-full product-image"
+      :src="node.image.sourceUrl"
+      :alt="node.image.altText || node.name"
+      :title="node.image.title || node.name"
+      :loading="index <= 1 || index == 5 ? 'eager' : 'lazy'"
+      format="avif"
+      fit="outside"
+    />
 
-		<div class="p-2">
-			<StarRating :rating="node.averageRating" :count="node.reviewCount" />
-			<h2 class="font-light mb-2 leading-tight">{{ node.name }}</h2>
-			<ProductPrice class="text-sm" :salePrice="node.salePrice" :regularPrice="node.regularPrice" />
-		</div>
-	</NuxtLink>
+    <div class="p-2">
+      <StarRating :rating="node.averageRating" :count="node.reviewCount" />
+      <h2 class="font-light mb-2 leading-tight">{{ node.name }}</h2>
+      <ProductPrice class="text-sm" :salePrice="node.salePrice" :regularPrice="node.regularPrice" />
+    </div>
+  </NuxtLink>
 </template>
 
 <script>
 export default {
-	props: {
-		node: { type: Object, default: null },
-		index: { type: Number, default: 1 },
-		page: { type: Number, default: 1 },
-	},
+  props: {
+    node: { type: Object, default: null },
+    index: { type: Number, default: 1 },
+    page: { type: Number, default: 1 },
+  },
 };
 </script>
 
 <style lang="postcss">
 .product-image {
-	aspect-ratio: 1/1.125;
+  aspect-ratio: 1/1.125;
 }
 </style>
