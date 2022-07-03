@@ -10,6 +10,7 @@
 <script>
 import GET_ALL_COLORS from "~/gql/queries/getAllColors";
 export default {
+  name: "ColorFilter",
   data() {
     return {
       selectedColors: [],
@@ -31,6 +32,7 @@ export default {
     const { allPaColor } = await this.$graphql.default.request(GET_ALL_COLORS);
     this.allPaColor = allPaColor.nodes;
   },
+  fetchKey: "ColorFilter",
   watch: {
     activeColors(newColors) {
       this.selectedColors = newColors;

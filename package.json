@@ -1,6 +1,6 @@
 {
   "name": "woonuxt",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "private": true,
   "scripts": {
     "dev": "nuxi dev",
@@ -13,7 +13,7 @@
     "@nuxtjs/sitemap": "^2.4.0",
     "@vueuse/core": "^8.7.5",
     "cookie-universal-nuxt": "^2.2.1",
-    "core-js": "^3.23.2",
+    "core-js": "^3.23.3",
     "fuse.js": "^6.6.2",
     "graphql": "^16.5.0",
     "graphql-tag": "^2.12.6",

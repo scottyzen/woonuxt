@@ -10,6 +10,7 @@
 <script>
 import GET_PRODUCT_CATEGORIES from "~/gql/queries/getProductCategories";
 export default {
+  name: "CategoryFilter",
   data() {
     return {
       selectedCategories: [],
@@ -31,6 +32,7 @@ export default {
     const { productCategories } = await this.$graphql.default.request(GET_PRODUCT_CATEGORIES);
     this.productCategories = productCategories.nodes;
   },
+  fetchKey: "CategoryFilter",
   watch: {
     activeCategories(newCategories) {
       this.selectedCategories = newCategories;
