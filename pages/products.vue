@@ -1,7 +1,7 @@
 <template>
   <main class="container flex">
     <!-- Filters -->
-    <LazyFilters @filter-updated="filterProducts" :activeFilters="this.$store.state.filter" :showFilters="showFilters" :params="$route.params" />
+    <Filters @filter-updated="filterProducts" :activeFilters="this.$store.state.filter" :showFilters="showFilters" :params="$route.params" />
 
     <!-- Overlay -->
     <div class="overlay" :class="{ 'show-overlay': showFilters }" @click="showFilters = false"></div>
@@ -12,11 +12,7 @@
         <MultiSearch class="flex-1" @has-changed="filterProducts" :activeTags="this.$store.state.searchTags" />
 
         <!-- Filter Toggle -->
-        <span
-          @click="showFilters = !showFilters"
-          class="rounded-xl cursor-pointer bg-gray-400 text-white p-1.5 md:hidden"
-          :class="{ 'bg-primary': this.$store.state.filter }"
-        >
+        <span @click="showFilters = !showFilters" class="rounded-xl cursor-pointer bg-gray-400 text-white p-1.5 md:hidden" :class="{ 'bg-primary': this.$store.state.filter }">
           <Icon name="filter" width="22" height="22" />
         </span>
 
@@ -47,7 +43,7 @@ export default {
   data() {
     return {
       products: [],
-      categorySlug: this.$route.params.categorySlug,
+      categorySlug: this.$route.params.categorySlug || null,
       page: this.$route.params.page || 1,
       showFilters: false,
       fuseOptions: {
@@ -91,14 +87,10 @@ export default {
 
             // Categories
             const catsSlugs = [...categories, this.categorySlug].filter(Boolean); // Remove nulls
-            const categoryCondition = catsSlugs.length
-              ? catsSlugs.some((category) => product.productCategories.nodes.some((cat) => cat.slug === category))
-              : true;
+            const categoryCondition = catsSlugs.length ? catsSlugs.some((category) => product.productCategories.nodes.some((cat) => cat.slug === category)) : true;
 
             // Colors
-            const colorCondition = colors.length
-              ? colors.some((color) => (product.allPaColor ? product.allPaColor.nodes.some((pc) => pc.slug === color) : false))
-              : true;
+            const colorCondition = colors.length ? colors.some((color) => (product.allPaColor ? product.allPaColor.nodes.some((pc) => pc.slug === color) : false)) : true;
 
             // Price
             maxPrice = maxPrice > 0 ? maxPrice : 9999999999;
@@ -120,9 +112,7 @@ export default {
       const searchTags = this.$store.state.searchTags.map((item) => `${item}' `).join(" ");
       const SEARCHED_PRODUCTS = searchTags.length ? fuse.search(searchTags).map((result) => result.item) : this.$store.state.products;
 
-      const PRODUCTS_IN_BOTH = SEARCHED_PRODUCTS.filter((product) =>
-        FILTERED_PRODUCTS.some((filteredProduct) => filteredProduct.databaseId == product.databaseId)
-      );
+      const PRODUCTS_IN_BOTH = SEARCHED_PRODUCTS.filter((product) => FILTERED_PRODUCTS.some((filteredProduct) => filteredProduct.databaseId == product.databaseId));
 
       // Order by: Latest, Name, Price, Popularity
       const ORDERED_PRODUCTS = PRODUCTS_IN_BOTH.sort((a, b) => {
@@ -157,8 +147,6 @@ export default {
             return b.date - a.date;
         }
       });
-
-      console.log(ORDERED_PRODUCTS[0].name);
 
       this.refreshProducts(ORDERED_PRODUCTS);
     },
