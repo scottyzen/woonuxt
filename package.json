@@ -9,16 +9,16 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "@nuxtjs/composition-api": "^0.32.0",
+    "@nuxtjs/composition-api": "^0.33.0",
     "@nuxtjs/sitemap": "^2.4.0",
-    "@vueuse/core": "^8.7.5",
+    "@vueuse/core": "^8.9.1",
     "cookie-universal-nuxt": "^2.2.1",
-    "core-js": "^3.23.3",
+    "core-js": "^3.23.4",
     "fuse.js": "^6.6.2",
     "graphql": "^16.5.0",
     "graphql-tag": "^2.12.6",
     "nuxt-cookie-control": "^1.9.91",
-    "nuxt-delay-hydration": "^0.3.2",
+    "nuxt-delay-hydration": "^0.4.3",
     "nuxt-edge": "latest",
     "vue-lazy-hydration": "^2.0.0-beta.4",
     "vue-multiselect": "^2.1.6",
@@ -29,7 +29,7 @@
     "@nuxt/image": "^0.7.1",
     "@nuxtjs/pwa": "^3.3.5",
     "nuxt-graphql-request": "^5.2.0",
-    "nuxt-windicss": "^2.4.2",
+    "nuxt-windicss": "^2.4.3",
     "vue-stripe-elements-plus": "^1.0.3"
   }
 }
