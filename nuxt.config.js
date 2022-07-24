@@ -66,6 +66,13 @@ export default defineNuxtConfig({
     '@nuxtjs/composition-api/module',
   ],
 
+  windicss: {
+    attributify: false,
+    safelist: [
+      "prose",
+    ]
+  },
+
   plugins: [
     { src: "~/plugins/vuex-persist", ssr: false },
   ],
