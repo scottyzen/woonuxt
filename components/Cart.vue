@@ -8,16 +8,11 @@
     <template v-if="cart && !cart.isEmpty">
       <ul class="flex flex-col flex-1 p-8 gap-4 overflow-y-scroll">
         <SwipeCard v-for="item in cart.contents.nodes" :key="item.key" :item="item" @has-swiped="removeItemFromCart(item.key)">
-          <LazyCartCard :item="item" />
+          <CartCard :item="item" />
         </SwipeCard>
       </ul>
 
-      <ShippingOptions
-        :options="cart.availableShippingMethods[0].rates"
-        :active-option="cart.chosenShippingMethods[0]"
-        class="mb-4 px-8"
-        @setActiveOption="setActiveOption"
-      />
+      <ShippingOptions :options="cart.availableShippingMethods[0].rates" :active-option="cart.chosenShippingMethods[0]" class="mb-4 px-8" @setActiveOption="setActiveOption" />
 
       <div class="mb-8 px-8">
         <NuxtLink class="bg-primary rounded-2xl shadow-md text-white text-lg text-center p-3 block justify-evenly hover:bg-primary-dark" to="/checkout">
@@ -63,6 +58,7 @@ export default {
 section {
   background: linear-gradient(#fff, #ececf1);
 }
+
 .shrink-move {
   transition: all 500ms;
 }
