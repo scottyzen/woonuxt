@@ -7,9 +7,10 @@
 
     <template v-if="cart && !cart.isEmpty">
       <ul class="flex flex-col flex-1 p-8 gap-4 overflow-y-scroll">
-        <SwipeCard v-for="item in cart.contents.nodes" :key="item.key" :item="item" @has-swiped="removeItemFromCart(item.key)">
-          <CartCard :item="item" />
-        </SwipeCard>
+        <!-- <SwipeCard v-for="item in cart.contents.nodes" :key="item.key" :item="item" @has-swiped="removeItemFromCart(item.key)"> -->
+        <!-- <CartCard :item="item" /> -->
+        <!-- </SwipeCard> -->
+        <CartCard v-for="item in cart.contents.nodes" :key="item.key" :item="item" />
       </ul>
 
       <ShippingOptions :options="cart.availableShippingMethods[0].rates" :active-option="cart.chosenShippingMethods[0]" class="mb-4 px-8" @setActiveOption="setActiveOption" />
