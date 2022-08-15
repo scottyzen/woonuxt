@@ -83,28 +83,28 @@ export default {
     filterProducts() {
       const FILTERED_PRODUCTS = this.$store.state.filter
         ? this.$store.state.products.filter((product) => {
-            let { minPrice, maxPrice, starRating, saleItemsOnly, categories, colors } = this.$store.state.filter;
+          let { minPrice, maxPrice, starRating, saleItemsOnly, categories, colors } = this.$store.state.filter;
 
-            // Categories
-            const catsSlugs = [...categories, this.categorySlug].filter(Boolean); // Remove nulls
-            const categoryCondition = catsSlugs.length ? catsSlugs.some((category) => product.productCategories.nodes.some((cat) => cat.slug === category)) : true;
+          // Categories
+          const catsSlugs = [...categories, this.categorySlug].filter(Boolean); // Remove nulls
+          const categoryCondition = catsSlugs.length ? catsSlugs.some((category) => product.productCategories.nodes.some((cat) => cat.slug === category)) : true;
 
-            // Colors
-            const colorCondition = colors.length ? colors.some((color) => (product.allPaColor ? product.allPaColor.nodes.some((pc) => pc.slug === color) : false)) : true;
+          // Colors
+          const colorCondition = colors.length ? colors.some((color) => (product.allPaColor ? product.allPaColor.nodes.some((pc) => pc.slug === color) : false)) : true;
 
-            // Price
-            maxPrice = maxPrice > 0 ? maxPrice : 9999999999;
-            const price = product.price ? product.price.replace(/\€/g, "").split(" - ") : [];
-            const priceCondition = price.some((el) => el >= minPrice || 0) && price.some((el) => el <= maxPrice);
+          // Price
+          maxPrice = maxPrice > 0 ? maxPrice : 9999999999;
+          const price = product.price ? product.price.replace(/\€/g, "").split(" - ") : [];
+          const priceCondition = price.some((el) => el >= minPrice || 0) && price.some((el) => el <= maxPrice);
 
-            // Rating
-            const ratingCondition = product.averageRating >= starRating;
+          // Rating
+          const ratingCondition = product.averageRating >= starRating;
 
-            // Sale items only
-            const saleItemsOnlyCondition = saleItemsOnly ? product.onSale : true;
+          // Sale items only
+          const saleItemsOnlyCondition = saleItemsOnly ? product.onSale : true;
 
-            return priceCondition && categoryCondition && ratingCondition && saleItemsOnlyCondition && colorCondition;
-          })
+          return priceCondition && categoryCondition && ratingCondition && saleItemsOnlyCondition && colorCondition;
+        })
         : this.$store.state.products;
 
       // https://fusejs.io/examples.html#extended-search
@@ -123,9 +123,13 @@ export default {
           case "Name":
             return a.name.localeCompare(b.name);
           case "Price (low to high)":
-            return a.price.replace(/\€/g, "") - b.price.replace(/\€/g, "");
+            const aPrice = a.price.replace(/\€/g, "").replace(/\,/g, "").split(" - ");
+            const bPrice = b.price.replace(/\€/g, "").replace(/\,/g, "").split(" - ");
+            return parseFloat(aPrice[0]) - parseFloat(bPrice[0]);
           case "Price (high to low)":
-            return b.price.replace(/\€/g, "") - a.price.replace(/\€/g, "");
+            const aPrice2 = a.price.replace(/\€/g, "").replace(/\,/g, "").split(" - ");
+            const bPrice2 = b.price.replace(/\€/g, "").replace(/\,/g, "").split(" - ");
+            return parseFloat(bPrice2[bPrice2.length - 1]) - parseFloat(aPrice2[aPrice2.length - 1]);
           case "Rating":
             return b.averageRating - a.averageRating;
           case "Discount":
@@ -176,7 +180,8 @@ input[type="search"] {
 .overlay {
   @apply bg-gray-900 opacity-0 inset-0 transition-opacity z-10 duration-300 hidden fixed;
 }
+
 .show-overlay {
-  @apply opacity-10 block md: hidden;
+  @apply opacity-10 block md: hidden ;
 }
 </style>

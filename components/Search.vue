@@ -24,6 +24,7 @@ export default {
         useExtendedSearch: true,
         keys: ["name", "description", ["allPaColor", "nodes", "name"]],
       };
+      console.log("searchProducts", this.$store.state.products);
       const fuse = new Fuse(this.$store.state.products, options);
       const results = fuse.search(this.search);
       if (results.length > 0) {

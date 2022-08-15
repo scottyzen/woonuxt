@@ -1,35 +1,32 @@
 <template>
   <main class="container container-sm py-4 relative lg:py-10">
     <!-- Breadcrumb -->
-    <Breadcrumb
-      class="mb-6"
-      :format="[
-        { name: 'Home', slug: '/' },
-        { name: 'Products', slug: '/products' },
-        { name: primaryCategory.name, slug: `/product-category/${primaryCategory.slug}` },
-        { name: product.name },
-      ]"
-    />
+    <Breadcrumb class="mb-6" :format="[
+      { name: 'Home', slug: '/' },
+      { name: 'Products', slug: '/products' },
+      { name: primaryCategory.name, slug: `/product-category/${primaryCategory.slug}` },
+      { name: product.name },
+    ]" />
 
-    <div class="flex flex-col gap-10 lg:gap-24 md:flex-row md:justify-between">
+    <div class="flex flex-col gap-10 md:flex-row md:justify-between lg:gap-24">
       <ProductImageGallery class="flex-1 relative" :first-image="product.image.sourceUrl" :main-image="type.image.sourceUrl" :gallery="product.galleryImages" :node="product" />
 
       <div class="md:max-w-md md:py-2">
         <div class="flex mb-4 justify-between">
           <div class="flex-1">
-            <h1 class="font-semibold text-2xl mb-2">{{ type.name }}</h1>
+            <h1 class="font-semibold mb-2 text-2xl">{{ type.name }}</h1>
             <StarRating :rating="product.averageRating" :count="product.reviewCount" />
           </div>
           <ProductPrice class="text-xl" :salePrice="type.salePrice" :regularPrice="type.regularPrice" />
         </div>
 
-        <div class="grid gap-2 my-8 text-sm">
-          <div class="flex items-center gap-2">
+        <div class="my-8 text-sm grid gap-2">
+          <div class="flex gap-2 items-center">
             <span class="text-gray-400">Availability: </span>
             <span v-if="product.stockStatus == 'IN_STOCK'" class="text-green-600">In Stock</span>
             <span v-else class="text-red-600">Out of Stock</span>
           </div>
-          <div class="flex items-center gap-2">
+          <div class="flex gap-2 items-center">
             <span class="text-gray-400">SKU: </span> <span>{{ product.sku || "N/A" }}</span>
           </div>
         </div>
@@ -39,32 +36,20 @@
         <hr />
 
         <form @submit.prevent="triggerAddToCart">
-          <AttributeSelections
-            class="mt-4 mb-8"
-            v-if="product.type == 'VARIABLE' && product.attributes"
-            :attrs="product.attributes.nodes"
-            @attrs-changed="updateSelectedVariations"
-          />
+          <AttributeSelections class="mt-4 mb-8" v-if="product.type == 'VARIABLE' && product.attributes" :attrs="product.attributes.nodes" @attrs-changed="updateSelectedVariations" />
           <div class="flex mt-12 gap-4 items-center">
             <QuantityButtons class="w-28" @quantity-change="updateQuantity" :quantity="quantity" :min="1" />
-            <AddToCartButton
-              class="md:max-w-xs w-full flex-1"
-              :add-to-cart-button-text="addToCartButtonText"
-              :disabled="!activeVariation && product.variations"
-              :class="{
-                loading: addToCartState == 'loading',
-                success: addToCartState == 'success',
-              }"
-            />
+            <AddToCartButton class="flex-1 w-full md:max-w-xs" :add-to-cart-button-text="addToCartButtonText" :disabled="!activeVariation && product.variations" :class="{
+              loading: addToCartState == 'loading',
+              success: addToCartState == 'success',
+            }" />
           </div>
         </form>
-        <div class="grid gap-2 my-8 text-sm">
-          <div class="flex items-center gap-2">
+        <div class="my-8 text-sm grid gap-2">
+          <div class="flex gap-2 items-center">
             <span class="text-gray-400">Categories:</span>
             <div class="product-categories">
-              <NuxtLink :to="`/product-category/${category.slug}`" v-for="category in product.productCategories.nodes" :key="category.slug" class="hover:text-primary"
-                >{{ category.name }}<span class="comma">, </span></NuxtLink
-              >
+              <NuxtLink :to="`/product-category/${category.slug}`" v-for="category in product.productCategories.nodes" :key="category.slug" class="hover:text-primary">{{ category.name }}<span class="comma">, </span></NuxtLink>
             </div>
           </div>
         </div>
@@ -86,10 +71,19 @@
 import GET_PRODUCT from "~/gql/queries/getProduct";
 import ADD_TO_CART from "~/gql/mutations/ADD_TO_CART";
 
-function arraysEqual(a1, a2) {
-  /* WARNING: arrays must not contain {objects} or behavior may be undefined */
-  return JSON.stringify(a1) == JSON.stringify(a2);
+function formatVariarionArrays(arr) {
+  return arr.map(a => {
+    // replace all dashes and spaces with underscores
+    return { name: a.name.replace(/[-\s]/g, '_'), value: a.value.replace(/[-\s]/g, '_') }
+  });
 }
+
+function arraysEqual(a1, a2) {
+  let a1Formatted = formatVariarionArrays(a1);
+  let a2Formatted = formatVariarionArrays(a2);
+  return JSON.stringify(a1Formatted) == JSON.stringify(a2Formatted);
+}
+
 
 const formatArray = (arr) => {
   return arr.map((v) => {
@@ -155,14 +149,12 @@ export default {
       }
     },
     updateSelectedVariations(variations) {
+      console.log('updateSelectedVariations', variations);
       if (!this.product.variations) {
         return;
       }
 
-      this.attrValues = variations.map((el) => ({
-        attributeName: el.name,
-        attributeValue: el.value,
-      }));
+      this.attrValues = variations.map((el) => ({ attributeName: el.name, attributeValue: el.value }));
       let cloneArray = JSON.parse(JSON.stringify(variations));
       const activeVariation = this.product.variations.nodes.filter((variation) => {
         // If there is any variation of type ANY set the value to ''
@@ -170,6 +162,7 @@ export default {
 
         return arraysEqual(formatArray(variation.attributes.nodes), formatArray(cloneArray));
       });
+      console.log('activeVariation', activeVariation);
 
       this.activeVariation = activeVariation[0];
       this.variation = variations;
@@ -214,6 +207,7 @@ export default {
   },
   computed: {
     type() {
+      console.log(this.product.type);
       return this.activeVariation ? this.activeVariation : this.product;
     },
     primaryCategory() {
@@ -224,7 +218,7 @@ export default {
 </script>
 
 <style>
-.product-categories > a:last-child .comma {
+.product-categories>a:last-child .comma {
   display: none;
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="grid gap-1">
     <div v-for="cat in productCategories" :key="cat.databaseId" class="flex gap-2 items-center">
       <input :id="cat.slug" type="checkbox" :value="cat.slug" v-model="selectedCategories" @change="checkboxChanged" />
-      <label :for="cat.slug" class="m-0 text-xs">{{ cat.name }}</label>
+      <label :for="cat.slug" class="m-0 text-xs">{{ cat.name }} <span class="text-gray-500">({{ cat.count }})</span></label>
     </div>
   </div>
 </template>

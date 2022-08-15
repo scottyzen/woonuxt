@@ -1,5 +1,5 @@
 query getCategories {
-  productCategories( where: {orderby: COUNT, order: DESC, hideEmpty: true, exclude: "15"} ) {
+  productCategories( where: {orderby: COUNT, order: DESC, hideEmpty: true} ) {
     nodes {
       count
       databaseId

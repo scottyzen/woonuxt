@@ -51,6 +51,8 @@ export const actions = {
 
     commit('updateProducts', await addProductsToArray())
 
+    console.log('products have been loaded')
+
     // const {products} = await this.$graphql.default.request(GET_PRODUCTS);
       // commit('updateProducts', products.nodes);
   },

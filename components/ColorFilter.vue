@@ -1,8 +1,11 @@
 <template>
-  <div class="grid gap-1">
-    <div v-for="color in allPaColor" :key="color.slug" class="gap-2 inline-flex items-center">
-      <input :id="color.slug" type="checkbox" :value="color.slug" v-model="selectedColors" @change="checkboxChanged" />
-      <label :for="color.slug" class="m-0 text-xs">{{ color.name }}</label>
+  <div v-if="allPaColor">
+    <div class="mt-8 mb-3">Colours</div>
+    <div class="grid gap-1">
+      <div v-for="color in allPaColor" :key="color.slug" class="gap-2 inline-flex items-center">
+        <input :id="color.slug" type="checkbox" :value="color.slug" v-model="selectedColors" @change="checkboxChanged" />
+        <label :for="color.slug" class="m-0 text-xs">{{ color.name }}</label>
+      </div>
     </div>
   </div>
 </template>
@@ -30,7 +33,7 @@ export default {
   },
   async fetch() {
     const { allPaColor } = await this.$graphql.default.request(GET_ALL_COLORS);
-    this.allPaColor = allPaColor.nodes;
+    this.allPaColor = allPaColor.nodes.length ? allPaColor.nodes : null;
   },
   fetchKey: "ColorFilter",
   watch: {
@@ -41,4 +44,5 @@ export default {
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped lang="postcss">
+</style>

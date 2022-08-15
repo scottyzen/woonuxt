@@ -11,14 +11,13 @@
 			</div>
 			<div class="flex w-1/2 relative items-center">
 				<span v-if="filter.maxPrice" class="p-2 absolute">€</span>
-				<input class="price-input" type="number" placeholder="Max" min="0" max="90" v-model.number="filter.maxPrice" step="1" :class="{ 'active': filter.maxPrice }" />
+				<input class="price-input" type="number" placeholder="Max" min="0" max="" v-model.number="filter.maxPrice" step="1" :class="{ 'active': filter.maxPrice }" />
 			</div>
 		</div>
 
 		<div class="mt-8 mb-3">Categories</div>
 		<CategoryFilter @checkbox-changed="updatedCategoryFilter" :active-categories="activeCategories" />
 
-		<div class="mt-8 mb-3">Colours</div>
 		<ColorFilter @color-changed="updatedColorFilter" :active-colors="activeColors" />
 
 		<div class="mt-8 mb-3">Rating</div>
@@ -65,7 +64,7 @@ export default {
 	data() {
 		const initialState = {
 			minPrice: null,
-			maxPrice: 90,
+			maxPrice: null,
 			starRating: null,
 			saleItemsOnly: false,
 			categories: [],
