@@ -39,7 +39,7 @@ fragment CartFragment on Cart {
           regularPrice
           salePrice
           image {
-            sourceUrl(size: SHOP_THUMBNAIL)
+            sourceUrl(size: THUMBNAIL)
           }
         }
       }
