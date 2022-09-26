@@ -1,5 +1,5 @@
 <template>
-  <div class="flex gap-1 items-center leading-none text-gray-400 text-sm">
+  <div class="flex text-sm leading-none text-gray-400 gap-1 items-center">
     <!-- {{ format }} -->
     <span v-for="(link, i) in format" :key="link.name">
       <NuxtLink v-if="link.slug" :to="link.slug" class="hover:text-primary">{{ link.name }}</NuxtLink>
@@ -17,4 +17,3 @@ export default {
 };
 </script>
 
-<style></style>
