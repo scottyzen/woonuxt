@@ -94,7 +94,7 @@ export default {
 
           // Price
           maxPrice = maxPrice > 0 ? maxPrice : 9999999999;
-          const price = product.price ? product.price.replace(/\€/g, "").split(" - ") : [];
+          const price = product.price ? product.price.replace(/\€/gu, "").split(" - ") : [];
           const priceCondition = price.some((el) => el >= minPrice || 0) && price.some((el) => el <= maxPrice);
 
           // Rating
@@ -123,12 +123,12 @@ export default {
           case "Name":
             return a.name.localeCompare(b.name);
           case "Price (low to high)":
-            const aPrice = a.price.replace(/\€/g, "").replace(/\,/g, "").split(" - ");
-            const bPrice = b.price.replace(/\€/g, "").replace(/\,/g, "").split(" - ");
+            const aPrice = a.price.replace(/\€/gu, "").replace(/\,/g, "").split(" - ");
+            const bPrice = b.price.replace(/\€/gu, "").replace(/\,/g, "").split(" - ");
             return parseFloat(aPrice[0]) - parseFloat(bPrice[0]);
           case "Price (high to low)":
-            const aPrice2 = a.price.replace(/\€/g, "").replace(/\,/g, "").split(" - ");
-            const bPrice2 = b.price.replace(/\€/g, "").replace(/\,/g, "").split(" - ");
+            const aPrice2 = a.price.replace(/\€/gu, "").replace(/\,/g, "").split(" - ");
+            const bPrice2 = b.price.replace(/\€/gu, "").replace(/\,/g, "").split(" - ");
             return parseFloat(bPrice2[bPrice2.length - 1]) - parseFloat(aPrice2[aPrice2.length - 1]);
           case "Rating":
             return b.averageRating - a.averageRating;
