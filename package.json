@@ -17,7 +17,7 @@
     "fuse.js": "^6.6.2",
     "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
-    "nuxt-cookie-control": "^1.9.92",
+    "nuxt-cookie-control": "^1.9.93",
     "nuxt-delay-hydration": "^0.4.5",
     "nuxt": "^2.15.8",
     "vue-lazy-hydration": "^2.0.0-beta.4",

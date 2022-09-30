@@ -7191,10 +7191,10 @@ nuxi@3.0.0-rc.8:
   optionalDependencies:
     fsevents "~2.3.2"
 
-nuxt-cookie-control@^1.9.92:
-  version "1.9.92"
-  resolved "https://registry.yarnpkg.com/nuxt-cookie-control/-/nuxt-cookie-control-1.9.92.tgz#3f50b975c7deda5f2da12ce092b55737a5a7bc52"
-  integrity sha512-TTfucTr2UC5v14BkMk7dVI+LxvqgSZJsFUDQkYnVUiSFD+rZ6wV9zdnX72AdGQwjXzutgF2NIYLFcwW/iTeqgQ==
+nuxt-cookie-control@^1.9.93:
+  version "1.9.93"
+  resolved "https://registry.yarnpkg.com/nuxt-cookie-control/-/nuxt-cookie-control-1.9.93.tgz#025e9eb8794819cd7b579ee6d484cebccb02b407"
+  integrity sha512-cwrdXk8ejVSOGDS1fmMZ5Ma6G5P2B1QOsbFZ2AQCa1UPQrvSf1m9RZrUvmibD3fYzIJvkN2TtVFHsMUpTb4ljw==
   dependencies:
     css-vars-ponyfill "^2.0.2"
     string-replace-loader "^2.1.1"
