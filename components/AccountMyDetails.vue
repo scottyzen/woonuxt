@@ -26,9 +26,10 @@ export default {
 .account-form textarea,
 .account-form .StripeElement,
 .account-form select {
-  @apply bg-white border rounded-xl outline-none w-full py-2.5 px-4 block md:bg-gray-50;
+  @apply bg-white border rounded-xl outline-none w-full py-2.5 px-4 block md: bg-gray-50 ;
 }
-label {
+
+.account-form label {
   @apply text-xs mb-1.5 text-gray-600 inline-block uppercase block;
 }
 

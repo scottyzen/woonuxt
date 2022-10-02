@@ -2,8 +2,8 @@
   <NuxtLink :to="{ name: 'product-slug', params: { slug: node.slug, page: page } }" class="relative">
     <SaleBadge :node="node" class="top-2 right-2 absolute" />
 
-    <NuxtPicture v-if="node.image" width="280" height="315" :src="node.image.sourceUrl" :alt="node.image.altText || node.name" :title="node.image.title || node.name" :loading="index <= 1 || index == 5 ? 'eager' : 'lazy'" format="avif"
-      :imgAttrs="{ class: 'rounded-xl object-top object-cover w-full product-image' }" fit="outside" placeholder />
+    <NuxtPicture v-if="image" width="280" height="315" :src="image" :alt="node.image.altText || node.name" :title="node.image.title || node.name" :loading="index <= 1 || index == 5 ? 'eager' : 'lazy'" format="avif"
+      :imgAttrs="{ class: 'rounded-xl object-top object-cover w-full product-image' }" fit="outside" />
 
     <div class="p-2">
       <StarRating :rating="node.averageRating" :count="node.reviewCount" />
@@ -19,6 +19,18 @@ export default {
     node: { type: Object, default: null },
     index: { type: Number, default: 1 },
     page: { type: Number, default: 1 },
+  },
+  computed: {
+    image() {
+      if (this.$store.state.filter?.colors?.length) {
+        // If we have a color filter, we need to find the image that matches the color
+        const activeColorImage = this.node.variations.nodes.filter((variation) => {
+          return this.$store.state.filter.colors.some((color) => variation.slug.includes(color));
+        });
+        return activeColorImage ? activeColorImage[0].image.sourceUrl : this.node.image.sourceUrl;
+      }
+      return this.node.image.sourceUrl;
+    },
   },
 };
 </script>

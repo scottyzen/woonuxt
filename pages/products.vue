@@ -81,30 +81,29 @@ export default {
       this.page = page;
     },
     filterProducts() {
-      const FILTERED_PRODUCTS = this.$store.state.filter
-        ? this.$store.state.products.filter((product) => {
-            let { minPrice, maxPrice, starRating, saleItemsOnly, categories, colors } = this.$store.state.filter;
+      const FILTERED_PRODUCTS = this.$store.state.filter ? this.$store.state.products.filter((product) => {
+        let { minPrice, maxPrice, starRating, saleItemsOnly, categories, colors } = this.$store.state.filter;
 
-            // Categories
-            const catsSlugs = [...categories, this.categorySlug].filter(Boolean); // Remove nulls
-            const categoryCondition = catsSlugs.length ? catsSlugs.some((category) => product.productCategories.nodes.some((cat) => cat.slug === category)) : true;
+        // Categories
+        const catsSlugs = [...categories, this.categorySlug].filter(Boolean); // Remove nulls
+        const categoryCondition = catsSlugs.length ? catsSlugs.some((category) => product.productCategories.nodes.some((cat) => cat.slug === category)) : true;
 
-            // Colors
-            const colorCondition = colors.length ? colors.some((color) => (product.allPaColor ? product.allPaColor.nodes.some((pc) => pc.slug === color) : false)) : true;
+        // Colors
+        const colorCondition = colors.length ? colors.some((color) => (product.allPaColor ? product.allPaColor.nodes.some((pc) => pc.slug === color) : false)) : true;
 
-            // Price
-            maxPrice = maxPrice > 0 ? maxPrice : 9999999999;
-            const price = product.price ? product.price.replace(/\€/g, "").split(" - ") : [];
-            const priceCondition = price.some((el) => el >= minPrice || 0) && price.some((el) => el <= maxPrice);
+        // Price
+        maxPrice = maxPrice > 0 ? maxPrice : 9999999999;
+        const price = product.price ? product.price.replace(/\€/g, "").split(" - ") : [];
+        const priceCondition = price.some((el) => el >= minPrice || 0) && price.some((el) => el <= maxPrice);
 
-            // Rating
-            const ratingCondition = product.averageRating >= starRating;
+        // Rating
+        const ratingCondition = product.averageRating >= starRating;
 
-            // Sale items only
-            const saleItemsOnlyCondition = saleItemsOnly ? product.onSale : true;
+        // Sale items only
+        const saleItemsOnlyCondition = saleItemsOnly ? product.onSale : true;
 
-            return priceCondition && categoryCondition && ratingCondition && saleItemsOnlyCondition && colorCondition;
-          })
+        return priceCondition && categoryCondition && ratingCondition && saleItemsOnlyCondition && colorCondition;
+      })
         : this.$store.state.products;
 
       // https://fusejs.io/examples.html#extended-search
@@ -112,7 +111,7 @@ export default {
       const searchTags = this.$store.state.searchTags.map((item) => `${item}' `).join(" ");
       const SEARCHED_PRODUCTS = searchTags.length ? fuse.search(searchTags).map((result) => result.item) : this.$store.state.products;
 
-      const PRODUCTS_IN_BOTH = SEARCHED_PRODUCTS.filter((product) => FILTERED_PRODUCTS.some((filteredProduct) => filteredProduct.databaseId == product.databaseId));
+      let PRODUCTS_IN_BOTH = SEARCHED_PRODUCTS.filter((product) => FILTERED_PRODUCTS.some((filteredProduct) => filteredProduct.databaseId == product.databaseId));
 
       // Order by: Latest, Name, Price, Popularity
       const ORDERED_PRODUCTS = PRODUCTS_IN_BOTH.sort((a, b) => {
@@ -182,6 +181,6 @@ input[type="search"] {
 }
 
 .show-overlay {
-  @apply opacity-10 block md: hidden;
+  @apply opacity-10 block md: hidden ;
 }
 </style>

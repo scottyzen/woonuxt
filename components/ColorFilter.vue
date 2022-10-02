@@ -1,10 +1,10 @@
 <template>
   <div v-if="allPaColor">
     <div class="mt-8 mb-3">Colours</div>
-    <div class="grid gap-1">
+    <div class="grid">
       <div v-for="color in allPaColor" :key="color.slug" class="gap-2 inline-flex items-center">
         <input :id="color.slug" type="checkbox" :value="color.slug" v-model="selectedColors" @change="checkboxChanged" />
-        <label :for="color.slug" class="m-0 text-xs">{{ color.name }}</label>
+        <label :for="color.slug" class="m-0 text-sm">{{ color.name }}</label>
       </div>
     </div>
   </div>
@@ -45,4 +45,5 @@ export default {
 </script>
 
 <style scoped lang="postcss">
+
 </style>
