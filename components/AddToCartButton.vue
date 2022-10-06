@@ -1,10 +1,5 @@
 <template>
-  <button
-    type="submit"
-    class="bg-primary flex rounded-xl text-white text-center min-w-[150px] p-2.5 gap-4 items-center justify-center focus:outline-none"
-    :class="{ disabled: disabled }"
-    :disabled="disabled"
-  >
+  <button type="submit" class="rounded-xl flex font-bold bg-gray-800 text-white text-center min-w-[150px] p-2.5 gap-4 items-center justify-center focus:outline-none" :class="{ disabled: disabled }" :disabled="disabled">
     <span>{{ addToCartButtonText }}</span>
     <span class="icon"></span>
   </button>
@@ -21,9 +16,11 @@ button {
   outline: none !important;
   transition: all 150ms ease-in;
 }
+
 button.disabled {
   @apply cursor-not-allowed bg-gray-400;
 }
+
 button .icon {
   display: inline-block;
   width: 6px;
@@ -32,6 +29,7 @@ button .icon {
   transition: none;
   max-width: 0;
 }
+
 button.loading .icon {
   @apply rounded-full animate-spin-fast inline-block;
   border: 2px solid #fff;
@@ -43,6 +41,7 @@ button.loading .icon {
   max-width: 100px;
   will-change: transform;
 }
+
 /* button.success {
 	@apply bg-green-500;
 } */

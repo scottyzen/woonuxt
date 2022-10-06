@@ -1,5 +1,5 @@
-query getCategories {
-  productCategories( where: {orderby: COUNT, order: DESC, hideEmpty: true} ) {
+query getCategories ($first: Int = 10) {
+  productCategories( first: $first where: {orderby: COUNT, order: DESC, hideEmpty: true} ) {
     nodes {
       count
       databaseId

@@ -29,7 +29,7 @@ export default {
     };
   },
   props: {
-    alignTo: { type: String, default: "container" },
+    alignTo: { type: String, default: "container-sm" },
     extraClass: { type: String, default: "" },
   },
   mounted() {
@@ -77,28 +77,33 @@ export default {
 </script>
 
 <style lang="postcss">
-.container > .scslider {
+.container>.scslider {
   @apply overflow-x-visible;
 }
+
 .scslider {
   @apply flex overflow-x-scroll;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
-  scroll-padding-inline: calc(var(--containerFromLeft) + 1rem);
+  scroll-padding-inline: calc(var(--containerFromLeft) + 0.5rem);
   gap: inherit;
 }
+
 .scslider::-webkit-scrollbar {
   display: none;
 }
-.scslider > * {
+
+.scslider>* {
   scroll-snap-align: start;
   scroll-snap-stop: always;
 }
+
 @media (min-width: 768px) {
   .scslider {
     scroll-snap-type: x proximity;
   }
 }
+
 .scslider-wrap:not(.container) .scslider::before,
 .scslider-wrap:not(.container) .scslider::after {
   content: "";

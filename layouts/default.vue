@@ -84,21 +84,26 @@ export default {
 .page-leave-active {
   transition: opacity 250ms ease-in-out;
 }
+
 .page-enter,
 .page-leave-active {
   opacity: 0;
 }
+
 html,
 body {
-  @apply bg-gray-50 text-gray-900;
+  @apply text-gray-900;
   scroll-behavior: smooth;
 }
 
 .container {
   max-width: 1440px;
 }
+
 .container-sm {
   max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 1rem;
 }
 
 pre {
@@ -111,6 +116,7 @@ pre {
 .slide-enter-active {
   transition: transform 400ms ease-in-out;
 }
+
 .slide-enter,
 .slide-leave-to {
   transform: translateX(500px);
@@ -143,6 +149,7 @@ pre {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -164,12 +171,14 @@ pre {
   max-height: 0;
   overflow: hidden;
 }
+
 .scale-y-enter-active {
   transition: max-height 500ms ease-out, opacity 500ms ease-out 250ms, transform 500ms ease-out;
   will-change: opacity, transform, max-height;
   max-height: 600px;
   overflow: hidden;
 }
+
 .scale-y-enter,
 .scale-y-leave-to {
   opacity: 0;

@@ -1,5 +1,5 @@
 <template>
-  <main class="container container-sm py-4 relative lg:py-10">
+  <main class="container container-sm py-4 relative">
     <!-- Breadcrumb -->
     <Breadcrumb class="mb-6" :format="[
       { name: 'Home', slug: '/' },

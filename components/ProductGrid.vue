@@ -7,7 +7,7 @@
     </div>
 
     <!-- Products -->
-    <transition-group v-else name="shrink" mode="in-out" class="my-4 min-h-[600px] grid transition-all gap-4 lg:gap-8 product-grid lg:my-8">
+    <transition-group v-else name="shrink" mode="in-out" class="my-4 min-h-[600px] grid transition-all gap-4 product-grid lg:my-8 lg:gap-8">
       <ProductCard class="w-full" v-for="(node, i) in newProducts" :key="node.databaseId" :node="node" :index="i" :page="page" />
     </transition-group>
   </section>
@@ -38,7 +38,7 @@ export default {
 
 @media (min-width: 768px) {
   .product-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   }
 }
 
@@ -68,6 +68,6 @@ export default {
 }
 
 .pagination button {
-  @apply rounded-xl bg-purple-100 leading-none py-2 px-4 text-purple-900 hover: bg-purple-200;
+  @apply rounded-xl bg-purple-100 leading-none py-2 px-4 text-purple-900 hover: bg-purple-200 ;
 }
 </style>
