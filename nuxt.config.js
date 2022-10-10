@@ -74,7 +74,7 @@ export default defineNuxtConfig({
   graphql: {
     clients: {
       default: {
-        endpoint: `${process.env.WORDPRESS_URL}/graphql`,
+        endpoint: `${process.env.GRAPHQL_ENDPOINT}`,
         options: { credentials: "include", mode: "cors" },
       },
     },
