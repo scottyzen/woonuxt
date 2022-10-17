@@ -1,6 +1,6 @@
 <template>
 	<header class="bg-white top-0 z-40 sticky">
-		<div class="container flex py-4 items-center justify-between">
+		<div class="container-sm flex py-4 items-center justify-between">
 			<Logo />
 			<MenuItems id="main-nav" class="text-sm text-gray-500 gap-6 items-center hidden md:flex lg:pl-12" />
 			<div class="flex justify-end items-center md:min-w-[120px]">

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container flex relative items-center justify-center">
-      <NuxtImg width="1400" height="800" class="object-cover rounded-3xl h-[65vh] w-full lg:h-[640px]" src="/images/hero-4.jpg" alt="Hero image" loading="eager" format="webp" fit="outside" preload />
+      <NuxtImg width="1400" height="800" class="object-cover rounded-3xl h-[65vh] w-full lg:h-[640px]" src="/images/hero-4.jpg" alt="Hero image" loading="eager" format="webp" fit="outside" />
       <div class="container p-12 text-gray-800 absolute lg:p-24 ">
         <h1 class="font-bold  text-2xl md:mb-4 lg:text-6xl">Just landed.</h1>
         <h2 class="font-bold text-xl md:mb-4 lg:text-3xl">The Autumn Collection</h2>
