@@ -1,5 +1,5 @@
 query getAllColors {
-  allPaColor{
+  allPaColor(first: 99){
     nodes{
       name
       slug
