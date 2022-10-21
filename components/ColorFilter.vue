@@ -1,7 +1,7 @@
 <template>
   <div v-if="allPaColor">
     <div class="mt-8 mb-3">Colours</div>
-    <div class="grid overflow-auto h-xs">
+    <div class="grid overflow-auto max-h-xs">
       <div v-for="color in allPaColor" :key="color.slug" class="gap-2 inline-flex items-center">
         <input :id="color.slug" type="checkbox" :value="color.slug" v-model="selectedColors" @change="checkboxChanged" />
         <label :for="color.slug" class="m-0 text-sm">{{ color.name }}</label>
