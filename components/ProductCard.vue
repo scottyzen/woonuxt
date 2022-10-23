@@ -2,7 +2,7 @@
   <NuxtLink :to="{ name: 'product-slug', params: { slug: node.slug, page: page } }" class="relative">
     <SaleBadge :node="node" class="top-2 right-2 absolute" />
 
-    <NuxtPicture v-if="image" width="280" height="315" :src="image" :alt="node.image.altText || node.name" :title="node.image.title || node.name" :loading="index <= 1 || index == 5 ? 'eager' : 'lazy'" format="avif"
+    <NuxtPicture v-if="image" width="280" height="300" :src="image" :alt="node.image.altText || node.name" :title="node.image.title || node.name" :loading="index <= 1 || index == 5 ? 'eager' : 'lazy'" format="avif"
       :imgAttrs="{ class: 'rounded-xl object-top object-cover w-full product-image' }" fit="outside" />
 
     <div class="p-2">

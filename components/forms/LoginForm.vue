@@ -28,7 +28,7 @@ export default {
           const { cart, viewer, customer } = await this.$graphql.default.request(GET_CART);
           this.$store.commit("updateCart", cart);
           this.$store.commit("updateUser", customer);
-          this.$router.push("/");
+          // this.$router.push("/");
           this.$cookiz.remove("woo");
         }
       } catch (error) {
@@ -45,6 +45,7 @@ input,
 button {
   @apply border rounded-2xl w-full p-3 px-4;
 }
+
 form button {
   @apply bg-primary rounded-2xl text-white p-3;
 }

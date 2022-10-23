@@ -80,6 +80,12 @@ export default {
 </script>
 
 <style lang="postcss">
+html,
+body {
+  @apply text-gray-900;
+  scroll-behavior: smooth;
+}
+
 .page-enter-active,
 .page-leave-active {
   transition: opacity 250ms ease-in-out;
@@ -90,12 +96,6 @@ export default {
   opacity: 0;
 }
 
-html,
-body {
-  @apply text-gray-900;
-  scroll-behavior: smooth;
-}
-
 .container {
   max-width: 1440px;
 }
@@ -104,6 +104,11 @@ body {
   max-width: 1280px;
   margin-inline: auto;
   padding-inline: 1rem;
+}
+
+img {
+  image-rendering: crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
 }
 
 pre {
