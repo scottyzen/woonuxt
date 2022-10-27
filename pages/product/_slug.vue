@@ -36,7 +36,7 @@
         <hr />
 
         <form @submit.prevent="triggerAddToCart">
-          <AttributeSelections class="mt-4 mb-8" v-if="product.type == 'VARIABLE' && product.attributes" :attrs="product.attributes.nodes" @attrs-changed="updateSelectedVariations" />
+          <AttributeSelections class="mt-4 mb-8" v-if="product.type == 'VARIABLE' && product.attributes" :attrs="product.attributes.nodes.filter(attr => attr.variation != false)" @attrs-changed="updateSelectedVariations" />
           <div class="flex mt-12 gap-4 items-center">
             <QuantityButtons class="w-28" @quantity-change="updateQuantity" :quantity="quantity" :min="1" />
             <AddToCartButton class="flex-1 w-full md:max-w-xs" :add-to-cart-button-text="addToCartButtonText" :disabled="!activeVariation && product.variations" :class="{
