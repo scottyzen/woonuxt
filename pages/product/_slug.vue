@@ -1,7 +1,7 @@
 <template>
-  <main class="container container-sm py-4 relative">
+  <main class="container container-sm py-5 relative">
     <!-- Breadcrumb -->
-    <Breadcrumb class="mb-6" :format="[
+    <Breadcrumb class="mb-5" :format="[
       { name: 'Home', slug: '/' },
       { name: 'Products', slug: '/products' },
       { name: primaryCategory.name, slug: `/product-category/${primaryCategory.slug}` },
