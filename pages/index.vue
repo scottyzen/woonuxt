@@ -1,11 +1,12 @@
 <template>
   <div>
     <div class="container flex relative items-center justify-center">
-      <NuxtImg width="1400" height="800" class="object-cover rounded-3xl h-[65vh] w-full lg:h-[640px]" src="/images/hero-4.jpg" alt="Hero image" loading="eager" format="webp" fit="outside" />
-      <div class="container p-12 text-gray-800 absolute lg:p-24 ">
-        <h1 class="font-bold  text-2xl md:mb-4 lg:text-6xl">Just landed.</h1>
-        <h2 class="font-bold text-xl md:mb-4 lg:text-3xl">The Autumn Collection</h2>
-        <div class="font-light max-w-sm mb-8 lg:max-w-md">
+      <NuxtImg width="1400" height="800" class="object-cover rounded-3xl h-[320px] w-full lg:h-[640px]" src="/images/hero-4.jpg" alt="Hero image" loading="eager" format="webp" fit="outside" sizes="sm:100vw lg:1400px" />
+
+      <div class="container bg-gradient-to-l from-gray-100 p-12 text-gray-800 absolute lg:p-24">
+        <h1 class="font-bold text-2xl md:mb-4 lg:text-6xl">Just landed.</h1>
+        <h2 class="font-bold text-lg md:mb-4 lg:text-3xl">The Autumn Collection</h2>
+        <div class="font-light max-w-sm text-sm mb-8 lg:max-w-md">
           View the Autumn Collection and discover the latest trends in fashion and accessories. We have everything you need to look your best this season.
         </div>
         <NuxtLink class="rounded-xl font-bold bg-gray-800 text-white py-4 px-8 hover:bg-gray-800" to="/products">Shop now</NuxtLink>
@@ -13,12 +14,12 @@
     </div>
 
     <div class="container-sm flex flex-wrap my-16 text-center gap-8 justify-center brand items-center lg:justify-between">
-      <NuxtImg src="/images/logoipsum-211.svg" alt="Brand 1" />
-      <NuxtImg src="/images/logoipsum-221.svg" alt="Brand 2" />
-      <NuxtImg src="/images/logoipsum-225.svg" alt="Brand 3" />
-      <NuxtImg src="/images/logoipsum-280.svg" alt="Brand 4" />
-      <NuxtImg src="/images/logoipsum-284.svg" alt="Brand 5" />
-      <NuxtImg src="/images/logoipsum-215.svg" alt="Brand 6" />
+      <NuxtImg src="/images/logoipsum-211.svg" alt="Brand 1" width="132" height="35" />
+      <NuxtImg src="/images/logoipsum-221.svg" alt="Brand 2" width="119" height="30" />
+      <NuxtImg src="/images/logoipsum-225.svg" alt="Brand 3" width="49" height="48" />
+      <NuxtImg src="/images/logoipsum-280.svg" alt="Brand 4" width="78" height="30" />
+      <NuxtImg src="/images/logoipsum-284.svg" alt="Brand 5" width="70" height="44" />
+      <NuxtImg src="/images/logoipsum-215.svg" alt="Brand 6" width="132" height="40" />
     </div>
 
     <section class="container-sm my-16">
