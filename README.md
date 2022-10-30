@@ -1,7 +1,6 @@
 # Next Generation Front-End for WooCommerce
 Set up guide [https://setup.woonuxt.com/](https://setup.woonuxt.com/)
 
-
 ### Required WordPress Plugins
 * WPGraphQL (https://www.wpgraphql.com)
 * WooGraphQL (https://woographql.com)
@@ -22,3 +21,9 @@ Set up guide [https://setup.woonuxt.com/](https://setup.woonuxt.com/)
  * Wishlists ✅
  * Account ⏳
  * Coupons
+
+#### Tested up to: 
+* WordPress 6.0.3
+* WooCommerce 6.9.4
+* WPGraphQL 1.12.0
+* WooGraphQL 0.11.2

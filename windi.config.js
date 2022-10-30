@@ -4,13 +4,13 @@ module.exports = {
   theme: {
     container: {
       center: true,
-      padding: "1rem",
+      padding: '1rem',
     },
     extend: {
       colors: {
         primary: {
-          light: "#AE7DDD",
-          DEFAULT: "#7F54B2",
+          light: '#AE7DDD',
+          DEFAULT: '#7F54B2',
           dark: '#754fa3',
         },
       },

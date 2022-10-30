@@ -29,7 +29,7 @@ export default {
     };
   },
   props: {
-    alignTo: { type: String, default: "container-sm" },
+    alignTo: { type: String, default: "container" },
     extraClass: { type: String, default: "" },
   },
   mounted() {

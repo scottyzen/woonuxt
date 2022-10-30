@@ -1,5 +1,5 @@
 <template>
-  <div class="-mx-4 md:m-0 md:w-[500px]" v-if="mainImage">
+  <div class="md:w-[500px]" v-if="mainImage">
     <SaleBadge :node="node" class="text-base top-4 right-4 absolute" />
     <NuxtImg class="object-contain rounded-2xl w-full min-w-[350px]" width="700" height="700" format="webp" fit="outside" :src="firstImage" v-show="imageToShow === null" placeholder />
     <NuxtImg class="object-contain rounded-2xl w-full min-w-[350px]" width="700" height="700" format="webp" fit="outside" :src="mainImage" v-show="imageToShow === 0" placeholder />
