@@ -1,5 +1,5 @@
 <template>
-  <main class="container container-sm py-4 relative">
+  <main class="container py-4 relative ">
     <!-- Breadcrumb -->
     <Breadcrumb class="mb-6" :format="[
       { name: 'Home', slug: '/' },
@@ -62,7 +62,7 @@
     </div>
     <div class="my-24">
       <div class="font-semibold text-xl mb-4">Related Products</div>
-      <ProductRow :products="product.related.nodes" />
+      <ProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
     </div>
   </main>
 </template>
@@ -207,7 +207,6 @@ export default {
   },
   computed: {
     type() {
-      console.log(this.product.type);
       return this.activeVariation ? this.activeVariation : this.product;
     },
     primaryCategory() {
