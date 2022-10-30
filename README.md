@@ -23,7 +23,7 @@ Set up guide [https://setup.woonuxt.com/](https://setup.woonuxt.com/)
  * Coupons
 
 #### Tested up to: 
-* WordPress 5.5.1
-* WooCommerce 6.0.3
+* WordPress 6.0.3
+* WooCommerce 6.9.4
 * WPGraphQL 1.12.0
 * WooGraphQL 0.11.2
