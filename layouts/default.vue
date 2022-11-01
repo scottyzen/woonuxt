@@ -80,7 +80,9 @@ export default {
 </script>
 
 <style lang="postcss">
-html,
+html {
+  font-family: 'Source Sans Pro', sans-serif;
+},
 body {
   @apply text-gray-900;
   scroll-behavior: smooth;

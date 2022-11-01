@@ -26,6 +26,7 @@ export default defineNuxtConfig({
       { rel: "apple-touch-icon", sizes: "512x512", href: "/icon_maskable.png" },
       { rel: "preconnect", href: process.env.WORDPRESS_URL },
       { rel: "dns-prefetch", href: process.env.WORDPRESS_URL },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&display=swap" },
     ],
   },
 
