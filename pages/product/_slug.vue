@@ -1,7 +1,7 @@
 <template>
   <main class="container py-4 relative ">
     <!-- Breadcrumb -->
-    <Breadcrumb class="mb-6" :format="[
+    <Breadcrumb class="mb-4" :format="[
       { name: 'Home', slug: '/' },
       { name: 'Products', slug: '/products' },
       { name: primaryCategory.name, slug: `/product-category/${primaryCategory.slug}` },
@@ -49,7 +49,7 @@
           <div class="flex gap-2 items-center">
             <span class="text-gray-400">Categories:</span>
             <div class="product-categories">
-              <NuxtLink :to="`/product-category/${category.slug}`" v-for="category in product.productCategories.nodes" :key="category.slug" class="hover:text-primary">{{ category.name }}<span class="comma">, </span></NuxtLink>
+              <NuxtLink :to="`/product-category/${category.slug}`" v-for="category in product.productCategories.nodes" :key="category.slug" class="hover:text-primary hover:underline">{{ category.name }}<span class="comma">, </span></NuxtLink>
             </div>
           </div>
         </div>
