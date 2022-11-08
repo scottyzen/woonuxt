@@ -18,6 +18,9 @@ module.exports = {
         'spin-fast': 'spin 600ms linear infinite',
       }
     },
+    boxShadow: {
+      'DEFAULT': '0 1px 4px rgb(0 0 0 / 5%)', // If a DEFAULT shadow is provided, it will be used for the non-suffixed shadow utility.
+    },
   },
   plugins: [ 
     typography

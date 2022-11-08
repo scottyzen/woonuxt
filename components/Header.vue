@@ -1,5 +1,5 @@
 <template>
-	<header class="bg-white top-0 z-40 sticky">
+	<header class="bg-white top-0 z-40 sticky border-b border-[#e8e8e8]">
 		<div class="container flex py-4 items-center justify-between">
 			<Logo />
 			<MenuItems id="main-nav" class="text-sm text-gray-500 gap-6 items-center hidden md:flex lg:pl-12" />

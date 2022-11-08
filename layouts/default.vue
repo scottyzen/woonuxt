@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col min-h-screen">
+  <div class="flex flex-col min-h-screen bg-[#fefefe]">
     <Header />
     <transition name="slide">
       <Cart v-if="showCart" class="z-50" />
@@ -100,7 +100,7 @@ body {
 
 
 .container {
-  max-width: 1280px;
+  max-width: 1200px;
 }
 
 img {

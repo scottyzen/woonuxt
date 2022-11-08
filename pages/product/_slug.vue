@@ -1,68 +1,112 @@
 <template>
-  <main class="container py-4 relative ">
+  <main class="container py-4 relative">
     <!-- Breadcrumb -->
-    <Breadcrumb class="mb-4" :format="[
+    <Breadcrumb
+      class="mb-4"
+      :format="[
       { name: 'Home', slug: '/' },
       { name: 'Products', slug: '/products' },
       { name: primaryCategory.name, slug: `/product-category/${primaryCategory.slug}` },
       { name: product.name },
-    ]" />
+    ]"
+    />
 
-    <div class="flex flex-col gap-10 md:flex-row md:justify-between lg:gap-24">
-      <ProductImageGallery class="flex-1 relative" :first-image="product.image.sourceUrl" :main-image="type.image.sourceUrl" :gallery="product.galleryImages" :node="product" />
+    <div class="block border border-[#e6e6e6] bg-white shadow rounded-4xl p-6 box-border">
+      <div class="flex flex-row justify-between">
+        <ProductImageGallery
+          :activeImg="product.image.sourceUrl"
+          :gallery="product.galleryImages"
+        />
 
-      <div class="md:max-w-md md:py-2">
-        <div class="flex mb-4 justify-between">
-          <div class="flex-1">
-            <h1 class="font-semibold mb-2 text-2xl">{{ type.name }}</h1>
-            <StarRating :rating="product.averageRating" :count="product.reviewCount" />
+        <div class="md:py-2">
+          <div class="flex mb-4 justify-between">
+            <div class="flex-1">
+              <h1 class="font-semibold mb-2 text-2xl">{{ type.name }}</h1>
+              <StarRating
+                :rating="product.averageRating"
+                :count="product.reviewCount"
+              />
+            </div>
+            <ProductPrice
+              class="text-xl"
+              :salePrice="type.salePrice"
+              :regularPrice="type.regularPrice"
+            />
           </div>
-          <ProductPrice class="text-xl" :salePrice="type.salePrice" :regularPrice="type.regularPrice" />
-        </div>
 
-        <div class="my-8 text-sm grid gap-2">
-          <div class="flex gap-2 items-center">
-            <span class="text-gray-400">Availability: </span>
-            <span v-if="product.stockStatus == 'IN_STOCK'" class="text-green-600">In Stock</span>
-            <span v-else class="text-red-600">Out of Stock</span>
-          </div>
-          <div class="flex gap-2 items-center">
-            <span class="text-gray-400">SKU: </span> <span>{{ product.sku || "N/A" }}</span>
-          </div>
-        </div>
-
-        <div v-html="product.description" class="font-light mb-8 prose"></div>
-
-        <hr />
-
-        <form @submit.prevent="triggerAddToCart">
-          <AttributeSelections class="mt-4 mb-8" v-if="product.type == 'VARIABLE' && product.attributes" :attrs="product.attributes.nodes.filter(attr => attr.variation != false)" @attrs-changed="updateSelectedVariations" />
-          <div class="flex mt-12 gap-4 items-center">
-            <QuantityButtons class="w-28" @quantity-change="updateQuantity" :quantity="quantity" :min="1" />
-            <AddToCartButton class="flex-1 w-full md:max-w-xs" :add-to-cart-button-text="addToCartButtonText" :disabled="!activeVariation && product.variations" :class="{
-              loading: addToCartState == 'loading',
-              success: addToCartState == 'success',
-            }" />
-          </div>
-        </form>
-        <div class="my-8 text-sm grid gap-2">
-          <div class="flex gap-2 items-center">
-            <span class="text-gray-400">Categories:</span>
-            <div class="product-categories">
-              <NuxtLink :to="`/product-category/${category.slug}`" v-for="category in product.productCategories.nodes" :key="category.slug" class="hover:text-primary hover:underline">{{ category.name }}<span class="comma">, </span></NuxtLink>
+          <div class="my-8 text-sm grid gap-2">
+            <div class="flex gap-2 items-center">
+              <span class="text-gray-400">Availability: </span>
+              <span
+                v-if="product.stockStatus == 'IN_STOCK'"
+                class="text-green-600"
+                >In Stock</span
+              >
+              <span v-else class="text-red-600">Out of Stock</span>
+            </div>
+            <div class="flex gap-2 items-center">
+              <span class="text-gray-400">SKU: </span>
+              <span>{{ product.sku || "N/A" }}</span>
             </div>
           </div>
-        </div>
-        <hr />
-        <div class="flex flex-wrap gap-4">
-          <WishlistButton :product="product" />
-          <ShareButton :product="product" />
+
+          <div v-html="product.description" class="font-light mb-8 prose"></div>
+
+          <hr />
+
+          <form @submit.prevent="triggerAddToCart">
+            <AttributeSelections
+              class="mt-4 mb-8"
+              v-if="product.type == 'VARIABLE' && product.attributes"
+              :attrs="product.attributes.nodes.filter(attr => attr.variation != false)"
+              @attrs-changed="updateSelectedVariations"
+            />
+            <div class="flex mt-12 gap-4 items-center">
+              <QuantityButtons
+                class="w-28"
+                @quantity-change="updateQuantity"
+                :quantity="quantity"
+                :min="1"
+              />
+              <AddToCartButton
+                class="flex-1 w-full md:max-w-xs"
+                :add-to-cart-button-text="addToCartButtonText"
+                :disabled="!activeVariation && product.variations"
+                :class="{
+              loading: addToCartState == 'loading',
+              success: addToCartState == 'success',
+            }"
+              />
+            </div>
+          </form>
+          <div class="my-8 text-sm grid gap-2">
+            <div class="flex gap-2 items-center">
+              <span class="text-gray-400">Categories:</span>
+              <div class="product-categories">
+                <NuxtLink
+                  :to="`/product-category/${category.slug}`"
+                  v-for="category in product.productCategories.nodes"
+                  :key="category.slug"
+                  class="hover:text-primary hover:underline"
+                  >{{ category.name }}<span class="comma">, </span></NuxtLink
+                >
+              </div>
+            </div>
+          </div>
+          <hr />
+          <div class="flex flex-wrap gap-4">
+            <WishlistButton :product="product" />
+            <ShareButton :product="product" />
+          </div>
         </div>
       </div>
     </div>
     <div class="my-24">
       <div class="font-semibold text-xl mb-4">Related Products</div>
-      <ProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
+      <ProductRow
+        :products="product.related.nodes"
+        class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5"
+      />
     </div>
   </main>
 </template>
@@ -217,7 +261,7 @@ export default {
 </script>
 
 <style>
-.product-categories>a:last-child .comma {
+.product-categories > a:last-child .comma {
   display: none;
 }
 </style>
