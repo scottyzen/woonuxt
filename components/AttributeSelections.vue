@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-col gap-2 justify-between">
-    <div class="flex flex-wrap py-2 relative justify-between" v-for="(attr, i) in attrs" :key="i">
+  <div class="relative mb-5">
+    <div class="" v-for="(attr, i) in attrs" :key="i">
       <div v-if="attr.name == 'pa_color'" class="grid gap-2">
-        <div>Color</div>
+        <div>Color:</div>
         <div class="flex gap-2">
           <span v-for="(option, i) in attr.options" :key="option.id">
             <label>
@@ -22,19 +22,16 @@
         </div>
       </div>
 
-      <div v-else-if="attr.options.length > 3" class="grid gap-2">
-        <div>{{ attr.label }}</div>
-        <select :name="attr.name" :id="attr.name" @change="updateAttrs" :ref="attr.name" required class="border-white shadow">
-          <option selected disabled hidden :value="null">Choose {{ attr.label }}</option>
-          <option v-for="option in attr.options" :key="option" :value="option">{{ option }}</option>
-        </select>
-      </div>
-
-      <div v-else class="grid gap-2">
-        <div>{{ attr.label }}</div>
-        <div class="flex gap-2">
+      <div v-else>
+        <div class="flex mb-2 text-base">
+          <span class="font-semibold text-[#333]"
+            >{{ attr.label }}:
+            <span class="text-[#999]">{{selectedValue}} </span>
+          </span>
+        </div>
+        <div class="flex items-center flex-wrap">
           <span v-for="(option, i) in attr.options" :key="option.id">
-            <label>
+            <label class="leading-34px block">
               <input
                 class="hidden"
                 :checked="i == 0"
@@ -45,7 +42,11 @@
                 :value="option"
                 :ref="attr.name"
               />
-              <span class="radio-button" :class="`picker-${option}`">{{ option }}</span>
+              <span
+                class="rounded-lg border border-[#999] text-base text-[#333] cursor-pointer px-3 py-1.5 mr-3 bg-white selected"
+                :class="`cursor-pointer picker-${option}`"
+                >{{ option.toUpperCase() }}</span
+              >
             </label>
           </span>
         </div>
@@ -63,6 +64,7 @@ export default {
         let name = row.name;
         let radioValue = document.querySelector(`.name-${name}:checked`);
         let value = radioValue ? radioValue.value : this.$refs[row.name][0].value;
+        this.selectedValue = value.toUpperCase()
 
         // console.log({ name: name.toLowerCase(), value: value })
 
@@ -77,51 +79,12 @@ export default {
   },
 };
 </script>
-
-<style lang="postcss">
-select {
-  @apply border-2 rounded-2xl  py-2 px-4 appearance-none;
-  background: url("/images/chevron-down.svg") center right 10px no-repeat;
-  background-size: 1rem;
-  padding-right: 2.5rem;
-}
-
-.radio-button {
-  @apply border-transparent border-white cursor-pointer outline bg-gray-50 border-2 rounded-2xl text-sm text-center outline-2 outline-gray-100 py-1.5 px-3 transition-all text-gray-800 inline-block;
-}
-
-.color-button {
-  @apply border-transparent border-white cursor-pointer outline bg-gray-50 border-2 rounded-2xl text-sm text-center outline-2 outline-gray-100 transition-all text-gray-800 inline-block;
-  width: 2rem;
-  height: 2rem;
-}
-.color-green {
-  @apply bg-green-500;
-}
-.color-blue {
-  @apply bg-blue-500;
-}
-
-.color-red {
-  @apply bg-red-500;
-}
-
-.color-yellow {
-  @apply bg-yellow-500;
-}
-
-.color-orange {
-  @apply bg-orange-500;
-}
-
-.color-purple {
-  @apply bg-purple-500;
-}
-.color-black {
-  @apply bg-black;
-}
-
-input[type="radio"]:checked ~ span {
-  @apply outline outline-2 outline-gray-500;
+<style lang="scss">
+.selected:hover,
+input[type="radio"]:checked ~ .selected {
+  outline-color: #7c54b4;
+  outline-style: auto;
+  background-color: #7c54b40f;
+  color: #000;
 }
 </style>

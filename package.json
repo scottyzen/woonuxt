@@ -31,6 +31,8 @@
     "canvas-confetti": "^1.6.0",
     "nuxt-graphql-request": "^6.0.1",
     "nuxt-windicss": "^2.5.2",
+    "sass": "^1.56.1",
+    "sass-loader": "10",
     "vue-stripe-elements-plus": "^1.0.3"
   }
 }

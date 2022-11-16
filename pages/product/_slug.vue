@@ -11,92 +11,115 @@
     ]"
     />
 
-    <div class="block border border-[#e6e6e6] bg-white shadow rounded-4xl p-6 box-border">
+    <div
+      class="block border border-[#e6e6e6] bg-white shadow rounded-4xl p-6 box-border"
+    >
       <div class="flex flex-row justify-between">
         <ProductImageGallery
           :activeImg="product.image.sourceUrl"
           :gallery="product.galleryImages"
         />
 
-        <div class="md:py-2">
-          <div class="flex mb-4 justify-between">
-            <div class="flex-1">
-              <h1 class="font-semibold mb-2 text-2xl">{{ type.name }}</h1>
-              <StarRating
-                :rating="product.averageRating"
-                :count="product.reviewCount"
-              />
-            </div>
+        <div class="w-51/100">
+          <div class="pb-4 mb-4 border-b border-[#eaeaea]">
+            <h1 class="text-[#333] font-semibold text-2xl">{{ type.name }}</h1>
+            <StarRating
+              :rating="product.averageRating"
+              :count="product.reviewCount"
+            />
             <ProductPrice
-              class="text-xl"
               :salePrice="type.salePrice"
               :regularPrice="type.regularPrice"
             />
           </div>
 
-          <div class="my-8 text-sm grid gap-2">
-            <div class="flex gap-2 items-center">
-              <span class="text-gray-400">Availability: </span>
-              <span
-                v-if="product.stockStatus == 'IN_STOCK'"
-                class="text-green-600"
-                >In Stock</span
-              >
-              <span v-else class="text-red-600">Out of Stock</span>
-            </div>
-            <div class="flex gap-2 items-center">
-              <span class="text-gray-400">SKU: </span>
-              <span>{{ product.sku || "N/A" }}</span>
-            </div>
-          </div>
-
-          <div v-html="product.description" class="font-light mb-8 prose"></div>
-
-          <hr />
-
           <form @submit.prevent="triggerAddToCart">
             <AttributeSelections
-              class="mt-4 mb-8"
               v-if="product.type == 'VARIABLE' && product.attributes"
               :attrs="product.attributes.nodes.filter(attr => attr.variation != false)"
               @attrs-changed="updateSelectedVariations"
             />
-            <div class="flex mt-12 gap-4 items-center">
-              <QuantityButtons
-                class="w-28"
-                @quantity-change="updateQuantity"
-                :quantity="quantity"
-                :min="1"
-              />
+            <div class="flex">
               <AddToCartButton
-                class="flex-1 w-full md:max-w-xs"
                 :add-to-cart-button-text="addToCartButtonText"
                 :disabled="!activeVariation && product.variations"
                 :class="{
-              loading: addToCartState == 'loading',
-              success: addToCartState == 'success',
-            }"
+                  loading: addToCartState == 'loading',
+                  success: addToCartState == 'success',
+                }"
               />
+              <WishlistButton :product="product" />
             </div>
           </form>
-          <div class="my-8 text-sm grid gap-2">
-            <div class="flex gap-2 items-center">
-              <span class="text-gray-400">Categories:</span>
-              <div class="product-categories">
-                <NuxtLink
-                  :to="`/product-category/${category.slug}`"
-                  v-for="category in product.productCategories.nodes"
-                  :key="category.slug"
-                  class="hover:text-primary hover:underline"
-                  >{{ category.name }}<span class="comma">, </span></NuxtLink
-                >
+
+          <aside class="my-4 flex border-b border-[#eaeaea] pb-4 flex-col">
+            <div class="flex justify-between">
+              <div class="text-sm text-true-gray-900">
+                <div class="flex items-center justify-center gap-1">
+                  <svg
+                    class="mr-1"
+                    height="1.5rem"
+                    width="1.5rem"
+                    fill="#0bc15c"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="m16.5 14.5-4.2-1.9c-.2-.1-.4-.1-.6 0l-4.2 1.9V6.9l2-5.6h5l2 5.9v7.3zM9 7.3v4.9l2.1-.9c.6-.3 1.2-.3 1.8 0l2.1.9V7.3l-1.6-4.5h-2.9L9 7.3z"
+                    ></path>
+                    <path
+                      d="M20.5 22.8h-17c-1.2 0-2.2-1-2.2-2.2V19c0-.4.3-.8.8-.8s.8.3.8.8v1.5c0 .4.3.8.8.8h17c.4 0 .8-.3.8-.8V7.3c0-.1 0-.2-.1-.3l-1.5-3.8c-.1-.3-.4-.5-.7-.5H5c-.3 0-.6.2-.7.5L2.8 7c0 .1-.1.2-.1.3V10c0 .4-.3.8-.8.8s-.7-.4-.7-.8V7.3c0-.3.1-.6.2-.8l1.5-3.8c.4-.9 1.2-1.5 2.1-1.5h14c.9 0 1.7.6 2.1 1.4l1.5 3.8c.1.3.2.5.2.8v13.2c0 1.3-1.1 2.4-2.3 2.4z"
+                    ></path>
+                    <path
+                      d="M2 7h20v1.5H2zM4.8 13.8h-4c-.5 0-.8-.4-.8-.8s.3-.8.8-.8h4c.4 0 .8.3.8.8s-.4.8-.8.8zM4.8 16.8h-4c-.5 0-.8-.4-.8-.8s.3-.8.8-.8h4c.4 0 .8.3.8.8-.1.4-.4.8-.8.8z"
+                    ></path>
+                  </svg>
+                  <div class="text-[#666]">
+                    If you order within<span class="text-[#333] font-semibold">
+                      {{countdown}}</span
+                    >, it will be delivered<span
+                      class="text-[#333] font-semibold"
+                    >
+                      tomorrow
+                    </span>
+                    at the latest!
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <hr />
-          <div class="flex flex-wrap gap-4">
-            <WishlistButton :product="product" />
-            <ShareButton :product="product" />
+          </aside>
+
+          <div>
+            <div class="text-[#333] text-base mb-2 font-semibold">
+              Featured Information
+            </div>
+            <div class="content-descriptions">
+              <ul>
+                <li>
+                  Free returns within 30 days. Click for detailed
+                  <a class="underline text-[#666]" href="#"> information</a>.
+                </li>
+                <li>
+                  This product will be sent by
+                  <span class="underline font-semibold cursor-help"
+                    >WooNuxt</span
+                  >.
+                </li>
+                <div v-html="product.description"></div>
+                <li>
+                  A maximum of 10 orders can be placed for this product. WooNuxt
+                  reserves the right to cancel orders over 10 units.
+                </li>
+                <li>
+                  More than 50 stocks were offered to be sold at the campaign
+                  price.
+                </li>
+                <li>
+                  WooNuxt determines the sales price of the product you have
+                  examined.
+                </li>
+                <li>The price listed is valid until 12 November 2022.</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -128,7 +151,6 @@ function arraysEqual(a1, a2) {
   return JSON.stringify(a1Formatted) == JSON.stringify(a2Formatted);
 }
 
-
 const formatArray = (arr) => {
   return arr.map((v) => {
     let name = v.name.toLowerCase();
@@ -154,6 +176,7 @@ export default {
       showBackButton: false,
       addToCartState: null,
       addToCartButtonText: "Add to Cart",
+      countdown: null
     };
   },
   transition(to, from) {
@@ -170,11 +193,21 @@ export default {
     return { product: product };
   },
   mounted() {
+    setInterval(() => { this.show() }, 1000);
     if (this.product.variations) {
       this.checkForVariationTypeOfAny();
     }
   },
   methods: {
+    show: function() {
+      const d = new Date();
+      const h = 24 - d.getHours();
+      const m = 60 - d.getMinutes();
+      if((m + '').length == 1){
+        m = '0' + m;
+      }
+      this.countdown = h + ' hours ' + m + ' minutes'
+    },
     updateQuantity(quantity) {
       this.quantity = quantity;
     },
@@ -238,7 +271,7 @@ export default {
         setTimeout(() => {
           this.addToCartState = null;
           this.addToCartButtonText = "Add to Cart";
-        }, 2500);
+        }, 4000);
 
         this.$store.commit("updateCart", addToCart.cart);
       } catch (error) {
@@ -261,7 +294,13 @@ export default {
 </script>
 
 <style>
-.product-categories > a:last-child .comma {
-  display: none;
+.content-descriptions ul li {
+  font-size: 0.875rem;
+  line-height: 1.75rem;
+  background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxlbGxpcHNlIHJ5PSIzIiByeD0iMyIgY3k9IjMiIGN4PSIzIiBmaWxsPSIjYzljOWM5Ii8+PC9zdmc+)
+    no-repeat 0 11px !important;
+  color: #333;
+  padding-left: 0.938rem;
+  margin-bottom: 6px;
 }
 </style>
