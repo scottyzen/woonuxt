@@ -12,17 +12,17 @@
     />
 
     <div
-      class="block border border-[#e6e6e6] bg-white shadow rounded-4xl p-6 box-border"
+      class="block border border-[#e6e6e6] overflow-hidden bg-white shadow rounded-2xl box-border md:rounded-4xl"
     >
-      <div class="flex flex-row justify-between">
+      <div class="flex flex-col justify-between md:flex-row md:p-5 md:gap-6">
         <ProductImageGallery
           :activeImg="product.image.sourceUrl"
           :gallery="product.galleryImages"
         />
 
-        <div class="w-51/100">
+        <div class="p-4 overflow-auto sm:p-5 md:p-0">
           <div class="pb-4 mb-4 border-b border-[#eaeaea]">
-            <h1 class="text-[#333] font-semibold text-2xl">{{ type.name }}</h1>
+            <h1 class="text-[#333] font-semibold text-lg sm:text-2xl">{{ type.name }}</h1>
             <StarRating
               :rating="product.averageRating"
               :count="product.reviewCount"
@@ -54,11 +54,9 @@
 
           <aside class="my-4 flex border-b border-[#eaeaea] pb-4 flex-col">
             <div class="flex justify-between">
-              <div class="text-sm text-true-gray-900">
-                <div class="flex items-center justify-center gap-1">
+              <div class="text-xs text-true-gray-900 sm:text-sm md:text-xs lg:text-sm">
+                <div class="flex items-center justify-center gap-2">
                   <svg
-                    class="mr-1"
-                    height="1.5rem"
                     width="1.5rem"
                     fill="#0bc15c"
                     viewBox="0 0 24 24"
@@ -89,14 +87,14 @@
           </aside>
 
           <div>
-            <div class="text-[#333] text-base mb-2 font-semibold">
+            <div class="text-[#333] text-base mb-2 font-semibold md:text-sm lg:text-base">
               Featured Information
             </div>
-            <div class="content-descriptions">
+            <div class="description overflow-auto max-h-56 text-sm text-[#666] sm:max-h-72 md:max-h-48 md:text-xs md:text-[#333] lg:max-h-84 lg:text-sm">
               <ul>
                 <li>
                   Free returns within 30 days. Click for detailed
-                  <a class="underline text-[#666]" href="#"> information</a>.
+                  <a class="underline" href="#"> information</a>.
                 </li>
                 <li>
                   This product will be sent by
@@ -128,7 +126,7 @@
       <div class="font-semibold text-xl mb-4">Related Products</div>
       <ProductRow
         :products="product.related.nodes"
-        class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5"
+        class="grid-cols-2"
       />
     </div>
   </main>
@@ -293,14 +291,22 @@ export default {
 };
 </script>
 
-<style>
-.content-descriptions ul li {
-  font-size: 0.875rem;
-  line-height: 1.75rem;
+<style lang="scss">
+.description ul li {
   background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxlbGxpcHNlIHJ5PSIzIiByeD0iMyIgY3k9IjMiIGN4PSIzIiBmaWxsPSIjYzljOWM5Ii8+PC9zdmc+)
     no-repeat 0 11px !important;
-  color: #333;
   padding-left: 0.938rem;
-  margin-bottom: 6px;
+  line-height: 1.75rem;
+}
+.description::-webkit-scrollbar {
+  width: 4px;
+}
+.description::-webkit-scrollbar-thumb {
+  background: #e6e6e6;
+  border-radius: 100px;
+}
+.description::-webkit-scrollbar-track {
+  background: #f9f9f9;
+  border-radius: 100px;
 }
 </style>

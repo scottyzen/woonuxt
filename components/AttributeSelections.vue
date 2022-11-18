@@ -23,15 +23,16 @@
       </div>
 
       <div v-else>
-        <div class="flex mb-2 text-base">
+        <div class="flex text-base">
           <span class="font-semibold text-[#333]"
             >{{ attr.label }}:
             <span class="text-[#999]">{{selectedValue}} </span>
           </span>
         </div>
-        <div class="flex items-center flex-wrap">
+        <div class="shadowAttributes"></div>
+        <div class="flex items-center overflow-x-auto">
           <span v-for="(option, i) in attr.options" :key="option.id">
-            <label class="leading-34px block">
+            <label class="leading-34px block mt-2">
               <input
                 class="hidden"
                 :checked="i == 0"
@@ -86,5 +87,14 @@ input[type="radio"]:checked ~ .selected {
   outline-style: auto;
   background-color: #7c54b40f;
   color: #000;
+}
+.shadowAttributes {
+  background: -webkit-gradient(linear, left top, right top, color-stop(100%, hsl(0deg, 0%, 100%)), color-stop(0, rgba(255, 255, 255, 0)));
+  z-index: 1;
+  position: absolute;
+  height: 50px;
+  pointer-events: none;
+  width: 30px;
+  right: 0px;
 }
 </style>
