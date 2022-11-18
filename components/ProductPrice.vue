@@ -21,7 +21,7 @@
     <div v-else>
       <div class="flex justify-between flex-row items-baseline">
         <div class="flex flex-row items-baseline">
-          <p class="text-2xl font-bold text-[#1a1a1a]">{{ regularPrice }}</p>
+          <p class="text-2xl font-bold text-[#333]">{{ regularPrice }}</p>
           <p class="text-sm text-[#66676e] ml-2">VAT included</p>
         </div>
       </div>
