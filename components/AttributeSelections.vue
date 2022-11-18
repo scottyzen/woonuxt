@@ -58,6 +58,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      selectedValue: null
+    }
+  },
   props: ["attrs"],
   methods: {
     updateAttrs() {
