@@ -5,7 +5,7 @@
         fit="outside"
         format="webp"
         width="600px"
-        :src="activeImg"
+        :src="firstImage"
         class="w-full object-center transform"
         alt="Main Product Image"
         placeholder
@@ -40,12 +40,12 @@ export default {
     }
   },
   props: [
-    "activeImg",
+    "firstImage",
     "gallery"
   ],
   methods: {
     currentThumbnail: function (img, i) {
-      this.activeImg = img;
+      this.firstImage = img;
       this.activeThumb = i;
     }
   }

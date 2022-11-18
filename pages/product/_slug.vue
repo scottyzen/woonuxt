@@ -16,7 +16,7 @@
     >
       <div class="flex flex-col justify-between md:flex-row md:p-5 md:gap-6">
         <ProductImageGallery
-          :activeImg="product.image.sourceUrl"
+          :first-image="product.image.sourceUrl"
           :gallery="product.galleryImages"
         />
 
