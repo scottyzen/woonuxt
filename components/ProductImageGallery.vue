@@ -15,17 +15,17 @@
     <div class="bullets-wrapper">
       <div class="bullets-container gap-2">
         <NuxtImg 
-            v-for="(img, i) in gallery.nodes" 
-            :key="`image-${i}`"
-            fit="outside"
-            format="webp"
-            width="600px"
-            :alt="`Product thumbnail #${i}`"
-            :src="img.sourceUrl"
-            placeholder
-            class="w-5 rounded-sm sm:w-10 md:w-6 lg:w-8"
-            :class="{ focused: i === activeThumb}"
-            @mouseover="changeActiveImg(i), selectedThumb(i)"
+          v-for="(img, i) in gallery.nodes" 
+          :key="`image-${i}`"
+          fit="outside"
+          format="webp"
+          width="600px"
+          :alt="`Product thumbnail #${i}`"
+          :src="img.sourceUrl"
+          placeholder
+          class="w-5 rounded-sm sm:w-10 md:w-6 lg:w-8"
+          @mouseover="currentThumbnail(img.sourceUrl, i)"
+          :class="[activeThumb == i ? 'focused': '']"
           />
       </div>
     </div>
@@ -44,10 +44,8 @@ export default {
     "gallery"
   ],
   methods: {
-    changeActiveImg(i) {
-      this.activeImg = this.gallery.nodes[i].sourceUrl;
-    },
-    selectedThumb(i) {
+    currentThumbnail: function (img, i) {
+      this.activeImg = img;
       this.activeThumb = i;
     }
   }
