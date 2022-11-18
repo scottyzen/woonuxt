@@ -90,7 +90,7 @@
             <div class="text-[#333] text-base mb-2 font-semibold md:text-sm lg:text-base">
               Featured Information
             </div>
-            <div class="description overflow-auto max-h-56 text-sm text-[#666] sm:max-h-72 md:max-h-48 md:text-xs md:text-[#333] lg:max-h-84 lg:text-sm">
+            <div class="description overflow-auto max-h-56 text-sm text-[#666] sm:max-h-72 md:max-h-48 md:text-xs md:text-[#333] lg:max-h-86 lg:text-sm">
               <ul>
                 <li>
                   Free returns within 30 days. Click for detailed
@@ -294,9 +294,9 @@ export default {
 <style lang="scss">
 .description ul li {
   background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxlbGxpcHNlIHJ5PSIzIiByeD0iMyIgY3k9IjMiIGN4PSIzIiBmaWxsPSIjYzljOWM5Ii8+PC9zdmc+)
-    no-repeat 0 11px !important;
+    no-repeat 0 14px !important;
   padding-left: 0.938rem;
-  line-height: 1.75rem;
+  line-height: 2rem;
 }
 .description::-webkit-scrollbar {
   width: 4px;
