@@ -198,9 +198,9 @@ export default {
   },
   methods: {
     show: function() {
-      const d = new Date();
-      const h = 24 - d.getHours();
-      const m = 60 - d.getMinutes();
+      let d = new Date();
+      let h = 24 - d.getHours();
+      let m = 60 - d.getMinutes();
       if((m + '').length == 1){
         m = '0' + m;
       }
