@@ -4,6 +4,7 @@
       <NuxtImg
         fit="outside"
         format="webp"
+        width="600px"
         :src="activeImg"
         class="w-full object-center transform"
         alt="Main Product Image"
@@ -18,6 +19,7 @@
             :key="`image-${i}`"
             fit="outside"
             format="webp"
+            width="600px"
             :alt="`Product thumbnail #${i}`"
             :src="img.sourceUrl"
             placeholder
