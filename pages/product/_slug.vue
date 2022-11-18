@@ -27,10 +27,15 @@
               :rating="product.averageRating"
               :count="product.reviewCount"
             />
+            <div class="grid grid-flow-col">
             <ProductPrice
               :salePrice="type.salePrice"
               :regularPrice="type.regularPrice"
             />
+            <ShareButton 
+              :product="product" 
+            />
+            </div>
           </div>
 
           <form @submit.prevent="triggerAddToCart">
