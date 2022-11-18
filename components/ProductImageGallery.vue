@@ -14,8 +14,8 @@
 
     <div class="bullets-wrapper">
       <div class="bullets-container gap-2">
-        <NuxtImg 
-          v-for="(img, i) in gallery.nodes" 
+        <NuxtImg
+          v-for="(img, i) in gallery.nodes"
           :key="`image-${i}`"
           fit="outside"
           format="webp"
@@ -53,22 +53,22 @@ export default {
 </script>
 <style lang="scss">
 .focused {
-  opacity: 0.4
+  opacity: 0.4;
 }
 .bullets-wrapper {
-    padding: 0.5rem;
-    background-color: hsla(0,0%,100%,.7);
-    border-radius: 0.875rem;
-    position: absolute;
-    left: 50%;
-    bottom: 0.563rem;
-    transform: translate(-50%);
+  padding: 0.5rem;
+  background-color: hsla(0, 0%, 100%, 0.7);
+  border-radius: 0.875rem;
+  position: absolute;
+  left: 50%;
+  bottom: 0.563rem;
+  transform: translate(-50%);
 }
 .bullets-wrapper .bullets-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    border-radius: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 0.5rem;
 }
 </style>
