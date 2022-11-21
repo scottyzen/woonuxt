@@ -20,30 +20,26 @@
         </svg>
         <span class="text-[#999] ml-1">({{node.reviewCount}})</span>
       </div>
-      <div class="flex-col flex mt-1">
-        <div v-if="node.salePrice">
-          <div class="flex justify-between flex-row items-baseline">
-            <div class="flex flex-row items-baseline">
-              <p class="text-lg font-bold text-[#eb0037]">{{ node.salePrice }}</p>
-            </div>
-          </div>
-          <div class="flex-wrap items-baseline flex-row flex text-sm">
-            <p class="text-[#66676e]">Originally:</p>
-            <p class="text-[#66676e] ml-1 line-through">
-              {{ node.regularPrice }}
-            </p>
-            <p class="text-[#eb0037] ml-1">
-              {{Math.round(((parseFloat(node.salePrice.replace(/[^0-9]/g, "")) - parseFloat(node.regularPrice.replace(/[^0-9]/g, ""))) / parseFloat(node.regularPrice.replace(/[^0-9]/g, ""))) * 100)
-              }}%
-            </p>
+      <div v-if="node.salePrice" class="flex-col flex">
+        <div class="flex justify-between flex-row items-baseline">
+          <div class="flex flex-row items-baseline">
+            <p class="text-lg font-bold text-[#eb0037]">{{ node.salePrice }}</p>
           </div>
         </div>
-        <div v-else>
-          <div class="flex justify-between flex-row items-baseline">
-            <div class="flex flex-row items-baseline">
-              <p class="text-lg font-bold text-[#333]">{{ node.regularPrice }}</p>
-            </div>
-          </div>
+        <div class="flex-wrap items-baseline flex-row flex text-sm leading-2">
+          <p class="text-[#66676e]">Originally:</p>
+          <p class="text-[#66676e] ml-1 line-through">
+            {{ node.regularPrice }}
+          </p>
+          <p class="text-[#eb0037] ml-1">
+            {{Math.round(((parseFloat(node.salePrice.replace(/[^0-9]/g, "")) - parseFloat(node.regularPrice.replace(/[^0-9]/g, ""))) / parseFloat(node.regularPrice.replace(/[^0-9]/g, ""))) * 100)
+            }}%
+          </p>
+        </div>
+      </div>
+      <div v-else class="flex justify-between flex-row items-baseline">
+        <div class="flex flex-row items-baseline">
+          <p class="text-lg font-bold text-[#333]">{{ node.regularPrice }}</p>
         </div>
       </div>
     </div>
