@@ -26,6 +26,7 @@
             <StarRating
               :rating="product.averageRating"
               :count="product.reviewCount"
+              class="my-1 sm:my-2 inline-flex items-center text-xs text-[#666] sm:text-sm"
             />
             <div class="grid grid-flow-col">
             <ProductPrice
@@ -129,10 +130,7 @@
     </div>
     <div class="my-24">
       <div class="font-semibold text-xl mb-4">Related Products</div>
-      <ProductRow
-        :products="product.related.nodes"
-        class="grid-cols-2"
-      />
+      <ProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
     </div>
   </main>
 </template>
