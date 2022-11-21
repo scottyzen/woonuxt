@@ -3,10 +3,10 @@
     <SaleBadge :node="node" class="top-2 right-2 absolute" />
 
     <NuxtPicture v-if="image" width="300" :src="image" :alt="node.image.altText || node.name" :title="node.image.title || node.name" :loading="index <= 1 || index == 5 ? 'eager' : 'lazy'" format="avif"
-      :imgAttrs="{ class: 'rounded-xl object-top object-cover w-full' }" fit="outside" />
+      :imgAttrs="{ class: 'rounded-xl border border-[#e6e6e6] object-top object-cover w-full' }" fit="outside" />
 
     <div class="py-3">
-      <h2 class="text-base">{{ node.name }}</h2>
+      <h2 class="text-base text-[#666]">{{ node.name }}</h2>
       <div v-if="node.reviewCount !== 0" class="flex my-1 text-sm">
         <svg
           v-for="i in 5"
