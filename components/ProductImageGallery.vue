@@ -8,7 +8,6 @@
         :src="firstImage"
         class="w-full object-center transform"
         alt="Main Product Image"
-        placeholder
       />
     </div>
 
@@ -22,7 +21,6 @@
           width="600px"
           :alt="`Product thumbnail #${i}`"
           :src="img.sourceUrl"
-          placeholder
           class="w-5 rounded-sm sm:w-10 md:w-6 lg:w-8"
           :class="{focused: i == activeThumb}"
           @mouseover="currentThumbnail(img.sourceUrl, i)"
