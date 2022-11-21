@@ -47,7 +47,7 @@ export default {
   methods: {
     updateAttrs() {
       const selectedVariations = this.attrs.map((row) => {
-        let radioValue = document.querySelector(`.name-${row.name}:checked`);
+        const radioValue = document.querySelector(`.name-${row.name}:checked`);
         const value = radioValue ? radioValue.value : this.$refs[row.name][0].value;
         const name = row.name.toLowerCase();
         return { name, value };
