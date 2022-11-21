@@ -36,8 +36,8 @@
         <hr />
 
         <form @submit.prevent="triggerAddToCart">
-          <AttributeSelections class="mt-4 mb-8" v-if="product.type == 'VARIABLE' && product.attributes" :attrs="product.attributes.nodes.filter(attr => attr.variation != false)" @attrs-changed="updateSelectedVariations" />
-          <div class="flex mt-12 gap-4 items-center">
+          <AttributeSelections class="my-4" v-if="product.type == 'VARIABLE' && product.attributes" :attrs="product.attributes.nodes.filter(attr => attr.variation != false)" @attrs-changed="updateSelectedVariations" />
+          <div class="flex mt-8 gap-4 items-center">
             <QuantityButtons class="w-28" @quantity-change="updateQuantity" :quantity="quantity" :min="1" />
             <AddToCartButton class="flex-1 w-full md:max-w-xs" :add-to-cart-button-text="addToCartButtonText" :disabled="!activeVariation && product.variations" :class="{
               loading: addToCartState == 'loading',
@@ -149,7 +149,7 @@ export default {
       }
     },
     updateSelectedVariations(variations) {
-      console.log('updateSelectedVariations', variations);
+      // console.log('updateSelectedVariations', variations);
       if (!this.product.variations) {
         return;
       }
@@ -162,7 +162,7 @@ export default {
 
         return arraysEqual(formatArray(variation.attributes.nodes), formatArray(cloneArray));
       });
-      console.log('activeVariation', activeVariation);
+      // console.log('activeVariation', activeVariation);
 
       this.activeVariation = activeVariation[0];
       this.variation = variations;
