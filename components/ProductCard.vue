@@ -7,7 +7,7 @@
 
     <div class="py-3">
       <h2 class="text-base text-[#666]">{{ node.name }}</h2>
-      <div v-if="node.reviewCount !== 0" class="flex my-1 text-sm">
+      <div v-if="node.reviewCount !== 0" class="flex text-xs">
         <svg
           v-for="i in 5"
           :key="i"
