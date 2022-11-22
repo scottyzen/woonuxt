@@ -1,6 +1,6 @@
 # Next Generation Front-End for WooCommerce
 
-* [Live Demo](https://woonuxt.com/) ⚡️
+* [Live Demo](https://demo.woonuxt.com/) ⚡️
 * [Second Demo](https://github.com/zackha/woonuxt) ⚡️ ([Fork](https://github.com/zackha/woonuxt) by [@zackha](https://github.com/zackha))
 
 ### Required WordPress Plugins
