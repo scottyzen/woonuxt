@@ -1,5 +1,5 @@
 # Next Generation Front-End for WooCommerce
-Set up guide [https://woonuxt.com/](https://woonuxt.com/)
+Demo Store [https://woonuxt.com/](https://woonuxt.com/)
 
 ### Required WordPress Plugins
 * WPGraphQL (https://www.wpgraphql.com)
