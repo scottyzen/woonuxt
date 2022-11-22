@@ -6,7 +6,7 @@
 		</svg>
 		<span class="text-[#333] hover:text-[#7c54b4]">Share</span>
 	</a>
-	<div v-else class="cursor-pointer flex mt-4 text-sm text-gray-400 gap-2 items-center">
+	<div v-else class="cursor-pointer flex mt-4 text-sm text-gray-400 gap-2 items-center justify-end">
 		<!-- Twitter -->
 		<a :href="twitterUrl" target="_blank">
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="18" height="18" fill="currentColor">

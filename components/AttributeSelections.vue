@@ -32,7 +32,7 @@
         <div class="shadowAttributes"></div>
         <div class="flex items-center overflow-x-auto">
           <span v-for="(option, i) in attr.options" :key="option.id">
-            <label class="leading-34px block mt-2">
+            <label class="leading-9 block mt-2">
               <input
                 class="hidden"
                 :checked="i == 0"
