@@ -80,7 +80,7 @@ export default defineNuxtConfig({
     },
   },
 
-  sitemap: { hostname: process.env.DOMAIN, gzip: true },
+  sitemap: { hostname: `https://${process.env.DOMAIN}`, gzip: true },
   image: { provider: "static", domains: [process.env.WORDPRESS_URL, process.env.DOMAIN] },
 
   pwa: {
