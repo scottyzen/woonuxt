@@ -1,5 +1,7 @@
 # Next Generation Front-End for WooCommerce
-Set up guide [https://setup.woonuxt.com/](https://setup.woonuxt.com/)
+
+* [Live Demo](https://demo.woonuxt.com/) ⚡️
+* [Second Demo](https://github.com/zackha/woonuxt) ⚡️ ([Fork](https://github.com/zackha/woonuxt) by [@zackha](https://github.com/zackha))
 
 ### Required WordPress Plugins
 * WPGraphQL (https://www.wpgraphql.com)
@@ -23,7 +25,7 @@ Set up guide [https://setup.woonuxt.com/](https://setup.woonuxt.com/)
  * Coupons
 
 #### Tested up to: 
-* WordPress 6.0.3
+* WordPress 6.1.1
 * WooCommerce 6.9.4
-* WPGraphQL 1.12.0
+* WPGraphQL 1.12.2
 * WooGraphQL 0.11.2
