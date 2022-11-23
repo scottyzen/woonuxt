@@ -1,0 +1,77 @@
+fragment VariableProduct on VariableProduct {
+  price
+  slug
+  description
+  image {
+    sourceUrl
+    altText
+    title
+  }
+  averageRating
+  reviewCount
+  salePrice
+  regularPrice
+  stockStatus
+  stockQuantity
+  productCategories{
+    nodes{
+      name
+      slug
+    }
+  }
+  attributes {
+    nodes {
+      name
+      options
+      variation
+      visible
+    }
+  }
+  defaultAttributes {
+    nodes {
+      name
+      attributeId
+    }
+  }
+  variations {
+    nodes {
+      name
+      databaseId
+      price
+      regularPrice
+      salePrice
+      slug
+      stockQuantity
+      stockStatus
+      hasAttributes
+      image {
+        sourceUrl
+        altText
+        title
+      }
+      attributes {
+        nodes {
+          value
+          name
+        }
+      }
+    }
+  }
+  galleryImages {
+    nodes {
+      sourceUrl
+    }
+  }
+  allPaColor{
+    nodes{
+      name
+      slug
+    }
+  }
+  allPaSize{
+    nodes{
+      name
+      slug
+    }
+  }
+}

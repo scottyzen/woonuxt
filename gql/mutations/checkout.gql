@@ -1,0 +1,49 @@
+mutation Checkout($billing: CustomerAddressInput = {}, $metaData: [MetaDataInput] = {key: "", value: ""}, $paymentMethod: String = "stripe", $shipping: CustomerAddressInput = {}, $customerNote: String = "", $shipToDifferentAddress: Boolean = false) {
+  checkout(
+    input: {paymentMethod: $paymentMethod, billing: $billing, metaData: $metaData, shipping: $shipping, customerNote: $customerNote, shipToDifferentAddress: $shipToDifferentAddress}
+  ) {
+    result
+    redirect
+    order {
+      needsPayment
+      needsProcessing
+      status
+      databaseId
+      orderKey
+      subtotal
+      total
+      subtotal
+      totalTax
+      shippingTotal
+      paymentMethodTitle
+      paymentMethod
+      date
+      subtotal
+      customer {
+        email
+      }
+      lineItems {
+        nodes {
+          quantity
+          total
+          product {
+            node{
+              name
+              image {
+                sourceUrl
+              }
+            }
+          }
+          variation {
+            node{
+              name
+              image {
+                sourceUrl
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

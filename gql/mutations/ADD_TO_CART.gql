@@ -1,0 +1,11 @@
+#import "~/gql/fragments/SimpleProduct.gql"
+#import "~/gql/fragments/VariableProduct.gql"
+#import "~/gql/fragments/CartFragment.gql"
+
+mutation ADD_TO_CART($input: AddToCartInput!) {
+  addToCart(input: $input) {
+    cart {
+    ...CartFragment
+    }
+  }
+}

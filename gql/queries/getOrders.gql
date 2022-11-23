@@ -1,0 +1,21 @@
+query getOrders {
+  customer {
+    orders {
+      nodes {
+        orderNumber
+        total
+        date
+        status
+        lineItems {
+          nodes {
+            product {
+              node{
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
