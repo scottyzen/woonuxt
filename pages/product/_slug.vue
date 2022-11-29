@@ -1,5 +1,5 @@
 <template>
-  <main class="container py-4 relative ">
+  <main class="container py-4 relative">
     <!-- Breadcrumb -->
     <Breadcrumb class="mb-6" :format="[
       { name: 'Home', slug: '/' },
@@ -23,7 +23,7 @@
         <div class="my-8 text-sm grid gap-2">
           <div class="flex gap-2 items-center">
             <span class="text-gray-400">Availability: </span>
-            <span v-if="product.stockStatus == 'IN_STOCK'" class="text-green-600">In Stock</span>
+            <span v-if="type.stockStatus == 'IN_STOCK'" class="text-green-600">In Stock</span>
             <span v-else class="text-red-600">Out of Stock</span>
           </div>
           <div class="flex gap-2 items-center">
@@ -36,10 +36,10 @@
         <hr />
 
         <form @submit.prevent="triggerAddToCart">
-          <AttributeSelections class="my-4" v-if="product.type == 'VARIABLE' && product.attributes" :attrs="product.attributes.nodes.filter(attr => attr.variation != false)" @attrs-changed="updateSelectedVariations" />
+          <AttributeSelections class="my-4" v-if="product.type == 'VARIABLE' && product.attributes" :attrs="product.attributes.nodes.filter((attr) => attr.variation != false)" @attrs-changed="updateSelectedVariations" />
           <div class="flex mt-8 gap-4 items-center">
             <QuantityButtons class="w-28" @quantity-change="updateQuantity" :quantity="quantity" :min="1" />
-            <AddToCartButton class="flex-1 w-full md:max-w-xs" :add-to-cart-button-text="addToCartButtonText" :disabled="!activeVariation && product.variations || activeVariation.stockStatus == `OUT_OF_STOCK`" :class="{
+            <AddToCartButton class="flex-1 w-full md:max-w-xs" :add-to-cart-button-text="addToCartButtonText" :disabled="(!activeVariation && product.variations) || type.stockStatus == `OUT_OF_STOCK`" :class="{
               loading: addToCartState == 'loading',
               success: addToCartState == 'success',
             }" />
@@ -72,9 +72,9 @@ import GET_PRODUCT from "~/gql/queries/getProduct";
 import ADD_TO_CART from "~/gql/mutations/ADD_TO_CART";
 
 function formatVariarionArrays(arr) {
-  return arr.map(a => {
+  return arr.map((a) => {
     // replace all dashes and spaces with underscores
-    return { name: a.name.replace(/[-\s]/g, '_'), value: a.value.replace(/[-\s]/g, '_') }
+    return { name: a.name.replace(/[-\s]/g, "_"), value: a.value.replace(/[-\s]/g, "_") };
   });
 }
 
@@ -83,7 +83,6 @@ function arraysEqual(a1, a2) {
   let a2Formatted = formatVariarionArrays(a2);
   return JSON.stringify(a1Formatted) == JSON.stringify(a2Formatted);
 }
-
 
 const formatArray = (arr) => {
   return arr.map((v) => {
