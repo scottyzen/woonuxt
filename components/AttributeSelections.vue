@@ -28,10 +28,10 @@
       <div v-else class="grid gap-2">
         <div class="text-sm">{{ attr.label }}<span class="text-gray-400 capitalize">: {{ activeValue(attr.name) }}</span></div>
         <div class="flex gap-2">
-          <span v-for="(option, i) in attr.options" :key="option.id">
-            <label>
-              <input class="hidden" :checked="i == 0" @change="updateAttrs($event)" type="radio" :class="`name-${attr.name}`" :name="attr.name" :value="option" :ref="attr.name" />
-              <span class="radio-button" :class="`picker-${option}`" :title="`${attr.name}: ${option}`">{{ option }}</span>
+          <span v-for="(vars, i) in variants">
+            <label v-for="v in vars.attributes.nodes">
+              <input class="hidden" :checked="(i == select)" @change="updateAttrs($event)" type="radio" :class="`name-${attr.name}`" :name="attr.name" :value="v.value" :ref="attr.name" :id="i" :disabled="vars.stockStatus == `OUT_OF_STOCK`" />
+              <span :class="[{disabled: vars.stockStatus == `OUT_OF_STOCK`}, `picker-${v.value} radio-button`]" :title="`${attr.name}: ${v.value}`">{{ v.value }}</span>
             </label>
           </span>
         </div>
@@ -43,7 +43,15 @@
 
 <script>
 export default {
-  props: ["attrs"],
+  props: ["attrs", "variants"],
+  computed: {
+    select: function () {
+      const value = this.variants.findIndex(function (e) {
+        return e.stockStatus.indexOf('IN_STOCK') > -1;
+      });
+      return value;
+    }
+  },
   methods: {
     updateAttrs() {
       const selectedVariations = this.attrs.map((row) => {
