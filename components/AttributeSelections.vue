@@ -30,7 +30,7 @@
         <div class="flex gap-2">
           <span v-for="(vars, i) in variants">
             <label v-for="v in vars.attributes.nodes">
-              <input class="hidden" :checked="(i == select)" @change="updateAttrs($event)" type="radio" :class="`name-${attr.name}`" :name="attr.name" :value="v.value" :ref="attr.name" :id="i" :disabled="vars.stockStatus == `OUT_OF_STOCK`" />
+              <input class="hidden" :checked="(i == variants.findIndex(obj => obj.stockStatus === `IN_STOCK`))" @change="updateAttrs($event)" type="radio" :class="`name-${attr.name}`" :name="attr.name" :value="v.value" :ref="attr.name" :id="i" :disabled="vars.stockStatus == `OUT_OF_STOCK`" />
               <span :class="[{disabled: vars.stockStatus == `OUT_OF_STOCK`}, `picker-${v.value} radio-button`]" :title="`${attr.name}: ${v.value}`">{{ v.value }}</span>
             </label>
           </span>
@@ -44,14 +44,6 @@
 <script>
 export default {
   props: ["attrs", "variants"],
-  computed: {
-    select: function () {
-      const value = this.variants.findIndex(function (e) {
-        return e.stockStatus.indexOf('IN_STOCK') > -1;
-      });
-      return value;
-    }
-  },
   methods: {
     updateAttrs() {
       const selectedVariations = this.attrs.map((row) => {
