@@ -31,3 +31,4 @@
 * WooCommerce 7.1.0
 * WPGraphQL 1.12.2
 * WooGraphQL 0.11.2
+* Node 16.18.1
