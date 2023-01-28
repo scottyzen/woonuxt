@@ -20,7 +20,8 @@ export default {
   props: ["item"],
   methods: {
     async updateQuantity(quantity) {
-      const { updateItemQuantities } = await this.$graphql.default.request(updateCartQuantity, { key: this.item.key, quantity });
+      const quantityInt = quantity ? parseInt(quantity) : 0;
+      const { updateItemQuantities } = await this.$graphql.default.request(updateCartQuantity, { key: this.item.key, quantity: quantityInt });
       this.$store.commit("updateCart", updateItemQuantities.cart);
     },
   },
