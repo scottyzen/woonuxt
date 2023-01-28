@@ -28,7 +28,7 @@
 
 #### Tested up to: 
 * WordPress 6.1.1
-* WooCommerce 7.1.1
+* WooCommerce 7.3.0
 * WPGraphQL 1.13.7
 * WooGraphQL 0.12.0
 * Node 16.18.1
