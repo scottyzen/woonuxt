@@ -30,7 +30,7 @@ export default {
       default: "#4B5563",
     },
     speed: {
-      default: "0.5s",
+      default: "400ms",
     },
     stroke: {
       default: "4",

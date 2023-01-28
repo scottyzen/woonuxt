@@ -17,6 +17,8 @@ query getProducts($after: String, $slug: [String], $first: Int = 10,  $orderby: 
       date
       totalSales
       databaseId
+      averageRating
+      reviewCount
       productCategories {
         nodes {
           databaseId
@@ -25,8 +27,6 @@ query getProducts($after: String, $slug: [String], $first: Int = 10,  $orderby: 
           count
         }
       }
-      averageRating
-      reviewCount
       slug
       ...SimpleProduct
       ...VariableProduct
