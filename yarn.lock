@@ -2083,25 +2083,25 @@
   optionalDependencies:
     prettier "^1.18.2 || ^2.0.0"
 
-"@vueuse/core@^9.5.0":
-  version "9.5.0"
-  resolved "https://registry.npmjs.org/@vueuse/core/-/core-9.5.0.tgz"
-  integrity sha512-6GsWBsJHEb3sYw15mbLrcbslAVY45pkzjJYTKYKCXv88z7srAF0VEW0q+oXKsl58tCbqooplInahXFg8Yo1m4w==
+"@vueuse/core@^9.11.1":
+  version "9.11.1"
+  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-9.11.1.tgz#1552aef67144220da7e6b797372a194a9c7ff52e"
+  integrity sha512-E/cizD1w9ILkq4axYjZrXLkKaBfzloaby2n3NMjUfd6yI/jkfTVgc6iwy/Cw2e++Ld4LphGbO+3MhzizvwUslQ==
   dependencies:
     "@types/web-bluetooth" "^0.0.16"
-    "@vueuse/metadata" "9.5.0"
-    "@vueuse/shared" "9.5.0"
+    "@vueuse/metadata" "9.11.1"
+    "@vueuse/shared" "9.11.1"
     vue-demi "*"
 
-"@vueuse/metadata@9.5.0":
-  version "9.5.0"
-  resolved "https://registry.npmjs.org/@vueuse/metadata/-/metadata-9.5.0.tgz"
-  integrity sha512-4M1AyPZmIv41pym+K5+4wup3bKuYebbH8w8BROY1hmT7rIwcyS4tEL+UsGz0Hiu1FCOxcoBrwtAizc0YmBJjyQ==
+"@vueuse/metadata@9.11.1":
+  version "9.11.1"
+  resolved "https://registry.yarnpkg.com/@vueuse/metadata/-/metadata-9.11.1.tgz#f4e5fd9cb421c5a02373d034a0ce53538b370518"
+  integrity sha512-ABjkrG+VXggNhjfGyw5e/sekxTZfXTwjrYXkkWQmQ7Biyv+Gq9UD6IDNfeGvQZEINI0Qzw6nfuO2UFCd3hlrxQ==
 
-"@vueuse/shared@9.5.0":
-  version "9.5.0"
-  resolved "https://registry.npmjs.org/@vueuse/shared/-/shared-9.5.0.tgz"
-  integrity sha512-HnnCWU1Vg9CVWRCcI8ohDKDRB2Sc4bTgT1XAIaoLSfVHHn+TKbrox6pd3klCSw4UDxkhDfOk8cAdcK+Z5KleCA==
+"@vueuse/shared@9.11.1":
+  version "9.11.1"
+  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-9.11.1.tgz#c76805c9d86da109b132529b4745d7d706106e7f"
+  integrity sha512-UTZYGAjT96hWn4buf4wstZbeheBVNcKPQuej6qpoSkjF1atdaeCD6kqm9uGL2waHfisSgH9mq0qCRiBOk5C/2w==
   dependencies:
     vue-demi "*"
 
@@ -3511,10 +3511,15 @@ core-js@^2.6.5:
   resolved "https://registry.npmjs.org/core-js/-/core-js-2.6.12.tgz"
   integrity sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==
 
-core-js@^3.26.0, core-js@^3.26.1:
+core-js@^3.26.0:
   version "3.26.1"
   resolved "https://registry.npmjs.org/core-js/-/core-js-3.26.1.tgz"
   integrity sha512-21491RRQVzUn0GGM9Z1Jrpr6PNPxPi+Za8OM9q4tksTSnlbXXGKK1nXNg/QvwFYettXvSX6zWKCtHHfjN4puyA==
+
+core-js@^3.27.2:
+  version "3.27.2"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.27.2.tgz#85b35453a424abdcacb97474797815f4d62ebbf7"
+  integrity sha512-9ashVQskuh5AZEZ1JdQWp1GqSoC1e1G87MzRqg2gIfVAQ7Qn9K+uFj8EcniUFA4P2NLZfV+TOlX1SzoKfo+s7w==
 
 core-util-is@~1.0.0:
   version "1.0.3"
@@ -5171,10 +5176,10 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   resolved "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.10.tgz"
   integrity sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==
 
-graphql-request@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.npmjs.org/graphql-request/-/graphql-request-5.0.0.tgz"
-  integrity sha512-SpVEnIo2J5k2+Zf76cUkdvIRaq5FMZvGQYnA4lUWYbc99m+fHh4CZYRRO/Ff4tCLQ613fzCm3SiDT64ubW5Gyw==
+graphql-request@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/graphql-request/-/graphql-request-5.1.0.tgz#dbc8feee27d21b993cd5da2d3af67821827b240a"
+  integrity sha512-0OeRVYigVwIiXhNmqnPDt+JhMzsjinxHE7TVy3Lm6jUzav0guVcL0lfSbi6jVTRAxcbwgyr6yrZioSHxf9gHzw==
   dependencies:
     "@graphql-typed-document-node/core" "^3.1.1"
     cross-fetch "^3.1.5"
@@ -7133,13 +7138,13 @@ nuxt-cookie-control@^1.9.93:
     css-vars-ponyfill "^2.0.2"
     string-replace-loader "^2.1.1"
 
-nuxt-graphql-request@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.npmjs.org/nuxt-graphql-request/-/nuxt-graphql-request-6.0.1.tgz"
-  integrity sha512-bnl+sWHgdZA8yqChEsoBfE2z51/9mkpXNvgTw0YIbMPA30l9NR5gfRnwWK+m6y2VqMOQvMeZzrW4tpfF5ubSIg==
+nuxt-graphql-request@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/nuxt-graphql-request/-/nuxt-graphql-request-6.0.2.tgz#5e54dfe5219939fc7dad523892b7df7f5d80f683"
+  integrity sha512-uya6XWPT1sa+PhH++NVgYyfTJI3qircAG5YY65tVE8eMyNE886zD1Rwv0cUn8VHumhxu1M5wn9dxJYQaprUUtQ==
   dependencies:
     cross-fetch "^3.1.5"
-    graphql-request "^5.0.0"
+    graphql-request "^5.1.0"
     ramda "^0.28.0"
 
 nuxt-windicss@^2.5.5:
@@ -10588,10 +10593,10 @@ vue-meta@^2.4.0:
   dependencies:
     deepmerge "^4.2.2"
 
-vue-multiselect@^2.1.6:
-  version "2.1.6"
-  resolved "https://registry.npmjs.org/vue-multiselect/-/vue-multiselect-2.1.6.tgz"
-  integrity sha512-s7jmZPlm9FeueJg1RwJtnE9KNPtME/7C8uRWSfp9/yEN4M8XcS/d+bddoyVwVnvFyRh9msFo0HWeW0vTL8Qv+w==
+vue-multiselect@^2.1.7:
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/vue-multiselect/-/vue-multiselect-2.1.7.tgz#f27afe3d46482b94810382af7a4826219255c47d"
+  integrity sha512-KIegcN+Ntwg3cbkY/jhw2s/+XJUM0Lpi/LcKFYCS8PrZHcWBl2iKCVze7ZCnRj3w8H7/lUJ9v7rj9KQiNxApBw==
 
 vue-no-ssr@^1.1.1:
   version "1.1.1"
