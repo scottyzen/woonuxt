@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-8 text-gray-800 md:bg-white md:rounded-xl md:mx-auto md:shadow-lg md:mt-8 md:my-24 md:max-w-3xl md:p-16 z-50" v-if="order">
+  <div class="w-full p-8 text-gray-800 z-50 md:bg-white md:rounded-xl md:mx-auto md:shadow-lg md:my-24 md:mt-8 md:max-w-3xl md:p-16" v-if="order">
     <h1 v-if="$route.params.order" class="font-semibold text-xl mb-2">Order received</h1>
     <h1 v-else class="font-semibold text-xl mb-2">Order Summary</h1>
     <p v-if="$route.params.order">Thank you for your order. We will send you an email with the order details.</p>
