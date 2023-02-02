@@ -165,7 +165,8 @@ export default {
           this.buttonText = "Order Successfull";
           this.$store.commit("updateCart", null);
           if (this.paymentMethod == "paypal") {
-            this.$router.push(checkout.redirect);
+            // this.$router.push(checkout.redirect);
+            window.location.href = checkout.redirect;
           } else {
             this.$router.push({
               name: "order-summary",
