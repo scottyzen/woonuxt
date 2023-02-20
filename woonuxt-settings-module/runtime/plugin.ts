@@ -19,17 +19,12 @@ export default defineNuxtPlugin(async () => {
         return;
       }
 
-      const { logoutUser } = useAuth();
-
       // Log out the user
+      const { logoutUser } = useAuth();
       const logout = await logoutUser();
-      if (!logout.success) {
-        console.log('logoutUser failed');
-      } else {
-        console.log('logoutUser success');
-      }
+      !logout.success ? console.log('logoutUser failed') : console.log('logoutUser success');
 
-      window.location.reload(true);
+      if (!reloadCount.value) window.location.reload();
     }
   }
 });
