@@ -1,282 +1,141 @@
+<script setup>
+import { StripeElements, StripeElement } from 'vue-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+
+const { cart, toggleCart, isUpdatingCart } = useCart();
+const { customer } = useAuth();
+const { orderInput, proccessCheckout, isProcessingOrder } = useCheckout();
+const runtimeConfig = useRuntimeConfig();
+const stripeKey = runtimeConfig.public.STRIPE_PUBLISHABLE_KEY;
+
+const buttonText = ref(isProcessingOrder.value ? 'Processing...' : 'Checkout');
+
+const instanceOptions = ref({});
+const elementsOptions = ref({});
+const cardOptions = ref({ hidePostalCode: true });
+const stripeLoaded = ref(false);
+const card = ref();
+const elms = ref();
+
+// Initialize Stripe.js
+onBeforeMount(() => {
+  const stripePromise = loadStripe(stripeKey);
+  stripePromise.then(() => {
+    stripeLoaded.value = true;
+  });
+});
+
+// If cart is open, close it after 1 second
+onMounted(() => {
+  setTimeout(() => {
+    if (toggleCart) toggleCart(false);
+  }, 600);
+});
+
+const payNow = async () => {
+  buttonText.value = 'Processing...';
+  try {
+    if (orderInput.value.paymentMethod === 'stripe') {
+      const cardElement = card.value.stripeElement;
+      const { source, error } = await elms.value.instance.createSource(cardElement);
+      orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
+    }
+  } catch (error) {
+    buttonText.value = 'Place Order';
+  }
+
+  proccessCheckout();
+};
+</script>
+
 <template>
-  <div
-    class="container flex flex-wrap my-12 gap-8 justify-evenly items-start md:flex-row-reverse lg:gap-12"
-  >
-    <!-- <pre>cart: {{ billing }}</pre> -->
-    <div
-      class="bg-white border-b rounded-2xl shadow-sm w-full p-6 top-20 text-gray-700 md:max-w-sm md:mt-16 md:sticky"
-    >
-      <h2 class="font-semibold mb-4">Order Summary</h2>
-      <div v-if="cart" class>
-        <div class="flex justify-between">
-          <span class="text-gray-600">Subtotal</span>
-          <span>{{ cart.subtotal }}</span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-gray-600">Tax</span>
-          <span>{{ cart.totalTax }}</span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-gray-600">Shipping</span>
-          <span>{{ cart.shippingTotal }}</span>
-        </div>
-        <hr class="my-4" />
-        <div class="flex justify-between">
-          <span class="text-gray-600">Total</span>
-          <span class="font-semibold">{{ cart.total }}</span>
-        </div>
-      </div>
-    </div>
-
+  <div>
     <form
-      @submit.prevent="pay"
-      class="w-full max-w-2xl grid gap-8 checkout-form md:flex-1"
-    >
-      <div>
-        <h2 class="text-xl mb-3 w-full">Billing Details</h2>
-        <BillingDetails :billing="billing" @update-billing="updateBilling" />
-      </div>
+      v-if="cart"
+      class="container flex flex-wrap my-12 gap-8 justify-evenly items-start md:flex-row-reverse lg:gap-24"
+      @submit.prevent="payNow">
+      <OrderSummary>
+        <button
+          v-if="orderInput.paymentMethod === 'paypal'"
+          class="rounded-lg flex font-semibold bg-[#EAB434] shadow-md mt-4 text-white text-lg text-center w-full p-3 gap-4 block justify-center items-center hover:bg-primary-dark hover:bg-[#EAB434] disabled:cursor-not-allowed disabled:opacity-50"
+          :disabled="isProcessingOrder || isUpdatingCart">
+          <img src="/images/paypal.svg" alt="PayPal" class="w-16" />
+          <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
+        </button>
 
-      <label for="shipToDifferentAddress" class="flex gap-2 items-center">
-        <span>Ship to a different address?</span>
-        <input
-          type="checkbox"
-          name="shipToDifferentAddress"
-          id="shipToDifferentAddress"
-          v-model="shipToDifferentAddress"
-        />
-      </label>
+        <button
+          v-else
+          class="bg-primary rounded-lg flex font-semibold shadow-md mt-4 text-white text-center w-full p-3 gap-4 block justify-center items-center hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
+          :disabled="isProcessingOrder || isUpdatingCart">
+          <span>{{ buttonText }}</span>
+          <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
+        </button>
+      </OrderSummary>
 
-      <transition name="scale-y" mode="out-in">
-        <div v-if="shipToDifferentAddress">
-          <h2 class="text-xl mb-3 w-full">Shipping Details</h2>
-          <ShippingDetails
-            :shipping="shipping"
-            @update-shipping="updateShipping"
-          />
-        </div>
-      </transition>
-
-      <!-- Pay methods -->
-      <div class="mt-2 col-span-full">
-        <h2 class="text-xl mb-3 w-full">Payment Options</h2>
-        <div class="flex gap-4">
-          <div class="flex gap-1">
-            <input
-              type="radio"
-              name="paymentMethod"
-              id="cc"
-              value="stripe"
-              v-model="paymentMethod"
-            />
-            <label for="cc">Credit or Debit Card</label>
-          </div>
-          <div class="flex gap-1">
-            <input
-              type="radio"
-              name="paymentMethod"
-              id="cod"
-              value="cod"
-              v-model="paymentMethod"
-            />
-            <label for="cod">Cash on Delivery</label>
-          </div>
-          <div class="flex gap-1">
-            <input
-              type="radio"
-              name="paymentMethod"
-              id="paypal"
-              value="paypal"
-              v-model="paymentMethod"
-            />
-            <label for="paypal">PayPal</label>
-          </div>
+      <div class="w-full max-w-2xl grid gap-8 checkout-form md:flex-1">
+        <div>
+          <h2 class="font-semibold mb-3 w-full text-2xl">Billing Details</h2>
+          <BillingDetails v-model="customer.billing" />
         </div>
 
-        <div v-if="paymentMethod == 'stripe'">
-          <StripeElements
-            v-if="loadStripe"
+        <label for="shipToDifferentAddress" class="flex gap-2 items-center">
+          <span>Ship to a different address?</span>
+          <input
+            id="shipToDifferentAddress"
+            v-model="orderInput.shipToDifferentAddress"
+            type="checkbox"
+            name="shipToDifferentAddress" />
+        </label>
+
+        <Transition name="scale-y" mode="out-in">
+          <div v-if="orderInput.shipToDifferentAddress">
+            <h2 class="font-semibold text-xl mb-4">Shipping Details</h2>
+            <ShippingDetails v-model="customer.shipping" />
+          </div>
+        </Transition>
+
+        <div>
+          <h3 class="font-semibold text-xl mb-4">Select shipping method</h3>
+          <ClientOnly>
+            <ShippingOptions
+              v-if="cart && cart.availableShippingMethods.length"
+              :options="cart.availableShippingMethods[0].rates"
+              :active-option="cart.chosenShippingMethods[0]" />
+          </ClientOnly>
+        </div>
+
+        <!-- Pay methods -->
+        <div class="mt-2 col-span-full">
+          <h2 class="font-semibold text-xl mb-4">Payment Options</h2>
+          <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" />
+
+          <Transition name="scale-y" mode="out-in">
+            <StripeElements
+              v-if="orderInput.paymentMethod == 'stripe'"
+              v-slot="{ elements, instance }"
+              ref="elms"
+              :stripe-key="stripeKey"
+              :instance-options="instanceOptions"
+              :elements-options="elementsOptions">
+              <StripeElement ref="card" :elements="elements" :options="cardOptions" />
+            </StripeElements>
+          </Transition>
+        </div>
+
+        <div>
+          <h2 class="font-semibold text-xl mb-4">Order Note (Optional)</h2>
+          <textarea
+            id="order-note"
+            v-model="orderInput.customerNote"
+            name="order-note"
             class="w-full"
-            :stripe-key="$config.stripePublishableKey"
-            :instance-options="{}"
-            :elements-options="{}"
-            #default="{ elements }"
-            ref="elms"
-          >
-            <StripeElement
-              type="card"
-              :elements="elements"
-              :options="cardOptions"
-              ref="card"
-            />
-          </StripeElements>
-          <span class="mt-1 text-sm text-right text-orange-400 capitalize block"
-            >Test mode: 4242 4242 4242 4242</span
-          >
+            rows="4"
+            placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
         </div>
       </div>
-
-      <div>
-        <h2 class="text-xl mb-3 w-full">Order Note (Optional)</h2>
-        <textarea
-          name="order-note"
-          id="order-note"
-          class="w-full"
-          v-model="orderNote"
-        ></textarea>
-      </div>
-
-      <button
-        class="bg-primary rounded-2xl shadow-md my-4 text-white text-lg text-center mb-8 p-3 block justify-evenly hover:bg-primary-dark"
-      >
-        {{ buttonText }}
-      </button>
     </form>
   </div>
 </template>
-
-<script>
-import { StripeElements, StripeElement } from 'vue-stripe-elements-plus';
-import CHECKOUT from '~/gql/mutations/checkout';
-
-export default {
-  middleware({ app, store, redirect, dispatch, commit }) {
-    if (!store.state.cart || store.state.cart.isEmpty) {
-      return redirect('/');
-    }
-  },
-  head() {
-    return { title: 'Checkout' };
-  },
-  data() {
-    return {
-      loadStripe: false,
-      buttonText: 'Place Order',
-      billing: {
-        country: 'IE',
-      },
-      shipping: {
-        country: 'IE',
-      },
-      orderNote: '',
-      shipToDifferentAddress: false,
-      paymentMethod: 'stripe',
-      cardOptions: {
-        hidePostalCode: true,
-        style: {
-          base: { color: '#1F2937', fontSize: '16px' },
-        },
-      },
-    };
-  },
-  components: {
-    StripeElements,
-    StripeElement,
-  },
-  methods: {
-    pay() {
-      this.buttonText = 'Processing...';
-      if (this.paymentMethod == 'stripe') {
-        this.payWithStripe();
-      } else {
-        this.checkout();
-      }
-    },
-    payWithStripe() {
-      this.buttonText = 'Processing...';
-
-      // ref in template
-      const groupComponent = this.$refs.elms;
-      const cardComponent = this.$refs.card;
-      // Get stripe element
-      const cardElement = cardComponent.stripeElement;
-
-      groupComponent.instance.createSource(cardElement).then((result) => {
-        this.buttonText = 'Checking out...';
-        this.checkout(result.source.id);
-      });
-    },
-
-    async checkout(sourceId) {
-      const removeTypename = (obj) => {
-        const newObj = {};
-        Object.keys(obj).forEach((key) => {
-          if (key !== '__typename') {
-            newObj[key] = obj[key];
-          }
-        });
-        return newObj;
-      };
-      try {
-        const variables = {
-          billing: removeTypename(this.billing),
-          shipping: this.shipToDifferentAddress
-            ? removeTypename(this.shipping)
-            : removeTypename(this.billing),
-          metaData: sourceId
-            ? [{ key: '_stripe_source_id', value: sourceId }]
-            : null,
-          paymentMethod: this.paymentMethod,
-          customerNote: this.orderNote,
-          shipToDifferentAddress: this.shipToDifferentAddress,
-        };
-
-        const { checkout } = await this.$graphql.default.request(
-          CHECKOUT,
-          variables
-        );
-        if (checkout.result == 'success') {
-          this.buttonText = 'Order Successfull';
-          this.$store.commit('updateCart', null);
-          if (this.paymentMethod == 'paypal') {
-            // this.$router.push(checkout.redirect);
-            window.location.href = checkout.redirect;
-          } else {
-            this.$router.push({
-              name: 'order-summary',
-              params: { order: checkout.order },
-            });
-          }
-        } else {
-          this.buttonText = 'Place Order';
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    addStripeScript() {
-      // Check if the stripe script is already added to the head
-      if (document.querySelector('script[src="https://js.stripe.com/v3/"]')) {
-        this.loadStripe = true;
-      } else {
-        // Add the stripe script to the head
-        const script = document.createElement('script');
-        script.src = 'https://js.stripe.com/v3/';
-        script.async = true;
-        document.head.appendChild(script);
-        // Wait for the stripe script to be loaded
-        script.onload = () => {
-          this.loadStripe = true;
-        };
-      }
-    },
-    updateBilling(billing) {
-      this.billing = billing;
-    },
-    updateShipping(shipping) {
-      this.shipping = shipping;
-    },
-  },
-  computed: {
-    cart() {
-      return this.$store.state.cart;
-    },
-  },
-  mounted() {
-    this.addStripeScript();
-  },
-};
-</script>
 
 <style lang="postcss">
 .checkout-form input[type='text'],
@@ -285,12 +144,25 @@ export default {
 .checkout-form textarea,
 .checkout-form .StripeElement,
 .checkout-form select {
-  @apply bg-white border rounded-xl outline-none w-full py-2.5 px-4 block;
+  @apply bg-white border rounded-md outline-none border-gray-300 shadow-sm w-full py-2 px-4;
 }
-label {
-  @apply text-xs mb-1.5 text-gray-600 inline-block uppercase block;
+
+.checkout-form label {
+  @apply my-1.5 text-xs text-gray-600 uppercase;
 }
+
 .checkout-form .StripeElement {
   padding: 1rem 0.75rem;
+}
+
+.fadeUp-enter-active,
+.fadeUp-leave-active {
+  transition: all 300ms;
+}
+
+.fadeUp-enter,
+.fadeUp-leave-active {
+  opacity: 0;
+  transform: translateY(10px);
 }
 </style>

@@ -1,11 +1,16 @@
 #import "~/gql/fragments/SimpleProduct.gql"
 #import "~/gql/fragments/VariableProduct.gql"
 
-query getProducts($after: String, $slug: [String], $first: Int = 10,  $orderby: [ProductsOrderbyInput] = {field: DATE, order: DESC}) {
+query getProducts(
+  $after: String
+  $slug: [String]
+  $first: Int = 100
+  $orderby: [ProductsOrderbyInput] = { field: DATE, order: DESC }
+) {
   products(
     first: $first
     after: $after
-    where: {categoryIn: $slug, typeNotIn: EXTERNAL, visibility: VISIBLE, minPrice: 0, orderby: $orderby}
+    where: { categoryIn: $slug, typeNotIn: EXTERNAL, visibility: VISIBLE, minPrice: 0, orderby: $orderby }
   ) {
     pageInfo {
       hasNextPage
@@ -14,11 +19,19 @@ query getProducts($after: String, $slug: [String], $first: Int = 10,  $orderby: 
     nodes {
       name
       onSale
+      slug
+      type
       date
-      totalSales
       databaseId
+      id
       averageRating
       reviewCount
+      terms(first: 1000) {
+        nodes {
+          taxonomyName
+          slug
+        }
+      }
       productCategories {
         nodes {
           databaseId
@@ -27,7 +40,6 @@ query getProducts($after: String, $slug: [String], $first: Int = 10,  $orderby: 
           count
         }
       }
-      slug
       ...SimpleProduct
       ...VariableProduct
     }

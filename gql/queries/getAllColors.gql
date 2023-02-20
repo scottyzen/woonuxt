@@ -1,8 +1,0 @@
-query getAllColors {
-  allPaColor(first: 99){
-    nodes{
-      name
-      slug
-    }
-  }
-}

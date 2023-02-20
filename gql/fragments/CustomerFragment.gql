@@ -9,7 +9,6 @@ fragment CustomerFragment on Customer {
     address1
     address2
     city
-    company
     country
     email
     firstName
@@ -22,7 +21,6 @@ fragment CustomerFragment on Customer {
     address1
     address2
     city
-    company
     country
     email
     firstName

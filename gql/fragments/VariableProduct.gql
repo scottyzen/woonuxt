@@ -1,7 +1,13 @@
 fragment VariableProduct on VariableProduct {
   price
+  rawPrice: price(format: RAW)
   slug
   description
+  shortDescription
+  weight
+  length
+  width
+  height
   image {
     sourceUrl
     altText
@@ -9,16 +15,13 @@ fragment VariableProduct on VariableProduct {
   }
   averageRating
   reviewCount
-  salePrice
   regularPrice
+  rawRegularPrice: regularPrice(format: RAW)
+  salePrice
+  rawSalePrice: salePrice(format: RAW)
   stockStatus
+  totalSales
   stockQuantity
-  productCategories{
-    nodes{
-      name
-      slug
-    }
-  }
   attributes {
     nodes {
       name
@@ -46,8 +49,10 @@ fragment VariableProduct on VariableProduct {
       hasAttributes
       image {
         sourceUrl
+        cartSourceUrl: sourceUrl(size: THUMBNAIL)
         altText
         title
+        id
       }
       attributes {
         nodes {
@@ -60,18 +65,6 @@ fragment VariableProduct on VariableProduct {
   galleryImages {
     nodes {
       sourceUrl
-    }
-  }
-  allPaColor{
-    nodes{
-      name
-      slug
-    }
-  }
-  allPaSize{
-    nodes{
-      name
-      slug
     }
   }
 }

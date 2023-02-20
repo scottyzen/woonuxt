@@ -22,18 +22,22 @@ query getOrder($id: ID!) {
         quantity
         total
         product {
-          node{
+          node {
             name
             image {
-              sourceUrl
+              sourceUrl(size: THUMBNAIL)
+              altText
+              title
             }
           }
         }
         variation {
-          node{
+          node {
             name
             image {
-              sourceUrl
+              sourceUrl(size: THUMBNAIL)
+              altText
+              title
             }
           }
         }
@@ -41,19 +45,6 @@ query getOrder($id: ID!) {
     }
   }
   customer {
-    orders {
-      nodes {
-        paymentMethod
-        paymentMethodTitle
-        status
-        date
-        databaseId
-        subtotal
-        total
-        customer {
-          email
-        }
-      }
-    }
+    ...CustomerFragment
   }
 }

@@ -1,21 +1,13 @@
+<script setup>
+// const { productCategories } = await GqlGetProductCategories();
+const { data } = await useAsyncGql('getProductCategories');
+const productCategories = data.value?.productCategories;
+</script>
+
 <template>
   <main class="container">
-    <div class="my-4 grid gap-4 grid-cols-2 md:grid-cols-3 lg:gap-8 xl:grid-cols-4">
+    <div v-if="productCategories" v-once class="my-6 grid gap-4 grid-cols-2 md:grid-cols-3 lg:gap-8 xl:grid-cols-4">
       <CategoryCard v-for="(category, i) in productCategories.nodes" :key="i" :node="category" />
     </div>
   </main>
 </template>
-
-<script>
-import GET_PRODUCT_CATEGORIES from "~/gql/queries/getProductCategories";
-
-export default {
-  head() {
-    return { title: "Product Categories" };
-  },
-  async asyncData({ $graphql, params }) {
-    const { productCategories } = await $graphql.default.request(GET_PRODUCT_CATEGORIES);
-    return { productCategories };
-  },
-};
-</script>

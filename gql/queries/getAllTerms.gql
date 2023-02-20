@@ -1,0 +1,16 @@
+query getAllTerms(
+  $hideEmpty: Boolean = false
+  $taxonomies: [TaxonomyEnum]!
+  $first: Int = 100
+) {
+  terms(
+    where: { taxonomies: $taxonomies, hideEmpty: $hideEmpty }
+    first: $first
+  ) {
+    nodes {
+      name
+      slug
+      count
+    }
+  }
+}

@@ -1,9 +1,5 @@
-#import "~/gql/fragments/SimpleProduct.gql"
-#import "~/gql/fragments/VariableProduct.gql"
-#import "~/gql/fragments/CartFragment.gql"
-
 mutation ChangeShippingMethod($shippingMethods: [String] = "") {
-  updateShippingMethod(input: {shippingMethods: $shippingMethods}) {
+  updateShippingMethod(input: { shippingMethods: $shippingMethods }) {
     cart {
       ...CartFragment
     }

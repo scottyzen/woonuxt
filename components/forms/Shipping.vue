@@ -1,38 +1,43 @@
 <template>
-  <form class="mt-4 grid gap-4 md:grid-cols-2" @submit.prevent="saveChanges">
-    <h3 class="mt-12 col-span-full">Shipping</h3>
-    <hr class="my-2 col-span-full" />
-    <div class="w-full">
-      <label for="shipping-address">Address 1</label>
-      <input placeholder="123 Main St" type="text" v-model="user.shipping.address1" />
+  <form class="bg-white rounded-lg shadow" @submit.prevent="saveChanges">
+    <div class="grid p-8 gap-8 md:grid-cols-2">
+      <h3 class="font-semibold text-xl col-span-full">Shipping</h3>
+      <div class="w-full">
+        <label for="shipping-address">Address 1</label>
+        <input v-model="user.shipping.address1" placeholder="123 Main St" type="text" />
+      </div>
+
+      <div class="w-full">
+        <label for="shipping-address-2">Address 2</label>
+        <input v-model="user.shipping.address2" placeholder="Apartment, studio, or floor" type="text" />
+      </div>
+
+      <div class="w-full">
+        <label for="shipping-city">City</label>
+        <input v-model="user.shipping.city" placeholder="New York" type="text" />
+      </div>
+
+      <div class="w-full">
+        <label for="shipping-state">County <Code></Code></label>
+        <input v-model="user.shipping.state" placeholder="NY" type="text" />
+      </div>
+
+      <div class="w-full">
+        <label for="shipping-zip">Zip</label>
+        <input v-model="user.shipping.postcode" placeholder="10001" type="text" />
+      </div>
+
+      <div class="w-full">
+        <label for="shipping-phone">Phone</label>
+        <input v-model="user.shipping.phone" type="text" />
+      </div>
     </div>
 
-    <div class="w-full">
-      <label for="shipping-address-2">Address 2</label>
-      <input placeholder="Apartment, studio, or floor" type="text" v-model="user.shipping.address2" />
-    </div>
-
-    <div class="w-full">
-      <label for="shipping-city">City</label>
-      <input placeholder="New York" type="text" v-model="user.shipping.city" />
-    </div>
-
-    <div class="w-full">
-      <label for="shipping-state">State</label>
-      <input placeholder="NY" type="text" v-model="user.shipping.state" />
-    </div>
-
-    <div class="w-full">
-      <label for="shipping-zip">Zip</label>
-      <input placeholder="10001" type="text" v-model="user.shipping.postcode" />
-    </div>
-
-    <div class="col-span-full">
+    <div class="bg-gray-100 col-span-full p-4">
       <button
-        class="rounded-xl flex font-semibold text-white py-2.5 px-4 gap-4 items-center"
+        class="rounded-lg flex font-semibold ml-auto text-white py-2.5 px-4 gap-4 items-center"
         :class="isUserChanged ? 'bg-primary' : 'bg-gray-400'"
-        :disabled="!isUserChanged"
-      >
+        :disabled="!isUserChanged">
         <LoadingIcon v-if="loading" color="#fff" :size="20" />
         <span>{{ buttonText }}</span>
       </button>
@@ -41,44 +46,49 @@
 </template>
 
 <script>
-import UPDATE_CUSTOMER from "~/gql/mutations/updateCustomer.gql";
 export default {
+  props: ['user', 'userId'],
   data() {
     return {
       initialUser: JSON.parse(JSON.stringify(this.user)),
       loading: false,
-      buttonText: "Update",
+      buttonText: 'Update',
     };
   },
-  props: ["user"],
+  computed: {
+    isUserChanged() {
+      return JSON.stringify(this.user) !== JSON.stringify(this.initialUser);
+    },
+  },
   methods: {
     async saveChanges() {
       this.loading = true;
-      this.buttonText = "Updating...";
+      this.buttonText = 'Updating...';
       const variables = {
         input: {
-          id: this.user.userId,
-          shipping: this.user.shipping,
+          id: this.userId,
+          shipping: {
+            address1: this.user.shipping.address1,
+            address2: this.user.shipping.address2,
+            city: this.user.shipping.city,
+            state: this.user.shipping.state,
+            postcode: this.user.shipping.postcode,
+            phone: this.user.shipping.phone,
+          },
         },
       };
 
       try {
-        const { updateCustomer } = await this.$graphql.default.request(UPDATE_CUSTOMER, variables);
-        console.log(updateCustomer);
+        const { updateCustomer } = await GqlUpdateCustomer(variables);
       } catch (error) {
         console.log(error);
       }
 
       this.loading = false;
-      this.buttonText = "Update";
+      this.buttonText = 'Update';
     },
     makeClone() {
       this.user = JSON.parse(JSON.stringify(this.initialUser));
-    },
-  },
-  computed: {
-    isUserChanged() {
-      return JSON.stringify(this.user) !== JSON.stringify(this.initialUser);
     },
   },
 };

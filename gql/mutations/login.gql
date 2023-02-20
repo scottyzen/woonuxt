@@ -1,5 +1,7 @@
-mutation login ($username: String!, $password: String!) {
-  loginWithCookies(input: { login: $username, password: $password, rememberMe: true }) {
+mutation login($username: String!, $password: String!) {
+  loginWithCookies(
+    input: { login: $username, password: $password, rememberMe: true }
+  ) {
     status
   }
 }

@@ -1,21 +1,24 @@
 fragment SimpleProduct on SimpleProduct {
   price
+  rawPrice: price(format: RAW)
   slug
-  salePrice
   regularPrice
+  rawRegularPrice: regularPrice(format: RAW)
+  salePrice
+  rawSalePrice: salePrice(format: RAW)
   stockStatus
   stockQuantity
   description
+  shortDescription
   averageRating
+  weight
+  length
+  width
+  height
   reviewCount
-  productCategories{
-    nodes{
-      name
-      slug
-    }
-  }
   image {
     sourceUrl
+    cartSourceUrl: sourceUrl(size: THUMBNAIL)
     altText
     title
   }

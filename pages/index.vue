@@ -1,67 +1,70 @@
+<script setup>
+const { data } = await useAsyncGql('getProductCategories', { first: 6 });
+const productCategories = data.value.productCategories?.nodes || [];
+
+useHead({
+  title: `Home | WooNuxt`,
+  meta: [
+    {
+      name: 'description',
+      content: 'The best ecommerce store in the world',
+    },
+  ],
+});
+</script>
+
 <template>
-  <div>
+  <main>
     <HeroBanner />
 
     <div class="container flex flex-wrap my-16 text-center gap-8 justify-center brand items-center lg:justify-between">
-      <NuxtImg src="/images/logoipsum-211.svg" alt="Brand 1" width="132" height="35" />
-      <NuxtImg src="/images/logoipsum-221.svg" alt="Brand 2" width="119" height="30" />
-      <NuxtImg src="/images/logoipsum-225.svg" alt="Brand 3" width="49" height="48" />
-      <NuxtImg src="/images/logoipsum-280.svg" alt="Brand 4" width="78" height="30" />
-      <NuxtImg src="/images/logoipsum-284.svg" alt="Brand 5" width="70" height="44" />
-      <NuxtImg src="/images/logoipsum-215.svg" alt="Brand 6" width="132" height="40" />
+      <img src="/images/logoipsum-211.svg" alt="Brand 1" width="132" height="35" />
+      <img src="/images/logoipsum-221.svg" alt="Brand 2" width="119" height="30" />
+      <img src="/images/logoipsum-225.svg" alt="Brand 3" width="49" height="48" />
+      <img src="/images/logoipsum-280.svg" alt="Brand 4" width="78" height="30" />
+      <img src="/images/logoipsum-284.svg" alt="Brand 5" width="70" height="44" />
+      <img src="/images/logoipsum-215.svg" alt="Brand 6" width="132" height="40" />
     </div>
 
     <section class="container my-16">
-      <div class=" flex items-end justify-between">
+      <div class="flex items-end justify-between">
         <h2 class="font-semibold text-lg md:text-2xl">Shop by category</h2>
         <NuxtLink class="text-primary" to="/categories">View All</NuxtLink>
       </div>
-      <div class=" mt-8 grid gap-4 grid-cols-2 justify-center md:grid-cols-3 lg:grid-cols-6">
-        <CategoryCard class="w-full" v-for="(category, i) in productCategories.nodes" :key="i" :node="category" />
+      <div class="mt-8 grid gap-4 grid-cols-2 justify-center md:grid-cols-3 lg:grid-cols-6">
+        <CategoryCard v-for="(category, i) in productCategories" :key="i" class="w-full" :node="category" />
       </div>
-
     </section>
 
-    <section class="my-16 md:my-24">
-      <div class="container flex items-end justify-between">
-        <h2 class="font-semibold text-lg md:text-2xl">Best Sellers</h2>
-        <NuxtLink class="text-primary" to="/products">View All</NuxtLink>
+    <section class="container my-24 grid gap-4 lg:grid-cols-4">
+      <div class="bg-white rounded-lg flex p-8 gap-8 items-center">
+        <img src="/icons/box.svg" width="60" height="60" />
+        <div>
+          <h4 class="font-semibold text-xl">Free Shipping</h4>
+          <p class="text-sm">Free shipping on order over €50</p>
+        </div>
       </div>
-      <SCSlider class="lg:gap-6">
-        <ProductCard class="min-w-[160px] lg:min-w-[280px]" v-for="node in bestSellers.nodes" :key="node.databaseId" :node="node" />
-      </SCSlider>
-    </section>
-
-    <section class="my-16 md:my-24">
-      <div class="container flex items-end justify-between">
-        <h2 class="font-semibold text-lg md:text-2xl">Latest Products</h2>
-        <NuxtLink class="text-primary" to="/products">View All</NuxtLink>
+      <div class="bg-white rounded-lg flex p-8 gap-8 items-center">
+        <img src="/icons/moneyback.svg" width="60" height="60" />
+        <div>
+          <h4 class="font-semibold text-xl">Peace of Mind</h4>
+          <p class="text-sm">30 days money back guarantee</p>
+        </div>
       </div>
-      <SCSlider class="lg:gap-6">
-        <ProductCard class="min-w-[160px] lg:min-w-[280px]" v-for="node in latesProducts.nodes" :key="node.databaseId" :node="node" />
-      </SCSlider>
+      <div class="bg-white rounded-lg flex p-8 gap-8 items-center">
+        <img src="/icons/secure.svg" width="60" height="60" />
+        <div>
+          <h4 class="font-semibold text-xl">100% Payment Secure</h4>
+          <p class="text-sm">Your payment are safe with us.</p>
+        </div>
+      </div>
+      <div class="bg-white rounded-lg flex p-8 gap-8 items-center">
+        <img src="/icons/support.svg" width="60" height="60" />
+        <div>
+          <h4 class="font-semibold text-xl">Support 24/7</h4>
+          <p class="text-sm">24/7 Online support</p>
+        </div>
+      </div>
     </section>
-  </div>
+  </main>
 </template>
-
-<script>
-import GET_PRODUCTS from "~/gql/queries/getProducts";
-import GET_PRODUCT_CATEGORIES from "~/gql/queries/getProductCategories";
-
-export default {
-  head() {
-    return {
-      title: "Home",
-      meta: [{ name: "description", content: "Home page" }],
-    };
-  },
-  async asyncData({ $graphql, params }) {
-    const { productCategories } = await $graphql.default.request(GET_PRODUCT_CATEGORIES, {
-      first: 6,
-    });
-    const { products: bestSellers } = await $graphql.default.request(GET_PRODUCTS, { first: 8, orderby: [{ field: "TOTAL_SALES", order: "DESC" }] });
-    const { products: latesProducts } = await $graphql.default.request(GET_PRODUCTS, { first: 8, orderby: [{ field: "DATE", order: "DESC" }] });
-    return { productCategories, bestSellers, latesProducts };
-  },
-};
-</script>

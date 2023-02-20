@@ -1,14 +1,7 @@
 mutation registerCustomer($input: RegisterCustomerInput!) {
   registerCustomer(input: $input) {
     customer {
-      sessionToken
-      username
-      shipping {
-        city
-      }
-      billing {
-        city
-      }
+      ...CustomerFragment
     }
   }
 }

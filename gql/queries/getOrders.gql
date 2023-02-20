@@ -9,7 +9,7 @@ query getOrders {
         lineItems {
           nodes {
             product {
-              node{
+              node {
                 name
               }
             }

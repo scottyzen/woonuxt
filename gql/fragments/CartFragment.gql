@@ -1,11 +1,8 @@
-#import "~/gql/fragments/SimpleProduct.gql"
-#import "~/gql/fragments/VariableProduct.gql"
-
 fragment CartFragment on Cart {
-  subtotal
   total
   subtotal
   totalTax
+  discountTotal
   shippingTotal
   chosenShippingMethods
   availableShippingMethods {
@@ -15,9 +12,16 @@ fragment CartFragment on Cart {
       label
     }
   }
+  appliedCoupons {
+    description
+    discountTax
+    discountAmount
+    code
+  }
   isEmpty
   contents {
     itemCount
+    productCount
     nodes {
       quantity
       key
@@ -36,14 +40,11 @@ fragment CartFragment on Cart {
         node {
           name
           price
-          regularPrice
-          salePrice
           image {
             sourceUrl(size: THUMBNAIL)
           }
         }
       }
     }
-    productCount
   }
 }

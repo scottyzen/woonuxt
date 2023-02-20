@@ -1,9 +1,5 @@
-#import "~/gql/fragments/SimpleProduct.gql"
-#import "~/gql/fragments/VariableProduct.gql"
-#import "~/gql/fragments/CartFragment.gql"
-
-mutation UpDateCartQuantity ($key: ID!, $quantity: Int!) {
-  updateItemQuantities(input: {items: {key: $key, quantity: $quantity}}) {
+mutation UpDateCartQuantity($key: ID!, $quantity: Int!) {
+  updateItemQuantities(input: { items: { key: $key, quantity: $quantity } }) {
     cart {
       ...CartFragment
     }

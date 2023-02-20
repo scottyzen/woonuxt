@@ -4,9 +4,9 @@
 query getProduct($slug: ID!) {
   product(id: $slug, idType: SLUG) {
     name
-    databaseId
     type
-    sku
+    databaseId
+    slug
     attributes {
       nodes {
         variation
@@ -23,14 +23,31 @@ query getProduct($slug: ID!) {
         count
       }
     }
-    slug
-    ... SimpleProduct
-    ... VariableProduct
+    ...SimpleProduct
+    ...VariableProduct
     related(first: 5) {
       nodes {
-        name
-        ... SimpleProduct
-        ... VariableProduct
+        ...SimpleProduct
+        ...VariableProduct
+      }
+    }
+    reviews {
+      averageRating
+      edges {
+        rating
+        node {
+          content
+          id
+          date
+          author {
+            node {
+              name
+              avatar {
+                url
+              }
+            }
+          }
+        }
       }
     }
   }
