@@ -10,7 +10,7 @@
 
 The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for WooCommerce. It's built on top of Nuxt 3 and uses the WPGraphQL API to retrieve all the data it needs. It's also fully customizable and can be extended with your own components and modules. You can see a live demo of WooNuxt by clicking the button below.
 
-[Live Demo of WooNuxt](https://v3.woonuxt.com/) ⚡️
+👉 [**Live Demo of WooNuxt**](https://v3.woonuxt.com/) ⚡️
 
 &nbsp;
 
