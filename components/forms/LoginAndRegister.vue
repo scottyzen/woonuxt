@@ -4,19 +4,13 @@
     <div v-if="message" class="my-4 text-sm text-red-500">{{ message }}</div>
     <form class="mb-4" @submit.prevent="loginOrRegister(userInfo)">
       <label v-if="formView == 'register'" for="email">Email</label>
-      <input
-        v-if="formView == 'register'"
-        id="email"
-        v-model="userInfo.email"
-        placeholder="Email"
-        type="email"
-        required />
+      <input v-if="formView == 'register'" id="email" v-model="userInfo.email" placeholder="Email" type="email" required />
       <label for="username">Username</label>
       <input id="email" v-model="userInfo.username" placeholder="Username" type="text" required />
       <label for="password">Password</label>
       <input id="password" v-model="userInfo.password" placeholder="Password" type="password" required />
-      <button class="mt-4 text-lg">
-        <LoadingIcon v-if="isPending" />
+      <button class="flex mt-4 text-lg gap-2 justify-center items-center">
+        <LoadingIcon v-if="isPending" :stroke="4" :size="16" color="#fff" />
         <span>
           {{ formView == 'login' ? 'Log In' : 'Register' }}
         </span>
@@ -34,15 +28,19 @@
 </template>
 
 <script setup>
-const { loginUser, logoutUser, viewer, isPending } = useAuth();
+const { loginUser, isPending, registerUser } = useAuth();
 const userInfo = ref({ email: '', password: '', username: '' });
 const formView = ref('login');
 const message = ref('');
 
 const loginOrRegister = async (userInfo) => {
-  console.log(userInfo);
-  if (formView === 'register') {
+  if (formView.value === 'register') {
     const { success, error } = await registerUser(userInfo);
+    if (success) {
+      const { success, error } = await loginUser(userInfo);
+    } else {
+      message.value = error;
+    }
   } else {
     const { success, error } = await loginUser(userInfo);
     if (error && error === 'invalid_username') {
@@ -60,6 +58,6 @@ button {
 }
 
 form button {
-  @apply rounded-lg font-bold bg-gray-800 text-white py-3 px-8 hover: bg-gray-800 ;
+  @apply rounded-lg font-bold bg-gray-800 text-white py-3 px-8 hover: bg-gray-800;
 }
 </style>

@@ -43,6 +43,27 @@ export const useAuth = () => {
     }
   };
 
+  // Register the user
+  const registerUser = async (userInfo) => {
+    console.log('registerUser', userInfo);
+    isPending.value = true;
+    try {
+      const { registerCustomer } = await GqlRegisterCustomer({ input: userInfo });
+      if (registerCustomer?.customer) {
+        refreshCart();
+      } else {
+        isPending.value = false;
+        return { success: false, error: registerCustomer?.customer };
+      }
+      return { success: true, error: null, data: registerCustomer };
+    } catch (error) {
+      console.log('error', error);
+      isPending.value = false;
+      return { success: false, error };
+    }
+  };
+
+
   // Update the user state
   const updateCustomer = (data: any) => {
 
@@ -69,5 +90,6 @@ export const useAuth = () => {
     updateViewer,
     logoutUser,
     isPending,
+    registerUser
   };
 };
