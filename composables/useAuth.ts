@@ -25,9 +25,9 @@ export const useAuth = () => {
       }
       return { success: true, error: null, data: loginWithCookies };
     } catch (error) {
-      console.log('error', error);
       isPending.value = false;
-      return { success: false, error };
+      const gqlError = error?.gqlErrors?.[0];
+      return { success: false, error: gqlError?.message };
     }
   };
 
@@ -44,23 +44,17 @@ export const useAuth = () => {
     }
   };
 
+
   // Register the user
-  const registerUser = async (userInfo) => {
-    console.log('registerUser', userInfo);
+  const registerUser = async (userInfo: CreateAccountInput) => {
     isPending.value = true;
     try {
       const { registerCustomer } = await GqlRegisterCustomer({ input: userInfo });
-      if (registerCustomer?.customer) {
-        refreshCart();
-      } else {
-        isPending.value = false;
-        return { success: false, error: registerCustomer?.customer };
-      }
       return { success: true, error: null, data: registerCustomer };
     } catch (error) {
-      console.log('error', error);
+      const gqlError = error?.gqlErrors?.[0];
       isPending.value = false;
-      return { success: false, error };
+      return { success: false, error: gqlError?.message };
     }
   };
 

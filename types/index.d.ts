@@ -40,6 +40,7 @@ declare interface MetaDataInput {
 declare interface CreateAccountInput {
     password: string;
     username: string;
+    email: string;
 }
 
 // // CustomerAddressInput
