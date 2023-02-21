@@ -25,6 +25,7 @@ export const useAuth = () => {
       }
       return { success: true, error: null, data: loginWithCookies };
     } catch (error) {
+      console.log('error', error);
       isPending.value = false;
       return { success: false, error };
     }

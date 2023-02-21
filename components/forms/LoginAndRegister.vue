@@ -37,9 +37,14 @@ const loginOrRegister = async (userInfo) => {
   if (formView.value === 'register') {
     const { success, error } = await registerUser(userInfo);
     if (success) {
-      const { success, error } = await loginUser(userInfo);
+      formView.value = 'login';
+      message.value = 'Account created! Please log in.';
+    } else if (error && error === 'username_exists') {
+      message.value = 'That username is already taken. Please try another.';
+    } else if (error && error === 'email_exists') {
+      message.value = 'That email is already taken. Please try another.';
     } else {
-      message.value = error;
+      message.value = 'Something went wrong. Please try again.';
     }
   } else {
     const { success, error } = await loginUser(userInfo);
