@@ -1,23 +1,29 @@
 <script setup>
 const { toggleCart, isShowingCart, cart } = useCart();
+const { isShowingMobileMenu, toggleMobileMenu } = useHelpers();
+
+const underlayCick = () => {
+  toggleCart(false);
+  toggleMobileMenu(false);
+};
 </script>
 
 <template>
   <div class="flex flex-col min-h-screen">
     <AppHeader />
 
-    <Transition name="slide">
-      <Cart v-if="isShowingCart && cart" />
+    <Transition name="slide-from-right">
+      <Cart v-if="isShowingCart" />
+    </Transition>
+
+    <Transition name="slide-from-left">
+      <MobileMenu v-if="isShowingMobileMenu" />
     </Transition>
 
     <NuxtPage />
 
     <Transition name="fade">
-      <div
-        v-if="isShowingCart && cart"
-        class="bg-black opacity-25 inset-0 z-40 fixed"
-        @click="toggleCart(false)"
-      ></div>
+      <div v-if="isShowingCart || isShowingMobileMenu" class="bg-black opacity-25 inset-0 z-40 fixed" @click="underlayCick"></div>
     </Transition>
 
     <AppFooter />
@@ -48,15 +54,22 @@ select {
   padding-right: 2.5rem;
 }
 
-/* Slide  */
-.slide-leave-active,
-.slide-enter-active {
+/* Slide-from-right & Slide-from-left */
+.slide-from-right-leave-active,
+.slide-from-right-enter-active,
+.slide-from-left-leave-active,
+.slide-from-right-leave-to {
   transition: transform 400ms ease-in-out;
 }
 
-.slide-enter-from,
-.slide-leave-to {
+.slide-from-right-enter-from,
+.slide-from-right-leave-to {
   transform: translateX(500px);
+}
+
+.slide-from-left-enter-from,
+.slide-from-left-leave-to {
+  transform: translateX(-500px);
 }
 
 /* Fade */

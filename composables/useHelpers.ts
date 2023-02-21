@@ -61,5 +61,12 @@ function removeBodyClass(className: string) {
 
 // A collection of helper functions.
 export function useHelpers() {
-  return { formatArray, arraysEqual, clearAllCookies, replaceQueryParam, toggleBodyClass, removeBodyClass };
+
+  const isShowingMobileMenu = useState<boolean>('isShowingMobileMenu', () => false);
+
+  function toggleMobileMenu(state: boolean | undefined = undefined) {
+    state === undefined ? (isShowingMobileMenu.value = !isShowingMobileMenu.value) : (isShowingMobileMenu.value = state);
+  }
+
+  return { formatArray, arraysEqual, clearAllCookies, replaceQueryParam, toggleBodyClass, removeBodyClass, isShowingMobileMenu, toggleMobileMenu };
 }
