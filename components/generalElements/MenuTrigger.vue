@@ -3,21 +3,5 @@ const { isShowingMobileMenu, toggleMobileMenu } = useHelpers();
 </script>
 
 <template>
-  <div>
-    <svg
-      width="24"
-      height="24"
-      class="cursor-pointer mr-4"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 512 512"
-      @click="toggleMobileMenu">
-      <path
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-miterlimit="10"
-        stroke-width="32"
-        d="M80 160h352M80 256h352M80 352h352" />
-    </svg>
-  </div>
+  <Icon name="ion:menu-outline" size="26" class="cursor-pointer -my-1 mr-4" @click="toggleMobileMenu" />
 </template>

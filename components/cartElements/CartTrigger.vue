@@ -4,7 +4,7 @@ const { toggleCart, cart } = useCart();
 
 <template>
   <div class="cursor-pointer relative" title="Cart" @click="toggleCart">
-    <Icon name="ion:cart-outline" size="20" />
+    <Icon name="ion:cart-outline" size="20" class="mr-1 md:mr-0" />
     <ClientOnly>
       <Transition name="popIn" mode="out-in">
         <span
