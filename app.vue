@@ -58,7 +58,7 @@ select {
 .slide-from-right-leave-active,
 .slide-from-right-enter-active,
 .slide-from-left-leave-active,
-.slide-from-right-leave-to {
+.slide-from-left-enter-active {
   transition: transform 400ms ease-in-out;
 }
 
