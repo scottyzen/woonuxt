@@ -6,8 +6,8 @@ const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES
 
 <template>
   <aside id="filters">
+    <OrderByDropdown class="w-full block md:hidden" />
     <div class="divide-y space-y-8 mb-12 grid z-30 relative">
-      <OrderByDropdown class="w-full block md:hidden" />
       <PriceFilter />
       <CategoryFilter />
       <div v-for="attribute in globalProductAttributes" :key="attribute.slug">
