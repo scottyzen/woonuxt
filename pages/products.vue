@@ -1,16 +1,10 @@
 <script setup>
-const { setProducts } = await useProducts();
+const { setProducts, updateProductList } = await useProducts();
 const { data } = await useAsyncGql('getProducts');
 setProducts(data.value?.products?.nodes || []);
 
-onMounted(async () => {
-  const { isFiltersActive, filterProducts } = await useFiltering();
-  const { isSearchActive, searchProducts } = await useSearching();
-  const { isSortingActive, sortProducts } = await useSorting();
-
-  if (isSearchActive.value) searchProducts();
-  if (isFiltersActive.value) filterProducts();
-  if (isSortingActive.value) sortProducts();
+onMounted(() => {
+  updateProductList();
 });
 
 useHead({

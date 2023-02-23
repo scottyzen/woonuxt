@@ -1,9 +1,12 @@
 // Example: ?search=shirt
-const searchQuery = ref('' as string);
+// const searchQuery = ref('' as string);
 
 export function useSearching() {
   const route = useRoute();
   const router = useRouter();
+  const { updateProductList } = useProducts();
+
+  const searchQuery = useState<string>('searchQuery', () => '');
 
   searchQuery.value = route.query.search as string;
 
@@ -13,39 +16,22 @@ export function useSearching() {
 
   function setSearchQuery(search: string) {
     searchQuery.value = search;
-    if (!searchQuery.value) {
-      router.push({ query: { ...route.query, search: undefined } });
-    } else {
-      router.push({ query: { ...route.query, search } });
-    }
-    searchProducts();
+    router.push({ query: { ...route.query, search: search || undefined } });
+    setTimeout(() => { updateProductList() }, 50);
   }
 
   function clearSearchQuery() {
-    searchQuery.value = '';
-    router.push({ query: { ...route.query, search: undefined } });
-    searchProducts();
-  }
-
-  async function searchProducts() {
-    const { products, allProducts } = await useProducts();
-    const { isFiltersActive, filterProducts } = useFiltering();
-
-    products.value = allProducts.value;
-
-    if (isFiltersActive.value) await filterProducts();
-
-    if (searchQuery.value) {
-      products.value = products.value.filter((product: any) => {
-        return product.name.toLowerCase().includes(searchQuery.value.toLowerCase());
-      });
-    }
-
-    return products.value;
+    setSearchQuery('');
   }
 
   const isSearchActive = computed(() => { return !!searchQuery.value });
 
+  function searchProducts(products: any[]) {
+    const query = getSearchQuery();
+    return query ? products.filter((product: any) => {
+      return product.name.toLowerCase().includes(query.toLowerCase());
+    }) : products;
+  }
 
   return { getSearchQuery, setSearchQuery, clearSearchQuery, searchProducts, isSearchActive };
 }

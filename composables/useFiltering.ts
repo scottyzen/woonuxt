@@ -5,6 +5,7 @@ export function useFiltering() {
   const route = useRoute();
   const router = useRouter();
   const runtimeConfig = useRuntimeConfig(); // Declare a variable for the runtime config and the filter and order functions
+  const { updateProductList } = useProducts();
 
   filterQuery.value = route.query.filter as string;
 
@@ -46,7 +47,7 @@ export function useFiltering() {
       router.push({ query: { ...route.query, filter: newFilterQuery } });
     }
 
-    filterProducts();
+    setTimeout(() => { updateProductList() }, 50);
 
   }
 
@@ -54,21 +55,15 @@ export function useFiltering() {
     filterQuery.value = '';
     router.push({ query: { ...route.query, filter: undefined } });
 
-    filterProducts();
+    setTimeout(() => { updateProductList() }, 50);
   }
 
   const isFiltersActive = computed(() => !!filterQuery.value);
 
   // Define a function to filter the products
-  async function filterProducts() {
-    const { products, allProducts } = await useProducts();
+  function filterProducts(products: any[]) {
 
-    if (!isFiltersActive.value) {
-      products.value = allProducts.value;
-      return;
-    }
-
-    products.value = allProducts.value.filter((product) => {
+    return products.filter((product: any) => {
       // Category filter
       const category = getFilter('category') || []; // ["category-slug"]
       const categoryCondition = category.length ? product.productCategories?.nodes?.find((node: any) => category.includes(node.slug)) : true;
@@ -99,11 +94,6 @@ export function useFiltering() {
 
     });
 
-    // If sorting is active, sort the products
-    const { sortProducts, isSortingActive } = useSorting();
-    if (isSortingActive.value) sortProducts();
-
-    return products.value;
   }
 
   return { getFilter, setFilter, resetFilter, isFiltersActive, filterProducts };

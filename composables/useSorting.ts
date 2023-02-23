@@ -4,6 +4,7 @@ const orderQuery = ref('' as string);
 export function useSorting() {
   const route = useRoute();
   const router = useRouter();
+  const { updateProductList } = useProducts();
 
   orderQuery.value = route.query.orderby as string;
 
@@ -11,37 +12,26 @@ export function useSorting() {
     return { orderBy: route.query.orderby as string, order: route.query.order as string };
   }
 
-  function setOrderQuery(orderBy: string, order?: string) {
-
-    // Default value is {orderby: 'date', order: 'DESC'}
-    if ((orderBy === 'date' && !order)) {
-      orderQuery.value = '';
-      router.push({ query: { ...route.query, orderby: undefined, order: undefined } });
-    } else {
-      router.push({ query: { ...route.query, orderby: orderBy, order } });
-    }
-
-    // sortProducts()
-    setTimeout(() => { sortProducts() }, 100);
+  function setOrderQuery(orderby: string, order?: string) {
+    router.push({ query: { ...route.query, orderby: orderby ? orderby : undefined, order: order ? order : undefined } });
+    setTimeout(() => { updateProductList() }, 100);
   }
 
   const isSortingActive = computed(() => !!orderQuery.value);
 
   // Define a function to order the products
-  async function sortProducts() {
+  function sortProducts(products: any) {
 
     if (!isSortingActive) return;
 
     const orderQuery = getOrderQuery();
 
-
     if (!orderQuery.orderBy && !orderQuery.order) return;
 
-    const { products } = await useProducts();
     const orderby: string = orderQuery.orderBy || 'date';
     const order: string = orderQuery.order || 'DESC';
 
-    products.value = products.value.sort((a: any, b: any) => {
+    return products.sort((a: any, b: any) => {
       // Format values for sorting
       const aDate: any = new Date(a.date).getTime();
       const bDate: any = new Date(b.date).getTime();
@@ -69,7 +59,6 @@ export function useSorting() {
 
     });
 
-    return products.value;
   }
 
   return { getOrderQuery, setOrderQuery, isSortingActive, orderQuery, sortProducts };
