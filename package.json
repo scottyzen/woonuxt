@@ -12,7 +12,7 @@
     "pretty": "prettier --write ."
   },
   "devDependencies": {
-    "@nuxt/image-edge": "^1.0.0-27919678.2f5b64b",
+    "@nuxt/image-edge": "^1.0.0-27952794.567c688",
     "@nuxtjs/eslint-config-typescript": "^12.0.0",
     "eslint": "^8.34.0",
     "eslint-config-prettier": "^8.6.0",
@@ -26,7 +26,7 @@
     "vue-stripe-js": "^1.0.1"
   },
   "dependencies": {
-    "@stripe/stripe-js": "^1.46.0",
+    "@stripe/stripe-js": "^1.47.0",
     "@vueform/slider": "^2.1.7",
     "nuxt-graphql-client": "^0.2.25",
     "ohmyfetch": "^0.4.21"
