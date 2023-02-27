@@ -12,9 +12,9 @@
     "pretty": "prettier --write ."
   },
   "devDependencies": {
-    "@nuxt/image-edge": "^1.0.0-27952794.567c688",
+    "@nuxt/image-edge": "^1.0.0-27954023.4cee565",
     "@nuxtjs/eslint-config-typescript": "^12.0.0",
-    "eslint": "^8.34.0",
+    "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-nuxt": "^4.0.0",
