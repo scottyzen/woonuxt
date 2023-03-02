@@ -8,6 +8,7 @@ query getWooNuxtSettings {
     logo
     publicIntrospectionEnabled
     frontEndUrl
+    domain
     maxPrice
     productsPerPage
     global_attributes {
@@ -49,6 +50,7 @@ export default defineNuxtModule<ModuleOptions>({
       // Default env variables
       process.env.PRIMARY_COLOR = data.woonuxtSettings?.primary_color || '#7F54B2';
       process.env.PUBLIC_INTROSPECTION_ENABLED = data.woonuxtSettings?.publicIntrospectionEnabled || 'off';
+      process.env.NUXT_IMAGE_DOMAINS = data.woonuxtSettings?.domain || null;
 
       // Default runtimeConfig
       nuxt.options.runtimeConfig.public.LOGO = data.woonuxtSettings?.logo || null;
@@ -63,9 +65,8 @@ export default defineNuxtModule<ModuleOptions>({
       }
 
     } catch (error) {
-      console.log({ error });
       console.log(
-        '\u001B[1;35mError fetching woonuxt settings. Make sure you have the woonuxt plugin installed and activated on your WordPress site. You can download it from https://woonuxt.com'
+        '\u001B[1;35mError fetching woonuxt settings. Make sure you have the latest version woonuxt-settings plugin installed and activated on your WordPress site. You can download it from https://github.com/scottyzen/woonuxt-settings'
       );
     }
 
