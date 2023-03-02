@@ -1,2 +1,5 @@
 [template.environment]
   GQL_HOST = "WordPress URL http://example.com"
+
+[build]
+  command = "npm run generate"
