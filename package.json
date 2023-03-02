@@ -19,7 +19,7 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "nuxt": "^3.2.2",
+    "nuxt": "^3.2.3",
     "nuxt-icon": "^0.3.2",
     "nuxt-windicss": "^2.6.0",
     "prettier": "^2.8.4",
