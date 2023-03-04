@@ -1,6 +1,6 @@
 {
   "name": "woonuxt",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "private": true,
   "scripts": {
     "build": "nuxt build",
@@ -26,7 +26,7 @@
     "vue-stripe-js": "^1.0.1"
   },
   "dependencies": {
-    "@stripe/stripe-js": "^1.47.0",
+    "@stripe/stripe-js": "^1.48.0",
     "@vueform/slider": "^2.1.7",
     "nuxt-graphql-client": "^0.2.25",
     "ohmyfetch": "^0.4.21"

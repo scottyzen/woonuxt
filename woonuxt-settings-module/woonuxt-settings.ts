@@ -8,7 +8,6 @@ query getWooNuxtSettings {
     logo
     publicIntrospectionEnabled
     frontEndUrl
-    domain
     maxPrice
     productsPerPage
     global_attributes {
@@ -49,12 +48,7 @@ export default defineNuxtModule<ModuleOptions>({
 
       // Default env variables
       process.env.PRIMARY_COLOR = data.woonuxtSettings?.primary_color || '#7F54B2';
-      process.env.PUBLIC_INTROSPECTION_ENABLED = data.woonuxtSettings?.publicIntrospectionEnabled || 'off';
-      const nuxtImageDomains = process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [];
-
-      nuxt.options.image = {
-        domains: [...nuxtImageDomains, data.woonuxtSettings?.domain],
-      }
+      process.env.PUBLIC_INTROSPECTION_ENABLED = data.woonuxtSettings?.publicIntrospectionEnabled === 'on' ? 'on' : 'false';
 
       // Default runtimeConfig
       nuxt.options.runtimeConfig.public.LOGO = data.woonuxtSettings?.logo || null;
