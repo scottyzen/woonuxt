@@ -21,17 +21,6 @@ export default defineNuxtConfig({
     domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
   },
 
-  'graphql-client': {
-    codegen: process.env.PUBLIC_INTROSPECTION_ENABLED !== 'on' ? false : {
-      silent: true,
-      skipTypename: true,
-      useTypeImports: true,
-      dedupeFragments: true,
-      onlyOperationTypes: true,
-      disableOnBuild: false
-    }
-  },
-
   hooks: {
     'pages:extend'(pages) {
       pages.push({ name: 'product-page-pager', path: '/products/page/:pageNumber', file: '~/pages/products.vue' });
