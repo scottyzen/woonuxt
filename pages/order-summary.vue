@@ -38,29 +38,28 @@ function formatPrice(price) {
   <div
     class="w-full min-h-80 p-8 text-gray-800 md:bg-white md:rounded-xl md:mx-auto md:shadow-lg md:my-24 md:mt-8 md:max-w-3xl md:p-16">
     <div v-if="order">
-      <h1 class="font-semibold text-xl mb-2">Order Summary</h1>
+      <h1 class="font-semibold text-xl mb-2">{{ $t('messages.shop.orderSummary') }}</h1>
       <p v-if="order">
-        Thank you for your order. We will send you an email with the order
-        details.
+        {{ $t('messages.shop.orderThanks') }}
       </p>
 
       <hr class="my-8" />
 
       <div class="flex justify-between">
         <div>
-          <div class="text-xs text-gray-400 uppercase">Order</div>
+          <div class="text-xs text-gray-400 uppercase">{{ $t('messages.shop.order') }}</div>
           <div>#{{ order.databaseId }}</div>
         </div>
         <div>
-          <div class="text-xs text-gray-400 uppercase">Date</div>
+          <div class="text-xs text-gray-400 uppercase">{{ $t('messages.general.date') }}</div>
           <div>{{ formatDate(order.date) }}</div>
         </div>
         <div>
-          <div class="text-xs text-gray-400 uppercase">Status</div>
+          <div class="text-xs text-gray-400 uppercase">{{ $t('messages.general.status') }}</div>
           <div>{{ order.status }}</div>
         </div>
         <div>
-          <div class="text-xs text-gray-400 uppercase">Payment Method</div>
+          <div class="text-xs text-gray-400 uppercase">{{ $t('messages.billing.paymentMethod') }}</div>
           <div>{{ order.paymentMethodTitle }}</div>
         </div>
       </div>
@@ -109,34 +108,34 @@ function formatPrice(price) {
 
       <div>
         <div class="flex justify-between">
-          <span>Subtotal</span>
+          <span>{{ $t('messages.shop.subtotal') }}</span>
           <span>{{ order.subtotal }}</span>
         </div>
         <div class="flex justify-between">
-          <span>Tax</span>
+          <span>{{ $t('messages.general.tax') }}</span>
           <span>{{ order.totalTax }}</span>
         </div>
         <div class="flex justify-between">
-          <span>Shipping</span>
+          <span>{{ $t('messages.general.shipping') }}</span>
           <span>{{ order.shippingTotal }}</span>
         </div>
         <hr class="my-8" />
         <div class="flex justify-between">
-          <span class>Total</span>
+          <span class>{{ $t('messages.shop.total') }}</span>
           <span class="font-semibold">{{ order.total }}</span>
         </div>
       </div>
     </div>
     <div v-else-if="error" class="flex min-h-80 justify-center items-center">
       <div class="text-center">
-        <h1 class="font-semibold mb-4 text-2xl">Something went wrong</h1>
+        <h1 class="font-semibold mb-4 text-2xl">{{ $t('messages.error.general') }}</h1>
         <p class="mb-8">
-          We could not find your order. Please try again later.
+          {{ $t('messages.error.noOrder') }}
         </p>
         <NuxtLink
           to="/"
           class="bg-primary rounded-lg font-bold text-white text-center min-w-[150px] p-2.5 focus:outline-noney">
-          Go to home
+          {{ $t('messages.general.goHome') }}
         </NuxtLink>
       </div>
     </div>

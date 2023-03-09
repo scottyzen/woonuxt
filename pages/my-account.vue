@@ -8,25 +8,25 @@
           class="rounded-xl flex p-3 px-4 gap-4 items-center hover:bg-purple-50 hover:text-purple-800"
           :class="{ active: activeTab == 'my-details' }">
           <Icon name="ion:information-circle-outline" size="22" />
-          My Details
+          {{ $t('messages.general.myDetails') }}
         </NuxtLink>
         <NuxtLink
           to="/my-account?tab=orders"
           class="rounded-xl flex p-3 px-4 gap-4 items-center hover:bg-purple-50 hover:text-purple-800"
           :class="{ active: activeTab == 'orders' }">
           <Icon name="ion:bag-check-outline" size="22" />
-          Orders
+          {{ $t('messages.shop.order', 2) }}
         </NuxtLink>
         <NuxtLink
           to="/my-account?tab=downloads"
           class="rounded-xl flex p-3 px-4 gap-4 items-center hover:bg-purple-50 hover:text-purple-800"
           :class="{ active: activeTab == 'downloads' }">
           <Icon name="ion:cloud-download-outline" size="22" />
-          Downloads
+          {{ $t('messages.general.downloads') }}
         </NuxtLink>
         <button class="rounded-xl flex p-3 px-4 gap-4 items-center hover:bg-purple-50 hover:text-purple-800" @click="logoutUser">
           <Icon name="ion:log-out-outline" size="22" />
-          Logout
+          {{ $t('messages.account.logout') }}
         </button>
       </nav>
 

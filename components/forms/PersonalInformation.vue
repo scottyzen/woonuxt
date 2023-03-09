@@ -1,19 +1,19 @@
 <template>
   <form class="bg-white rounded-lg shadow" @submit.prevent="saveChanges">
     <div class="grid p-8 gap-8 md:grid-cols-2">
-      <h3 class="font-semibold text-xl col-span-full">Personal Information</h3>
+      <h3 class="font-semibold text-xl col-span-full">{{ $t('messages.account.personalInfo') }}</h3>
 
       <div class="w-full">
-        <label for="first-name">First Name</label>
+        <label for="first-name">{{ $t('messages.billing.firstName') }}</label>
         <input v-model="user.firstName" placeholder="John" type="text" />
       </div>
 
       <div class="w-full">
-        <label for="last-name">Last Name</label>
+        <label for="last-name">{{ $t('messages.billing.lastName') }}</label>
         <input v-model="user.lastName" placeholder="Doe" type="text" />
       </div>
       <div class="w-full col-span-full">
-        <label for="email">Email</label>
+        <label for="email">{{ $t('messages.billing.email') }}</label>
         <input v-model="user.email" placeholder="johndoe@email.com" type="email" />
       </div>
     </div>

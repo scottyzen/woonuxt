@@ -4,7 +4,7 @@
       <!-- COLOR SWATCHES -->
       <div v-if="attr.name == 'pa_color' || attr.name == 'color'" class="grid gap-2">
         <div class="text-sm">
-          Color
+          {{ $t('messages.general.color') }}
           <span v-if="activeVariations" class="text-gray-400 capitalize">: {{ activeVariations[i].value }}</span>
         </div>
         <div class="flex gap-2">
@@ -38,7 +38,7 @@
           required
           class="border-white shadow"
           @change="updateAttrs">
-          <option selected disabled hidden :value="null">Choose {{ attr.label }}</option>
+          <option selected disabled hidden :value="null">{{ $t('messages.general.choose') }} {{ attr.label }}</option>
           <option v-for="option in attr.options" :key="option" :value="option">
             {{ option }}
           </option>

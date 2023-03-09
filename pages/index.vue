@@ -28,8 +28,8 @@ useHead({
 
     <section class="container my-16">
       <div class="flex items-end justify-between">
-        <h2 class="font-semibold text-lg md:text-2xl">Shop by category</h2>
-        <NuxtLink class="text-primary" to="/categories">View All</NuxtLink>
+        <h2 class="font-semibold text-lg md:text-2xl">{{ $t('messages.shop.shopByCategory') }}</h2>
+        <NuxtLink class="text-primary" to="/categories">{{ $t('messages.general.viewAll') }}</NuxtLink>
       </div>
       <div class="mt-8 grid gap-4 grid-cols-2 justify-center md:grid-cols-3 lg:grid-cols-6">
         <CategoryCard v-for="(category, i) in productCategories" :key="i" class="w-full" :node="category" />

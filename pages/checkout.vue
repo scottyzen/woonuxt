@@ -2,13 +2,14 @@
 import { StripeElements, StripeElement } from 'vue-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
+const { t } = useI18n();
 const { cart, toggleCart, isUpdatingCart } = useCart();
 const { customer } = useAuth();
 const { orderInput, proccessCheckout, isProcessingOrder } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
 const stripeKey = runtimeConfig.public.STRIPE_PUBLISHABLE_KEY;
 
-const buttonText = ref(isProcessingOrder.value ? 'Processing...' : 'Checkout');
+const buttonText = ref(isProcessingOrder.value ? t('messages.general.processing') : t('messages.shop.checkoutButton'));
 
 const instanceOptions = ref({});
 const elementsOptions = ref({});
@@ -33,7 +34,7 @@ onMounted(() => {
 });
 
 const payNow = async () => {
-  buttonText.value = 'Processing...';
+  buttonText.value = t('messages.general.processing');
   try {
     if (orderInput.value.paymentMethod === 'stripe') {
       const cardElement = card.value.stripeElement;
@@ -41,7 +42,7 @@ const payNow = async () => {
       orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
     }
   } catch (error) {
-    buttonText.value = 'Place Order';
+    buttonText.value = t('messages.shop.placeOrder');
   }
 
   proccessCheckout();
@@ -74,12 +75,12 @@ const payNow = async () => {
 
       <div class="w-full max-w-2xl grid gap-8 checkout-form md:flex-1">
         <div>
-          <h2 class="font-semibold mb-3 w-full text-2xl">Billing Details</h2>
+          <h2 class="font-semibold mb-3 w-full text-2xl">{{ $t('messages.billing.billingDetails') }}</h2>
           <BillingDetails v-model="customer.billing" />
         </div>
 
         <label for="shipToDifferentAddress" class="flex gap-2 items-center">
-          <span>Ship to a different address?</span>
+          <span>{{ $t('messages.billing.differentAddress') }}</span>
           <input
             id="shipToDifferentAddress"
             v-model="orderInput.shipToDifferentAddress"
@@ -89,13 +90,13 @@ const payNow = async () => {
 
         <Transition name="scale-y" mode="out-in">
           <div v-if="orderInput.shipToDifferentAddress">
-            <h2 class="font-semibold text-xl mb-4">Shipping Details</h2>
+            <h2 class="font-semibold text-xl mb-4">{{ $t('messages.general.shippingDetails') }}</h2>
             <ShippingDetails v-model="customer.shipping" />
           </div>
         </Transition>
 
         <div>
-          <h3 class="font-semibold text-xl mb-4">Select shipping method</h3>
+          <h3 class="font-semibold text-xl mb-4">{{ $t('messages.general.shippingSelect') }}</h3>
           <ClientOnly>
             <ShippingOptions
               v-if="cart && cart.availableShippingMethods.length"
@@ -106,7 +107,7 @@ const payNow = async () => {
 
         <!-- Pay methods -->
         <div class="mt-2 col-span-full">
-          <h2 class="font-semibold text-xl mb-4">Payment Options</h2>
+          <h2 class="font-semibold text-xl mb-4">{{ $t('messages.billing.paymentOptions') }}</h2>
           <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" />
 
           <Transition name="scale-y" mode="out-in">
@@ -123,14 +124,14 @@ const payNow = async () => {
         </div>
 
         <div>
-          <h2 class="font-semibold text-xl mb-4">Order Note (Optional)</h2>
+          <h2 class="font-semibold text-xl mb-4">{{ $t('messages.shop.orderNote') }} ({{ $t('messages.general.optional') }})</h2>
           <textarea
             id="order-note"
             v-model="orderInput.customerNote"
             name="order-note"
             class="w-full"
             rows="4"
-            placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
+            :placeholder="$t('messages.shop.orderNotePlaceholder')"></textarea>
         </div>
       </div>
     </form>

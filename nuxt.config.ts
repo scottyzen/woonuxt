@@ -14,11 +14,28 @@ export default defineNuxtConfig({
     'nuxt-graphql-client',
     'nuxt-windicss',
     'nuxt-icon',
-    '@nuxt/image-edge'
+    '@nuxt/image-edge',
+    '@nuxtjs/i18n',
   ],
 
   image: {
     domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
+  },
+
+  i18n: {
+    locales: [
+      {
+        code: 'en',
+        file: 'en-US.json'
+      },
+      {
+        code: 'de',
+        file: 'de-DE.json'
+      },
+    ],
+    lazy: true,
+    langDir: 'lang',
+    defaultLocale: 'en'
   },
 
   hooks: {
