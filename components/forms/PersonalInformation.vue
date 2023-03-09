@@ -1,7 +1,7 @@
 <template>
   <form class="bg-white rounded-lg shadow" @submit.prevent="saveChanges">
     <div class="grid p-8 gap-8 md:grid-cols-2">
-      <h3 class="font-semibold text-xl col-span-full">{{ $t('messages.general.personalInfo') }}</h3>
+      <h3 class="font-semibold text-xl col-span-full">{{ $t('messages.account.personalInfo') }}</h3>
 
       <div class="w-full">
         <label for="first-name">{{ $t('messages.billing.firstName') }}</label>

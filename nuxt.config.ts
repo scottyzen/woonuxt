@@ -32,14 +32,10 @@ export default defineNuxtConfig({
         code: 'de',
         file: 'de-DE.json'
       },
-      // {
-      //   code: 'fr',
-      //   file: 'fr-FR.json'
-      // }
     ],
     lazy: true,
     langDir: 'lang',
-    defaultLocale: 'en'
+    defaultLocale: 'de'
   },
 
   hooks: {

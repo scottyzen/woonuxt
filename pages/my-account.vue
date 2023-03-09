@@ -26,7 +26,7 @@
         </NuxtLink>
         <button class="rounded-xl flex p-3 px-4 gap-4 items-center hover:bg-purple-50 hover:text-purple-800" @click="logoutUser">
           <Icon name="ion:log-out-outline" size="22" />
-          {{ $t('messages.general.logout') }}
+          {{ $t('messages.account.logout') }}
         </button>
       </nav>
 

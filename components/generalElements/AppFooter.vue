@@ -37,9 +37,9 @@
         </div>
       </div>
       <div class="w-3/7 lg:w-auto">
-        <div class="font-semibold mb-1">{{ $t('messages.general.myAccount') }}</div>
+        <div class="font-semibold mb-1">{{ $t('messages.account.myAccount') }}</div>
         <div class="text-sm">
-          <NuxtLink to="/my-account" class="py-1.5 block">{{ $t('messages.general.myAccount') }}</NuxtLink>
+          <NuxtLink to="/my-account" class="py-1.5 block">{{ $t('messages.account.myAccount') }}</NuxtLink>
           <NuxtLink to="/my-account?tab=orders" class="py-1.5 block">{{ $t('messages.shop.orderHistory') }}</NuxtLink>
           <NuxtLink to="/wishlist" class="py-1.5 block">{{ $t('messages.shop.wishlist') }}</NuxtLink>
           <a href="#" class="py-1.5 block">{{ $t('messages.general.newsletter') }}</a>
