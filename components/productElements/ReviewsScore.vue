@@ -20,11 +20,11 @@ const numberAndPercentageOfEachRating = computed(() => {
 
 <template>
   <div>
-    <h4 v-if="reviews.edges.length" class="font-semibold text-sm text-2xl text-gray-900">Customer Reviews</h4>
-    <h4 v-else class="font-semibold text-sm text-2xl text-gray-900">No reviews yet</h4>
+    <h4 v-if="reviews.edges.length" class="font-semibold text-sm text-2xl text-gray-900">{{ $t('messages.shop.customerReviews') }}</h4>
+    <h4 v-else class="font-semibold text-sm text-2xl text-gray-900">{{ $t('messages.shop.noReviews') }}</h4>
     <div v-if="reviews.edges.length" class="my-2">
       <StarRating :rating="reviews.averageRating" :hide-count="true" class="text-sm mr-2" />
-      <span class="text-sm"> Based on {{ reviews.edges.length }} reviews</span>
+      <span class="text-sm"> {{ $t('messages.general.basedOn') }} {{ reviews.edges.length }} {{ $t('messages.shop.reviews') }}</span>
     </div>
     <div class="my-4 bars">
       <div v-for="rating in numberAndPercentageOfEachRating" :key="rating" class="flex gap-4 items-center">
@@ -42,6 +42,6 @@ const numberAndPercentageOfEachRating = computed(() => {
     </div>
     <div class="mt-10 text-xl mb-2 text-gray-900">Share your thoughts</div>
     <div class="text-sm mb-4">If you have used this product, we would love to hear about your experience.</div>
-    <button class="border rounded-lg text-center w-full p-2">Write a review</button>
+    <button class="border rounded-lg text-center w-full p-2">{{ $t('messages.shop.writeReview') }}</button>
   </div>
 </template>

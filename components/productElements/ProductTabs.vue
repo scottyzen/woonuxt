@@ -9,8 +9,8 @@ const show = ref(0);
 <template>
   <div>
     <nav class="border-b flex gap-8 tabs">
-      <a :class="show === 0 ? 'active' : ''" @click.prevent="show = 0">Description</a>
-      <a :class="show === 1 ? 'active' : ''" @click.prevent="show = 1">Reviews ({{ product.reviewCount }})</a>
+      <a :class="show === 0 ? 'active' : ''" @click.prevent="show = 0">{{ $t('messages.shop.productDescription') }}</a>
+      <a :class="show === 1 ? 'active' : ''" @click.prevent="show = 1">{{ $t('messages.shop.reviews') }} ({{ product.reviewCount }})</a>
     </nav>
     <div class="tab-contents">
       <div v-if="show === 0" class="font-light mt-8 prose" v-html="product.description"></div>

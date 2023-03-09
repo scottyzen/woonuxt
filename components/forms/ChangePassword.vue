@@ -1,20 +1,20 @@
 <template>
   <form class="bg-white rounded-lg shadow mt-4">
     <div class="grid p-8 gap-8 md:grid-cols-2">
-      <h3 class="font-semibold text-xl col-span-full">Change Password</h3>
+      <h3 class="font-semibold text-xl col-span-full">{{ $t('messages.general.changePassword') }}</h3>
       <div class="w-full">
-        <label for="current-password">Current Password</label>
+        <label for="current-password">{{ $t('messages.general.currentPassword') }}</label>
         <input v-model="password.current" placeholder="••••••••••" type="password" required />
       </div>
       <br class="hidden md:block" />
 
       <div class="w-full">
-        <label for="new-password">New Password</label>
+        <label for="new-password">{{ $t('messages.general.newPassword') }}</label>
         <input v-model="password.new" placeholder="••••••••••" type="password" required />
       </div>
 
       <div class="w-full">
-        <label for="new-password-confirm">Confirm New Password</label>
+        <label for="new-password-confirm">{{ $t('messages.general.confirmNewPassword') }}</label>
         <input v-model="password.confirm" placeholder="••••••••••" type="password" required />
       </div>
     </div>
@@ -25,7 +25,7 @@
         :class="{
           'bg-primary': !!password.current || !!password.new || !!password.confirm,
         }">
-        Update Password
+        {{ $t('messages.general.updatePassword') }}
       </button>
     </div>
   </form>

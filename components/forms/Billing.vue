@@ -1,34 +1,34 @@
 <template>
   <form class="bg-white rounded-lg shadow" @submit.prevent="saveChanges">
     <div class="grid p-8 gap-8 md:grid-cols-2">
-      <h3 class="font-semibold text-xl col-span-full">Billing</h3>
+      <h3 class="font-semibold text-xl col-span-full">{{ $t('messages.billing.billing') }}</h3>
       <div class="w-full">
-        <label for="billing-address">Address 1</label>
+        <label for="billing-address">{{ $t('messages.billing.address1') }}</label>
         <input v-model="user.billing.address1" placeholder="123 Main St" type="text" />
       </div>
 
       <div class="w-full">
-        <label for="billing-address-2">Address 2</label>
+        <label for="billing-address-2">{{ $t('messages.billing.address2') }}</label>
         <input v-model="user.billing.address2" placeholder="Apartment, studio, or floor" type="text" />
       </div>
 
       <div class="w-full">
-        <label for="billing-city">City</label>
+        <label for="billing-city">{{ $t('messages.billing.city') }}</label>
         <input v-model="user.billing.city" placeholder="New York" type="text" />
       </div>
 
       <div class="w-full">
-        <label for="billing-state">County Code</label>
+        <label for="billing-state">{{ $t('messages.billing.countryCode') }}</label>
         <input v-model="user.billing.state" placeholder="NY" type="text" />
       </div>
 
       <div class="w-full">
-        <label for="billing-zip">Zip</label>
+        <label for="billing-zip">{{ $t('messages.billing.zip') }}</label>
         <input v-model="user.billing.postcode" placeholder="10001" type="text" />
       </div>
 
       <div class="w-full">
-        <label for="billing-phone">Phone</label>
+        <label for="billing-phone">{{ $t('messages.billing.phone') }}</label>
         <input v-model="user.billing.phone" type="tel" />
       </div>
     </div>

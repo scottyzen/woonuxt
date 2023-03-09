@@ -37,7 +37,7 @@
         stroke-width="32"
         d="M169.83 279.53l172.34 96.94M342.17 135.53l-172.34 96.94" />
     </svg>
-    <span>Share</span>
+    <span>{{ $t('messages.general.share') }}</span>
   </a>
   <div v-else class="cursor-pointer flex mt-4 text-sm text-gray-400 gap-2 items-center">
     <!-- Twitter -->

@@ -32,7 +32,7 @@ const checkboxChanged = () => {
 <template>
   <div v-if="allCategories.length">
     <div class="cursor-pointer flex font-semibold mt-8 justify-between items-center" @click="isOpen = !isOpen">
-      <span>{{ label || 'Categories' }}</span>
+      <span>{{ label || $t('messages.shop.category', 2) }}</span>
       <Icon name="ion:chevron-down-outline" class="transform" :class="isOpen ? 'rotate-180' : ''" />
     </div>
     <div v-show="isOpen" class="mt-3 mr-1 max-h-[240px] grid gap-1 overflow-auto custom-scrollbar">

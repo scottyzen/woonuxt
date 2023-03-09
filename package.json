@@ -14,6 +14,7 @@
   "devDependencies": {
     "@nuxt/image-edge": "^1.0.0-27968280.9739e4d",
     "@nuxtjs/eslint-config-typescript": "^12.0.0",
+    "@nuxtjs/i18n": "^8.0.0-beta.10",
     "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-import": "^2.27.5",

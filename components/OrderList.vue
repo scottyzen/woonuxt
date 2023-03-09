@@ -4,10 +4,10 @@
     <table v-if="orders" class="text-left w-full table-auto">
       <thead>
         <tr>
-          <th>Order</th>
-          <th>Date</th>
-          <th>Status</th>
-          <th class="text-right">Total</th>
+          <th>{{ $t('messages.shop.order') }}</th>
+          <th>{{ $t('messages.general.date') }}</th>
+          <th>{{ $t('messages.general.status') }}</th>
+          <th class="text-right">{{ $t('messages.shop.total') }}</th>
         </tr>
       </thead>
       <tbody>

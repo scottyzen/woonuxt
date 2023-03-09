@@ -7,7 +7,7 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
     <CloseIcon class="bg-white rounded-xl shadow-xl p-1.5" @click="toggleCart(false)" />
     <EmptyCart v-if="!cart.isEmpty" class="rounded-xl shadow-xl p-1.5 hover:bg-red-400 hover:text-white" />
 
-    <div class="mt-8 text-center">Cart</div>
+    <div class="mt-8 text-center">{{ $t('messages.shop.cart') }}</div>
 
     <ClientOnly>
       <template v-if="!cart.isEmpty">
@@ -21,7 +21,7 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
           <NuxtLink
             class="rounded-xl bg-gray-800 shadow-md text-white text-lg text-center p-3 block justify-evenly hover:bg-gray-900"
             to="/checkout/">
-            <span class="mx-2">Checkout</span>
+            <span class="mx-2">{{ $t('messages.shop.checkout') }}</span>
             <span>{{ cart.total }}</span>
           </NuxtLink>
         </div>
@@ -29,7 +29,7 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
 
       <!-- Empty Cart Message -->
       <div v-else class="flex flex-col flex-1 mb-12 items-center justify-center">
-        <div class="text-xl mb-20 text-gray-300">Cart is empty</div>
+        <div class="text-xl mb-20 text-gray-300">{{ $t('messages.shop.cartEmpty') }}</div>
       </div>
     </ClientOnly>
 

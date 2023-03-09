@@ -4,7 +4,8 @@ const props = defineProps({
   disabled: { type: Boolean, default: false },
 });
 const isLoading = ref(false);
-const addToCartButtonText = computed(() => (isLoading.value ? 'Adding...' : 'Add to Cart'));
+const { t } = useI18n()
+const addToCartButtonText = computed(() => (isLoading.value ? t('messages.shop.adding') : t('messages.shop.addToCart')));
 
 // stop loading when cart is updated
 watch(cart, (val) => {
