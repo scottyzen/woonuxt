@@ -22,21 +22,6 @@ export default defineNuxtConfig({
     domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
   },
 
-  i18n: {
-    locales: [
-      {
-        code: 'en',
-        file: 'en-US.json'
-      },
-      {
-        code: 'de',
-        file: 'de-DE.json'
-      },
-    ],
-    lazy: true,
-    langDir: 'lang',
-    defaultLocale: 'en'
-  },
 
   hooks: {
     'pages:extend'(pages) {
@@ -47,6 +32,18 @@ export default defineNuxtConfig({
       pages.push({ name: 'order-summary', path: '/order-summary/:orderId', file: '~/pages/order-summary.vue' });
     }
   },
+
+  i18n: {
+    locales: [
+      { code: 'en', file: 'en-US.js', name: 'English' },
+      { code: 'de', file: 'de-DE.js', name: 'Deutsch' },
+    ],
+    lazy: true,
+    langDir: 'lang/',
+    defaultLocale: 'en',
+    strategy: 'no_prefix',
+  },
+
 
   routeRules: {
     '/checkout/order-received/**': { ssr: false },

@@ -1,6 +1,5 @@
 <template>
-  <div
-    class="bg-white rounded-lg flex shadow min-h-36 p-8 justify-center items-center">
+  <div class="bg-white rounded-lg flex shadow min-h-36 p-8 justify-center items-center">
     <table v-if="orders" class="text-left w-full table-auto">
       <thead>
         <tr>
@@ -13,9 +12,7 @@
       <tbody>
         <tr v-for="order in orders.nodes" :key="order.orderNumber">
           <td class="rounded-l-lg">
-            <NuxtLink
-              :to="`/order-summary/${order.orderNumber}`"
-              class="cursor-pointer hover:underline">
+            <NuxtLink :to="`/order-summary/${order.orderNumber}`" class="cursor-pointer hover:underline">
               {{ order.orderNumber }}
             </NuxtLink>
           </td>
@@ -29,7 +26,7 @@
         </tr>
       </tbody>
     </table>
-    <LoadingIcon v-else :size="24" stroke="2" />
+    <LoadingIcon v-else size="24" stroke="2" />
   </div>
 </template>
 

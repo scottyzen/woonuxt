@@ -10,3 +10,5 @@ nuxt.d.ts
 .cache
 dist
 .vscode
+# Local Netlify folder
+.netlify

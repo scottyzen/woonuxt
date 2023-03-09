@@ -22,7 +22,7 @@
         class="rounded-lg flex font-semibold ml-auto text-white py-2 px-4 gap-4 items-center"
         :class="isUserChanged ? 'bg-primary' : 'bg-gray-400'"
         :disabled="!isUserChanged">
-        <LoadingIcon v-if="loading" color="#fff" :size="20" />
+        <LoadingIcon v-if="loading" color="#fff" size="20" />
         <span>{{ buttonText }}</span>
       </button>
     </div>

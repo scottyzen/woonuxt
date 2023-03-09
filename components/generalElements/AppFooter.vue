@@ -8,6 +8,7 @@
           aliquam nisl lorem quis nunc. Sed euismod, nisl sit amet aliquam lacinia, nunc odio lacinia tortor, vel aliquam nisl lorem quis
           nunc.
         </p>
+        <LangSwitcher class="mt-8" />
       </div>
       <div class="w-3/7 lg:w-auto">
         <div class="font-semibold mb-1">Information</div>

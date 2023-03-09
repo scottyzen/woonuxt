@@ -30,18 +30,15 @@ function formatDate(date) {
 
 function formatPrice(price) {
   price = parseFloat(price);
-  return price.toLocaleString('nl-NL', { style: 'currency', currency: 'EUR' });
+  return price.toLocaleString('en-US', { style: 'currency', currency: 'EUR' });
 }
 </script>
 
 <template>
-  <div
-    class="w-full min-h-80 p-8 text-gray-800 md:bg-white md:rounded-xl md:mx-auto md:shadow-lg md:my-24 md:mt-8 md:max-w-3xl md:p-16">
+  <div class="w-full min-h-80 p-8 text-gray-800 md:bg-white md:rounded-xl md:mx-auto md:shadow-lg md:my-24 md:mt-8 md:max-w-3xl md:p-16">
     <div v-if="order">
       <h1 class="font-semibold text-xl mb-2">{{ $t('messages.shop.orderSummary') }}</h1>
-      <p v-if="order">
-        {{ $t('messages.shop.orderThanks') }}
-      </p>
+      <p v-if="order">{{ $t('messages.shop.orderThanks') }}</p>
 
       <hr class="my-8" />
 
@@ -59,7 +56,7 @@ function formatPrice(price) {
           <div>{{ order.status }}</div>
         </div>
         <div>
-          <div class="text-xs text-gray-400 uppercase">{{ $t('messages.billing.paymentMethod') }}</div>
+          <div class="text-xs text-gray-400 uppercase">{{ $t('messages.general.paymentMethod') }}</div>
           <div>{{ order.paymentMethodTitle }}</div>
         </div>
       </div>
@@ -67,40 +64,21 @@ function formatPrice(price) {
       <hr class="my-8" />
 
       <div class="grid gap-2">
-        <div
-          v-for="item in order.lineItems.nodes"
-          :key="item.product.databaseId"
-          class="flex gap-8 items-center justify-between">
+        <div v-for="item in order.lineItems.nodes" :key="item.product.databaseId" class="flex gap-8 items-center justify-between">
           <img
             v-if="item.product.node.image"
             class="rounded-xl h-16 w-16"
-            :src="
-              item.variation
-                ? item.variation.node.image.sourceUrl
-                : item.product.node.image.sourceUrl || '/images/placeholder.png'
-            "
-            :alt="
-              item.variation
-                ? item.variation.node.altText
-                : item.product.node.image.altText || 'Product image'
-            "
-            :title="
-              item.variation
-                ? item.variation.node.title
-                : item.product.node.image.title || 'Product image'
-            "
+            :src="item.variation ? item.variation.node.image.sourceUrl : item.product.node.image.sourceUrl || '/images/placeholder.png'"
+            :alt="item.variation ? item.variation.node.altText : item.product.node.image.altText || 'Product image'"
+            :title="item.variation ? item.variation.node.title : item.product.node.image.title || 'Product image'"
             width="64"
             height="64"
             loading="lazy" />
           <div class="flex-1 leading-tight">
-            {{
-              item.variation ? item.variation.node.name : item.product.node.name
-            }}
+            {{ item.variation ? item.variation.node.name : item.product.node.name }}
           </div>
           <div class="text-sm text-gray-600">Qty. {{ item.quantity }}</div>
-          <span class="font-semibold text-sm">{{
-            formatPrice(item.total)
-          }}</span>
+          <span class="font-semibold text-sm">{{ formatPrice(item.total) }}</span>
         </div>
       </div>
 
@@ -132,9 +110,7 @@ function formatPrice(price) {
         <p class="mb-8">
           {{ $t('messages.error.noOrder') }}
         </p>
-        <NuxtLink
-          to="/"
-          class="bg-primary rounded-lg font-bold text-white text-center min-w-[150px] p-2.5 focus:outline-noney">
+        <NuxtLink to="/" class="bg-primary rounded-lg font-bold text-white text-center min-w-[150px] p-2.5 focus:outline-noney">
           {{ $t('messages.general.goHome') }}
         </NuxtLink>
       </div>
