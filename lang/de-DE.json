@@ -28,7 +28,8 @@
       "downloads": "Downloads",
       "goHome": "Zur Startseite",
       "newsletter": "Newsletter",
-      "customerService": "Kundenservice"
+      "customerService": "Kundenservice",
+      "processing": "Wird verarbeitet..."
     },
     "account": {
       "changePassword": "Passwort ändern",
@@ -80,15 +81,18 @@
       "orderNotePlaceholder": "Nachricht zu Ihrer Bestellung, zum Beispiel zur Lieferung.",
       "orderThanks": "Vielen Dank für Ihre Bestellung. Wir senden Ihnen eine E-Mail mit den Bestelldetails zu.",
       "orderHistory": "Bestellverlauf",
+      "placeOrder": "Bestellung aufgeben",
       "total": "Gesamt",
       "subtotal": "Zwischensumme",
       "rating": "Bewertung | Bewertungen",
       "cart": "Warenkorb",
       "cartEmpty": "Ihr Warenkorb ist leer",
       "checkout": "Kasse",
+      "checkoutButton": "jetzt bezahlen",
       "discount": "Rabatt",
       "giftCards": "Geschenkkarten",
-      "searchProducts": "Produkte suchen..."
+      "searchProducts": "Produkte suchen...",
+      "couponCode": "Gutscheincode"
     },
     "billing": {
       "billing": "Rechnung",
@@ -106,7 +110,7 @@
       "email": "E-Mail",
       "paymentOptions": "Zahlungsoptionen",
       "creditCard": "Kreditkarte",
-      "cashOnDelivery": "Nachnahme",
+      "cashOnDelivery": "Nachname",
       "differentAddress": "Abweichende Lieferadresse?"
     },
     "error": {

@@ -2,13 +2,14 @@
 import { StripeElements, StripeElement } from 'vue-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
+const { t } = useI18n();
 const { cart, toggleCart, isUpdatingCart } = useCart();
 const { customer } = useAuth();
 const { orderInput, proccessCheckout, isProcessingOrder } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
 const stripeKey = runtimeConfig.public.STRIPE_PUBLISHABLE_KEY;
 
-const buttonText = ref(isProcessingOrder.value ? 'Processing...' : 'Checkout');
+const buttonText = ref(isProcessingOrder.value ? t('messages.general.processing') : t('messages.shop.checkoutButton'));
 
 const instanceOptions = ref({});
 const elementsOptions = ref({});
@@ -33,7 +34,7 @@ onMounted(() => {
 });
 
 const payNow = async () => {
-  buttonText.value = 'Processing...';
+  buttonText.value = t('messages.general.processing');
   try {
     if (orderInput.value.paymentMethod === 'stripe') {
       const cardElement = card.value.stripeElement;
@@ -41,7 +42,7 @@ const payNow = async () => {
       orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
     }
   } catch (error) {
-    buttonText.value = 'Place Order';
+    buttonText.value = t('messages.shop.placeOrder');
   }
 
   proccessCheckout();
@@ -130,7 +131,7 @@ const payNow = async () => {
             name="order-note"
             class="w-full"
             rows="4"
-            :placeholder="$t('messages.shop.orderNotePlaceholer')"></textarea>
+            :placeholder="$t('messages.shop.orderNotePlaceholder')"></textarea>
         </div>
       </div>
     </form>

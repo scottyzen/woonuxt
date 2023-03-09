@@ -24,7 +24,7 @@ const { cart, toggleCart, isUpdatingCart, isUpdatingCoupon, applyCoupon } = useC
         <span>{{ $t('messages.shop.subtotal') }}</span><spa class="text-gray-700 tabular-nums">{{ cart.subtotal }}</spa>
       </div>
       <div class="flex justify-between">
-        <span>{{ $t('messages.shop.shipping') }}</span><span class="text-gray-700 tabular-nums">+ {{ cart.shippingTotal }}</span>
+        <span>{{ $t('messages.general.shipping') }}</span><span class="text-gray-700 tabular-nums">+ {{ cart.shippingTotal }}</span>
       </div>
       <Transition name="scale-y" mode="out-in">
         <div v-if="cart && cart.appliedCoupons" class="flex justify-between">

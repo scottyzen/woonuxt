@@ -28,7 +28,8 @@
       "downloads": "Downloads",
       "goHome": "Go Home",
       "newsletter": "Newsletter",
-      "customerService": "Customer Service"
+      "customerService": "Customer Service",
+      "processing": "Processing"
     },
     "account": {
       "changePassword": "Change Password",
@@ -80,15 +81,18 @@
       "orderNotePlaceholder": "Notes about your order, e.g. special notes for delivery.",
       "orderThanks": "Thank you for your order. We will send you an email with the order details.",
       "orderHistory": "Order History",
+      "placeOrder": "Place Order",
       "total": "Total",
       "subtotal": "Subtotal",
       "rating": "Rating | Ratings",
       "cart": "Cart",
       "cartEmpty": "Your cart is empty.",
       "checkout": "Checkout",
+      "checkoutButton": "Checkout",
       "discount": "Discount",
       "giftCards": "Gift Cards",
-      "searchProducts": "Search Products..."
+      "searchProducts": "Search Products...",
+      "couponCode": "Coupon Code"
     },
     "billing": {
       "billing": "Billing",

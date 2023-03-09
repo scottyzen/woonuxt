@@ -21,7 +21,7 @@ async function submitCoupon() {
         id="couponCode"
         v-model="couponCode"
         type="text"
-        placeholder="Coupon Code"
+        :placeholder="$t('messages.shop.couponCode')"
         class="bg-white border rounded-md outline-none border-gray-300 shadow-sm w-full py-2 px-4"
         required />
       <button
