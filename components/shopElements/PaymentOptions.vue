@@ -16,7 +16,7 @@ const updatePaymentMethod = (value) => {
   <div class="leading-tight grid gap-4 payment-options">
     <div class="option" :class="{ 'active-option': paymentMethod === 'stripe' }" @click="updatePaymentMethod('stripe')">
       <icon name="ion:card-outline" size="20" class="text-gray-600" />
-      <span>Credit Card</span>
+      <span>{{ $t('messages.billing.creditCard') }}</span>
       <icon name="ion:checkmark-circle" size="20" class="ml-auto text-primary checkmark" />
     </div>
     <div class="option" :class="{ 'active-option': paymentMethod === 'paypal' }" @click="updatePaymentMethod('paypal')">
@@ -26,7 +26,7 @@ const updatePaymentMethod = (value) => {
     </div>
     <div class="option" :class="{ 'active-option': paymentMethod === 'cod' }" @click="updatePaymentMethod('cod')">
       <icon name="ion:cash-outline" size="20" class="text-gray-600" />
-      <span>Cash on Delivery</span>
+      <span>{{ $t('messages.billing.cashOnDelivery') }}</span>
       <icon name="ion:checkmark-circle" size="20" class="ml-auto text-primary checkmark" />
     </div>
   </div>

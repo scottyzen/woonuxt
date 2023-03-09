@@ -14,12 +14,14 @@ export default defineNuxtConfig({
     'nuxt-graphql-client',
     'nuxt-windicss',
     'nuxt-icon',
-    '@nuxt/image-edge'
+    '@nuxt/image-edge',
+    '@nuxtjs/i18n',
   ],
 
   image: {
     domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
   },
+
 
   hooks: {
     'pages:extend'(pages) {
@@ -30,6 +32,18 @@ export default defineNuxtConfig({
       pages.push({ name: 'order-summary', path: '/order-summary/:orderId', file: '~/pages/order-summary.vue' });
     }
   },
+
+  i18n: {
+    locales: [
+      { code: 'en', file: 'en-US.json', name: 'English' },
+      { code: 'de', file: 'de-DE.json', name: 'Deutsch' },
+    ],
+    // lazy: true,
+    langDir: 'lang/',
+    defaultLocale: 'en',
+    strategy: 'no_prefix',
+  },
+
 
   routeRules: {
     '/checkout/order-received/**': { ssr: false },

@@ -1,7 +1,7 @@
 <template>
   <div class="flex text-sm leading-none text-gray-400 gap-1 items-center">
     <span>
-      <NuxtLink to="/" class="hover:text-primary">Home</NuxtLink>
+      <NuxtLink to="/" class="hover:text-primary">{{ $t('messages.general.home') }}</NuxtLink>
       <span> /</span>
     </span>
     <span v-for="(link, i) in format" :key="link.name">

@@ -21,14 +21,14 @@ async function submitCoupon() {
         id="couponCode"
         v-model="couponCode"
         type="text"
-        placeholder="Coupon Code"
+        :placeholder="$t('messages.shop.couponCode')"
         class="bg-white border rounded-md outline-none border-gray-300 shadow-sm w-full py-2 px-4"
         required />
       <button
         class="border rounded-md flex outline-none bg-gray-800 shadow-sm text-white min-w-20 py-2 px-4 justify-center items-center"
         :disabled="isUpdatingCoupon">
         <LoadingIcon v-if="isUpdatingCoupon" color="#fff" size="16" />
-        <span v-else>Apply</span>
+        <span v-else>{{ $t('messages.general.apply') }}</span>
       </button>
     </form>
     <Transition name="scale-y" mode="out-in">

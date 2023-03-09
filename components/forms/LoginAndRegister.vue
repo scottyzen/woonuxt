@@ -1,6 +1,6 @@
 <template>
   <div class="mx-auto max-w-lg my-16 min-h-96 lg:my-24">
-    <h1 class="font-bold text-xl mb-4 lg:text-3xl">My Account</h1>
+    <h1 class="font-bold text-xl mb-4 lg:text-3xl">{{ $t('messages.account.myAccount') }}</h1>
     <form class="mb-4" @submit.prevent="loginOrRegister(userInfo)">
       <label v-if="formView == 'register'" for="email"
         >Email <span class="text-red-500">*</span> <br />
@@ -13,11 +13,11 @@
           required />
       </label>
       <label for="username"
-        >Username <span class="text-red-500">*</span> <br />
+        >{{ $t('messages.account.username') }} <span class="text-red-500">*</span> <br />
         <input id="username" v-model="userInfo.username" placeholder="Username" type="text" required />
       </label>
       <label for="password"
-        >Password <span class="text-red-500">*</span> <br />
+        >{{ $t('messages.account.password') }} <span class="text-red-500">*</span> <br />
         <input id="password" v-model="userInfo.password" placeholder="Password" type="password" required />
       </label>
       <Transition name="scale-y" mode="out-in">
@@ -28,21 +28,22 @@
       </Transition>
       <button class="flex mt-4 text-lg gap-4 justify-center items-center">
         <LoadingIcon v-if="isPending" stroke="4" size="16" color="#fff" />
-        <span>{{ formView == 'login' ? 'Log In' : 'Register' }}</span>
+        <span>{{ formView == 'login' ? $t('messages.account.login') : $t('messages.account.register') }}</span>
       </button>
     </form>
     <div v-if="formView == 'login'" class="my-4 text-center">
-      If you don't have an account, please
-      <a class="cursor-pointer underline" @click="formView = 'register'">register</a>.
+      {{ $t('messages.account.noAccount') }}
+      <a class="cursor-pointer underline" @click="formView = 'register'">{{ $t('messages.general.please') }} {{ $t('messages.account.accountRegister') }}</a>.
     </div>
     <div v-if="formView == 'register'" class="my-4 text-center">
-      If you already have an account, please
-      <a class="cursor-pointer underline" @click="formView = 'login'">log in</a>.
+      {{ $t('messages.account.hasAccount') }}
+      <a class="cursor-pointer underline" @click="formView = 'login'">{{ $t('messages.general.please') }} {{ $t('messages.account.accountLogin') }}</a>.
     </div>
   </div>
 </template>
 
 <script setup>
+const { t } = useI18n();
 const { loginUser, isPending, registerUser } = useAuth();
 const userInfo = ref({ email: '', password: '', username: '' });
 const formView = ref('login');
@@ -52,14 +53,14 @@ const errorMessage = ref('');
 const login = async (userInfo) => {
   const { success, error } = await loginUser(userInfo);
   if (error && error === 'invalid_username') {
-    errorMessage.value = 'No account found with that username. Please register.';
+    errorMessage.value = t('messages.error.invalidUsername');
   } else if (error && error === 'incorrect_password') {
-    errorMessage.value = 'Incorrect password. Please try again.';
+    errorMessage.value = t('messages.error.incorrectPassword');
   } else if (error) {
     errorMessage.value = error;
   } else {
     errorMessage.value = '';
-    message.value = 'Logging you in...';
+    message.value = t('messages.account.loggingIn');
   }
 };
 
@@ -68,7 +69,7 @@ const loginOrRegister = async (userInfo) => {
     const { success, error } = await registerUser(userInfo);
     if (success) {
       errorMessage.value = '';
-      message.value = 'Account created! Logging you in...';
+      message.value = t('messages.account.accountCreated') + ' ' + t('messages.account.loggingIn');
       setTimeout(() => {
         login(userInfo);
       }, 2000);

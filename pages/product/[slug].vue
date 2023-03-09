@@ -40,14 +40,14 @@
 
         <div class="my-8 text-sm grid gap-2">
           <div class="flex gap-2 items-center">
-            <span class="text-gray-400">Availability: </span>
+            <span class="text-gray-400">{{ $t('messages.shop.availability') }}: </span>
             <span v-if="type.stockStatus == 'IN_STOCK'" class="text-green-600"
-              >In Stock</span
+              >{{ $t('messages.shop.inStock') }}</span
             >
-            <span v-else class="text-red-600">Out of Stock</span>
+            <span v-else class="text-red-600">{{ $t('messages.shop.outOfStock') }}</span>
           </div>
           <div class="flex gap-2 items-center">
-            <span class="text-gray-400">SKU: </span>
+            <span class="text-gray-400">{{ $t('messages.shop.sku') }}: </span>
             <span>{{ product.sku || 'N/A' }}</span>
           </div>
         </div>
@@ -85,7 +85,7 @@
 
         <div class="my-8 text-sm grid gap-2">
           <div class="flex gap-2 items-center">
-            <span class="text-gray-400">Categories:</span>
+            <span class="text-gray-400">{{ $t('messages.shop.category', 2) }}:</span>
             <div class="product-categories">
               <NuxtLink
                 v-for="category in product.productCategories.nodes"
@@ -108,7 +108,7 @@
       <ProductTabs :product="product" />
     </div>
     <div class="my-32">
-      <div class="font-semibold text-xl mb-4">You May Also Like</div>
+      <div class="font-semibold text-xl mb-4">{{ $t('messages.shop.youMayLike') }}</div>
       <ProductRow
         :products="product.related.nodes"
         class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5"

@@ -26,11 +26,11 @@ watch([orderby, order], () => {
       v-model="orderby"
       class="bg-white border rounded-l-none rounded-r-md font-medium border-gray-300 flex-1 text-sm p-1.5 pr-12 pl-4 text-gray-500 relative inline-flex items-center hover:bg-gray-50 focus:z-20"
       aria-label="Order by">
-      <option value="date">Lastest</option>
-      <option value="alphabetically">Alphabetically</option>
-      <option value="price">Price</option>
-      <option value="rating">Rating</option>
-      <option value="discount">Discount</option>
+      <option value="date">{{ $t('messages.general.latest') }}</option>
+      <option value="alphabetically">{{ $t('messages.general.alphabetically') }}</option>
+      <option value="price">{{ $t('messages.shop.price') }}</option>
+      <option value="rating">{{ $t('messages.shop.rating') }}</option>
+      <option value="discount">{{ $t('messages.shop.discount') }}</option>
     </select>
   </div>
 </template>

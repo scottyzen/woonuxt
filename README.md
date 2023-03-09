@@ -48,6 +48,7 @@ The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for
 | Cookie Popup & GDPR Compliance                        |                      |      |             | ✅              |
 | Progressive Web App (PWA)                             |                      |      | ✅          |                 |
 | Queing System (for chcecking out when server is busy) |                      |      |             | ✅              |
+| Language Support (i18n)                               |                      |      | ✅          |                 |
 
 &nbsp;
 
