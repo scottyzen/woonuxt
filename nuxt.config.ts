@@ -35,7 +35,7 @@ export default defineNuxtConfig({
     ],
     lazy: true,
     langDir: 'lang',
-    defaultLocale: 'de'
+    defaultLocale: 'en'
   },
 
   hooks: {
