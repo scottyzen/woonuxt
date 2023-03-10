@@ -22,7 +22,7 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
             class="rounded-xl bg-gray-800 shadow-md text-white text-lg text-center p-3 block justify-evenly hover:bg-gray-900"
             to="/checkout/">
             <span class="mx-2">{{ $t('messages.shop.checkout') }}</span>
-            <span>{{ cart.total }}</span>
+            <span v-html="cart.total" />
           </NuxtLink>
         </div>
       </template>
