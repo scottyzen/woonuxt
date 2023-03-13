@@ -4,3 +4,13 @@
 
 [build]
   command = "npm run generate"
+
+[[headers]]
+  for = "/_nuxt/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/_ipx/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
