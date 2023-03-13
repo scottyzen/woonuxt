@@ -1,3 +1,7 @@
+<script setup>
+const runtimeConfig = useRuntimeConfig();
+</script>
+
 <template>
   <div class="bg-white">
     <div class="container flex flex-wrap my-24 gap-12 justify-between md:gap-24">
@@ -50,7 +54,7 @@
     <div class="container border-t">
       <div class="copywrite">
         <p class="text-xs text-center py-4">
-          <a href="https://woonuxt.com">WooNuxt v0.4.21</a> - by
+          <a href="https://woonuxt.com">WooNuxt v{{ runtimeConfig.public.version }}</a> - by
           <a href="https://scottyzen.com" target="_blank">Scottyzen</a>
         </p>
       </div>

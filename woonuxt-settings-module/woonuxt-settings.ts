@@ -1,5 +1,6 @@
 import { defineNuxtModule, addPlugin, createResolver } from '@nuxt/kit';
 import { $fetch } from 'ohmyfetch';
+import pkg from '../package.json'
 
 const query = `
 query getWooNuxtSettings {
@@ -37,6 +38,8 @@ export default defineNuxtModule<ModuleOptions>({
     const resolver = createResolver(import.meta.url)
 
     const GQL_HOST = process.env.GQL_HOST || null;
+
+    nuxt.options.runtimeConfig.public.version = pkg.version;
 
     if (!GQL_HOST) {
       console.log('\u001B[1;35mGQL_HOST is missing. Make sure you have the GQL_HOST environment variable set.');
