@@ -10,8 +10,8 @@ const props = defineProps({
     class="border border-white rounded-xl flex item relative justify-center overflow-hidden snap-mandatory snap-x">
     <NuxtImg
       v-if="node.image"
-      width="400"
-      height="400"
+      width="220"
+      height="280"
       class="h-full object-cover w-full inset-0 absolute"
       :src="node.image.sourceUrl"
       :alt="node.name"
@@ -19,9 +19,7 @@ const props = defineProps({
       fit="outside"
       format="webp" />
     <div class="bg-gradient-to-t from-black to-transparent h-1/2 opacity-50 inset-x-0 bottom-0 absolute"></div>
-    <span class="font-semibold mt-auto text-sm text-white mb-2 z-10 relative capitalize md:text-base md:mb-4">{{
-      node.name
-    }}</span>
+    <span class="font-semibold mt-auto text-sm text-white mb-2 z-10 relative capitalize md:text-base md:mb-4">{{ node.name }}</span>
   </NuxtLink>
 </template>
 

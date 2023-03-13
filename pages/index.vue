@@ -1,15 +1,12 @@
 <script setup>
 const { data } = await useAsyncGql('getProductCategories', { first: 6 });
 const productCategories = data.value.productCategories?.nodes || [];
+const runtimeConfig = useRuntimeConfig();
 
 useHead({
   title: `Home | WooNuxt`,
-  meta: [
-    {
-      name: 'description',
-      content: 'The best ecommerce store in the world',
-    },
-  ],
+  meta: [{ name: 'description', content: 'The best ecommerce store in the world' }],
+  link: [{ rel: 'canonical', href: runtimeConfig?.public?.FRONT_END_URL }],
 });
 </script>
 
@@ -38,30 +35,30 @@ useHead({
 
     <section class="container my-24 grid gap-4 lg:grid-cols-4">
       <div class="bg-white rounded-lg flex p-8 gap-8 items-center">
-        <img src="/icons/box.svg" width="60" height="60" />
+        <NuxtImg src="/icons/box.svg" width="60" height="60" alt="Free Shipping" loading="lazy" />
         <div>
-          <h4 class="font-semibold text-xl">Free Shipping</h4>
+          <h3 class="font-semibold text-xl">Free Shipping</h3>
           <p class="text-sm">Free shipping on order over €50</p>
         </div>
       </div>
       <div class="bg-white rounded-lg flex p-8 gap-8 items-center">
-        <img src="/icons/moneyback.svg" width="60" height="60" />
+        <NuxtImg src="/icons/moneyback.svg" width="60" height="60" alt="Money Back" loading="lazy" />
         <div>
-          <h4 class="font-semibold text-xl">Peace of Mind</h4>
+          <h3 class="font-semibold text-xl">Peace of Mind</h3>
           <p class="text-sm">30 days money back guarantee</p>
         </div>
       </div>
       <div class="bg-white rounded-lg flex p-8 gap-8 items-center">
-        <img src="/icons/secure.svg" width="60" height="60" />
+        <NuxtImg src="/icons/secure.svg" width="60" height="60" alt="Secure Payment" loading="lazy" />
         <div>
-          <h4 class="font-semibold text-xl">100% Payment Secure</h4>
+          <h3 class="font-semibold text-xl">100% Payment Secure</h3>
           <p class="text-sm">Your payment are safe with us.</p>
         </div>
       </div>
       <div class="bg-white rounded-lg flex p-8 gap-8 items-center">
-        <img src="/icons/support.svg" width="60" height="60" />
+        <NuxtImg src="/icons/support.svg" width="60" height="60" alt="Support 24/7" loading="lazy" />
         <div>
-          <h4 class="font-semibold text-xl">Support 24/7</h4>
+          <h3 class="font-semibold text-xl">Support 24/7</h3>
           <p class="text-sm">24/7 Online support</p>
         </div>
       </div>

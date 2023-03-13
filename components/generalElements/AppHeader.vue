@@ -3,10 +3,10 @@
     <div class="container flex py-4 items-center justify-between">
       <div class="flex items-center">
         <MenuTrigger class="md:hidden" />
-        <Logo class="md:w-[200px]" />
+        <Logo class="md:w-[160px]" />
       </div>
       <MainMenu class="text-sm text-gray-500 gap-6 items-center hidden md:flex lg:px-4" />
-      <div class="flex gap-4 justify-end items-center md:w-[200px]">
+      <div class="flex gap-4 justify-end items-center md:w-[160px]">
         <NuxtLink to="/wishlist" title="Wishlist">
           <Icon name="ion:heart-outline" size="20" />
         </NuxtLink>
