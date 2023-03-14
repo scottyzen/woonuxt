@@ -20,14 +20,14 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "nuxt": "^3.2.3",
+    "nuxt": "^3.3.1",
     "nuxt-icon": "^0.3.2",
     "nuxt-windicss": "^2.6.0",
     "prettier": "^2.8.4",
     "vue-stripe-js": "^1.0.1"
   },
   "dependencies": {
-    "@stripe/stripe-js": "^1.48.0",
+    "@stripe/stripe-js": "^1.49.0",
     "@vueform/slider": "^2.1.7",
     "nuxt-graphql-client": "^0.2.27",
     "ohmyfetch": "^0.4.21"
