@@ -10,12 +10,16 @@ export default defineNuxtConfig({
   components: [{ path: '~/components', pathPrefix: false }],
 
   modules: [
-    './woonuxt-settings-module/woonuxt-settings.ts',
+    'woonuxt-settings',
     'nuxt-graphql-client',
     'nuxt-windicss',
     'nuxt-icon',
     '@nuxt/image-edge',
     '@nuxtjs/i18n',
+  ],
+
+  plugins: [
+    '~/plugins/init.ts',
   ],
 
   image: {
