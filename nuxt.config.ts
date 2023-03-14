@@ -1,3 +1,5 @@
+import pkg from './package.json'
+
 export default defineNuxtConfig({
   app: {
     head: {
@@ -26,6 +28,11 @@ export default defineNuxtConfig({
     domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
   },
 
+  runtimeConfig: {
+    public: {
+      version: pkg.version,
+    },
+  },
 
   hooks: {
     'pages:extend'(pages) {
