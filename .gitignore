@@ -93,3 +93,5 @@ sw.*
 
 # VSCode
 .vscode
+
+.netlify

@@ -3,17 +3,33 @@
     <!-- <pre>{{ $store.state.user }}</pre> -->
     <div class="w-full">
       <label for="first-name">First Name</label>
-      <input placeholder="John" type="text" required v-model="billing.firstName" />
+      <input
+        placeholder="John"
+        type="text"
+        required
+        v-model="billing.firstName"
+      />
     </div>
 
     <div class="w-full">
       <label for="last-name">Last Name</label>
-      <input placeholder="Doe" type="text" required v-model="billing.lastName" />
+      <input
+        placeholder="Doe"
+        type="text"
+        required
+        v-model="billing.lastName"
+      />
     </div>
 
     <div class="w-full">
       <label for="email">Email</label>
-      <input placeholder="johndoe@email.com" type="email" required v-model="billing.email" />
+      <input
+        placeholder="johndoe@email.com"
+        type="email"
+        required
+        v-model="billing.email"
+        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+      />
     </div>
 
     <div class="w-full">
@@ -23,7 +39,12 @@
 
     <div class="w-full col-span-full">
       <label for="address1">Address Line 1</label>
-      <input placeholder="5998 Sunset Blvd" type="text" required v-model="billing.address1" />
+      <input
+        placeholder="5998 Sunset Blvd"
+        type="text"
+        required
+        v-model="billing.address1"
+      />
     </div>
 
     <div class="w-full col-span-full">
@@ -33,12 +54,20 @@
 
     <div class="w-full">
       <label for="city">City</label>
-      <input placeholder="California" type="text" required v-model="billing.city" />
+      <input
+        placeholder="California"
+        type="text"
+        required
+        v-model="billing.city"
+      />
     </div>
 
     <div class="w-full">
       <label for="country">Country</label>
-      <CountrySelect :defaultValue="billing.country" v-model="billing.country" />
+      <CountrySelect
+        :defaultValue="billing.country"
+        v-model="billing.country"
+      />
     </div>
   </div>
 </template>
@@ -52,7 +81,7 @@ export default {
   },
   methods: {
     updateBilling(billing) {
-      this.$emit("update-billing", billing);
+      this.$emit('update-billing', billing);
     },
     prefillAvailableBilling() {
       const interval = setInterval(() => {

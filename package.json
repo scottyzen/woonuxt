@@ -11,13 +11,13 @@
   "dependencies": {
     "@nuxtjs/composition-api": "^0.33.1",
     "@nuxtjs/sitemap": "^2.4.0",
-    "@vueuse/core": "^9.12.0",
+    "@vueuse/core": "^9.13.0",
     "cookie-universal-nuxt": "^2.2.2",
-    "core-js": "^3.27.2",
+    "core-js": "^3.29.1",
     "fuse.js": "^6.6.2",
     "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
-    "nuxt": "^2.15.8",
+    "nuxt": "^2.16.3",
     "nuxt-cookie-control": "^1.9.93",
     "vue-lazy-hydration": "^2.0.0-beta.4",
     "vue-multiselect": "^2.1.7",
@@ -28,8 +28,8 @@
     "@nuxt/image": "^0.7.1",
     "@nuxtjs/pwa": "^3.3.5",
     "canvas-confetti": "^1.6.0",
-    "nuxt-graphql-request": "^6.0.2",
-    "nuxt-windicss": "^2.5.5",
+    "nuxt-graphql-request": "^6.0.3",
+    "nuxt-windicss": "^2.6.0",
     "vue-stripe-elements-plus": "^1.0.3"
   }
 }
