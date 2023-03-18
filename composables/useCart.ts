@@ -1,7 +1,7 @@
 export function useCart() {
   const cart = useState<any>('cart', () => null);
   const isShowingCart = useState<boolean>('isShowingCart', () => false);
-  const isUpdatingCart = useState<boolean>('isUpdatingCart', () => false);
+  const isUpdatingCart = useState<boolean>('isUpdatingCart', () => true);
   const isUpdatingCoupon = useState<boolean>('isUpdatingCoupon', () => false);
 
   // Refesh the cart from the server

@@ -50,7 +50,9 @@ const payNow = async () => {
 </script>
 
 <template>
-  <div>
+  <div class="flex flex-col min-h-96">
+    <LoadingIcon v-if="isUpdatingCart" class="m-auto" />
+
     <form
       v-if="cart"
       class="container flex flex-wrap my-12 gap-8 justify-evenly items-start md:flex-row-reverse lg:gap-24"
@@ -81,11 +83,7 @@ const payNow = async () => {
 
         <label for="shipToDifferentAddress" class="flex gap-2 items-center">
           <span>{{ $t('messages.billing.differentAddress') }}</span>
-          <input
-            id="shipToDifferentAddress"
-            v-model="orderInput.shipToDifferentAddress"
-            type="checkbox"
-            name="shipToDifferentAddress" />
+          <input id="shipToDifferentAddress" v-model="orderInput.shipToDifferentAddress" type="checkbox" name="shipToDifferentAddress" />
         </label>
 
         <Transition name="scale-y" mode="out-in">
