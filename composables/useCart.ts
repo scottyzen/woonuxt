@@ -37,20 +37,14 @@ export function useCart() {
   // remove an item from the cart
   async function removeItem(key: string) {
     isUpdatingCart.value = true;
-    const { updateItemQuantities } = await GqlUpDateCartQuantity({
-      key,
-      quantity: 0,
-    });
+    const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity: 0 });
     cart.value = updateItemQuantities?.cart || null;
   }
 
   // update the quantity of an item in the cart
   async function updateItemQuantity(key: string, quantity: number) {
     isUpdatingCart.value = true;
-    const { updateItemQuantities } = await GqlUpDateCartQuantity({
-      key,
-      quantity,
-    });
+    const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity });
     cart.value = updateItemQuantities?.cart || null;
     return quantity;
   }
@@ -62,11 +56,9 @@ export function useCart() {
   }
 
   // Update shipping method
-  async function updateShippingMethod(shippingMethodId: string) {
+  async function updateShippingMethod(shippingMethods: string) {
     isUpdatingCart.value = true;
-    const { updateShippingMethod } = await GqlChangeShippingMethod({
-      shippingMethods: shippingMethodId,
-    });
+    const { updateShippingMethod } = await GqlChangeShippingMethod({ shippingMethods });
     cart.value = updateShippingMethod?.cart || null;
   }
 

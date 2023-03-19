@@ -3,8 +3,7 @@ const { cart, toggleCart, isUpdatingCart, isUpdatingCoupon, applyCoupon } = useC
 </script>
 
 <template>
-  <aside
-    class="bg-white rounded-lg shadow-lg mt-8 mb-8 w-full min-h-[250px] p-8 relative md:max-w-sm md:top-32 md:sticky">
+  <aside class="bg-white rounded-lg shadow-lg mb-8 w-full min-h-[250px] p-8 relative md:max-w-sm md:top-32 md:sticky">
     <h2 class="font-semibold text-xl mb-4">{{ $t('messages.shop.orderSummary') }}</h2>
 
     <ClientOnly>
@@ -21,18 +20,22 @@ const { cart, toggleCart, isUpdatingCart, isUpdatingCoupon, applyCoupon } = useC
 
     <div v-if="cart" class="font-semibold text-sm grid text-gray-500 gap-1">
       <div class="flex justify-between">
-        <span>{{ $t('messages.shop.subtotal') }}</span><spa class="text-gray-700 tabular-nums" v-html="cart.subtotal" />
+        <span>{{ $t('messages.shop.subtotal') }}</span
+        ><spa class="text-gray-700 tabular-nums" v-html="cart.subtotal" />
       </div>
       <div class="flex justify-between">
-        <span>{{ $t('messages.general.shipping') }}</span><span class="text-gray-700 tabular-nums">+ <span v-html="cart.shippingTotal" /></span>
+        <span>{{ $t('messages.general.shipping') }}</span
+        ><span class="text-gray-700 tabular-nums">+ <span v-html="cart.shippingTotal" /></span>
       </div>
       <Transition name="scale-y" mode="out-in">
         <div v-if="cart && cart.appliedCoupons" class="flex justify-between">
-          <span>{{ $t('messages.shop.discount') }}</span><span class="text-primary tabular-nums">- <span v-html="cart.discountTotal" /></span>
+          <span>{{ $t('messages.shop.discount') }}</span
+          ><span class="text-primary tabular-nums">- <span v-html="cart.discountTotal" /></span>
         </div>
       </Transition>
       <div class="flex mt-4 justify-between">
-        <span>{{ $t('messages.shop.total') }}</span><span class="font-bold text-lg text-gray-700 tabular-nums" v-html="cart.total" />
+        <span>{{ $t('messages.shop.total') }}</span
+        ><span class="font-bold text-lg text-gray-700 tabular-nums" v-html="cart.total" />
       </div>
     </div>
 
