@@ -5,26 +5,39 @@ export default defineNuxtPlugin(async () => {
         const sessionToken = useCookie('woocommerce-session');
         if (sessionToken.value) useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken.value}` });
 
-        const { refreshCart } = useCart();
-        const success = await refreshCart();
+        // Wait for the user to interact with the page before refreshing the cart, this is helpful to prevent excessive requests to the server
+        let initialised = false as boolean;
+        const eventsToFireOn = ['mousedown', 'keydown', 'touchstart', 'scroll', 'wheel', 'click', 'resize', 'mousemove', 'mouseover'];
 
-        if (!success) {
-            clearAllCookies();
+        eventsToFireOn.forEach((event) => {
+            window.addEventListener(event, async () => {
 
-            // Add a new cookie to prevent infinite reloads
-            const reloadCount = useCookie('reloadCount');
-            if (!reloadCount.value) {
-                reloadCount.value = '1';
-            } else {
-                return;
-            }
+                // We only want to execute this code block once, so we return if initialised is truthy.
+                if (initialised) return;
+                initialised = true;
 
-            // Log out the user
-            const { logoutUser } = useAuth();
-            const logout = await logoutUser();
-            !logout.success ? console.log('logoutUser failed') : console.log('logoutUser success');
+                const { refreshCart } = useCart();
+                const success = await refreshCart();
+                if (!success) {
+                    clearAllCookies();
 
-            if (!reloadCount.value) window.location.reload();
+                    // Add a new cookie to prevent infinite reloads
+                    const reloadCount = useCookie('reloadCount');
+                    if (!reloadCount.value) {
+                        reloadCount.value = '1';
+                    } else {
+                        return;
+                    }
+
+                    // Log out the user
+                    const { logoutUser } = useAuth();
+                    const logout = await logoutUser();
+                    !logout.success ? console.log('logoutUser failed') : console.log('logoutUser success');
+
+                    if (!reloadCount.value) window.location.reload();
+                }
+            }, { once: true });
         }
+        );
     }
 });

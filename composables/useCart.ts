@@ -1,7 +1,7 @@
 export function useCart() {
   const cart = useState<any>('cart', () => null);
   const isShowingCart = useState<boolean>('isShowingCart', () => false);
-  const isUpdatingCart = useState<boolean>('isUpdatingCart', () => true);
+  const isUpdatingCart = useState<boolean>('isUpdatingCart', () => false);
   const isUpdatingCoupon = useState<boolean>('isUpdatingCoupon', () => false);
 
   // Refesh the cart from the server
@@ -71,7 +71,7 @@ export function useCart() {
       isUpdatingCoupon.value = false;
       return { message: null };
     }
-    catch (error) {
+    catch (error: any) {
       isUpdatingCoupon.value = false;
       const gqlErrors = error?.gqlErrors;
       if (gqlErrors) {
