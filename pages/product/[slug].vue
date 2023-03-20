@@ -19,7 +19,7 @@
         :first-image="product.image.sourceUrl"
         :main-image="type.image.sourceUrl"
         :gallery="product.galleryImages"
-        :node="product"
+        :node="type"
       />
 
       <div class="md:max-w-md md:py-2">
