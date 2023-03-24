@@ -50,7 +50,7 @@
 export default {
   props: {
     firstImage: { type: String, required: true },
-    mainImage: { type: String, required: true ,
+    mainImage: { type: String, required: true },
     gallery: { type: Object, required: true },
     node: { type: Object, required: true },
   },
