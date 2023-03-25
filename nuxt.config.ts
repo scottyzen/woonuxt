@@ -15,13 +15,16 @@ export default defineNuxtConfig({
 
   plugins: ['~/plugins/init.ts'],
 
+  image: {
+    domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
+  },
+
   runtimeConfig: {
     public: {
       version: pkg.version,
     },
     ipx: {
       dir: 'public',
-      domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
     },
   },
 
