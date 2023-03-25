@@ -23,6 +23,10 @@ export default defineNuxtConfig({
     public: {
       version: pkg.version,
     },
+    ipx: {
+      dir: 'public',
+      domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
+    },
   },
 
   hooks: {
