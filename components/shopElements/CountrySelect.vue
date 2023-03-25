@@ -1,11 +1,6 @@
 <template>
   <select :value="defaultValue" @change="select">
-    <option
-      v-for="country in countries"
-      :key="country.countryName"
-      def
-      :value="country.countryCode"
-      :checked="country.countryCode === defaultValue">
+    <option v-for="country in countries" :key="country.countryName" def :value="country.countryCode" :checked="country.countryCode === defaultValue">
       {{ country.countryName }}
     </option>
   </select>

@@ -4,7 +4,7 @@ export function useProducts() {
   // Declare the state variables and the setter functions
   const products = useState<any[]>('products', () => []);
 
-  function setProducts(newProducts: any[]) {
+  function setProducts(newProducts: any[]): void {
     products.value = newProducts;
     allProducts = JSON.parse(JSON.stringify(newProducts));
   }
@@ -22,12 +22,12 @@ export function useProducts() {
 
     // otherwise, apply filter, search and sorting in that order
     let newProducts = [...allProducts];
-    if (isFiltersActive.value) newProducts = await filterProducts(newProducts)
-    if (isSearchActive.value) newProducts = await searchProducts(newProducts)
-    if (isSortingActive.value) newProducts = await sortProducts(newProducts)
+    if (isFiltersActive.value) newProducts = await filterProducts(newProducts);
+    if (isSearchActive.value) newProducts = await searchProducts(newProducts);
+    if (isSortingActive.value) newProducts = await sortProducts(newProducts);
 
     products.value = newProducts;
-  }
+  };
 
   return { products, allProducts, setProducts, updateProductList };
 }

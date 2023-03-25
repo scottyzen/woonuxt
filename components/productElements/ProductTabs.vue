@@ -22,10 +22,7 @@ const show = ref(0);
           <div class="divide-y flex-1">
             <div v-for="review in product.reviews.edges" :key="review.id" class="my-2 py-8">
               <div class="flex gap-4 items-center">
-                <img
-                  v-if="review.node.author.node.avatar"
-                  :src="review.node.author.node.avatar.url"
-                  class="rounded-full h-12 w-12" />
+                <img v-if="review.node.author.node.avatar" :src="review.node.author.node.avatar.url" class="rounded-full h-12 w-12" />
                 <div class="grid gap-1">
                   <span class="font-semibold text-sm">{{ review.node.author.node.name }}</span>
                   <StarRating :rating="review.rating" :hide-count="true" class="text-sm" />

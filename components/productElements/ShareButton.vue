@@ -1,41 +1,29 @@
+<script setup lang="ts">
+const props = defineProps({
+  product: { type: Object, required: true },
+});
+
+const isOpen = ref(false);
+
+const twitterUrl = computed(() => `https://twitter.com/intent/tweet?text=${props.product.name}&url=${window.location.href}`);
+const facebookUrl = computed(() => `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`);
+const pinterestUrl = computed(
+  () => `https://pinterest.com/pin/create/button/?url=${window.location.href}&media=${props.product.image.sourceUrl}&description=${props.product.name}`
+);
+
+const showShare = () => {
+  isOpen.value = true;
+};
+</script>
+
 <template>
   <a v-if="!isOpen" class="cursor-pointer flex mt-4 text-sm text-gray-400 gap-2 items-center" @click="showShare">
     <!-- <pre>{{product}}</pre> -->
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="18" height="18">
-      <circle
-        cx="128"
-        cy="256"
-        r="48"
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="32" />
-      <circle
-        cx="384"
-        cy="112"
-        r="48"
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="32" />
-      <circle
-        cx="384"
-        cy="400"
-        r="48"
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="32" />
-      <path
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="32"
-        d="M169.83 279.53l172.34 96.94M342.17 135.53l-172.34 96.94" />
+      <circle cx="128" cy="256" r="48" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
+      <circle cx="384" cy="112" r="48" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
+      <circle cx="384" cy="400" r="48" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
+      <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M169.83 279.53l172.34 96.94M342.17 135.53l-172.34 96.94" />
     </svg>
     <span>{{ $t('messages.general.share') }}</span>
   </a>
@@ -64,34 +52,3 @@
     </a>
   </div>
 </template>
-
-<script>
-export default {
-  props: {
-    product: { type: Object, required: true },
-  },
-  data() {
-    return {
-      isOpen: false,
-    };
-  },
-  computed: {
-    twitterUrl() {
-      return `https://twitter.com/intent/tweet?text=${this.product.name}&url=${window.location.href}`;
-    },
-    facebookUrl() {
-      return `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`;
-    },
-    pinterestUrl() {
-      return `https://pinterest.com/pin/create/button/?url=${window.location.href}&media=${this.product.image.sourceUrl}&description=${this.product.name}`;
-    },
-  },
-  methods: {
-    showShare() {
-      this.isOpen = true;
-    },
-  },
-};
-</script>
-
-<style></style>

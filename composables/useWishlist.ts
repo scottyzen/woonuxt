@@ -3,34 +3,27 @@ const theList = ref([] as any[]);
 
 export function useWishlist() {
   // function to add to the list
-  function addToList(item: any) {
+  function addToList(item: any): void {
     theList.value.push(item);
-    storeInLocalStorage();
+    localStorage.setItem('wishlist', JSON.stringify(theList.value));
   }
 
   // function to remove from the list
-  function removeFromList(databaseId: number) {
-    theList.value = theList.value.filter(
-      (item) => item.databaseId !== databaseId
-    );
-    storeInLocalStorage();
+  function removeFromList(databaseId: number): void {
+    theList.value = theList.value.filter( (item) => item.databaseId !== databaseId );
+    localStorage.setItem('wishlist', JSON.stringify(theList.value));
   }
 
   // function to check if an item is in the list
-  function isInList(databaseId: number) {
+  function isInList(databaseId: number): boolean {
     return theList.value.some((item) => item.databaseId === databaseId);
   }
 
-  function isEmpty() {
+  function isEmpty(): boolean {
     return theList.value.length === 0;
   }
 
-  function storeInLocalStorage() {
-    if (process.client)
-      localStorage.setItem('wishlist', JSON.stringify(theList.value));
-  }
-
-  function getFromLocalStorage() {
+  function getFromLocalStorage(): void {
     const wishlist = localStorage.getItem('wishlist');
     if (wishlist) theList.value = JSON.parse(wishlist);
   }

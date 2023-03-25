@@ -10,27 +10,33 @@ export function useSearching() {
 
   searchQuery.value = route.query.search as string;
 
-  function getSearchQuery() {
+  function getSearchQuery(): string {
     return route.query.search as string;
   }
 
-  function setSearchQuery(search: string) {
+  function setSearchQuery(search: string): void {
     searchQuery.value = search;
     router.push({ query: { ...route.query, search: search || undefined } });
-    setTimeout(() => { updateProductList() }, 50);
+    setTimeout(() => {
+      updateProductList();
+    }, 50);
   }
 
-  function clearSearchQuery() {
+  function clearSearchQuery(): void {
     setSearchQuery('');
   }
 
-  const isSearchActive = computed(() => { return !!searchQuery.value });
+  const isSearchActive = computed(() => {
+    return !!searchQuery.value;
+  });
 
-  function searchProducts(products: any[]) {
+  function searchProducts(products: any[]): any[] {
     const query = getSearchQuery();
-    return query ? products.filter((product: any) => {
-      return product.name.toLowerCase().includes(query.toLowerCase());
-    }) : products;
+    return query
+      ? products.filter((product: any) => {
+          return product.name.toLowerCase().includes(query.toLowerCase());
+        })
+      : products;
   }
 
   return { getSearchQuery, setSearchQuery, clearSearchQuery, searchProducts, isSearchActive };

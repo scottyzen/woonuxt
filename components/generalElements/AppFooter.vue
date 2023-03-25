@@ -8,9 +8,8 @@ const runtimeConfig = useRuntimeConfig();
       <div class="mr-auto">
         <Logo />
         <p class="mt-4 text-sm text-gray-700 xl:max-w-sm">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl sit amet aliquam lacinia, nunc odio lacinia tortor, vel
-          aliquam nisl lorem quis nunc. Sed euismod, nisl sit amet aliquam lacinia, nunc odio lacinia tortor, vel aliquam nisl lorem quis
-          nunc.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl sit amet aliquam lacinia, nunc odio lacinia tortor, vel aliquam nisl lorem quis nunc. Sed
+          euismod, nisl sit amet aliquam lacinia, nunc odio lacinia tortor, vel aliquam nisl lorem quis nunc.
         </p>
         <LangSwitcher class="mt-8" />
       </div>

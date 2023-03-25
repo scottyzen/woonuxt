@@ -1,3 +1,12 @@
+<script setup>
+const { loginUser, logoutUser, viewer, isPending } = useAuth();
+const route = useRoute();
+
+const activeTab = computed(() => {
+  return route.query.tab || 'my-details';
+});
+</script>
+
 <template>
   <div class="container">
     <LoginAndRegister v-if="!viewer" />
@@ -40,15 +49,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-const { loginUser, logoutUser, viewer, isPending } = useAuth();
-const route = useRoute();
-
-const activeTab = computed(() => {
-  return route.query.tab || 'my-details';
-});
-</script>
 
 <style lang="postcss" scoped>
 a.active {

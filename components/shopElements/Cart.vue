@@ -18,9 +18,7 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
         </ul>
 
         <div class="mb-8 px-8">
-          <NuxtLink
-            class="rounded-xl bg-gray-800 shadow-md text-white text-lg text-center p-3 block justify-evenly hover:bg-gray-900"
-            to="/checkout/">
+          <NuxtLink class="rounded-xl bg-gray-800 shadow-md text-white text-lg text-center p-3 block justify-evenly hover:bg-gray-900" to="/checkout/">
             <span class="mx-2">{{ $t('messages.shop.checkout') }}</span>
             <span v-html="cart.total" />
           </NuxtLink>
