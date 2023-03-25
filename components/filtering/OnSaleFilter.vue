@@ -29,13 +29,7 @@ const checkboxClicked = (e) => {
     </div>
     <div v-if="isOpen" class="mt-3 text-sm grid text-gray-500 gap-2">
       <div class="cursor-pointer flex gap-2 items-center">
-        <input
-          id="sale-true"
-          v-model="selectedTerms"
-          type="checkbox"
-          :value="true"
-          aria-label="Sale Products Only"
-          @click="checkboxClicked" />
+        <input id="sale-true" v-model="selectedTerms" type="checkbox" :value="true" aria-label="Sale Products Only" @click="checkboxClicked" />
       </div>
     </div>
   </div>

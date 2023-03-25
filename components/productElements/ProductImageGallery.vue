@@ -1,22 +1,23 @@
+<script setup lang="ts">
+defineProps({
+  firstImage: { type: String, required: true },
+  mainImage: { type: String, required: true },
+  gallery: { type: Object, required: true },
+  node: { type: Object, required: true },
+});
+
+const imageToShow = ref(0);
+
+const changeImage = (index = 0) => {
+  imageToShow.value = index;
+};
+</script>
+
 <template>
   <div v-if="mainImage" class="-mx-4 md:m-0">
     <SaleBadge :node="node" class="text-base top-4 right-4 absolute" />
-    <NuxtImg
-      v-show="imageToShow === null"
-      class="rounded-xl object-contain w-full min-w-[350px]"
-      width="700"
-      height="700"
-      fit="outside"
-      :src="firstImage"
-      fetchpriority="high" />
-    <NuxtImg
-      v-show="imageToShow === 0"
-      class="rounded-xl object-contain w-full min-w-[350px]"
-      width="700"
-      height="700"
-      fit="outside"
-      :src="mainImage"
-      fetchpriority="high" />
+    <NuxtImg v-show="imageToShow === null" class="rounded-xl object-contain w-full min-w-[350px]" width="700" height="700" fit="outside" :src="firstImage" fetchpriority="high" />
+    <NuxtImg v-show="imageToShow === 0" class="rounded-xl object-contain w-full min-w-[350px]" width="700" height="700" fit="outside" :src="mainImage" fetchpriority="high" />
     <NuxtImg
       v-for="(galleryImg, i) in gallery.nodes"
       v-show="imageToShow === i + 1"
@@ -27,12 +28,7 @@
       fit="outside"
       :src="galleryImg.sourceUrl" />
     <div v-if="gallery.nodes.length" class="my-4 gallery-images">
-      <NuxtImg
-        class="rounded-xl cursor-pointer"
-        width="110"
-        height="140"
-        :src="firstImage"
-        @click.native="changeImage(null)" />
+      <NuxtImg class="rounded-xl cursor-pointer" width="110" height="140" :src="firstImage" @click.native="changeImage(null)" />
       <NuxtImg
         v-for="(galleryImg, i) in gallery.nodes"
         :key="i"
@@ -45,32 +41,6 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  props: {
-    firstImage: { type: String, required: true },
-    mainImage: { type: String, required: true },
-    gallery: { type: Object, required: true },
-    node: { type: Object, required: true },
-  },
-  data() {
-    return {
-      imageToShow: 0,
-    };
-  },
-  watch: {
-    mainImage(newImage) {
-      this.imageToShow = 0;
-    },
-  },
-  methods: {
-    changeImage(index) {
-      this.imageToShow = index;
-    },
-  },
-};
-</script>
 
 <style>
 .gallery-images {

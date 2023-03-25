@@ -9,14 +9,11 @@ export function useFiltering() {
 
   filterQuery.value = route.query.filter as string;
 
-  function getFilter(filterName: string) {
-    return (
-      filterQuery.value?.split(`${filterName}[`)[1]?.split(']')[0]?.split(',') || []
-    );
+  function getFilter(filterName: string): string[] {
+    return filterQuery.value?.split(`${filterName}[`)[1]?.split(']')[0]?.split(',') || [];
   }
 
   function setFilter(filterName: string, filterValue: string[]) {
-
     let newFilterQuery = filterQuery.value || '';
 
     // If there are filters and filterName is not one of them, add the filter query
@@ -24,7 +21,8 @@ export function useFiltering() {
       newFilterQuery = filterQuery.value ? `${filterQuery.value},${filterName}[${filterValue}]` : `${filterName}[${filterValue}]`;
     } else {
       // If filterValue is empty, remove the filter query
-      newFilterQuery = !filterValue.length ? filterQuery.value.replace(`${filterName}[${getFilter(filterName)}]`, '')
+      newFilterQuery = !filterValue.length
+        ? filterQuery.value.replace(`${filterName}[${getFilter(filterName)}]`, '')
         : filterQuery.value.replace(`${filterName}[${getFilter(filterName)}]`, `${filterName}[${filterValue}]`);
     }
 
@@ -47,22 +45,24 @@ export function useFiltering() {
       router.push({ query: { ...route.query, filter: newFilterQuery } });
     }
 
-    setTimeout(() => { updateProductList() }, 50);
-
+    setTimeout(() => {
+      updateProductList();
+    }, 50);
   }
 
-  function resetFilter() {
+  function resetFilter(): void {
     filterQuery.value = '';
     router.push({ query: { ...route.query, filter: undefined } });
 
-    setTimeout(() => { updateProductList() }, 50);
+    setTimeout(() => {
+      updateProductList();
+    }, 50);
   }
 
   const isFiltersActive = computed(() => !!filterQuery.value);
 
   // Define a function to filter the products
-  function filterProducts(products: any[]) {
-
+  function filterProducts(products: any[]): any[] {
     return products.filter((product: any) => {
       // Category filter
       const category = getFilter('category') || []; // ["category-slug"]
@@ -76,24 +76,24 @@ export function useFiltering() {
 
       // Star rating filter
       const starRating = getFilter('rating') || [];
-      const ratingCondition = starRating.length ? product.averageRating ? product.averageRating >= parseFloat(starRating[0]) : false : true;
+      const ratingCondition = starRating.length ? (product.averageRating ? product.averageRating >= parseFloat(starRating[0]) : false) : true;
 
       // Product attribute filters
       const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES?.map((attribute: any) => attribute.slug) || [];
-      const attributeCondition = globalProductAttributes.map((attribute: string) => {
-        const attributeValues = getFilter(attribute) || [];
-        if (!attributeValues.length) return true;
-        return product.terms?.nodes?.find((node: any) => node.taxonomyName === attribute && attributeValues.includes(node.slug));
-      }).every((condition: object) => condition);
+      const attributeCondition = globalProductAttributes
+        .map((attribute: string) => {
+          const attributeValues = getFilter(attribute) || [];
+          if (!attributeValues.length) return true;
+          return product.terms?.nodes?.find((node: any) => node.taxonomyName === attribute && attributeValues.includes(node.slug));
+        })
+        .every((condition: object) => condition);
 
       // onSale filter
       const onSale = getFilter('sale') || [];
       const saleItemsOnlyCondition = onSale.length ? product.onSale : true;
 
-      return (ratingCondition && priceCondition && attributeCondition && categoryCondition && saleItemsOnlyCondition);
-
+      return ratingCondition && priceCondition && attributeCondition && categoryCondition && saleItemsOnlyCondition;
     });
-
   }
 
   return { getFilter, setFilter, resetFilter, isFiltersActive, filterProducts };

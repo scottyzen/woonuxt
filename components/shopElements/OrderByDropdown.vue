@@ -16,11 +16,7 @@ watch([orderby, order], () => {
       class="bg-white border rounded-l-md font-medium border-gray-300 text-sm p-2 text-gray-500 relative inline-flex items-center hover:bg-gray-50 focus:z-20"
       aria-label="Sort"
       @click="order = order === 'ASC' ? 'DESC' : 'ASC'">
-      <Icon
-        name="ion:filter-outline"
-        size="18"
-        :class="order === 'ASC' ? 'rotate-180' : ''"
-        class="transform transform-origin-center transition-transform" />
+      <Icon name="ion:filter-outline" size="18" :class="order === 'ASC' ? 'rotate-180' : ''" class="transform transform-origin-center transition-transform" />
     </button>
     <select
       v-model="orderby"

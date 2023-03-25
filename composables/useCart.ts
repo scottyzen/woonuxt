@@ -22,7 +22,7 @@ export function useCart() {
   }
 
   // toggle the cart visibility
-  function toggleCart(state: boolean | undefined = undefined) {
+  function toggleCart(state: boolean | undefined = undefined): void {
     state === undefined ? (isShowingCart.value = !isShowingCart.value) : (isShowingCart.value = state);
   }
 
@@ -30,7 +30,6 @@ export function useCart() {
   async function addToCart(input: AddToCartInput) {
     isUpdatingCart.value = true;
     const { addToCart } = await GqlAddToCart({ input });
-
     cart.value = addToCart?.cart || null;
   }
 
@@ -50,7 +49,7 @@ export function useCart() {
   }
 
   // empty the cart
-  async function emptyCart() {
+  async function emptyCart(): Promise<void> {
     const { emptyCart } = await GqlEmptyCart();
     cart.value = emptyCart?.cart || null;
   }
@@ -70,8 +69,7 @@ export function useCart() {
       cart.value = applyCoupon?.cart || null;
       isUpdatingCoupon.value = false;
       return { message: null };
-    }
-    catch (error: any) {
+    } catch (error: any) {
       isUpdatingCoupon.value = false;
       const gqlErrors = error?.gqlErrors;
       if (gqlErrors) {
@@ -88,12 +86,10 @@ export function useCart() {
     try {
       const { removeCoupons } = await GqlRemoveCoupons({ codes: [code] });
       cart.value = removeCoupons?.cart || null;
-    }
-    catch (error) {
+    } catch (error) {
       console.error(error);
     }
   }
-
 
   watch(cart, (val) => {
     isUpdatingCart.value = false;

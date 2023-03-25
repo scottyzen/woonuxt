@@ -8,20 +8,21 @@ export function useSorting() {
 
   orderQuery.value = route.query.orderby as string;
 
-  function getOrderQuery() {
+  function getOrderQuery(): { orderBy: string; order: string } {
     return { orderBy: route.query.orderby as string, order: route.query.order as string };
   }
 
-  function setOrderQuery(orderby: string, order?: string) {
+  function setOrderQuery(orderby: string, order?: string): void {
     router.push({ query: { ...route.query, orderby: orderby ? orderby : undefined, order: order ? order : undefined } });
-    setTimeout(() => { updateProductList() }, 100);
+    setTimeout(() => {
+      updateProductList();
+    }, 100);
   }
 
   const isSortingActive = computed(() => !!orderQuery.value);
 
   // Define a function to order the products
   function sortProducts(products: any) {
-
     if (!isSortingActive) return;
 
     const orderQuery = getOrderQuery();
@@ -56,9 +57,7 @@ export function useSorting() {
         default:
           return order !== 'DESC' ? aDate - bDate : bDate - aDate;
       }
-
     });
-
   }
 
   return { getOrderQuery, setOrderQuery, isSortingActive, orderQuery, sortProducts };

@@ -2,10 +2,7 @@ export const useAuth = () => {
   const { refreshCart } = useCart();
 
   const customer = useState<any | null>('customer', () => {
-    return {
-      billing: {},
-      shipping: {},
-    }
+    return { billing: {}, shipping: {} };
   });
   const viewer = useState<any | null>('viewer', () => null);
   const isPending = useState<boolean>('isPending', () => false);
@@ -44,7 +41,6 @@ export const useAuth = () => {
     }
   };
 
-
   // Register the user
   const registerUser = async (userInfo: CreateAccountInput) => {
     isPending.value = true;
@@ -58,10 +54,8 @@ export const useAuth = () => {
     }
   };
 
-
   // Update the user state
-  const updateCustomer = (data: any) => {
-
+  const updateCustomer = (data: any): void => {
     const sessionToken = data?.sessionToken;
     if (sessionToken) {
       useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken}` });
@@ -72,7 +66,7 @@ export const useAuth = () => {
     isPending.value = false;
   };
 
-  const updateViewer = (data: any) => {
+  const updateViewer = (data: any): void => {
     viewer.value = data;
     isPending.value = false;
   };
@@ -85,6 +79,6 @@ export const useAuth = () => {
     updateViewer,
     logoutUser,
     isPending,
-    registerUser
+    registerUser,
   };
 };

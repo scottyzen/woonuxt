@@ -34,9 +34,7 @@ const numberAndPercentageOfEachRating = computed(() => {
         </div>
         <div class="flex-1 relative">
           <div class="rounded-full bg-gray-200 h-2.5 w-full"></div>
-          <div
-            class="rounded-full bg-yellow-400 h-2.5 top-0 left-0 absolute"
-            :style="{ width: rating.percentage + '%' }"></div>
+          <div class="rounded-full bg-yellow-400 h-2.5 top-0 left-0 absolute" :style="{ width: rating.percentage + '%' }"></div>
         </div>
       </div>
     </div>
