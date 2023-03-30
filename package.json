@@ -12,7 +12,7 @@
     "pretty": "prettier --write ."
   },
   "devDependencies": {
-    "@nuxt/image-edge": "^1.0.0-28001428.0aa03b6",
+    "@nuxt/image-edge": "^1.0.0-28002839.c6a7c9b",
     "@nuxtjs/eslint-config-typescript": "^12.0.0",
     "@nuxtjs/i18n": "^8.0.0-beta.10",
     "eslint": "^8.37.0",
