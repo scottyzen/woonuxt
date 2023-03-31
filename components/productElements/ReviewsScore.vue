@@ -1,7 +1,7 @@
 <script setup>
 const props = defineProps({
   reviews: { type: Object, default: null },
-  size: { type: Number, default: 24 }
+  size: { type: Number, default: 21 }
 });
 
 const numberAndPercentageOfEachRating = computed(() => {
@@ -23,6 +23,8 @@ const hovered = ref(0);
 const rating = ref(null)
 const content = ref(null)
 const authorEmail = ref(null)
+const errorMessage = ref('')
+const successMessage = ref('')
 
 function setRating(i) {
   rating.value = i;
@@ -46,8 +48,16 @@ async function addComment() {
   }
   try {
     await GqlWriteReview(variables);
+    successMessage.value = 'Your review is awaiting approval'
+    setTimeout(() => {
+      successMessage.value = ''
+      show.value = false
+    }, 4000)
   } catch (error) {
-    console.error(error)
+    errorMessage.value = error?.gqlErrors?.[0].message
+    setTimeout(() => {
+      errorMessage.value = ''
+    }, 5000)
   }
 }
 </script>
@@ -76,31 +86,43 @@ async function addComment() {
     <div class="text-sm mb-4">If you have used this product, we would love to hear about your experience.</div>
     <button @click="show = !show" class="border rounded-lg text-center w-full p-2">{{ show ? $t('messages.shop.close') : $t('messages.shop.writeReview') }}</button>
     <transition class="ease-in-out transform transition-all" name="form">
-      <form v-if="show" @submit.prevent="addComment">
-        <div>
-          <Icon 
-            v-for="i in 5" 
-            :key="i" 
-            name="ion:star" 
-            @click="setRating(i)"
-            @mouseover="setHovered(i)"
-            @mouseout="resetHovered"
-            :size="size + ''"
-            :class="(rating < i && i > hovered) ? 'disable-star' : 'checked-star'"
-          />
+      <form v-if="show" @submit.prevent="addComment" class="writeReview">
+        <div class="w-full text-gray-500">
+          <div class="p-5 mt-3 grid gap-2 border rounded-lg">
+            <div class="block text-center mb-1.5">
+              <label class="text-center text-sm block relative w-72 m-auto">{{ $t('messages.shop.rateReview') }} <span class="text-red-500">*</span></label>
+              <div class="gap-1 flex justify-center mt-2">
+                <div v-for="i in 5"
+                  @click="setRating(i)"
+                  @mouseover="setHovered(i)"
+                  @mouseout="resetHovered"
+                  :key="i"
+                  class="grid p-1 rounded"
+                  :class="(rating < i && i > hovered) ? 'disable-star' : 'checked-star'"
+                >
+                  <Icon name="ion:star" :size="size + ''" />
+                </div>
+              </div>
+            </div>
+            <div class="w-full col-span-full">
+              <label for="content" class="text-sm mb-0.5">{{ $t('messages.shop.rateContent') }} <span class="text-red-500">*</span></label>
+              <textarea class="w-full" id="content" v-model="content" required></textarea>
+            </div>
+            <div class="w-full col-span-full">
+              <label for="author" class="text-sm mb-0.5">{{ $t('messages.shop.rateEmail') }} <span class="text-red-500">*</span></label>
+              <input class="w-full" id="author" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" v-model="authorEmail" required>
+            </div>
+            <Transition name="scale-y" mode="out-in">
+              <div v-if="errorMessage" class="my-4 text-sm text-red-500" v-html="errorMessage"></div>
+            </Transition>
+            <Transition name="scale-y" mode="out-in">
+              <div v-if="successMessage" class="my-4 text-sm text-green-500" v-html="successMessage"></div>
+            </Transition>
+            <div class="w-full col-span-full text-center mt-3">
+              <button class="transition font-semibold border rounded-md text-center w-full p-2 bg-amber-300 border-amber-400 text-amber-500 hover:(bg-amber-400 border-amber-500 text-amber-600)" type="submit" :disabled="rating === null">{{ $t('messages.shop.submit') }}</button>
+            </div>
+          </div>
         </div>
-        <br>
-        <div>
-          <label for="content">Comment:</label>
-          <textarea id="content" v-model="content" required></textarea>
-        </div>
-        <br>
-        <div>
-          <label for="author">Your Email:</label>
-          <input id="author" type="email" v-model="authorEmail" required>
-        </div>
-        <br>
-        <button type="submit">Add Comment</button>
       </form>
     </transition>
   </div>
@@ -110,21 +132,25 @@ async function addComment() {
 .form-enter-from,
 .form-leave-to {
   @apply opacity-0 max-h-0;
-  transition: opacity 0.25s ease-out, max-height 0.2s ease-out;
+  transition: opacity 0.25s ease-out, max-height 0.4s ease-out;
 }
 
 .form-enter-to,
 .form-leave-from {
-  @apply opacity-100 max-h-80;
-  transition: opacity 0.25s ease-in-out, max-height 0.2s ease-in-out;
+  @apply opacity-100 max-h-lg;
+  transition: opacity 0.25s ease-in-out, max-height 0.4s ease-in-out;
 }
 .disable-star {
+  @apply bg-white shadow-sm text-gray-300 border border-gray-300;
   transition: 0.15s ease-in-out;
-  color: #ccc;
 }
 .checked-star {
+  @apply text-amber-400 bg-amber-50 border border-amber-400;
   transition: 0.15s ease-in-out;
-  color: #F9BF3B;
-	filter: drop-shadow(0 0 2px #F9BF3B);
+  box-shadow: 0 0px 4px 0 rgb(249 191 59 / 21%);
+}
+.writeReview input,
+.writeReview textarea {
+  @apply bg-white border rounded-md outline-none border-gray-300 shadow-sm w-full py-2 px-4;
 }
 </style>
