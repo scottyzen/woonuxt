@@ -1,6 +1,7 @@
 <script setup>
 const props = defineProps({
   reviews: { type: Object, default: null },
+  productId: { type: Number, default: null },
   size: { type: Number, default: 21 }
 });
 
@@ -41,7 +42,7 @@ function resetHovered() {
 
 async function addComment() {
   const variables = {
-    commentOn: 97,
+    commentOn: props.productId,
     author: authorEmail.value.split('@')[0],
     content: content.value,
     rating: rating.value,
