@@ -123,7 +123,7 @@ async function addComment() {
               <button
                 class="flex gap-4 font-bold justify-center items-center transition font-semibold rounded-md w-full p-2 bg-amber-300 text-amber-900 hover:bg-amber-400"
                 type="submit">
-                <LoadingIcon v-if="isPending || true" stroke="4" size="16" color="#78350F" />
+                <LoadingIcon v-if="isPending" stroke="4" size="16" color="#78350F" />
                 <span>{{ $t('messages.shop.submit') }}</span>
               </button>
             </div>
