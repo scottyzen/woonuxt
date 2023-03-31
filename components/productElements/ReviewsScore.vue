@@ -25,6 +25,7 @@ const content = ref(null)
 const authorEmail = ref(null)
 const errorMessage = ref('')
 const successMessage = ref('')
+const isPending = ref(false)
 
 function setRating(i) {
   rating.value = i;
@@ -47,6 +48,7 @@ async function addComment() {
     authorEmail: authorEmail.value
   }
   try {
+    isPending.value = true
     await GqlWriteReview(variables);
     successMessage.value = 'Your review is awaiting approval'
     setTimeout(() => {
@@ -58,6 +60,8 @@ async function addComment() {
     setTimeout(() => {
       errorMessage.value = ''
     }, 5000)
+  } finally {
+    isPending.value = false
   }
 }
 </script>
@@ -119,7 +123,10 @@ async function addComment() {
               <div v-if="successMessage" class="my-4 text-sm text-green-500" v-html="successMessage"></div>
             </Transition>
             <div class="w-full col-span-full text-center mt-3">
-              <button class="transition font-semibold border rounded-md text-center w-full p-2 bg-amber-300 border-amber-400 text-amber-500 hover:(bg-amber-400 border-amber-500 text-amber-600)" type="submit" :disabled="rating === null">{{ $t('messages.shop.submit') }}</button>
+              <button class="flex gap-4 justify-center items-center transition font-semibold border rounded-md text-center w-full p-2 bg-amber-300 border-amber-400 text-amber-500 hover:(bg-amber-400 border-amber-500 text-amber-600)" type="submit" :disabled="rating === null">
+                <LoadingIcon v-if="isPending" stroke="4" size="16" color="#f59e0b" />
+                <span>{{ $t('messages.shop.submit') }}</span>
+              </button>
             </div>
           </div>
         </div>
