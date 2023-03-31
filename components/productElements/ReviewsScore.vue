@@ -1,6 +1,7 @@
 <script setup>
 const props = defineProps({
   reviews: { type: Object, default: null },
+  size: { type: Number, default: 24 }
 });
 
 const numberAndPercentageOfEachRating = computed(() => {
@@ -16,6 +17,39 @@ const numberAndPercentageOfEachRating = computed(() => {
     })
     .reverse();
 });
+
+const show = ref(false)
+const hovered = ref(0);
+const rating = ref(null)
+const content = ref(null)
+const authorEmail = ref(null)
+
+function setRating(i) {
+  rating.value = i;
+}
+
+function setHovered(i) {
+  hovered.value = i;
+}
+
+function resetHovered() {
+  hovered.value = 0;
+}
+
+async function addComment() {
+  const variables = {
+    commentOn: 97,
+    author: authorEmail.value.split('@')[0],
+    content: content.value,
+    rating: rating.value,
+    authorEmail: authorEmail.value
+  }
+  try {
+    await GqlWriteReview(variables);
+  } catch (error) {
+    console.error(error)
+  }
+}
 </script>
 
 <template>
@@ -40,6 +74,57 @@ const numberAndPercentageOfEachRating = computed(() => {
     </div>
     <div class="mt-10 text-xl mb-2 text-gray-900">Share your thoughts</div>
     <div class="text-sm mb-4">If you have used this product, we would love to hear about your experience.</div>
-    <button class="border rounded-lg text-center w-full p-2">{{ $t('messages.shop.writeReview') }}</button>
+    <button @click="show = !show" class="border rounded-lg text-center w-full p-2">{{ show ? $t('messages.shop.close') : $t('messages.shop.writeReview') }}</button>
+    <transition class="ease-in-out transform transition-all" name="form">
+      <form v-if="show" @submit.prevent="addComment">
+        <div>
+          <Icon 
+            v-for="i in 5" 
+            :key="i" 
+            name="ion:star" 
+            @click="setRating(i)"
+            @mouseover="setHovered(i)"
+            @mouseout="resetHovered"
+            :size="size + ''"
+            :class="(rating < i && i > hovered) ? 'disable-star' : 'checked-star'"
+          />
+        </div>
+        <br>
+        <div>
+          <label for="content">Comment:</label>
+          <textarea id="content" v-model="content" required></textarea>
+        </div>
+        <br>
+        <div>
+          <label for="author">Your Email:</label>
+          <input id="author" type="email" v-model="authorEmail" required>
+        </div>
+        <br>
+        <button type="submit">Add Comment</button>
+      </form>
+    </transition>
   </div>
 </template>
+
+<style lang="postcss">
+.form-enter-from,
+.form-leave-to {
+  @apply opacity-0 max-h-0;
+  transition: opacity 0.25s ease-out, max-height 0.2s ease-out;
+}
+
+.form-enter-to,
+.form-leave-from {
+  @apply opacity-100 max-h-80;
+  transition: opacity 0.25s ease-in-out, max-height 0.2s ease-in-out;
+}
+.disable-star {
+  transition: 0.15s ease-in-out;
+  color: #ccc;
+}
+.checked-star {
+  transition: 0.15s ease-in-out;
+  color: #F9BF3B;
+	filter: drop-shadow(0 0 2px #F9BF3B);
+}
+</style>
