@@ -111,11 +111,11 @@ async function addComment() {
             </div>
             <div class="w-full col-span-full">
               <label for="content" class="text-sm mb-0.5">{{ $t('messages.shop.rateContent') }} <span class="text-red-500">*</span></label>
-              <textarea class="w-full" id="content" v-model="content" required></textarea>
+              <textarea class="w-full" id="content" placeholder="Great Quality" v-model="content" required></textarea>
             </div>
             <div class="w-full col-span-full">
               <label for="author" class="text-sm mb-0.5">{{ $t('messages.shop.rateEmail') }} <span class="text-red-500">*</span></label>
-              <input class="w-full" id="author" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" v-model="authorEmail" required>
+              <input class="w-full" id="author" placeholder="example@example.com" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" v-model="authorEmail" required>
             </div>
             <Transition name="scale-y" mode="out-in">
               <div v-if="errorMessage" class="my-4 text-sm text-red-500" v-html="errorMessage"></div>
