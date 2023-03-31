@@ -2,7 +2,7 @@
 const props = defineProps({
   reviews: { type: Object, default: null },
   productId: { type: Number, default: null },
-  size: { type: Number, default: 21 }
+  size: { type: Number, default: 21 },
 });
 
 const numberAndPercentageOfEachRating = computed(() => {
@@ -19,18 +19,14 @@ const numberAndPercentageOfEachRating = computed(() => {
     .reverse();
 });
 
-const show = ref(false)
+const show = ref(false);
 const hovered = ref(0);
-const rating = ref(null)
-const content = ref(null)
-const authorEmail = ref(null)
-const errorMessage = ref('')
-const successMessage = ref('')
-const isPending = ref(false)
-
-function setRating(i) {
-  rating.value = i;
-}
+const rating = ref(null);
+const content = ref(null);
+const authorEmail = ref(null);
+const errorMessage = ref('');
+const successMessage = ref('');
+const isPending = ref(false);
 
 function setHovered(i) {
   hovered.value = i;
@@ -46,23 +42,23 @@ async function addComment() {
     author: authorEmail.value.split('@')[0],
     content: content.value,
     rating: rating.value,
-    authorEmail: authorEmail.value
-  }
+    authorEmail: authorEmail.value,
+  };
   try {
-    isPending.value = true
+    isPending.value = true;
     await GqlWriteReview(variables);
-    successMessage.value = 'Your review is awaiting approval'
+    successMessage.value = 'Your review is awaiting approval';
     setTimeout(() => {
-      successMessage.value = ''
-      show.value = false
-    }, 4000)
+      successMessage.value = '';
+      show.value = false;
+    }, 4000);
   } catch (error) {
-    errorMessage.value = error?.gqlErrors?.[0].message
+    errorMessage.value = error?.gqlErrors?.[0].message;
     setTimeout(() => {
-      errorMessage.value = ''
-    }, 5000)
+      errorMessage.value = '';
+    }, 5000);
   } finally {
-    isPending.value = false
+    isPending.value = false;
   }
 }
 </script>
@@ -90,23 +86,23 @@ async function addComment() {
     <div class="mt-10 text-xl mb-2 text-gray-900">Share your thoughts</div>
     <div class="text-sm mb-4">If you have used this product, we would love to hear about your experience.</div>
     <button @click="show = !show" class="border rounded-lg text-center w-full p-2">{{ show ? $t('messages.shop.close') : $t('messages.shop.writeReview') }}</button>
-    <transition class="ease-in-out transform transition-all" name="form">
+    <transition class="ease-in-out transform transition-all" name="scale-y">
       <form v-if="show" @submit.prevent="addComment" class="writeReview">
         <div class="w-full text-gray-500">
           <div class="p-5 mt-3 grid gap-2 border rounded-lg">
             <div class="block text-center mb-1.5">
-              <label class="text-center text-sm block relative w-72 m-auto">{{ $t('messages.shop.rateReview') }} <span class="text-red-500">*</span></label>
-              <div class="gap-1 flex justify-center mt-2">
-                <div v-for="i in 5"
-                  @click="setRating(i)"
-                  @mouseover="setHovered(i)"
-                  @mouseout="resetHovered"
+              <label class="text-center text-sm block relative m-auto">{{ $t('messages.shop.rateReview') }} <span class="text-red-500">*</span></label>
+              <div class="gap-1 flex justify-center mt-2 relative">
+                <label
+                  v-for="i in 5"
                   :key="i"
                   class="grid p-1 rounded"
-                  :class="(rating < i && i > hovered) ? 'disable-star' : 'checked-star'"
-                >
+                  :class="rating < i && i > hovered ? 'disable-star' : 'checked-star'"
+                  @mouseover="setHovered(i)"
+                  @mouseout="resetHovered">
+                  <input type="radio" class="overflow-hidden appearance-none opacity-0 absolute" name="rating" :value="i" v-model="rating" required />
                   <Icon name="ion:star" :size="size + ''" />
-                </div>
+                </label>
               </div>
             </div>
             <div class="w-full col-span-full">
@@ -115,7 +111,7 @@ async function addComment() {
             </div>
             <div class="w-full col-span-full">
               <label for="author" class="text-sm mb-0.5">{{ $t('messages.shop.rateEmail') }} <span class="text-red-500">*</span></label>
-              <input class="w-full" id="author" placeholder="example@example.com" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" v-model="authorEmail" required>
+              <input class="w-full" id="author" placeholder="example@example.com" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" v-model="authorEmail" required />
             </div>
             <Transition name="scale-y" mode="out-in">
               <div v-if="errorMessage" class="my-4 text-sm text-red-500" v-html="errorMessage"></div>
@@ -124,8 +120,10 @@ async function addComment() {
               <div v-if="successMessage" class="my-4 text-sm text-green-500" v-html="successMessage"></div>
             </Transition>
             <div class="w-full col-span-full text-center mt-3">
-              <button class="flex gap-4 justify-center items-center transition font-semibold border rounded-md text-center w-full p-2 bg-amber-300 border-amber-400 text-amber-500 hover:(bg-amber-400 border-amber-500 text-amber-600)" type="submit" :disabled="rating === null">
-                <LoadingIcon v-if="isPending" stroke="4" size="16" color="#f59e0b" />
+              <button
+                class="flex gap-4 font-bold justify-center items-center transition font-semibold rounded-md w-full p-2 bg-amber-300 text-amber-900 hover:bg-amber-400"
+                type="submit">
+                <LoadingIcon v-if="isPending || true" stroke="4" size="16" color="#78350F" />
                 <span>{{ $t('messages.shop.submit') }}</span>
               </button>
             </div>
@@ -136,18 +134,7 @@ async function addComment() {
   </div>
 </template>
 
-<style lang="postcss">
-.form-enter-from,
-.form-leave-to {
-  @apply opacity-0 max-h-0;
-  transition: opacity 0.25s ease-out, max-height 0.4s ease-out;
-}
-
-.form-enter-to,
-.form-leave-from {
-  @apply opacity-100 max-h-lg;
-  transition: opacity 0.25s ease-in-out, max-height 0.4s ease-in-out;
-}
+<style lang="postcss" scoped>
 .disable-star {
   @apply bg-white shadow-sm text-gray-300 border border-gray-300;
   transition: 0.15s ease-in-out;
