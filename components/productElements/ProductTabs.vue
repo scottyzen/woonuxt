@@ -17,7 +17,7 @@ const show = ref(0);
       <div v-if="show === 1">
         <div class="flex flex-wrap gap-32 items-start">
           <div class="flex max-w-sm gap-4 prose">
-            <ReviewsScore :reviews="product.reviews" />
+            <ReviewsScore :reviews="product.reviews" :productId="product.databaseId" />
           </div>
           <div class="divide-y flex-1">
             <div v-for="review in product.reviews.edges" :key="review.id" class="my-2 py-8">
