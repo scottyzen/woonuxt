@@ -26,7 +26,7 @@ const show = ref(0);
                 <div class="grid gap-1">
                   <div class="text-sm">
                     <span class="font-semibold">{{ review.node.author.node.name }}</span>
-                    <span class="italic text-gray-400"> – {{ new Date(review.node.date).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) }}</span>
+                    <span class="italic text-gray-400"> – {{ new Date(review.node.date).toLocaleString($t('messages.general.langCode'), { month: 'long', day: 'numeric', year: 'numeric' }) }}</span>
                   </div>
                   <StarRating :rating="review.rating" :hide-count="true" class="text-sm" />
                 </div>
