@@ -34,7 +34,11 @@ export function useSearching() {
     const query = getSearchQuery();
     return query
       ? products.filter((product: any) => {
-          return product.name.toLowerCase().includes(query.toLowerCase());
+          return (
+            product.name.toLowerCase().includes(query.toLowerCase()) ||
+            product.description.toLowerCase().includes(query.toLowerCase()) ||
+            product.shortDescription.toLowerCase().includes(query.toLowerCase())
+          );
         })
       : products;
   }
