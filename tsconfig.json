@@ -1,5 +1,6 @@
 {
   "extends": "./.nuxt/tsconfig.json",
+  "allowJs": true,
   "compilerOptions": {
     "types": ["nuxt-windicss", "@nuxt/image-edge", "@nuxtjs/i18n"]
   }
