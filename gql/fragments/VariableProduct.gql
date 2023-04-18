@@ -10,6 +10,7 @@ fragment VariableProduct on VariableProduct {
   height
   image {
     sourceUrl
+    cartSourceUrl: sourceUrl(size: THUMBNAIL)
     altText
     title
   }
