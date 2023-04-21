@@ -38,7 +38,7 @@ const updatePaymentMethod = (value) => {
 }
 
 .payment-options .option {
-  @apply bg-white border rounded-lg cursor-pointer flex w-full py-3 px-4 gap-2 items-center hover: border-purple-300;
+  @apply bg-white border rounded-lg cursor-pointer flex w-full py-3 px-4 gap-2 items-center hover:border-purple-300;
 }
 
 .payment-options .active-option {

@@ -58,7 +58,7 @@ const numberOfPages = computed(() => Math.ceil(products.value.length / productsP
 .prev,
 .next,
 .page-number {
-  @apply bg-white border font-medium border-gray-300 text-sm p-2 text-gray-500 relative inline-flex items-center hover: bg-gray-50 focus:z-5;
+  @apply bg-white border font-medium border-gray-300 text-sm p-2 text-gray-500 relative inline-flex items-center hover:bg-gray-50 focus:z-10;
 }
 
 .prev {

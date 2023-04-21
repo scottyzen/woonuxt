@@ -4,13 +4,7 @@
     <form class="mb-4" @submit.prevent="loginOrRegister(userInfo)">
       <label v-if="formView == 'register'" for="email"
         >Email <span class="text-red-500">*</span> <br />
-        <input
-          id="email"
-          v-model="userInfo.email"
-          placeholder="Email"
-          type="email"
-          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-          required />
+        <input id="email" v-model="userInfo.email" placeholder="Email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required />
       </label>
       <label for="username"
         >{{ $t('messages.account.username') }} <span class="text-red-500">*</span> <br />
@@ -33,11 +27,13 @@
     </form>
     <div v-if="formView == 'login'" class="my-4 text-center">
       {{ $t('messages.account.noAccount') }}
-      <a class="cursor-pointer underline" @click="formView = 'register'">{{ $t('messages.general.please') }} {{ $t('messages.account.accountRegister') }}</a>.
+      <a class="cursor-pointer underline" @click="formView = 'register'">{{ $t('messages.general.please') }} {{ $t('messages.account.accountRegister') }}</a
+      >.
     </div>
     <div v-if="formView == 'register'" class="my-4 text-center">
       {{ $t('messages.account.hasAccount') }}
-      <a class="cursor-pointer underline" @click="formView = 'login'">{{ $t('messages.general.please') }} {{ $t('messages.account.accountLogin') }}</a>.
+      <a class="cursor-pointer underline" @click="formView = 'login'">{{ $t('messages.general.please') }} {{ $t('messages.account.accountLogin') }}</a
+      >.
     </div>
   </div>
 </template>
@@ -89,6 +85,6 @@ button {
 }
 
 form button {
-  @apply rounded-lg font-bold bg-gray-800 text-white py-3 px-8 hover: bg-gray-800;
+  @apply rounded-lg font-bold bg-gray-800 text-white py-3 px-8 hover:bg-gray-800;
 }
 </style>

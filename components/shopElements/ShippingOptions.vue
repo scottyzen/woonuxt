@@ -45,7 +45,7 @@ const setActiveOption = async (id) => {
 }
 
 .shipping-options .option {
-  @apply bg-white border rounded-lg cursor-pointer w-full py-2 px-4 hover: border-purple-300;
+  @apply bg-white border rounded-lg cursor-pointer w-full py-2 px-4 hover:border-purple-300;
 }
 
 .shipping-options .active-option {

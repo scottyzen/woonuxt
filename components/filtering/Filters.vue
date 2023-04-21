@@ -52,7 +52,7 @@ const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES
 
 #filters input[type='checkbox'],
 #filters input[type='radio'] {
-  @apply bg-white border rounded-lg cursor-pointer font-sans outline-none border-gray-300 w-full p-3 transition-all duration-200 appearance-none hover: border-primary;
+  @apply bg-white border rounded-lg cursor-pointer font-sans outline-none border-gray-300 w-full p-3 transition-all duration-200 appearance-none hover:border-primary;
   width: 1em;
   height: 1em;
   position: relative;
@@ -98,7 +98,7 @@ const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES
 
 #filters input[type='checkbox'] + label,
 #filters input[type='radio'] + label {
-  @apply cursor-pointer text-gray-500 hover: text-gray-800;
+  @apply cursor-pointer text-gray-500 hover:text-gray-800;
 }
 
 #filters input[type='checkbox']:checked + label,
@@ -142,8 +142,9 @@ const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES
 
 @media (max-width: 768px) {
   #filters {
-    @apply bg-white h-full h-screen p-8 transform pl-2 transition-all ease-in-out bottom-0 left-4 z-60 -translate-x-[110vw] duration-500 overflow-auto fixed;
+    @apply bg-white h-full p-8 transform pl-2 transition-all ease-in-out bottom-0 left-4 -translate-x-[110vw] duration-500 overflow-auto fixed;
     box-shadow: -100px 0 0 white, -200px 0 0 white, -300px 0 0 white;
+    z-index: 60;
   }
 
   .show-filters #filters {
