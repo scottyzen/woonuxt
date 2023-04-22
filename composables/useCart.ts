@@ -1,5 +1,5 @@
 export function useCart() {
-  const cart = useState<any>('cart', () => null);
+  const cart = useState<Cart | null>('cart', () => null);
   const isShowingCart = useState<boolean>('isShowingCart', () => false);
   const isUpdatingCart = useState<boolean>('isUpdatingCart', () => false);
   const isUpdatingCoupon = useState<boolean>('isUpdatingCoupon', () => false);
@@ -7,18 +7,22 @@ export function useCart() {
   // Refesh the cart from the server
   async function refreshCart() {
     try {
-      const data = await GqlGetCart();
-      cart.value = data.cart || null;
+      const { cart, customer, viewer } = await GqlGetCart();
 
       const { updateCustomer, updateViewer } = useAuth();
-      updateCustomer(data.customer);
-      updateViewer(data.viewer);
+      updateCart(cart);
+      updateCustomer(customer);
+      updateViewer(viewer);
 
-      return data;
-    } catch (error) {
+      return cart;
+    } catch (error: any) {
       console.error(error);
       return null;
     }
+  }
+
+  function updateCart(payload: any): void {
+    cart.value = payload;
   }
 
   // toggle the cart visibility

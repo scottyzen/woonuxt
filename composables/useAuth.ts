@@ -21,7 +21,7 @@ export const useAuth = () => {
         return { success: false, error: loginWithCookies?.status };
       }
       return { success: true, error: null, data: loginWithCookies };
-    } catch (error) {
+    } catch (error: any) {
       isPending.value = false;
       const gqlError = error?.gqlErrors?.[0];
       return { success: false, error: gqlError?.message };
@@ -47,7 +47,7 @@ export const useAuth = () => {
     try {
       const { registerCustomer } = await GqlRegisterCustomer({ input: userInfo });
       return { success: true, error: null, data: registerCustomer };
-    } catch (error) {
+    } catch (error: any) {
       const gqlError = error?.gqlErrors?.[0];
       isPending.value = false;
       return { success: false, error: gqlError?.message };
@@ -55,7 +55,7 @@ export const useAuth = () => {
   };
 
   // Update the user state
-  const updateCustomer = (data: any): void => {
+  const updateCustomer = <T>(data: any): void => {
     const sessionToken = data?.sessionToken;
     if (sessionToken) {
       useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken}` });
@@ -66,8 +66,8 @@ export const useAuth = () => {
     isPending.value = false;
   };
 
-  const updateViewer = (data: any): void => {
-    viewer.value = data;
+  const updateViewer = <T>(payload: any): void => {
+    viewer.value = payload;
     isPending.value = false;
   };
 

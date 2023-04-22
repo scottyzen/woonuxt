@@ -2,6 +2,7 @@
   "extends": "./.nuxt/tsconfig.json",
   "allowJs": true,
   "compilerOptions": {
-    "types": ["@nuxt/image-edge", "@nuxtjs/i18n"]
+    "types": ["@nuxt/image-edge", "@nuxtjs/i18n"],
+    "strict": true
   }
 }

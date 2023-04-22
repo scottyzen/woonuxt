@@ -1,7 +1,7 @@
 <script setup>
 const { setProducts, updateProductList } = await useProducts();
-const { data } = await useAsyncGql('getProducts');
-setProducts(data.value?.products?.nodes || []);
+const { products } = await GqlGetProducts();
+setProducts(products?.nodes || []);
 
 onMounted(() => {
   updateProductList();
@@ -14,11 +14,11 @@ useHead({
 </script>
 
 <template>
-  <div class="container flex gap-16 items-start">
+  <div class="container flex items-start gap-16">
     <Filters />
 
     <div class="w-full">
-      <div class="flex mt-8 w-full gap-8 items-center justify-between">
+      <div class="flex items-center justify-between w-full gap-8 mt-8">
         <ShowFilterTrigger class="md:hidden" />
         <ProductSearch />
         <OrderByDropdown class="hidden md:inline-flex" />

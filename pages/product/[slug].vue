@@ -1,5 +1,5 @@
 <template>
-  <main v-if="product" class="container py-6 relative xl:max-w-7xl">
+  <main v-if="product" class="container relative py-6 xl:max-w-7xl">
     <!-- Breadcrumb -->
     <Breadcrumb
       class="mb-6"
@@ -13,30 +13,30 @@
       ]" />
 
     <div class="flex flex-col gap-10 md:flex-row md:justify-between lg:gap-24">
-      <ProductImageGallery class="flex-1 relative" :first-image="product.image.sourceUrl" :main-image="type.image.sourceUrl" :gallery="product.galleryImages" :node="type" />
+      <ProductImageGallery class="relative flex-1" :first-image="product.image.sourceUrl" :main-image="type.image.sourceUrl" :gallery="product.galleryImages" :node="type" />
 
       <div class="md:max-w-md md:py-2">
-        <div class="flex mb-4 justify-between">
+        <div class="flex justify-between mb-4">
           <div class="flex-1">
-            <h1 class="font-sesmibold mb-2 text-2xl">{{ type.name }}</h1>
+            <h1 class="mb-2 text-2xl font-sesmibold">{{ type.name }}</h1>
             <StarRating :rating="product.averageRating" :count="product.reviewCount" />
           </div>
           <ProductPrice class="text-xl" :sale-price="type.salePrice" :regular-price="type.regularPrice" />
         </div>
 
-        <div class="my-8 text-sm grid gap-2">
-          <div class="flex gap-2 items-center">
+        <div class="grid gap-2 my-8 text-sm">
+          <div class="flex items-center gap-2">
             <span class="text-gray-400">{{ $t('messages.shop.availability') }}: </span>
             <span v-if="type.stockStatus == 'IN_STOCK'" class="text-green-600">{{ $t('messages.shop.inStock') }}</span>
             <span v-else class="text-red-600">{{ $t('messages.shop.outOfStock') }}</span>
           </div>
-          <div class="flex gap-2 items-center">
+          <div class="flex items-center gap-2">
             <span class="text-gray-400">{{ $t('messages.shop.sku') }}: </span>
             <span>{{ product.sku || 'N/A' }}</span>
           </div>
         </div>
 
-        <div class="font-light mb-8 prose" v-html="product.description || product.shortDescription"></div>
+        <div class="mb-8 font-light prose" v-html="product.description || product.shortDescription"></div>
 
         <hr />
 
@@ -47,7 +47,7 @@
             :attrs="product.attributes.nodes"
             :variations="product.variations.nodes"
             @attrs-changed="updateSelectedVariations" />
-          <div class="flex mt-12 gap-4 items-center">
+          <div class="flex items-center gap-4 mt-12">
             <input
               v-model="quantity"
               type="number"
@@ -58,8 +58,8 @@
           </div>
         </form>
 
-        <div class="my-8 text-sm grid gap-2">
-          <div class="flex gap-2 items-center">
+        <div class="grid gap-2 my-8 text-sm">
+          <div class="flex items-center gap-2">
             <span class="text-gray-400">{{ $t('messages.shop.category', 2) }}:</span>
             <div class="product-categories">
               <NuxtLink v-for="category in product.productCategories.nodes" :key="category.slug" :to="`/product-category/${category.slug}`" class="hover:text-primary"
@@ -79,7 +79,7 @@
       <ProductTabs :product="product" />
     </div>
     <div class="my-32">
-      <div class="font-semibold text-xl mb-4">{{ $t('messages.shop.youMayLike') }}</div>
+      <div class="mb-4 text-xl font-semibold">{{ $t('messages.shop.youMayLike') }}</div>
       <ProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
     </div>
   </main>
@@ -90,8 +90,7 @@ const route = useRoute();
 const { arraysEqual, formatArray } = useHelpers();
 const { addToCart, isUpdatingCart } = useCart();
 
-const { data } = await useAsyncGql('getProduct', { slug: route.params.slug });
-const product = data.value.product;
+const { product } = await GqlGetProduct({ slug: route.params.slug });
 
 useHead({
   title: product.name,

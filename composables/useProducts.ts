@@ -2,14 +2,14 @@ let allProducts = [] as any[];
 
 export function useProducts() {
   // Declare the state variables and the setter functions
-  const products = useState<any[]>('products', () => []);
+  const products = useState<Product[]>('products', () => []);
 
-  function setProducts(newProducts: any[]): void {
+  function setProducts(newProducts: Product[]): void {
     products.value = newProducts;
     allProducts = JSON.parse(JSON.stringify(newProducts));
   }
 
-  const updateProductList = async () => {
+  const updateProductList = async (): Promise<void> => {
     const { isFiltersActive, filterProducts } = await useFiltering();
     const { isSearchActive, searchProducts } = await useSearching();
     const { isSortingActive, sortProducts } = await useSorting();
