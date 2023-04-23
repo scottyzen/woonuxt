@@ -38,7 +38,6 @@ export function useFiltering() {
     router.push({ query: { ...route.query, filter: newFilterQuery } });
 
     // if the filter query is empty, remove it from the url
-    // !newFilterQuery ? router.push({ query: { ...route.query, filter: undefined } }) : router.push({ query: { filter: newFilterQuery } });
     if (!newFilterQuery) {
       router.push({ query: { ...route.query, filter: undefined } });
     } else {
@@ -62,8 +61,8 @@ export function useFiltering() {
   const isFiltersActive = computed(() => !!filterQuery.value);
 
   // Define a function to filter the products
-  function filterProducts(products: any[]): any[] {
-    return products.filter((product: any) => {
+  function filterProducts(products: Product[]): Product[] {
+    return products.filter((product) => {
       // Category filter
       const category = getFilter('category') || []; // ["category-slug"]
       const categoryCondition = category.length ? product.productCategories?.nodes?.find((node: any) => category.includes(node.slug)) : true;
@@ -71,7 +70,7 @@ export function useFiltering() {
       // price filter
       const priceRange = getFilter('price') || [];
       // Variable products returns an array of prices, so we need to find the highest price.
-      const productPrice = product.rawPrice ? parseFloat([...product.rawPrice.split(',')].reduce((a, b) => Math.max(a, b))) : 0;
+      const productPrice = product.rawPrice ? parseFloat([...product.rawPrice.split(',')].reduce((a, b) => String(Math.max(Number(a), Number(b))))) : 0;
       const priceCondition = priceRange.length ? productPrice >= parseFloat(priceRange[0]) && productPrice <= parseFloat(priceRange[1]) : true;
 
       // Star rating filter
@@ -86,7 +85,7 @@ export function useFiltering() {
           if (!attributeValues.length) return true;
           return product.terms?.nodes?.find((node: any) => node.taxonomyName === attribute && attributeValues.includes(node.slug));
         })
-        .every((condition: object) => condition);
+        .every((condition: any) => condition);
 
       // onSale filter
       const onSale = getFilter('sale') || [];

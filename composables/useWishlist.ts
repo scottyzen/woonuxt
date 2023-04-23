@@ -1,5 +1,5 @@
 // defing refs outside of the component to keep there state
-const theList = ref([] as any[]);
+const theList = ref([] as Product[]);
 
 export function useWishlist() {
   // function to add to the list
@@ -10,7 +10,7 @@ export function useWishlist() {
 
   // function to remove from the list
   function removeFromList(databaseId: number): void {
-    theList.value = theList.value.filter( (item) => item.databaseId !== databaseId );
+    theList.value = theList.value.filter((item) => item.databaseId !== databaseId);
     localStorage.setItem('wishlist', JSON.stringify(theList.value));
   }
 

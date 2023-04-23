@@ -30,15 +30,15 @@ export function useSearching() {
     return !!searchQuery.value;
   });
 
-  function searchProducts(products: any[]): any[] {
+  function searchProducts(products: Product[]): Product[] {
     const query = getSearchQuery();
     return query
-      ? products.filter((product: any) => {
-          const name = product.name.toLowerCase();
+      ? products.filter((product: Product) => {
+          const name = product.name?.toLowerCase();
           const description = product.description ? product.description.toLowerCase() : null;
           const shortDescription = product.shortDescription ? product.shortDescription.toLowerCase() : null;
           const search = query.toLowerCase();
-          return name.includes(search) || description?.includes(search) || shortDescription?.includes(search);
+          return name?.includes(search) || description?.includes(search) || shortDescription?.includes(search);
         })
       : products;
   }

@@ -20,31 +20,31 @@ export function useCheckout() {
     const { customer } = useAuth();
 
     const billing = {
-      address1: customer.value.billing.address1,
-      address2: customer.value.billing.address2,
-      city: customer.value.billing.city,
-      company: customer.value.billing.company,
-      country: customer.value.billing.country,
-      email: customer.value.billing.email,
-      firstName: customer.value.billing.firstName,
-      lastName: customer.value.billing.lastName,
-      phone: customer.value.billing.phone,
-      postcode: customer.value.billing.postcode,
-      state: customer.value.billing.state,
+      address1: customer.value.billing?.address1,
+      address2: customer.value.billing?.address2,
+      city: customer.value.billing?.city,
+      company: customer.value.billing?.company,
+      country: customer.value.billing?.country,
+      email: customer.value.billing?.email,
+      firstName: customer.value.billing?.firstName,
+      lastName: customer.value.billing?.lastName,
+      phone: customer.value.billing?.phone,
+      postcode: customer.value.billing?.postcode,
+      state: customer.value.billing?.state,
     };
 
     const shipping = {
-      address1: customer.value.shipping.address1,
-      address2: customer.value.shipping.address2,
-      city: customer.value.shipping.city,
-      company: customer.value.shipping.company,
-      country: customer.value.shipping.country,
-      email: customer.value.shipping.email,
-      firstName: customer.value.shipping.firstName,
-      lastName: customer.value.shipping.lastName,
-      phone: customer.value.shipping.phone,
-      postcode: customer.value.shipping.postcode,
-      state: customer.value.shipping.state,
+      address1: customer.value.shipping?.address1,
+      address2: customer.value.shipping?.address2,
+      city: customer.value.shipping?.city,
+      company: customer.value.shipping?.company,
+      country: customer.value.shipping?.country,
+      email: customer.value.shipping?.email,
+      firstName: customer.value.shipping?.firstName,
+      lastName: customer.value.shipping?.lastName,
+      phone: customer.value.shipping?.phone,
+      postcode: customer.value.shipping?.postcode,
+      state: customer.value.shipping?.state,
     };
 
     const { checkout } = await GqlCheckout({

@@ -1,14 +1,14 @@
 export const useAuth = () => {
   const { refreshCart } = useCart();
 
-  const customer = useState<any | null>('customer', () => {
+  const customer = useState<Customer>('customer', () => {
     return { billing: {}, shipping: {} };
   });
-  const viewer = useState<any | null>('viewer', () => null);
+  const viewer = useState<Viewer | null>('viewer', () => null);
   const isPending = useState<boolean>('isPending', () => false);
 
   // Log in the user
-  const loginUser = async (credentials: CreateAccountInput) => {
+  const loginUser = async (credentials: CreateAccountInput): Promise<{ success: boolean; error: any }> => {
     isPending.value = true;
 
     try {
@@ -20,7 +20,7 @@ export const useAuth = () => {
         isPending.value = false;
         return { success: false, error: loginWithCookies?.status };
       }
-      return { success: true, error: null, data: loginWithCookies };
+      return { success: true, error: null };
     } catch (error: any) {
       isPending.value = false;
       const gqlError = error?.gqlErrors?.[0];
@@ -29,7 +29,7 @@ export const useAuth = () => {
   };
 
   // Log out the user
-  const logoutUser = async () => {
+  const logoutUser = async (): Promise<{ success: boolean; error: any }> => {
     isPending.value = true;
     try {
       const data = await GqlLogout();
@@ -42,7 +42,7 @@ export const useAuth = () => {
   };
 
   // Register the user
-  const registerUser = async (userInfo: CreateAccountInput) => {
+  const registerUser = async (userInfo: CreateAccountInput): Promise<{ success: boolean; error: any }> => {
     isPending.value = true;
     try {
       const { registerCustomer } = await GqlRegisterCustomer({ input: userInfo });
@@ -55,18 +55,18 @@ export const useAuth = () => {
   };
 
   // Update the user state
-  const updateCustomer = <T>(data: any): void => {
-    const sessionToken = data?.sessionToken;
+  const updateCustomer = (payload: Customer): void => {
+    const sessionToken = payload?.sessionToken;
     if (sessionToken) {
       useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken}` });
       const newToken = useCookie('woocommerce-session');
       newToken.value = sessionToken;
     }
-    customer.value = data;
+    customer.value = payload;
     isPending.value = false;
   };
 
-  const updateViewer = <T>(payload: any): void => {
+  const updateViewer = (payload: Viewer): void => {
     viewer.value = payload;
     isPending.value = false;
   };

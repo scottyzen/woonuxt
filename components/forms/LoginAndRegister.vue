@@ -1,6 +1,6 @@
 <template>
-  <div class="mx-auto max-w-lg my-16 min-h-96 lg:my-24">
-    <h1 class="font-bold text-xl mb-4 lg:text-3xl">{{ $t('messages.account.myAccount') }}</h1>
+  <div class="max-w-lg mx-auto my-16 min-h-96 lg:my-24">
+    <h1 class="mb-4 text-xl font-bold lg:text-3xl">{{ $t('messages.account.myAccount') }}</h1>
     <form class="mb-4" @submit.prevent="loginOrRegister(userInfo)">
       <label v-if="formView == 'register'" for="email"
         >Email <span class="text-red-500">*</span> <br />
@@ -20,19 +20,19 @@
       <Transition name="scale-y" mode="out-in">
         <div v-if="errorMessage" class="my-4 text-sm text-red-500" v-html="errorMessage"></div>
       </Transition>
-      <button class="flex mt-4 text-lg gap-4 justify-center items-center">
+      <button class="flex items-center justify-center gap-4 mt-4 text-lg">
         <LoadingIcon v-if="isPending" stroke="4" size="16" color="#fff" />
         <span>{{ formView == 'login' ? $t('messages.account.login') : $t('messages.account.register') }}</span>
       </button>
     </form>
     <div v-if="formView == 'login'" class="my-4 text-center">
       {{ $t('messages.account.noAccount') }}
-      <a class="cursor-pointer underline" @click="formView = 'register'">{{ $t('messages.general.please') }} {{ $t('messages.account.accountRegister') }}</a
+      <a class="underline cursor-pointer" @click="formView = 'register'">{{ $t('messages.general.please') }} {{ $t('messages.account.accountRegister') }}</a
       >.
     </div>
     <div v-if="formView == 'register'" class="my-4 text-center">
       {{ $t('messages.account.hasAccount') }}
-      <a class="cursor-pointer underline" @click="formView = 'login'">{{ $t('messages.general.please') }} {{ $t('messages.account.accountLogin') }}</a
+      <a class="underline cursor-pointer" @click="formView = 'login'">{{ $t('messages.general.please') }} {{ $t('messages.account.accountLogin') }}</a
       >.
     </div>
   </div>
@@ -47,7 +47,7 @@ const message = ref('');
 const errorMessage = ref('');
 
 const login = async (userInfo) => {
-  const { success, error } = await loginUser(userInfo);
+  const { error } = await loginUser(userInfo);
   if (error && error === 'invalid_username') {
     errorMessage.value = t('messages.error.invalidUsername');
   } else if (error && error === 'incorrect_password') {

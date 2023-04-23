@@ -1,4 +1,4 @@
-let allProducts = [] as any[];
+let allProducts = [] as Product[];
 
 export function useProducts() {
   // Declare the state variables and the setter functions

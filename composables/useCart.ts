@@ -10,9 +10,9 @@ export function useCart() {
       const { cart, customer, viewer } = await GqlGetCart();
 
       const { updateCustomer, updateViewer } = useAuth();
-      updateCart(cart);
-      updateCustomer(customer);
-      updateViewer(viewer);
+      if (cart) updateCart(cart);
+      if (customer) updateCustomer(customer);
+      if (viewer) updateViewer(viewer);
 
       return cart;
     } catch (error: any) {
@@ -21,7 +21,7 @@ export function useCart() {
     }
   }
 
-  function updateCart(payload: any): void {
+  function updateCart(payload: Cart): void {
     cart.value = payload;
   }
 

@@ -1,34 +1,30 @@
-// ProductAttributeInput
-declare interface ProductAttributeInput {
+interface ProductAttributeInput {
   attributeName: string;
   attributeValue: string;
 }
 
-// AddToCartInput
-declare interface AddToCartInput {
+interface AddToCartInput {
   clientMutationId?: string;
   extraData?: string;
   productId: number;
-  quantity?: number;
+  quantity: number;
   variation?: ProductAttributeInput[];
   variationId?: number;
 }
 
-// MetaDataInput
-declare interface MetaDataInput {
+interface MetaDataInput {
   key: string;
   value: string;
   id?: string;
 }
 
-// CreateAccountInput
-declare interface CreateAccountInput {
+interface CreateAccountInput {
   password: string;
   username: string;
   email: string;
 }
 
-declare interface Customer {
+interface Customer {
   lastName?: string | null;
   email?: string | null;
   firstName?: string | null;
@@ -39,20 +35,21 @@ declare interface Customer {
   shipping?: Address | null;
 }
 
-declare interface Address {
+interface Address {
   address1?: string | null;
   address2?: string | null;
   city?: string | null;
-  country?: string | null;
+  country?: CountriesEnum | null;
   email?: string | null;
   firstName?: string | null;
   lastName?: string | null;
   phone?: string | null;
   postcode?: string | null;
   state?: string | null;
+  company?: string | null;
 }
 
-declare interface Viewer {
+interface Viewer {
   lastName?: string | null;
   email?: string | null;
   databaseId: number;
@@ -63,40 +60,65 @@ declare interface Viewer {
   wooSessionToken?: string | null;
 }
 
-declare enum StockStatusEnum {
-  IN_STOCK = 'IN_STOCK',
-  ON_BACKORDER = 'ON_BACKORDER',
-  OUT_OF_STOCK = 'OUT_OF_STOCK',
+interface ProductCategory {
+  databaseId: number;
+  slug: string;
+  name: string;
+  count: number;
 }
 
-declare enum ProductTypesEnum {
-  EXTERNAL = 'EXTERNAL',
-  GROUPED = 'GROUPED',
-  SIMPLE = 'SIMPLE',
-  VARIABLE = 'VARIABLE',
-  VARIATION = 'VARIATION',
+interface Attribute {
+  value?: string | null;
+  name?: string | null;
 }
 
-interface CartContents {
-  itemCount?: number | null;
-  productCount?: number | null;
-  nodes: CartItem[];
+interface ProductAttribute {
+  name?: string | null;
+  options?: Array<string | null> | null;
+  variation?: boolean | null;
+  visible?: boolean | null;
 }
 
-interface CartItem {
-  quantity?: number | null;
-  key: string;
-  product?: Product | null;
-  variation?: { node: Variation } | null;
+interface ProductTerm {
+  taxonomyName?: string | null;
+  slug?: string | null;
 }
 
 interface Product {
+  name?: string | null;
+  databaseId?: number | null;
+  slug?: string | null;
+  sku?: string | null;
+  onSale?: boolean | null;
+  type?: ProductTypesEnum | null;
+  price?: string | null;
+  date?: string | null;
+  regularPrice?: string | null;
+  salePrice?: string | null;
+  stockStatus?: StockStatusEnum | null;
+  stockQuantity?: number | null;
+  description?: string | null;
+  shortDescription?: string | null;
+  averageRating?: number | null;
+  weight?: string | null;
+  length?: string | null;
+  width?: string | null;
+  height?: string | null;
+  reviewCount?: number | null;
+  rawPrice?: string | null;
+  rawRegularPrice?: string | null;
+  rawSalePrice?: string | null;
+  image?: ProductImage | null;
+  terms?: { nodes: Array<ProductTerm> } | null;
+  galleryImages?: Array<{ sourceUrl?: string | null }> | null;
+  attributes?: { nodes: Array<Attribute> } | null;
+  productCategories?: { nodes: Array<ProductCategory> } | null;
+  defaultAttributes?: Array<{ name?: string | null; attributeId?: number | null }> | null;
+  variations?: Array<ProductVariation> | null;
   node: SimpleProduct | VariableProduct;
 }
 
 interface SimpleProduct {
-  name?: string | null;
-  slug?: string | null;
   sku?: string | null;
   databaseId: number;
   type?: ProductTypesEnum | null;
@@ -121,8 +143,6 @@ interface SimpleProduct {
 }
 
 interface VariableProduct {
-  name?: string | null;
-  slug?: string | null;
   sku?: string | null;
   databaseId: number;
   type?: ProductTypesEnum | null;
@@ -143,13 +163,8 @@ interface VariableProduct {
   rawRegularPrice?: string | null;
   rawSalePrice?: string | null;
   image?: ProductImage | null;
-  attributes?: {
-    nodes: Array<
-      | { name?: string | null; options?: Array<string | null> | null; variation?: boolean | null; visible?: boolean | null }
-      | { name?: string | null; options?: Array<string | null> | null; variation?: boolean | null; visible?: boolean | null }
-    >;
-  } | null;
-  defaultAttributes?: { nodes: Array<{ name?: string | null; attributeId?: number | null }> } | null;
+  attributes?: { nodes: Array<ProductAttribute> } | null;
+  defaultAttributes?: { nodes: Array<Attribute> } | null;
   variations?: {
     nodes: Variation[];
   } | null;
@@ -167,7 +182,7 @@ interface Variation {
   stockStatus?: StockStatusEnum | null;
   hasAttributes?: boolean | null;
   image?: ProductImage | null;
-  attributes?: { nodes: Array<{ value?: string | null; name?: string | null }> } | null;
+  attributes?: { nodes: Array<Attribute> } | null;
 }
 
 interface ProductImage {
@@ -175,13 +190,6 @@ interface ProductImage {
   altText?: string | null;
   title?: string | null;
   cartSourceUrl?: string | null;
-}
-
-interface ProductAttributes {
-  name?: string | null;
-  options?: Array<string | null> | null;
-  variation?: boolean | null;
-  visible?: boolean | null;
 }
 
 interface ProductVariation {
@@ -195,49 +203,7 @@ interface ProductVariation {
   stockStatus?: StockStatusEnum | null;
   hasAttributes?: boolean | null;
   image?: ProductImage | null;
-  attributes?: Array<ProductAttributes> | null;
-}
-
-interface Product {
-  name?: string | null;
-  slug?: string | null;
-  sku?: string | null;
-  databaseId?: number;
-  type?: ProductTypesEnum | null;
-  price?: string | null;
-  regularPrice?: string | null;
-  salePrice?: string | null;
-  stockStatus?: StockStatusEnum | null;
-  stockQuantity?: number | null;
-  description?: string | null;
-  shortDescription?: string | null;
-  averageRating?: number | null;
-  weight?: string | null;
-  length?: string | null;
-  width?: string | null;
-  height?: string | null;
-  reviewCount?: number | null;
-  rawPrice?: string | null;
-  rawRegularPrice?: string | null;
-  rawSalePrice?: string | null;
-  image?: ProductImage | null;
-  galleryImages?: Array<{ sourceUrl?: string | null }> | null;
-  attributes?: Array<ProductAttributes> | null;
-  defaultAttributes?: Array<{ name?: string | null; attributeId?: number | null }> | null;
-  variations?: Array<ProductVariation> | null;
-}
-
-interface CartItem {
-  quantity?: number | null;
-  key: string;
-  product?: Product | null;
-  variation?: { node: { name?: string | null; price?: string | null; image?: ProductImage | null } } | null;
-}
-
-interface CartContents {
-  itemCount?: number | null;
-  productCount?: number | null;
-  nodes: Array<CartItem>;
+  attributes?: { nodes: Array<Attribute> } | null;
 }
 
 interface ShippingMethodRate {
@@ -255,6 +221,19 @@ interface AppliedCoupon {
   discountTax: string;
   discountAmount: string;
   code: string;
+}
+
+interface CartItem {
+  quantity?: number | null;
+  key: string;
+  product?: Product | null;
+  variation?: { node: Variation } | null;
+}
+
+interface CartContents {
+  itemCount?: number | null;
+  productCount?: number | null;
+  nodes?: CartItem[];
 }
 
 interface Cart {
