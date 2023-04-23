@@ -21,31 +21,31 @@ watch(
   }
 );
 
-const image = computed(() => {
+const imageSrc = computed(() => {
+  const fallbackImage = '/images/placeholder.jpg';
   // If we have a color filter, we need to find the image that matches the color
   if (paColor.value.length) {
     const activeColorImage = props.node?.variations?.nodes.filter((variation) => paColor.value.some((color) => variation.slug.includes(color)));
-    return activeColorImage && activeColorImage.length ? activeColorImage[0]?.image?.sourceUrl : props.node.image.sourceUrl;
+    if (activeColorImage && activeColorImage.length) {
+      return activeColorImage[0].image?.sourceUrl || fallbackImage;
+    }
   }
-  return props.node.image?.sourceUrl || null;
+  return props.node?.image?.sourceUrl || fallbackImage;
 });
 </script>
 
 <template>
   <NuxtLink :to="`/product/${node.slug}`" class="relative product-card">
     <SaleBadge :node="node" class="absolute top-2 right-2" />
-
     <NuxtImg
-      v-if="image && image == props.node.image.sourceUrl"
+      v-if="imageSrc"
       :width="imgWidth"
       :height="imgHeight"
-      :src="image"
-      :alt="node.image.altText || node.name"
-      :title="node.image.title || node.name"
+      :src="imageSrc"
+      :alt="node.image?.altText || node.name"
+      :title="node.image?.title || node.name"
       :loading="index <= 1 ? 'eager' : 'lazy'"
       format="webp" />
-    <img v-else-if="image" :width="imgWidth" :height="imgHeight" :src="image" :alt="node.image.altText || node.name" :title="node.image.title || node.name" loading="lazy" />
-    <NuxtImg v-else :width="imgWidth" :height="imgHeight" src="/images/placeholder.jpg" :alt="node.name" :title="node.name" loading="lazy" />
 
     <div class="p-2">
       <StarRating :rating="node.averageRating" :count="node.reviewCount" />
