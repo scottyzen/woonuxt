@@ -46,7 +46,7 @@ export const useAuth = () => {
     isPending.value = true;
     try {
       const { registerCustomer } = await GqlRegisterCustomer({ input: userInfo });
-      return { success: true, error: null, data: registerCustomer };
+      return { success: true, error: null };
     } catch (error: any) {
       const gqlError = error?.gqlErrors?.[0];
       isPending.value = false;
