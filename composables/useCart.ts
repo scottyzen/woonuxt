@@ -9,7 +9,7 @@ export function useCart() {
     try {
       const { cart, customer, viewer } = await GqlGetCart();
 
-      const { updateCustomer, updateViewer } = useAuth();
+      const { updateCustomer, updateViewer } = useAuth() as any;
       if (cart) updateCart(cart);
       if (customer) updateCustomer(customer);
       if (viewer) updateViewer(viewer);

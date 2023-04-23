@@ -116,6 +116,7 @@ interface Product {
   defaultAttributes?: Array<{ name?: string | null; attributeId?: number | null }> | null;
   variations?: Array<ProductVariation> | null;
   node: SimpleProduct | VariableProduct;
+  related?: { nodes: Array<Product> } | null;
 }
 
 interface SimpleProduct {
