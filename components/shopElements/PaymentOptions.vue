@@ -1,6 +1,7 @@
 <script setup>
 const props = defineProps({
   modelValue: { type: String, required: true, default: 'stripe' },
+  paymentGateways: { type: Array, required: true },
 });
 
 const paymentMethod = toRef(props, 'modelValue');
@@ -10,23 +11,20 @@ const emits = defineEmits(['update:modelValue']);
 const updatePaymentMethod = (value) => {
   emits('update:modelValue', value);
 };
+
+onMounted(() => {
+  // Emit first payment method
+  updatePaymentMethod(props.paymentGateways[0].id);
+});
 </script>
 
 <template>
-  <div class="leading-tight grid gap-4 payment-options">
-    <div class="option" :class="{ 'active-option': paymentMethod === 'stripe' }" @click="updatePaymentMethod('stripe')">
-      <icon name="ion:card-outline" size="20" class="text-gray-600" />
-      <span>{{ $t('messages.billing.creditCard') }}</span>
-      <icon name="ion:checkmark-circle" size="20" class="ml-auto text-primary checkmark" />
-    </div>
-    <div class="option" :class="{ 'active-option': paymentMethod === 'paypal' }" @click="updatePaymentMethod('paypal')">
-      <img src="/icons/pp.svg" alt="PayPal Logo" width="16" height="16" />
-      <span>PayPal</span>
-      <icon name="ion:checkmark-circle" size="20" class="ml-auto text-primary checkmark" />
-    </div>
-    <div class="option" :class="{ 'active-option': paymentMethod === 'cod' }" @click="updatePaymentMethod('cod')">
-      <icon name="ion:cash-outline" size="20" class="text-gray-600" />
-      <span>{{ $t('messages.billing.cashOnDelivery') }}</span>
+  <div class="grid gap-4 leading-tight payment-options">
+    <div v-for="gateway in paymentGateways" :key="gateway.id" class="option" :class="{ 'active-option': paymentMethod === gateway.id }" @click="updatePaymentMethod(gateway.id)">
+      <icon v-if="gateway.id === 'stripe'" name="ion:card-outline" size="20" class="text-gray-600" />
+      <icon v-else-if="gateway.id === 'paypal'" name="ion:logo-paypal" size="20" class="text-gray-600" />
+      <icon v-else name="ion:cash-outline" size="20" class="text-gray-600" />
+      <span>{{ gateway.title }}</span>
       <icon name="ion:checkmark-circle" size="20" class="ml-auto text-primary checkmark" />
     </div>
   </div>

@@ -15,4 +15,10 @@ query getCart {
     nicename
     wooSessionToken
   }
+  paymentGateways {
+    nodes {
+      title
+      id
+    }
+  }
 }

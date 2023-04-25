@@ -2,7 +2,7 @@ export function useCheckout() {
   const orderInput = useState<any>('orderInput', () => {
     return {
       customerNote: '',
-      paymentMethod: 'stripe',
+      paymentMethod: '',
       shipToDifferentAddress: false,
       metaData: [{ key: 'order_via', value: 'WooNuxt' }],
     };

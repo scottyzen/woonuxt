@@ -1,6 +1,6 @@
 {
   "name": "woonuxt",
-  "version": "3.0.14",
+  "version": "3.0.15",
   "private": true,
   "scripts": {
     "build": "nuxt build",
@@ -32,6 +32,6 @@
     "@vueform/slider": "^2.1.7",
     "nuxt-graphql-client": "^0.2.27",
     "ohmyfetch": "^0.4.21",
-    "woonuxt-settings": "^1.0.22"
+    "woonuxt-settings": "^1.0.23"
   }
 }

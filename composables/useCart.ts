@@ -3,16 +3,18 @@ export function useCart() {
   const isShowingCart = useState<boolean>('isShowingCart', () => false);
   const isUpdatingCart = useState<boolean>('isUpdatingCart', () => false);
   const isUpdatingCoupon = useState<boolean>('isUpdatingCoupon', () => false);
+  const paymentGateways = useState<PaymentGateway[]>('paymentGateways', () => []);
 
   // Refesh the cart from the server
   async function refreshCart() {
     try {
-      const { cart, customer, viewer } = await GqlGetCart();
+      const { cart, customer, viewer, paymentGateways } = await GqlGetCart();
 
       const { updateCustomer, updateViewer } = useAuth() as any;
       if (cart) updateCart(cart);
       if (customer) updateCustomer(customer);
       if (viewer) updateViewer(viewer);
+      if (paymentGateways) updatePaymentGateways(paymentGateways.nodes);
 
       return cart;
     } catch (error: any) {
@@ -23,6 +25,10 @@ export function useCart() {
 
   function updateCart(payload: Cart): void {
     cart.value = payload;
+  }
+
+  function updatePaymentGateways(payload: PaymentGateway[]): void {
+    paymentGateways.value = payload;
   }
 
   // toggle the cart visibility
@@ -113,5 +119,6 @@ export function useCart() {
     updateShippingMethod,
     applyCoupon,
     removeCoupon,
+    paymentGateways,
   };
 }

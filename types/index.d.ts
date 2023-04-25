@@ -237,6 +237,11 @@ interface CartContents {
   nodes?: CartItem[];
 }
 
+interface PaymentGateway {
+  title?: string | null;
+  id?: string | null;
+}
+
 interface Cart {
   total?: string | null;
   subtotal?: string | null;
