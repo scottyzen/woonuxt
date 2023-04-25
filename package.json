@@ -1,6 +1,6 @@
 {
   "name": "woonuxt",
-  "version": "3.0.13",
+  "version": "3.0.14",
   "private": true,
   "scripts": {
     "build": "nuxt build",
@@ -23,8 +23,8 @@
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-prettier": "^4.2.1",
     "nuxt": "^3.4.2",
-    "nuxt-icon": "^0.3.3",
-    "prettier": "^2.8.7",
+    "nuxt-icon": "^0.4.0",
+    "prettier": "^2.8.8",
     "vue-stripe-js": "^1.0.1"
   },
   "dependencies": {

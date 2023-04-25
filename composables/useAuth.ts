@@ -30,10 +30,15 @@ export const useAuth = () => {
 
   // Log out the user
   const logoutUser = async (): Promise<{ success: boolean; error: any }> => {
+    const { clearAllCookies } = useHelpers();
     isPending.value = true;
     try {
-      const data = await GqlLogout();
-      if (data) refreshCart();
+      const { logout } = await GqlLogout();
+      if (logout) {
+        refreshCart();
+        clearAllCookies();
+        viewer.value = null;
+      }
       return { success: true, error: null };
     } catch (error) {
       isPending.value = false;
