@@ -151,7 +151,7 @@ const updateSelectedVariations = (variations) => {
 };
 </script>
 
-<style>
+<style scoped>
 .product-categories > a:last-child .comma {
   display: none;
 }

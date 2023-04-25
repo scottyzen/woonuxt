@@ -11,29 +11,26 @@ const activeTab = computed(() => {
   <div class="container">
     <LoginAndRegister v-if="!viewer" />
     <div v-if="viewer" class="flex flex-col items-start w-full gap-8 mb-24 lg:flex-row">
-      <nav class="grid w-full gap-1 my-8 text-gray-600 min-w-xs top-24 lg:w-auto lg:sticky">
+      <nav class="grid w-full gap-1 my-8 text-gray-600 min-w-[240px] top-24 lg:w-auto lg:sticky">
         <NuxtLink
           to="/my-account?tab=my-details"
-          class="flex items-center gap-4 p-3 px-4 rounded-xl hover:bg-purple-50 hover:text-purple-800"
+          class="flex items-center gap-4 p-3 px-4 rounded-lg hover:bg-white hover:text-primary"
           :class="{ active: activeTab == 'my-details' }">
           <Icon name="ion:information-circle-outline" size="22" />
           {{ $t('messages.general.myDetails') }}
         </NuxtLink>
-        <NuxtLink
-          to="/my-account?tab=orders"
-          class="flex items-center gap-4 p-3 px-4 rounded-xl hover:bg-purple-50 hover:text-purple-800"
-          :class="{ active: activeTab == 'orders' }">
+        <NuxtLink to="/my-account?tab=orders" class="flex items-center gap-4 p-3 px-4 rounded-lg hover:bg-white hover:text-primary" :class="{ active: activeTab == 'orders' }">
           <Icon name="ion:bag-check-outline" size="22" />
           {{ $t('messages.shop.order', 2) }}
         </NuxtLink>
         <NuxtLink
           to="/my-account?tab=downloads"
-          class="flex items-center gap-4 p-3 px-4 rounded-xl hover:bg-purple-50 hover:text-purple-800"
+          class="flex items-center gap-4 p-3 px-4 rounded-lg hover:bg-white hover:text-primary"
           :class="{ active: activeTab == 'downloads' }">
           <Icon name="ion:cloud-download-outline" size="22" />
           {{ $t('messages.general.downloads') }}
         </NuxtLink>
-        <button class="flex items-center gap-4 p-3 px-4 rounded-xl hover:bg-purple-50 hover:text-purple-800" @click="logoutUser">
+        <button class="flex items-center gap-4 p-3 px-4 rounded-lg hover:bg-white hover:text-primary" @click="logoutUser">
           <Icon name="ion:log-out-outline" size="22" />
           {{ $t('messages.account.logout') }}
         </button>
@@ -52,6 +49,6 @@ const activeTab = computed(() => {
 
 <style lang="postcss" scoped>
 a.active {
-  @apply bg-purple-50 text-gray-800;
+  @apply text-primary;
 }
 </style>

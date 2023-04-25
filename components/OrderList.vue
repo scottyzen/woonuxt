@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-white rounded-lg flex shadow min-h-36 p-8 justify-center items-center">
-    <table v-if="orders" class="text-left w-full table-auto">
+  <div class="bg-white rounded-lg flex shadow min-h-[250px] p-8 justify-center items-center">
+    <table v-if="orders" class="w-full text-left table-auto">
       <thead>
         <tr>
           <th>{{ $t('messages.shop.order') }}</th>
@@ -20,7 +20,7 @@
           <td :class="`order-${order.status}`" class="order-status">
             {{ order.status }}
           </td>
-          <td class="rounded-r-lg text-right">
+          <td class="text-right rounded-r-lg">
             {{ order.total }}
           </td>
         </tr>

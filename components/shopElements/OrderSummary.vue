@@ -1,10 +1,10 @@
 <script setup>
-const { cart, toggleCart, isUpdatingCart, isUpdatingCoupon, applyCoupon } = useCart();
+const { cart } = useCart();
 </script>
 
 <template>
   <aside class="bg-white rounded-lg shadow-lg mb-8 w-full min-h-[250px] p-8 relative md:max-w-sm md:top-32 md:sticky">
-    <h2 class="font-semibold text-xl mb-4">{{ $t('messages.shop.orderSummary') }}</h2>
+    <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.shop.orderSummary') }}</h2>
 
     <ClientOnly>
       <template v-if="!cart.isEmpty">
@@ -18,7 +18,7 @@ const { cart, toggleCart, isUpdatingCart, isUpdatingCoupon, applyCoupon } = useC
 
     <AddCoupon class="my-8" />
 
-    <div v-if="cart" class="font-semibold text-sm grid text-gray-500 gap-1">
+    <div v-if="cart" class="grid gap-1 text-sm font-semibold text-gray-500">
       <div class="flex justify-between">
         <span>{{ $t('messages.shop.subtotal') }}</span
         ><spa class="text-gray-700 tabular-nums" v-html="cart.subtotal" />
@@ -33,9 +33,9 @@ const { cart, toggleCart, isUpdatingCart, isUpdatingCoupon, applyCoupon } = useC
           ><span class="text-primary tabular-nums">- <span v-html="cart.discountTotal" /></span>
         </div>
       </Transition>
-      <div class="flex mt-4 justify-between">
+      <div class="flex justify-between mt-4">
         <span>{{ $t('messages.shop.total') }}</span
-        ><span class="font-bold text-lg text-gray-700 tabular-nums" v-html="cart.total" />
+        ><span class="text-lg font-bold text-gray-700 tabular-nums" v-html="cart.total" />
       </div>
     </div>
 

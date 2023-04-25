@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-lg mx-auto my-16 min-h-96 lg:my-24">
+  <div class="max-w-lg mx-auto my-16 min-h-[600px] lg:my-24">
     <h1 class="mb-4 text-xl font-bold lg:text-3xl">{{ $t('messages.account.myAccount') }}</h1>
     <form class="mb-4" @submit.prevent="loginOrRegister(userInfo)">
       <label v-if="formView == 'register'" for="email"
