@@ -1,5 +1,72 @@
+<script setup>
+const route = useRoute();
+const { arraysEqual, formatArray } = useHelpers();
+const { addToCart, isUpdatingCart } = useCart();
+
+const { data } = await useAsyncGql('getProduct', { slug: route.params.slug });
+const product = data.value.product;
+
+useHead({
+  title: product.name,
+  meta: [{ hid: 'description', name: 'description', content: product.description }],
+});
+
+const quantity = ref(1);
+const activeVariation = ref(null);
+const variation = ref([]);
+const indexOfTypeAny = [];
+const attrValues = ref([]);
+
+const type = computed(() => (activeVariation.value ? activeVariation.value : product));
+const primaryCategory = computed(() => {
+  return product.productCategories?.nodes[0];
+});
+const selectProductInput = computed(() => ({
+  productId: type.value.databaseId,
+  quantity: quantity.value,
+}));
+
+const checkForVariationTypeOfAny = () => {
+  const numberOfVariation = product.attributes.nodes.length;
+  for (let index = 0; index < numberOfVariation; index++) {
+    const tempArray = [];
+    product.variations.nodes.forEach((element) => {
+      if (element.attributes.nodes[index]?.value) tempArray.push(element.attributes.nodes[index].value);
+    });
+
+    if (!tempArray.some(Boolean)) indexOfTypeAny.push(index);
+  }
+};
+
+onMounted(() => {
+  if (product.variations) checkForVariationTypeOfAny(product.variations.nodes);
+});
+
+const updateSelectedVariations = (variations) => {
+  if (!product.variations) {
+    return;
+  }
+
+  attrValues.value = variations.map((el) => ({
+    attributeName: el.name,
+    attributeValue: el.value,
+  }));
+  const cloneArray = JSON.parse(JSON.stringify(variations));
+  const getActiveVariation = product.variations.nodes.filter((variation) => {
+    // If there is any variation of type ANY set the value to ''
+    indexOfTypeAny.forEach((index) => (cloneArray[index].value = ''));
+    return arraysEqual(formatArray(variation.attributes.nodes), formatArray(cloneArray));
+  });
+
+  activeVariation.value = getActiveVariation[0];
+  selectProductInput.value.variationId = activeVariation.value?.databaseId || null;
+  selectProductInput.value.variation = activeVariation.value ? attrValues.value : null;
+  variation.value = variations;
+};
+</script>
+
 <template>
-  <main v-if="product" class="container relative py-6 xl:max-w-7xl">
+  <main class="container relative py-6 xl:max-w-7xl">
     <!-- Breadcrumb -->
     <Breadcrumb
       class="mb-6"
@@ -84,72 +151,6 @@
     </div>
   </main>
 </template>
-
-<script setup>
-const route = useRoute();
-const { arraysEqual, formatArray } = useHelpers();
-const { addToCart, isUpdatingCart } = useCart();
-
-const { product } = await GqlGetProduct({ slug: route.params.slug });
-
-useHead({
-  title: product.name,
-  meta: [{ hid: 'description', name: 'description', content: product.description }],
-});
-
-const quantity = ref(1);
-const activeVariation = ref(null);
-const variation = ref([]);
-const indexOfTypeAny = [];
-const attrValues = ref([]);
-
-const type = computed(() => (activeVariation.value ? activeVariation.value : product));
-const primaryCategory = computed(() => {
-  return product.productCategories?.nodes[0];
-});
-const selectProductInput = computed(() => ({
-  productId: type.value.databaseId,
-  quantity: quantity.value,
-}));
-
-const checkForVariationTypeOfAny = () => {
-  const numberOfVariation = product.attributes.nodes.length;
-  for (let index = 0; index < numberOfVariation; index++) {
-    const tempArray = [];
-    product.variations.nodes.forEach((element) => {
-      if (element.attributes.nodes[index]?.value) tempArray.push(element.attributes.nodes[index].value);
-    });
-
-    if (!tempArray.some(Boolean)) indexOfTypeAny.push(index);
-  }
-};
-
-onMounted(() => {
-  if (product.variations) checkForVariationTypeOfAny(product.variations.nodes);
-});
-
-const updateSelectedVariations = (variations) => {
-  if (!product.variations) {
-    return;
-  }
-
-  attrValues.value = variations.map((el) => ({
-    attributeName: el.name,
-    attributeValue: el.value,
-  }));
-  const cloneArray = JSON.parse(JSON.stringify(variations));
-  const getActiveVariation = product.variations.nodes.filter((variation) => {
-    // If there is any variation of type ANY set the value to ''
-    indexOfTypeAny.forEach((index) => (cloneArray[index].value = ''));
-    return arraysEqual(formatArray(variation.attributes.nodes), formatArray(cloneArray));
-  });
-
-  activeVariation.value = getActiveVariation[0];
-  selectProductInput.value.variationId = activeVariation.value?.databaseId || null;
-  selectProductInput.value.variation = activeVariation.value ? attrValues.value : null;
-  variation.value = variations;
-};
-</script>
 
 <style scoped>
 .product-categories > a:last-child .comma {
