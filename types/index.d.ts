@@ -9,7 +9,7 @@ interface AddToCartInput {
   productId: number;
   quantity: number;
   variation?: ProductAttributeInput[];
-  variationId?: number;
+  variationId?: number | null | undefined;
 }
 
 interface MetaDataInput {
@@ -114,15 +114,13 @@ interface Product {
   attributes?: { nodes: Array<Attribute> } | null;
   productCategories?: { nodes: Array<ProductCategory> } | null;
   defaultAttributes?: Array<{ name?: string | null; attributeId?: number | null }> | null;
-  variations?: Array<ProductVariation> | null;
+  variations?: { nodes: Variation[] } | null;
   node: SimpleProduct | VariableProduct;
   related?: { nodes: Array<Product> } | null;
 }
 
 interface SimpleProduct {
-  sku?: string | null;
-  databaseId: number;
-  type?: ProductTypesEnum | null;
+  name?: string | null;
   price?: string | null;
   regularPrice?: string | null;
   salePrice?: string | null;
@@ -144,9 +142,7 @@ interface SimpleProduct {
 }
 
 interface VariableProduct {
-  sku?: string | null;
-  databaseId: number;
-  type?: ProductTypesEnum | null;
+  name?: string | null;
   description?: string | null;
   shortDescription?: string | null;
   weight?: string | null;
@@ -183,7 +179,8 @@ interface Variation {
   stockStatus?: StockStatusEnum | null;
   hasAttributes?: boolean | null;
   image?: ProductImage | null;
-  attributes?: { nodes: Array<Attribute> } | null;
+  attributes?: { nodes: Attribute[] } | null;
+  node?: SimpleProduct | VariableProduct;
 }
 
 interface ProductImage {
@@ -193,20 +190,6 @@ interface ProductImage {
   cartSourceUrl?: string | null;
 }
 
-interface ProductVariation {
-  name?: string | null;
-  databaseId?: number;
-  price?: string | null;
-  regularPrice?: string | null;
-  salePrice?: string | null;
-  slug?: string | null;
-  stockQuantity?: number | null;
-  stockStatus?: StockStatusEnum | null;
-  hasAttributes?: boolean | null;
-  image?: ProductImage | null;
-  attributes?: { nodes: Array<Attribute> } | null;
-}
-
 interface ShippingMethodRate {
   cost?: string | null;
   id: string;
@@ -214,7 +197,7 @@ interface ShippingMethodRate {
 }
 
 interface ShippingMethod {
-  rates?: Array<ShippingMethodRate | null> | null;
+  rates?: ShippingMethodRate[] | null;
 }
 
 interface AppliedCoupon {
@@ -250,7 +233,31 @@ interface Cart {
   shippingTotal?: string | null;
   chosenShippingMethods?: Array<string | null> | null;
   isEmpty?: boolean | null;
-  availableShippingMethods?: Array<ShippingMethod | null> | null;
-  appliedCoupons?: Array<AppliedCoupon | null> | null;
+  availableShippingMethods?: ShippingMethod[] | null;
+  appliedCoupons?: AppliedCoupon[] | null;
   contents?: CartContents | null;
+}
+
+interface LineItem {
+  quantity?: number | null;
+  total?: string | null;
+  product?: Product | null;
+  variation?: Variation | null;
+}
+
+interface Order {
+  needsPayment?: boolean | null;
+  needsProcessing?: boolean | null;
+  status?: OrderStatusEnum | null;
+  databaseId?: number | null;
+  orderKey?: string | null;
+  subtotal?: string | null;
+  total?: string | null;
+  totalTax?: string | null;
+  shippingTotal?: string | null;
+  paymentMethodTitle?: string | null;
+  paymentMethod?: string | null;
+  date?: string | null;
+  customer?: Customer | null;
+  lineItems?: { nodes?: LineItem[] } | null;
 }

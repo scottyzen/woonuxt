@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const { logoutUser, viewer } = useAuth();
 const route = useRoute();
 
@@ -39,7 +39,6 @@ const activeTab = computed(() => {
       <main class="flex-1 w-full my-8 rounded-lg">
         <AccountMyDetails v-if="activeTab === 'my-details'" :user="viewer" />
         <div v-else-if="activeTab === 'orders'">
-          <!-- <h2 class="text-lg font-semibold">Orders</h2> -->
           <OrderList />
         </div>
       </main>

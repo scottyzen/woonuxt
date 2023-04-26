@@ -1,6 +1,6 @@
-<script setup>
+<script lang="ts" setup>
 const { data } = await useAsyncGql('getProductCategories', { first: 6 });
-const productCategories = data.value.productCategories?.nodes || [];
+const productCategories = data.value?.productCategories?.nodes || [];
 const runtimeConfig = useRuntimeConfig();
 
 useHead({

@@ -12,6 +12,28 @@ enum ProductTypesEnum {
   VARIATION = 'VARIATION',
 }
 
+enum OrderEnum {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
+
+enum OrderIdTypeEnum {
+  DATABASE_ID = 'DATABASE_ID',
+  ID = 'ID',
+  ORDER_NUMBER = 'ORDER_NUMBER',
+}
+
+enum OrderStatusEnum {
+  CANCELLED = 'CANCELLED',
+  CHECKOUT_DRAFT = 'CHECKOUT_DRAFT',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+  ON_HOLD = 'ON_HOLD',
+  PENDING = 'PENDING',
+  PROCESSING = 'PROCESSING',
+  REFUNDED = 'REFUNDED',
+}
+
 enum CountriesEnum {
   AD = 'AD',
   AE = 'AE',
