@@ -15,7 +15,10 @@ export const useAuth = () => {
       const { loginWithCookies } = await GqlLogin(credentials);
 
       if (loginWithCookies?.status === 'SUCCESS') {
-        refreshCart();
+        const cart = await refreshCart();
+        if (cart && viewer.value === null) {
+          return { success: false, error: 'Password was correct, but there was an error logging in. Plwase try again later. If the problem persists, please contact support.' };
+        }
       } else {
         isPending.value = false;
         return { success: false, error: loginWithCookies?.status };
@@ -35,9 +38,11 @@ export const useAuth = () => {
     try {
       const { logout } = await GqlLogout();
       if (logout) {
-        refreshCart();
+        isPending.value = false;
+        await refreshCart();
         clearAllCookies();
         viewer.value = null;
+        customer.value = { billing: {}, shipping: {} };
       }
       return { success: true, error: null };
     } catch (error) {

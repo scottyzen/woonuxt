@@ -190,23 +190,6 @@ interface ProductImage {
   cartSourceUrl?: string | null;
 }
 
-interface ShippingMethodRate {
-  cost?: string | null;
-  id: string;
-  label?: string | null;
-}
-
-interface ShippingMethod {
-  rates?: ShippingMethodRate[] | null;
-}
-
-interface AppliedCoupon {
-  description?: string | null;
-  discountTax: string;
-  discountAmount: string;
-  code: string;
-}
-
 interface CartItem {
   quantity?: number | null;
   key: string;
@@ -225,6 +208,19 @@ interface PaymentGateway {
   id?: string | null;
 }
 
+interface AppliedCoupon {
+  description?: string | null;
+  discountTax: string;
+  discountAmount: string;
+  code: string;
+}
+
+interface ShippingMethodRate {
+  cost?: string | null;
+  id: string;
+  label?: string | null;
+}
+
 interface Cart {
   total?: string | null;
   subtotal?: string | null;
@@ -233,8 +229,8 @@ interface Cart {
   shippingTotal?: string | null;
   chosenShippingMethods?: Array<string | null> | null;
   isEmpty?: boolean | null;
-  availableShippingMethods?: ShippingMethod[] | null;
-  appliedCoupons?: AppliedCoupon[] | null;
+  appliedCoupons?: Array<AppliedCoupon | null> | null;
+  availableShippingMethods?: Array<{ rates?: Array<ShippingMethodRate | null> | null } | null> | null;
   contents?: CartContents | null;
 }
 
