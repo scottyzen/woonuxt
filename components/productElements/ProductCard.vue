@@ -5,9 +5,9 @@ const props = defineProps({
   index: { type: Number, default: 1 },
 });
 
+const fallbackImage = '/images/placeholder.jpg';
 const imgWidth = 400;
 const imgHeight = 500;
-const mainImage = ref(props.node?.image?.sourceUrl || '/images/placeholder.jpg');
 
 // example: ?filter=pa_color[green,blue],pa_size[large]
 const filterQuery = ref(route.query.filter);
@@ -21,6 +21,8 @@ watch(
     paColor.value = filterQuery.value?.split('pa_color[')[1]?.split(']')[0]?.split(',') || [];
   }
 );
+
+const mainImage = computed(() => props.node?.image?.sourceUrl);
 
 const colorVariableImage = computed(() => {
   if (paColor.value.length) {
@@ -37,17 +39,16 @@ const colorVariableImage = computed(() => {
   <NuxtLink :to="`/product/${node.slug}`" class="relative product-card">
     <SaleBadge :node="node" class="absolute top-2 right-2" />
     <img
-      v-if="!!colorVariableImage"
-      :width="imgWidth"
-      :height="imgHeight"
+      v-if="colorVariableImage"
       :src="colorVariableImage"
       :alt="node.image?.altText || node.name"
-      :title="node.image?.title || node.name" />
+      :title="node.image?.title || node.name"
+      :loading="index <= 1 ? 'eager' : 'lazy'" />
     <NuxtImg
       v-else
       :width="imgWidth"
       :height="imgHeight"
-      :src="mainImage"
+      :src="mainImage || fallbackImage"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
       :loading="index <= 1 ? 'eager' : 'lazy'"
