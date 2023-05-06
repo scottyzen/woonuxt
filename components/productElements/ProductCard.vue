@@ -26,8 +26,7 @@ const colorVariableImage = computed(() => {
   if (paColor.value.length) {
     const activeColorImage = props.node?.variations?.nodes.filter((variation) => paColor.value.some((color) => variation.slug.includes(color)));
     if (activeColorImage && activeColorImage.length) {
-      const image = activeColorImage[0]?.image?.sourceUrl;
-      if (image) return image;
+      return activeColorImage[0].image?.sourceUrl;
     }
   }
   return null;
@@ -38,7 +37,7 @@ const colorVariableImage = computed(() => {
   <NuxtLink :to="`/product/${node.slug}`" class="relative product-card">
     <SaleBadge :node="node" class="absolute top-2 right-2" />
     <img
-      v-if="colorVariableImage"
+      v-if="!!colorVariableImage"
       :width="imgWidth"
       :height="imgHeight"
       :src="colorVariableImage"
@@ -52,8 +51,7 @@ const colorVariableImage = computed(() => {
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
       :loading="index <= 1 ? 'eager' : 'lazy'"
-      format="webp"
-      :ref="`product-card-${index}`" />
+      format="webp" />
 
     <div class="p-2">
       <StarRating :rating="node.averageRating" :count="node.reviewCount" />
