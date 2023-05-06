@@ -22,46 +22,23 @@ watch(
   }
 );
 
-const colorVariableImage = computed(async () => {
+const colorVariableImage = computed(() => {
   if (paColor.value.length) {
     const activeColorImage = props.node?.variations?.nodes.filter((variation) => paColor.value.some((color) => variation.slug.includes(color)));
     if (activeColorImage && activeColorImage.length) {
       const image = activeColorImage[0]?.image?.sourceUrl;
-      // check if image url returns 200
-      // const response = await fetch(image);
-      // if (response.ok) return image;
-      try {
-        const response = await fetch(image);
-        console.log(response);
-        if (response.ok) return image;
-      } catch (error) {
-        console.log(error);
-      }
+      if (image) return image;
     }
   }
   return null;
 });
 
-watch(
-  () => colorVariableImage.value,
-  () => {
-    if (colorVariableImage.value) {
-      mainImage.value = colorVariableImage.value;
-    } else {
-      mainImage.value = props.node?.image?.sourceUrl || '/images/placeholder.jpg';
-    }
-  }
-);
-
 const fallbackIf404 = () => {
-  if (mainImage.value === '/images/placeholder.jpg') return;
-  const img = new Image();
-  img.src = mainImage.value;
-  img.onload = () => {
-    if (img.naturalWidth === 404) {
-      mainImage.value = '/images/placeholder.jpg';
-    }
-  };
+  const img = ref(`product-card-${props.index}`);
+  if (img.value && img.value.naturalWidth === 0) {
+    console.log('fallbackIf404: img not found');
+    colorVariableImage.value = null;
+  }
 };
 </script>
 
@@ -69,14 +46,15 @@ const fallbackIf404 = () => {
   <NuxtLink :to="`/product/${node.slug}`" class="relative product-card">
     <SaleBadge :node="node" class="absolute top-2 right-2" />
     <NuxtImg
-      v-if="mainImage"
+      v-if="mainImage || colorVariableImage"
       :width="imgWidth"
       :height="imgHeight"
-      :src="mainImage"
+      :src="colorVariableImage || mainImage || fallbackImage"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
       :loading="index <= 1 ? 'eager' : 'lazy'"
       format="webp"
+      :ref="`product-card-${index}`"
       @load="fallbackIf404" />
 
     <div class="p-2">
