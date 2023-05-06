@@ -5,6 +5,7 @@ const props = defineProps({
   index: { type: Number, default: 1 },
 });
 
+const fallbackImage = '/images/placeholder.jpg';
 const imgWidth = 400;
 const imgHeight = 500;
 
@@ -21,27 +22,33 @@ watch(
   }
 );
 
-const imageSrc = computed(() => {
-  const fallbackImage = '/images/placeholder.jpg';
-  // If we have a color filter, we need to find the image that matches the color
+const mainImage = computed(() => props.node?.image?.sourceUrl);
+
+const colorVariableImage = computed(() => {
   if (paColor.value.length) {
     const activeColorImage = props.node?.variations?.nodes.filter((variation) => paColor.value.some((color) => variation.slug.includes(color)));
     if (activeColorImage && activeColorImage.length) {
-      return activeColorImage[0].image?.sourceUrl || fallbackImage;
+      return activeColorImage[0].image?.sourceUrl;
     }
   }
-  return props.node?.image?.sourceUrl || fallbackImage;
+  return null;
 });
 </script>
 
 <template>
   <NuxtLink :to="`/product/${node.slug}`" class="relative product-card">
     <SaleBadge :node="node" class="absolute top-2 right-2" />
+    <img
+      v-if="colorVariableImage"
+      :src="colorVariableImage"
+      :alt="node.image?.altText || node.name"
+      :title="node.image?.title || node.name"
+      :loading="index <= 1 ? 'eager' : 'lazy'" />
     <NuxtImg
-      v-if="imageSrc"
+      v-else
       :width="imgWidth"
       :height="imgHeight"
-      :src="imageSrc"
+      :src="mainImage || fallbackImage"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
       :loading="index <= 1 ? 'eager' : 'lazy'"
