@@ -32,27 +32,28 @@ const colorVariableImage = computed(() => {
   }
   return null;
 });
-
-const fallbackIf404 = () => {
-  console.log('fallbackIf404: img not found');
-  colorVariableImage.value = null;
-};
 </script>
 
 <template>
   <NuxtLink :to="`/product/${node.slug}`" class="relative product-card">
     <SaleBadge :node="node" class="absolute top-2 right-2" />
-    <NuxtImg
-      v-if="mainImage || colorVariableImage"
+    <img
+      v-if="colorVariableImage"
       :width="imgWidth"
       :height="imgHeight"
-      :src="colorVariableImage || mainImage || fallbackImage"
+      :src="colorVariableImage"
+      :alt="node.image?.altText || node.name"
+      :title="node.image?.title || node.name" />
+    <NuxtImg
+      v-else
+      :width="imgWidth"
+      :height="imgHeight"
+      :src="mainImage"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
       :loading="index <= 1 ? 'eager' : 'lazy'"
       format="webp"
-      :ref="`product-card-${index}`"
-      @error="fallbackIf404" />
+      :ref="`product-card-${index}`" />
 
     <div class="p-2">
       <StarRating :rating="node.averageRating" :count="node.reviewCount" />
