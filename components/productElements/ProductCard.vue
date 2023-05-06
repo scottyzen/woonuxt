@@ -34,11 +34,8 @@ const colorVariableImage = computed(() => {
 });
 
 const fallbackIf404 = () => {
-  const img = ref(`product-card-${props.index}`);
-  if (img.value && img.value.naturalWidth === 0) {
-    console.log('fallbackIf404: img not found');
-    colorVariableImage.value = null;
-  }
+  console.log('fallbackIf404: img not found');
+  colorVariableImage.value = null;
 };
 </script>
 
@@ -55,7 +52,7 @@ const fallbackIf404 = () => {
       :loading="index <= 1 ? 'eager' : 'lazy'"
       format="webp"
       :ref="`product-card-${index}`"
-      @load="fallbackIf404" />
+      @error="fallbackIf404" />
 
     <div class="p-2">
       <StarRating :rating="node.averageRating" :count="node.reviewCount" />
