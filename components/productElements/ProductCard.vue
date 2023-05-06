@@ -7,6 +7,7 @@ const props = defineProps({
 
 const imgWidth = 400;
 const imgHeight = 500;
+const mainImage = ref(props.node?.image?.sourceUrl || '/images/placeholder.jpg');
 
 // example: ?filter=pa_color[green,blue],pa_size[large]
 const filterQuery = ref(route.query.filter);
@@ -21,31 +22,62 @@ watch(
   }
 );
 
-const imageSrc = computed(() => {
-  const fallbackImage = '/images/placeholder.jpg';
-  // If we have a color filter, we need to find the image that matches the color
+const colorVariableImage = computed(async () => {
   if (paColor.value.length) {
     const activeColorImage = props.node?.variations?.nodes.filter((variation) => paColor.value.some((color) => variation.slug.includes(color)));
     if (activeColorImage && activeColorImage.length) {
-      return activeColorImage[0].image?.sourceUrl || fallbackImage;
+      const image = activeColorImage[0]?.image?.sourceUrl;
+      // check if image url returns 200
+      // const response = await fetch(image);
+      // if (response.ok) return image;
+      try {
+        const response = await fetch(image);
+        console.log(response);
+        if (response.ok) return image;
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
-  return props.node?.image?.sourceUrl || fallbackImage;
+  return null;
 });
+
+watch(
+  () => colorVariableImage.value,
+  () => {
+    if (colorVariableImage.value) {
+      mainImage.value = colorVariableImage.value;
+    } else {
+      mainImage.value = props.node?.image?.sourceUrl || '/images/placeholder.jpg';
+    }
+  }
+);
+
+const fallbackIf404 = () => {
+  if (mainImage.value === '/images/placeholder.jpg') return;
+  const img = new Image();
+  img.src = mainImage.value;
+  img.onload = () => {
+    if (img.naturalWidth === 404) {
+      mainImage.value = '/images/placeholder.jpg';
+    }
+  };
+};
 </script>
 
 <template>
   <NuxtLink :to="`/product/${node.slug}`" class="relative product-card">
     <SaleBadge :node="node" class="absolute top-2 right-2" />
     <NuxtImg
-      v-if="imageSrc"
+      v-if="mainImage"
       :width="imgWidth"
       :height="imgHeight"
-      :src="imageSrc"
+      :src="mainImage"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
       :loading="index <= 1 ? 'eager' : 'lazy'"
-      format="webp" />
+      format="webp"
+      @load="fallbackIf404" />
 
     <div class="p-2">
       <StarRating :rating="node.averageRating" :count="node.reviewCount" />
