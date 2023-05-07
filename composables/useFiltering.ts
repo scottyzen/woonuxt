@@ -37,11 +37,20 @@ export function useFiltering() {
 
     router.push({ query: { ...route.query, filter: newFilterQuery } });
 
+    // remove pagination from the url
+    const path = route.path.includes('/page/') ? route.path.split('/page/')[0] : route.path;
+
     // if the filter query is empty, remove it from the url
     if (!newFilterQuery) {
-      router.push({ query: { ...route.query, filter: undefined } });
+      router.push({
+        path,
+        query: { ...route.query, filter: undefined },
+      });
     } else {
-      router.push({ query: { ...route.query, filter: newFilterQuery } });
+      router.push({
+        path,
+        query: { ...route.query, filter: newFilterQuery },
+      });
     }
 
     setTimeout(() => {
