@@ -12,7 +12,7 @@
       </label>
       <label for="password"
         >{{ $t('messages.account.password') }} <span class="text-red-500">*</span> <br />
-        <input id="password" v-model="userInfo.password" placeholder="Password" type="password" required />
+        <PasswordInput id="password" class="mb-4" className="border rounded-lg w-full p-3 px-4 bg-white" v-model="userInfo.password" placeholder="Password" required />
       </label>
       <Transition name="scale-y" mode="out-in">
         <div v-if="message" class="my-4 text-sm text-green-500" v-html="message"></div>
@@ -80,8 +80,9 @@ const loginOrRegister = async (userInfo) => {
 
 <style lang="postcss" scoped>
 input,
-button {
-  @apply border rounded-lg mb-4 w-full p-3 px-4;
+button,
+.form-input {
+  @apply border rounded-lg mb-4 w-full p-3 px-4 bg-white;
 }
 
 form button {
