@@ -15,7 +15,7 @@
     "@nuxt/image-edge": "^1.0.0-28059208.2abef1b",
     "@nuxtjs/eslint-config-typescript": "^12.0.0",
     "@nuxtjs/i18n": "^8.0.0-beta.10",
-    "@nuxtjs/tailwindcss": "^6.6.8",
+    "@nuxtjs/tailwindcss": "^6.7.0",
     "@tailwindcss/typography": "^0.5.9",
     "eslint": "^8.40.0",
     "eslint-config-prettier": "^8.8.0",
