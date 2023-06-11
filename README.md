@@ -44,7 +44,7 @@ The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for
 | WooNuxt Settings Module                               |                      |      | ✅          |                 |
 | Better Typescript Supp                                |                      |      | ✅          |                 |
 | Mobile layout                                         | ✅                   |      | ✅          |                 |
-| Countries & States Enums                              |                      |      |             | ✅              |
+| Countries & States Enums                              |                      |      | ✅          |                 |
 | Cookie Popup & GDPR Compliance                        |                      |      |             | ✅              |
 | Progressive Web App (PWA)                             |                      |      | ✅          |                 |
 | Queing System (for chcecking out when server is busy) |                      |      |             | ✅              |
