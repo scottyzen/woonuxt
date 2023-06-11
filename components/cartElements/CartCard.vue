@@ -13,7 +13,7 @@ const updateQuantity = () => {
 
 <template>
   <li v-if="item" class="flex items-center gap-4">
-    <NuxtLink :to="props.item.product.node.slug">
+    <NuxtLink :to="`/product/${props.item.product.node.slug}`">
       <img
         v-if="productType.image"
         width="64"
@@ -25,7 +25,7 @@ const updateQuantity = () => {
         loading="lazy" />
     </NuxtLink>
     <div class="flex-1">
-      <NuxtLink class="leading-tight" :to="props.item.product.node.slug">{{ productType.name }}</NuxtLink>
+      <NuxtLink class="leading-tight" :to="`/product/${props.item.product.node.slug}`">{{ productType.name }}</NuxtLink>
       <ProductPrice class="mt-1 text-xs" :sale-price="productType.salePrice" :regular-price="productType.regularPrice" />
     </div>
     <input
