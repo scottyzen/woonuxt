@@ -1,10 +1,10 @@
-enum StockStatusEnum {
+export enum StockStatusEnum {
   IN_STOCK = 'IN_STOCK',
   ON_BACKORDER = 'ON_BACKORDER',
   OUT_OF_STOCK = 'OUT_OF_STOCK',
 }
 
-enum ProductTypesEnum {
+export enum ProductTypesEnum {
   EXTERNAL = 'EXTERNAL',
   GROUPED = 'GROUPED',
   SIMPLE = 'SIMPLE',
@@ -12,18 +12,18 @@ enum ProductTypesEnum {
   VARIATION = 'VARIATION',
 }
 
-enum OrderEnum {
+export enum OrderEnum {
   ASC = 'ASC',
   DESC = 'DESC',
 }
 
-enum OrderIdTypeEnum {
+export enum OrderIdTypeEnum {
   DATABASE_ID = 'DATABASE_ID',
   ID = 'ID',
   ORDER_NUMBER = 'ORDER_NUMBER',
 }
 
-enum OrderStatusEnum {
+export enum OrderStatusEnum {
   CANCELLED = 'CANCELLED',
   CHECKOUT_DRAFT = 'CHECKOUT_DRAFT',
   COMPLETED = 'COMPLETED',
@@ -34,7 +34,7 @@ enum OrderStatusEnum {
   REFUNDED = 'REFUNDED',
 }
 
-enum CountriesEnum {
+export enum CountriesEnum {
   AD = 'AD',
   AE = 'AE',
   AF = 'AF',

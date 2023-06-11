@@ -7,7 +7,7 @@ const billing = toRef(props, 'modelValue');
 </script>
 
 <template>
-  <div class="w-full grid gap-4 lg:grid-cols-2">
+  <div class="grid w-full gap-4 lg:grid-cols-2">
     <div class="w-full">
       <label for="first-name">{{ $t('messages.billing.firstName') }}</label>
       <input v-model="billing.firstName" placeholder="John" type="text" required />
@@ -20,12 +20,7 @@ const billing = toRef(props, 'modelValue');
 
     <div class="w-full">
       <label for="email">{{ $t('messages.billing.email') }}</label>
-      <input
-        v-model="billing.email"
-        placeholder="johndoe@email.com"
-        type="email"
-        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-        required />
+      <input v-model="billing.email" placeholder="johndoe@email.com" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required />
     </div>
 
     <div class="w-full">
@@ -46,6 +41,16 @@ const billing = toRef(props, 'modelValue');
     <div class="w-full">
       <label for="city">{{ $t('messages.billing.city') }}</label>
       <input v-model="billing.city" placeholder="Dublin" type="text" required />
+    </div>
+
+    <div class="w-full">
+      <label for="zip">ZIP (Optional)</label>
+      <input v-model="billing.postcode" placeholder="D01 1234" type="text" required />
+    </div>
+
+    <div class="w-full">
+      <label for="country">County</label>
+      <StateSelect v-model="billing.state" :default-value="billing.state" :country-code="billing.country" />
     </div>
 
     <div class="w-full">
