@@ -102,6 +102,8 @@ const payNow = async () => {
           </ClientOnly>
         </div>
 
+        <pre>{{ customer }}</pre>
+
         <!-- Pay methods -->
         <div class="mt-2 col-span-full">
           <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.billing.paymentOptions') }}</h2>
