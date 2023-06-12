@@ -17,8 +17,7 @@ const showShare = () => {
 </script>
 
 <template>
-  <a v-if="!isOpen" class="cursor-pointer flex mt-4 text-sm text-gray-400 gap-2 items-center" @click="showShare">
-    <!-- <pre>{{product}}</pre> -->
+  <a v-if="!isOpen" class="flex items-center gap-2 mt-4 text-sm text-gray-400 cursor-pointer" @click="showShare">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="18" height="18">
       <circle cx="128" cy="256" r="48" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
       <circle cx="384" cy="112" r="48" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
@@ -27,7 +26,7 @@ const showShare = () => {
     </svg>
     <span>{{ $t('messages.general.share') }}</span>
   </a>
-  <div v-else class="cursor-pointer flex mt-4 text-sm text-gray-400 gap-2 items-center">
+  <div v-else class="flex items-center gap-2 mt-4 text-sm text-gray-400 cursor-pointer">
     <!-- Twitter -->
     <a :href="twitterUrl" target="_blank">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="18" height="18" fill="currentColor">

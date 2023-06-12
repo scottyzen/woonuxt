@@ -248,6 +248,7 @@ const countries = [
 
 const props = defineProps({
   modelValue: { type: String, default: 'IE' },
+  allowedCountries: { type: Array, default: [] },
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -256,14 +257,17 @@ function select(evt) {
   emit('update:modelValue', evt.target.value);
 }
 
-onMounted(() => {
-  console.log('mounted', props.modelValue, props.defaultValue);
+const countriesToShow = computed(() => {
+  if (props.allowedCountries.length) {
+    return countries.filter((country) => props.allowedCountries.includes(country.countryCode));
+  }
+  return countries;
 });
 </script>
 
 <template>
   <select :value="modelValue" @change="select">
-    <option v-for="country in countries" :key="country.countryName" :value="country.countryCode">
+    <option v-for="country in countriesToShow" :key="country.countryName" :value="country.countryCode">
       {{ country.countryName }}
     </option>
   </select>

@@ -1,4 +1,6 @@
 <script setup>
+const { allowedCountries } = await GqlGetStates({ country: 'IE' });
+
 const props = defineProps({
   modelValue: { type: Object, required: true },
 });
@@ -55,7 +57,7 @@ const shipping = toRef(props, 'modelValue');
 
     <div class="w-full">
       <label for="country">{{ $t('messages.billing.country') }}</label>
-      <CountrySelect v-model="shipping.country" :default-value="shipping.country" />
+      <CountrySelect v-model="shipping.country" :default-value="shipping.country" :allowed-countries="allowedCountries" />
     </div>
   </div>
 </template>
