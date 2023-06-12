@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 const route = useRoute();
 const order = ref() as Ref<null | Order>;
-const error = ref() as Ref<null | any>;
+const { customer } = useAuth();
 
 onMounted(() => {
   if (route.params.orderId) getOrder();
@@ -10,11 +10,10 @@ onMounted(() => {
 async function getOrder() {
   try {
     const data = await GqlGetOrder({ id: route.params.orderId as string });
+    console.log(data);
     if (data.order) order.value = data.order;
-
-    if (data.order === null) error.value = true;
   } catch (err: any) {
-    error.value = err;
+    console.error(err);
   }
 }
 
@@ -29,13 +28,17 @@ function formatDate(date = '') {
 function formatPrice(price: string) {
   return parseFloat(price).toLocaleString('en-US', { style: 'currency', currency: 'EUR' });
 }
+
+const isGuest = computed(() => {
+  return !customer.value.databaseId;
+});
 </script>
 
 <template>
   <div class="w-full min-h-[600px] flex justify-center items-center p-8 text-gray-800 md:bg-white md:rounded-xl md:mx-auto md:shadow-lg md:my-24 md:mt-8 md:max-w-3xl md:p-16">
-    <div v-if="order?.databaseId" class="w-full">
+    <div v-if="order?.databaseId && !isGuest" class="w-full">
       <h1 class="mb-2 text-xl font-semibold">{{ $t('messages.shop.orderSummary') }}</h1>
-      <p v-if="order">{{ $t('messages.shop.orderThanks') }}</p>
+      <p>{{ $t('messages.shop.orderThanks') }}</p>
 
       <hr class="my-8" />
 
@@ -101,11 +104,9 @@ function formatPrice(price: string) {
         </div>
       </div>
     </div>
-    <div v-else-if="error" class="w-full text-center">
-      <h1 class="mb-4 text-2xl font-semibold">{{ $t('messages.error.general') }}</h1>
-      <p class="mb-8">
-        {{ $t('messages.error.noOrder') }}
-      </p>
+    <div v-else-if="isGuest && !order" class="w-full text-center">
+      <h1 class="mb-2 text-xl font-semibold">{{ $t('messages.shop.orderSummary') }}</h1>
+      <p class="mb-8">{{ $t('messages.shop.orderThanks') }}</p>
       <NuxtLink to="/" class="bg-primary rounded-lg font-bold text-white text-center min-w-[150px] p-2.5 focus:outline-noney">
         {{ $t('messages.general.goHome') }}
       </NuxtLink>

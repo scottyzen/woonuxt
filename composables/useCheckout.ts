@@ -58,6 +58,11 @@ export function useCheckout() {
 
     if ((await checkout?.result) === 'success') {
       refreshCart();
+    } else {
+      isProcessingOrder.value = false;
+      alert('There was an error processing your order. Please try again.');
+      window.location.reload();
+      return;
     }
 
     const orderId = checkout?.order?.databaseId;
