@@ -60,7 +60,7 @@ The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for
 | WooGraphQL     | GraphQL API for WooCommerce              | https://woographql.com/                     |
 | WPGraphQL Cors | Enable CORS for WPGraphQL                | https://github.com/funkhaus/wp-graphql-cors |
 
-> **Note** The the [WooNuxt Settings](https://github.com/scottyzen/woonuxt-settings/releases/download/1.0.29/woonuxt-settings.zip) plugin will help you install all the required plugins.
+> **Note** The the [WooNuxt Settings](https://github.com/scottyzen/woonuxt-settings/releases/download/1.0.29/woonuxt-settings.zip) plugin will help you install all the required plugins. WooGraphQL 0.13.0 and up is required to get the list of available countries and states. You can find the latest version of WooGraphQL [here](https://github.com/wp-graphql/wp-graphql-woocommerce/releases)
 
 &nbsp;
 
@@ -80,4 +80,8 @@ The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for
 | WooGraphQL      | 0.13.0  |
 | Node            | 16.18.1 |
 
-> **Note** The latest WooGraphQL is required to get the list of available countries and states. You can find the latest version of WooGraphQL [here](https://github.com/wp-graphql/wp-graphql-woocommerce/releases)
+### Current translations
+
+- English 🇺🇸
+- Deutsch 🇩🇪
+- Español 🇪🇸
