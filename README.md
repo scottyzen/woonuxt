@@ -74,8 +74,10 @@ The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for
 
 | Plugin/Software | Version |
 | --------------- | ------- |
-| WordPress       | 6.2.0   |
-| WooCommerce     | 7.7.0   |
+| WordPress       | 6.2.2   |
+| WooCommerce     | 7.7.2   |
 | WPGraphQL       | 1.14.0  |
-| WooGraphQL      | 0.12.3  |
+| WooGraphQL      | 0.13.0  |
 | Node            | 16.18.1 |
+
+> **Note** The latest WooGraphQL is required to get the list of available countries and states. You can find the latest version of WooGraphQL [here](https://github.com/wp-graphql/wp-graphql-woocommerce/releases)
