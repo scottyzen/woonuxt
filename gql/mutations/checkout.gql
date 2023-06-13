@@ -5,6 +5,7 @@ mutation Checkout(
   $shipping: CustomerAddressInput = {}
   $customerNote: String = ""
   $shipToDifferentAddress: Boolean = false
+  $account: CreateAccountInput = { username: "", password: "" }
 ) {
   checkout(
     input: {
@@ -14,6 +15,7 @@ mutation Checkout(
       shipping: $shipping
       customerNote: $customerNote
       shipToDifferentAddress: $shipToDifferentAddress
+      account: $account
     }
   ) {
     result

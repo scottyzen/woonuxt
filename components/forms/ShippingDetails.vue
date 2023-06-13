@@ -20,16 +20,6 @@ const shipping = toRef(props, 'modelValue');
       <input v-model="shipping.lastName" placeholder="Doe" type="text" required />
     </div>
 
-    <div class="w-full">
-      <label for="email">{{ $t('messages.billing.email') }}</label>
-      <input v-model="shipping.email" placeholder="johndoe@email.com" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required />
-    </div>
-
-    <div class="w-full">
-      <label for="phone">{{ $t('messages.billing.phone') }}</label>
-      <input v-model="shipping.phone" placeholder="+353871234567" type="tel" />
-    </div>
-
     <div class="w-full col-span-full">
       <label for="address1">{{ $t('messages.billing.address1') }}</label>
       <input v-model="shipping.address1" placeholder="O'Connell Street" type="text" required />
@@ -46,7 +36,7 @@ const shipping = toRef(props, 'modelValue');
     </div>
 
     <div class="w-full">
-      <label for="zip">ZIP (Optional)</label>
+      <label for="zip">ZIP ({{ $t('messages.general.optional') }})</label>
       <input v-model="shipping.postcode" placeholder="D01 1234" type="text" required />
     </div>
 
@@ -58,6 +48,11 @@ const shipping = toRef(props, 'modelValue');
     <div class="w-full">
       <label for="country">{{ $t('messages.billing.country') }}</label>
       <CountrySelect v-model="shipping.country" :default-value="shipping.country" :allowed-countries="allowedCountries" />
+    </div>
+
+    <div class="w-full col-span-full">
+      <label for="phone">{{ $t('messages.billing.phone') }} ({{ $t('messages.general.optional') }})</label>
+      <input v-model="shipping.phone" placeholder="+353871234567" type="tel" />
     </div>
   </div>
 </template>

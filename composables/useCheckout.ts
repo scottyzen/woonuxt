@@ -11,12 +11,13 @@ export function useCheckout() {
   const isProcessingOrder = useState<boolean>('isProcessingOrder', () => false);
 
   const proccessCheckout = async () => {
+    const { loginUser } = useAuth();
     const router = useRouter();
     const { replaceQueryParam } = useHelpers();
 
     isProcessingOrder.value = true;
 
-    const { refreshCart } = useCart();
+    const { refreshCart, emptyCart } = useCart();
     const { customer } = useAuth();
 
     const billing = {
@@ -39,7 +40,7 @@ export function useCheckout() {
       city: customer.value.shipping?.city,
       company: customer.value.shipping?.company,
       country: customer.value.shipping?.country,
-      email: customer.value.shipping?.email,
+      email: customer.value.billing?.email,
       firstName: customer.value.shipping?.firstName,
       lastName: customer.value.shipping?.lastName,
       phone: customer.value.shipping?.phone,
@@ -47,47 +48,72 @@ export function useCheckout() {
       state: customer.value.shipping?.state,
     };
 
-    const { checkout } = await GqlCheckout({
-      billing,
-      shipping: orderInput.value.shipToDifferentAddress ? shipping : billing,
-      metaData: orderInput.value.metaData,
-      paymentMethod: orderInput.value.paymentMethod,
-      customerNote: orderInput.value.customerNote,
-      shipToDifferentAddress: orderInput.value.shipToDifferentAddress,
-    });
+    try {
+      let checkoutPayload = {
+        billing,
+        shipping: orderInput.value.shipToDifferentAddress ? shipping : billing,
+        metaData: orderInput.value.metaData,
+        paymentMethod: orderInput.value.paymentMethod,
+        customerNote: orderInput.value.customerNote,
+        shipToDifferentAddress: orderInput.value.shipToDifferentAddress,
+      };
 
-    if ((await checkout?.result) === 'success') {
-      refreshCart();
-    } else {
+      if (orderInput.value.createAccount) {
+        // @ts-ignore
+        checkoutPayload.account = {
+          username: customer.value.billing?.email,
+          password: orderInput.value.password,
+        };
+      }
+
+      const { checkout } = await GqlCheckout(checkoutPayload);
+
+      if (orderInput.value.createAccount) {
+        await loginUser({
+          // @ts-ignore
+          username: customer.value.billing?.email,
+          password: orderInput.value.password,
+        });
+      }
+
+      if ((await checkout?.result) === 'success') {
+        emptyCart();
+      } else {
+        isProcessingOrder.value = false;
+        alert('There was an error processing your order. Please try again.');
+        window.location.reload();
+        return;
+      }
+
+      const orderId = checkout?.order?.databaseId;
+      const orderKey = checkout?.order?.orderKey;
+
+      // PayPal redirect
+      if ((await checkout?.redirect) && orderInput.value.paymentMethod === 'paypal') {
+        const runtimeConfig = useRuntimeConfig();
+        const frontEndUrl = runtimeConfig?.public?.FRONT_END_URL;
+        let redirectUrl = checkout?.redirect || '';
+
+        const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}`;
+        const payPalCancelUrl = `${frontEndUrl}/checkout/?cancel_order=true`;
+
+        redirectUrl = replaceQueryParam('return', payPalReturnUrl, redirectUrl);
+        redirectUrl = replaceQueryParam('cancel_return', payPalCancelUrl, redirectUrl);
+        redirectUrl = replaceQueryParam('bn', 'WooNuxt_Cart', redirectUrl);
+
+        window.location.href = redirectUrl;
+      } else {
+        router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
+      }
+
       isProcessingOrder.value = false;
-      alert('There was an error processing your order. Please try again.');
-      window.location.reload();
-      return;
+      return checkout;
+    } catch (error: any) {
+      const errorMessage = error?.gqlErrors?.[0].message;
+      isProcessingOrder.value = false;
+      alert(errorMessage);
+      return null;
     }
-
-    const orderId = checkout?.order?.databaseId;
-    const orderKey = checkout?.order?.orderKey;
-
-    // PayPal redirect
-    if ((await checkout?.redirect) && orderInput.value.paymentMethod === 'paypal') {
-      const runtimeConfig = useRuntimeConfig();
-      const frontEndUrl = runtimeConfig?.public?.FRONT_END_URL;
-      let redirectUrl = checkout?.redirect || '';
-
-      const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}`;
-      const payPalCancelUrl = `${frontEndUrl}/checkout/?cancel_order=true`;
-
-      redirectUrl = replaceQueryParam('return', payPalReturnUrl, redirectUrl);
-      redirectUrl = replaceQueryParam('cancel_return', payPalCancelUrl, redirectUrl);
-      redirectUrl = replaceQueryParam('bn', 'WooNuxt_Cart', redirectUrl);
-
-      window.location.href = redirectUrl;
-    } else {
-      router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
-    }
-
-    isProcessingOrder.value = false;
-    return checkout;
   };
 
   return {

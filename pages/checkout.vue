@@ -4,7 +4,7 @@ import { loadStripe } from '@stripe/stripe-js';
 
 const { t } = useI18n();
 const { cart, toggleCart, isUpdatingCart, paymentGateways } = useCart();
-const { customer } = useAuth();
+const { customer, viewer } = useAuth();
 const { orderInput, proccessCheckout, isProcessingOrder } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
 const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY;
@@ -70,7 +70,7 @@ const payNow = async () => {
 
         <button
           v-else
-          class="flex items-center justify-center w-full p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary gap- hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
+          class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary gap- hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
           :disabled="isProcessingOrder || isUpdatingCart">
           <span>{{ buttonText }}</span>
           <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
@@ -78,6 +78,23 @@ const payNow = async () => {
       </OrderSummary>
 
       <div class="grid w-full max-w-2xl gap-8 checkout-form md:flex-1">
+        <div>
+          <h2 class="w-full mb-2 text-2xl font-semibold">Contact Information</h2>
+          <p v-if="!viewer" class="mt-1 text-sm text-gray-500">Already have an account? <a href="/my-account" class="text-gray-800 underline text-semibold">Log in</a>.</p>
+          <div class="w-full mt-4">
+            <label for="email">{{ $t('messages.billing.email') }}</label>
+            <input v-model="customer.billing.email" placeholder="johndoe@email.com" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required />
+          </div>
+          <div class="w-full my-2" v-if="orderInput.createAccount">
+            <label for="email">{{ $t('messages.account.password') }}</label>
+            <PasswordInput id="password" class="my-2" v-model="orderInput.password" placeholder="Password" :required="true" />
+          </div>
+          <div v-if="!viewer" class="flex items-center gap-2 my-2">
+            <label for="creat-account">Create an account?</label>
+            <input id="creat-account" v-model="orderInput.createAccount" type="checkbox" name="creat-account" />
+          </div>
+        </div>
+
         <div>
           <h2 class="w-full mb-3 text-2xl font-semibold">{{ $t('messages.billing.billingDetails') }}</h2>
           <BillingDetails v-model="customer.billing" />
@@ -133,6 +150,7 @@ const payNow = async () => {
 .checkout-form input[type='text'],
 .checkout-form input[type='email'],
 .checkout-form input[type='tel'],
+.checkout-form input[type='password'],
 .checkout-form textarea,
 .checkout-form .StripeElement,
 .checkout-form select {
