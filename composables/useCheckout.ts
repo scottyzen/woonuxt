@@ -78,6 +78,7 @@ export function useCheckout() {
 
       if ((await checkout?.result) === 'success') {
         emptyCart();
+        refreshCart();
       } else {
         isProcessingOrder.value = false;
         alert('There was an error processing your order. Please try again.');

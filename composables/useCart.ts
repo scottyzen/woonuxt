@@ -37,10 +37,16 @@ export function useCart() {
   }
 
   // add an item to the cart
-  async function addToCart(input: AddToCartInput) {
+  async function addToCart(input: AddToCartInput): Promise<void> {
     isUpdatingCart.value = true;
-    const { addToCart } = await GqlAddToCart({ input });
-    cart.value = addToCart?.cart || null;
+
+    try {
+      const { addToCart } = await GqlAddToCart({ input });
+      cart.value = addToCart?.cart || null;
+    } catch (error: any) {
+      const errorMessage = error?.gqlErrors?.[0].message;
+      if (errorMessage) console.error(errorMessage);
+    }
   }
 
   // remove an item from the cart
@@ -51,17 +57,28 @@ export function useCart() {
   }
 
   // update the quantity of an item in the cart
-  async function updateItemQuantity(key: string, quantity: number) {
+  async function updateItemQuantity(key: string, quantity: number): Promise<number> {
     isUpdatingCart.value = true;
-    const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity });
-    cart.value = updateItemQuantities?.cart || null;
+    try {
+      const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity });
+      cart.value = updateItemQuantities?.cart || null;
+      return quantity;
+    } catch (error: any) {
+      const errorMessage = error?.gqlErrors?.[0].message;
+      if (errorMessage) console.error(errorMessage);
+    }
     return quantity;
   }
 
   // empty the cart
   async function emptyCart(): Promise<void> {
-    const { emptyCart } = await GqlEmptyCart();
-    cart.value = emptyCart?.cart || null;
+    try {
+      const { emptyCart } = await GqlEmptyCart();
+      cart.value = emptyCart?.cart || null;
+    } catch (error: any) {
+      const errorMessage = error?.gqlErrors?.[0].message;
+      if (errorMessage) console.error(errorMessage);
+    }
   }
 
   // Update shipping method
