@@ -43,6 +43,7 @@
       "username": "Nom d'utilisateur",
       "login": "Se connecter",
       "logout": "Se déconnecter",
+      "sendPasswordResetEmail": "Envoyer un e-mail de réinitialisation du mot de passe",
       "register": "S'inscrire",
       "accountRegister": "S'inscrire",
       "accountLogin": "Se connecter",

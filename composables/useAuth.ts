@@ -81,6 +81,19 @@ export const useAuth = () => {
     isPending.value = false;
   };
 
+  const sendResetPasswordEmail = async (email: string): Promise<{ success: boolean; error: any }> => {
+    try {
+      const { sendPasswordResetEmail } = await GqlResetPasswordEmail({ username: email });
+      if (sendPasswordResetEmail?.success) {
+        return { success: true, error: null };
+      }
+      return { success: false, error: 'There was an error sending the reset password email. Please try again later.' };
+    } catch (error: any) {
+      const gqlError = error?.gqlErrors?.[0];
+      return { success: false, error: gqlError?.message };
+    }
+  };
+
   return {
     viewer,
     customer,
@@ -90,5 +103,6 @@ export const useAuth = () => {
     logoutUser,
     isPending,
     registerUser,
+    sendResetPasswordEmail,
   };
 };

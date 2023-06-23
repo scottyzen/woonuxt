@@ -43,6 +43,7 @@
       "username": "Username",
       "login": "Log In",
       "logout": "Logout",
+      "sendPasswordResetEmail": "Send Password Reset Email",
       "register": "Register",
       "accountRegister": "Sign up",
       "accountLogin": "log in",

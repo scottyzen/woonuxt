@@ -14,19 +14,23 @@
         >.
       </div>
     </div>
-    <form class="mt-6" @submit.prevent="loginOrRegister(userInfo)">
-      <label v-if="formView == 'register'" for="email"
+
+    <form class="mt-6" @submit.prevent="handleFormSubmit(userInfo)">
+      <label v-if="formView == 'register' || formView == 'forgotPassword'" for="email"
         >Email <span class="text-red-500">*</span> <br />
         <input id="email" v-model="userInfo.email" placeholder="Email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required />
       </label>
-      <label for="username"
-        >{{ $t('messages.account.username') }} <span class="text-red-500">*</span> <br />
-        <input id="username" v-model="userInfo.username" placeholder="Username" type="text" required />
-      </label>
-      <label for="password"
-        >{{ $t('messages.account.password') }} <span class="text-red-500">*</span> <br />
-        <PasswordInput id="password" class="mb-4" className="border rounded-lg w-full p-3 px-4 bg-white" v-model="userInfo.password" placeholder="Password" :required="true" />
-      </label>
+      <p v-if="formView == 'forgotPassword'" class="text-sm text-gray-500">Please enter your email address and we will send you a link to reset your password.</p>
+      <div v-if="formView != 'forgotPassword'">
+        <label for="username"
+          >{{ $t('messages.account.username') }} <span class="text-red-500">*</span> <br />
+          <input id="username" v-model="userInfo.username" placeholder="Username" type="text" required />
+        </label>
+        <label for="password"
+          >{{ $t('messages.account.password') }} <span class="text-red-500">*</span> <br />
+          <PasswordInput id="password" class="mb-4" className="border rounded-lg w-full p-3 px-4 bg-white" v-model="userInfo.password" placeholder="Password" :required="true" />
+        </label>
+      </div>
       <Transition name="scale-y" mode="out-in">
         <div v-if="message" class="my-4 text-sm text-green-500" v-html="message"></div>
       </Transition>
@@ -35,16 +39,16 @@
       </Transition>
       <button class="flex items-center justify-center gap-4 mt-4 text-lg">
         <LoadingIcon v-if="isPending" stroke="4" size="16" color="#fff" />
-        <span>{{ formView == 'login' ? $t('messages.account.login') : $t('messages.account.register') }}</span>
+        <span>{{ buttonText }}</span>
       </button>
     </form>
-    <div class="my-8 text-center">Forgot password?</div>
+    <div class="my-8 text-center" @click="formView = 'forgotPassword'" v-if="formView == 'login'">Forgot password?</div>
   </div>
 </template>
 
 <script setup>
 const { t } = useI18n();
-const { loginUser, isPending, registerUser } = useAuth();
+const { loginUser, isPending, registerUser, sendResetPasswordEmail } = useAuth();
 const userInfo = ref({ email: '', password: '', username: '' });
 const formView = ref('login');
 const message = ref('');
@@ -64,7 +68,7 @@ const login = async (userInfo) => {
   }
 };
 
-const loginOrRegister = async (userInfo) => {
+const handleFormSubmit = async (userInfo) => {
   if (formView.value === 'register') {
     const { success, error } = await registerUser(userInfo);
     if (success) {
@@ -76,10 +80,33 @@ const loginOrRegister = async (userInfo) => {
     } else {
       errorMessage.value = error;
     }
+  } else if (formView.value === 'forgotPassword') {
+    resetPassword(userInfo);
   } else {
     login(userInfo);
   }
 };
+
+const resetPassword = async (userInfo) => {
+  const { success, error } = await sendResetPasswordEmail(userInfo.email);
+  if (success) {
+    errorMessage.value = '';
+    message.value = 'If your email address is registered with us, you will receive an email with a link to reset your password.';
+  } else {
+    errorMessage.value = error;
+  }
+};
+
+const buttonText = computed(() => {
+  if (formView.value === 'login') {
+    return t('messages.account.login');
+  } else if (formView.value === 'register') {
+    return t('messages.account.register');
+  } else if (formView.value === 'forgotPassword') {
+    return t('messages.account.sendPasswordResetEmail');
+  }
+  return 'login';
+});
 </script>
 
 <style lang="postcss" scoped>

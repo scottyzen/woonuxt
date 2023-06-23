@@ -43,6 +43,7 @@
       "username": "Nombre de usuario",
       "login": "Iniciar sesión",
       "logout": "Cerrar sesión",
+      "sendPasswordResetEmail": "Enviar correo electrónico de restablecimiento de contraseña",
       "register": "Registrarse",
       "accountRegister": "registrarse",
       "accountLogin": "iniciar sesión",
