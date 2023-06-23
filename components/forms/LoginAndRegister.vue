@@ -1,7 +1,20 @@
 <template>
   <div class="max-w-lg mx-auto my-16 min-h-[600px] lg:my-24">
-    <h1 class="mb-4 text-xl font-bold lg:text-3xl">{{ $t('messages.account.myAccount') }}</h1>
-    <form class="mb-4" @submit.prevent="loginOrRegister(userInfo)">
+    <div class="flex flex-col items-center">
+      <Logo class="mb-6 scale-125" />
+      <h1 class="text-xl font-bold lg:text-3xl">{{ $t('messages.account.loginToAccount') }}</h1>
+      <div v-if="formView == 'login'" class="my-2 text-center">
+        {{ $t('messages.account.noAccount') }}
+        <a class="font-semibold cursor-pointer text-primary" @click="formView = 'register'">{{ $t('messages.account.accountRegister') }}</a
+        >.
+      </div>
+      <div v-if="formView == 'register'" class="my-2 text-center">
+        {{ $t('messages.account.hasAccount') }}
+        <a class="font-semibold cursor-pointer text-primary" @click="formView = 'login'">{{ $t('messages.general.please') }} {{ $t('messages.account.accountLogin') }}</a
+        >.
+      </div>
+    </div>
+    <form class="mt-6" @submit.prevent="loginOrRegister(userInfo)">
       <label v-if="formView == 'register'" for="email"
         >Email <span class="text-red-500">*</span> <br />
         <input id="email" v-model="userInfo.email" placeholder="Email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required />
@@ -25,16 +38,7 @@
         <span>{{ formView == 'login' ? $t('messages.account.login') : $t('messages.account.register') }}</span>
       </button>
     </form>
-    <div v-if="formView == 'login'" class="my-4 text-center">
-      {{ $t('messages.account.noAccount') }}
-      <a class="underline cursor-pointer" @click="formView = 'register'">{{ $t('messages.general.please') }} {{ $t('messages.account.accountRegister') }}</a
-      >.
-    </div>
-    <div v-if="formView == 'register'" class="my-4 text-center">
-      {{ $t('messages.account.hasAccount') }}
-      <a class="underline cursor-pointer" @click="formView = 'login'">{{ $t('messages.general.please') }} {{ $t('messages.account.accountLogin') }}</a
-      >.
-    </div>
+    <div class="my-8 text-center">Forgot password?</div>
   </div>
 </template>
 
