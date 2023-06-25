@@ -1,4 +1,5 @@
 <script setup>
+import { onBeforeRouteUpdate } from 'nuxt/app';
 const { getSearchQuery, setSearchQuery, clearSearchQuery, searchProducts, isSearchActive } = useSearching();
 const searchQuery = ref(getSearchQuery());
 
@@ -6,6 +7,13 @@ const reset = () => {
   clearSearchQuery();
   searchQuery.value = '';
 };
+
+onBeforeRouteUpdate((to, from, next) => {
+  if (to.path !== '/products' && from.path === '/products') {
+    reset();
+  }
+  next();
+});
 </script>
 
 <template>

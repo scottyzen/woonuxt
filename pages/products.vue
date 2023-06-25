@@ -1,6 +1,5 @@
 <script setup>
 const { setProducts, updateProductList } = await useProducts();
-const { clearSearchQuery } = useSearching();
 const { data } = await useAsyncGql('getProducts');
 const products = data.value?.products?.nodes || [];
 setProducts(products || []);
@@ -12,12 +11,6 @@ onMounted(() => {
 useHead({
   title: 'Products',
   meta: [{ hid: 'description', name: 'description', content: 'Products' }],
-});
-
-// Clear the search query when navigating away from the page
-onBeforeRouteLeave(() => {
-  console.log('Clearing search query');
-  clearSearchQuery();
 });
 </script>
 
