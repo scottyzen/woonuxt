@@ -31,6 +31,11 @@ export function useSearching() {
   });
 
   function searchProducts(products: Product[]): Product[] {
+    // chec on the search page /products
+    if (route.name !== 'products') {
+      console.log('searchProducts', route.name);
+      router.push({ name: 'products', query: { search: searchQuery.value } });
+    }
     const query = getSearchQuery();
     return query
       ? products.filter((product: Product) => {

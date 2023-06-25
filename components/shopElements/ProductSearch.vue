@@ -9,16 +9,22 @@ const reset = () => {
 </script>
 
 <template>
-  <form class="-space-x-px rounded-md flex max-w-xl flex-1 shadow-sm items-center relative" @submit.prevent="setSearchQuery(searchQuery)">
-    <Icon name="ion:search-outline" size="20" class="opacity-50 left-2 z-10 absolute pointer-events-none" />
+  <form id="product-search" class="relative inline-flex items-center flex-1 max-w-xl -space-x-px rounded-md shadow-sm" @submit.prevent="setSearchQuery(searchQuery)">
+    <Icon name="ion:search-outline" size="20" class="absolute z-10 opacity-50 pointer-events-none left-2" />
     <input
       v-model="searchQuery"
       type="text"
       :placeholder="$t('messages.shop.searchProducts')"
-      class="bg-white border rounded-md font-medium border-gray-300 text-sm w-full p-2 pl-10 text-gray-500 z-0 inline-flex items-center" />
-    <span v-if="searchQuery" class="bg-primary rounded cursor-pointer flex bg-opacity-10 text-xs text-primary py-1 px-2 right-2 z-10 gap-1 absolute items-center" @click="reset">
+      class="z-0 inline-flex items-center w-full p-2 pl-10 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md" />
+    <span v-if="searchQuery" class="absolute z-10 flex items-center gap-1 px-2 py-1 text-xs rounded cursor-pointer bg-primary bg-opacity-10 text-primary right-2" @click="reset">
       <span>{{ $t('messages.general.clear') }}</span>
       <Icon name="ion:close-outline" size="18" />
     </span>
   </form>
 </template>
+
+<style scoped>
+#product-search {
+  max-width: 360px;
+}
+</style>
