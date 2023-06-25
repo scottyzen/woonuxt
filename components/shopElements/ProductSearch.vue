@@ -9,8 +9,8 @@ const reset = () => {
 };
 
 onBeforeRouteUpdate((to, from, next) => {
-  if (to.path !== '/products' && from.path === '/products') {
-    reset();
+  if (to.path !== '/products' && from.path === '/products' && searchQuery.value) {
+    searchQuery.value = '';
   }
   next();
 });

@@ -21,6 +21,7 @@ useHead({
     <div class="w-full">
       <div class="flex items-center justify-between w-full gap-8 mt-8">
         <ShowFilterTrigger class="md:hidden" />
+        <ProductResultCount />
         <!-- <ProductSearch /> -->
         <OrderByDropdown class="hidden md:inline-flex" />
       </div>
