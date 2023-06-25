@@ -42,7 +42,7 @@
         <span>{{ buttonText }}</span>
       </button>
     </form>
-    <div class="my-8 text-center" @click="formView = 'forgotPassword'" v-if="formView == 'login'">Forgot password?</div>
+    <div class="my-8 text-center cursor-pointer" @click="formView = 'forgotPassword'" v-if="formView == 'login'">Forgot password?</div>
   </div>
 </template>
 
