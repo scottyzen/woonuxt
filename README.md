@@ -91,4 +91,4 @@ I don't know where this project will go but I'm excited to see what the future h
 
 &nbsp;
 
-**Note** If you're looking for the old version of WooNuxt you can find it on the [v2 branch](https://github.com/scottyzen/woonuxt/tree/v2).
+> **Note** If you're looking for the old version of WooNuxt you can find it on the [v2 branch](https://github.com/scottyzen/woonuxt/tree/v2).
