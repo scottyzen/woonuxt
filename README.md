@@ -60,7 +60,7 @@ The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for
 | WooGraphQL     | GraphQL API for WooCommerce              | https://woographql.com/                     |
 | WPGraphQL Cors | Enable CORS for WPGraphQL                | https://github.com/funkhaus/wp-graphql-cors |
 
-> **Note** The the [WooNuxt Settings](https://github.com/scottyzen/woonuxt-settings/releases/download/1.0.29/woonuxt-settings.zip) plugin will help you install all the required plugins. WooGraphQL 0.13.0 and up is required to get the list of available countries and states. You can find the latest version of WooGraphQL [here](https://github.com/wp-graphql/wp-graphql-woocommerce/releases)
+> **Note** The the [WooNuxt Settings](https://github.com/scottyzen/woonuxt-settings/releases/download/1.0.34/woonuxt-settings.zip) plugin will help you install all the required plugins. WooGraphQL 0.13.0 and up is required to get the list of available countries and states. You can find the latest version of WooGraphQL [here](https://github.com/wp-graphql/wp-graphql-woocommerce/releases)
 
 &nbsp;
 
@@ -75,8 +75,8 @@ The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for
 | Plugin/Software | Version |
 | --------------- | ------- |
 | WordPress       | 6.2.2   |
-| WooCommerce     | 7.7.2   |
-| WPGraphQL       | 1.14.0  |
+| WooCommerce     | 7.78.1  |
+| WPGraphQL       | 1.14.4  |
 | WooGraphQL      | 0.13.0  |
 | Node            | 16.18.1 |
 
@@ -85,3 +85,10 @@ The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for
 - English 🇺🇸
 - Deutsch 🇩🇪
 - Español 🇪🇸
+- Français 🇫🇷
+
+#### Credits
+
+This is an ongoing project but it wouldn't be possible without the help of the following people: [Jason Bahl](https://github.com/jasonbahl) & [Geoffrey K Taylor](https://github.com/kidunot89) for there endless work on WPGraphQL and WooGraphQL respectively. Also, a big thanks to the Nuxt team for all there hard work on making Nuxt 3 a pleasure to build upon. And a big thanks to the [WooCommerce](https://woocommerce.com/) team for making such a great e-commerce platform. Some other honerable mentions are [Funkhaus](https://funkhaus.us/) for there work on the WPGraphQL Cors plugin. And the people who have contributed to the making WooNuxt better every day. Zack Hatlen, Galli, Guillaume, Thank you all! 🙏
+
+I don't know where this project will go but I'm excited to see what the future holds. If you have any questions or would like to contribute to the project please feel free to reach out to me on [Twitter](https://twitter.com/scottyzen) or [GitHub](https://github.com/scottyzen).
