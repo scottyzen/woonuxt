@@ -2,6 +2,7 @@
 // const searchQuery = ref('' as string);
 
 export function useSearching() {
+  const isShowingSearch = useState<boolean>('isShowingSearch', () => false);
   const route = useRoute();
   const router = useRouter();
   const { updateProductList } = useProducts();
@@ -30,6 +31,10 @@ export function useSearching() {
     return !!searchQuery.value;
   });
 
+  const toggleSearch = () => {
+    isShowingSearch.value = !isShowingSearch.value;
+  };
+
   function searchProducts(products: Product[]): Product[] {
     // chec on the search page /products
     if (route.name !== 'products') {
@@ -47,5 +52,5 @@ export function useSearching() {
       : products;
   }
 
-  return { getSearchQuery, setSearchQuery, clearSearchQuery, searchProducts, isSearchActive };
+  return { getSearchQuery, setSearchQuery, clearSearchQuery, searchProducts, isSearchActive, isShowingSearch, toggleSearch };
 }

@@ -2,7 +2,7 @@
   <div class="max-w-lg mx-auto my-16 min-h-[600px] lg:my-24">
     <div class="flex flex-col items-center">
       <Logo class="mb-6 scale-125" />
-      <h1 class="text-xl font-bold lg:text-3xl">{{ $t('messages.account.loginToAccount') }}</h1>
+      <h1 class="text-xl font-semibold lg:text-3xl">{{ $t('messages.account.loginToAccount') }}</h1>
       <div v-if="formView == 'login'" class="my-2 text-center">
         {{ $t('messages.account.noAccount') }}
         <a class="font-semibold cursor-pointer text-primary" @click="formView = 'register'">{{ $t('messages.account.accountRegister') }}</a
@@ -43,6 +43,7 @@
       </button>
     </form>
     <div class="my-8 text-center cursor-pointer" @click="formView = 'forgotPassword'" v-if="formView == 'login'">Forgot password?</div>
+    <div class="my-8 text-center cursor-pointer" @click="formView = 'login'" v-if="formView == 'forgotPassword'">Back to login</div>
   </div>
 </template>
 

@@ -19,11 +19,12 @@ useHead({
     <Filters />
 
     <div class="w-full">
-      <div class="flex items-center justify-between w-full gap-8 mt-8">
-        <ShowFilterTrigger class="md:hidden" />
+      <div class="flex items-center justify-between w-full gap-4 mt-8 md:gap-8">
         <ProductResultCount />
         <!-- <ProductSearch /> -->
-        <OrderByDropdown class="hidden md:inline-flex" />
+        <OrderByDropdown />
+        <ShowFilterTrigger class="md:hidden" />
+        <!-- <OrderByDropdown class="hidden md:inline-flex" /> -->
       </div>
       <ProductGrid />
     </div>
