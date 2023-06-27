@@ -2,10 +2,6 @@
 
 # Next Generation Front-End for WooCommerce
 
-> **Note** This is the first iteration of the new WooNuxt built on Nuxt 3. It's under active development and has a lot of features still to be added. You can use the old version of WooNuxt on the [v2 branch](https://github.com/scottyzen/woonuxt/tree/v2) which is more stable.
-
-&nbsp;
-
 ## Introduction
 
 The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for WooCommerce. It's built on top of Nuxt 3 and uses the WPGraphQL API to retrieve all the data it needs. It's also fully customizable and can be extended with your own components and modules. You can see a live demo of WooNuxt by clicking the button below.
@@ -44,7 +40,7 @@ The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for
 | WooNuxt Settings Module                               |                      |      | ✅          |                 |
 | Better Typescript Supp                                |                      |      | ✅          |                 |
 | Mobile layout                                         | ✅                   |      | ✅          |                 |
-| Countries & States Enums                              |                      |      | ✅          |                 |
+| Countries & States Enums                              |                      | ✅   |             |                 |
 | Cookie Popup & GDPR Compliance                        |                      |      |             | ✅              |
 | Progressive Web App (PWA)                             |                      |      | ✅          |                 |
 | Queing System (for chcecking out when server is busy) |                      |      |             | ✅              |
@@ -89,6 +85,10 @@ The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for
 
 #### Credits
 
-This is an ongoing project but it wouldn't be possible without the help of the following people: [Jason Bahl](https://github.com/jasonbahl) & [Geoffrey K Taylor](https://github.com/kidunot89) for there endless work on WPGraphQL and WooGraphQL respectively. Also, a big thanks to the Nuxt team for all there hard work on making Nuxt 3 a pleasure to build upon. And a big thanks to the [WooCommerce](https://woocommerce.com/) team for making such a great e-commerce platform. Some other honerable mentions are [Funkhaus](https://funkhaus.us/) for there work on the WPGraphQL Cors plugin. And the people who have contributed to the making WooNuxt better every day. Zack Hatlen, Galli, Guillaume, Thank you all! 🙏
+This is an ongoing project but it wouldn't be possible without the help of the following people: [Jason Bahl](https://github.com/jasonbahl) & [Geoffrey K Taylor](https://github.com/kidunot89) for there endless work on WPGraphQL and WooGraphQL respectively. Also, a big thanks to the Nuxt team for all there hard work on making Nuxt 3 a pleasure to build upon. And a big thanks to the [WooCommerce](https://woocommerce.com/) team for making such a great e-commerce platform. Some other honerable mentions are [Funkhaus](https://funkhaus.us/) for there work on the WPGraphQL Cors plugin. And the people who have contributed to the making WooNuxt better every day. [Zack Hatlen](https://github.com/zackha), [Galli](https://github.com/Zielgestalt), [Guillaume](https://github.com/GuillaumeDgr), Thank you all! 🙏
 
 I don't know where this project will go but I'm excited to see what the future holds. If you have any questions or would like to contribute to the project please feel free to reach out to me on [Twitter](https://twitter.com/scottyzen) or [GitHub](https://github.com/scottyzen).
+
+&nbsp;
+
+**Note** If you're looking for the old version of WooNuxt you can find it on the [v2 branch](https://github.com/scottyzen/woonuxt/tree/v2).
