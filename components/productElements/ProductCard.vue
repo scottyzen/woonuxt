@@ -52,6 +52,7 @@ const colorVariableImage = computed(() => {
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
       :loading="index <= 1 ? 'eager' : 'lazy'"
+      fit="outside"
       format="webp" />
 
     <div class="p-2">

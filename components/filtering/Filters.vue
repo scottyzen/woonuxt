@@ -6,8 +6,8 @@ const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES
 
 <template>
   <aside id="filters">
-    <OrderByDropdown class="w-full block md:hidden" />
-    <div class="divide-y space-y-8 mb-12 grid z-30 relative">
+    <!-- <OrderByDropdown class="block w-full md:hidden" /> -->
+    <div class="relative z-30 grid mb-12 space-y-8 divide-y">
       <PriceFilter />
       <CategoryFilter />
       <div v-for="attribute in globalProductAttributes" :key="attribute.slug">
@@ -31,7 +31,7 @@ const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES
       <ResetFiltersButton />
     </div>
   </aside>
-  <div class="bg-black opacity-25 inset-0 z-50 fixed filter-overlay" @click="removeBodyClass('show-filters')"></div>
+  <div class="fixed inset-0 z-50 bg-black opacity-25 filter-overlay" @click="removeBodyClass('show-filters')"></div>
 </template>
 
 <style lang="postcss">
