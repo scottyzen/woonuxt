@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 const route = useRoute();
-const { arraysEqual, formatArray } = useHelpers();
+const { arraysEqual, formatArray, checkForVariationTypeOfAny } = useHelpers();
 const { addToCart, isUpdatingCart } = useCart();
 
 const { data } = await useAsyncGql('getProduct', { slug: route.params.slug as string });
@@ -26,20 +26,8 @@ const selectProductInput = computed(() => ({
   quantity: quantity.value,
 })) as ComputedRef<AddToCartInput>;
 
-const checkForVariationTypeOfAny = () => {
-  const numberOfVariation = product?.attributes?.nodes?.length || 0;
-  for (let index = 0; index < numberOfVariation; index++) {
-    const tempArray = [] as string[];
-    product.variations?.nodes.forEach((element) => {
-      if (element.attributes?.nodes[index]?.value) tempArray.push(element.attributes.nodes[index].value as string);
-    });
-
-    if (!tempArray.some(Boolean)) indexOfTypeAny.push(index);
-  }
-};
-
 onMounted(() => {
-  if (product.variations) checkForVariationTypeOfAny();
+  if (product.variations) checkForVariationTypeOfAny(product);
 });
 
 const updateSelectedVariations = (variations: Variation[]) => {

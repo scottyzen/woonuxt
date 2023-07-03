@@ -1,0 +1,48 @@
+{
+  "name": "woonuxt",
+  "version": "3.0.26",
+  "main": "./nuxt.config.ts",
+  "files": [
+    "nuxt.config.ts",
+    "composables",
+    "components",
+    "pages",
+    "app.vue",
+    "gql",
+    "lang",
+    "types",
+    "plugins",
+    "public"
+  ],
+  "scripts": {
+    "dev": "nuxi dev .starters/default",
+    "build": "nuxi build .starters/default",
+    "generate": "nuxi generate .starters/default",
+    "preview": "nuxi preview .starters/default",
+    "prepare": "nuxi prepare && nuxi prepare .starters/default",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@stripe/stripe-js": "^1.54.1",
+    "@vueform/slider": "^2.1.7",
+    "nuxt-graphql-client": "^0.2.27",
+    "woonuxt-settings": "^1.0.24"
+  },
+  "devDependencies": {
+    "@nuxt/image": "rc",
+    "@nuxtjs/eslint-config-typescript": "^12.0.0",
+    "@nuxtjs/i18n": "^8.0.0-beta.10",
+    "@nuxtjs/tailwindcss": "^6.8.0",
+    "@tailwindcss/typography": "^0.5.9",
+    "eslint": "^8.43.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-nuxt": "^4.0.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nuxt": "^3.6.1",
+    "nuxt-icon": "^0.4.1",
+    "prettier": "^2.8.8",
+    "vue-stripe-js": "^1.0.1",
+    "typescript": "^5.1.3"
+  }
+}

@@ -62,6 +62,20 @@ export function useHelpers() {
     body?.classList.remove(className);
   }
 
+  const checkForVariationTypeOfAny = (product: Product) => {
+    const numberOfVariation = product?.attributes?.nodes?.length || 0;
+    let indexOfTypeAny = [] as number[];
+    for (let index = 0; index < numberOfVariation; index++) {
+      const tempArray = [] as string[];
+      product.variations?.nodes.forEach((element) => {
+        if (element.attributes?.nodes[index]?.value) tempArray.push(element.attributes.nodes[index].value as string);
+      });
+
+      if (!tempArray.some(Boolean)) indexOfTypeAny.push(index);
+      return indexOfTypeAny;
+    }
+  };
+
   return {
     formatArray,
     arraysEqual,
@@ -71,5 +85,6 @@ export function useHelpers() {
     removeBodyClass,
     isShowingMobileMenu,
     toggleMobileMenu,
+    checkForVariationTypeOfAny,
   };
 }
