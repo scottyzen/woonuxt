@@ -29,11 +29,31 @@ export default defineNuxtConfig({
 
   hooks: {
     'pages:extend'(pages) {
-      pages.push({ name: 'product-page-pager', path: '/products/page/:pageNumber', file: resolve('./pages/products.vue') });
-      pages.push({ name: 'product-category-page', path: '/product-category/:categorySlug', file: resolve('./pages/products.vue'});
-      pages.push({ name: 'product-category-page-pager', path: '/product-category/:categorySlug/page/:pageNumber', file: resolve('./pages/products.vue'),});
-      pages.push({ name: 'order-received', path: '/checkout/order-received/:orderId', file: resolve('./pages/order-summary.vue'});
-      pages.push({ name: 'order-summary', path: '/order-summary/:orderId', file: resolve('./pages/order-summary.vue'});
+      pages.push({
+        name: 'product-page-pager',
+        path: '/products/page/:pageNumber',
+        file: resolve('./pages/products.vue'),
+      });
+      pages.push({
+        name: 'product-category-page',
+        path: '/product-category/:categorySlug',
+        file: resolve('./pages/products.vue'),
+      });
+      pages.push({
+        name: 'product-category-page-pager',
+        path: '/product-category/:categorySlug/page/:pageNumber',
+        file: resolve('./pages/products.vue'),
+      });
+      pages.push({
+        name: 'order-received',
+        path: '/checkout/order-received/:orderId',
+        file: resolve('./pages/order-summary.vue'),
+      });
+      pages.push({
+        name: 'order-summary',
+        path: '/order-summary/:orderId',
+        file: resolve('./pages/order-summary.vue'),
+      });
     },
   },
 
