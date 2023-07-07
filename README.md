@@ -23,28 +23,28 @@ The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for
 
 ### Progress
 
-| Feature                                                   | Ongoing Enhancements | Done | In Progress | In the Pipeline |
-| --------------------------------------------------------- | -------------------- | ---- | ----------- | --------------- |
-| Proformanance                                             | ✅                   | ✅   |             |                 |
-| SEO                                                       |                      |      | ✅          |                 |
-| Cart                                                      |                      | ✅   |             |                 |
-| Search                                                    |                      | ✅   |             |                 |
-| Shipping                                                  |                      | ✅   |             |                 |
-| Checkout (Stripe, PayPay, Cash on Delivery)               |                      | ✅   |             |                 |
-| Filtering                                                 | ✅                   | ✅   |             |                 |
-| Wishlists                                                 |                      | ✅   |             |                 |
-| Account                                                   |                      |      | ✅          |                 |
-| Coupons                                                   |                      | ✅   |             |                 |
-| Product Reviews                                           |                      |      | ✅          |                 |
-| Product Category Pages                                    |                      |      | ✅          |                 |
-| WooNuxt Settings Module                                   |                      |      | ✅          |                 |
-| Better Typescript Supp                                    |                      |      | ✅          |                 |
-| Mobile layout                                             | ✅                   |      | ✅          |                 |
-| Countries & States Enums                                  |                      | ✅   |             |                 |
-| Cookie Popup & GDPR Compliance                            |                      |      |             | ✅              |
-| Progressive Web App (PWA)                                 |                      |      | ✅          |                 |
-| Queuing System (for checking out when the server is busy) |                      |      |             | ✅              |
-| Language Support (i18n)                                   |                      |      | ✅          |                 |
+| Feature                                                   | Ongoing Enhancements | In the Pipeline | In Progress | Done |
+| --------------------------------------------------------- | -------------------- | --------------- | ----------- | ---- |
+| Proformanance                                             | ✅                   |                 |             | ✅   |
+| SEO                                                       |                      |                 | ✅          |      |
+| Cart                                                      |                      |                 |             | ✅   |
+| Search                                                    |                      |                 |             | ✅   |
+| Shipping                                                  |                      |                 |             | ✅   |
+| Checkout (Stripe, PayPay, Cash on Delivery)               |                      |                 |             | ✅   |
+| Filtering                                                 | ✅                   |                 |             | ✅   |
+| Wishlists                                                 |                      |                 |             | ✅   |
+| Account                                                   |                      |                 | ✅          |      |
+| Coupons                                                   |                      |                 |             | ✅   |
+| Product Reviews                                           |                      |                 | ✅          |      |
+| Product Category Pages                                    |                      |                 | ✅          |      |
+| WooNuxt Settings Module                                   |                      |                 | ✅          |      |
+| Better Typescript Supp                                    |                      |                 | ✅          |      |
+| Mobile layout                                             | ✅                   |                 | ✅          |      |
+| Countries & States Enums                                  |                      |                 |             | ✅   |
+| Cookie Popup & GDPR Compliance                            |                      | ✅              |             |      |
+| Progressive Web App (PWA)                                 |                      |                 | ✅          |      |
+| Queuing System (for checking out when the server is busy) |                      | ✅              |             |      |
+| Language Support (i18n)                                   |                      |                 | ✅          |      |
 
 &nbsp;
 
