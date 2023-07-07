@@ -12,7 +12,7 @@ The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for
 
 ## Get Started
 
-- Download the lates WooNuxt Settings (woonuxt-settings.zip) from the releases page here: [Releases]([WooNuxt Settings](https://github.com/scottyzen/woonuxt-settings/releases)
+- Download the lates WooNuxt Settings (woonuxt-settings.zip) from the releases page here: [Releases](https://github.com/scottyzen/woonuxt-settings/releases)
 - Install and activate the plugin on your WordPress site. This will install all the required plugins for WooNuxt, add some useful fields to the WPGraphQL schema, and automatically retrieve the WooCommerce payment gateway settings for Stripe and PayPal.
 - Once the plugin is activated you are ready to deploy WooNuxt on whatever hosting you like or click one of the fast deploy buttons below.
 - Once the plugin is activated the only required environment variable is `GQL_HOST`. Checkout the .env.example file for more details.
