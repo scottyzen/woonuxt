@@ -11,8 +11,7 @@
     "gql",
     "lang",
     "types",
-    "plugins",
-    "public"
+    "plugins"
   ],
   "scripts": {
     "dev": "nuxi dev .starters/default",
