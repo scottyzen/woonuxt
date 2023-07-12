@@ -8,7 +8,6 @@
     "generate": "nuxi generate",
     "preview": "nuxi preview",
     "postinstall": "nuxi prepare",
-    "lint": "eslint --fix --ext .vue,.ts,.tsx,.js,.mjs .",
     "pretty": "prettier --write ."
   },
   "devDependencies": {
