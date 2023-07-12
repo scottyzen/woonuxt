@@ -1,6 +1,5 @@
 {
   "name": "woonuxt",
-  "version": "3.0.26",
   "main": "./nuxt.config.ts",
   "files": [
     "nuxt.config.ts",
@@ -18,8 +17,7 @@
     "build": "nuxi build",
     "generate": "nuxi generate",
     "preview": "nuxi preview",
-    "prepare": "nuxi prepare && nuxi prepare",
-    "lint": "eslint ."
+    "prepare": "nuxi prepare && nuxi prepare"
   },
   "dependencies": {
     "@stripe/stripe-js": "^1.54.1",
@@ -38,7 +36,7 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "nuxt": "^3.6.1",
+    "nuxt": "3.6.1",
     "nuxt-icon": "^0.4.1",
     "prettier": "^2.8.8",
     "vue-stripe-js": "^1.0.1",
