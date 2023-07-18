@@ -16,9 +16,9 @@ const numberOfPages = computed(() => Math.ceil(products.value.length / productsP
 </script>
 
 <template>
-  <div class="flex mt-8 mb-16 col-span-full justify-center tabular-nums">
+  <div class="flex justify-center mt-8 mb-16 col-span-full tabular-nums">
     <!-- Pagination -->
-    <nav v-if="numberOfPages > 1" class="-space-x-px rounded-md shadow-sm isolate inline-flex self-end" aria-label="Pagination">
+    <nav v-if="numberOfPages > 1" class="inline-flex self-end -space-x-px rounded-md shadow-sm isolate" aria-label="Pagination">
       <!-- PREV -->
       <NuxtLink
         :to="page > 1 ? `/products/page/${page - 1}/?${currentQuery}` : `/products/page/${page}/?${currentQuery}`"
@@ -27,7 +27,7 @@ const numberOfPages = computed(() => Math.ceil(products.value.length / productsP
         :class="{ 'cursor-not-allowed': page == 1 }"
         :aria-disabled="page == 1"
         aria-label="Previous">
-        <Icon name="ion:chevron-back-outline" size="20" class="h-5 w-5" />
+        <Icon name="ion:chevron-back-outline" size="20" class="w-5 h-5" />
       </NuxtLink>
 
       <!-- NUMBERS -->
@@ -48,7 +48,7 @@ const numberOfPages = computed(() => Math.ceil(products.value.length / productsP
         :class="{ 'cursor-not-allowed': page === numberOfPages }"
         :aria-disabled="page === numberOfPages"
         aria-label="Next">
-        <Icon name="ion:chevron-forward-outline" size="20" class="h-5 w-5" />
+        <Icon name="ion:chevron-forward-outline" size="20" class="w-5 h-5" />
       </NuxtLink>
     </nav>
   </div>

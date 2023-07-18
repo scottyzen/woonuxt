@@ -20,7 +20,7 @@ export function useProducts() {
     if (pageInfo.hasNextPage) {
       if (process.env.NODE_ENV === 'development') console.log('fetching more products...');
       isFetchingMoreProducts.value = true;
-      fetchAllProducts(pageInfo.endCursor);
+      await fetchAllProducts(pageInfo.endCursor);
     } else {
       setProducts(allProducts);
     }
