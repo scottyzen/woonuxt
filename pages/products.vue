@@ -1,5 +1,6 @@
 <script setup>
-const { updateProductList, fetchAllProducts } = await useProducts();
+const { updateProductList, fetchAllProducts, products } = await useProducts();
+
 await fetchAllProducts();
 
 onMounted(() => {

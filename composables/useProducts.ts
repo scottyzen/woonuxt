@@ -1,17 +1,21 @@
 let allProducts = [] as Product[];
+let productHaveBeenFetched = false;
 
 export function useProducts() {
   // Declare the state variables and the setter functions
   const products = useState<Product[]>('products', () => []);
-  const isFetchingMoreProducts = useState<boolean>('isFetchingMoreProducts', () => false);
 
   function setProducts(newProducts: Product[]): void {
     products.value = newProducts;
     allProducts = JSON.parse(JSON.stringify(newProducts));
-    isFetchingMoreProducts.value = false;
+    productHaveBeenFetched = true;
   }
 
   const fetchAllProducts = async (after: string): Promise<void> => {
+  
+    // Return if all products are already fetched
+    if (productHaveBeenFetched) return;
+
     const { data } = await useAsyncGql('getProducts', { after });
     const { pageInfo, nodes } = data.value.products as any;
 
@@ -19,7 +23,6 @@ export function useProducts() {
 
     if (pageInfo.hasNextPage) {
       if (process.env.NODE_ENV === 'development') console.log('fetching more products...');
-      isFetchingMoreProducts.value = true;
       await fetchAllProducts(pageInfo.endCursor);
     } else {
       setProducts(allProducts);
@@ -47,5 +50,5 @@ export function useProducts() {
     products.value = newProducts;
   };
 
-  return { products, allProducts, setProducts, updateProductList, fetchAllProducts, isFetchingMoreProducts };
+  return { products, allProducts, setProducts, updateProductList, fetchAllProducts };
 }

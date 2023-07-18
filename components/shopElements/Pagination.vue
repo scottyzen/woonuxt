@@ -1,7 +1,8 @@
 <script setup lang="ts">
 const route = useRoute();
 const runtimeConfig = useRuntimeConfig();
-const { products } = await useProducts();
+const { products, isFullyLoaded } = await useProducts();
+await isFullyLoaded;
 
 const currentQuery = computed(() => {
   const query = route.query;
