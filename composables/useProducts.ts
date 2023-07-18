@@ -9,6 +9,20 @@ export function useProducts() {
     allProducts = JSON.parse(JSON.stringify(newProducts));
   }
 
+  const fetchAllProducts = async (after: string): Promise<void> => {
+    const { data } = await useAsyncGql('getProducts', { after });
+    const { pageInfo, nodes } = data.value.products as any;
+
+    allProducts = [...allProducts, ...nodes];
+
+    if (pageInfo.hasNextPage) {
+    fetchAllProducts(pageInfo.endCursor);
+  } else {
+    setProducts(allProducts);
+  }
+
+  }
+
   const updateProductList = async (): Promise<void> => {
     const { isFiltersActive, filterProducts } = await useFiltering();
     const { isSearchActive, searchProducts } = await useSearching();
@@ -29,5 +43,5 @@ export function useProducts() {
     products.value = newProducts;
   };
 
-  return { products, allProducts, setProducts, updateProductList };
+  return { products, allProducts, setProducts, updateProductList, fetchAllProducts };
 }
