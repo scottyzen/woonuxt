@@ -3,10 +3,12 @@ let allProducts = [] as Product[];
 export function useProducts() {
   // Declare the state variables and the setter functions
   const products = useState<Product[]>('products', () => []);
+  const isFetchingMoreProducts = useState<boolean>('isFetchingMoreProducts', () => false);
 
   function setProducts(newProducts: Product[]): void {
     products.value = newProducts;
     allProducts = JSON.parse(JSON.stringify(newProducts));
+    isFetchingMoreProducts.value = false;
   }
 
   const fetchAllProducts = async (after: string): Promise<void> => {
@@ -16,10 +18,12 @@ export function useProducts() {
     allProducts = [...allProducts, ...nodes];
 
     if (pageInfo.hasNextPage) {
-    fetchAllProducts(pageInfo.endCursor);
-  } else {
-    setProducts(allProducts);
-  }
+      if (process.env.NODE_ENV === 'development') console.log('fetching more products...');
+      isFetchingMoreProducts.value = true;
+      fetchAllProducts(pageInfo.endCursor);
+    } else {
+      setProducts(allProducts);
+    }
 
   }
 
@@ -43,5 +47,5 @@ export function useProducts() {
     products.value = newProducts;
   };
 
-  return { products, allProducts, setProducts, updateProductList, fetchAllProducts };
+  return { products, allProducts, setProducts, updateProductList, fetchAllProducts, isFetchingMoreProducts };
 }
