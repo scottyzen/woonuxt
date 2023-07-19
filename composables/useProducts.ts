@@ -12,23 +12,27 @@ export function useProducts() {
   }
 
   const fetchAllProducts = async (after: string): Promise<void> => {
-  
     // Return if all products are already fetched
     if (productHaveBeenFetched) return;
 
-    const { data } = await useAsyncGql('getProducts', { after });
-    const { pageInfo, nodes } = data.value.products as any;
+    try {
+      const { data } = await useAsyncGql('getProducts', { after });
+      const { pageInfo, nodes } = data.value?.products || { pageInfo: {}, nodes: [] };
 
-    allProducts = [...allProducts, ...nodes];
+      allProducts = [...allProducts, ...nodes] as Product[];
 
-    if (pageInfo.hasNextPage) {
-      if (process.env.NODE_ENV === 'development') console.log('fetching more products...');
-      await fetchAllProducts(pageInfo.endCursor);
-    } else {
-      setProducts(allProducts);
+      if (allProducts.length) {
+        if (pageInfo?.hasNextPage === true) {
+          if (process.env.NODE_ENV === 'development') console.log('fetching more products...');
+          await fetchAllProducts(pageInfo?.endCursor || '');
+        } else {
+          setProducts(allProducts);
+        }
+      }
+    } catch (error: any) {
+      console.error(error);
     }
-
-  }
+  };
 
   const updateProductList = async (): Promise<void> => {
     const { isFiltersActive, filterProducts } = await useFiltering();

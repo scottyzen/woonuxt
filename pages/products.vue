@@ -4,7 +4,7 @@ const { updateProductList, fetchAllProducts, products } = await useProducts();
 await fetchAllProducts();
 
 onMounted(() => {
-  updateProductList();
+  if (products.value.length !== 0) updateProductList(products.value);
 });
 
 useHead({
