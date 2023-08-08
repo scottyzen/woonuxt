@@ -9,8 +9,10 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' },
   },
 
-  experimental: {
-    payloadExtraction: false,
+  nitro: {
+    prerender: {
+      failOnError: false,
+    },
   },
 
   components: [{ path: '~/components', pathPrefix: false }],
