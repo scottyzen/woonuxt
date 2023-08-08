@@ -1,5 +1,5 @@
 import pkg from './package.json';
-import { createResolver} from '@nuxt/kit';
+import { createResolver } from '@nuxt/kit';
 const { resolve } = createResolver(import.meta.url);
 
 export default defineNuxtConfig({
@@ -9,6 +9,10 @@ export default defineNuxtConfig({
       link: [{ rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' }],
     },
     pageTransition: { name: 'page', mode: 'out-in' },
+  },
+
+  experimental: {
+    payloadExtraction: false,
   },
 
   components: [{ path: '~/components', pathPrefix: false }],
