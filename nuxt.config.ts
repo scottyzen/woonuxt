@@ -10,6 +10,12 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' },
   },
 
+  nitro: {
+    prerender: {
+      failOnError: false,
+    },
+  },
+
   components: [{ path: '~/components', pathPrefix: false }],
 
   modules: ['woonuxt-settings', 'nuxt-graphql-client', '@nuxtjs/tailwindcss', 'nuxt-icon', '@nuxt/image', '@nuxtjs/i18n'],
