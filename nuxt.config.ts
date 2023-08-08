@@ -1,4 +1,5 @@
 import pkg from './package.json';
+import { resolve } from 'pathe';
 
 export default defineNuxtConfig({
   app: {
@@ -33,11 +34,11 @@ export default defineNuxtConfig({
 
   hooks: {
     'pages:extend'(pages) {
-      pages.push({ name: 'product-page-pager', path: '/products/page/:pageNumber', file: '~/pages/products.vue' });
-      pages.push({ name: 'product-category-page', path: '/product-category/:categorySlug', file: '~/pages/products.vue' });
-      pages.push({ name: 'product-category-page-pager', path: '/product-category/:categorySlug/page/:pageNumber', file: '~/pages/products.vue' });
-      pages.push({ name: 'order-received', path: '/checkout/order-received/:orderId', file: '~/pages/order-summary.vue' });
-      pages.push({ name: 'order-summary', path: '/order-summary/:orderId', file: '~/pages/order-summary.vue' });
+      pages.push({ name: 'product-page-pager', path: '/products/page/:pageNumber', file: resolve(__dirname, './pages/products.vue') });
+      pages.push({ name: 'product-category-page', path: '/product-category/:categorySlug', file: resolve(__dirname, './pages/products.vue') });
+      pages.push({ name: 'product-category-page-pager', path: '/product-category/:categorySlug/page/:pageNumber', file: resolve(__dirname, './pages/products.vue') });
+      pages.push({ name: 'order-received', path: '/checkout/order-received/:orderId', file: resolve(__dirname, './pages/order-summary.vue') });
+      pages.push({ name: 'order-summary', path: '/order-summary/:orderId', file: resolve(__dirname, './pages/order-summary.vue') });
     },
   },
 
