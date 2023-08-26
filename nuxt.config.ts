@@ -10,11 +10,11 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' },
   },
 
-  nitro: {
-    prerender: {
-      failOnError: false,
-    },
-  },
+  // nitro: {
+  //   prerender: {
+  //     failOnError: false,
+  //   },
+  // },
 
   components: [{ path: '~/components', pathPrefix: false }],
 
