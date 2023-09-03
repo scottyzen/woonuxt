@@ -70,10 +70,10 @@ The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for
 
 | Plugin/Software | Version |
 | --------------- | ------- |
-| WordPress       | 6.2.2   |
-| WooCommerce     | 7.8.2   |
-| WPGraphQL       | 1.14.4  |
-| WooGraphQL      | 0.13.0  |
+| WordPress       | 6.3.1   |
+| WooCommerce     | 8.0.3   |
+| WPGraphQL       | 1.16.0  |
+| WooGraphQL      | 0.15.0  |
 | Node            | 16.18.1 |
 
 ### Current translations
