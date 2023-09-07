@@ -5,8 +5,18 @@ export function useProducts() {
   const products = useState<Product[]>('products', () => []);
 
   function setProducts(newProducts: Product[]): void {
-    products.value = newProducts;
-    allProducts = JSON.parse(JSON.stringify(newProducts));
+    if (!Array.isArray(newProducts)) {
+      throw new Error('Products must be an array.');
+    }
+    if (newProducts.length === 0) {
+      throw new Error('Products cannot be empty.');
+    }
+    try {
+      products.value = newProducts;
+      allProducts = JSON.parse(JSON.stringify(newProducts));
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   const updateProductList = async (): Promise<void> => {

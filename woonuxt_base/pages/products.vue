@@ -15,7 +15,7 @@ useHead({
 </script>
 
 <template>
-  <div class="container flex items-start gap-16">
+  <div class="container flex items-start gap-16" v-if="products">
     <Filters />
 
     <div class="w-full">
