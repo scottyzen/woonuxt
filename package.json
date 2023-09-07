@@ -1,6 +1,6 @@
 {
   "name": "woonuxt",
-  "version": "3.0.29",
+  "version": "3.0.28",
   "private": true,
   "scripts": {
     "dev": "nuxi dev",
@@ -8,10 +8,29 @@
     "generate": "nuxi generate",
     "preview": "nuxi preview",
     "postinstall": "nuxi prepare",
+    "lint": "eslint --fix --ext .vue,.ts,.tsx,.js,.mjs .",
     "pretty": "prettier --write ."
   },
+  "dependencies": {
+    "@stripe/stripe-js": "^2.1.2",
+    "@vueform/slider": "^2.1.7"
+  },
   "devDependencies": {
+    "@nuxt/image": "rc",
+    "@nuxtjs/eslint-config-typescript": "^12.1.0",
+    "@nuxtjs/i18n": "^8.0.0-rc.4",
+    "@nuxtjs/tailwindcss": "^6.8.0",
+    "@tailwindcss/typography": "^0.5.10",
+    "eslint": "^8.48.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-nuxt": "^4.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
     "nuxt": "^3.7.1",
-    "@nuxtjs/tailwindcss": "^6.8.0"
+    "nuxt-graphql-client": "^0.2.30",
+    "nuxt-icon": "^0.5.0",
+    "prettier": "^3.0.3",
+    "woonuxt-settings": "^1.0.24",
+    "vue-stripe-js": "^1.0.1"
   }
 }
