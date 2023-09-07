@@ -55,7 +55,6 @@ const updateSelectedVariations = (variations: Variation[]) => {
 
 <template>
   <main class="container relative py-6 xl:max-w-7xl" v-if="product">
-    <!-- Breadcrumb -->
     <Breadcrumb
       v-if="primaryCategory"
       class="mb-6"
@@ -138,13 +137,13 @@ const updateSelectedVariations = (variations: Variation[]) => {
         </div>
       </div>
     </div>
-    <div class="my-32">
+    <!-- <div class="my-32">
       <ProductTabs :product="product" />
     </div>
     <div class="my-32" v-if="product.related">
       <div class="mb-4 text-xl font-semibold">{{ $t('messages.shop.youMayLike') }}</div>
       <ProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
-    </div>
+    </div> -->
   </main>
 </template>
 

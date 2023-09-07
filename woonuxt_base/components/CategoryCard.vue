@@ -5,22 +5,23 @@ const props = defineProps({
 </script>
 
 <template>
-  <NuxtLink
+  <!-- <NuxtLink
     :to="`/products?filter=category[${node.slug}]`"
-    class="border border-white rounded-xl flex item relative justify-center overflow-hidden snap-mandatory snap-x">
+    class="relative flex justify-center overflow-hidden border border-white rounded-xl item snap-mandatory snap-x">
     <NuxtImg
       v-if="node.image"
       width="220"
       height="280"
-      class="h-full object-cover w-full inset-0 absolute"
+      class="absolute inset-0 object-cover w-full h-full"
       :src="node.image.sourceUrl"
       :alt="node.name"
       loading="lazy"
       fit="outside"
       format="webp" />
-    <div class="bg-gradient-to-t from-black to-transparent h-1/2 opacity-50 inset-x-0 bottom-0 absolute"></div>
-    <span class="font-semibold mt-auto text-sm text-white mb-2 z-10 relative capitalize md:text-base md:mb-4">{{ node.name }}</span>
-  </NuxtLink>
+    <div class="absolute inset-x-0 bottom-0 opacity-50 bg-gradient-to-t from-black to-transparent h-1/2"></div>
+    <span class="relative z-10 mt-auto mb-2 text-sm font-semibold text-white capitalize md:text-base md:mb-4">{{ node.name }}</span>
+  </NuxtLink> -->
+  <div>link</div>
 </template>
 
 <style lang="postcss" scoped>

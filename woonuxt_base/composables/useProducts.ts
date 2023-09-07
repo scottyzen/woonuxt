@@ -5,12 +5,8 @@ export function useProducts() {
   const products = useState<Product[]>('products', () => []);
 
   function setProducts(newProducts: Product[]): void {
-    if (!Array.isArray(newProducts)) {
-      throw new Error('Products must be an array.');
-    }
-    if (newProducts.length === 0) {
-      throw new Error('Products cannot be empty.');
-    }
+    if (!Array.isArray(newProducts)) throw new Error('Products must be an array.');
+    if (newProducts.length === 0) throw new Error('Products cannot be empty.');
     try {
       products.value = newProducts;
       allProducts = JSON.parse(JSON.stringify(newProducts));
@@ -31,12 +27,16 @@ export function useProducts() {
     }
 
     // otherwise, apply filter, search and sorting in that order
-    let newProducts = [...allProducts];
-    if (isFiltersActive.value) newProducts = await filterProducts(newProducts);
-    if (isSearchActive.value) newProducts = await searchProducts(newProducts);
-    if (isSortingActive.value) newProducts = await sortProducts(newProducts);
+    try {
+      let newProducts = [...allProducts];
+      if (isFiltersActive.value) newProducts = await filterProducts(newProducts);
+      if (isSearchActive.value) newProducts = await searchProducts(newProducts);
+      if (isSortingActive.value) newProducts = await sortProducts(newProducts);
 
-    products.value = newProducts;
+      products.value = newProducts;
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return { products, allProducts, setProducts, updateProductList };

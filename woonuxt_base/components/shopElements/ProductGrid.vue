@@ -12,7 +12,7 @@ const page = ref(parseInt(route.params.pageNumber as string) || 1);
       <ProductCard v-for="(node, i) in products.slice((page - 1) * productsPerPage, page * productsPerPage)" :key="node.databaseId || i" :node="node" :index="i" />
     </TransitionGroup>
 
-    <Pagination />
+    <!-- <Pagination /> -->
   </section>
 </template>
 
@@ -38,7 +38,9 @@ const page = ref(parseInt(route.params.pageNumber as string) || 1);
 }
 
 .shrink-enter-active {
-  transition: opacity 500ms ease-out 250ms, transform 500ms ease-out;
+  transition:
+    opacity 500ms ease-out 250ms,
+    transform 500ms ease-out;
   will-change: opacity, transform;
 }
 
