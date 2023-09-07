@@ -127,6 +127,7 @@ interface SimpleProduct {
   stockStatus?: StockStatusEnum | null;
   stockQuantity?: number | null;
   description?: string | null;
+  rawDescription?: string | null;
   shortDescription?: string | null;
   averageRating?: number | null;
   weight?: string | null;
@@ -144,6 +145,7 @@ interface SimpleProduct {
 interface VariableProduct {
   name?: string | null;
   description?: string | null;
+  rawDescription?: string | null;
   shortDescription?: string | null;
   weight?: string | null;
   length?: string | null;

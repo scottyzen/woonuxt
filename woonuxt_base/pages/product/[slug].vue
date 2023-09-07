@@ -8,7 +8,7 @@ const product = data?.value?.product as Product;
 
 useHead({
   title: product?.name || 'Product',
-  meta: [{ hid: 'description', name: 'description', content: product?.description || '' }],
+  meta: [{ hid: 'description', name: 'description', content: product?.rawDescription || '' }],
 });
 
 const quantity = ref(1);
