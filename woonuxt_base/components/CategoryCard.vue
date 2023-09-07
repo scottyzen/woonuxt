@@ -5,9 +5,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <!-- <NuxtLink
-    :to="`/products?filter=category[${node.slug}]`"
-    class="relative flex justify-center overflow-hidden border border-white rounded-xl item snap-mandatory snap-x">
+  <NuxtLink :to="`/products?filter=category[${node.slug}]`" class="relative flex justify-center overflow-hidden border border-white rounded-xl item snap-mandatory snap-x">
     <NuxtImg
       v-if="node.image"
       width="220"
@@ -20,8 +18,7 @@ const props = defineProps({
       format="webp" />
     <div class="absolute inset-x-0 bottom-0 opacity-50 bg-gradient-to-t from-black to-transparent h-1/2"></div>
     <span class="relative z-10 mt-auto mb-2 text-sm font-semibold text-white capitalize md:text-base md:mb-4">{{ node.name }}</span>
-  </NuxtLink> -->
-  <div>link</div>
+  </NuxtLink>
 </template>
 
 <style lang="postcss" scoped>
