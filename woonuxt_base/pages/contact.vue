@@ -1,6 +1,6 @@
 <template>
   <div class="container my-8">
-    <h1 class="mb-8 text-3xl font-semibold text-primary">Contact Page from Parent</h1>
+    <h1 class="mb-8 text-3xl font-semibold text-primary">Contact Page</h1>
     <div class="my-8 prose">
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat facilis, commodi illum repellat accusamus praesentium quaerat ut ducimus ipsam deserunt, a voluptate id
