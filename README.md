@@ -21,6 +21,14 @@ The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for
 
 &nbsp;
 
+## How to customize & extend WooNuxt 🎨
+
+WooNuxt now uses the Nuxt layers feature to make it easy to customize any part of WooNuxt. Just like you would with a WordPress theme with it's child theme.
+
+Example: I have created a pages directory and added a `contact.vue` file in the pages directory. This will override the default contact page that comes with WooNuxt. You can do this with any page or component. So think of the `woonuxt_base` folder as the parent theme and the root folder as the child theme.
+
+&nbsp;
+
 ### Progress
 
 | Feature                                                   | Ongoing Enhancements | In the Pipeline | In Progress | Done |
@@ -65,6 +73,7 @@ The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for
 `GQL_HOST` - The URL of your WordPress site. This is the only required environment variable.
 
 &nbsp;
+
 
 #### Tested up to:
 
