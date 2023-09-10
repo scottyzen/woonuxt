@@ -33,7 +33,7 @@ useHead({
       </div>
     </section>
 
-    <section class="container grid gap-4 my-24 lg:grid-cols-4">
+    <section class="container grid gap-4 my-24 md:grid-cols-2 lg:grid-cols-4">
       <div class="flex items-center gap-8 p-8 bg-white rounded-lg">
         <img src="/icons/box.svg" width="60" height="60" alt="Free Shipping" loading="lazy" />
         <div>

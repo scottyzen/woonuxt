@@ -19,7 +19,7 @@ const updateQuantity = () => {
         width="64"
         height="64"
         class="w-16 h-16 rounded-lg"
-        :src="productType.image.cartSourceUrl || productType.image.sourceUrl"
+        :src="productType.image.cartSourceUrl || product.image.cartSourceUrl"
         :alt="productType.image.altText || productType.name"
         :title="productType.image.altText || productType.name"
         loading="lazy" />

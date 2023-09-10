@@ -7,7 +7,7 @@ watch(locale, (newLocale) => {
 </script>
 
 <template>
-  <select v-model="locale">
+  <select v-model="locale" aria-label="Language switcher">
     <option v-for="locale in locales" :key="locale" :value="locale.code">
       {{ locale.name }}
     </option>

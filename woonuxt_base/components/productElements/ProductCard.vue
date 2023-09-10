@@ -5,9 +5,8 @@ const props = defineProps({
   index: { type: Number, default: 1 },
 });
 
-const fallbackImage = '/images/placeholder.jpg';
-const imgWidth = 400;
-const imgHeight = 500;
+const imgWidth = 290;
+const imgHeight = 385;
 
 // example: ?filter=pa_color[green,blue],pa_size[large]
 const filterQuery = ref(route.query.filter);
@@ -19,7 +18,7 @@ watch(
   () => {
     filterQuery.value = route.query.filter;
     paColor.value = filterQuery.value?.split('pa_color[')[1]?.split(']')[0]?.split(',') || [];
-  }
+  },
 );
 
 const mainImage = computed(() => props.node?.image?.sourceUrl);
@@ -48,12 +47,13 @@ const colorVariableImage = computed(() => {
       v-else
       :width="imgWidth"
       :height="imgHeight"
-      :src="mainImage || fallbackImage"
+      :src="mainImage || '/images/placeholder.jpg'"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
       :loading="index <= 1 ? 'eager' : 'lazy'"
       fit="outside"
-      format="webp" />
+      format="webp"
+      densities="x1 x2" />
 
     <div class="p-2">
       <StarRating :rating="node.averageRating" :count="node.reviewCount" />
