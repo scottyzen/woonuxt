@@ -1,17 +1,18 @@
 <script lang="ts" setup>
-const { logoutUser, viewer } = useAuth();
+const { logoutUser, viewer, customer, isPending } = useAuth();
 const route = useRoute();
 
-const activeTab = computed(() => {
-  return route.query.tab || 'my-details';
-});
+const activeTab = computed(() => route.query.tab || 'my-details');
 </script>
 
 <template>
-  <div class="container">
-    <LoginAndRegister v-if="!viewer" />
-    <div v-if="viewer" class="flex flex-col items-start w-full gap-8 mb-24 lg:flex-row">
-      <nav class="grid w-full gap-1 my-8 text-gray-600 min-w-[240px] top-24 lg:w-auto lg:sticky">
+  <div class="container min-h-[600px]">
+    <div v-if="!viewer && !customer" class="flex flex-col min-h-[500px]">
+      <LoadingIcon class="m-auto" />
+    </div>
+    <LoginAndRegister v-else-if="!viewer" />
+    <div v-else class="flex flex-col items-start w-full lg:gap-8 mb-24 lg:flex-row">
+      <nav class="flex lg:grid flex-wrap w-full gap-1 my-8 text-gray-600 min-w-[240px] top-24 lg:w-auto lg:sticky">
         <NuxtLink
           to="/my-account?tab=my-details"
           class="flex items-center gap-4 p-3 px-4 rounded-lg hover:bg-white hover:text-primary"
@@ -31,16 +32,15 @@ const activeTab = computed(() => {
           {{ $t('messages.general.downloads') }}
         </NuxtLink>
         <button class="flex items-center gap-4 p-3 px-4 rounded-lg hover:bg-white hover:text-primary" @click="logoutUser">
-          <Icon name="ion:log-out-outline" size="22" />
+          <LoadingIcon v-if="isPending" size="22" />
+          <Icon v-else name="ion:log-out-outline" size="22" />
           {{ $t('messages.account.logout') }}
         </button>
       </nav>
 
-      <main class="flex-1 w-full my-8 rounded-lg">
+      <main class="flex-1 w-full lg:my-8 rounded-lg">
         <AccountMyDetails v-if="activeTab === 'my-details'" :user="viewer" />
-        <div v-else-if="activeTab === 'orders'">
-          <OrderList />
-        </div>
+        <OrderList v-else-if="activeTab === 'orders'" />
       </main>
     </div>
   </div>

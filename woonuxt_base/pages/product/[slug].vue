@@ -18,25 +18,17 @@ const indexOfTypeAny = [] as number[];
 const attrValues = ref();
 
 const type = computed(() => (activeVariation.value ? activeVariation.value : product)) as ComputedRef<Product | Variation>;
-const primaryCategory = computed(() => {
-  return product.productCategories?.nodes[0];
-});
-const selectProductInput = computed(() => ({
-  productId: type.value.databaseId,
-  quantity: quantity.value,
-})) as ComputedRef<AddToCartInput>;
+const primaryCategory = computed(() => product.productCategories?.nodes[0]);
+const selectProductInput = computed(() => ({ productId: type.value.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
 
 onMounted(() => {
-  if (product.variations) checkForVariationTypeOfAny(product);
+  if (product.variations) indexOfTypeAny.push(...checkForVariationTypeOfAny(product));
 });
 
-const updateSelectedVariations = (variations: Variation[]) => {
+const updateSelectedVariations = (variations: Variation[]): void => {
   if (!product.variations) return;
 
-  attrValues.value = variations.map((el: Attribute) => ({
-    attributeName: el.name,
-    attributeValue: el.value,
-  }));
+  attrValues.value = variations.map((el: Attribute) => ({ attributeName: el.name, attributeValue: el.value }));
   const cloneArray = JSON.parse(JSON.stringify(variations));
   const getActiveVariation = product.variations.nodes.filter((variation) => {
     // If there is any variation of type ANY set the value to ''

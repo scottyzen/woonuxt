@@ -1,6 +1,6 @@
 {
   "name": "woonuxt",
-  "version": "3.0.29",
+  "version": "3.1.30",
   "private": true,
   "scripts": {
     "dev": "nuxi dev",
@@ -21,7 +21,7 @@
     "@nuxtjs/i18n": "^8.0.0-rc.4",
     "@nuxtjs/tailwindcss": "^6.8.0",
     "@tailwindcss/typography": "^0.5.10",
-    "eslint": "^8.48.0",
+    "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-nuxt": "^4.0.0",

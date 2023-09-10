@@ -62,7 +62,7 @@ export function useHelpers() {
     body?.classList.remove(className);
   }
 
-  const checkForVariationTypeOfAny = (product: Product) => {
+  const checkForVariationTypeOfAny = (product: Product): number[] => {
     const numberOfVariation = product?.attributes?.nodes?.length || 0;
     let indexOfTypeAny = [] as number[];
     for (let index = 0; index < numberOfVariation; index++) {
@@ -72,18 +72,19 @@ export function useHelpers() {
       });
 
       if (!tempArray.some(Boolean)) indexOfTypeAny.push(index);
-      return indexOfTypeAny;
     }
+
+    return indexOfTypeAny;
   };
 
   return {
+    isShowingMobileMenu,
     formatArray,
     arraysEqual,
     clearAllCookies,
     replaceQueryParam,
     toggleBodyClass,
     removeBodyClass,
-    isShowingMobileMenu,
     toggleMobileMenu,
     checkForVariationTypeOfAny,
   };
