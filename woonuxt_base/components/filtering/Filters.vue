@@ -6,7 +6,7 @@ const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES
 
 <template>
   <aside id="filters">
-    <!-- <OrderByDropdown class="block w-full md:hidden" /> -->
+    <OrderByDropdown class="block w-full md:hidden" />
     <div class="relative z-30 grid mb-12 space-y-8 divide-y">
       <PriceFilter />
       <CategoryFilter />
@@ -143,7 +143,10 @@ const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES
 @media (max-width: 768px) {
   #filters {
     @apply bg-white h-full p-8 transform pl-2 transition-all ease-in-out bottom-0 left-4 -translate-x-[110vw] duration-500 overflow-auto fixed;
-    box-shadow: -100px 0 0 white, -200px 0 0 white, -300px 0 0 white;
+    box-shadow:
+      -100px 0 0 white,
+      -200px 0 0 white,
+      -300px 0 0 white;
     z-index: 60;
   }
 

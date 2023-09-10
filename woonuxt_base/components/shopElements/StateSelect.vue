@@ -1,7 +1,7 @@
 <script setup>
 const props = defineProps({
   modelValue: { type: String, required: true },
-  countryCode: { type: String, required: true },
+  countryCode: { type: String, required: true, default: 'IE' },
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -25,7 +25,7 @@ watch(
   () => props.countryCode,
   () => {
     updateState();
-  }
+  },
 );
 
 onMounted(() => {

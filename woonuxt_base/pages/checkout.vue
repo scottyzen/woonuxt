@@ -10,6 +10,7 @@ const runtimeConfig = useRuntimeConfig();
 const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY;
 
 const buttonText = ref(isProcessingOrder.value ? t('messages.general.processing') : t('messages.shop.checkoutButton'));
+const isCheckoutDisabled = computed(() => isProcessingOrder.value || isUpdatingCart.value || !orderInput.paymentMethod);
 
 const instanceOptions = ref({});
 const elementsOptions = ref({});
@@ -58,25 +59,7 @@ const payNow = async () => {
   <div class="flex flex-col min-h-[600px]">
     <LoadingIcon v-if="!cart" class="m-auto" />
 
-    <form v-if="cart" class="container flex flex-wrap items-start gap-8 my-16 justify-evenly md:flex-row-reverse lg:gap-24" @submit.prevent="payNow">
-      <OrderSummary>
-        <button
-          v-if="orderInput.paymentMethod === 'paypal'"
-          class="rounded-lg flex font-semibold bg-[#EAB434] shadow-md mt-4 text-white text-lg text-center w-full p-3 gap-4 justify-center items-center hover:bg-[#EAB434] disabled:cursor-not-allowed disabled:opacity-50"
-          :disabled="isProcessingOrder || isUpdatingCart">
-          <img src="/images/paypal.svg" alt="PayPal" class="w-16" />
-          <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
-        </button>
-
-        <button
-          v-else
-          class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary gap- hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
-          :disabled="isProcessingOrder || isUpdatingCart">
-          <span>{{ buttonText }}</span>
-          <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
-        </button>
-      </OrderSummary>
-
+    <form v-if="cart" class="container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-24" @submit.prevent="payNow">
       <div class="grid w-full max-w-2xl gap-8 checkout-form md:flex-1">
         <div>
           <h2 class="w-full mb-2 text-2xl font-semibold">Contact Information</h2>
@@ -112,15 +95,15 @@ const payNow = async () => {
           </div>
         </Transition>
 
-        <div>
+        <div v-if="cart && cart.availableShippingMethods.length">
           <h3 class="mb-4 text-xl font-semibold">{{ $t('messages.general.shippingSelect') }}</h3>
           <ClientOnly>
-            <ShippingOptions v-if="cart && cart.availableShippingMethods.length" :options="cart.availableShippingMethods[0].rates" :active-option="cart.chosenShippingMethods[0]" />
+            <ShippingOptions :options="cart.availableShippingMethods[0].rates" :active-option="cart.chosenShippingMethods[0]" />
           </ClientOnly>
         </div>
 
         <!-- Pay methods -->
-        <div class="mt-2 col-span-full">
+        <div v-if="paymentGateways.length" class="mt-2 col-span-full">
           <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.billing.paymentOptions') }}</h2>
           <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :paymentGateways="paymentGateways" />
 
@@ -142,6 +125,24 @@ const payNow = async () => {
           <textarea id="order-note" v-model="orderInput.customerNote" name="order-note" class="w-full" rows="4" :placeholder="$t('messages.shop.orderNotePlaceholder')"></textarea>
         </div>
       </div>
+
+      <OrderSummary>
+        <button
+          v-if="orderInput.paymentMethod === 'paypal'"
+          class="rounded-lg flex font-semibold bg-[#EAB434] shadow-md mt-4 text-white text-lg text-center w-full p-3 gap-4 justify-center items-center hover:bg-[#EAB434] disabled:cursor-not-allowed disabled:opacity-50"
+          :disabled="isCheckoutDisabled">
+          <img src="/images/paypal.svg" alt="PayPal" class="w-16" />
+          <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
+        </button>
+
+        <button
+          v-else
+          class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary gap- hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
+          :disabled="isCheckoutDisabled">
+          <span>{{ buttonText }}</span>
+          <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
+        </button>
+      </OrderSummary>
     </form>
   </div>
 </template>

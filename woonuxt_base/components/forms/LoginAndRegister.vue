@@ -56,14 +56,20 @@ const message = ref('');
 const errorMessage = ref('');
 
 const login = async (userInfo) => {
-  const { error } = await loginUser(userInfo);
-  if (error && error === 'invalid_username') {
-    errorMessage.value = t('messages.error.invalidUsername');
-  } else if (error && error === 'incorrect_password') {
-    errorMessage.value = t('messages.error.incorrectPassword');
-  } else if (error) {
-    errorMessage.value = error;
-  } else {
+  const { success, error } = await loginUser(userInfo);
+  switch (error) {
+    case 'invalid_username':
+      errorMessage.value = t('messages.error.invalidUsername');
+      break;
+    case 'incorrect_password':
+      errorMessage.value = t('messages.error.incorrectPassword');
+      break;
+    default:
+      errorMessage.value = error;
+      break;
+  }
+
+  if (success) {
     errorMessage.value = '';
     message.value = t('messages.account.loggingIn');
   }

@@ -10,7 +10,7 @@ export function useCart() {
     try {
       const { cart, customer, viewer, paymentGateways } = await GqlGetCart();
 
-      const { updateCustomer, updateViewer } = useAuth() as any;
+      const { updateCustomer, updateViewer } = useAuth();
       if (cart) updateCart(cart);
       if (customer) updateCustomer(customer);
       if (viewer) updateViewer(viewer);
@@ -19,8 +19,9 @@ export function useCart() {
       return cart;
     } catch (error: any) {
       console.error(error);
-      return null;
     }
+
+    return null;
   }
 
   function updateCart(payload: Cart): void {
@@ -89,27 +90,25 @@ export function useCart() {
   }
 
   // Apply coupon
-  async function applyCoupon(code: string) {
+  async function applyCoupon(code: string): Promise<{ message: string | null }> {
     try {
       isUpdatingCoupon.value = true;
       const { applyCoupon } = await GqlApplyCoupon({ code });
       cart.value = applyCoupon?.cart || null;
       isUpdatingCoupon.value = false;
-      return { message: null };
     } catch (error: any) {
       isUpdatingCoupon.value = false;
       const gqlErrors = error?.gqlErrors;
       if (gqlErrors) {
         const message = gqlErrors[0]?.message;
-        if (message) {
-          return { message };
-        }
+        if (message) return { message };
       }
     }
+    return { message: null };
   }
 
   // Remove coupon
-  async function removeCoupon(code: string) {
+  async function removeCoupon(code: string): Promise<void> {
     try {
       const { removeCoupons } = await GqlRemoveCoupons({ codes: [code] });
       cart.value = removeCoupons?.cart || null;
@@ -127,6 +126,7 @@ export function useCart() {
     isShowingCart,
     isUpdatingCart,
     isUpdatingCoupon,
+    paymentGateways,
     refreshCart,
     toggleCart,
     addToCart,
@@ -136,6 +136,5 @@ export function useCart() {
     updateShippingMethod,
     applyCoupon,
     removeCoupon,
-    paymentGateways,
   };
 }

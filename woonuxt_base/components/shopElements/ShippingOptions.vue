@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-const { updateShippingMethod, isUpdatingCart } = useCart();
+const { updateShippingMethod, isUpdatingCart, cart } = useCart();
 const props = defineProps({
   options: { type: Array, required: true },
   activeOption: { type: String, required: true },

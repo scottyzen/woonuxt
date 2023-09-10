@@ -14,7 +14,7 @@ const changeImage = (index = 0) => {
 </script>
 
 <template>
-  <div v-if="mainImage" class="-mx-4 md:m-0">
+  <div v-if="mainImage">
     <SaleBadge :node="node" class="text-base top-4 right-4 absolute" />
     <NuxtImg v-show="imageToShow === null" class="rounded-xl object-contain w-full min-w-[350px]" width="700" height="700" fit="outside" :src="firstImage" fetchpriority="high" />
     <NuxtImg v-show="imageToShow === 0" class="rounded-xl object-contain w-full min-w-[350px]" width="700" height="700" fit="outside" :src="mainImage" fetchpriority="high" />
