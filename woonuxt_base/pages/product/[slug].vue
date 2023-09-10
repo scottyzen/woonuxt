@@ -20,6 +20,7 @@ const attrValues = ref();
 const type = computed(() => (activeVariation.value ? activeVariation.value : product)) as ComputedRef<Product | Variation>;
 const primaryCategory = computed(() => product.productCategories?.nodes[0]);
 const selectProductInput = computed(() => ({ productId: type.value.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
+const disabledAddToCart = computed(() => (!activeVariation.value && !!product.variations) || type.value.stockStatus !== 'IN_STOCK');
 
 onMounted(() => {
   if (product.variations) indexOfTypeAny.push(...checkForVariationTypeOfAny(product));
@@ -101,14 +102,14 @@ const updateSelectedVariations = (variations: Variation[]): void => {
             :attrs="product.attributes.nodes"
             :variations="product.variations.nodes"
             @attrs-changed="updateSelectedVariations" />
-          <div class="flex items-center gap-4 mt-12">
+          <div class="flex items-center gap-4 mt-12 fixed md:static bottom-0 bg-white md:bg-transparent bg-opacity-90 w-full left-0 p-4 md:p-0 z-10">
             <input
               v-model="quantity"
               type="number"
               min="1"
               aria-label="Quantity"
               class="bg-white border rounded-lg flex text-left p-2.5 w-20 gap-4 items-center justify-center focus:outline-none" />
-            <AddToCartButton class="flex-1 w-full md:max-w-xs" :disabled="!activeVariation && !!product.variations" :class="{ loading: isUpdatingCart }" />
+            <AddToCartButton class="flex-1 w-full md:max-w-xs" :disabled="disabledAddToCart" :class="{ loading: isUpdatingCart }" />
           </div>
         </form>
 

@@ -15,7 +15,7 @@ export const useAuth = () => {
       if (loginWithCookies?.status === 'SUCCESS') {
         const cart = await refreshCart();
         if (cart && viewer.value === null) {
-          return { success: false, error: 'Password was cuseLocaleRoutersists, please contact support.' };
+          return { success: false, error: 'Password was correct, but there was an error logging in. Please try again later. If the problem persists, please contact support.' };
         }
       } else {
         isPending.value = false;

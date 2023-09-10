@@ -19,8 +19,9 @@ export function useCart() {
       return cart;
     } catch (error: any) {
       console.error(error);
-      return null;
     }
+
+    return null;
   }
 
   function updateCart(payload: Cart): void {
@@ -125,6 +126,7 @@ export function useCart() {
     isShowingCart,
     isUpdatingCart,
     isUpdatingCoupon,
+    paymentGateways,
     refreshCart,
     toggleCart,
     addToCart,
@@ -134,6 +136,5 @@ export function useCart() {
     updateShippingMethod,
     applyCoupon,
     removeCoupon,
-    paymentGateways,
   };
 }
