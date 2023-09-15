@@ -79,7 +79,7 @@ Example: I have created a pages directory and added a `contact.vue` file in the 
 | Plugin/Software | Version |
 | --------------- | ------- |
 | WordPress       | 6.3.1   |
-| WooCommerce     | 8.0.3   |
+| WooCommerce     | 8.1.0   |
 | WPGraphQL       | 1.16.0  |
 | WooGraphQL      | 0.15.0  |
 | Node            | 16.18.1 |
