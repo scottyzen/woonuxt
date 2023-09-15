@@ -31,28 +31,28 @@ Example: I have created a pages directory and added a `contact.vue` file in the 
 
 ### Progress
 
-| Feature                                                   | Ongoing Enhancements | In the Pipeline | In Progress | Done |
-| --------------------------------------------------------- | -------------------- | --------------- | ----------- | ---- |
-| Proformanance                                             | ✅                   |                 |             | ✅   |
-| SEO                                                       |                      |                 | ✅          |      |
-| Cart                                                      |                      |                 |             | ✅   |
-| Search                                                    |                      |                 |             | ✅   |
-| Shipping                                                  |                      |                 |             | ✅   |
-| Checkout (Stripe, PayPay, Cash on Delivery)               |                      |                 |             | ✅   |
-| Filtering                                                 | ✅                   |                 |             | ✅   |
-| Wishlists                                                 |                      |                 |             | ✅   |
-| Account                                                   |                      |                 | ✅          |      |
-| Coupons                                                   |                      |                 |             | ✅   |
-| Product Reviews                                           |                      |                 | ✅          |      |
-| Product Category Pages                                    |                      |                 | ✅          |      |
-| WooNuxt Settings Module                                   |                      |                 | ✅          |      |
-| Better Typescript Supp                                    |                      |                 | ✅          |      |
-| Mobile layout                                             | ✅                   |                 | ✅          |      |
-| Countries & States Enums                                  |                      |                 |             | ✅   |
-| Cookie Popup & GDPR Compliance                            |                      | ✅              |             |      |
-| Progressive Web App (PWA)                                 |                      |                 | ✅          |      |
-| Queuing System (for checking out when the server is busy) |                      | ✅              |             |      |
-| Language Support (i18n)                                   |                      |                 | ✅          |      |
+| Feature                                                   | Ongoing Enhancements | In the Pipeline | In Progress | Done | Next |
+| --------------------------------------------------------- | -------------------- | --------------- | ----------- | ---- | ---- |
+| Proformanance                                             | 🔷                   |                 |             | ✅   |      |
+| SEO                                                       |                      |                 | ✅          |      | 🔶   |
+| Cart                                                      |                      |                 |             | ✅   |      |
+| Search                                                    |                      |                 |             | ✅   |      |
+| Shipping                                                  |                      |                 |             | ✅   |      |
+| Checkout (Stripe, PayPay, Cash on Delivery)               |                      |                 |             | ✅   |      |
+| Filtering                                                 | 🔷                   |                 |             | ✅   |      |
+| Wishlists                                                 |                      |                 |             | ✅   |      |
+| Account                                                   |                      |                 | ✅          |      |      |
+| Coupons                                                   |                      |                 |             | ✅   |      |
+| Product Reviews                                           |                      |                 | ✅          |      |      |
+| Product Category Pages                                    |                      |                 | ✅          |      |      |
+| WooNuxt Settings Module                                   | 🔷                   |                 | ✅          |      |      |
+| Better Typescript Supp                                    | 🔷                   |                 | ✅          |      |      |
+| Mobile layout                                             | 🔷                   |                 | ✅          |      |      |
+| Countries & States Enums                                  |                      |                 |             | ✅   |      |
+| Cookie Popup & GDPR Compliance                            |                      | ✅              |             |      |      |
+| Progressive Web App (PWA)                                 |                      |                 | ✅          |      |      |
+| Queuing System (for checking out when the server is busy) |                      | ✅              |             |      |      |
+| Language Support (i18n)                                   | 🔷                   |                 | ✅          |      |      |
 
 &nbsp;
 
