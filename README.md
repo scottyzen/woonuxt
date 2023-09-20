@@ -87,13 +87,14 @@ Example: I have created a pages directory and added a `contact.vue` file in the 
 
 ### Current translations
 
-| Language   | Code |
-| ---------- | ---- |
-| English 🇺🇸 | en   |
-| German 🇩🇪  | de   |
-| Spanish 🇪🇸 | es   |
-| French 🇫🇷  | fr   |
-| Italian 🇮🇹 | it   |
+| Language      | Code |
+| ------------- | ---- |
+| English 🇺🇸    | en   |
+| German 🇩🇪     | de   |
+| Spanish 🇪🇸    | es   |
+| French 🇫🇷     | fr   |
+| Italian 🇮🇹    | it   |
+| Portuguese 🇵🇹 | pt   |
 
 #### Credits
 
