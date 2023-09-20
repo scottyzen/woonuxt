@@ -58,92 +58,103 @@ const payNow = async () => {
 <template>
   <div class="flex flex-col min-h-[600px]">
     <LoadingIcon v-if="!cart" class="m-auto" />
-
-    <form v-if="cart" class="container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-24" @submit.prevent="payNow">
-      <div class="grid w-full max-w-2xl gap-8 checkout-form md:flex-1">
-        <div>
-          <h2 class="w-full mb-2 text-2xl font-semibold">Contact Information</h2>
-          <p v-if="!viewer" class="mt-1 text-sm text-gray-500">Already have an account? <a href="/my-account" class="text-primary text-semibold">Log in</a>.</p>
-          <div class="w-full mt-4">
-            <label for="email">{{ $t('messages.billing.email') }}</label>
-            <input v-model="customer.billing.email" placeholder="johndoe@email.com" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required />
-          </div>
-          <div class="w-full my-2" v-if="orderInput.createAccount">
-            <label for="email">{{ $t('messages.account.password') }}</label>
-            <PasswordInput id="password" class="my-2" v-model="orderInput.password" placeholder="Password" :required="true" />
-          </div>
-          <div v-if="!viewer" class="flex items-center gap-2 my-2">
-            <label for="creat-account">Create an account?</label>
-            <input id="creat-account" v-model="orderInput.createAccount" type="checkbox" name="creat-account" />
-          </div>
-        </div>
-
-        <div>
-          <h2 class="w-full mb-3 text-2xl font-semibold">{{ $t('messages.billing.billingDetails') }}</h2>
-          <BillingDetails v-model="customer.billing" />
-        </div>
-
-        <label for="shipToDifferentAddress" class="flex items-center gap-2">
-          <span>{{ $t('messages.billing.differentAddress') }}</span>
-          <input id="shipToDifferentAddress" v-model="orderInput.shipToDifferentAddress" type="checkbox" name="shipToDifferentAddress" />
-        </label>
-
-        <Transition name="scale-y" mode="out-in">
-          <div v-if="orderInput.shipToDifferentAddress">
-            <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.general.shippingDetails') }}</h2>
-            <ShippingDetails v-model="customer.shipping" />
-          </div>
-        </Transition>
-
-        <div v-if="cart && cart.availableShippingMethods.length">
-          <h3 class="mb-4 text-xl font-semibold">{{ $t('messages.general.shippingSelect') }}</h3>
-          <ClientOnly>
-            <ShippingOptions :options="cart.availableShippingMethods[0].rates" :active-option="cart.chosenShippingMethods[0]" />
-          </ClientOnly>
-        </div>
-
-        <!-- Pay methods -->
-        <div v-if="paymentGateways.length" class="mt-2 col-span-full">
-          <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.billing.paymentOptions') }}</h2>
-          <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :paymentGateways="paymentGateways" />
-
-          <Transition name="scale-y" mode="out-in">
-            <StripeElements
-              v-if="orderInput.paymentMethod == 'stripe'"
-              v-slot="{ elements, instance }"
-              ref="elms"
-              :stripe-key="stripeKey"
-              :instance-options="instanceOptions"
-              :elements-options="elementsOptions">
-              <StripeElement ref="card" :elements="elements" :options="cardOptions" />
-            </StripeElements>
-          </Transition>
-        </div>
-
-        <div>
-          <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.shop.orderNote') }} ({{ $t('messages.general.optional') }})</h2>
-          <textarea id="order-note" v-model="orderInput.customerNote" name="order-note" class="w-full" rows="4" :placeholder="$t('messages.shop.orderNotePlaceholder')"></textarea>
-        </div>
+    <template v-else>
+      <div v-if="cart.isEmpty" class="flex flex-col items-center justify-center flex-1 mb-12">
+        <div class="mb-20 text-xl text-gray-300">{{ $t('messages.shop.cartEmpty') }}</div>
       </div>
 
-      <OrderSummary>
-        <button
-          v-if="orderInput.paymentMethod === 'paypal'"
-          class="rounded-lg flex font-semibold bg-[#EAB434] shadow-md mt-4 text-white text-lg text-center w-full p-3 gap-4 justify-center items-center hover:bg-[#EAB434] disabled:cursor-not-allowed disabled:opacity-50"
-          :disabled="isCheckoutDisabled">
-          <img src="/images/paypal.svg" alt="PayPal" class="w-16" />
-          <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
-        </button>
+      <form v-else class="container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-24" @submit.prevent="payNow">
+        <div class="grid w-full max-w-2xl gap-8 checkout-form md:flex-1">
+          <div>
+            <h2 class="w-full mb-2 text-2xl font-semibold">Contact Information</h2>
+            <p v-if="!viewer" class="mt-1 text-sm text-gray-500">Already have an account? <a href="/my-account" class="text-primary text-semibold">Log in</a>.</p>
+            <div class="w-full mt-4">
+              <label for="email">{{ $t('messages.billing.email') }}</label>
+              <input v-model="customer.billing.email" placeholder="johndoe@email.com" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required />
+            </div>
+            <div class="w-full my-2" v-if="orderInput.createAccount">
+              <label for="email">{{ $t('messages.account.password') }}</label>
+              <PasswordInput id="password" class="my-2" v-model="orderInput.password" placeholder="Password" :required="true" />
+            </div>
+            <div v-if="!viewer" class="flex items-center gap-2 my-2">
+              <label for="creat-account">Create an account?</label>
+              <input id="creat-account" v-model="orderInput.createAccount" type="checkbox" name="creat-account" />
+            </div>
+          </div>
 
-        <button
-          v-else
-          class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary gap- hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
-          :disabled="isCheckoutDisabled">
-          <span>{{ buttonText }}</span>
-          <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
-        </button>
-      </OrderSummary>
-    </form>
+          <div>
+            <h2 class="w-full mb-3 text-2xl font-semibold">{{ $t('messages.billing.billingDetails') }}</h2>
+            <BillingDetails v-model="customer.billing" />
+          </div>
+
+          <label for="shipToDifferentAddress" class="flex items-center gap-2">
+            <span>{{ $t('messages.billing.differentAddress') }}</span>
+            <input id="shipToDifferentAddress" v-model="orderInput.shipToDifferentAddress" type="checkbox" name="shipToDifferentAddress" />
+          </label>
+
+          <Transition name="scale-y" mode="out-in">
+            <div v-if="orderInput.shipToDifferentAddress">
+              <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.general.shippingDetails') }}</h2>
+              <ShippingDetails v-model="customer.shipping" />
+            </div>
+          </Transition>
+
+          <div v-if="cart.availableShippingMethods.length">
+            <h3 class="mb-4 text-xl font-semibold">{{ $t('messages.general.shippingSelect') }}</h3>
+            <ClientOnly>
+              <ShippingOptions :options="cart.availableShippingMethods[0].rates" :active-option="cart.chosenShippingMethods[0]" />
+            </ClientOnly>
+          </div>
+
+          <!-- Pay methods -->
+          <div v-if="paymentGateways.length" class="mt-2 col-span-full">
+            <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.billing.paymentOptions') }}</h2>
+            <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :paymentGateways="paymentGateways" />
+
+            <Transition name="scale-y" mode="out-in">
+              <StripeElements
+                v-if="orderInput.paymentMethod == 'stripe'"
+                v-slot="{ elements, instance }"
+                ref="elms"
+                :stripe-key="stripeKey"
+                :instance-options="instanceOptions"
+                :elements-options="elementsOptions">
+                <StripeElement ref="card" :elements="elements" :options="cardOptions" />
+              </StripeElements>
+            </Transition>
+          </div>
+
+          <div>
+            <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.shop.orderNote') }} ({{ $t('messages.general.optional') }})</h2>
+            <textarea
+              id="order-note"
+              v-model="orderInput.customerNote"
+              name="order-note"
+              class="w-full"
+              rows="4"
+              :placeholder="$t('messages.shop.orderNotePlaceholder')"></textarea>
+          </div>
+        </div>
+
+        <OrderSummary>
+          <button
+            v-if="orderInput.paymentMethod === 'paypal'"
+            class="rounded-lg flex font-semibold bg-[#EAB434] shadow-md mt-4 text-white text-lg text-center w-full p-3 gap-4 justify-center items-center hover:bg-[#EAB434] disabled:cursor-not-allowed disabled:opacity-50"
+            :disabled="isCheckoutDisabled">
+            <img src="/images/paypal.svg" alt="PayPal" class="w-16" />
+            <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
+          </button>
+
+          <button
+            v-else
+            class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary gap- hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
+            :disabled="isCheckoutDisabled">
+            <span>{{ buttonText }}</span>
+            <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
+          </button>
+        </OrderSummary>
+      </form>
+    </template>
   </div>
 </template>
 

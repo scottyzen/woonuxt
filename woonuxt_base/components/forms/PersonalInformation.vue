@@ -1,27 +1,24 @@
 <template>
-  <form class="bg-white rounded-lg shadow" @submit.prevent="saveChanges">
-    <div class="grid gap-8 p-8 md:grid-cols-2">
+  <form v-if="customer" class="bg-white rounded-lg shadow" @submit.prevent="saveChanges">
+    <div class="grid gap-6 p-8 md:grid-cols-2">
       <h3 class="text-xl font-semibold col-span-full">{{ $t('messages.account.personalInfo') }}</h3>
 
       <div class="w-full">
         <label for="first-name">{{ $t('messages.billing.firstName') }}</label>
-        <input v-model="user.firstName" placeholder="John" type="text" />
+        <input v-model="customer.firstName" placeholder="John" type="text" />
       </div>
 
       <div class="w-full">
         <label for="last-name">{{ $t('messages.billing.lastName') }}</label>
-        <input v-model="user.lastName" placeholder="Doe" type="text" />
+        <input v-model="customer.lastName" placeholder="Doe" type="text" />
       </div>
       <div class="w-full col-span-full">
         <label for="email">{{ $t('messages.billing.email') }}</label>
-        <input v-model="user.email" placeholder="johndoe@email.com" type="email" />
+        <input v-model="customer.email" placeholder="johndoe@email.com" type="email" />
       </div>
     </div>
-    <div class="p-4 bg-gray-100 col-span-full">
-      <button
-        class="flex items-center gap-4 px-4 py-2 ml-auto font-semibold text-white rounded-lg"
-        :class="isUserChanged ? 'bg-primary' : 'bg-gray-400'"
-        :disabled="!isUserChanged">
+    <div class="bg-white backdrop-blur-sm bg-opacity-75 border-t col-span-full p-4 sticky bottom-0 rounded-b-lg">
+      <button class="rounded-md flex font-semibold bg-primary ml-auto text-white py-2 px-4 gap-4 items-center">
         <LoadingIcon v-if="loading" color="#fff" size="20" />
         <span>{{ buttonText }}</span>
       </button>
@@ -29,56 +26,29 @@
   </form>
 </template>
 
-<script>
-export default {
-  props: {
-    user: {
-      type: Object,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      initialUser: JSON.parse(JSON.stringify(this.user)),
-      loading: false,
-      buttonText: 'Update',
-    };
-  },
-  computed: {
-    isUserChanged() {
-      // Session token might be different, so we need to remove it
-      delete this.user.sessionToken;
-      delete this.initialUser.sessionToken;
+<script setup>
+const { viewer, customer } = useAuth();
 
-      return JSON.stringify(this.user) !== JSON.stringify(this.initialUser);
-    },
-  },
-  methods: {
-    async saveChanges() {
-      this.loading = true;
-      this.buttonText = 'Updating...';
-      const variables = {
-        input: {
-          id: this.user.userId,
-          firstName: this.user.firstName,
-          lastName: this.user.lastName,
-          email: this.user.email,
-        },
-      };
+const loading = ref(false);
+const buttonText = computed(() => (loading.value ? 'Updating...' : 'Update Details'));
 
-      try {
-        const { updateCustomer } = await GqlUpdateCustomer({ input });
-        const user = { ...updateCustomer.customer, userId: this.user.userId };
-        // Session token might be different, so we need to remove it
-        delete user.sessionToken;
-        this.initialUser = JSON.parse(JSON.stringify(user));
-      } catch (error) {
-        console.log(error);
-      }
-
-      this.loading = false;
-      this.buttonText = 'Update';
-    },
-  },
-};
+async function saveChanges() {
+  loading.value = true;
+  try {
+    const { updateCustomer } = await GqlUpdateCustomer({
+      input: {
+        id: viewer.value.id,
+        firstName: customer.value.firstName,
+        lastName: customer.value.lastName,
+      },
+    });
+    console.log(updateCustomer);
+    if (updateCustomer) {
+      loading.value = false;
+    }
+  } catch (error) {
+    loading.value = false;
+    console.log(error);
+  }
+}
 </script>

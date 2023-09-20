@@ -1,6 +1,6 @@
 <template>
   <form class="bg-white rounded-lg shadow mt-4">
-    <div class="grid p-8 gap-8 md:grid-cols-2">
+    <div class="grid p-8 gap-6 md:grid-cols-2">
       <h3 class="font-semibold text-xl col-span-full">{{ $t('messages.account.changePassword') }}</h3>
       <div class="w-full">
         <label for="current-password">{{ $t('messages.account.currentPassword') }}</label>
@@ -19,24 +19,14 @@
       </div>
     </div>
 
-    <div class="bg-gray-100 col-span-full p-4">
-      <button
-        class="rounded-lg flex font-semibold ml-auto bg-gray-400 text-white py-2 px-4 gap-4 items-center"
-        :class="{
-          'bg-primary': !!password.current || !!password.new || !!password.confirm,
-        }">
+    <div class="bg-white backdrop-blur-sm bg-opacity-75 border-t col-span-full p-4 sticky bottom-0 rounded-b-lg">
+      <button class="rounded-md bg-primary flex font-semibold ml-auto text-white py-2 px-4 gap-4 items-center">
         {{ $t('messages.account.updatePassword') }}
       </button>
     </div>
   </form>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      password: {},
-    };
-  },
-};
+<script setup>
+const password = ref({});
 </script>

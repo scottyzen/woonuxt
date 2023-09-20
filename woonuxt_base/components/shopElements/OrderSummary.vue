@@ -7,18 +7,14 @@ const { cart } = useCart();
     <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.shop.orderSummary') }}</h2>
 
     <ClientOnly>
-      <template v-if="!cart.isEmpty">
-        <ul class="flex flex-col gap-4 overflow-y-scroll">
-          <div v-for="item in cart.contents.nodes" :key="item.key" :item="item">
-            <CartCard :item="item" />
-          </div>
-        </ul>
-      </template>
+      <ul class="flex flex-col gap-4 overflow-y-scroll">
+        <CartCard v-for="item in cart.contents.nodes" :key="item.key" :item="item" />
+      </ul>
     </ClientOnly>
 
     <AddCoupon class="my-8" />
 
-    <div v-if="cart" class="grid gap-1 text-sm font-semibold text-gray-500">
+    <div class="grid gap-1 text-sm font-semibold text-gray-500">
       <div class="flex justify-between">
         <span>{{ $t('messages.shop.subtotal') }}</span
         ><spa class="text-gray-700 tabular-nums" v-html="cart.subtotal" />

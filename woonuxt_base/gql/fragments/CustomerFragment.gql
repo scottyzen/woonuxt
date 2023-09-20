@@ -16,6 +16,7 @@ fragment CustomerFragment on Customer {
     lastName
     phone
     postcode
+    company
     state
   }
   shipping {
@@ -28,6 +29,7 @@ fragment CustomerFragment on Customer {
     lastName
     phone
     postcode
+    company
     state
   }
 }

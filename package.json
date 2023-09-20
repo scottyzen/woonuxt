@@ -1,6 +1,5 @@
 {
   "name": "woonuxt",
-  "version": "3.1.32",
   "private": true,
   "scripts": {
     "dev": "nuxi dev",
@@ -12,7 +11,7 @@
     "pretty": "prettier --write ."
   },
   "dependencies": {
-    "@stripe/stripe-js": "^2.1.5",
+    "@stripe/stripe-js": "^2.1.6",
     "@vueform/slider": "^2.1.7"
   },
   "devDependencies": {

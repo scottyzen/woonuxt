@@ -38,7 +38,7 @@ export default defineNuxtPlugin(async () => {
             if (!reloadCount.value) window.location.reload();
           }
         },
-        { once: true }
+        { once: true },
       );
     });
   }

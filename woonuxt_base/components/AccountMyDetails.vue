@@ -1,13 +1,8 @@
-<script setup>
-const { viewer, customer } = useAuth();
-</script>
-
 <template>
   <div class="grid gap-8 account-form">
-    <PersonalInformation :user="customer" :user-id="viewer.id" />
+    <PersonalInformation />
+    <BillingAndShipping />
     <ChangePassword />
-    <Billing :user="customer" :user-id="viewer.id" />
-    <Shipping :user="customer" :user-id="viewer.id" />
   </div>
 </template>
 
@@ -19,10 +14,10 @@ const { viewer, customer } = useAuth();
 .account-form textarea,
 .account-form .StripeElement,
 .account-form select {
-  @apply bg-white border rounded-lg outline-none w-full py-2.5 px-4 block md:bg-gray-50;
+  @apply bg-white border rounded-md outline-none w-full py-2 px-4 block md:bg-gray-50;
 }
 
 .account-form label {
-  @apply text-xs mb-1.5 text-gray-600 inline-block uppercase;
+  @apply text-xs mb-1 text-gray-600 inline-block uppercase;
 }
 </style>
