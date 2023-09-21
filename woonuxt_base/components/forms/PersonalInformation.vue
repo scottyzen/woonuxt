@@ -42,13 +42,10 @@ async function saveChanges() {
         lastName: customer.value.lastName,
       },
     });
-    console.log(updateCustomer);
-    if (updateCustomer) {
-      loading.value = false;
-    }
+
+    if (updateCustomer) loading.value = false;
   } catch (error) {
     loading.value = false;
-    console.log(error);
   }
 }
 </script>

@@ -10,6 +10,30 @@ export function useCheckout() {
 
   const isProcessingOrder = useState<boolean>('isProcessingOrder', () => false);
 
+  // if Country or State are changed, calculate the shipping rates again
+  async function updateShippingLocation() {
+    const { customer } = useAuth();
+    const { isUpdatingCart, refreshCart } = useCart();
+
+    isUpdatingCart.value = true;
+
+    try {
+      const billingState = customer.value.billing?.state as string;
+      const billingCountry = customer.value.billing?.country;
+      const shippingState = customer.value.shipping?.state as string;
+      const shippingCountry = customer.value.shipping?.country;
+      const { updateCustomer } = await GqlChangeShippingCounty({
+        billingState,
+        billingCountry,
+        shippingState: orderInput.value.shipToDifferentAddress ? shippingState : billingState,
+        shippingCountry: orderInput.value.shipToDifferentAddress ? shippingCountry : billingCountry,
+      });
+      if (updateCustomer) refreshCart();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const proccessCheckout = async () => {
     const { loginUser } = useAuth();
     const router = useRouter();
@@ -119,7 +143,8 @@ export function useCheckout() {
 
   return {
     orderInput,
-    proccessCheckout,
     isProcessingOrder,
+    proccessCheckout,
+    updateShippingLocation,
   };
 }

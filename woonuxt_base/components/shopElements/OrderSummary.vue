@@ -1,16 +1,14 @@
 <script setup>
-const { cart } = useCart();
+const { cart, isUpdatingCart } = useCart();
 </script>
 
 <template>
   <aside class="bg-white rounded-lg shadow-lg mb-8 w-full min-h-[250px] p-8 relative md:max-w-sm md:top-32 md:sticky">
     <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.shop.orderSummary') }}</h2>
 
-    <ClientOnly>
-      <ul class="flex flex-col gap-4 overflow-y-scroll">
-        <CartCard v-for="item in cart.contents.nodes" :key="item.key" :item="item" />
-      </ul>
-    </ClientOnly>
+    <ul class="flex flex-col gap-4 overflow-y-scroll">
+      <CartCard v-for="item in cart.contents.nodes" :key="item.key" :item="item" />
+    </ul>
 
     <AddCoupon class="my-8" />
 
@@ -36,5 +34,9 @@ const { cart } = useCart();
     </div>
 
     <slot></slot>
+
+    <div v-if="isUpdatingCart" class="bg-white flex bg-opacity-50 inset-0 absolute justify-center items-center">
+      <LoadingIcon />
+    </div>
   </aside>
 </template>

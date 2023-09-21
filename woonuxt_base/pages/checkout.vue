@@ -5,7 +5,7 @@ import { loadStripe } from '@stripe/stripe-js';
 const { t } = useI18n();
 const { cart, toggleCart, isUpdatingCart, paymentGateways } = useCart();
 const { customer, viewer } = useAuth();
-const { orderInput, proccessCheckout, isProcessingOrder } = useCheckout();
+const { orderInput, isProcessingOrder, proccessCheckout } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
 const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY;
 
@@ -65,6 +65,7 @@ const payNow = async () => {
 
       <form v-else class="container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-24" @submit.prevent="payNow">
         <div class="grid w-full max-w-2xl gap-8 checkout-form md:flex-1">
+          <!-- Customer details -->
           <div>
             <h2 class="w-full mb-2 text-2xl font-semibold">Contact Information</h2>
             <p v-if="!viewer" class="mt-1 text-sm text-gray-500">Already have an account? <a href="/my-account" class="text-primary text-semibold">Log in</a>.</p>
@@ -84,7 +85,7 @@ const payNow = async () => {
 
           <div>
             <h2 class="w-full mb-3 text-2xl font-semibold">{{ $t('messages.billing.billingDetails') }}</h2>
-            <BillingDetails v-model="customer.billing" />
+            <BillingDetails v-model="customer.billing" :sameAsShippingAddress="orderInput.shipToDifferentAddress" />
           </div>
 
           <label for="shipToDifferentAddress" class="flex items-center gap-2">
@@ -99,11 +100,10 @@ const payNow = async () => {
             </div>
           </Transition>
 
+          <!-- Shipping methods -->
           <div v-if="cart.availableShippingMethods.length">
             <h3 class="mb-4 text-xl font-semibold">{{ $t('messages.general.shippingSelect') }}</h3>
-            <ClientOnly>
-              <ShippingOptions :options="cart.availableShippingMethods[0].rates" :active-option="cart.chosenShippingMethods[0]" />
-            </ClientOnly>
+            <ShippingOptions :options="cart.availableShippingMethods[0].rates" :active-option="cart.chosenShippingMethods[0]" />
           </div>
 
           <!-- Pay methods -->
@@ -124,6 +124,7 @@ const payNow = async () => {
             </Transition>
           </div>
 
+          <!-- Order note -->
           <div>
             <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.shop.orderNote') }} ({{ $t('messages.general.optional') }})</h2>
             <textarea
@@ -138,18 +139,14 @@ const payNow = async () => {
 
         <OrderSummary>
           <button
-            v-if="orderInput.paymentMethod === 'paypal'"
-            class="rounded-lg flex font-semibold bg-[#EAB434] shadow-md mt-4 text-white text-lg text-center w-full p-3 gap-4 justify-center items-center hover:bg-[#EAB434] disabled:cursor-not-allowed disabled:opacity-50"
+            class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md disabled:cursor-not-allowed disabled:opacity-50"
+            :class="{
+              'bg-[#EAB434] hover:bg-[#EAB434]': orderInput.paymentMethod === 'paypal',
+              'bg-primary hover:bg-primary-dark': orderInput.paymentMethod !== 'paypal',
+            }"
             :disabled="isCheckoutDisabled">
-            <img src="/images/paypal.svg" alt="PayPal" class="w-16" />
-            <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
-          </button>
-
-          <button
-            v-else
-            class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary gap- hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
-            :disabled="isCheckoutDisabled">
-            <span>{{ buttonText }}</span>
+            <NuxtImg v-if="orderInput.paymentMethod === 'paypal'" src="/images/paypal.svg" alt="PayPal" height="24px" class="h-[24px]" />
+            <span v-else>{{ buttonText }}</span>
             <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
           </button>
         </OrderSummary>

@@ -1,7 +1,9 @@
 <script setup>
 const { allowedCountries } = await GqlGetStates({ country: 'IE' });
+const { updateShippingLocation } = useCheckout();
 const props = defineProps({
   modelValue: { type: Object, required: true },
+  sameAsShippingAddress: { type: Boolean, default: true },
 });
 
 const billing = toRef(props, 'modelValue');
@@ -36,12 +38,12 @@ const billing = toRef(props, 'modelValue');
 
     <div class="w-full">
       <label for="country">County</label>
-      <StateSelect v-model="billing.state" :default-value="billing.state" :country-code="billing.country" />
+      <StateSelect v-model="billing.state" :default-value="billing.state" :country-code="billing.country" @change="updateShippingLocation" />
     </div>
 
     <div class="w-full">
       <label for="country">{{ $t('messages.billing.country') }}</label>
-      <CountrySelect v-model="billing.country" :default-value="billing.country" :allowed-countries="allowedCountries" />
+      <CountrySelect v-model="billing.country" :default-value="billing.country" :allowed-countries="allowedCountries" @change="updateShippingLocation" />
     </div>
 
     <div class="w-full">
