@@ -1,7 +1,7 @@
 export const useAuth = () => {
   const { refreshCart } = useCart();
 
-  const customer = useState<Customer | null>('customer', () => null);
+  const customer = useState<Customer>('customer', () => ({ billing: {}, shipping: {} }));
   const viewer = useState<Viewer | null>('viewer', () => null);
   const isPending = useState<boolean>('isPending', () => false);
 

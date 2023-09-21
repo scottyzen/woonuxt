@@ -139,13 +139,11 @@ async function saveChanges() {
         billing: customer.value.billing,
       },
     });
-    console.log(updateCustomer);
     if (updateCustomer) {
       loading.value = false;
     }
   } catch (error) {
     loading.value = false;
-    console.log(error);
   }
 }
 </script>

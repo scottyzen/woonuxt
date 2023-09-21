@@ -127,6 +127,7 @@ export function useCart() {
     isUpdatingCart,
     isUpdatingCoupon,
     paymentGateways,
+    updateCart,
     refreshCart,
     toggleCart,
     addToCart,

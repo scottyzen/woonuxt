@@ -10,7 +10,6 @@ onMounted(() => {
 async function getOrder() {
   try {
     const data = await GqlGetOrder({ id: route.params.orderId as string });
-    console.log(data);
     if (data.order) order.value = data.order;
   } catch (err: any) {
     console.error(err);

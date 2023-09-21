@@ -1,0 +1,8 @@
+mutation ChangeShippingCounty($shippingState: String!, $shippingCountry: CountriesEnum!, $billingState: String!, $billingCountry: CountriesEnum!) {
+  updateCustomer(input: { shipping: { state: $shippingState, country: $shippingCountry }, billing: { state: $billingState, country: $billingCountry } }) {
+    customer {
+      calculatedShipping
+      hasCalculatedShipping
+    }
+  }
+}
