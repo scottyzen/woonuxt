@@ -62,4 +62,19 @@ export default defineNuxtConfig({
       version: pkg.version || '0.0.0',
     },
   },
+
+  // Multilingual support
+  i18n: {
+    locales: [
+      { code: 'en', file: 'en-US.json', name: 'English' },
+      { code: 'de', file: 'de-DE.json', name: 'Deutsch' },
+      { code: 'es', file: 'es-ES.json', name: 'Español' },
+      { code: 'fr', file: 'fr-FR.json', name: 'Français' },
+      { code: 'it', file: 'it-IT.json', name: 'Italiano' },
+      { code: 'pt', file: 'pt-BR.json', name: 'Português' },
+    ],
+    langDir: 'locales',
+    defaultLocale: 'en',
+    strategy: 'no_prefix',
+  },
 });

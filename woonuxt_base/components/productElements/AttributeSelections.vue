@@ -47,7 +47,7 @@
           <span v-for="(option, i) in attr.options" :key="option.id">
             <label>
               <input :ref="attr.name" class="hidden" :checked="i == 0" type="radio" :class="`name-${attr.name}`" :name="attr.name" :value="option" @change="updateAttrs($event)" />
-              <span class="radio-button" :class="`picker-${option}`" :title="`${attr.name}: ${option}`">{{ option }}</span>
+              <span class="radio-button" :class="`picker-${option}`" :title="`${attr.name}: ${option}`" v-html="option" />
             </label>
           </span>
         </div>
