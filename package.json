@@ -30,6 +30,6 @@
     "nuxt-icon": "^0.5.0",
     "prettier": "^3.0.3",
     "vue-stripe-js": "^1.0.1",
-    "woonuxt-settings": "^1.0.29"
+    "woonuxt-settings": "^1.0.28"
   }
 }
