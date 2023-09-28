@@ -1,5 +1,6 @@
 <script setup>
 const route = useRoute();
+const img = useImage();
 const props = defineProps({
   node: { type: Object, default: null },
   index: { type: Number, default: 1 },
@@ -22,6 +23,9 @@ watch(
 );
 
 const mainImage = computed(() => props.node?.image?.sourceUrl);
+
+// '/images/placeholder.jpg' is a placeholder image
+const placeholderImage = computed(() => img('/images/placeholder.jpg'));
 
 const colorVariableImage = computed(() => {
   if (paColor.value.length) {
@@ -47,7 +51,7 @@ const colorVariableImage = computed(() => {
       v-else
       :width="imgWidth"
       :height="imgHeight"
-      :src="mainImage || '/images/placeholder.jpg'"
+      :src="mainImage || placeholderImage"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
       :loading="index <= 1 ? 'eager' : 'lazy'"
