@@ -25,7 +25,7 @@ watch(
 const mainImage = computed(() => props.node?.image?.sourceUrl);
 
 // '/images/placeholder.jpg' is a placeholder image
-const placeholderImage = computed(() => img('/images/placeholder.jpg'));
+const placeholderImageUrl = computed(() => img('/images/placeholder.jpg'));
 
 const colorVariableImage = computed(() => {
   if (paColor.value.length) {
@@ -41,6 +41,7 @@ const colorVariableImage = computed(() => {
 <template>
   <NuxtLink :to="`/product/${node.slug}`" class="relative product-card">
     <SaleBadge :node="node" class="absolute top-2 right-2" />
+    <pre>{{ placeholderImageUrl }}</pre>
     <img
       v-if="colorVariableImage"
       :src="colorVariableImage"
@@ -48,16 +49,17 @@ const colorVariableImage = computed(() => {
       :title="node.image?.title || node.name"
       :loading="index <= 1 ? 'eager' : 'lazy'" />
     <NuxtImg
-      v-else
+      v-else-if="mainImage"
       :width="imgWidth"
       :height="imgHeight"
-      :src="mainImage || placeholderImage"
+      :src="mainImage"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
       :loading="index <= 1 ? 'eager' : 'lazy'"
       fit="outside"
       format="webp"
       densities="x1 x2" />
+    <img v-else src="/images/placeholder.jpg" :alt="node.image?.altText || node.name" :title="node.image?.title || node.name" loading="lazy" />
 
     <div class="p-2">
       <StarRating :rating="node.averageRating" :count="node.reviewCount" />
