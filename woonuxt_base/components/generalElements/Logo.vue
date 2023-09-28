@@ -3,7 +3,7 @@ const runtimeConfig = useRuntimeConfig();
 const img = useImage();
 const logoUrl = runtimeConfig?.public?.LOGO || null;
 
-const _src = computed(() => img(logoUrl, { modifiers: { format: 'webp' } }));
+const _src = computed(() => img(logoUrl, { modifiers: { format: 'webp' } }) || logoUrl);
 </script>
 
 <template>
