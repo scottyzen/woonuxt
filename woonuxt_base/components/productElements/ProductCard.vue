@@ -1,6 +1,5 @@
 <script setup>
 const route = useRoute();
-const img = useImage();
 const props = defineProps({
   node: { type: Object, default: null },
   index: { type: Number, default: 1 },
