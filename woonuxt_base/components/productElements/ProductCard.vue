@@ -24,9 +24,6 @@ watch(
 
 const mainImage = computed(() => props.node?.image?.sourceUrl);
 
-// '/images/placeholder.jpg' is a placeholder image
-const placeholderImageUrl = computed(() => img('/images/placeholder.jpg'));
-
 const colorVariableImage = computed(() => {
   if (paColor.value.length) {
     const activeColorImage = props.node?.variations?.nodes.filter((variation) => paColor.value.some((color) => variation.slug.includes(color)));
@@ -41,7 +38,6 @@ const colorVariableImage = computed(() => {
 <template>
   <NuxtLink :to="`/product/${node.slug}`" class="relative product-card">
     <SaleBadge :node="node" class="absolute top-2 right-2" />
-    <pre>{{ placeholderImageUrl }}</pre>
     <img
       v-if="colorVariableImage"
       :src="colorVariableImage"
