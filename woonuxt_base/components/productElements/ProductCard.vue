@@ -1,5 +1,6 @@
 <script setup>
 const route = useRoute();
+const img = useImage();
 const props = defineProps({
   node: { type: Object, default: null },
   index: { type: Number, default: 1 },
@@ -44,16 +45,17 @@ const colorVariableImage = computed(() => {
       :title="node.image?.title || node.name"
       :loading="index <= 1 ? 'eager' : 'lazy'" />
     <NuxtImg
-      v-else
+      v-else-if="mainImage"
       :width="imgWidth"
       :height="imgHeight"
-      :src="mainImage || '/images/placeholder.jpg'"
+      :src="mainImage"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
       :loading="index <= 1 ? 'eager' : 'lazy'"
       fit="outside"
       format="webp"
       densities="x1 x2" />
+    <img v-else src="/images/placeholder.jpg" :alt="node.image?.altText || node.name" :title="node.image?.title || node.name" loading="lazy" />
 
     <div class="p-2">
       <StarRating :rating="node.averageRating" :count="node.reviewCount" />

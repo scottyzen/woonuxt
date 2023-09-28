@@ -10,7 +10,6 @@
     "pages",
     "app.vue",
     "gql",
-    "lang",
     "types",
     "plugins",
     "public",

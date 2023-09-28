@@ -1,11 +1,14 @@
 <script setup>
 const runtimeConfig = useRuntimeConfig();
+const img = useImage();
 const logoUrl = runtimeConfig?.public?.LOGO || null;
+
+const _src = computed(() => img(logoUrl, { modifiers: { format: 'webp' } }) || logoUrl);
 </script>
 
 <template>
   <NuxtLink to="/">
-    <img v-if="logoUrl" :src="logoUrl" alt="Logo" class="object-contain h-10" />
+    <img v-if="logoUrl" :src="_src" alt="Logo" class="object-contain h-10" />
     <div v-else class="flex font-bold text-lg gap-2 items-center">
       <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 124 124" transform="scale(1 -1)">
         <path
