@@ -9,7 +9,7 @@
     "components",
     "pages",
     "app.vue",
-    "gql",
+    "queries",
     "types",
     "plugins",
     "public",
