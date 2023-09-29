@@ -1,5 +1,5 @@
-#import "~/gql/fragments/CartFragment.gql"
-#import "~/gql/fragments/CustomerFragment.gql"
+#import "./gql/fragments/CartFragment.gql"
+#import "./gql/fragments/CustomerFragment.gql"
 
 query getCart {
   cart {

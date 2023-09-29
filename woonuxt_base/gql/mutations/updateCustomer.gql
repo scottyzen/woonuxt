@@ -1,4 +1,4 @@
-#import "~/gql/fragments/CustomerFragment.gql"
+#import "./gql/fragments/CustomerFragment.gql"
 
 mutation UpdateCustomer($input: UpdateCustomerInput!) {
   updateCustomer(input: $input) {

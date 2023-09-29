@@ -1,5 +1,5 @@
-#import "~/gql/fragments/SimpleProduct.gql"
-#import "~/gql/fragments/VariableProduct.gql"
+#import "./gql/fragments/SimpleProduct.gql"
+#import "./gql/fragments/VariableProduct.gql"
 
 query getProduct($slug: ID!) {
   product(id: $slug, idType: SLUG) {
