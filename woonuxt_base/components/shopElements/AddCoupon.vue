@@ -1,9 +1,9 @@
-<script setup>
+<script setup lang="ts">
 const { cart, isUpdatingCoupon, applyCoupon, removeCoupon } = useCart();
 const couponCode = ref('');
 const errorMessage = ref('');
 
-async function submitCoupon() {
+async function submitCoupon(): Promise<void> {
   const { message } = await applyCoupon(couponCode.value);
   if (message) {
     errorMessage.value = message;

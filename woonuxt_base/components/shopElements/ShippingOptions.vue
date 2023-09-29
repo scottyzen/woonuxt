@@ -1,3 +1,15 @@
+<script setup>
+const { updateShippingMethod } = useCart();
+const props = defineProps({
+  options: { type: Array, required: true },
+  activeOption: { type: String, required: true },
+});
+
+const setActiveOption = async (id) => {
+  await updateShippingMethod(id);
+};
+</script>
+
 <template>
   <div class="grid gap-4 shipping-options">
     <div
@@ -17,18 +29,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-const { updateShippingMethod } = useCart();
-const props = defineProps({
-  options: { type: Array, required: true },
-  activeOption: { type: String, required: true },
-});
-
-const setActiveOption = async (id) => {
-  await updateShippingMethod(id);
-};
-</script>
 
 <style lang="postcss">
 .shipping-options {

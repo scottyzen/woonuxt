@@ -1,3 +1,9 @@
+<script setup lang="ts">
+const props = defineProps({
+  format: { type: Array, default: [] },
+});
+</script>
+
 <template>
   <div class="flex text-sm leading-none text-gray-400 gap-1 items-center">
     <span>
@@ -11,11 +17,3 @@
     </span>
   </div>
 </template>
-
-<script>
-export default {
-  props: {
-    format: { type: Array, default: [] },
-  },
-};
-</script>

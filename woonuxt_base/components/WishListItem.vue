@@ -1,3 +1,10 @@
+<script setup lang="ts">
+const { removeFromList } = useWishlist();
+const props = defineProps({
+  product: { type: Object, required: true },
+});
+</script>
+
 <template>
   <li class="flex py-4 gap-4 items-center">
     <button title="Remove Item" @click="removeFromList(product.databaseId)">
@@ -19,10 +26,3 @@
     <ProductPrice :sale-price="product.salePrice" :regular-price="product.regularPrice" class="ml-auto" />
   </li>
 </template>
-
-<script setup>
-const { removeFromList } = useWishlist();
-const props = defineProps({
-  product: { type: Object, required: true },
-});
-</script>

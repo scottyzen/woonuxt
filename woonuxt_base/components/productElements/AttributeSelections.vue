@@ -32,9 +32,7 @@
         </div>
         <select :id="attr.name" :ref="attr.name" :name="attr.name" required class="border-white shadow" @change="updateAttrs">
           <option selected disabled hidden :value="null">{{ $t('messages.general.choose') }} {{ attr.label }}</option>
-          <option v-for="option in attr.options" :key="option" :value="option">
-            {{ option }}
-          </option>
+          <option v-for="option in attr.options" :key="option" :value="option" v-html="option" />
         </select>
       </div>
 

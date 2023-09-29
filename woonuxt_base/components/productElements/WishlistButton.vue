@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { addToList, removeFromList, isInList, isEmpty } = useWishlist();
+const { addToList, removeFromList, isInList } = useWishlist();
 const props = defineProps({
   product: { type: Object, required: true },
 });
