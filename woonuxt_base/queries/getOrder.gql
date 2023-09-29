@@ -1,5 +1,3 @@
-#import "./gql/fragments/customerFragment.gql"
-
 query getOrder($id: ID!) {
   order(id: $id, idType: DATABASE_ID) {
     needsPayment
