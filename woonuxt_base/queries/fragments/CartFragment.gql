@@ -1,3 +1,6 @@
+#import "./fragments/SimpleProduct.gql"
+#import "./fragments/VariableProduct.gql"
+
 fragment CartFragment on Cart {
   total
   subtotal
