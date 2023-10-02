@@ -6,9 +6,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <NuxtLink
-    :to="`/products?filter=category[${decodeURI(node.slug)}]`"
-    class="relative flex justify-center overflow-hidden border border-white rounded-xl item snap-mandatory snap-x">
+  <NuxtLink :to="`/product-category/${decodeURI(node.slug)}`" class="relative flex justify-center overflow-hidden border border-white rounded-xl item snap-mandatory snap-x">
     <NuxtImg
       width="220"
       height="280"
