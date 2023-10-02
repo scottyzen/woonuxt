@@ -1,3 +1,6 @@
+#import "~/queries/fragments/SimpleProduct.gql"
+#import "~/queries/fragments/VariableProduct.gql"
+
 query getProducts($after: String, $slug: [String], $first: Int = 100, $orderby: [ProductsOrderbyInput] = { field: DATE, order: DESC }) {
   products(first: $first, after: $after, where: { categoryIn: $slug, typeNotIn: EXTERNAL, visibility: VISIBLE, minPrice: 0, orderby: $orderby }) {
     pageInfo {

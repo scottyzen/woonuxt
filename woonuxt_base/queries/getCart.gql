@@ -1,3 +1,6 @@
+#import "~/queries/fragments/CartFragment.gql"
+#import "~/queries/fragments/CustomerFragment.gql"
+
 query getCart {
   cart {
     ...CartFragment
