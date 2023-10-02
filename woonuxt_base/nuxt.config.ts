@@ -18,8 +18,7 @@ export default defineNuxtConfig({
   modules: ['woonuxt-settings', 'nuxt-graphql-client', '@nuxtjs/tailwindcss', 'nuxt-icon', '@nuxt/image', '@nuxtjs/i18n'],
 
   'graphql-client': {
-    // codegen: process.env.ENABLE_CODEGEN === 'true' || false,
-    codegen: false,
+    codegen: process.env.ENABLE_CODEGEN === 'true' || false,
   },
 
   image: {
