@@ -1,11 +1,14 @@
 <script setup lang="ts">
+const { decodeURI } = useHelpers();
 const props = defineProps({
   node: { type: Object, required: true },
 });
 </script>
 
 <template>
-  <NuxtLink :to="`/products?filter=category[${node.slug}]`" class="relative flex justify-center overflow-hidden border border-white rounded-xl item snap-mandatory snap-x">
+  <NuxtLink
+    :to="`/products?filter=category[${decodeURI(node.slug)}]`"
+    class="relative flex justify-center overflow-hidden border border-white rounded-xl item snap-mandatory snap-x">
     <NuxtImg
       width="220"
       height="280"
