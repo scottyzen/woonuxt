@@ -64,11 +64,11 @@ const updateSelectedVariations = (variations: Variation[]): void => {
       <ProductImageGallery
         v-if="product.image"
         class="relative flex-1"
-        :first-image="product.image.sourceUrl!"
-        :main-image="type.image ? type.image.sourceUrl! : product.image.sourceUrl!"
+        :first-image="product.image.sourceUrl"
+        :main-image="type.image ? type.image.sourceUrl : product.image.sourceUrl"
         :gallery="product.galleryImages!"
         :node="type" />
-      <NuxtImg v-else class="relative flex-1" src="/images/placeholder.jpg" :alt="product.name!" />
+      <img v-else class="relative flex-1" src="/images/placeholder.jpg" :alt="product.name" />
 
       <div class="md:max-w-md md:py-2">
         <div class="flex justify-between mb-4">
@@ -102,7 +102,7 @@ const updateSelectedVariations = (variations: Variation[]): void => {
             :attrs="product.attributes.nodes"
             :variations="product.variations.nodes"
             @attrs-changed="updateSelectedVariations" />
-          <div class="flex items-center gap-4 mt-12 fixed md:static bottom-0 bg-white md:bg-transparent bg-opacity-90 w-full left-0 p-4 md:p-0 z-10">
+          <div class="fixed bottom-0 left-0 z-10 flex items-center w-full gap-4 p-4 mt-12 bg-white md:static md:bg-transparent bg-opacity-90 md:p-0">
             <input
               v-model="quantity"
               type="number"

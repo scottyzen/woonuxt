@@ -67,6 +67,8 @@ fragment VariableProduct on VariableProduct {
   galleryImages {
     nodes {
       sourceUrl
+      altText
+      title
     }
   }
 }

@@ -22,7 +22,7 @@ fragment CartFragment on Cart {
     code
   }
   isEmpty
-  contents {
+  contents(first: 100) {
     itemCount
     productCount
     nodes {
@@ -45,6 +45,9 @@ fragment CartFragment on Cart {
           price
           image {
             sourceUrl(size: THUMBNAIL)
+            cartSourceUrl: sourceUrl(size: THUMBNAIL)
+            altText
+            title
           }
         }
       }
