@@ -12,6 +12,9 @@ const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY;
 const buttonText = ref(isProcessingOrder.value ? t('messages.general.processing') : t('messages.shop.checkoutButton'));
 const isCheckoutDisabled = computed(() => isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod);
 
+const emailRegex = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$');
+const isInvalidEmail = ref(false);
+
 const instanceOptions = ref({});
 const elementsOptions = ref({});
 const cardOptions = ref({ hidePostalCode: true });
@@ -53,6 +56,14 @@ const payNow = async () => {
 
   proccessCheckout();
 };
+
+const checkEmailOnBlur = (email) => {
+  if (email) isInvalidEmail.value = !emailRegex.test(email);
+};
+
+const checkEmailOnInput = (email) => {
+  if (email || isInvalidEmail.value) isInvalidEmail.value = !emailRegex.test(email);
+};
 </script>
 
 <template>
@@ -71,7 +82,18 @@ const payNow = async () => {
             <p v-if="!viewer" class="mt-1 text-sm text-gray-500">Already have an account? <a href="/my-account" class="text-primary text-semibold">Log in</a>.</p>
             <div class="w-full mt-4">
               <label for="email">{{ $t('messages.billing.email') }}</label>
-              <input v-model="customer.billing.email" placeholder="johndoe@email.com" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required />
+              <input
+                v-model="customer.billing.email"
+                placeholder="johndoe@email.com"
+                type="email"
+                name="email"
+                :class="{ 'has-error': isInvalidEmail }"
+                @blur="checkEmailOnBlur(customer.billing.email)"
+                @input="checkEmailOnInput(customer.billing.email)"
+                required />
+              <Transition name="scale-y" mode="out-in">
+                <div v-if="isInvalidEmail" class="mt-1 text-sm text-red-500">Invalid email address</div>
+              </Transition>
             </div>
             <div class="w-full my-2" v-if="orderInput.createAccount">
               <label for="email">{{ $t('messages.account.password') }}</label>
@@ -164,6 +186,11 @@ const payNow = async () => {
 .checkout-form .StripeElement,
 .checkout-form select {
   @apply bg-white border rounded-md outline-none border-gray-300 shadow-sm w-full py-2 px-4;
+}
+
+.checkout-form input.has-error,
+.checkout-form textarea.has-error {
+  @apply border-red-500;
 }
 
 .checkout-form label {

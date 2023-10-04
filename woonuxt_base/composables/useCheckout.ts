@@ -12,22 +12,20 @@ export function useCheckout() {
 
   // if Country or State are changed, calculate the shipping rates again
   async function updateShippingLocation() {
-    const { customer } = useAuth();
+    const { customer, viewer } = useAuth();
     const { isUpdatingCart, refreshCart } = useCart();
 
     isUpdatingCart.value = true;
 
     try {
-      const billingState = customer.value.billing?.state as string;
-      const billingCountry = customer.value.billing?.country;
-      const shippingState = customer.value.shipping?.state as string;
-      const shippingCountry = customer.value.shipping?.country;
-      const { updateCustomer } = await GqlChangeShippingCounty({
-        billingState,
-        billingCountry,
-        shippingState: orderInput.value.shipToDifferentAddress ? shippingState : billingState,
-        shippingCountry: orderInput.value.shipToDifferentAddress ? shippingCountry : billingCountry,
+      const { updateCustomer } = await GqlUpdateCustomer({
+        input: {
+          id: viewer?.value?.id,
+          shipping: orderInput.value.shipToDifferentAddress ? customer.value.shipping : customer.value.billing,
+          billing: customer.value.billing,
+        },
       });
+
       if (updateCustomer) refreshCart();
     } catch (error) {
       console.error(error);

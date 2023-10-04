@@ -2,16 +2,6 @@ import pkg from './package.json';
 import { createResolver } from '@nuxt/kit';
 const { resolve } = createResolver(import.meta.url);
 
-const codegenSettings = {
-  silent: false,
-  // skipTypename: true,
-  // useTypeImports: true,
-  // dedupeFragments: true,
-  // onlyOperationTypes: true,
-  // avoidOptionals: true,
-  // disableOnBuild: false,
-};
-
 export default defineNuxtConfig({
   app: {
     head: {
@@ -25,19 +15,7 @@ export default defineNuxtConfig({
 
   components: [{ path: resolve('./components'), pathPrefix: false }],
 
-  modules: [
-    // 'woonuxt-settings',
-    './modules/woonuxt-setting.ts',
-    'nuxt-graphql-client',
-    '@nuxtjs/tailwindcss',
-    'nuxt-icon',
-    '@nuxt/image',
-    '@nuxtjs/i18n',
-  ],
-
-  'graphql-client': {
-    codegen: process.env.ENABLE_CODEGEN === 'true' ? codegenSettings : false,
-  },
+  modules: ['woonuxt-settings', 'nuxt-graphql-client', '@nuxtjs/tailwindcss', 'nuxt-icon', '@nuxt/image', '@nuxtjs/i18n'],
 
   image: {
     domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
