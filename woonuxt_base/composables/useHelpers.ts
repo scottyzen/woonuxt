@@ -77,6 +77,8 @@ export function useHelpers() {
     return indexOfTypeAny;
   };
 
+  const decodeURI = (str: string): string => decodeURIComponent(str);
+
   return {
     isShowingMobileMenu,
     formatArray,
@@ -87,5 +89,6 @@ export function useHelpers() {
     removeBodyClass,
     toggleMobileMenu,
     checkForVariationTypeOfAny,
+    decodeURI,
   };
 }

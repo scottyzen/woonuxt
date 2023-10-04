@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     prerender: {
       concurrency: 10, // How many pages to prerender at once
       interval: 1000, // How long to wait between prerendering pages
-      failOnError: false,
+      failOnError: false, // This stops the build from failing but the page will not be statically generated
     },
   },
 });

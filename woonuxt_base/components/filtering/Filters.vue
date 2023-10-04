@@ -26,7 +26,7 @@ const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES
           :show-count="attribute.showCount"
           :hide-empty="attribute.hideEmpty" />
       </div>
-      <!-- <OnSaleFilter /> -->
+      <OnSaleFilter />
       <StarRatingFilter />
       <ResetFiltersButton />
     </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { cart, isUpdatingCoupon, applyCoupon, removeCoupon } = useCart();
-const couponCode = ref('');
-const errorMessage = ref('');
+const couponCode = ref<string>('');
+const errorMessage = ref<string>('');
 
 async function submitCoupon(): Promise<void> {
   const { message } = await applyCoupon(couponCode.value);
@@ -22,9 +22,9 @@ async function submitCoupon(): Promise<void> {
         v-model="couponCode"
         type="text"
         :placeholder="$t('messages.shop.couponCode')"
-        class="bg-white border rounded-md outline-none border-gray-300 shadow-sm w-full py-2 px-4"
+        class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm outline-none"
         required />
-      <button class="border rounded-md flex outline-none bg-gray-800 shadow-sm text-white min-w-20 py-2 px-4 justify-center items-center" :disabled="isUpdatingCoupon">
+      <button class="flex items-center justify-center px-4 py-2 text-white bg-gray-800 border rounded-md shadow-sm outline-none min-w-20" :disabled="isUpdatingCoupon">
         <LoadingIcon v-if="isUpdatingCoupon" color="#fff" size="16" />
         <span v-else>{{ $t('messages.general.apply') }}</span>
       </button>
@@ -33,10 +33,10 @@ async function submitCoupon(): Promise<void> {
       <div v-if="errorMessage" class="mt-2 text-xs text-red-600" v-html="errorMessage"></div>
     </Transition>
     <Transition name="scale-y" mode="out-in">
-      <div v-if="cart && cart.appliedCoupons" class="font-semibold text-xs uppercase">
-        <div v-for="coupon in cart.appliedCoupons" :key="coupon.code" class="flex flex-wrap flex-2 mt-2">
+      <div v-if="cart && cart.appliedCoupons" class="text-xs font-semibold uppercase">
+        <div v-for="coupon in cart.appliedCoupons" :key="coupon.code" class="flex flex-wrap mt-2 flex-2">
           <div class="bg-primary border-primary border rounded-md flex bg-opacity-5 border-opacity-10 text-primary leading-none p-1.5 gap-1 items-center">
-            <span>{{ coupon.code }}</span>
+            <span v-html="coupon.code" />
             <Icon name="ion:close" class="rounded-full cursor-pointer hover:bg-primary hover:text-white" @click="removeCoupon(coupon.code)" />
           </div>
         </div>

@@ -18,10 +18,19 @@ const updateQuantity = () => {
         v-if="productType.image"
         width="64"
         height="64"
-        class="w-16 h-16 rounded-lg"
-        :src="productType.image.cartSourceUrl || product.image.cartSourceUrl"
-        :alt="productType.image.altText || productType.name"
-        :title="productType.image.altText || productType.name"
+        class="w-16 h-16 rounded-md"
+        :src="productType.image.cartSourceUrl || productType.image.sourceUrl || item.product.image.sourceUrl"
+        :alt="productType.image?.altText || productType.name"
+        :title="productType.image?.title || productType.name"
+        loading="lazy" />
+      <img
+        v-else
+        src="/images/placeholder.jpg"
+        width="64"
+        height="64"
+        class="w-16 h-16 rounded-md"
+        :alt="productType.image?.altText || productType.name"
+        :title="productType.image?.title || productType.name"
         loading="lazy" />
     </NuxtLink>
     <div class="flex-1">
@@ -33,7 +42,7 @@ const updateQuantity = () => {
       type="number"
       min="0"
       aria-label="Quantity"
-      class="flex items-center justify-center w-16 gap-4 p-2 text-left bg-white border rounded-lg focus:outline-none"
+      class="flex items-center justify-center w-16 gap-4 p-2 text-left bg-white border rounded-md focus:outline-none"
       :disabled="isUpdatingCart"
       @input="updateQuantity" />
   </li>

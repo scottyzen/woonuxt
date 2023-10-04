@@ -26,6 +26,8 @@ fragment SimpleProduct on SimpleProduct {
   galleryImages {
     nodes {
       sourceUrl
+      altText
+      title
     }
   }
 }
