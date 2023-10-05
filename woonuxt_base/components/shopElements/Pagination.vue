@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { decodeURI } = useHelpers();
 const route = useRoute();
 const runtimeConfig = useRuntimeConfig();
 const { products } = await useProducts();
@@ -13,6 +14,21 @@ const currentQuery = computed(() => {
 const page = ref(route.params.pageNumber ? parseInt(route.params.pageNumber as string) : 1);
 const productsPerPage: number = runtimeConfig.public.PRODUCTS_PER_PAGE;
 const numberOfPages = computed<number>(() => Math.ceil(products.value.length / productsPerPage || 1));
+
+const prevSrc = (pageNumber: number) => {
+  const link = pageNumber > 1 ? `/products/page/${pageNumber - 1}/?${currentQuery}` : `/products/page/${pageNumber}/?${currentQuery}`;
+  return decodeURI(link);
+};
+
+const nextSrc = (pageNumber: number) => {
+  const link = pageNumber < numberOfPages.value ? `/products/page/${pageNumber + 1}/?${currentQuery}` : `/products/page/${pageNumber}/?${currentQuery}`;
+  return decodeURI(link);
+};
+
+const numberSrc = (pageNumber: number) => {
+  const link = `/products/page/${pageNumber}/?${currentQuery}`;
+  return decodeURI(link);
+};
 </script>
 
 <template>
@@ -20,29 +36,18 @@ const numberOfPages = computed<number>(() => Math.ceil(products.value.length / p
     <!-- Pagination -->
     <nav v-if="numberOfPages && numberOfPages > 1" class="inline-flex self-end -space-x-px rounded-md shadow-sm isolate" aria-label="Pagination">
       <!-- PREV -->
-      <NuxtLink
-        :to="page > 1 ? `/products/page/${page - 1}/?${currentQuery}` : `/products/page/${page}/?${currentQuery}`"
-        class="prev"
-        :disabled="page == 1"
-        :class="{ 'cursor-not-allowed': page == 1 }"
-        :aria-disabled="page == 1"
-        aria-label="Previous">
+      <NuxtLink :to="prevSrc(page)" class="prev" :disabled="page == 1" :class="{ 'cursor-not-allowed': page == 1 }" :aria-disabled="page == 1" aria-label="Previous">
         <Icon name="ion:chevron-back-outline" size="20" class="w-5 h-5" />
       </NuxtLink>
 
       <!-- NUMBERS -->
-      <NuxtLink
-        v-for="pageNumber in numberOfPages"
-        :key="pageNumber"
-        :to="`/products/page/${pageNumber}/?${currentQuery}`"
-        :aria-current="pageNumber === page ? 'page' : undefined"
-        class="page-number"
-        >{{ pageNumber }}</NuxtLink
-      >
+      <NuxtLink v-for="pageNumber in numberOfPages" :key="pageNumber" :to="numberSrc(pageNumber)" :aria-current="pageNumber === page ? 'page' : undefined" class="page-number">{{
+        pageNumber
+      }}</NuxtLink>
 
       <!-- NEXT -->
       <NuxtLink
-        :to="page < numberOfPages ? `/products/page/${page + 1}/?${currentQuery}` : `/products/page/${page}/?${currentQuery}`"
+        :to="nextSrc(page)"
         class="next"
         :disabled="page === numberOfPages"
         :class="{ 'cursor-not-allowed': page === numberOfPages }"
