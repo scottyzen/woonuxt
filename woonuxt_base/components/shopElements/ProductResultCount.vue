@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const route = useRoute();
-const { products } = await useProducts();
+const { products } = useProducts();
 const runtimeConfig = useRuntimeConfig();
 const productsPerPage = runtimeConfig.public.PRODUCTS_PER_PAGE || 24;
 const page = ref(parseInt(route.params.pageNumber as string) || 1);

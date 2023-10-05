@@ -2,7 +2,7 @@
 const route = useRoute();
 const runtimeConfig = useRuntimeConfig();
 const { decodeURI } = useHelpers();
-const { products } = await useProducts();
+const { products } = useProducts();
 
 // TODO: Refactor all this logic. It's a mess.
 
