@@ -1,14 +1,20 @@
 <script setup lang="ts">
-const { decodeURI } = useHelpers();
 const route = useRoute();
 const runtimeConfig = useRuntimeConfig();
 const { products } = await useProducts();
 
+// TODO: Refactor all this logic. It's a mess.
+
 const currentQuery = computed(() => {
   const query = route.query;
-  return Object.keys(query)
-    .map((key) => `${key}=${query[key]}`)
-    .join('&');
+  const queryKeys = Object.keys(query);
+  let currentQuery = '';
+  if (queryKeys.length > 0) {
+    queryKeys.forEach((key, index) => {
+      currentQuery += index === 0 ? `${key}=${query[key]}` : `&${key}=${query[key]}`;
+    });
+  }
+  return currentQuery;
 });
 
 const page = ref(route.params.pageNumber ? parseInt(route.params.pageNumber as string) : 1);
@@ -17,25 +23,25 @@ const numberOfPages = computed<number>(() => Math.ceil(products.value.length / p
 
 const prevSrc = (pageNumber: number) => {
   if (currentQuery.value === '') {
-    return decodeURI(`/products/page/${pageNumber > 1 ? pageNumber - 1 : pageNumber}`);
+    return `/products/page/${pageNumber > 1 ? pageNumber - 1 : pageNumber}`;
   } else {
-    return decodeURI(pageNumber > 1 ? `/products/page/${pageNumber - 1}/?${currentQuery}` : `/products/page/${pageNumber}/?${currentQuery}`);
+    return pageNumber > 1 ? `/products/page/${pageNumber - 1}/?${currentQuery.value}` : `/products/page/${pageNumber}/?${currentQuery.value}`;
   }
 };
 
 const nextSrc = (pageNumber: number) => {
   if (currentQuery.value === '') {
-    return decodeURI(`/products/page/${pageNumber < numberOfPages.value ? pageNumber + 1 : pageNumber}`);
+    return `/products/page/${pageNumber < numberOfPages.value ? pageNumber + 1 : pageNumber}`;
   } else {
-    return decodeURI(pageNumber < numberOfPages.value ? `/products/page/${pageNumber + 1}/?${currentQuery}` : `/products/page/${pageNumber}/?${currentQuery}`);
+    return pageNumber < numberOfPages.value ? `/products/page/${pageNumber + 1}/?${currentQuery.value}` : `/products/page/${pageNumber}/?${currentQuery.value}`;
   }
 };
 
 const numberSrc = (pageNumber: number) => {
   if (currentQuery.value === '') {
-    return decodeURI(`/products/page/${pageNumber}`);
+    return `/products/page/${pageNumber}`;
   } else {
-    return decodeURI(`/products/page/${pageNumber}/?${currentQuery}`);
+    return `/products/page/${pageNumber}/?${currentQuery.value}`;
   }
 };
 </script>
