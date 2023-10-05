@@ -1,5 +1,5 @@
 <script setup>
-const { setProducts, updateProductList } = await useProducts();
+const { setProducts, updateProductList } = useProducts();
 const { data } = await useAsyncGql('getProducts');
 const products = data.value?.products?.nodes || [];
 setProducts(products || []);
