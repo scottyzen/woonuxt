@@ -16,18 +16,29 @@ const productsPerPage: number = runtimeConfig.public.PRODUCTS_PER_PAGE;
 const numberOfPages = computed<number>(() => Math.ceil(products.value.length / productsPerPage || 1));
 
 const prevSrc = (pageNumber: number) => {
-  const link = pageNumber > 1 ? `/products/page/${pageNumber - 1}/?${currentQuery}` : `/products/page/${pageNumber}/?${currentQuery}`;
-  return decodeURI(link);
+  if (currentQuery.value === '') {
+    return decodeURI(`/products/page/${pageNumber > 1 ? pageNumber - 1 : pageNumber}`);
+  } else {
+    return decodeURI(pageNumber > 1 ? `/products/page/${pageNumber - 1}/?${currentQuery}` : `/products/page/${pageNumber}/?${currentQuery}`);
+  }
 };
 
 const nextSrc = (pageNumber: number) => {
-  const link = pageNumber < numberOfPages.value ? `/products/page/${pageNumber + 1}/?${currentQuery}` : `/products/page/${pageNumber}/?${currentQuery}`;
-  return decodeURI(link);
+  // const link = pageNumber < numberOfPages.value ? `/products/page/${pageNumber + 1}/?${currentQuery}` : `/products/page/${pageNumber}/?${currentQuery}`;
+  if (currentQuery.value === '') {
+    return decodeURI(`/products/page/${pageNumber < numberOfPages.value ? pageNumber + 1 : pageNumber}`);
+  } else {
+    return decodeURI(pageNumber < numberOfPages.value ? `/products/page/${pageNumber + 1}/?${currentQuery}` : `/products/page/${pageNumber}/?${currentQuery}`);
+  }
 };
 
 const numberSrc = (pageNumber: number) => {
-  const link = `/products/page/${pageNumber}/?${currentQuery}`;
-  return decodeURI(link);
+  // const link = `/products/page/${pageNumber}/?${currentQuery}`;
+  if (currentQuery.value === '') {
+    return decodeURI(`/products/page/${pageNumber}`);
+  } else {
+    return decodeURI(`/products/page/${pageNumber}/?${currentQuery}`);
+  }
 };
 </script>
 
