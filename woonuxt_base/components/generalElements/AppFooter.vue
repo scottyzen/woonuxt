@@ -25,17 +25,7 @@ const runtimeConfig = useRuntimeConfig();
       <div class="w-3/7 lg:w-auto">
         <div class="mb-1 font-semibold">Products</div>
         <div class="text-sm">
-          <NuxtLink
-            :to="{
-              name: 'products',
-              query: {
-                orderby: 'date',
-                order: 'DESC',
-              },
-            }"
-            class="py-1.5 block"
-            >{{ $t('messages.shop.newArrivals') }}</NuxtLink
-          >
+          <NuxtLink to="/products" class="py-1.5 block">{{ $t('messages.shop.newArrivals') }}</NuxtLink>
           <NuxtLink
             :to="{
               name: 'products',
