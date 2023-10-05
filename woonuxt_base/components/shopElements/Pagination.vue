@@ -24,7 +24,6 @@ const prevSrc = (pageNumber: number) => {
 };
 
 const nextSrc = (pageNumber: number) => {
-  // const link = pageNumber < numberOfPages.value ? `/products/page/${pageNumber + 1}/?${currentQuery}` : `/products/page/${pageNumber}/?${currentQuery}`;
   if (currentQuery.value === '') {
     return decodeURI(`/products/page/${pageNumber < numberOfPages.value ? pageNumber + 1 : pageNumber}`);
   } else {
@@ -33,7 +32,6 @@ const nextSrc = (pageNumber: number) => {
 };
 
 const numberSrc = (pageNumber: number) => {
-  // const link = `/products/page/${pageNumber}/?${currentQuery}`;
   if (currentQuery.value === '') {
     return decodeURI(`/products/page/${pageNumber}`);
   } else {
