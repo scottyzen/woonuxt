@@ -25,9 +25,37 @@ const runtimeConfig = useRuntimeConfig();
       <div class="w-3/7 lg:w-auto">
         <div class="mb-1 font-semibold">Products</div>
         <div class="text-sm">
-          <NuxtLink to="/products?orderby=date&order=DESC" class="py-1.5 block">{{ $t('messages.shop.newArrivals') }}</NuxtLink>
-          <NuxtLink to="/products?filter=sale[true]" class="py-1.5 block">{{ $t('messages.shop.onSale') }}</NuxtLink>
-          <NuxtLink to="/products?orderby=best-selling" class="py-1.5 block">{{ $t('messages.shop.productBestSellers') }}</NuxtLink>
+          <NuxtLink
+            :to="{
+              name: 'products',
+              query: {
+                orderby: 'date',
+                order: 'DESC',
+              },
+            }"
+            class="py-1.5 block"
+            >{{ $t('messages.shop.newArrivals') }}</NuxtLink
+          >
+          <NuxtLink
+            :to="{
+              name: 'products',
+              query: {
+                filter: 'sale[true]',
+              },
+            }"
+            class="py-1.5 block"
+            >{{ $t('messages.shop.onSale') }}</NuxtLink
+          >
+          <NuxtLink
+            :to="{
+              name: 'products',
+              query: {
+                orderby: 'best-selling',
+              },
+            }"
+            class="py-1.5 block"
+            >{{ $t('messages.shop.productBestSellers') }}</NuxtLink
+          >
           <a href="#" class="py-1.5 block">{{ $t('messages.shop.giftCards') }}</a>
         </div>
       </div>
@@ -43,8 +71,8 @@ const runtimeConfig = useRuntimeConfig();
       <div class="w-3/7 lg:w-auto">
         <div class="mb-1 font-semibold">{{ $t('messages.account.myAccount') }}</div>
         <div class="text-sm">
-          <NuxtLink to="/my-account" class="py-1.5 block">{{ $t('messages.account.myAccount') }}</NuxtLink>
-          <NuxtLink to="/my-account?tab=orders" class="py-1.5 block">{{ $t('messages.shop.orderHistory') }}</NuxtLink>
+          <NuxtLink to="/my-account/" class="py-1.5 block">{{ $t('messages.account.myAccount') }}</NuxtLink>
+          <NuxtLink to="/my-account/?tab=orders" class="py-1.5 block">{{ $t('messages.shop.orderHistory') }}</NuxtLink>
           <NuxtLink to="/wishlist" class="py-1.5 block">{{ $t('messages.shop.wishlist') }}</NuxtLink>
           <a href="#" class="py-1.5 block">{{ $t('messages.general.newsletter') }}</a>
         </div>
