@@ -1,8 +1,6 @@
 <script setup lang="ts">
 const { removeFromWishlist } = useWishlist();
-const props = defineProps({
-  product: { type: Object, required: true },
-});
+const { product } = defineProps<{ product: Product }>();
 </script>
 
 <template>
@@ -14,9 +12,9 @@ const props = defineProps({
     </button>
     <NuxtLink :to="`/product/${product.slug}`">
       <img
-        v-if="product.image"
+        v-if="product?.image?.cartSourceUrl"
         class="rounded-lg object-cover h-20 w-20"
-        :src="product.image.cartSourceUrl || product.image.sourceUrl"
+        :src="product.image?.cartSourceUrl || product.image?.sourceUrl || '/images/placeholder.jpg'"
         :alt="product.image.altText || product.name"
         :title="product.image.altText || product.name"
         width="100"

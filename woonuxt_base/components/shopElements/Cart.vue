@@ -12,7 +12,7 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
     <ClientOnly>
       <template v-if="!cart.isEmpty">
         <ul class="flex flex-col flex-1 gap-4 p-8 overflow-y-scroll">
-          <div v-for="item in cart.contents.nodes" :key="item.key" :item="item">
+          <div v-for="item in cart.contents?.nodes" :key="item.key" :item="item">
             <CartCard :item="item" />
           </div>
         </ul>

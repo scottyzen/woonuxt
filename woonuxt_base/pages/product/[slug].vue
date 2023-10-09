@@ -3,8 +3,8 @@ const route = useRoute();
 const { arraysEqual, formatArray, checkForVariationTypeOfAny } = useHelpers();
 const { addToCart, isUpdatingCart } = useCart();
 
-const { data } = await useAsyncGql('getProduct', { slug: route.params.slug as string });
-const product = data?.value?.product as Product;
+const { data } = (await useAsyncGql('getProduct', { slug: route.params.slug })) as { data: { value: { product: Product } } };
+const product = data?.value?.product;
 
 useHead({
   title: product?.name || 'Product',
@@ -30,7 +30,7 @@ const updateSelectedVariations = (variations: Variation[]): void => {
 
   attrValues.value = variations.map((el: Attribute) => ({ attributeName: el.name, attributeValue: el.value }));
   const cloneArray = JSON.parse(JSON.stringify(variations));
-  const getActiveVariation = product.variations.nodes.filter((variation) => {
+  const getActiveVariation = product.variations.nodes.filter((variation: any) => {
     // If there is any variation of type ANY set the value to ''
     if (variation.attributes) {
       indexOfTypeAny.forEach((index) => (cloneArray[index].value = ''));
