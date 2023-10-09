@@ -1,36 +1,56 @@
-// defing refs outside of the component to keep there state
+/**
+ * @name useWishlist
+ * @description A composable that handles the wishlist in local storage
+ */
+
 const theList = ref([] as Product[]);
 
 export function useWishlist() {
-  // function to add to the list
-  function addToList(item: any): void {
+  /**
+   * Add an item to the list
+   * @param {Product} item
+   * @example addToWishlist({ databaseId: 123, name: 'My Product' })
+   */
+  function addToWishlist(item: Product): void {
     theList.value.push(item);
     localStorage.setItem('wishlist', JSON.stringify(theList.value));
   }
 
-  // function to remove from the list
-  function removeFromList(databaseId: number): void {
+  /**
+   * Remove an item from the list
+   * @param {number} databaseId
+   * @example removeFromWishlist(123) - Removes the product with the databaseId of 123
+   */
+  function removeFromWishlist(databaseId: number): void {
     theList.value = theList.value.filter((item) => item.databaseId !== databaseId);
     localStorage.setItem('wishlist', JSON.stringify(theList.value));
   }
 
-  // function to check if an item is in the list
+  // Check if an item is in the list
   function isInList(databaseId: number): boolean {
     return theList.value.some((item) => item.databaseId === databaseId);
   }
 
+  // Check if the list is empty
   function isEmpty(): boolean {
     return theList.value.length === 0;
   }
 
+  // Get the list from local storage
   function getFromLocalStorage(): void {
     const wishlist = localStorage.getItem('wishlist');
     if (wishlist) theList.value = JSON.parse(wishlist);
+  }
+
+  // Clear the list from local storage
+  function clearWishlist(): void {
+    theList.value = [];
+    localStorage.removeItem('wishlist');
   }
 
   onMounted(() => {
     getFromLocalStorage();
   });
 
-  return { theList, addToList, removeFromList, isInList, isEmpty };
+  return { theList, addToWishlist, removeFromWishlist, isInList, isEmpty, clearWishlist };
 }
