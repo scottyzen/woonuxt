@@ -18,7 +18,6 @@ const indexOfTypeAny = [] as number[];
 const attrValues = ref();
 
 const type = computed(() => (activeVariation.value ? activeVariation.value : product)) as ComputedRef<Product | Variation>;
-const primaryCategory = computed(() => product.productCategories?.nodes[0]);
 const selectProductInput = computed(() => ({ productId: type.value.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
 const disabledAddToCart = computed(() => (!activeVariation.value && !!product.variations) || type.value.stockStatus !== 'IN_STOCK');
 
