@@ -6,9 +6,9 @@ defineProps({
   node: { type: Object, required: true },
 });
 
-const imageToShow = ref(0);
+const imageToShow = ref<number | null>(0);
 
-const changeImage = (index = 0) => {
+const changeImage = (index: number | null): void => {
   imageToShow.value = index;
 };
 </script>

@@ -1,5 +1,10 @@
+/**
+ * @name useCart
+ * @description A composable that handles the cart in local storage
+ */
+
 export function useCart() {
-  const cart = useState<Cart | null>('cart', () => null);
+  const cart = useState<Cart>('cart');
   const isShowingCart = useState<boolean>('isShowingCart', () => false);
   const isUpdatingCart = useState<boolean>('isUpdatingCart', () => false);
   const isUpdatingCoupon = useState<boolean>('isUpdatingCoupon', () => false);

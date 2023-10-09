@@ -17,6 +17,18 @@ export default defineNuxtConfig({
 
   modules: ['woonuxt-settings', 'nuxt-graphql-client', '@nuxtjs/tailwindcss', 'nuxt-icon', '@nuxt/image', '@nuxtjs/i18n'],
 
+  'graphql-client': {
+    codegen: {
+      silent: false,
+      skipTypename: true,
+      useTypeImports: false,
+      dedupeFragments: true,
+      onlyOperationTypes: true,
+      avoidOptionals: false,
+      disableOnBuild: false,
+    },
+  },
+
   image: {
     domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
   },

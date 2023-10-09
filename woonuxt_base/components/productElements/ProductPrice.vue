@@ -1,8 +1,10 @@
 <script setup lang="ts">
-const props = defineProps({
-  regularPrice: { default: null, type: String },
-  salePrice: { default: null, type: String },
-});
+interface ProductPriceProps {
+  regularPrice?: string | null;
+  salePrice?: string | null;
+}
+
+const { regularPrice, salePrice } = defineProps<ProductPriceProps>();
 </script>
 
 <template>

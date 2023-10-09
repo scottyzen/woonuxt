@@ -1,7 +1,7 @@
 /**
  * @name useFiltering
- * @description A composable that handles the filtering of products
- * @example ?filter=pa_color[green,blue],pa_size[md] is what the filter query looks like. It's handy to see here for reference.
+ * @description A composable that handles the filtering of products. For reference this
+ * is what the filter query looks like: ?filter=pa_color[green,blue],pa_size[md]
  */
 
 const filterQuery = ref('' as string);
