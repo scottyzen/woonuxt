@@ -4,7 +4,6 @@ const props = defineProps({
   node: { type: Object, default: null },
   index: { type: Number, default: 1 },
 });
-const hasLoadingError = ref(false);
 
 const imgWidth = 290;
 const imgHeight = 385;
@@ -33,10 +32,6 @@ const colorVariableImage = computed(() => {
   }
   return null;
 });
-
-const handleLoadError = () => {
-  hasLoadingError.value = true;
-};
 </script>
 
 <template>
@@ -58,9 +53,7 @@ const handleLoadError = () => {
       :loading="index <= 1 ? 'eager' : 'lazy'"
       fit="outside"
       format="webp"
-      densities="x1 x2"
-      @error="handleLoadError" />
-    <img v-else-if="hasLoadingError" :src="mainImage || '/images/placeholder.jpg'" :alt="node.image?.altText || node.name" :title="node.image?.title || node.name" loading="lazy" />
+      densities="x1 x2" />
     <img v-else src="/images/placeholder.jpg" :alt="node.image?.altText || node.name" :title="node.image?.title || node.name" loading="lazy" />
 
     <div class="p-2">
