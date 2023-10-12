@@ -17,7 +17,7 @@ const format = computed(() => [
 </script>
 
 <template>
-  <div v-if="primaryCategory" class="flex text-sm leading-none text-gray-400 gap-1 items-center">
+  <div class="flex text-sm leading-none text-gray-400 gap-1 items-center">
     <span>
       <NuxtLink to="/" class="hover:text-primary">{{ $t('messages.general.home') }}</NuxtLink>
       <span> /</span>

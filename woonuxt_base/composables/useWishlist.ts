@@ -27,8 +27,8 @@ export function useWishlist() {
   }
 
   // Check if an item is in the list
-  function isInList(databaseId: number): boolean {
-    return theList.value.some((item) => item.databaseId === databaseId);
+  function isInList(databaseId?: number): boolean {
+    return databaseId ? theList.value.some((item) => item.databaseId === databaseId) : false;
   }
 
   // Check if the list is empty
