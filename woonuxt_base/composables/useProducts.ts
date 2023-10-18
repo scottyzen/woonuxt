@@ -7,17 +7,16 @@ export function useProducts() {
 
   // Get all products
   const getAllProducts = async (after: string | null = ''): Promise<any[]> => {
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === 'development') {
+      const { data } = await useAsyncGql('getProducts'); // Default 40 products
+      return data.value?.products?.nodes.length ? data.value?.products?.nodes : [];
+    } else {
       // All products
       const { data } = await useAsyncGql('getProducts', { after: after, first: 50 });
       const newProducts = data.value?.products?.nodes || [];
       tempArray = [...tempArray, ...newProducts];
       console.log('tempArray', tempArray.length, ' Has next page', data.value?.products?.pageInfo?.hasNextPage);
       return data.value?.products?.pageInfo?.hasNextPage ? getAllProducts(data.value?.products?.pageInfo?.endCursor) : tempArray;
-    } else {
-      // Only 50
-      const { data } = await useAsyncGql('getProducts', { first: 50 });
-      return data.value?.products?.nodes.length ? data.value?.products?.nodes : [];
     }
   };
 
