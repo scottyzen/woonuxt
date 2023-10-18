@@ -6,13 +6,14 @@ export function useProducts() {
   let tempArray: any[] = [];
 
   // Get all products
-  const getAllProducts = async (after: string | null = ''): Promise<any[]> => {
+  const getAllProducts = async (after: string | null = '', categorySlug?: string): Promise<any[]> => {
     if (process.env.NODE_ENV === 'development') {
-      const { data } = await useAsyncGql('getProducts'); // Default 40 products
+      // Default 40 products
+      const { data } = await useAsyncGql('getProducts', { slug: categorySlug });
       return data.value?.products?.nodes.length ? data.value?.products?.nodes : [];
     } else {
       // All products
-      const { data } = await useAsyncGql('getProducts', { after: after, first: 50 });
+      const { data } = await useAsyncGql('getProducts', { after, first: 50, slug: categorySlug });
       const newProducts = data.value?.products?.nodes || [];
       tempArray = [...tempArray, ...newProducts];
       console.log('tempArray', tempArray.length, ' Has next page', data.value?.products?.pageInfo?.hasNextPage);
