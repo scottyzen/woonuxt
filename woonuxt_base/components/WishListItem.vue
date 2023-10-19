@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { removeFromWishlist } = useWishlist();
+const { decodeURI } = useHelpers();
 const { product } = defineProps<{ product: Product }>();
 </script>
 
@@ -10,7 +11,7 @@ const { product } = defineProps<{ product: Product }>();
         <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368" />
       </svg>
     </button>
-    <NuxtLink :to="`/product/${product.slug}`">
+    <NuxtLink :to="`/product/${decodeURI(product.slug)}`">
       <img
         v-if="product?.image?.cartSourceUrl"
         class="rounded-lg object-cover h-20 w-20"
@@ -20,7 +21,7 @@ const { product } = defineProps<{ product: Product }>();
         width="100"
         height="120" />
     </NuxtLink>
-    <NuxtLink class="text-lg leading-tight" :to="`/product/${product.slug}`">{{ product.name }}</NuxtLink>
+    <NuxtLink class="text-lg leading-tight" :to="`/product/${decodeURI(product.slug)}`">{{ product.name }}</NuxtLink>
     <ProductPrice :sale-price="product.salePrice" :regular-price="product.regularPrice" class="ml-auto" />
   </li>
 </template>

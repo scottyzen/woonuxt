@@ -1,4 +1,5 @@
 <script setup>
+const { decodeURI } = useHelpers();
 const route = useRoute();
 const props = defineProps({
   node: { type: Object, default: null },
@@ -35,7 +36,7 @@ const colorVariableImage = computed(() => {
 </script>
 
 <template>
-  <NuxtLink :to="`/product/${node.slug}`" class="relative product-card">
+  <NuxtLink :to="`/product/${decodeURI(node.slug)}`" class="relative product-card">
     <SaleBadge :node="node" class="absolute top-2 right-2" />
     <img
       v-if="colorVariableImage"
