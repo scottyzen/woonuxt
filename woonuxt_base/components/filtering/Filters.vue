@@ -3,7 +3,7 @@ const { removeBodyClass } = useHelpers();
 const runtimeConfig = useRuntimeConfig();
 const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES || [];
 // hide-categories prop is used to hide the category filter on the product category page
-const hideCategories = defineProps({ hideCategories: { type: Boolean, default: false } });
+const { hideCategories } = defineProps({ hideCategories: { type: Boolean, default: false } });
 </script>
 
 <template>
