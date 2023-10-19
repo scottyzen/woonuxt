@@ -2,6 +2,8 @@
 const { removeBodyClass } = useHelpers();
 const runtimeConfig = useRuntimeConfig();
 const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES || [];
+// hide-categories prop is used to hide the category filter on the product category page
+const hideCategories = defineProps({ hideCategories: { type: Boolean, default: false } });
 </script>
 
 <template>
@@ -9,7 +11,7 @@ const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES
     <OrderByDropdown class="block w-full md:hidden" />
     <div class="relative z-30 grid mb-12 space-y-8 divide-y">
       <PriceFilter />
-      <CategoryFilter />
+      <CategoryFilter v-if="!hideCategories" />
       <div v-for="attribute in globalProductAttributes" :key="attribute.slug">
         <ColorFilter
           v-if="attribute.slug == 'pa_color' || attribute.slug == 'pa_colour'"
