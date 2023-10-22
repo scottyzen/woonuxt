@@ -1,0 +1,8 @@
+fragment Terms on Product {
+  terms(first: 1000) {
+    nodes {
+      taxonomyName
+      slug
+    }
+  }
+}

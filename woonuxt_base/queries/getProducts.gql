@@ -2,7 +2,7 @@
 #import "~/queries/fragments/VariableProduct.gql"
 
 query getProducts($after: String, $slug: [String], $first: Int = 40, $orderby: [ProductsOrderbyInput] = { field: DATE, order: DESC }) {
-  products(first: $first, after: $after, where: { categoryIn: $slug, typeNotIn: EXTERNAL, visibility: VISIBLE, minPrice: 0, orderby: $orderby }) {
+  products(first: $first, after: $after, where: { categoryIn: $slug, typeNotIn: EXTERNAL, visibility: VISIBLE, minPrice: 0, orderby: $orderby, status: "publish" }) {
     pageInfo {
       hasNextPage
       endCursor
@@ -12,25 +12,12 @@ query getProducts($after: String, $slug: [String], $first: Int = 40, $orderby: [
       onSale
       slug
       type
-      date
       databaseId
       id
       averageRating
       reviewCount
-      terms(first: 1000) {
-        nodes {
-          taxonomyName
-          slug
-        }
-      }
-      productCategories {
-        nodes {
-          databaseId
-          slug
-          name
-          count
-        }
-      }
+      ...Terms
+      ...ProductCategories
       ...SimpleProduct
       ...VariableProduct
     }

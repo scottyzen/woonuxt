@@ -1,5 +1,5 @@
 query getStates($country: CountriesEnum!) {
-  allowedCountryStates(country: $country) {
+  countryStates(country: $country) {
     code
     name
   }

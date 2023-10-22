@@ -2,6 +2,7 @@ fragment VariableProduct on VariableProduct {
   price
   rawPrice: price(format: RAW)
   slug
+  date
   description
   rawDescription: description(format: RAW)
   shortDescription

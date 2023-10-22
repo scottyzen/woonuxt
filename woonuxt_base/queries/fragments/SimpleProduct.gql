@@ -2,6 +2,7 @@ fragment SimpleProduct on SimpleProduct {
   price
   rawPrice: price(format: RAW)
   slug
+  date
   regularPrice
   rawRegularPrice: regularPrice(format: RAW)
   salePrice
