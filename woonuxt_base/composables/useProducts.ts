@@ -16,7 +16,7 @@ export function useProducts() {
       const { data } = await useAsyncGql('getProducts', { after, first: 50, slug: categorySlug });
       const newProducts = data.value?.products?.nodes || [];
       tempArray = [...tempArray, ...newProducts];
-      console.log('tempArray', tempArray.length, ' Has next page', data.value?.products?.pageInfo?.hasNextPage);
+
       return data.value?.products?.pageInfo?.hasNextPage ? getAllProducts(data.value?.products?.pageInfo?.endCursor) : tempArray;
     }
   };

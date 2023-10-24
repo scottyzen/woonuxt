@@ -11,7 +11,7 @@
     "pretty": "prettier --write ."
   },
   "dependencies": {
-    "@stripe/stripe-js": "^2.1.9",
+    "@stripe/stripe-js": "^2.1.10",
     "@vueform/slider": "^2.1.9"
   },
   "devDependencies": {
@@ -22,7 +22,7 @@
     "@tailwindcss/typography": "^0.5.10",
     "eslint": "^8.52.0",
     "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-prettier": "^5.0.1",
     "nuxt": "^3.8.0",
