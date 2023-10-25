@@ -42,6 +42,7 @@ fragment CartFragment on Cart {
       variation {
         node {
           name
+          slug
           price
           image {
             sourceUrl(size: THUMBNAIL)
