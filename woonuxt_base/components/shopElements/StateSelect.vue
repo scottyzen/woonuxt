@@ -14,8 +14,8 @@ function select(evt) {
 
 async function updateState() {
   try {
-    const { allowedCountryStates } = await GqlGetStates({ country: props.countryCode });
-    states.value = allowedCountryStates;
+    const { countryStates } = await GqlGetStates({ country: props.countryCode });
+    states.value = countryStates;
   } catch (error) {
     console.log(error);
   }
