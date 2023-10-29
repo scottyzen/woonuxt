@@ -7,13 +7,11 @@ export function useProducts() {
 
   // Get all products
   const getAllProducts = async (after: string | null = '', categorySlug?: string): Promise<any[]> => {
+    console.log('Getting products...');
     try {
       const { data } = await useAsyncGql('getProducts', { after, slug: categorySlug });
       const newProducts = data.value?.products?.nodes || [];
       if (newProducts.length) tempArray = [...tempArray, ...newProducts];
-
-      // add 300ms delay to avoid rate limiting
-      await new Promise((resolve) => setTimeout(resolve, 300));
 
       return data.value.products?.pageInfo?.hasNextPage ? getAllProducts(data.value.products.pageInfo.endCursor) : tempArray;
     } catch (error) {
@@ -24,9 +22,6 @@ export function useProducts() {
 
   function setProducts(newProducts: Product[]): void {
     if (!Array.isArray(newProducts)) throw new Error('Products must be an array.');
-
-    // If products are already set, don't set them again
-    if (allProducts.length) return;
 
     console.log(`Setting ${newProducts.length} products.`);
 
