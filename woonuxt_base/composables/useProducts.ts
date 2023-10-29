@@ -12,7 +12,7 @@ export function useProducts() {
       const payload = categorySlug ? { after, slug: categorySlug } : { after };
       const { data } = await useAsyncGql('getProducts', payload);
       const newProducts = data.value?.products?.nodes || [];
-      if (newProducts.length) tempArray = [...tempArray, ...newProducts];
+      if (newProducts.length) tempArray = [...tempArray, ...h];
 
       return data.value.products?.pageInfo?.hasNextPage ? getAllProducts(data.value.products.pageInfo.endCursor) : tempArray;
     } catch (error) {
