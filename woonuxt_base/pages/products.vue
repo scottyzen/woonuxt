@@ -1,6 +1,6 @@
 <script setup>
 const { setProducts, updateProductList, getAllProducts } = useProducts();
-const products = getAllProducts('');
+const products = await getAllProducts('');
 
 setProducts(products || []);
 

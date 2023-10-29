@@ -9,7 +9,8 @@ export function useProducts() {
   const getAllProducts = async (after: string | null = '', categorySlug?: string): Promise<any[]> => {
     console.log('Getting products...');
     try {
-      const { data } = await useAsyncGql('getProducts', { after, slug: categorySlug });
+      const payload = categorySlug ? { after, slug: categorySlug } : { after };
+      const { data } = await useAsyncGql('getProducts', payload);
       const newProducts = data.value?.products?.nodes || [];
       if (newProducts.length) tempArray = [...tempArray, ...newProducts];
 
@@ -22,9 +23,6 @@ export function useProducts() {
 
   function setProducts(newProducts: Product[]): void {
     if (!Array.isArray(newProducts)) throw new Error('Products must be an array.');
-
-    console.log(`Setting ${newProducts.length} products.`);
-
     try {
       products.value = newProducts;
       allProducts = JSON.parse(JSON.stringify(newProducts));
