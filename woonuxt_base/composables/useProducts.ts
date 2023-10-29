@@ -7,22 +7,21 @@ export function useProducts() {
 
   // Get all products
   const getAllProducts = async (after: string | null = '', categorySlug?: string): Promise<any[]> => {
-    if (process.env.NODE_ENV === 'development') {
-      // Default 40 products
-      const { data } = await useAsyncGql('getProducts', { slug: categorySlug });
-      return data.value?.products?.nodes.length ? data.value?.products?.nodes : [];
-    } else {
-      // All products
-      const { data } = await useAsyncGql('getProducts', { after, first: 50, slug: categorySlug });
-      const newProducts = data.value?.products?.nodes || [];
-      tempArray = [...tempArray, ...newProducts];
+    // All products
+    const { data } = await useAsyncGql('getProducts', { after, first: 50, slug: categorySlug });
+    const newProducts = data.value?.products?.nodes || [];
+    if (newProducts.length) tempArray = [...tempArray, ...newProducts];
 
-      return data.value?.products?.pageInfo?.hasNextPage ? getAllProducts(data.value?.products?.pageInfo?.endCursor) : tempArray;
-    }
+    return data.value.products?.pageInfo?.hasNextPage ? getAllProducts(data.value.products.pageInfo.endCursor) : tempArray;
   };
 
   function setProducts(newProducts: Product[]): void {
     if (!Array.isArray(newProducts)) throw new Error('Products must be an array.');
+
+    // If products are already set, don't set them again
+    if (allProducts.length) return;
+
+    console.log(`Setting ${newProducts.length} products.`);
 
     try {
       products.value = newProducts;
