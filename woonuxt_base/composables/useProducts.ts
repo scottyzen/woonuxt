@@ -3,18 +3,27 @@ let allProducts = [] as Product[];
 export function useProducts() {
   // Declare the state variables and the setter functions
   const products = useState<Product[]>('products', () => []);
-  let tempArray: any[] = [];
 
   // Get all products
-  const getAllProducts = async (after: string | null = '', categorySlug?: string): Promise<any[]> => {
-    console.log('Getting products...');
+  const getAllProducts = async (after: string | null = '', categorySlug?: string, tempArray: any[] = []): Promise<Product[]> => {
     try {
       const payload = categorySlug ? { after, slug: categorySlug } : { after };
       const { data } = await useAsyncGql('getProducts', payload);
       const newProducts = data.value?.products?.nodes || [];
-      if (newProducts.length) tempArray = [...tempArray, ...h];
+      if (newProducts.length) {
+        tempArray = [...tempArray, ...newProducts];
+      }
 
-      return data.value.products?.pageInfo?.hasNextPage ? getAllProducts(data.value.products.pageInfo.endCursor) : tempArray;
+      // return data.value.products?.pageInfo?.hasNextPage ? getAllProducts(data.value.products.pageInfo.endCursor) : tempArray;
+      if (data.value.products?.pageInfo?.hasNextPage) {
+        // add a delay to prevent rate limiting
+        console.log('Number of products:', tempArray.length, 'Fetching more...');
+        await new Promise((resolve, reject) => setTimeout(resolve, 1000)).catch(console.error);
+        return getAllProducts(data.value.products.pageInfo.endCursor, categorySlug, tempArray);
+      } else {
+        console.log('Number of products:', tempArray.length);
+        return tempArray;
+      }
     } catch (error) {
       console.error(error);
       return [];

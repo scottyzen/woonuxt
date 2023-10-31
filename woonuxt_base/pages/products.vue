@@ -1,8 +1,8 @@
 <script setup>
-const { setProducts, updateProductList, products } = useProducts();
-const { $wooproducts } = useNuxtApp();
+const { setProducts, updateProductList, getAllProducts, products } = useProducts();
+const allProducts = await getAllProducts('');
 
-setProducts($wooproducts);
+setProducts(allProducts || []);
 
 onMounted(() => {
   updateProductList();

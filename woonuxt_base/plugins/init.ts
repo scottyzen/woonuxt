@@ -43,25 +43,33 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     });
   }
 
-  let tempArray: any[] = [];
+  // nuxtApp.hook('app:created', () => {
+  // type Product = any; // Replace with your actual Product type
+  // type PageInfo = { hasNextPage: boolean; endCursor: string };
+  // type Data = { value: { products: { nodes: Product[]; pageInfo: PageInfo } } };
 
-  // Get all products
-  const getAllProducts = async (after: string = ''): Promise<void> => {
-    try {
-      const { data } = await useAsyncGql('getProducts', { after });
-      const newProducts = data.value?.products?.nodes;
-      if (newProducts) tempArray = [...tempArray, ...newProducts];
+  // const loadAllProducts = async (after: string = '', tempArray: Product[] = []): Promise<Product[]> => {
+  //   try {
+  //     const { data }: { data: Data } = await useAsyncGql('getProducts', { after });
+  //     const newProducts = data.value?.products?.nodes || [];
+  //     tempArray = [...tempArray, ...newProducts];
 
-      if (data.value.products?.pageInfo?.hasNextPage) {
-        await getAllProducts(data.value.products.pageInfo.endCursor);
-      } else {
-        console.log('Number of products:', tempArray.length);
-        nuxtApp.provide('wooproducts', tempArray);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //     if (data.value.products?.pageInfo?.hasNextPage) {
+  //       // add a delay to prevent rate limiting
+  //       console.log('Number of products:', tempArray.length, 'Fetching more...');
+  //       await new Promise((resolve, reject) => setTimeout(resolve, 1000)).catch(console.error);
+  //       return loadAllProducts(data.value.products.pageInfo.endCursor, tempArray);
+  //     } else {
+  //       console.log('Number of products:', tempArray.length);
+  //       nuxtApp.provide('wooproducts', tempArray);
+  //       return tempArray;
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     return tempArray;
+  //   }
+  // };
 
-  await getAllProducts();
+  // const products = await loadAllProducts();
+  // });
 });
