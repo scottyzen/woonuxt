@@ -1,7 +1,7 @@
 <script setup>
-const { setProducts, updateProductList, getAllProducts, products } = useProducts();
-const allProducts = await getAllProducts('');
+const { setProducts, updateProductList, getAllProducts } = useProducts();
 
+const allProducts = await getAllProducts('');
 setProducts(allProducts || []);
 
 onMounted(() => {
@@ -15,7 +15,7 @@ useHead({
 </script>
 
 <template>
-  <div class="container flex items-start gap-16" v-if="products">
+  <div class="container flex items-start gap-16" v-if="allProducts">
     <Filters />
 
     <div class="w-full">

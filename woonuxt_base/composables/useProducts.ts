@@ -5,21 +5,20 @@ export function useProducts() {
   const products = useState<Product[]>('products', () => []);
 
   // Get all products
-  const getAllProducts = async (after: string | null = '', categorySlug?: string, tempArray: any[] = []): Promise<Product[]> => {
+  const getAllProducts = async (after: string | null = '', categorySlug?: string, tempArray: any[] = []): Promise<any> => {
+    if (allProducts.length) {
+      console.log('Products already loaded.');
+      return;
+    }
     try {
       const payload = categorySlug ? { after, slug: categorySlug } : { after };
       const { data } = await useAsyncGql('getProducts', payload);
-      const newProducts = data.value?.products?.nodes || [];
-      if (newProducts.length) {
-        tempArray = [...tempArray, ...newProducts];
-      }
+      const newProducts = data?.value?.products?.nodes || [];
+      if (newProducts.length) tempArray = [...tempArray, ...newProducts];
 
-      // return data.value.products?.pageInfo?.hasNextPage ? getAllProducts(data.value.products.pageInfo.endCursor) : tempArray;
-      if (data.value.products?.pageInfo?.hasNextPage) {
-        // add a delay to prevent rate limiting
-        console.log('Number of products:', tempArray.length, 'Fetching more...');
+      if (data?.value.products?.pageInfo?.hasNextPage) {
         await new Promise((resolve, reject) => setTimeout(resolve, 1000)).catch(console.error);
-        return getAllProducts(data.value.products.pageInfo.endCursor, categorySlug, tempArray);
+        return getAllProducts(data?.value.products.pageInfo.endCursor, categorySlug, tempArray);
       } else {
         console.log('Number of products:', tempArray.length);
         return tempArray;
