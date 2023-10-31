@@ -1,5 +1,6 @@
-export default defineNuxtPlugin(async () => {
+export default defineNuxtPlugin(async (nuxtApp) => {
   useGqlCors({ credentials: 'include', mode: 'cors' });
+
   if (process.client) {
     const { clearAllCookies } = useHelpers();
     const sessionToken = useCookie('woocommerce-session');
@@ -41,4 +42,26 @@ export default defineNuxtPlugin(async () => {
       );
     });
   }
+
+  let tempArray: any[] = [];
+
+  // Get all products
+  const getAllProducts = async (after: string = ''): Promise<void> => {
+    try {
+      const { data } = await useAsyncGql('getProducts', { after });
+      const newProducts = data.value?.products?.nodes;
+      if (newProducts) tempArray = [...tempArray, ...newProducts];
+
+      if (data.value.products?.pageInfo?.hasNextPage) {
+        await getAllProducts(data.value.products.pageInfo.endCursor);
+      } else {
+        console.log('Number of products:', tempArray.length);
+        nuxtApp.provide('wooproducts', tempArray);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  await getAllProducts();
 });
