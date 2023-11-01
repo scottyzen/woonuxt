@@ -4,31 +4,7 @@ export function useProducts() {
   // Declare the state variables and the setter functions
   const products = useState<Product[]>('products', () => []);
 
-  // Get all products
-  const getAllProducts = async (after: string | null = '', categorySlug?: string, tempArray: any[] = []): Promise<any> => {
-    if (allProducts.length) {
-      console.log('Products already loaded.');
-      return;
-    }
-    try {
-      const payload = categorySlug ? { after, slug: categorySlug } : { after };
-      const { data } = await useAsyncGql('getProducts', payload);
-      const newProducts = data?.value?.products?.nodes || [];
-      if (newProducts.length) tempArray = [...tempArray, ...newProducts];
-
-      if (data?.value.products?.pageInfo?.hasNextPage) {
-        await new Promise((resolve, reject) => setTimeout(resolve, 1000)).catch(console.error);
-        return getAllProducts(data?.value.products.pageInfo.endCursor, categorySlug, tempArray);
-      } else {
-        console.log('Number of products:', tempArray.length);
-        return tempArray;
-      }
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
-  };
-
+  // Set the products state and the allProducts variable
   function setProducts(newProducts: Product[]): void {
     if (!Array.isArray(newProducts)) throw new Error('Products must be an array.');
     try {
@@ -38,6 +14,30 @@ export function useProducts() {
       console.log(e);
     }
   }
+
+  /**
+   * get all products from the api, it's a recursive function that will fetch all products
+   * @param {string} category - the category to filter by (optional)
+   * @param {string} after - the cursor to start fetching from
+   * @param {Product[]} tempArray - the array to store the products in
+   * @returns {Promise<Product[]>} - an array of all products
+   */
+  const getAllProducts = async (category: string = '', after: string = '', tempArray: Product[] = []): Promise<Product[]> => {
+    try {
+      const { data }: any = await useAsyncGql('getProducts', { after, slug: category });
+      const newProducts = data.value?.products?.nodes || [];
+      tempArray = [...tempArray, ...newProducts];
+
+      if (data.value.products?.pageInfo?.hasNextPage) {
+        return getAllProducts(category, data.value.products.pageInfo.endCursor, tempArray);
+      } else {
+        return tempArray;
+      }
+    } catch (error) {
+      console.error(error);
+      return tempArray;
+    }
+  };
 
   const updateProductList = async (): Promise<void> => {
     const { isFiltersActive, filterProducts } = await useFiltering();
