@@ -80,8 +80,8 @@ Example: I have created a pages directory and added a `contact.vue` file in the 
 | --------------- | ------- |
 | WordPress       | 6.3.2   |
 | WooCommerce     | 8.2.1   |
-| WPGraphQL       | 1.17.0  |
-| WooGraphQL      | 0.18.2  |
+| WPGraphQL       | 1.18.0  |
+| WooGraphQL      | 0.18.3  |
 | Node            | 18.17.1 |
 | PHP             | 8.2     |
 

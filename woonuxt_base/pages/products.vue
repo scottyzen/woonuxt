@@ -1,8 +1,11 @@
 <script setup>
-const { setProducts, updateProductList, getAllProducts } = useProducts();
-const products = await getAllProducts('');
+const { setProducts, updateProductList, getAllProducts, products } = useProducts();
+const route = useRoute();
+const categorySlug = route.params.slug;
 
-setProducts(products || []);
+const allProducts = await getAllProducts();
+
+if (allProducts) setProducts(allProducts);
 
 onMounted(() => {
   updateProductList();
@@ -15,7 +18,7 @@ useHead({
 </script>
 
 <template>
-  <div class="container flex items-start gap-16" v-if="products">
+  <div class="container flex items-start gap-16">
     <Filters />
 
     <div class="w-full">
@@ -24,7 +27,10 @@ useHead({
         <OrderByDropdown class="hidden md:inline-flex" />
         <ShowFilterTrigger class="md:hidden" />
       </div>
-      <ProductGrid />
+      <Transition name="fade" mode="out-in">
+        <ProductGrid v-if="products.length" />
+        <NoProductsFound v-else />
+      </Transition>
     </div>
   </div>
 </template>

@@ -1,5 +1,6 @@
-export default defineNuxtPlugin(async () => {
+export default defineNuxtPlugin(async (nuxtApp) => {
   useGqlCors({ credentials: 'include', mode: 'cors' });
+
   if (process.client) {
     const { clearAllCookies } = useHelpers();
     const sessionToken = useCookie('woocommerce-session');

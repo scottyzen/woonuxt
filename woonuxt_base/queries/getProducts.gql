@@ -1,7 +1,9 @@
-#import "~/queries/fragments/SimpleProduct.gql"
-#import "~/queries/fragments/VariableProduct.gql"
+#import "./fragments/SimpleProduct.gql"
+#import "./fragments/VariableProduct.gql"
+#import "./fragments/Terms.gql"
+#import "./fragments/ProductCategories.gql"
 
-query getProducts($after: String, $slug: [String], $first: Int = 40, $orderby: [ProductsOrderbyInput] = { field: DATE, order: DESC }) {
+query getProducts($after: String, $slug: [String], $first: Int = 100, $orderby: [ProductsOrderbyInput] = { field: DATE, order: DESC }) {
   products(first: $first, after: $after, where: { categoryIn: $slug, typeNotIn: EXTERNAL, visibility: VISIBLE, minPrice: 0, orderby: $orderby, status: "publish" }) {
     pageInfo {
       hasNextPage

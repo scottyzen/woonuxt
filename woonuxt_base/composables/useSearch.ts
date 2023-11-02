@@ -17,6 +17,7 @@ export function useSearching() {
 
   function setSearchQuery(search: string): void {
     searchQuery.value = search;
+    console.log('setSearchQuery', { query: { ...route.query, search: search || undefined } });
     router.push({ query: { ...route.query, search: search || undefined } });
     setTimeout(() => {
       updateProductList();
@@ -35,11 +36,28 @@ export function useSearching() {
     isShowingSearch.value = !isShowingSearch.value;
   };
 
+  // pages.push({
+  //   name: 'product-page-pager',
+  //   path: '/products/page/:pageNumber',
+  //   file: resolve('./pages/products.vue'),
+  // });
+  // pages.push({
+  //   name: 'product-category-page',
+  //   path: '/product-category/:categorySlug',
+  //   // file: resolve('./pages/products.vue'),
+  //   file: resolve('./pages/product-category/[slug].vue'),
+  // });
   function searchProducts(products: Product[]): Product[] {
-    // chec on the search page /products
-    if (route.name !== 'products') {
+    const currentRouteName = route.name || 'products'; // Default to products
+
+    // If we are on a category page, we need to add the category slug to the route, otherwise every search will redirect to the products page
+    if (route.name === 'product-category-slug') {
+      const categorySlug = route.params.categorySlug as string;
+      router.push({ name: currentRouteName, params: { categorySlug }, query: { search: searchQuery.value } });
+    } else {
       router.push({ name: 'products', query: { search: searchQuery.value } });
     }
+
     const query = getSearchQuery();
     return query
       ? products.filter((product: Product) => {

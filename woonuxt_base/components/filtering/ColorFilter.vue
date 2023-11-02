@@ -14,7 +14,7 @@ const { data } = await useAsyncGql('getAllTerms', {
   hideEmpty: props.hideEmpty,
 });
 
-const allPaTerms = data.value.terms?.nodes || [];
+const allPaTerms = data?.value?.terms?.nodes || [];
 const { getFilter, setFilter, isFiltersActive } = await useFiltering();
 const selectedTerms = ref(getFilter(props.filterSlug) || []);
 
