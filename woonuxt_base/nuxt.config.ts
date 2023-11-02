@@ -24,14 +24,6 @@ export default defineNuxtConfig({
 
   pages: true,
 
-  tailwindcss: {
-    viewer: false,
-  },
-
-  'graphql-client': {
-    codegen: isDev ? false : {},
-  },
-
   hooks: {
     'pages:extend'(pages) {
       pages.push({
