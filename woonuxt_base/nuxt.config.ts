@@ -42,12 +42,12 @@ export default defineNuxtConfig({
       pages.push({
         name: 'product-category-page',
         path: '/product-category/:categorySlug',
-        file: resolve('./pages/product-category/[slug].vue'),
+        file: resolve('./pages/products.vue'),
       });
       pages.push({
         name: 'product-category-page-pager',
         path: '/product-category/:categorySlug/page/:pageNumber',
-        file: resolve('./pages/product-category/[slug].vue'),
+        file: resolve('./pages/products.vue'),
       });
       pages.push({
         name: 'order-received',

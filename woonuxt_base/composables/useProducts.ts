@@ -26,10 +26,10 @@ export function useProducts() {
     try {
       const payload = category ? { after, slug: category } : { after };
       const { data }: any = await useAsyncGql('getProducts', payload);
-      const newProducts = data.value?.products?.nodes || [];
+      const newProducts = data?.value?.products?.nodes || [];
       tempArray = [...tempArray, ...newProducts];
 
-      if (data.value.products?.pageInfo?.hasNextPage) {
+      if (data?.value?.products?.pageInfo?.hasNextPage) {
         if (category) return getAllProducts(category, data.value.products.pageInfo.endCursor, tempArray);
         return getAllProducts(category, data.value.products.pageInfo.endCursor, tempArray);
       } else {

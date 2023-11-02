@@ -1,7 +1,9 @@
 <script setup>
 const { setProducts, updateProductList, getAllProducts, products } = useProducts();
+const route = useRoute();
+const categorySlug = route.params.slug;
+
 const allProducts = await getAllProducts();
-// const products = !process.client ? await getAllProducts() : [];
 
 if (allProducts) setProducts(allProducts);
 

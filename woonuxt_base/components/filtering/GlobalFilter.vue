@@ -11,7 +11,7 @@ const TaxonomyEnum = filterSlug.toUpperCase().replace('_', '');
 
 const { data } = await useAsyncGql('getAllTerms', { taxonomies: TaxonomyEnum, hideEmpty: hideEmpty });
 
-const allPaTerms = data.value.terms?.nodes || [];
+const allPaTerms = data?.value?.terms?.nodes || [];
 const { getFilter, setFilter, isFiltersActive } = await useFiltering();
 const selectedTerms = ref(getFilter(filterSlug) || []);
 const filterTitle = ref(label || filterSlug);
