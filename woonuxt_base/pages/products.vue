@@ -1,8 +1,9 @@
 <script setup>
-const { setProducts, updateProductList, getAllProducts } = useProducts();
-const products = await getAllProducts();
+const { setProducts, updateProductList, getAllProducts, products } = useProducts();
+const allProducts = await getAllProducts();
+// const products = !process.client ? await getAllProducts() : [];
 
-if (products) setProducts(products);
+if (allProducts) setProducts(allProducts);
 
 onMounted(() => {
   updateProductList();
@@ -19,12 +20,15 @@ useHead({
     <Filters />
 
     <div class="w-full">
-      <div class="flex items-center justify-between w-full gap-4 mt-8 md:gap-8" v-if="products.length">
+      <div class="flex items-center justify-between w-full gap-4 mt-8 md:gap-8">
         <ProductResultCount />
         <OrderByDropdown class="hidden md:inline-flex" />
         <ShowFilterTrigger class="md:hidden" />
       </div>
-      <ProductGrid />
+      <Transition name="fade" mode="out-in">
+        <ProductGrid v-if="products.length" />
+        <NoProductsFound v-else />
+      </Transition>
     </div>
   </div>
 </template>

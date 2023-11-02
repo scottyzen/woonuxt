@@ -14,6 +14,11 @@ onBeforeRouteUpdate((to, from, next) => {
   }
   next();
 });
+
+watch(getSearchQuery, (value) => {
+  // If the search query is empty, clear the search query
+  if (!value) reset();
+});
 </script>
 
 <template>
