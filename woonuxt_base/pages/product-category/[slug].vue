@@ -4,7 +4,7 @@ const { setProducts, updateProductList, getAllProducts } = useProducts();
 const categorySlug = route.params.slug;
 const products = await getAllProducts(categorySlug);
 
-setProducts(products || []);
+if (products) setProducts(products);
 
 onMounted(() => {
   updateProductList();

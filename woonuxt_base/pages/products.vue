@@ -2,7 +2,7 @@
 const { setProducts, updateProductList, getAllProducts } = useProducts();
 const products = await getAllProducts();
 
-setProducts(products);
+if (products) setProducts(products);
 
 onMounted(() => {
   updateProductList();
