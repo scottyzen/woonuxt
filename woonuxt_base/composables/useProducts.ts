@@ -23,18 +23,19 @@ export function useProducts() {
    * @param {Product[]} tempArray - the array to store the products in
    * @returns {Promise<Product[]>} - an array of all products
    */
-  const getAllProducts = async (category: string = '', after: string = '', tempArray: Product[] = []): Promise<any> => {
-    console.log('getAllProducts - useProducts');
+  const getAllProducts = async (category: string = '', after: string = '', tempArray: Product[] = []): Promise<Product[]> => {
     try {
       const payload = category ? { after, slug: category } : { after };
       const { data }: any = await useAsyncGql('getProducts', payload);
       const newProducts = data?.value?.products?.nodes || [];
       tempArray = [...tempArray, ...newProducts];
+      console.log('tempArray length: ', tempArray.length);
 
       if (data?.value?.products?.pageInfo?.hasNextPage) {
-        console.log('Getting more products');
+        console.log('pageinfo: ', data.value.products.pageInfo);
         return getAllProducts(category, data.value.products.pageInfo.endCursor, tempArray);
       } else {
+        console.log('no more pages');
         return tempArray;
       }
     } catch (error) {

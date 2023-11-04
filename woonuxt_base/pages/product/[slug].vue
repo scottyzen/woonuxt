@@ -3,8 +3,9 @@ const route = useRoute();
 const { arraysEqual, formatArray, checkForVariationTypeOfAny } = useHelpers();
 const { addToCart, isUpdatingCart } = useCart();
 const { decodeURI } = useHelpers();
+const slug = route.params.slug as string;
 
-const { data } = (await useAsyncGql('getProduct', { slug: route.params.slug })) as { data: { value: { product: Product } } };
+const { data } = (await useAsyncGql('getProduct', { slug })) as { data: { value: { product: Product } } };
 const product = data?.value?.product;
 
 useHead({
