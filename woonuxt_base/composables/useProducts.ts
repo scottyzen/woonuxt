@@ -20,9 +20,9 @@ export function useProducts() {
    * @param {string} category - the category to filter by (optional)
    * @param {string} after - the cursor to start fetching from
    * @param {Product[]} tempArray - the array to store the products in
-   * @returns {Promise<Product[]>} - an array of all products
    */
-  const getAllProducts = async (category: string = '', after: string = '', tempArray: Product[] = []): Promise<Product[]> => {
+  const getAllProducts = async (category: string = '', after: string = '', tempArray: Product[] = []): Promise<any> => {
+    if (process.client) return; // only run on the server
     try {
       const payload = category ? { after, slug: category } : { after };
       const { data }: any = await useAsyncGql('getProducts', payload);
