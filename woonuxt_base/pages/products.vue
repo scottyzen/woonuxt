@@ -1,22 +1,13 @@
 <script setup>
 const { setProducts, updateProductList, getAllProducts, products } = useProducts();
 const route = useRoute();
-// const isDev = process.env.NODE_ENV === 'development';
-// const isServer = process.server;
+const isDev = process.env.NODE_ENV === 'development';
+const isServer = process.server;
 
-// console.log('isDev: ', isDev);
-// console.log('isServer: ', isServer);
-
-// if (isDev || isServer || !products.length) {
-//   const allProducts = await getAllProducts();
-//   if (allProducts.length) setProducts(allProducts);
-//   console.log('Number of Products: ', allProducts.length);
-// }
-
-// if (Object.keys(route.query).length === 0) {
-//       console.log('route.query is empty');
-//       return;
-//     }
+if (isDev || isServer) {
+  const allProducts = await getAllProducts();
+  if (allProducts.length) setProducts(allProducts);
+}
 
 const allProducts = await getAllProducts();
 if (allProducts.length) setProducts(allProducts);

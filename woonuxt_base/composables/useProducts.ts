@@ -46,13 +46,6 @@ export function useProducts() {
 
   const updateProductList = async (): Promise<void> => {
     console.log('updateProductList - useProducts');
-    // Return if the route query is an empty object
-    // if (Object.keys(route.query).length === 0) {
-    //   console.log('route.query is empty');
-    //   return;
-    // }
-
-    console.log('updateProductList: ', route.query);
 
     const { isFiltersActive, filterProducts } = await useFiltering();
     const { isSearchActive, searchProducts } = await useSearching();
