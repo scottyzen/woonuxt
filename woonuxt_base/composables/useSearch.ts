@@ -16,8 +16,10 @@ export function useSearching() {
   }
 
   function setSearchQuery(search: string): void {
+    // Only run on the client
+    if (process.server) return;
     searchQuery.value = search;
-    console.log('setSearchQuery', { query: { ...route.query, search: search || undefined } });
+    console.log('setSearchQuery', searchQuery.value);
     router.push({ query: { ...route.query, search: search || undefined } });
     setTimeout(() => {
       updateProductList();

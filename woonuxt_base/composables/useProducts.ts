@@ -3,15 +3,17 @@ let allProducts = [] as Product[];
 export function useProducts() {
   // Declare the state variables and the setter functions
   const products = useState<Product[]>('products', () => []);
+  const route = useRoute();
 
   // Set the products state and the allProducts variable
   function setProducts(newProducts: Product[]): void {
-    console.log(`setProducts: ${newProducts.length}`);
+    console.log('setProducts - useProducts');
     if (!Array.isArray(newProducts)) throw new Error('Products must be an array.');
     if (newProducts.length) {
       try {
         products.value = newProducts;
         allProducts = JSON.parse(JSON.stringify(newProducts));
+        console.log('Products set from setProducts');
       } catch (e) {
         console.log(e);
       }
@@ -25,30 +27,33 @@ export function useProducts() {
    * @param {Product[]} tempArray - the array to store the products in
    */
   const getAllProducts = async (category: string = '', after: string = '', tempArray: Product[] = []): Promise<Product[]> => {
-    const isDev = process.env.NODE_ENV === 'development';
-    const isServer = process.server;
-    console.log('getAllProducts: ', { isServer }, { isDev });
-    if (isServer || isDev) {
-      console.log('Fetching products from the server');
-      try {
-        const payload = category ? { after, slug: category } : { after };
-        const { data }: any = await useAsyncGql('getProducts', payload);
-        const newProducts = data?.value?.products?.nodes || [];
-        tempArray = [...tempArray, ...newProducts];
-        const hasMore = data?.value?.products?.pageInfo?.hasNextPage;
+    console.log('getAllProducts - useProducts');
+    try {
+      const payload = category ? { after, slug: category } : { after };
+      const { data }: any = await useAsyncGql('getProducts', payload);
+      const newProducts = data?.value?.products?.nodes || [];
+      tempArray = [...tempArray, ...newProducts];
+      const hasMore = data?.value?.products?.pageInfo?.hasNextPage;
 
-        return hasMore ? getAllProducts(category, data.value.products.pageInfo.endCursor, tempArray) : tempArray;
-      } catch (error) {
-        console.error(error);
-        return tempArray;
-      }
+      return hasMore ? getAllProducts(category, data.value.products.pageInfo.endCursor, tempArray) : tempArray;
+    } catch (error) {
+      console.error(error);
+      return tempArray;
     }
 
     return tempArray;
   };
 
   const updateProductList = async (): Promise<void> => {
-    if (!allProducts.length) return;
+    console.log('updateProductList - useProducts');
+    // Return if the route query is an empty object
+    // if (Object.keys(route.query).length === 0) {
+    //   console.log('route.query is empty');
+    //   return;
+    // }
+
+    console.log('updateProductList: ', route.query);
+
     const { isFiltersActive, filterProducts } = await useFiltering();
     const { isSearchActive, searchProducts } = await useSearching();
     const { isSortingActive, sortProducts } = await useSorting();
@@ -65,8 +70,6 @@ export function useProducts() {
       if (isFiltersActive.value) newProducts = await filterProducts(newProducts);
       if (isSearchActive.value) newProducts = await searchProducts(newProducts);
       if (isSortingActive.value) newProducts = await sortProducts(newProducts);
-
-      console.log('updateProductList: ', newProducts.length);
 
       products.value = newProducts;
     } catch (error) {

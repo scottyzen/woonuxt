@@ -8,7 +8,7 @@ const allProducts = await getAllProducts(categorySlug);
 if (allProducts) setProducts(allProducts);
 
 onMounted(() => {
-  updateProductList();
+  if (Object.keys(route.query).length) updateProductList();
 });
 
 useHead({

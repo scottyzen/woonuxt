@@ -1,23 +1,28 @@
 <script setup>
 const { setProducts, updateProductList, getAllProducts, products } = useProducts();
-const isDev = process.env.NODE_ENV === 'development';
-const isServer = process.server;
+const route = useRoute();
+// const isDev = process.env.NODE_ENV === 'development';
+// const isServer = process.server;
 
-console.log('isDev: ', isDev);
-console.log('isServer: ', isServer);
+// console.log('isDev: ', isDev);
+// console.log('isServer: ', isServer);
 
-if (isDev || isServer || !products.length) {
-  const allProducts = await getAllProducts();
-  console.log('Number of Products: ', allProducts.length);
-  if (allProducts.length) setProducts(allProducts);
-}
+// if (isDev || isServer || !products.length) {
+//   const allProducts = await getAllProducts();
+//   if (allProducts.length) setProducts(allProducts);
+//   console.log('Number of Products: ', allProducts.length);
+// }
 
-// const allProducts = await getAllProducts();
-// console.log('products.vue: ', allProducts.length);
-// if (allProducts.length) setProducts(allProducts);
+// if (Object.keys(route.query).length === 0) {
+//       console.log('route.query is empty');
+//       return;
+//     }
+
+const allProducts = await getAllProducts();
+if (allProducts.length) setProducts(allProducts);
 
 onMounted(() => {
-  updateProductList();
+  if (Object.keys(route.query).length) updateProductList();
 });
 
 useHead({
