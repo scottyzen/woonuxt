@@ -22,22 +22,26 @@ export function useProducts() {
    * @param {Product[]} tempArray - the array to store the products in
    */
   const getAllProducts = async (category: string = '', after: string = '', tempArray: Product[] = []): Promise<Product[]> => {
-    try {
-      const payload = category ? { after, slug: category } : { after };
-      const { data }: any = await useAsyncGql('getProducts', payload);
-      const newProducts = data?.value?.products?.nodes || [];
-      tempArray = [...tempArray, ...newProducts];
+    const isDev = process.env.NODE_ENV === 'development';
+    const isServer = process.server;
+    console.log('getAllProducts', process.client, isServer, isDev);
+    if (isServer || isDev) {
+      console.log('Fetching products from the server');
+      try {
+        const payload = category ? { after, slug: category } : { after };
+        const { data }: any = await useAsyncGql('getProducts', payload);
+        const newProducts = data?.value?.products?.nodes || [];
+        tempArray = [...tempArray, ...newProducts];
+        const hasMore = data?.value?.products?.pageInfo?.hasNextPage;
 
-      if (data?.value?.products?.pageInfo?.hasNextPage) {
-        if (category) return getAllProducts(category, data.value.products.pageInfo.endCursor, tempArray);
-        return getAllProducts(category, data.value.products.pageInfo.endCursor, tempArray);
-      } else {
+        return hasMore ? getAllProducts(category, data.value.products.pageInfo.endCursor, tempArray) : tempArray;
+      } catch (error) {
+        console.error(error);
         return tempArray;
       }
-    } catch (error) {
-      console.error(error);
-      return tempArray;
     }
+
+    return tempArray;
   };
 
   const updateProductList = async (): Promise<void> => {

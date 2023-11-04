@@ -1,11 +1,9 @@
 <script setup>
 const { setProducts, updateProductList, getAllProducts, products } = useProducts();
-const isDev = process.env.NODE_ENV === 'development';
 
-if (isDev || !process.client) {
-  const allProducts = await getAllProducts();
-  if (allProducts) setProducts(allProducts);
-}
+const allProducts = await getAllProducts();
+console.log('Number of Products: ', allProducts.length);
+if (allProducts.length) setProducts(allProducts);
 
 onMounted(() => {
   updateProductList();
