@@ -1,6 +1,5 @@
 <script setup>
-const { setProducts, updateProductList, getAllProducts, products } = useProducts();
-const route = useRoute();
+const { setProducts, getAllProducts, products } = useProducts();
 const isDev = process.env.NODE_ENV === 'development';
 const isServer = process.server;
 
@@ -8,13 +7,6 @@ if (isDev || isServer) {
   const allProducts = await getAllProducts();
   if (allProducts.length) setProducts(allProducts);
 }
-
-const allProducts = await getAllProducts();
-if (allProducts.length) setProducts(allProducts);
-
-onMounted(() => {
-  if (Object.keys(route.query).length) updateProductList();
-});
 
 useHead({
   title: 'Products',

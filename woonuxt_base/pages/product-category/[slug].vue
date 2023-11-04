@@ -1,15 +1,14 @@
 <script setup>
-const { setProducts, updateProductList, getAllProducts, products } = useProducts();
+const { setProducts, getAllProducts, products } = useProducts();
 const route = useRoute();
 const categorySlug = route.params.slug;
+const isDev = process.env.NODE_ENV === 'development';
+const isServer = process.server;
 
-const allProducts = await getAllProducts(categorySlug);
-
-if (allProducts) setProducts(allProducts);
-
-onMounted(() => {
-  if (Object.keys(route.query).length) updateProductList();
-});
+if (isDev || isServer) {
+  const allProducts = await getAllProducts(categorySlug);
+  if (allProducts.length) setProducts(allProducts);
+}
 
 useHead({
   title: 'Products',

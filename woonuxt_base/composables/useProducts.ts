@@ -25,6 +25,7 @@ export function useProducts() {
    * @param {string} category - the category to filter by (optional)
    * @param {string} after - the cursor to start fetching from
    * @param {Product[]} tempArray - the array to store the products in
+   * @returns {Promise<Product[]>} - an array of all products
    */
   const getAllProducts = async (category: string = '', after: string = '', tempArray: Product[] = []): Promise<Product[]> => {
     console.log('getAllProducts - useProducts');
@@ -40,8 +41,6 @@ export function useProducts() {
       console.error(error);
       return tempArray;
     }
-
-    return tempArray;
   };
 
   const updateProductList = async (): Promise<void> => {

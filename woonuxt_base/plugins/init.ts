@@ -3,6 +3,13 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
   if (process.client) {
     const { clearAllCookies } = useHelpers();
+    const route = useRoute();
+    const { updateProductList } = useProducts();
+
+    onMounted(() => {
+      if (Object.keys(route.query).length) updateProductList();
+    });
+
     const sessionToken = useCookie('woocommerce-session');
     if (sessionToken.value) useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken.value}` });
 
