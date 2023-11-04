@@ -1,11 +1,13 @@
 <script setup>
 const { setProducts, getAllProducts, updateProductList, products } = useProducts();
-const route = useRoute();
+const { isQueryEmpty } = useHelpers();
+
 const allProducts = await getAllProducts();
-if (allProducts) setProducts(allProducts);
+console.log('product.vue allProducts', allProducts.length);
+if (allProducts.length) setProducts(allProducts);
 
 onMounted(() => {
-  if (Object.keys(route.query).length) updateProductList();
+  if (!isQueryEmpty.value) updateProductList();
 });
 
 useHead({

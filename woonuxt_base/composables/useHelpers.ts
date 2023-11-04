@@ -1,5 +1,6 @@
 // A collection of helper functions.
 export function useHelpers() {
+  const route = useRoute();
   const isShowingMobileMenu = useState<boolean>('isShowingMobileMenu', () => false);
 
   function toggleMobileMenu(state: boolean | undefined = undefined) {
@@ -79,8 +80,11 @@ export function useHelpers() {
 
   const decodeURI = (str: string): string => decodeURIComponent(str);
 
+  const isQueryEmpty = computed(() => Object.keys(route.query).length === 0);
+
   return {
     isShowingMobileMenu,
+    isQueryEmpty,
     formatArray,
     arraysEqual,
     clearAllCookies,

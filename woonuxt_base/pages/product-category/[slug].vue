@@ -1,5 +1,6 @@
 <script setup>
 const { setProducts, getAllProducts, updateProductList, products } = useProducts();
+const { isQueryEmpty } = useHelpers();
 const route = useRoute();
 const categorySlug = route.params.slug;
 
@@ -7,7 +8,7 @@ const allProducts = await getAllProducts(categorySlug);
 if (allProducts) setProducts(allProducts);
 
 onMounted(() => {
-  if (Object.keys(route.query).length) updateProductList();
+  if (!isQueryEmpty.value) updateProductList();
 });
 
 useHead({

@@ -23,7 +23,7 @@ export function useProducts() {
    * @param {Product[]} tempArray - the array to store the products in
    * @returns {Promise<Product[]>} - an array of all products
    */
-  const getAllProducts = async (category: string = '', after: string = '', tempArray: Product[] = []): Promise<Product[]> => {
+  const getAllProducts = async (category: string = '', after: string = '', tempArray: Product[] = []): Promise<any> => {
     console.log('getAllProducts - useProducts');
     try {
       const payload = category ? { after, slug: category } : { after };
