@@ -24,7 +24,7 @@ export function useProducts() {
   const getAllProducts = async (category: string = '', after: string = '', tempArray: Product[] = []): Promise<Product[]> => {
     const isDev = process.env.NODE_ENV === 'development';
     const isServer = process.server;
-    console.log('getAllProducts', process.client, isServer, isDev);
+    console.log('getAllProducts', { isServer }, { isDev });
     if (isServer || isDev) {
       console.log('Fetching products from the server');
       try {
