@@ -6,12 +6,15 @@ export function useProducts() {
 
   // Set the products state and the allProducts variable
   function setProducts(newProducts: Product[]): void {
+    console.log(`setProducts: ${newProducts.length}`);
     if (!Array.isArray(newProducts)) throw new Error('Products must be an array.');
-    try {
-      products.value = newProducts;
-      allProducts = JSON.parse(JSON.stringify(newProducts));
-    } catch (e) {
-      console.log(e);
+    if (newProducts.length) {
+      try {
+        products.value = newProducts;
+        allProducts = JSON.parse(JSON.stringify(newProducts));
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 
@@ -24,7 +27,7 @@ export function useProducts() {
   const getAllProducts = async (category: string = '', after: string = '', tempArray: Product[] = []): Promise<Product[]> => {
     const isDev = process.env.NODE_ENV === 'development';
     const isServer = process.server;
-    console.log('getAllProducts', { isServer }, { isDev });
+    console.log('getAllProducts: ', { isServer }, { isDev });
     if (isServer || isDev) {
       console.log('Fetching products from the server');
       try {
@@ -45,6 +48,7 @@ export function useProducts() {
   };
 
   const updateProductList = async (): Promise<void> => {
+    if (!allProducts.length) return;
     const { isFiltersActive, filterProducts } = await useFiltering();
     const { isSearchActive, searchProducts } = await useSearching();
     const { isSortingActive, sortProducts } = await useSorting();
@@ -61,6 +65,8 @@ export function useProducts() {
       if (isFiltersActive.value) newProducts = await filterProducts(newProducts);
       if (isSearchActive.value) newProducts = await searchProducts(newProducts);
       if (isSortingActive.value) newProducts = await sortProducts(newProducts);
+
+      console.log('updateProductList: ', newProducts.length);
 
       products.value = newProducts;
     } catch (error) {

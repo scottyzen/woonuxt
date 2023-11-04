@@ -3,11 +3,18 @@ const { setProducts, updateProductList, getAllProducts, products } = useProducts
 const isDev = process.env.NODE_ENV === 'development';
 const isServer = process.server;
 
-if (isDev || isServer) {
+console.log('isDev: ', isDev);
+console.log('isServer: ', isServer);
+
+if (isDev || isServer || !products.length) {
   const allProducts = await getAllProducts();
   console.log('Number of Products: ', allProducts.length);
   if (allProducts.length) setProducts(allProducts);
 }
+
+// const allProducts = await getAllProducts();
+// console.log('products.vue: ', allProducts.length);
+// if (allProducts.length) setProducts(allProducts);
 
 onMounted(() => {
   updateProductList();
