@@ -6,7 +6,6 @@ export function useProducts() {
 
   // Set the products state and the allProducts variable
   function setProducts(newProducts: Product[]): void {
-    console.log('setProducts - useProducts');
     if (!Array.isArray(newProducts)) throw new Error('Products must be an array.');
     try {
       products.value = newProducts;
@@ -24,16 +23,21 @@ export function useProducts() {
    * @returns {Promise<Product[]>} - an array of all products
    */
   const getAllProducts = async (category: string = '', after: string = '', tempArray: Product[] = []): Promise<Product[]> => {
+    // Check if products are already set
+    if (products.value.length) return products.value;
+
     try {
       const payload = category ? { after, slug: category } : { after };
       const { data }: any = await useAsyncGql('getProducts', payload);
       const newProducts = data?.value?.products?.nodes || [];
       tempArray = [...tempArray, ...newProducts];
-      console.log('tempArray length: ', tempArray.length);
 
-      if (data?.value?.products?.pageInfo?.hasNextPage) {
-        console.log('pageinfo: ', data.value.products.pageInfo);
-        return getAllProducts(category, data.value.products.pageInfo.endCursor, tempArray);
+      const hasNextPage = data?.value?.products?.pageInfo?.hasNextPage;
+      const endCursor = data?.value?.products?.pageInfo?.endCursor;
+
+      if (hasNextPage) {
+        console.log({ hasNextPage }, { endCursor });
+        return getAllProducts(category, endCursor, tempArray);
       } else {
         console.log('no more pages');
         return tempArray;

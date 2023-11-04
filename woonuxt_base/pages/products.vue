@@ -3,10 +3,7 @@ const { setProducts, getAllProducts, updateProductList, products } = useProducts
 const { isQueryEmpty } = useHelpers();
 
 const allProducts = await getAllProducts();
-if (allProducts) {
-  setProducts(allProducts);
-  console.log(`products.vue - Number of products: ${allProducts.length}`);
-}
+if (allProducts) setProducts(allProducts);
 
 onMounted(() => {
   if (!isQueryEmpty.value) updateProductList();
