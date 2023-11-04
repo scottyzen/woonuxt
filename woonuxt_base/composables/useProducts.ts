@@ -3,20 +3,16 @@ let allProducts = [] as Product[];
 export function useProducts() {
   // Declare the state variables and the setter functions
   const products = useState<Product[]>('products', () => []);
-  const route = useRoute();
 
   // Set the products state and the allProducts variable
   function setProducts(newProducts: Product[]): void {
     console.log('setProducts - useProducts');
     if (!Array.isArray(newProducts)) throw new Error('Products must be an array.');
-    if (newProducts.length) {
-      try {
-        products.value = newProducts;
-        allProducts = JSON.parse(JSON.stringify(newProducts));
-        console.log('Products set from setProducts');
-      } catch (e) {
-        console.log(e);
-      }
+    try {
+      products.value = newProducts;
+      allProducts = JSON.parse(JSON.stringify(newProducts));
+    } catch (e) {
+      console.log(e);
     }
   }
 
@@ -34,9 +30,13 @@ export function useProducts() {
       const { data }: any = await useAsyncGql('getProducts', payload);
       const newProducts = data?.value?.products?.nodes || [];
       tempArray = [...tempArray, ...newProducts];
-      const hasMore = data?.value?.products?.pageInfo?.hasNextPage;
 
-      return hasMore ? getAllProducts(category, data.value.products.pageInfo.endCursor, tempArray) : tempArray;
+      if (data?.value?.products?.pageInfo?.hasNextPage) {
+        console.log('Getting more products');
+        return getAllProducts(category, data.value.products.pageInfo.endCursor, tempArray);
+      } else {
+        return tempArray;
+      }
     } catch (error) {
       console.error(error);
       return tempArray;

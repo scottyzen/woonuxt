@@ -1,17 +1,17 @@
 <script setup>
-const { setProducts, getAllProducts, products } = useProducts();
+const { setProducts, getAllProducts, updateProductList, products } = useProducts();
 const route = useRoute();
 const categorySlug = route.params.slug;
-const isDev = process.env.NODE_ENV === 'development';
-const isServer = process.server;
 
-if (isDev || isServer) {
-  const allProducts = await getAllProducts(categorySlug);
-  if (allProducts.length) setProducts(allProducts);
-}
+const allProducts = await getAllProducts(categorySlug);
+if (allProducts) setProducts(allProducts);
+
+onMounted(() => {
+  if (Object.keys(route.query).length) updateProductList();
+});
 
 useHead({
-  title: 'Products',
+  title: 'Products - ' + categorySlug,
   meta: [{ hid: 'description', name: 'description', content: 'Products' }],
 });
 </script>

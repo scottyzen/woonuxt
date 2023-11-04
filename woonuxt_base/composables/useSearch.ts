@@ -16,10 +16,7 @@ export function useSearching() {
   }
 
   function setSearchQuery(search: string): void {
-    // Only run on the client
-    if (process.server) return;
     searchQuery.value = search;
-    console.log('setSearchQuery', searchQuery.value);
     router.push({ query: { ...route.query, search: search || undefined } });
     setTimeout(() => {
       updateProductList();
@@ -38,17 +35,6 @@ export function useSearching() {
     isShowingSearch.value = !isShowingSearch.value;
   };
 
-  // pages.push({
-  //   name: 'product-page-pager',
-  //   path: '/products/page/:pageNumber',
-  //   file: resolve('./pages/products.vue'),
-  // });
-  // pages.push({
-  //   name: 'product-category-page',
-  //   path: '/product-category/:categorySlug',
-  //   // file: resolve('./pages/products.vue'),
-  //   file: resolve('./pages/product-category/[slug].vue'),
-  // });
   function searchProducts(products: Product[]): Product[] {
     const currentRouteName = route.name || 'products'; // Default to products
 
