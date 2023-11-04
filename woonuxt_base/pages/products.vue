@@ -1,9 +1,11 @@
 <script setup>
 const { setProducts, updateProductList, getAllProducts, products } = useProducts();
+const isDev = process.env.NODE_ENV === 'development';
 
-const allProducts = await getAllProducts();
-
-if (allProducts) setProducts(allProducts);
+if (isDev || !process.client) {
+  const allProducts = await getAllProducts();
+  if (allProducts) setProducts(allProducts);
+}
 
 onMounted(() => {
   updateProductList();
