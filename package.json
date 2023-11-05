@@ -20,7 +20,7 @@
     "@nuxtjs/i18n": "^8.0.0-rc.4",
     "@nuxtjs/tailwindcss": "^6.9.4",
     "@tailwindcss/typography": "^0.5.10",
-    "eslint": "^8.52.0",
+    "eslint": "^8.53.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-nuxt": "^4.0.0",
