@@ -120,9 +120,7 @@ async function addComment() {
               <div v-if="successMessage" class="my-4 text-sm text-green-500" v-html="successMessage"></div>
             </Transition>
             <div class="w-full col-span-full text-center mt-3">
-              <button
-                class="flex gap-4 font-bold justify-center items-center transition font-semibold rounded-md w-full p-2 bg-amber-300 text-amber-900 hover:bg-amber-400"
-                type="submit">
+              <button class="flex gap-4 justify-center items-center transition font-semibold rounded-md w-full p-2 bg-amber-300 text-amber-900 hover:bg-amber-400" type="submit">
                 <LoadingIcon v-if="isPending" stroke="4" size="16" color="#78350F" />
                 <span>{{ $t('messages.shop.submit') }}</span>
               </button>

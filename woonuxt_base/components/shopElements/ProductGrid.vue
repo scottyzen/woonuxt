@@ -28,7 +28,7 @@ const page = ref(parseInt(route.params.pageNumber as string) || 1);
 }
 
 .shrink-move {
-  transition: all 500ms;
+  transition: all 400ms;
 }
 
 .shrink-leave-active {
@@ -39,8 +39,8 @@ const page = ref(parseInt(route.params.pageNumber as string) || 1);
 
 .shrink-enter-active {
   transition:
-    opacity 500ms ease-out 250ms,
-    transform 500ms ease-out;
+    opacity 400ms ease-out 200ms,
+    transform 400ms ease-out;
   will-change: opacity, transform;
 }
 

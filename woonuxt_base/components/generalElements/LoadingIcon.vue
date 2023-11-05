@@ -2,7 +2,7 @@
 const props = defineProps({
   size: { default: '20', type: String || Number },
   color: { default: '#4B5563', type: String },
-  speed: { default: '300ms', type: String },
+  speed: { default: '250ms', type: String },
   stroke: { default: '2.5', type: String || Number },
 });
 </script>

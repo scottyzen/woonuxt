@@ -37,13 +37,3 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
     </div>
   </div>
 </template>
-
-<style scoped>
-section {
-  background: linear-gradient(#fff, #ececf1);
-}
-
-.shrink-move {
-  transition: all 500ms;
-}
-</style>

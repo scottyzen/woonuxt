@@ -59,7 +59,7 @@ select {
 .slide-from-right-enter-active,
 .slide-from-left-leave-active,
 .slide-from-left-enter-active {
-  transition: transform 400ms ease-in-out;
+  transition: transform 300ms ease-in-out;
 }
 
 .slide-from-right-enter-from,
@@ -75,7 +75,7 @@ select {
 /* Fade */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 400ms ease-in-out;
+  transition: opacity 300ms ease-in-out;
 }
 
 .fade-enter-from,
@@ -150,7 +150,7 @@ select {
 
 .page-enter-active,
 .page-leave-active {
-  transition: opacity 250ms;
+  transition: opacity 20ms;
 }
 
 .page-enter,
@@ -159,7 +159,7 @@ select {
 }
 
 .page-enter-active {
-  animation-duration: 250ms;
+  animation-duration: 200ms;
   animation-name: fadeIn;
   animation-timing-function: linear;
   backface-visibility: hidden;
@@ -167,6 +167,6 @@ select {
 
 .page-leave-active {
   animation-name: fadeOut;
-  animation-duration: 0.25s;
+  animation-duration: 200ms;
 }
 </style>

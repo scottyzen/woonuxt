@@ -200,15 +200,4 @@ const checkEmailOnInput = (email) => {
 .checkout-form .StripeElement {
   padding: 1rem 0.75rem;
 }
-
-.fadeUp-enter-active,
-.fadeUp-leave-active {
-  transition: all 300ms;
-}
-
-.fadeUp-enter,
-.fadeUp-leave-active {
-  opacity: 0;
-  transform: translateY(10px);
-}
 </style>
