@@ -1,11 +1,11 @@
 <script setup>
-const { setProducts, getAllProducts, updateProductList, products } = useProducts();
+const { setProducts, updateProductList, products } = useProducts();
 const { isQueryEmpty } = useHelpers();
 const route = useRoute();
-const categorySlug = route.params.slug;
+const slug = route.params.slug;
 
-const allProducts = await getAllProducts(categorySlug);
-if (allProducts) setProducts(allProducts);
+const { data } = await useAsyncGql('getProducts', { slug });
+setProducts(data.value?.products?.nodes || []);
 
 onMounted(() => {
   if (!isQueryEmpty.value) updateProductList();

@@ -1,9 +1,9 @@
 <script setup>
-const { setProducts, getAllProducts, updateProductList, products } = useProducts();
+const { setProducts, updateProductList, products } = useProducts();
 const { isQueryEmpty } = useHelpers();
 
-const allProducts = await getAllProducts();
-if (allProducts) setProducts(allProducts);
+const { data } = await useAsyncGql('getProducts');
+setProducts(data.value?.products?.nodes || []);
 
 onMounted(() => {
   if (!isQueryEmpty.value) updateProductList();

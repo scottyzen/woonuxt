@@ -15,42 +15,7 @@ export function useProducts() {
     }
   }
 
-  /**
-   * get all products from the api, it's a recursive function that will fetch all products
-   * @param {string} category - the category to filter by (optional)
-   * @param {string} after - the cursor to start fetching from
-   * @param {Product[]} tempArray - the array to store the products in
-   * @returns {Promise<Product[]>} - an array of all products
-   */
-  const getAllProducts = async (category: string = '', after: string = '', tempArray: Product[] = []): Promise<Product[]> => {
-    // Check if products are already set
-    if (products.value.length) return products.value;
-
-    try {
-      const payload = category ? { after, slug: category } : { after };
-      const { data }: any = await useAsyncGql('getProducts', payload);
-      const newProducts = data?.value?.products?.nodes || [];
-      tempArray = [...tempArray, ...newProducts];
-
-      const hasNextPage = data?.value?.products?.pageInfo?.hasNextPage;
-      const endCursor = data?.value?.products?.pageInfo?.endCursor;
-
-      if (hasNextPage) {
-        console.log({ hasNextPage }, { endCursor });
-        return getAllProducts(category, endCursor, tempArray);
-      } else {
-        console.log('no more pages');
-        return tempArray;
-      }
-    } catch (error) {
-      console.error(error);
-      return tempArray;
-    }
-  };
-
   const updateProductList = async (): Promise<void> => {
-    console.log('updateProductList - useProducts');
-
     const { isFiltersActive, filterProducts } = await useFiltering();
     const { isSearchActive, searchProducts } = await useSearching();
     const { isSortingActive, sortProducts } = await useSorting();
@@ -74,5 +39,5 @@ export function useProducts() {
     }
   };
 
-  return { products, allProducts, setProducts, updateProductList, getAllProducts };
+  return { products, allProducts, setProducts, updateProductList };
 }
