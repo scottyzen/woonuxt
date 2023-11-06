@@ -26,7 +26,11 @@ const mainImage = computed(() => props.node?.image?.sourceUrl);
 
 const colorVariableImage = computed(() => {
   if (paColor.value.length) {
-    const activeColorImage = props.node?.variations?.nodes.filter((variation) => paColor.value.some((color) => variation.slug.includes(color)));
+    const activeColorImage = props.node?.variations?.nodes.filter((variation) => {
+      const hasMatchingAttributes = variation.attributes.nodes.some((attribute) => paColor.value.some((color) => attribute.value.includes(color)));
+      const hasMatchingSlug = paColor.value.some((color) => variation.slug.includes(color));
+      return hasMatchingAttributes || hasMatchingSlug;
+    });
     if (activeColorImage && activeColorImage.length) {
       return activeColorImage[0].image?.sourceUrl;
     }
