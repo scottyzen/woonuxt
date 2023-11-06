@@ -12,7 +12,7 @@ onMounted(() => {
 });
 
 useHead({
-  title: 'Products - ' + categorySlug,
+  title: 'Products',
   meta: [{ hid: 'description', name: 'description', content: 'Products' }],
 });
 </script>

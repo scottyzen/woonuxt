@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import WPAdminLink from '../WPAdminLink.vue';
-
 const route = useRoute();
 const { arraysEqual, formatArray, checkForVariationTypeOfAny } = useHelpers();
 const { addToCart, isUpdatingCart } = useCart();
@@ -66,7 +64,7 @@ const updateSelectedVariations = (variations: Variation[]): void => {
       <div class="md:max-w-md md:py-2">
         <div class="flex justify-between mb-4">
           <div class="flex-1">
-            <h1 class="mb-2 text-2xl font-sesmibold flex items-center">
+            <h1 class="mb-2 text-2xl font-sesmibold flex items-center flex-wrap gap-2">
               {{ type.name }}
               <WPAdminLink :link="`/wp-admin/post.php?post=${product.databaseId}&action=edit`">Edit</WPAdminLink>
             </h1>
