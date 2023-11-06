@@ -1,7 +1,6 @@
 import pkg from './package.json';
 import { createResolver } from '@nuxt/kit';
 const { resolve } = createResolver(import.meta.url);
-const isDev = process.env.NODE_ENV === 'development';
 
 export default defineNuxtConfig({
   app: {
