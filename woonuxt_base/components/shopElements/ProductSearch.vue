@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeRouteUpdate } from 'nuxt/app';
+import { onBeforeRouteUpdate } from '#imports';
 const { getSearchQuery, setSearchQuery, clearSearchQuery, searchProducts, isSearchActive } = useSearching();
 const searchQuery = ref(getSearchQuery());
 
