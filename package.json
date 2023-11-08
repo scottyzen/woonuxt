@@ -27,7 +27,7 @@
     "eslint-plugin-prettier": "^5.0.1",
     "nuxt": "^3.8.1",
     "nuxt-graphql-client": "^0.2.31",
-    "nuxt-icon": "^0.5.0",
+    "nuxt-icon": "^0.6.5",
     "prettier": "^3.0.3",
     "vue-stripe-js": "^1.0.1",
     "woonuxt-settings": "^1.0.46"
