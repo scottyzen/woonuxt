@@ -1,12 +1,11 @@
 <script lang="ts" setup>
 const { data } = await useAsyncGql('getProductCategories', { first: 6 });
 const productCategories = data.value?.productCategories?.nodes || [];
-const runtimeConfig = useRuntimeConfig();
 
 useHead({
   title: `Home | WooNuxt`,
   meta: [{ name: 'description', content: 'The best ecommerce store in the world' }],
-  link: [{ rel: 'canonical', href: runtimeConfig?.public?.FRONT_END_URL }],
+  link: [{ rel: 'canonical', href: 'https://v3.woonuxt.com/' }],
 });
 </script>
 

@@ -113,8 +113,7 @@ export function useCheckout() {
 
       // PayPal redirect
       if ((await checkout?.redirect) && orderInput.value.paymentMethod === 'paypal') {
-        const runtimeConfig = useRuntimeConfig();
-        const frontEndUrl = runtimeConfig?.public?.FRONT_END_URL;
+        const frontEndUrl = window.location.origin;
         let redirectUrl = checkout?.redirect || '';
 
         const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}`;
@@ -134,6 +133,12 @@ export function useCheckout() {
     } catch (error: any) {
       const errorMessage = error?.gqlErrors?.[0].message;
       isProcessingOrder.value = false;
+
+      if (errorMessage?.includes('An account is already registered with your email address')) {
+        alert('An account is already registered with your email address');
+        return null;
+      }
+
       alert(errorMessage);
       return null;
     }
