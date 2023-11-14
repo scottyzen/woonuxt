@@ -19,9 +19,9 @@ interface MetaDataInput {
 }
 
 interface CreateAccountInput {
-  password: string;
-  username: string;
-  email: string;
+  password?: string;
+  username?: string;
+  email?: string;
 }
 
 interface Customer {

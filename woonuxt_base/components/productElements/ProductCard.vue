@@ -13,6 +13,13 @@ const imgHeight = 385;
 const filterQuery = ref(route.query.filter);
 const paColor = ref(filterQuery.value?.split('pa_color[')[1]?.split(']')[0]?.split(',') || []);
 
+// 4 on desktop, 3 on tablet, 2 on mobile
+const numberOfImagesInsideOfView = computed(() => {
+  if (window && window.innerWidth >= 1024) return 4;
+  if (window && window.innerWidth >= 768) return 3;
+  return 2;
+});
+
 // watch filterQuery
 watch(
   () => route.query,
@@ -47,7 +54,7 @@ const colorVariableImage = computed(() => {
       :src="colorVariableImage"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
-      :loading="index <= 1 ? 'eager' : 'lazy'" />
+      :loading="index <= numberOfImagesInsideOfView ? 'eager' : 'lazy'" />
     <NuxtImg
       v-else-if="mainImage"
       :width="imgWidth"
@@ -55,7 +62,7 @@ const colorVariableImage = computed(() => {
       :src="mainImage"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
-      :loading="index <= 1 ? 'eager' : 'lazy'"
+      :loading="index <= numberOfImagesInsideOfView ? 'eager' : 'lazy'"
       fit="outside"
       format="webp"
       densities="x1 x2" />

@@ -8,7 +8,8 @@
     "preview": "nuxi preview",
     "postinstall": "nuxi prepare",
     "lint": "eslint --fix --ext .vue,.ts,.tsx,.js,.mjs .",
-    "pretty": "prettier --write ."
+    "pretty": "prettier --write .",
+    "preview-static": "nuxi generate && npx serve .output/public"
   },
   "dependencies": {
     "@stripe/stripe-js": "^2.1.11",
@@ -27,8 +28,8 @@
     "eslint-plugin-prettier": "^5.0.1",
     "nuxt": "^3.8.1",
     "nuxt-graphql-client": "^0.2.31",
-    "nuxt-icon": "^0.6.5",
-    "prettier": "^3.0.3",
+    "nuxt-icon": "^0.6.6",
+    "prettier": "^3.1.0",
     "vue-stripe-js": "^1.0.1",
     "woonuxt-settings": "^1.0.46"
   }

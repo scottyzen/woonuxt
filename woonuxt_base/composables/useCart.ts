@@ -4,7 +4,7 @@
  */
 
 export function useCart() {
-  const cart = useState<Cart>('cart');
+  const cart = useState<Cart | null>('cart');
   const isShowingCart = useState<boolean>('isShowingCart', () => false);
   const isUpdatingCart = useState<boolean>('isUpdatingCart', () => false);
   const isUpdatingCoupon = useState<boolean>('isUpdatingCoupon', () => false);
@@ -12,8 +12,9 @@ export function useCart() {
 
   // Refesh the cart from the server
   async function refreshCart() {
-    try {
-      const { cart, customer, viewer, paymentGateways } = await GqlGetCart();
+    const { data, error } = await useAsyncGql('getCart', {}, { lazy: true, deep: false });
+    if (!error) {
+      const { cart, customer, viewer, paymentGateways } = data.value;
 
       const { updateCustomer, updateViewer } = useAuth();
       if (cart) updateCart(cart);
@@ -22,11 +23,7 @@ export function useCart() {
       if (paymentGateways) updatePaymentGateways(paymentGateways.nodes);
 
       return cart;
-    } catch (error: any) {
-      console.error(error);
     }
-
-    return null;
   }
 
   function updateCart(payload: Cart): void {
