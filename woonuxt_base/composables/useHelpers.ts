@@ -53,14 +53,19 @@ export function useHelpers() {
     return (query.length > 2 ? query + '&' : '?') + (newval ? param + '=' + newval : '');
   }
 
-  function toggleBodyClass(className: string): void {
-    const body = document.querySelector('body');
-    body?.classList.contains(className) ? body.classList.remove(className) : body?.classList.add(className);
-  }
-
   function removeBodyClass(className: string): void {
     const body = document.querySelector('body');
     body?.classList.remove(className);
+  }
+
+  function addBodyClass(className: string): void {
+    const body = document.querySelector('body');
+    body?.classList.add(className);
+  }
+
+  function toggleBodyClass(className: string): void {
+    const body = document.querySelector('body');
+    body?.classList.contains(className) ? body.classList.remove(className) : body?.classList.add(className);
   }
 
   const checkForVariationTypeOfAny = (product: Product): number[] => {
@@ -82,6 +87,14 @@ export function useHelpers() {
 
   const isQueryEmpty = computed(() => Object.keys(route.query).length === 0);
 
+  const formatDate = (date: string): string => {
+    return new Date(date).toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  };
+
   return {
     isShowingMobileMenu,
     isQueryEmpty,
@@ -89,10 +102,12 @@ export function useHelpers() {
     arraysEqual,
     clearAllCookies,
     replaceQueryParam,
-    toggleBodyClass,
+    addBodyClass,
     removeBodyClass,
+    toggleBodyClass,
     toggleMobileMenu,
     checkForVariationTypeOfAny,
     decodeURI,
+    formatDate,
   };
 }

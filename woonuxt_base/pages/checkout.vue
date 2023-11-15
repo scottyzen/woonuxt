@@ -116,7 +116,7 @@ const checkEmailOnInput = (email) => {
           </label>
 
           <Transition name="scale-y" mode="out-in">
-            <div v-if="orderInput.shipToDifferentAddress">
+            <div v-show="orderInput.shipToDifferentAddress">
               <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.general.shippingDetails') }}</h2>
               <ShippingDetails v-model="customer.shipping" />
             </div>
@@ -135,7 +135,7 @@ const checkEmailOnInput = (email) => {
 
             <Transition name="scale-y" mode="out-in">
               <StripeElements
-                v-if="orderInput.paymentMethod == 'stripe'"
+                v-show="orderInput.paymentMethod == 'stripe'"
                 v-slot="{ elements, instance }"
                 ref="elms"
                 :stripe-key="stripeKey"
@@ -161,14 +161,9 @@ const checkEmailOnInput = (email) => {
 
         <OrderSummary>
           <button
-            class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md disabled:cursor-not-allowed disabled:opacity-50"
-            :class="{
-              'bg-[#EAB434] hover:bg-[#EAB434]': orderInput.paymentMethod === 'paypal',
-              'bg-primary hover:bg-primary-dark': orderInput.paymentMethod !== 'paypal',
-            }"
+            class="flex items-center bg-primary hover:bg-primary-dark justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md disabled:cursor-not-allowed disabled:opacity-50"
             :disabled="isCheckoutDisabled">
-            <NuxtImg v-if="orderInput.paymentMethod === 'paypal'" src="/images/paypal.svg" alt="PayPal" height="24px" class="h-[24px]" />
-            <span v-else>{{ buttonText }}</span>
+            {{ buttonText }}
             <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
           </button>
         </OrderSummary>
@@ -177,7 +172,7 @@ const checkEmailOnInput = (email) => {
   </div>
 </template>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
 .checkout-form input[type='text'],
 .checkout-form input[type='email'],
 .checkout-form input[type='tel'],
