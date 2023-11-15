@@ -18,7 +18,7 @@ const removeItem = () => {
 
 <template>
   <SwipeCard @remove="removeItem">
-    <li v-if="productType" class="flex items-center gap-4">
+    <li v-if="productType" class="flex items-center gap-3">
       <NuxtLink :to="`/product/${decodeURI(productType.slug)}`">
         <img
           v-if="productType.image"
@@ -43,7 +43,6 @@ const removeItem = () => {
         <NuxtLink class="leading-tight" :to="`/product/${decodeURI(productType.slug)}`">{{ productType.name }}</NuxtLink>
         <ProductPrice class="mt-1 text-xs" :sale-price="productType.salePrice" :regular-price="productType.regularPrice" />
       </div>
-      <TrashIcon @click="removeItem" class="remove-item w-5 h-5 transition-all text-gray-300 opacity-0 cursor-pointer hover:text-red-500 hidden sm:inline-block" />
       <input
         v-model.number="quantity"
         type="number"
@@ -52,6 +51,9 @@ const removeItem = () => {
         class="flex items-center justify-center w-16 gap-4 p-2 text-left bg-white border rounded-md focus:outline-none"
         :disabled="isUpdatingCart"
         @input="updateQuantity" />
+      <button title="Remove Item" aria-label="Remove Item" @click="removeItem">
+        <Icon name="ion:close-outline" class="removeItem hover:text-red-500 cursor-pointer p-1.5" size="34" />
+      </button>
     </li>
   </SwipeCard>
 </template>
@@ -63,7 +65,7 @@ input[type='number']::-webkit-outer-spin-button {
   opacity: 1;
 }
 
-li:hover .remove-item {
-  opacity: 1;
+.removeItem {
+  @apply hidden md:inline-block;
 }
 </style>
