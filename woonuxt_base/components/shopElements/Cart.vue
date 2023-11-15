@@ -3,16 +3,16 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
 </script>
 
 <template>
-  <div class="fixed top-0 bottom-0 right-0 z-50 flex flex-col w-9/12 max-w-lg overflow-x-hidden bg-white shadow-lg">
+  <div class="fixed top-0 bottom-0 right-0 z-50 flex flex-col w-11/12 max-w-lg overflow-x-hidden bg-white shadow-lg">
     <!-- <CloseIcon class="bg-white rounded-lg shadow-lg p-1.5" @click="toggleCart(false)" /> -->
-    <Icon name="ion:close-outline" class="bg-white rounded-lg shadow-lg p-1 top-6 left-8 absolute" size="34" @click="toggleCart(false)" />
+    <Icon name="ion:close-outline" class="bg-white rounded-lg shadow-lg p-1 top-6 left-6 md:left-8 absolute" size="34" @click="toggleCart(false)" />
     <EmptyCart v-if="cart && !cart.isEmpty" class="rounded-lg shadow-lg p-1.5 hover:bg-red-400 hover:text-white" />
 
     <div class="mt-8 text-center">{{ $t('messages.shop.cart') }}</div>
 
     <ClientOnly>
       <template v-if="cart && !cart.isEmpty">
-        <ul class="flex flex-col flex-1 gap-4 p-8 overflow-y-scroll">
+        <ul class="flex flex-col flex-1 gap-4 p-6 md:p-8 overflow-y-scroll">
           <div v-for="item in cart.contents?.nodes" :key="item.key" :item="item">
             <CartCard :item="item" />
           </div>
