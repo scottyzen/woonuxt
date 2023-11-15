@@ -47,7 +47,7 @@ const colorVariableImage = computed(() => {
       :src="colorVariableImage"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
-      :loading="index <= 1 ? 'eager' : 'lazy'" />
+      :loading="index <= 3 ? 'eager' : 'lazy'" />
     <NuxtImg
       v-else-if="mainImage"
       :width="imgWidth"
@@ -55,7 +55,7 @@ const colorVariableImage = computed(() => {
       :src="mainImage"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
-      :loading="index <= 1 ? 'eager' : 'lazy'"
+      :loading="index <= 3 ? 'eager' : 'lazy'"
       fit="outside"
       format="webp"
       densities="x1 x2" />
