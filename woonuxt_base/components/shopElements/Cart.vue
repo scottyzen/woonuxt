@@ -4,21 +4,20 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
 
 <template>
   <div class="fixed top-0 bottom-0 right-0 z-50 flex flex-col w-11/12 max-w-lg overflow-x-hidden bg-white shadow-lg">
-    <!-- <CloseIcon class="bg-white rounded-lg shadow-lg p-1.5" @click="toggleCart(false)" /> -->
-    <Icon name="ion:close-outline" class="bg-white rounded-lg shadow-lg p-1 top-6 left-6 md:left-8 absolute" size="34" @click="toggleCart(false)" />
+    <Icon name="ion:close-outline" class="absolute p-1 bg-white rounded-lg shadow-lg top-6 left-6 md:left-8" size="34" @click="toggleCart(false)" />
     <EmptyCart v-if="cart && !cart.isEmpty" class="rounded-lg shadow-lg p-1.5 hover:bg-red-400 hover:text-white" />
 
     <div class="mt-8 text-center">{{ $t('messages.shop.cart') }}</div>
 
     <ClientOnly>
       <template v-if="cart && !cart.isEmpty">
-        <ul class="flex flex-col flex-1 gap-4 p-6 md:p-8 overflow-y-scroll">
+        <ul class="flex flex-col flex-1 gap-4 p-6 overflow-y-scroll md:p-8">
           <div v-for="item in cart.contents?.nodes" :key="item.key" :item="item">
             <CartCard :item="item" />
           </div>
         </ul>
         <div class="px-8 mb-8">
-          <NuxtLink class="block p-3 text-lg text-center text-white bg-gray-800 shadow-md rounded-lg justify-evenly hover:bg-gray-900" to="/checkout">
+          <NuxtLink class="block p-3 text-lg text-center text-white bg-gray-800 rounded-lg shadow-md justify-evenly hover:bg-gray-900" to="/checkout">
             <span class="mx-2">{{ $t('messages.shop.checkout') }}</span>
             <span v-html="cart.total" />
           </NuxtLink>
