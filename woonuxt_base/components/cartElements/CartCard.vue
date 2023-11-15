@@ -51,7 +51,7 @@ const removeItem = () => {
         class="flex items-center justify-center w-16 gap-4 p-2 text-left bg-white border rounded-md focus:outline-none"
         :disabled="isUpdatingCart"
         @input="updateQuantity" />
-      <button title="Remove Item" aria-label="Remove Item" @click="removeItem">
+      <button title="Remove Item" aria-label="Remove Item" @click="removeItem" type="button">
         <Icon name="ion:close-outline" class="removeItem hover:text-red-500 cursor-pointer p-1.5" size="34" />
       </button>
     </li>
