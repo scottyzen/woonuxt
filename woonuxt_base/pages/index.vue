@@ -70,6 +70,5 @@ useHead({
   max-height: min(8vw, 120px);
   object-fit: contain;
   object-position: center;
-  /* aspect-ratio: 2 / 1; */
 }
 </style>

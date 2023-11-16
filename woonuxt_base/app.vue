@@ -42,7 +42,6 @@ watch([isShowingCart, isShowingMobileMenu], () => {
 <style lang="postcss">
 html,
 body {
-  /* @apply bg-gradient-to-t to-white from-gray-50 text-gray-900; */
   @apply bg-gray-100 text-gray-900;
   scroll-behavior: smooth;
 }
@@ -58,7 +57,8 @@ pre {
 
 select {
   @apply border-2 rounded-2xl py-2 px-4 appearance-none;
-  background: url('/images/chevron-down.svg') center right 10px no-repeat;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M4 6l4 4 4-4'/%3E%3C/svg%3E")
+    center right 10px no-repeat;
   background-size: 1rem;
   padding-right: 2.5rem;
 }

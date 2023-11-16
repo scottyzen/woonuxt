@@ -65,6 +65,7 @@ interface ProductCategory {
   slug: string;
   name: string;
   count: number;
+  image?: ProductImage | null;
 }
 
 interface Attribute {
