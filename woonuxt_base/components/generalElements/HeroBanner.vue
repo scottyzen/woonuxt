@@ -10,8 +10,8 @@
       format="webp"
       fit="outside"
       sizes="sm:100vw lg:1400px"
-      fetchpriority="high" />
-
+      fetchpriority="high"
+      preload />
     <div class="container absolute inset-0 flex flex-col items-start justify-center text-gray-800 bg-gradient-to-l from-gray-100 md:bg-none md:p-12 lg:p-24">
       <h1 class="text-3xl font-bold md:mb-4 md:text-4xl lg:text-6xl">Just landed.</h1>
       <h2 class="text-lg font-bold md:mb-4 lg:text-3xl">The Autumn Collection</h2>

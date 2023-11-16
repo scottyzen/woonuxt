@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 const { data } = await useAsyncGql('getProductCategories');
-const productCategories = data.value?.productCategories?.nodes || [];
+const productCategories = data.value.productCategories?.nodes as ProductCategory[];
 </script>
 
 <template>
