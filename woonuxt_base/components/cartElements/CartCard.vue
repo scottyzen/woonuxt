@@ -29,7 +29,7 @@ const removeItem = () => {
           :alt="productType.image?.altText || productType.name"
           :title="productType.image?.title || productType.name"
           loading="lazy" />
-        <img
+        <NuxtImg
           v-else
           src="/images/placeholder.jpg"
           width="64"

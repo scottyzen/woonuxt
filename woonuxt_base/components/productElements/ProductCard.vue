@@ -60,7 +60,7 @@ const colorVariableImage = computed(() => {
         fit="outside"
         format="webp"
         densities="x1 x2" />
-      <img v-else src="/images/placeholder.jpg" :alt="node.image?.altText || node.name" :title="node.image?.title || node.name" loading="lazy" />
+      <NuxtImg v-else src="/images/placeholder.jpg" :alt="node.image?.altText || node.name" :title="node.image?.title || node.name" loading="lazy" />
     </NuxtLink>
     <div class="p-2">
       <StarRating :rating="node.averageRating" :count="node.reviewCount" />

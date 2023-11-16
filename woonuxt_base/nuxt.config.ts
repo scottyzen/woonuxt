@@ -19,6 +19,7 @@ export default defineNuxtConfig({
 
   image: {
     domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
+    dir: resolve('./static'),
   },
 
   pages: true,

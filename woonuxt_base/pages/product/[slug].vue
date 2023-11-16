@@ -59,12 +59,12 @@ const updateSelectedVariations = (variations: Variation[]): void => {
         :main-image="type.image ? type.image?.sourceUrl || product.image.sourceUrl : '/images/placeholder.jpg'"
         :gallery="product.galleryImages!"
         :node="type" />
-      <img v-else class="relative flex-1" src="/images/placeholder.jpg" :alt="product?.name || 'Product'" />
+      <NuxtImg v-else class="relative flex-1" src="/images/placeholder.jpg" :alt="product?.name || 'Product'" />
 
       <div class="md:max-w-md md:py-2">
         <div class="flex justify-between mb-4">
           <div class="flex-1">
-            <h1 class="mb-2 text-2xl font-sesmibold flex items-center flex-wrap gap-2">
+            <h1 class="flex flex-wrap items-center gap-2 mb-2 text-2xl font-sesmibold">
               {{ type.name }}
               <WPAdminLink :link="`/wp-admin/post.php?post=${product.databaseId}&action=edit`">Edit</WPAdminLink>
             </h1>

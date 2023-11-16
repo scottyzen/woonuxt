@@ -19,7 +19,7 @@ const { node } = defineProps({
       fit="outside"
       format="webp"
       densities="x1 x2" />
-    <img
+    <NuxtImg
       v-else
       src="/images/placeholder.jpg"
       :alt="node.image?.altText || node.name"
