@@ -78,7 +78,7 @@ const checkEmailOnInput = (email) => {
         <div class="grid w-full max-w-2xl gap-8 checkout-form md:flex-1">
           <!-- Customer details -->
           <div>
-            <h2 class="w-full mb-2 text-2xl font-semibold">Contact Information</h2>
+            <h2 class="w-full mb-2 text-2xl font-semibold leading-none">Contact Information</h2>
             <p v-if="!viewer" class="mt-1 text-sm text-gray-500">Already have an account? <a href="/my-account" class="text-primary text-semibold">Log in</a>.</p>
             <div class="w-full mt-4">
               <label for="email">{{ $t('messages.billing.email') }}</label>
