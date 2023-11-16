@@ -1,13 +1,15 @@
 <script lang="ts" setup>
 const { logoutUser, viewer, customer, isPending } = useAuth();
+const { cart } = useCart();
 const route = useRoute();
 
 const activeTab = computed(() => route.query.tab || 'my-details');
+const showLoader = computed(() => !viewer && !customer);
 </script>
 
 <template>
   <div class="container min-h-[600px]">
-    <div v-if="!viewer && !customer" class="flex flex-col min-h-[500px]">
+    <div v-if="showLoader || !cart" class="flex flex-col min-h-[500px]">
       <LoadingIcon class="m-auto" />
     </div>
     <template v-else>

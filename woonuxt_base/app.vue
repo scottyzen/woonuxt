@@ -1,11 +1,20 @@
 <script setup>
-const { toggleCart, isShowingCart, cart } = useCart();
+const { isShowingCart, toggleCart } = useCart();
 const { isShowingMobileMenu, toggleMobileMenu } = useHelpers();
+const { addBodyClass, removeBodyClass, toggleBodyClass } = useHelpers();
 
 const underlayCick = () => {
   toggleCart(false);
   toggleMobileMenu(false);
 };
+
+watch([isShowingCart, isShowingMobileMenu], () => {
+  if (isShowingCart.value || isShowingMobileMenu.value) {
+    addBodyClass('overflow-hidden');
+  } else {
+    removeBodyClass('overflow-hidden');
+  }
+});
 </script>
 
 <template>

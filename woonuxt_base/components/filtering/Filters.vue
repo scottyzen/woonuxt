@@ -33,18 +33,10 @@ const { hideCategories } = defineProps({ hideCategories: { type: Boolean, defaul
       <ResetFiltersButton />
     </div>
   </aside>
-  <div class="fixed inset-0 z-50 bg-black opacity-25 filter-overlay" @click="removeBodyClass('show-filters')"></div>
+  <div class="fixed inset-0 z-50 hidden bg-black opacity-25 filter-overlay" @click="removeBodyClass('show-filters')"></div>
 </template>
 
 <style lang="postcss">
-#filters {
-  @apply w-[280px];
-}
-
-.filter-overlay {
-  @apply hidden;
-}
-
 .show-filters .filter-overlay {
   @apply block;
 }
@@ -52,83 +44,91 @@ const { hideCategories } = defineProps({ hideCategories: { type: Boolean, defaul
   overflow: hidden;
 }
 
-#filters input[type='checkbox'],
-#filters input[type='radio'] {
-  @apply bg-white border rounded-lg cursor-pointer font-sans outline-none border-gray-300 w-full p-3 transition-all duration-150 appearance-none hover:border-primary;
-  width: 1em;
-  height: 1em;
-  position: relative;
-  cursor: pointer;
-  border-radius: 4px;
-  padding: 0;
-}
+#filters {
+  @apply w-[280px];
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
-#filters input[type='radio'] {
-  border-radius: 50%;
-}
+  input[type='checkbox'],
+  input[type='radio'] {
+    @apply bg-white border rounded-lg cursor-pointer font-sans outline-none border-gray-300 w-full p-3 transition-all duration-150 appearance-none hover:border-primary;
+    width: 1em;
+    height: 1em;
+    position: relative;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 0;
+  }
 
-#filters input[type='checkbox']:after {
-  content: '';
-  display: block;
-  width: 5px;
-  height: 9px;
-  border: 2px solid #fff;
-  border-top: 0;
-  border-left: 0;
-  transform: rotate(0deg) translate(-1px, 1px) scale(0.75);
-  transition: all 250ms cubic-bezier(0.65, -0.43, 0.4, 1.71);
-  opacity: 0;
-  position: absolute;
-  top: 3px;
-  left: 6.5px;
-}
+  input[type='radio'] {
+    border-radius: 50%;
+  }
 
-#filters input[type='radio']:after {
-  content: '';
-  display: block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  transform: scale(0);
-  transition: all 250ms cubic-bezier(0.65, -0.43, 0.4, 1.71);
-  opacity: 0;
-  position: absolute;
-  background: #fff;
-  top: 4px;
-  left: 4px;
-}
+  input[type='checkbox']:after,
+  input[type='radio']:after {
+    content: '';
+    display: block;
+    opacity: 0;
+    transition: all 250ms cubic-bezier(0.65, -0.43, 0.4, 1.71);
+  }
 
-#filters input[type='checkbox'] + label,
-#filters input[type='radio'] + label {
-  @apply cursor-pointer text-gray-500 hover:text-gray-800;
-}
+  input[type='checkbox']:after {
+    width: 5px;
+    height: 9px;
+    border: 2px solid #fff;
+    border-top: 0;
+    border-left: 0;
+    transform: rotate(0deg) translate(-1px, 1px) scale(0.75);
+    position: absolute;
+    top: 3px;
+    left: 6.5px;
+  }
 
-#filters input[type='checkbox']:checked + label,
-#filters input[type='radio']:checked + label {
-  @apply text-gray-800;
-}
+  input[type='radio']:after {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    transform: scale(0);
+    position: absolute;
+    background: #fff;
+    top: 4px;
+    left: 4px;
+  }
 
-#filters input[type='checkbox']:checked,
-#filters input[type='radio']:checked {
-  @apply bg-primary border-0;
-}
+  input[type='checkbox']:checked:after,
+  input[type='checkbox'] + label,
+  input[type='radio'] + label {
+    @apply cursor-pointer text-gray-500 hover:text-gray-800;
+  }
 
-#filters input[type='checkbox']:checked:after {
-  opacity: 1;
-  transform: rotate(45deg) translate(-1px, 1px) scale(1);
-}
+  input[type='checkbox']:checked + label,
+  input[type='radio']:checked + label {
+    @apply text-gray-800;
+  }
 
-#filters input[type='radio']:checked:after {
-  opacity: 1;
-  transform: scale(1);
+  input[type='checkbox']:checked,
+  input[type='radio']:checked {
+    @apply bg-primary border-0;
+  }
+
+  input[type='checkbox']:checked:after {
+    opacity: 1;
+    transform: rotate(45deg) translate(-1px, 1px) scale(1);
+  }
+
+  input[type='radio']:checked:after {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .price-input {
   @apply border rounded-xl outline-none leading-tight w-full p-2 transition-all;
-}
 
-.price-input.active {
-  @apply border-gray-400 pl-6;
+  &.active {
+    @apply border-gray-400 pl-6;
+  }
 }
 
 @media (max-width: 768px) {

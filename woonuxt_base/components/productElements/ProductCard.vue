@@ -40,38 +40,46 @@ const colorVariableImage = computed(() => {
 </script>
 
 <template>
-  <NuxtLink :to="`/product/${decodeURI(node.slug)}`" class="relative product-card">
-    <SaleBadge :node="node" class="absolute top-2 right-2" />
-    <img
-      v-if="colorVariableImage"
-      :src="colorVariableImage"
-      :alt="node.image?.altText || node.name"
-      :title="node.image?.title || node.name"
-      :loading="index <= 3 ? 'eager' : 'lazy'" />
-    <NuxtImg
-      v-else-if="mainImage"
-      :width="imgWidth"
-      :height="imgHeight"
-      :src="mainImage"
-      :alt="node.image?.altText || node.name"
-      :title="node.image?.title || node.name"
-      :loading="index <= 3 ? 'eager' : 'lazy'"
-      fit="outside"
-      format="webp"
-      densities="x1 x2" />
-    <img v-else src="/images/placeholder.jpg" :alt="node.image?.altText || node.name" :title="node.image?.title || node.name" loading="lazy" />
-
+  <div class="relative product-card">
+    <NuxtLink :to="`/product/${decodeURI(node.slug)}`">
+      <SaleBadge :node="node" class="absolute top-2 right-2" />
+      <img
+        v-if="colorVariableImage"
+        :src="colorVariableImage"
+        :alt="node.image?.altText || node.name"
+        :title="node.image?.title || node.name"
+        :loading="index <= 3 ? 'eager' : 'lazy'" />
+      <NuxtImg
+        v-else-if="mainImage"
+        :width="imgWidth"
+        :height="imgHeight"
+        :src="mainImage"
+        :alt="node.image?.altText || node.name"
+        :title="node.image?.title || node.name"
+        :loading="index <= 3 ? 'eager' : 'lazy'"
+        fit="outside"
+        format="webp"
+        densities="x1 x2" />
+      <img v-else src="/images/placeholder.jpg" :alt="node.image?.altText || node.name" :title="node.image?.title || node.name" loading="lazy" />
+    </NuxtLink>
     <div class="p-2">
       <StarRating :rating="node.averageRating" :count="node.reviewCount" />
-      <h2 class="mb-2 font-light leading-tight">{{ node.name }}</h2>
+      <NuxtLink :to="`/product/${decodeURI(node.slug)}`">
+        <h2 class="mb-2 font-light leading-tight">{{ node.name }}</h2>
+      </NuxtLink>
       <ProductPrice class="text-sm" :sale-price="node.salePrice" :regular-price="node.regularPrice" />
     </div>
-  </NuxtLink>
+  </div>
 </template>
 
 <style lang="postcss">
 .product-card img {
   @apply rounded-lg object-top object-cover w-full;
   aspect-ratio: 1/1.125;
+}
+.product-card:hover {
+  h2 {
+    @apply text-primary;
+  }
 }
 </style>

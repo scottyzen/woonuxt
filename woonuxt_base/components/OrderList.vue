@@ -1,3 +1,12 @@
+<script setup>
+const { formatDate } = useHelpers();
+const orders = ref(null);
+onMounted(async () => {
+  const { customer } = await GqlGetOrders();
+  orders.value = customer?.orders;
+});
+</script>
+
 <template>
   <div class="bg-white rounded-lg flex shadow min-h-[250px] p-8 justify-center items-center">
     <table v-if="orders" class="w-full text-left table-auto">
@@ -29,37 +38,6 @@
     <LoadingIcon v-else size="24" stroke="2" />
   </div>
 </template>
-
-<script>
-export default {
-  data() {
-    return {
-      orders: null,
-    };
-  },
-  mounted() {
-    this.getOrders();
-  },
-  methods: {
-    async getOrders() {
-      try {
-        const { customer } = await GqlGetOrders();
-        this.orders = customer.orders;
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    formatDate(date) {
-      // Outputs date like: January 29, 2022
-      return new Date(date).toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      });
-    },
-  },
-};
-</script>
 
 <style lang="postcss" scoped>
 tbody tr:nth-child(odd) {

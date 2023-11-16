@@ -74,11 +74,11 @@ const checkEmailOnInput = (email) => {
         <div class="mb-20 text-xl text-gray-300">{{ $t('messages.shop.cartEmpty') }}</div>
       </div>
 
-      <form v-else class="container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-24" @submit.prevent="payNow">
+      <form v-else class="container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-20" @submit.prevent="payNow">
         <div class="grid w-full max-w-2xl gap-8 checkout-form md:flex-1">
           <!-- Customer details -->
           <div>
-            <h2 class="w-full mb-2 text-2xl font-semibold">Contact Information</h2>
+            <h2 class="w-full mb-2 text-2xl font-semibold leading-none">Contact Information</h2>
             <p v-if="!viewer" class="mt-1 text-sm text-gray-500">Already have an account? <a href="/my-account" class="text-primary text-semibold">Log in</a>.</p>
             <div class="w-full mt-4">
               <label for="email">{{ $t('messages.billing.email') }}</label>
@@ -116,7 +116,7 @@ const checkEmailOnInput = (email) => {
           </label>
 
           <Transition name="scale-y" mode="out-in">
-            <div v-if="orderInput.shipToDifferentAddress">
+            <div v-show="orderInput.shipToDifferentAddress">
               <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.general.shippingDetails') }}</h2>
               <ShippingDetails v-model="customer.shipping" />
             </div>
@@ -135,7 +135,7 @@ const checkEmailOnInput = (email) => {
 
             <Transition name="scale-y" mode="out-in">
               <StripeElements
-                v-if="orderInput.paymentMethod == 'stripe'"
+                v-show="orderInput.paymentMethod == 'stripe'"
                 v-slot="{ elements, instance }"
                 ref="elms"
                 :stripe-key="stripeKey"
@@ -161,14 +161,9 @@ const checkEmailOnInput = (email) => {
 
         <OrderSummary>
           <button
-            class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md disabled:cursor-not-allowed disabled:opacity-50"
-            :class="{
-              'bg-[#EAB434] hover:bg-[#EAB434]': orderInput.paymentMethod === 'paypal',
-              'bg-primary hover:bg-primary-dark': orderInput.paymentMethod !== 'paypal',
-            }"
+            class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
             :disabled="isCheckoutDisabled">
-            <NuxtImg v-if="orderInput.paymentMethod === 'paypal'" src="/images/paypal.svg" alt="PayPal" height="24px" class="h-[24px]" />
-            <span v-else>{{ buttonText }}</span>
+            {{ buttonText }}
             <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
           </button>
         </OrderSummary>

@@ -30,9 +30,9 @@ onMounted(() => {
   </div>
 </template>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
 .payment-options {
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
 .payment-options .option {
