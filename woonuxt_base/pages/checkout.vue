@@ -74,7 +74,7 @@ const checkEmailOnInput = (email) => {
         <div class="mb-20 text-xl text-gray-300">{{ $t('messages.shop.cartEmpty') }}</div>
       </div>
 
-      <form v-else class="container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-24" @submit.prevent="payNow">
+      <form v-else class="container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-20" @submit.prevent="payNow">
         <div class="grid w-full max-w-2xl gap-8 checkout-form md:flex-1">
           <!-- Customer details -->
           <div>
@@ -161,7 +161,7 @@ const checkEmailOnInput = (email) => {
 
         <OrderSummary>
           <button
-            class="flex items-center bg-primary hover:bg-primary-dark justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md disabled:cursor-not-allowed disabled:opacity-50"
+            class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
             :disabled="isCheckoutDisabled">
             {{ buttonText }}
             <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
@@ -172,7 +172,7 @@ const checkEmailOnInput = (email) => {
   </div>
 </template>
 
-<style lang="postcss" scoped>
+<style lang="postcss">
 .checkout-form input[type='text'],
 .checkout-form input[type='email'],
 .checkout-form input[type='tel'],

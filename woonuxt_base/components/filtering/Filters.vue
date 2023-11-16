@@ -33,7 +33,7 @@ const { hideCategories } = defineProps({ hideCategories: { type: Boolean, defaul
       <ResetFiltersButton />
     </div>
   </aside>
-  <div class="fixed inset-0 z-50 bg-black opacity-25 hidden filter-overlay" @click="removeBodyClass('show-filters')"></div>
+  <div class="fixed inset-0 z-50 hidden bg-black opacity-25 filter-overlay" @click="removeBodyClass('show-filters')"></div>
 </template>
 
 <style lang="postcss">
