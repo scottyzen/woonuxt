@@ -20,7 +20,7 @@
     "@nuxt/image": "rc",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@nuxtjs/i18n": "^8.0.0-rc.4",
-    "@nuxtjs/tailwindcss": "^6.9.4",
+    "@nuxtjs/tailwindcss": "^6.9.5",
     "@tailwindcss/typography": "^0.5.10",
     "eslint": "^8.53.0",
     "eslint-config-prettier": "^9.0.0",
@@ -29,8 +29,8 @@
     "eslint-plugin-prettier": "^5.0.1",
     "nuxt": "^3.8.1",
     "nuxt-graphql-client": "^0.2.31",
-    "nuxt-icon": "^0.6.5",
-    "prettier": "^3.0.3",
+    "nuxt-icon": "^0.6.6",
+    "prettier": "^3.1.0",
     "vue-stripe-js": "^1.0.1",
     "woonuxt-settings": "^1.0.46"
   }
