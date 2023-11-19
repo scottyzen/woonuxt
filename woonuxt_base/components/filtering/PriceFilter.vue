@@ -1,19 +1,23 @@
 <script setup>
 import Slider from '@vueform/slider';
-const { getFilter, setFilter } = await useFiltering();
+const { getFilter, setFilter, isFiltersActive } = await useFiltering();
 const runtimeConfig = useRuntimeConfig();
 const maxPrice = runtimeConfig?.public?.MAX_PRICE || 1000;
 const activeFilters = ref(getFilter('price'));
 const price = activeFilters.value.length ? ref(activeFilters.value) : ref([0, maxPrice]);
 const isOpen = ref(true);
 
-// watch(price, () => {
-//     setFilter("price", price.value);
-// });
+const resetSlider = () => {
+  price.value = [0, maxPrice];
+};
 
 const applyPrice = () => {
   setFilter('price', price.value);
 };
+
+watch(isFiltersActive, () => {
+  if (!isFiltersActive.value) resetSlider();
+});
 </script>
 
 <template>
