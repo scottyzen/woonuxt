@@ -16,9 +16,9 @@ export function useProducts() {
   }
 
   const updateProductList = async (): Promise<void> => {
+    const { isSortingActive, sortProducts } = await useSorting();
     const { isFiltersActive, filterProducts } = await useFiltering();
     const { isSearchActive, searchProducts } = await useSearching();
-    const { isSortingActive, sortProducts } = await useSorting();
 
     // return all products if no filters are active
     if (!isFiltersActive.value && !isSearchActive.value && !isSortingActive.value) {

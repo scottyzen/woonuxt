@@ -1,7 +1,11 @@
 // A collection of helper functions.
 export function useHelpers() {
   const route = useRoute();
+  const runtimeConfig = useRuntimeConfig();
+
   const isShowingMobileMenu = useState<boolean>('isShowingMobileMenu', () => false);
+  const wooNuxtVersionInfo: string = runtimeConfig.public.version || '0.0.0';
+  const productsPerPage: number = runtimeConfig.public.PRODUCTS_PER_PAGE || 24;
 
   function toggleMobileMenu(state: boolean | undefined = undefined) {
     state === undefined ? (isShowingMobileMenu.value = !isShowingMobileMenu.value) : (isShowingMobileMenu.value = state);
@@ -97,6 +101,8 @@ export function useHelpers() {
 
   return {
     isShowingMobileMenu,
+    wooNuxtVersionInfo,
+    productsPerPage,
     isQueryEmpty,
     formatArray,
     arraysEqual,

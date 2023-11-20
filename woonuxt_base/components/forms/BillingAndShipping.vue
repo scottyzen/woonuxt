@@ -40,7 +40,7 @@
 
       <div class="w-full">
         <label for="billing-state">{{ $t('messages.billing.state') }}</label>
-        <StateSelect v-model="customer.billing.state" :default-value="customer.billing.state" :country-code="customer.billing.country" />
+        <LazyStateSelect v-model="customer.billing.state" :default-value="customer.billing.state" :country-code="customer.billing.country" />
       </div>
 
       <div class="w-full">
@@ -99,7 +99,7 @@
 
       <div class="w-full">
         <label for="billing-state">{{ $t('messages.billing.state') }}</label>
-        <StateSelect v-model="customer.shipping.state" :default-value="customer.shipping.state" :country-code="customer.shipping.country" />
+        <LazyStateSelect v-model="customer.shipping.state" :default-value="customer.shipping.state" :country-code="customer.shipping.country" />
       </div>
 
       <div class="w-full">

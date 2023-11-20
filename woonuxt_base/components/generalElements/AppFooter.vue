@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const runtimeConfig = useRuntimeConfig();
+const { wooNuxtVersionInfo } = useHelpers();
+const versionInfo = `WooNuxt v${wooNuxtVersionInfo}`;
 </script>
 
 <template>
@@ -51,8 +52,8 @@ const runtimeConfig = useRuntimeConfig();
     <div class="container border-t">
       <div class="copywrite">
         <p class="py-4 text-xs text-center">
-          <a href="https://woonuxt.com">WooNuxt v{{ runtimeConfig.public.version }}</a> - by
-          <a href="https://scottyzen.com" target="_blank">Scottyzen</a>
+          <a href="https://woonuxt.com" :title="versionInfo">{{ versionInfo }}</a> - by
+          <a href="https://scottyzen.com" title="Scott Kennedy - Web Developer" target="_blank">Scott Kennedy</a>
         </p>
       </div>
     </div>

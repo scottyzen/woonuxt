@@ -1,22 +1,26 @@
 <script setup lang="ts">
 const route = useRoute();
+const { productsPerPage } = useHelpers();
 const { products } = useProducts();
-const runtimeConfig = useRuntimeConfig();
-const productsPerPage = runtimeConfig.public.PRODUCTS_PER_PAGE || 24;
 const page = ref(parseInt(route.params.pageNumber as string) || 1);
+const productsToShow = computed(() => products.value.slice((page.value - 1) * productsPerPage, page.value * productsPerPage));
 </script>
 
 <template>
-  <section class="relative w-full" v-if="products.length">
-    <TransitionGroup name="shrink" tag="div" mode="in-out" class="my-4 min-h-[600px] grid transition-all gap-8 product-grid lg:my-8">
-      <ProductCard v-for="(node, i) in products.slice((page - 1) * productsPerPage, page * productsPerPage)" :key="node.databaseId || i" :node="node" :index="i" />
-    </TransitionGroup>
-    <Pagination />
-  </section>
+  <Transition name="fade" mode="out-in">
+    <section v-if="!!products.length" class="relative w-full">
+      <TransitionGroup name="shrink" tag="div" mode="in-out" class="product-grid">
+        <ProductCard v-for="(node, i) in productsToShow" :key="node.id || i" :node="node" :index="i" />
+      </TransitionGroup>
+      <Pagination />
+    </section>
+  </Transition>
 </template>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
 .product-grid {
+  @apply my-4 min-h-[600px] grid transition-all gap-8 lg:my-8;
+
   grid-template-columns: repeat(2, 1fr);
 }
 
@@ -48,9 +52,5 @@ const page = ref(parseInt(route.params.pageNumber as string) || 1);
 .shrink-enter-from {
   opacity: 0;
   transform: scale(0.75) translateY(25%);
-}
-
-.pagination {
-  @apply flex mb-8 p-8 gap-2 items-center justify-center;
 }
 </style>

@@ -88,6 +88,7 @@ interface ProductTerm {
 interface Product {
   name?: string | null;
   databaseId?: number | null;
+  id?: string | null;
   slug?: string | null;
   sku?: string | null;
   onSale?: boolean | null;

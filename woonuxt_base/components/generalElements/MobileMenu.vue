@@ -1,12 +1,13 @@
 <script setup>
-const { toggleMobileMenu } = useHelpers();
+const { toggleMobileMenu, wooNuxtVersionInfo } = useHelpers();
 const route = useRoute();
-const runtimeConfig = useRuntimeConfig();
 
 // if the route changes, close the mobile menu
 watch(route, () => {
   toggleMobileMenu(false);
 });
+
+const versionInfo = `WooNuxt Version ${wooNuxtVersionInfo}`;
 </script>
 
 <template>
@@ -15,7 +16,7 @@ watch(route, () => {
     <div class="mt-8 text-center">{{ $t('messages.general.menu') }}</div>
     <MainMenu class="m-4 grid p-4 text-gray-500 gap-6" />
     <div class="mt-auto text-center p-8 text-[10px] text-gray-400 uppercase">
-      <a href="/">WooNuxt Version {{ runtimeConfig.public.version }}</a>
+      <a href="/" :title="wooNuxtVersionInfo">{{ wooNuxtVersionInfo }}</a>
     </div>
   </div>
 </template>

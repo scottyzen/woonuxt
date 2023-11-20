@@ -38,7 +38,7 @@ const billing = toRef(props, 'modelValue');
 
     <div class="w-full">
       <label for="country">County</label>
-      <StateSelect v-model="billing.state" :default-value="billing.state" :country-code="billing.country" @change="updateShippingLocation" />
+      <LazyStateSelect v-model="billing.state" :default-value="billing.state" :country-code="billing.country" @change="updateShippingLocation" />
     </div>
 
     <div class="w-full">

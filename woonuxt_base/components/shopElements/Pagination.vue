@@ -1,11 +1,10 @@
 <script setup lang="ts">
 const route = useRoute();
-const runtimeConfig = useRuntimeConfig();
+const { productsPerPage } = useHelpers();
 const { decodeURI } = useHelpers();
 const { products } = useProducts();
 
 // TODO: Refactor all this logic. It's a mess.
-
 const currentQuery = computed(() => {
   const query = route.query;
   const queryKeys = Object.keys(query);
@@ -19,7 +18,6 @@ const currentQuery = computed(() => {
 });
 
 const page = ref(route.params.pageNumber ? parseInt(route.params.pageNumber as string) : 1);
-const productsPerPage: number = runtimeConfig.public.PRODUCTS_PER_PAGE;
 const numberOfPages = computed<number>(() => Math.ceil(products.value.length / productsPerPage || 1));
 
 const prevSrc = (pageNumber: number) => {

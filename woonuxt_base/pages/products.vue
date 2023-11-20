@@ -1,5 +1,5 @@
 <script setup>
-const { setProducts, updateProductList } = useProducts();
+const { setProducts, updateProductList, products } = useProducts();
 const { isQueryEmpty } = useHelpers();
 
 const { data } = await useAsyncGql('getProducts');
@@ -22,14 +22,12 @@ useHead({
 
     <div class="w-full">
       <div class="flex items-center justify-between w-full gap-4 mt-8 md:gap-8">
-        <LazyProductResultCount />
-        <LazyOrderByDropdown class="hidden md:inline-flex" />
+        <ProductResultCount />
+        <OrderByDropdown class="hidden md:inline-flex" />
         <LazyShowFilterTrigger class="md:hidden" />
       </div>
-      <Transition name="fade" mode="out-in">
-        <LazyProductGrid />
-        <LazyNoProductsFound />
-      </Transition>
+      <ProductGrid />
+      <LazyNoProductsFound />
     </div>
   </div>
 </template>
