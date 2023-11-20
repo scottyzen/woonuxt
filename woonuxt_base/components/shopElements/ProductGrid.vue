@@ -7,11 +7,10 @@ const page = ref(parseInt(route.params.pageNumber as string) || 1);
 </script>
 
 <template>
-  <section class="relative w-full">
+  <section class="relative w-full" v-if="products.length">
     <TransitionGroup name="shrink" tag="div" mode="in-out" class="my-4 min-h-[600px] grid transition-all gap-8 product-grid lg:my-8">
       <ProductCard v-for="(node, i) in products.slice((page - 1) * productsPerPage, page * productsPerPage)" :key="node.databaseId || i" :node="node" :index="i" />
     </TransitionGroup>
-
     <Pagination />
   </section>
 </template>

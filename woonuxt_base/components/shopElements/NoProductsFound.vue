@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { products } = useProducts();
 const { clearSearchQuery, isSearchActive } = useSearching();
 const { resetFilter, isFiltersActive } = useFiltering();
 
@@ -9,7 +10,7 @@ const clearAll = () => {
 </script>
 
 <template>
-  <div class="w-full my-16 lg:my-24">
+  <div class="w-full my-16 lg:my-24" v-if="products.length === 0">
     <div class="flex flex-col items-center justify-center w-full text-center">
       <Icon name="ion:sad-outline" size="156" class="opacity-25 mb-10" />
       <h2 class="text-2xl font-bold">No products found</h2>

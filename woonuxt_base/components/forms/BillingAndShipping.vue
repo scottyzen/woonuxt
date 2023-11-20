@@ -45,7 +45,7 @@
 
       <div class="w-full">
         <label for="country">{{ $t('messages.billing.country') }}</label>
-        <CountrySelect v-model="customer.billing.country" :default-value="customer.billing.country" :allowed-countries="allowedCountries" />
+        <LazyCountrySelect v-model="customer.billing.country" :default-value="customer.billing.country" :allowed-countries="allowedCountries" />
       </div>
 
       <div class="w-full">
@@ -104,7 +104,7 @@
 
       <div class="w-full">
         <label for="country">{{ $t('messages.billing.country') }}</label>
-        <CountrySelect v-model="customer.shipping.country" :default-value="customer.shipping.country" :allowed-countries="allowedCountries" />
+        <LazyCountrySelect v-model="customer.shipping.country" :default-value="customer.shipping.country" :allowed-countries="allowedCountries" />
       </div>
 
       <div class="w-full">

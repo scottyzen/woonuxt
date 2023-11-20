@@ -2,7 +2,7 @@ let allProducts = [] as Product[];
 
 export function useProducts() {
   // Declare the state variables and the setter functions
-  const products = useState<Product[]>('products', () => []);
+  const products = useState<Product[]>('products');
 
   // Set the products state and the allProducts variable
   function setProducts(newProducts: Product[]): void {

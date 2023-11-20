@@ -22,11 +22,11 @@ watch([isShowingCart, isShowingMobileMenu], () => {
     <AppHeader />
 
     <Transition name="slide-from-right">
-      <Cart v-if="isShowingCart" />
+      <LazyCart v-if="isShowingCart" />
     </Transition>
 
     <Transition name="slide-from-left">
-      <MobileMenu v-if="isShowingMobileMenu" />
+      <LazyMobileMenu v-if="isShowingMobileMenu" />
     </Transition>
 
     <NuxtPage />
