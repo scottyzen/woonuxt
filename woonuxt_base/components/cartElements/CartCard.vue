@@ -6,6 +6,7 @@ const props = defineProps({
 });
 const productType = computed(() => (props.item.variation ? props.item.variation?.node : props.item.product?.node));
 const quantity = ref(props.item.quantity);
+const productSlug = computed(() => `/product/${decodeURI(props.item.product.node.slug)}`);
 
 const updateQuantity = () => {
   updateItemQuantity(props.item.key, quantity.value);
@@ -19,7 +20,7 @@ const removeItem = () => {
 <template>
   <SwipeCard @remove="removeItem">
     <li v-if="productType" class="flex items-center gap-3">
-      <NuxtLink :to="`/product/${decodeURI(productType.slug)}`">
+      <NuxtLink :to="productSlug">
         <img
           v-if="productType.image"
           width="64"
@@ -40,7 +41,7 @@ const removeItem = () => {
           loading="lazy" />
       </NuxtLink>
       <div class="flex-1">
-        <NuxtLink class="leading-tight" :to="`/product/${decodeURI(productType.slug)}`">{{ productType.name }}</NuxtLink>
+        <NuxtLink class="leading-tight" :to="productSlug">{{ productType.name }}</NuxtLink>
         <ProductPrice class="mt-1 text-xs" :sale-price="productType.salePrice" :regular-price="productType.regularPrice" />
       </div>
       <input

@@ -1,7 +1,8 @@
 <script setup>
+const route = useRoute();
 const { isShowingCart, toggleCart } = useCart();
 const { isShowingMobileMenu, toggleMobileMenu } = useHelpers();
-const { addBodyClass, removeBodyClass, toggleBodyClass } = useHelpers();
+const { addBodyClass, removeBodyClass } = useHelpers();
 
 const underlayCick = () => {
   toggleCart(false);
@@ -15,6 +16,14 @@ watch([isShowingCart, isShowingMobileMenu], () => {
     removeBodyClass('overflow-hidden');
   }
 });
+
+watch(
+  () => route.path,
+  () => {
+    toggleCart(false);
+    toggleMobileMenu(false);
+  },
+);
 </script>
 
 <template>

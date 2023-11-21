@@ -35,13 +35,6 @@ onBeforeMount(() => {
   });
 });
 
-// If cart is open, close it after 600ms
-onMounted(() => {
-  setTimeout(() => {
-    if (toggleCart) toggleCart(false);
-  }, 600);
-});
-
 const payNow = async () => {
   buttonText.value = t('messages.general.processing');
   try {

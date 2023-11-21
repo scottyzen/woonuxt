@@ -1,12 +1,5 @@
 <script setup>
 const { toggleMobileMenu, wooNuxtVersionInfo } = useHelpers();
-const route = useRoute();
-
-// if the route changes, close the mobile menu
-watch(route, () => {
-  toggleMobileMenu(false);
-});
-
 const versionInfo = `WooNuxt Version ${wooNuxtVersionInfo}`;
 </script>
 
