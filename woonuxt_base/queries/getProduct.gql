@@ -29,6 +29,8 @@ query getProduct($slug: ID!) {
     ...VariableProduct
     related(first: 5) {
       nodes {
+        name
+        slug
         ...SimpleProduct
         ...VariableProduct
       }
