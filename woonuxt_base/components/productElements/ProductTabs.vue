@@ -9,8 +9,8 @@ const show = ref(0);
 <template>
   <div>
     <nav class="border-b flex gap-8 tabs">
-      <a :class="show === 0 ? 'active' : ''" @click.prevent="show = 0">{{ $t('messages.shop.productDescription') }}</a>
-      <a :class="show === 1 ? 'active' : ''" @click.prevent="show = 1">{{ $t('messages.shop.reviews') }} ({{ product.reviewCount }})</a>
+      <button type="button" :class="show === 0 ? 'active' : ''" @click.prevent="show = 0">{{ $t('messages.shop.productDescription') }}</button>
+      <button type="button" :class="show === 1 ? 'active' : ''" @click.prevent="show = 1">{{ $t('messages.shop.reviews') }} ({{ product.reviewCount }})</button>
     </nav>
     <div class="tab-contents">
       <div v-if="show === 0" class="font-light mt-8 prose" v-html="product.description"></div>
@@ -26,7 +26,9 @@ const show = ref(0);
                 <div class="grid gap-1">
                   <div class="text-sm">
                     <span class="font-semibold">{{ review.node.author.node.name }}</span>
-                    <span class="italic text-gray-400"> – {{ new Date(review.node.date).toLocaleString($t('messages.general.langCode'), { month: 'long', day: 'numeric', year: 'numeric' }) }}</span>
+                    <span class="italic text-gray-400">
+                      – {{ new Date(review.node.date).toLocaleString($t('messages.general.langCode'), { month: 'long', day: 'numeric', year: 'numeric' }) }}</span
+                    >
                   </div>
                   <StarRating :rating="review.rating" :hide-count="true" class="text-sm" />
                 </div>
@@ -40,13 +42,13 @@ const show = ref(0);
   </div>
 </template>
 
-<style lang="postcss">
-.tabs a {
+<style lang="postcss" scoped>
+.tabs button {
   @apply border-transparent border-b-2 text-lg pb-8;
   margin-bottom: -1px;
 }
 
-.tabs a.active {
+.tabs button.active {
   @apply border-primary text-primary;
 }
 </style>

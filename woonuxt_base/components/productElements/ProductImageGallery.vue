@@ -48,7 +48,7 @@ const changeImage = (index: number | null): void => {
       :title="galleryImg.title || node.name"
       :src="galleryImg.sourceUrl || '/images/placeholder.jpg'" />
     <div v-if="gallery.nodes.length" class="my-4 gallery-images">
-      <NuxtImg class="cursor-pointer rounded-xl" width="110" height="140" :src="firstImage" @click.native="changeImage(null)" />
+      <NuxtImg class="cursor-pointer rounded-xl" width="110" height="140" :src="firstImage" @click.native="changeImage(null)" :alt="node.name" :title="node.name" />
       <NuxtImg
         v-for="(galleryImg, i) in gallery.nodes"
         :key="i"
