@@ -4,6 +4,7 @@ export const useAuth = () => {
   const customer = useState<Customer>('customer', () => ({ billing: {}, shipping: {} }));
   const viewer = useState<Viewer | null>('viewer', () => null);
   const isPending = useState<boolean>('isPending', () => false);
+  const orders = useState<Order[] | null>('orders', () => null);
 
   // Log in the user
   const loginUser = async (credentials: CreateAccountInput): Promise<{ success: boolean; error: any }> => {
@@ -92,15 +93,31 @@ export const useAuth = () => {
     }
   };
 
+  const getOrders = async (): Promise<{ success: boolean; error: any }> => {
+    try {
+      const { customer } = await GqlGetOrders();
+      if (customer) {
+        orders.value = customer.orders?.nodes || [];
+        return { success: true, error: null };
+      }
+      return { success: false, error: 'There was an error getting your orders. Please try again later.' };
+    } catch (error: any) {
+      const gqlError = error?.gqlErrors?.[0];
+      return { success: false, error: gqlError?.message };
+    }
+  };
+
   return {
     viewer,
     customer,
     isPending,
+    orders,
     loginUser,
     updateCustomer,
     updateViewer,
     logoutUser,
     registerUser,
     sendResetPasswordEmail,
+    getOrders,
   };
 };

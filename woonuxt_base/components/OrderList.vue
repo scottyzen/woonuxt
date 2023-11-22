@@ -1,40 +1,57 @@
 <script setup>
 const { formatDate } = useHelpers();
-const orders = ref(null);
-onMounted(async () => {
-  const { customer } = await GqlGetOrders();
-  orders.value = customer?.orders;
-});
+const { getOrders, orders } = useAuth();
+
+if (orders.value === null) await getOrders();
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+const refresh = async () => {
+  orders.value = null;
+  scrollToTop();
+  await getOrders();
+};
 </script>
 
 <template>
-  <div class="bg-white rounded-lg flex shadow min-h-[250px] p-8 justify-center items-center">
-    <table v-if="orders" class="w-full text-left table-auto">
-      <thead>
-        <tr>
-          <th>{{ $t('messages.shop.order') }}</th>
-          <th>{{ $t('messages.general.date') }}</th>
-          <th>{{ $t('messages.general.status') }}</th>
-          <th class="text-right">{{ $t('messages.shop.total') }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="order in orders.nodes" :key="order.orderNumber">
-          <td class="rounded-l-lg">
-            <NuxtLink :to="`/order-summary/${order.orderNumber}`" class="cursor-pointer hover:underline">
-              {{ order.orderNumber }}
-            </NuxtLink>
-          </td>
-          <td>{{ formatDate(order.date) }}</td>
-          <td :class="`order-${order.status}`" class="order-status">
-            {{ order.status }}
-          </td>
-          <td class="text-right rounded-r-lg">
-            {{ order.total }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="bg-white rounded-lg flex shadow min-h-[250px] p-12 justify-center items-center">
+    <div v-if="orders && orders.length" class="w-full">
+      <table class="w-full text-left table-auto">
+        <thead>
+          <tr>
+            <th>{{ $t('messages.shop.order') }}</th>
+            <th>{{ $t('messages.general.date') }}</th>
+            <th>{{ $t('messages.general.status') }}</th>
+            <th class="text-right">{{ $t('messages.shop.total') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="order in orders" :key="order.orderNumber">
+            <td class="rounded-l-lg">
+              <NuxtLink :to="`/order-summary/${order.orderNumber}`" class="cursor-pointer hover:underline">
+                {{ order.orderNumber }}
+              </NuxtLink>
+            </td>
+            <td>{{ formatDate(order.date) }}</td>
+            <td :class="`order-${order.status}`" class="order-status">
+              {{ order.status }}
+            </td>
+            <td class="text-right rounded-r-lg">
+              {{ order.total }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="text-center flex justify-center w-full mt-8">
+        <button type="button" @click="refresh" class="flex items-center gap-1 text-sm leading-none hover:bg-gray-50 p-2 rounded">
+          <span>Reresh list</span>
+          <Icon name="ion:refresh-outline" />
+        </button>
+      </div>
+    </div>
+    <div v-else-if="orders && orders.length === 0" class="min-h-[250px] flex items-center justify-center text-gray-500 text-lg">No orders found.</div>
     <LoadingIcon v-else size="24" stroke="2" />
   </div>
 </template>
