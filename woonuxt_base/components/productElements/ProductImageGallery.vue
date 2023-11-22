@@ -16,8 +16,26 @@ const changeImage = (index: number | null): void => {
 <template>
   <div v-if="mainImage">
     <SaleBadge :node="node" class="absolute text-base top-4 right-4" />
-    <NuxtImg v-show="imageToShow === null" class="rounded-xl object-contain w-full min-w-[350px]" width="700" height="700" fit="outside" :src="firstImage" fetchpriority="high" />
-    <NuxtImg v-show="imageToShow === 0" class="rounded-xl object-contain w-full min-w-[350px]" width="700" height="700" fit="outside" :src="mainImage" fetchpriority="high" />
+    <NuxtImg
+      v-show="imageToShow === null"
+      class="rounded-xl object-contain w-full min-w-[350px]"
+      width="700"
+      height="700"
+      fit="outside"
+      :src="firstImage"
+      :alt="node.name"
+      :title="node.name"
+      fetchpriority="high" />
+    <NuxtImg
+      v-show="imageToShow === 0"
+      class="rounded-xl object-contain w-full min-w-[350px]"
+      width="700"
+      height="700"
+      fit="outside"
+      :src="mainImage"
+      :alt="node.name"
+      :title="node.name"
+      fetchpriority="high" />
     <NuxtImg
       v-for="(galleryImg, i) in gallery.nodes"
       v-show="imageToShow === i + 1"
@@ -26,7 +44,9 @@ const changeImage = (index: number | null): void => {
       width="700"
       height="700"
       fit="outside"
-      :src="galleryImg.sourceUrl" />
+      :alt="galleryImg.altText || galleryImg.title || node.name"
+      :title="galleryImg.title || node.name"
+      :src="galleryImg.sourceUrl || '/images/placeholder.jpg'" />
     <div v-if="gallery.nodes.length" class="my-4 gallery-images">
       <NuxtImg class="cursor-pointer rounded-xl" width="110" height="140" :src="firstImage" @click.native="changeImage(null)" />
       <NuxtImg
@@ -37,6 +57,8 @@ const changeImage = (index: number | null): void => {
         height="140"
         fit="outside"
         :src="galleryImg.sourceUrl"
+        :alt="galleryImg.altText || galleryImg.title || node.name"
+        :title="galleryImg.title || node.name"
         @click.native="changeImage(i + 1)" />
     </div>
   </div>

@@ -111,7 +111,12 @@ const updateSelectedVariations = (variations: Variation[]): void => {
           <div class="flex items-center gap-2">
             <span class="text-gray-400">{{ $t('messages.shop.category', 2) }}:</span>
             <div class="product-categories" v-if="product.productCategories">
-              <NuxtLink v-for="category in product.productCategories.nodes" :key="category.slug" :to="`/product-category/${decodeURI(category.slug)}`" class="hover:text-primary"
+              <NuxtLink
+                v-for="category in product.productCategories.nodes"
+                :key="category.slug"
+                :to="`/product-category/${decodeURI(category.slug)}`"
+                class="hover:text-primary"
+                :title="category.name"
                 >{{ category.name }}<span class="comma">, </span></NuxtLink
               >
             </div>
