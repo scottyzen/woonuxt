@@ -89,7 +89,7 @@ export function useHelpers() {
 
   const decodeURI = (str: string): string => decodeURIComponent(str);
 
-  const isQueryEmpty = computed(() => Object.keys(route.query).length === 0);
+  const isQueryEmpty = computed<boolean>(() => Object.keys(route.query).length === 0);
 
   const formatDate = (date: string): string => {
     return new Date(date).toLocaleDateString('en-US', {

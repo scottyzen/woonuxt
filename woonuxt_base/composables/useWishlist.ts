@@ -3,9 +3,8 @@
  * @description A composable that handles the wishlist in local storage
  */
 
-const theList = ref([] as Product[]);
-
 export function useWishlist() {
+  const theList = useState<Product[]>('wishlist', () => []);
   /**
    * Add an item to the list
    * @param {Product} item

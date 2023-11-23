@@ -1,5 +1,4 @@
 // Example: ?search=shirt
-// const searchQuery = ref('' as string);
 
 export function useSearching() {
   const isShowingSearch = useState<boolean>('isShowingSearch', () => false);
@@ -27,9 +26,7 @@ export function useSearching() {
     setSearchQuery('');
   }
 
-  const isSearchActive = computed(() => {
-    return !!searchQuery.value;
-  });
+  const isSearchActive = computed<boolean>(() => !!searchQuery.value);
 
   const toggleSearch = () => {
     isShowingSearch.value = !isShowingSearch.value;

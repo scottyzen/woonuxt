@@ -2,7 +2,6 @@
 const props = defineProps({
   products: { type: Array, default: null },
 });
-console.log(props.products);
 </script>
 
 <template>

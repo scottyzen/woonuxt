@@ -1,10 +1,11 @@
 // Example: ?orderby=price&order=asc
-const orderQuery = ref('' as string);
 
 export function useSorting() {
   const route = useRoute();
   const router = useRouter();
   const { updateProductList } = useProducts();
+
+  const orderQuery = useState<string>('order', () => '');
 
   orderQuery.value = route.query.orderby as string;
 
@@ -19,7 +20,7 @@ export function useSorting() {
     }, 100);
   }
 
-  const isSortingActive = computed(() => !!orderQuery.value);
+  const isSortingActive = computed<boolean>(() => !!orderQuery.value);
 
   // Define a function to order the products
   function sortProducts(products: Product[]): Product[] {

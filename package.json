@@ -19,8 +19,8 @@
   "devDependencies": {
     "@nuxt/image": "rc",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
-    "@nuxtjs/i18n": "^8.0.0-rc.4",
-    "@nuxtjs/tailwindcss": "^6.9.5",
+    "@nuxtjs/i18n": "8.0.0-rc.5",
+    "@nuxtjs/tailwindcss": "^6.10.1",
     "@tailwindcss/typography": "^0.5.10",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
