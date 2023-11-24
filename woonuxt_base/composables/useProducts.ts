@@ -19,6 +19,7 @@ export function useProducts() {
     const { isSortingActive, sortProducts } = await useSorting();
     const { isFiltersActive, filterProducts } = await useFiltering();
     const { isSearchActive, searchProducts } = await useSearching();
+    const { scrollToTop } = useHelpers();
 
     // return all products if no filters are active
     if (!isFiltersActive.value && !isSearchActive.value && !isSortingActive.value) {
@@ -34,6 +35,7 @@ export function useProducts() {
       if (isSortingActive.value) newProducts = await sortProducts(newProducts);
 
       products.value = newProducts;
+      scrollToTop();
     } catch (error) {
       console.error(error);
     }

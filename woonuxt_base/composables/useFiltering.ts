@@ -79,10 +79,14 @@ export function useFiltering() {
    * Reset the filter value in the url
    */
   function resetFilter(): void {
+    const { scrollToTop } = useHelpers();
     filterQuery.value = '';
     router.push({ query: { ...route.query, filter: undefined } });
 
-    setTimeout(() => updateProductList(), 50);
+    setTimeout(() => {
+      updateProductList();
+      scrollToTop();
+    }, 50);
   }
 
   /**

@@ -99,6 +99,10 @@ export function useHelpers() {
     });
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return {
     isShowingMobileMenu,
     wooNuxtVersionInfo,
@@ -115,5 +119,6 @@ export function useHelpers() {
     checkForVariationTypeOfAny,
     decodeURI,
     formatDate,
+    scrollToTop,
   };
 }

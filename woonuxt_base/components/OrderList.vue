@@ -1,12 +1,8 @@
 <script setup>
-const { formatDate } = useHelpers();
+const { formatDate, scrollToTop } = useHelpers();
 const { getOrders, orders } = useAuth();
 
 if (orders.value === null) await getOrders();
-
-const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
 
 const refresh = async () => {
   orders.value = null;

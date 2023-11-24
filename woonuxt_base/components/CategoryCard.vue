@@ -23,7 +23,7 @@ const { node } = defineProps<Props>();
       loading="lazy"
       fit="outside"
       format="webp"
-      densities="x1 x2" />
+      sizes="sm:280px lg:560px" />
     <div class="absolute inset-x-0 bottom-0 opacity-50 bg-gradient-to-t from-black to-transparent h-1/2" />
     <span class="relative z-10 mt-auto mb-2 text-sm font-semibold text-white capitalize md:text-base md:mb-4" v-html="node.name" />
   </NuxtLink>
