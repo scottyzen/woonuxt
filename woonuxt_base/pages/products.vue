@@ -1,5 +1,7 @@
 <script setup>
-const { setProducts, updateProductList, products } = useProducts();
+const { setProducts, updateProductList } = useProducts();
+const route = useRoute();
+
 const { isQueryEmpty } = useHelpers();
 
 const { data } = await useAsyncGql('getProducts');
@@ -9,6 +11,14 @@ setProducts(allProducts);
 onMounted(() => {
   if (!isQueryEmpty.value) updateProductList();
 });
+
+watch(
+  () => route.query,
+  () => {
+    if (route.name !== 'products') return;
+    updateProductList();
+  },
+);
 
 useHead({
   title: 'Products',

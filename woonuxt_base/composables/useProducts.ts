@@ -16,9 +16,13 @@ export function useProducts() {
   }
 
   const updateProductList = async (): Promise<void> => {
+    const { scrollToTop } = useHelpers();
     const { isSortingActive, sortProducts } = await useSorting();
     const { isFiltersActive, filterProducts } = await useFiltering();
     const { isSearchActive, searchProducts } = await useSearching();
+
+    // scroll to top of page
+    scrollToTop();
 
     // return all products if no filters are active
     if (!isFiltersActive.value && !isSearchActive.value && !isSortingActive.value) {

@@ -17,26 +17,28 @@ const versionInfo = `WooNuxt v${wooNuxtVersionInfo}`;
       <div class="w-3/7 lg:w-auto">
         <div class="mb-1 font-semibold">Information</div>
         <div class="text-sm">
-          <a class="py-1.5 block">About Us</a>
-          <a class="py-1.5 block">Careers</a>
-          <a class="py-1.5 block">Press</a>
-          <a class="py-1.5 block">Affiliates</a>
+          <a class="py-1.5 block" href="https://github.com/scottyzen/woonuxt?tab=readme-ov-file#next-generation-front-end-for-woocommerce" target="_blank">About</a>
+          <a href="/" class="py-1.5 block">Careers</a>
+          <a href="/" class="py-1.5 block">Press</a>
+          <a href="/" class="py-1.5 block">Affiliates</a>
         </div>
       </div>
       <div class="w-3/7 lg:w-auto">
         <div class="mb-1 font-semibold">Products</div>
         <div class="text-sm">
           <NuxtLink to="/products" class="py-1.5 block">{{ $t('messages.shop.newArrivals') }}</NuxtLink>
-          <a href="#" class="py-1.5 block">{{ $t('messages.shop.giftCards') }}</a>
+          <NuxtLink to="/products?filter=sale[true]" class="py-1.5 block">On sale</NuxtLink>
+          <NuxtLink to="/products?orderby=rating&order=ASC&filter=rating[1]" class="py-1.5 block">Top rated</NuxtLink>
+          <a href="/" class="py-1.5 block">{{ $t('messages.shop.giftCards') }}</a>
         </div>
       </div>
       <div class="w-3/7 lg:w-auto">
         <div class="mb-1 font-semibold">{{ $t('messages.general.customerService') }}</div>
         <div class="text-sm">
           <NuxtLink to="/contact" class="py-1.5 block">Contact Us</NuxtLink>
-          <a class="py-1.5 block">Shipping & Returns</a>
-          <a class="py-1.5 block">Privacy Policy</a>
-          <a class="py-1.5 block">Terms & Conditions</a>
+          <a href="/" class="py-1.5 block">Shipping & Returns</a>
+          <a href="/" class="py-1.5 block">Privacy Policy</a>
+          <a href="/" class="py-1.5 block">Terms & Conditions</a>
         </div>
       </div>
       <div class="w-3/7 lg:w-auto">
