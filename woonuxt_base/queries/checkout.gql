@@ -47,6 +47,8 @@ mutation Checkout(
               name
               image {
                 sourceUrl
+                altText
+                title
               }
             }
           }
@@ -55,6 +57,8 @@ mutation Checkout(
               name
               image {
                 sourceUrl
+                altText
+                title
               }
             }
           }

@@ -15,7 +15,7 @@ onMounted(() => {
 watch(
   () => route.query,
   () => {
-    if (route.path !== '/products') return;
+    if (route.name !== 'products') return;
     updateProductList();
   },
 );

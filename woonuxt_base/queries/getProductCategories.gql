@@ -7,7 +7,9 @@ query getProductCategories($first: Int = 20) {
       name
       slug
       image {
-        sourceUrl
+        sourceUrl(size: MEDIUM_LARGE)
+        altText
+        title
       }
     }
   }

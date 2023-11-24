@@ -28,7 +28,7 @@ const versionInfo = `WooNuxt v${wooNuxtVersionInfo}`;
         <div class="text-sm">
           <NuxtLink to="/products" class="py-1.5 block">{{ $t('messages.shop.newArrivals') }}</NuxtLink>
           <NuxtLink to="/products?filter=sale[true]" class="py-1.5 block">On sale</NuxtLink>
-          <NuxtLink to="/products?orderby=rating&order=ASC" class="py-1.5 block">Top rated</NuxtLink>
+          <NuxtLink to="/products?orderby=rating&order=ASC&filter=rating[1]" class="py-1.5 block">Top rated</NuxtLink>
           <a href="/" class="py-1.5 block">{{ $t('messages.shop.giftCards') }}</a>
         </div>
       </div>

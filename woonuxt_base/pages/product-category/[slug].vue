@@ -1,5 +1,5 @@
 <script setup>
-const { setProducts, updateProductList, products } = useProducts();
+const { setProducts, updateProductList } = useProducts();
 const { isQueryEmpty } = useHelpers();
 const route = useRoute();
 const slug = route.params.slug;
@@ -10,6 +10,14 @@ setProducts(data.value?.products?.nodes || []);
 onMounted(() => {
   if (!isQueryEmpty.value) updateProductList();
 });
+
+watch(
+  () => route.query,
+  () => {
+    if (route.name !== 'product-category-slug') return;
+    updateProductList();
+  },
+);
 
 useHead({
   title: 'Products',
@@ -27,10 +35,8 @@ useHead({
         <OrderByDropdown class="hidden md:inline-flex" />
         <ShowFilterTrigger class="md:hidden" />
       </div>
-      <Transition name="fade" mode="out-in">
-        <ProductGrid v-if="products.length" />
-        <NoProductsFound v-else />
-      </Transition>
+      <ProductGrid />
+      <LazyNoProductsFound />
     </div>
   </div>
 </template>
