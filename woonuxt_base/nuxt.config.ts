@@ -56,10 +56,19 @@ export default defineNuxtConfig({
     },
   },
 
-  routeRules: {
-    '/product/**': { isr: 300 },
-    '/checkout/order-received/**': { ssr: false },
-    '/order-summary/**': { ssr: false },
+  // routeRules: {
+  //   '/product/**': { isr: 300 },
+  //   '/checkout/order-received/**': { ssr: false },
+  //   '/order-summary/**': { ssr: false },
+  // },
+
+  nitro: {
+    routeRules: {
+      '/product/**': { isr: 60 },
+      '/checkout/order-received/**': { ssr: false },
+      '/order-summary/**': { ssr: false },
+    },
+    preset: 'netlify-edge',
   },
 
   runtimeConfig: {
