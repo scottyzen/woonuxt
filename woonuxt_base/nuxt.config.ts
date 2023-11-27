@@ -57,6 +57,7 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
+    '/product/**': { isr: 300 },
     '/checkout/order-received/**': { ssr: false },
     '/order-summary/**': { ssr: false },
   },
