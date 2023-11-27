@@ -60,7 +60,17 @@ export default defineNuxtConfig({
     '/product/**': { isr: 300 },
     '/checkout/order-received/**': { ssr: false },
     '/order-summary/**': { ssr: false },
+    '/**': { headers: { 'x-magic-of': 'WooNuxt' } },
   },
+
+  // nitro: {
+  //   routeRules: {
+  //     '/product/*': { isr: 60 },
+  //     '/checkout/order-received/**': { ssr: false },
+  //     '/order-summary/**': { ssr: false },
+  //     '/**': { headers: { 'x-magic-of': 'WooNuxt' } },
+  //   },
+  // },
 
   runtimeConfig: {
     public: {
