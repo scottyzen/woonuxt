@@ -5,6 +5,7 @@ interface Props {
 }
 
 const { node } = defineProps<Props>();
+const imageSrc = node.image?.sourceUrl || '/images/placeholder.jpg';
 </script>
 
 <template>
@@ -14,10 +15,10 @@ const { node } = defineProps<Props>();
     class="relative flex justify-center overflow-hidden border border-white rounded-xl item snap-mandatory snap-x">
     <NuxtImg
       v-if="node.image?.sourceUrl"
-      width="280"
-      height="350"
+      width="250"
+      height="300"
       class="absolute inset-0 object-cover w-full h-full"
-      :src="node.image?.sourceUrl || '/images/placeholder.jpg'"
+      :src="imageSrc"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
       loading="lazy"

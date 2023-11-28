@@ -1,3 +1,4 @@
+import { NuxtLink } from './../.nuxt/components.d';
 import pkg from './package.json';
 import { createResolver } from '@nuxt/kit';
 const { resolve } = createResolver(import.meta.url);

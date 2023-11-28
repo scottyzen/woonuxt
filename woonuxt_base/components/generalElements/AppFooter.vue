@@ -47,7 +47,7 @@ const versionInfo = `WooNuxt v${wooNuxtVersionInfo}`;
           <NuxtLink to="/my-account/" class="py-1.5 block">{{ $t('messages.account.myAccount') }}</NuxtLink>
           <NuxtLink to="/my-account/?tab=orders" class="py-1.5 block">{{ $t('messages.shop.orderHistory') }}</NuxtLink>
           <NuxtLink to="/wishlist" class="py-1.5 block">{{ $t('messages.shop.wishlist') }}</NuxtLink>
-          <a class="py-1.5 block">{{ $t('messages.general.newsletter') }}</a>
+          <a href="/" class="py-1.5 block">{{ $t('messages.general.newsletter') }}</a>
         </div>
       </div>
     </div>
