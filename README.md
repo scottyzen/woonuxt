@@ -12,7 +12,7 @@ The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for
 
 ## Troubleshooting
 
-You can find some common errors and how to fix them in here: [FAQ](https://woonuxt.com/faq#some-common-errors-to-troubleshoot)
+You can find some common errors and how to fix them in [here](https://woonuxt.com/faq#some-common-errors-to-troubleshoot)
 
 &nbsp;
 
