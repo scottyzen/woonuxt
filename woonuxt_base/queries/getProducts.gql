@@ -16,9 +16,6 @@ query getProducts($after: String, $slug: [String], $first: Int = 9999, $orderby:
       type
       databaseId
       id
-      description
-      rawDescription: description(format: RAW)
-      shortDescription
       averageRating
       reviewCount
       ...Terms

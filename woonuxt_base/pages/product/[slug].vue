@@ -85,7 +85,7 @@ const updateSelectedVariations = (variations: Variation[]): void => {
           </div>
         </div>
 
-        <div class="mb-8 font-light prose" v-html="product.description || product.shortDescription"></div>
+        <div class="mb-8 font-light prose" v-html="product.description || product.shortDescription" />
 
         <hr />
 

@@ -9,6 +9,9 @@ query getProduct($slug: ID!) {
     id
     slug
     sku
+    description
+    rawDescription: description(format: RAW)
+    shortDescription
     attributes {
       nodes {
         variation

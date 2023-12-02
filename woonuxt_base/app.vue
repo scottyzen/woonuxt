@@ -35,7 +35,7 @@ watch(
     </Transition>
 
     <Transition name="slide-from-left">
-      <LazyMobileMenu v-if="isShowingMobileMenu" />
+      <MobileMenu v-if="isShowingMobileMenu" />
     </Transition>
 
     <NuxtPage />
@@ -44,7 +44,7 @@ watch(
       <div v-if="isShowingCart || isShowingMobileMenu" class="bg-black opacity-25 inset-0 z-40 fixed" @click="underlayCick"></div>
     </Transition>
 
-    <AppFooter />
+    <LazyAppFooter />
   </div>
 </template>
 
