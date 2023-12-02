@@ -129,8 +129,8 @@ const updateSelectedVariations = (variations: Variation[]): void => {
         </div>
       </div>
     </div>
-    <div class="my-32">
-      <ProductTabs :product="product" />
+    <div v-if="product.description || product.reviews" class="my-32">
+      <LazyProductTabs :product="product" />
     </div>
     <div class="my-32" v-if="product.related">
       <div class="mb-4 text-xl font-semibold">{{ $t('messages.shop.youMayLike') }}</div>

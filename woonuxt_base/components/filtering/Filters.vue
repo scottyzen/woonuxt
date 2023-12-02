@@ -1,4 +1,5 @@
 <script setup>
+const { isFiltersActive } = useFiltering();
 const { removeBodyClass } = useHelpers();
 const runtimeConfig = useRuntimeConfig();
 const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES || [];
@@ -30,7 +31,7 @@ const { hideCategories } = defineProps({ hideCategories: { type: Boolean, defaul
       </div>
       <OnSaleFilter />
       <LazyStarRatingFilter />
-      <LazyResetFiltersButton />
+      <LazyResetFiltersButton v-if="isFiltersActive" />
     </div>
   </aside>
   <div class="fixed inset-0 z-50 hidden bg-black opacity-25 filter-overlay" @click="removeBodyClass('show-filters')"></div>

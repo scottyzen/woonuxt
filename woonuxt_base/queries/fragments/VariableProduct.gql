@@ -3,9 +3,6 @@ fragment VariableProduct on VariableProduct {
   rawPrice: price(format: RAW)
   slug
   date
-  description
-  rawDescription: description(format: RAW)
-  shortDescription
   weight
   length
   width

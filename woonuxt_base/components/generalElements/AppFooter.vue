@@ -8,10 +8,7 @@ const versionInfo = `WooNuxt v${wooNuxtVersionInfo}`;
     <div class="container flex flex-wrap justify-between gap-12 my-24 md:gap-24">
       <div class="mr-auto">
         <Logo />
-        <p class="mt-4 text-sm text-gray-700 xl:max-w-sm">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl sit amet aliquam lacinia, nunc odio lacinia tortor, vel aliquam nisl lorem quis nunc. Sed
-          euismod, nisl sit amet aliquam lacinia, nunc odio lacinia tortor, vel aliquam nisl lorem quis nunc.
-        </p>
+        <WebsiteShortDescription />
         <LangSwitcher class="mt-8" />
       </div>
       <div class="w-3/7 lg:w-auto">
@@ -20,7 +17,7 @@ const versionInfo = `WooNuxt v${wooNuxtVersionInfo}`;
           <a class="py-1.5 block" href="https://github.com/scottyzen/woonuxt?tab=readme-ov-file#next-generation-front-end-for-woocommerce" target="_blank">About</a>
           <a href="/" class="py-1.5 block">Careers</a>
           <a href="/" class="py-1.5 block">Press</a>
-          <a href="/" class="py-1.5 block">Affiliates</a>
+          <a href="https://woonuxt.com/faq" class="py-1.5 block" rel="noreferrer" target="_blank">FAQ's</a>
         </div>
       </div>
       <div class="w-3/7 lg:w-auto">

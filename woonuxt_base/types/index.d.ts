@@ -85,6 +85,24 @@ interface ProductTerm {
   slug?: string | null;
 }
 
+interface Author {
+  name?: string | null;
+  avatar?: { url?: string | null } | null;
+}
+
+interface Review {
+  rating?: number | null;
+  content?: string | null;
+  id?: string | null;
+  date?: string | null;
+  author?: { node?: Author | null } | null;
+}
+
+interface Reviews {
+  averageRating?: number | null;
+  edges?: Array<{ rating?: number | null; node?: Review | null }> | null;
+}
+
 interface Product {
   name?: string | null;
   databaseId?: number | null;
@@ -120,6 +138,7 @@ interface Product {
   variations?: { nodes: Variation[] } | null;
   node: SimpleProduct | VariableProduct;
   related?: { nodes: Array<Product> } | null;
+  reviews?: Reviews | null;
 }
 
 interface SimpleProduct {
