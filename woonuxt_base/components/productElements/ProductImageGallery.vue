@@ -22,6 +22,7 @@ const changeImage = (index: number | null): void => {
       width="700"
       height="700"
       fit="outside"
+      format="webp"
       :src="firstImage"
       :alt="node.name"
       :title="node.name"
@@ -32,6 +33,7 @@ const changeImage = (index: number | null): void => {
       width="700"
       height="700"
       fit="outside"
+      format="webp"
       :src="mainImage"
       :alt="node.name"
       :title="node.name"
@@ -44,11 +46,12 @@ const changeImage = (index: number | null): void => {
       width="700"
       height="700"
       fit="outside"
+      format="webp"
       :alt="galleryImg.altText || galleryImg.title || node.name"
       :title="galleryImg.title || node.name"
       :src="galleryImg.sourceUrl || '/images/placeholder.jpg'" />
     <div v-if="gallery.nodes.length" class="my-4 gallery-images">
-      <NuxtImg class="cursor-pointer rounded-xl" width="110" height="140" :src="firstImage" @click.native="changeImage(null)" :alt="node.name" :title="node.name" />
+      <NuxtImg class="cursor-pointer rounded-xl" width="110" height="140" format="webp" :src="firstImage" @click.native="changeImage(null)" :alt="node.name" :title="node.name" />
       <NuxtImg
         v-for="(galleryImg, i) in gallery.nodes"
         :key="i"
@@ -56,6 +59,7 @@ const changeImage = (index: number | null): void => {
         width="110"
         height="140"
         fit="outside"
+        format="webp"
         :src="galleryImg.sourceUrl"
         :alt="galleryImg.altText || galleryImg.title || node.name"
         :title="galleryImg.title || node.name"
