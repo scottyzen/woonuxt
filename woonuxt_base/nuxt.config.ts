@@ -1,4 +1,3 @@
-import { NuxtLink } from './../.nuxt/components.d';
 import pkg from './package.json';
 import { createResolver } from '@nuxt/kit';
 const { resolve } = createResolver(import.meta.url);
@@ -59,6 +58,7 @@ export default defineNuxtConfig({
 
   nitro: {
     routeRules: {
+      '/product/*': { isr: 300 },
       '/checkout/order-received/**': { ssr: false },
       '/order-summary/**': { ssr: false },
     },
