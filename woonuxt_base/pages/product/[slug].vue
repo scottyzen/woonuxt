@@ -41,7 +41,7 @@ const updateSelectedVariations = (variations: Attribute[]): void => {
   });
 
   activeVariation.value = getActiveVariation[0];
-  selectProductInput.value.variationId = activeVariation.value?.databaseId || null;
+  selectProductInput.value.variationId = activeVariation.value?.databaseId ?? null;
   selectProductInput.value.variation = activeVariation.value ? attrValues.value : null;
   variation.value = variations;
 };
