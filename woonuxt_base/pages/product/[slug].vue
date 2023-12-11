@@ -2,15 +2,15 @@
 const route = useRoute();
 const { arraysEqual, formatArray, checkForVariationTypeOfAny } = useHelpers();
 const { addToCart, isUpdatingCart } = useCart();
-const { decodeURI } = useHelpers();
+const { formatURI } = useHelpers();
 const slug = route.params.slug as string;
 
 const { data } = (await useAsyncGql('getProduct', { slug })) as { data: { value: { product: Product } } };
 const product = data?.value?.product;
 
 useHead({
-  title: product?.name || 'Product',
-  meta: [{ hid: 'description', name: 'description', content: product?.rawDescription || '' }],
+  title: product?.name ?? 'Product',
+  meta: [{ hid: 'description', name: 'description', content: product?.rawDescription ?? '' }],
 });
 
 const quantity = ref(1);
@@ -19,7 +19,7 @@ const variation = ref([]) as Ref<Variation[]>;
 const indexOfTypeAny = [] as number[];
 const attrValues = ref();
 
-const type = computed(() => (activeVariation.value ? activeVariation.value : product)) as ComputedRef<Product | Variation>;
+const type = computed(() => (activeVariation.value ? activeVariation.value : product));
 const selectProductInput = computed(() => ({ productId: type.value.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
 const disabledAddToCart = computed(() => (!activeVariation.value && !!product.variations) || type.value.stockStatus !== 'IN_STOCK');
 
@@ -27,10 +27,10 @@ onMounted(() => {
   if (product.variations) indexOfTypeAny.push(...checkForVariationTypeOfAny(product));
 });
 
-const updateSelectedVariations = (variations: Variation[]): void => {
+const updateSelectedVariations = (variations: Attribute[]): void => {
   if (!product.variations) return;
 
-  attrValues.value = variations.map((el: Attribute) => ({ attributeName: el.name, attributeValue: el.value }));
+  attrValues.value = variations.map((el) => ({ attributeName: el.name, attributeValue: el.value }));
   const cloneArray = JSON.parse(JSON.stringify(variations));
   const getActiveVariation = product.variations.nodes.filter((variation: any) => {
     // If there is any variation of type ANY set the value to ''
@@ -61,7 +61,7 @@ const updateSelectedVariations = (variations: Variation[]): void => {
         :node="type" />
       <NuxtImg v-else class="relative flex-1" src="/images/placeholder.jpg" :alt="product?.name || 'Product'" />
 
-      <div class="md:max-w-md md:py-2">
+      <div class="lg:max-w-md xl:max-w-lg md:py-2">
         <div class="flex justify-between mb-4">
           <div class="flex-1">
             <h1 class="flex flex-wrap items-center gap-2 mb-2 text-2xl font-sesmibold">
@@ -114,7 +114,7 @@ const updateSelectedVariations = (variations: Variation[]): void => {
               <NuxtLink
                 v-for="category in product.productCategories.nodes"
                 :key="category.slug"
-                :to="`/product-category/${decodeURI(category.slug)}`"
+                :to="`/product-category/${formatURI(category.slug)}`"
                 class="hover:text-primary"
                 :title="category.name"
                 >{{ category.name }}<span class="comma">, </span></NuxtLink

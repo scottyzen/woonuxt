@@ -33,24 +33,27 @@ export function useSearching() {
   };
 
   function searchProducts(products: Product[]): Product[] {
-    const currentRouteName = route.name || 'products'; // Default to products
+    const name = route.name ?? 'products';
+    const search = getSearchQuery();
 
-    // If we are on a category page, we need to add the category slug to the route, otherwise every search will redirect to the products page
+    /**
+     * If we are on a category page, we need to add the category slug to the
+     * route, otherwise every search will redirect to the products page.
+     */
     if (route.name === 'product-category-slug') {
       const categorySlug = route.params.categorySlug as string;
-      router.push({ name: currentRouteName, params: { categorySlug }, query: { ...route.query, search: searchQuery.value } });
+      router.push({ name, params: { categorySlug }, query: { ...route.query, search } });
     } else {
-      router.push({ name: 'products', query: { ...route.query, search: searchQuery.value } });
+      router.push({ name: 'products', query: { ...route.query, search } });
     }
 
-    const query = getSearchQuery();
-    return query
+    return search
       ? products.filter((product: Product) => {
           const name = product.name?.toLowerCase();
           const description = product.description ? product.description.toLowerCase() : null;
           const shortDescription = product.shortDescription ? product.shortDescription.toLowerCase() : null;
-          const search = query.toLowerCase();
-          return name?.includes(search) || description?.includes(search) || shortDescription?.includes(search);
+          const query = search.toLowerCase();
+          return name?.includes(query) ?? description?.includes(query) ?? shortDescription?.includes(query);
         })
       : products;
   }

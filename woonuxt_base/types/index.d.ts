@@ -69,13 +69,14 @@ interface ProductCategory {
 }
 
 interface Attribute {
-  value?: string | null;
-  name?: string | null;
+  value: string;
+  name: string;
 }
 
 interface ProductAttribute {
-  name?: string | null;
-  options?: Array<string | null> | null;
+  name: string;
+  label: string;
+  options?: Array<string> | null;
   variation?: boolean | null;
   visible?: boolean | null;
 }

@@ -70,14 +70,29 @@ const changeImage = (index: number | null): void => {
 
 <style>
 .gallery-images {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  display: flex;
+  overflow: auto;
   gap: 1rem;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .gallery-images img {
-  width: 100%;
-  object-fit: cover;
+  width: 72px;
   aspect-ratio: 5/6;
+  object-fit: cover;
+}
+
+@media (min-width: 768px) {
+  .gallery-images {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+
+    img {
+      width: 100%;
+    }
+  }
 }
 </style>

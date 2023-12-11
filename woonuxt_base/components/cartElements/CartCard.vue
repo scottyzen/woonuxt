@@ -1,12 +1,12 @@
 <script setup>
 const { updateItemQuantity, isUpdatingCart } = useCart();
-const { decodeURI } = useHelpers();
+const { formatURI } = useHelpers();
 const props = defineProps({
   item: { type: Object, required: true },
 });
 const productType = computed(() => (props.item.variation ? props.item.variation?.node : props.item.product?.node));
 const quantity = ref(props.item.quantity);
-const productSlug = computed(() => `/product/${decodeURI(props.item.product.node.slug)}`);
+const productSlug = computed(() => `/product/${formatURI(props.item.product.node.slug)}`);
 
 const updateQuantity = () => {
   updateItemQuantity(props.item.key, quantity.value);

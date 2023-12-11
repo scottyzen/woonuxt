@@ -5,7 +5,7 @@ const route = useRoute();
 const { isQueryEmpty } = useHelpers();
 
 const { data } = await useAsyncGql('getProducts');
-const allProducts = data.value?.products?.nodes || [];
+const allProducts = data.value?.products?.nodes ?? [];
 setProducts(allProducts);
 
 onMounted(() => {
@@ -27,7 +27,7 @@ useHead({
 </script>
 
 <template>
-  <div class="container flex items-start gap-16" v-if="allProducts.length">
+  <div class="container flex items-start gap-16">
     <Filters />
 
     <div class="w-full">
@@ -37,7 +37,7 @@ useHead({
         <LazyShowFilterTrigger class="md:hidden" />
       </div>
       <ProductGrid />
-      <LazyNoProductsFound />
+      <NoProductsFound />
     </div>
   </div>
 </template>

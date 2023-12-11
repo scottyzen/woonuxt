@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const route = useRoute();
 const { productsPerPage } = useHelpers();
-const { decodeURI } = useHelpers();
+const { formatURI } = useHelpers();
 const { products } = useProducts();
 
 // TODO: Refactor all this logic. It's a mess.
@@ -14,7 +14,7 @@ const currentQuery = computed(() => {
       currentQuery += index === 0 ? `${key}=${query[key]}` : `&${key}=${query[key]}`;
     });
   }
-  return decodeURI(currentQuery);
+  return formatURI(currentQuery);
 });
 
 const page = ref(route.params.pageNumber ? parseInt(route.params.pageNumber as string) : 1);
@@ -22,25 +22,25 @@ const numberOfPages = computed<number>(() => Math.ceil(products.value.length / p
 
 const prevSrc = (pageNumber: number) => {
   if (currentQuery.value === '') {
-    return decodeURI(`/products/page/${pageNumber > 1 ? pageNumber - 1 : pageNumber}`);
+    return formatURI(`/products/page/${pageNumber > 1 ? pageNumber - 1 : pageNumber}`);
   } else {
-    return decodeURI(pageNumber > 1 ? `/products/page/${pageNumber - 1}/?${currentQuery.value}` : `/products/page/${pageNumber}/?${currentQuery.value}`);
+    return formatURI(pageNumber > 1 ? `/products/page/${pageNumber - 1}/?${currentQuery.value}` : `/products/page/${pageNumber}/?${currentQuery.value}`);
   }
 };
 
 const nextSrc = (pageNumber: number) => {
   if (currentQuery.value === '') {
-    return decodeURI(`/products/page/${pageNumber < numberOfPages.value ? pageNumber + 1 : pageNumber}`);
+    return formatURI(`/products/page/${pageNumber < numberOfPages.value ? pageNumber + 1 : pageNumber}`);
   } else {
-    return decodeURI(pageNumber < numberOfPages.value ? `/products/page/${pageNumber + 1}/?${currentQuery.value}` : `/products/page/${pageNumber}/?${currentQuery.value}`);
+    return formatURI(pageNumber < numberOfPages.value ? `/products/page/${pageNumber + 1}/?${currentQuery.value}` : `/products/page/${pageNumber}/?${currentQuery.value}`);
   }
 };
 
 const numberSrc = (pageNumber: number) => {
   if (currentQuery.value === '') {
-    return decodeURI(`/products/page/${pageNumber}`);
+    return formatURI(`/products/page/${pageNumber}`);
   } else {
-    return decodeURI(`/products/page/${pageNumber}/?${currentQuery.value}`);
+    return formatURI(`/products/page/${pageNumber}/?${currentQuery.value}`);
   }
 };
 </script>

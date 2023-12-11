@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { decodeURI } = useHelpers();
+const { formatURI } = useHelpers();
 interface Props {
   node: ProductCategory;
 }
@@ -11,7 +11,7 @@ const imageSrc = node.image?.sourceUrl || '/images/placeholder.jpg';
 <template>
   <NuxtLink
     v-if="node"
-    :to="`/product-category/${decodeURI(node.slug)}`"
+    :to="`/product-category/${formatURI(node.slug)}`"
     class="relative flex justify-center overflow-hidden border border-white rounded-xl item snap-mandatory snap-x">
     <NuxtImg
       v-if="node.image?.sourceUrl"

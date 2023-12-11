@@ -1,14 +1,45 @@
+<script setup lang="ts">
+const { formatURI } = useHelpers();
+
+const { attrs } = defineProps<{ attrs: any[] }>();
+
+const emit = defineEmits(['attrs-changed']);
+
+const activeVariations = ref<Attribute[]>([]);
+
+const updateAttrs = () => {
+  const selectedVariations = attrs.map((row): Attribute => {
+    const radioValue = document.querySelector(`.name-${row.name}:checked`) as HTMLInputElement;
+    const dropdownValue = document.querySelector(`#${row.name}`) as HTMLSelectElement;
+
+    return {
+      name: row.name,
+      value: radioValue?.value ?? dropdownValue?.value ?? '',
+    };
+  });
+
+  console.log('selectedVariations', selectedVariations);
+
+  activeVariations.value = selectedVariations;
+  emit('attrs-changed', selectedVariations);
+};
+
+onMounted(() => {
+  updateAttrs();
+});
+</script>
+
 <template>
-  <div class="flex flex-col gap-1 justify-between">
+  <div class="flex flex-col gap-1 justify-between" v-if="attrs">
     <div v-for="(attr, i) in attrs" :key="i" class="flex flex-wrap py-2 relative justify-between">
       <!-- COLOR SWATCHES -->
       <div v-if="attr.name == 'pa_color' || attr.name == 'color'" class="grid gap-2">
         <div class="text-sm">
           {{ $t('messages.general.color') }}
-          <span v-if="activeVariations" class="text-gray-400 capitalize">{{ decodeURIComponent(activeVariations[i].value) }}</span>
+          <span v-if="activeVariations.length" class="text-gray-400 capitalize">{{ formatURI(activeVariations[i].value) }}</span>
         </div>
         <div class="flex gap-2">
-          <span v-for="(option, optionIndex) in attr.options" :key="option.id">
+          <span v-for="(option, optionIndex) in attr.options" :key="optionIndex">
             <label>
               <input
                 :ref="attr.name"
@@ -18,7 +49,7 @@
                 :class="`name-${attr.name}`"
                 :name="attr.name"
                 :value="option"
-                @change="updateAttrs($event)" />
+                @change="updateAttrs" />
               <span class="color-button" :class="`color-${option}`" :title="`${attr.name}: ${option}`"></span>
             </label>
           </span>
@@ -26,26 +57,26 @@
       </div>
 
       <!-- DROPDOWN -->
-      <div v-else-if="attr.options.length > 8" class="grid gap-2">
+      <div v-else-if="attr.options && attr.options?.length > 8" class="grid gap-2">
         <div class="text-sm">
-          {{ attr.label }}<span v-if="activeVariations" class="text-gray-400 capitalize">{{ decodeURIComponent(activeVariations[i].value) }}</span>
+          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400 capitalize">{{ formatURI(activeVariations[i].value) }}</span>
         </div>
         <select :id="attr.name" :ref="attr.name" :name="attr.name" required class="border-white shadow" @change="updateAttrs">
-          <option selected disabled hidden :value="null">{{ $t('messages.general.choose') }} {{ decodeURIComponent(attr.label) }}</option>
-          <option v-for="option in attr.options" :key="option" :value="option" v-html="option" />
+          <option disabled hidden>{{ $t('messages.general.choose') }} {{ formatURI(attr.label) }}</option>
+          <option v-for="(option, dropdownIndex) in attr.options" :key="option" :value="option" v-html="option" :selected="dropdownIndex == 0" />
         </select>
       </div>
 
       <!-- CHECKBOXES -->
       <div v-else class="grid gap-2">
         <div class="text-sm">
-          {{ attr.label }}<span v-if="activeVariations" class="text-gray-400 capitalize">: {{ decodeURIComponent(activeVariations[i].value) }}</span>
+          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400 capitalize">: {{ formatURI(activeVariations[i].value) }}</span>
         </div>
         <div class="flex gap-2">
-          <span v-for="(option, i) in attr.options" :key="option.id">
+          <span v-for="(option, index) in attr.options" :key="index">
             <label>
-              <input :ref="attr.name" class="hidden" :checked="i == 0" type="radio" :class="`name-${attr.name}`" :name="attr.name" :value="option" @change="updateAttrs($event)" />
-              <span class="radio-button" :class="`picker-${option}`" :title="`${attr.name}: ${option}`">{{ decodeURIComponent(option) }}</span>
+              <input :ref="attr.name" class="hidden" :checked="index == 0" type="radio" :class="`name-${attr.name}`" :name="attr.name" :value="option" @change="updateAttrs" />
+              <span class="radio-button" :class="`picker-${option}`" :title="`${attr.name}: ${option}`">{{ formatURI(option) }}</span>
             </label>
           </span>
         </div>
@@ -53,36 +84,6 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  props: {
-    attrs: { type: Array, required: true },
-    variations: { type: Array, required: true },
-  },
-  data() {
-    return {
-      activeVariations: null,
-    };
-  },
-  mounted() {
-    this.updateAttrs();
-  },
-  methods: {
-    updateAttrs() {
-      const selectedVariations = this.attrs.map((row) => {
-        const radioValue = document.querySelector(`.name-${row.name}:checked`);
-        const value = radioValue ? radioValue.value : this.$refs[row.name][0].value;
-        const name = row.name.toLowerCase();
-        return { name, value };
-      });
-
-      this.activeVariations = selectedVariations;
-      this.$emit('attrs-changed', selectedVariations);
-    },
-  },
-};
-</script>
 
 <style lang="postcss">
 .radio-button {

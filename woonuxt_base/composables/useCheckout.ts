@@ -114,7 +114,7 @@ export function useCheckout() {
       // PayPal redirect
       if ((await checkout?.redirect) && orderInput.value.paymentMethod === 'paypal') {
         const frontEndUrl = window.location.origin;
-        let redirectUrl = checkout?.redirect || '';
+        let redirectUrl = checkout?.redirect ?? '';
 
         const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}`;
         const payPalCancelUrl = `${frontEndUrl}/checkout/?cancel_order=true`;

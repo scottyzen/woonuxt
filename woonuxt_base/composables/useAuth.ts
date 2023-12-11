@@ -54,7 +54,7 @@ export const useAuth = () => {
   const registerUser = async (userInfo: CreateAccountInput): Promise<{ success: boolean; error: any }> => {
     isPending.value = true;
     try {
-      const { registerCustomer } = await GqlRegisterCustomer({ input: userInfo });
+      await GqlRegisterCustomer({ input: userInfo });
       return { success: true, error: null };
     } catch (error: any) {
       const gqlError = error?.gqlErrors?.[0];
@@ -97,7 +97,7 @@ export const useAuth = () => {
     try {
       const { customer } = await GqlGetOrders();
       if (customer) {
-        orders.value = customer.orders?.nodes || [];
+        orders.value = customer.orders?.nodes ?? [];
         return { success: true, error: null };
       }
       return { success: false, error: 'There was an error getting your orders. Please try again later.' };

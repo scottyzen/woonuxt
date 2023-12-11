@@ -7,19 +7,15 @@ export function useProducts() {
   // Set the products state and the allProducts variable
   function setProducts(newProducts: Product[]): void {
     if (!Array.isArray(newProducts)) throw new Error('Products must be an array.');
-    try {
-      products.value = newProducts;
-      allProducts = JSON.parse(JSON.stringify(newProducts));
-    } catch (e) {
-      console.log(e);
-    }
+    products.value = newProducts ?? [];
+    allProducts = JSON.parse(JSON.stringify(newProducts));
   }
 
   const updateProductList = async (): Promise<void> => {
     const { scrollToTop } = useHelpers();
-    const { isSortingActive, sortProducts } = await useSorting();
-    const { isFiltersActive, filterProducts } = await useFiltering();
-    const { isSearchActive, searchProducts } = await useSearching();
+    const { isSortingActive, sortProducts } = useSorting();
+    const { isFiltersActive, filterProducts } = useFiltering();
+    const { isSearchActive, searchProducts } = useSearching();
 
     // scroll to top of page
     scrollToTop();
@@ -33,9 +29,9 @@ export function useProducts() {
     // otherwise, apply filter, search and sorting in that order
     try {
       let newProducts = [...allProducts];
-      if (isFiltersActive.value) newProducts = await filterProducts(newProducts);
-      if (isSearchActive.value) newProducts = await searchProducts(newProducts);
-      if (isSortingActive.value) newProducts = await sortProducts(newProducts);
+      if (isFiltersActive.value) newProducts = filterProducts(newProducts);
+      if (isSearchActive.value) newProducts = searchProducts(newProducts);
+      if (isSortingActive.value) newProducts = sortProducts(newProducts);
 
       products.value = newProducts;
     } catch (error) {

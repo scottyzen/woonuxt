@@ -14,7 +14,7 @@ export function useSorting() {
   }
 
   function setOrderQuery(orderby: string, order?: string): void {
-    router.push({ query: { ...route.query, orderby: orderby ? orderby : undefined, order: order ? order : undefined } });
+    router.push({ query: { ...route.query, orderby: orderby ?? undefined, order: order ?? undefined } });
     setTimeout(() => {
       updateProductList();
     }, 100);
