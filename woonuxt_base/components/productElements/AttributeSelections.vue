@@ -18,8 +18,6 @@ const updateAttrs = () => {
     };
   });
 
-  console.log('selectedVariations', selectedVariations);
-
   activeVariations.value = selectedVariations;
   emit('attrs-changed', selectedVariations);
 };
