@@ -5,7 +5,6 @@
         v-if="linkStartsWithWpAdmin && wpBase && link"
         :href="formattedLink"
         target="_blank"
-        rel="noopener noreferrer"
         class="wp-admin-link"
         title="This is a dev-only link, it will not be visible in production.">
         <span class="link">
