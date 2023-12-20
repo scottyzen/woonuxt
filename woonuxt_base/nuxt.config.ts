@@ -29,8 +29,6 @@ export default defineNuxtConfig({
     dir: resolve('./static'),
   },
 
-  pages: true,
-
   hooks: {
     'pages:extend'(pages) {
       pages.push({

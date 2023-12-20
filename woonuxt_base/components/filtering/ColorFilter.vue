@@ -1,4 +1,6 @@
 <script setup>
+const { getFilter, setFilter, isFiltersActive } = useFiltering();
+
 const props = defineProps({
   filterSlug: { type: String, default: '', required: true },
   label: { type: String, default: '' },
@@ -14,8 +16,7 @@ const { data } = await useAsyncGql('getAllTerms', {
   hideEmpty: props.hideEmpty,
 });
 
-const allPaTerms = data?.value?.terms?.nodes || [];
-const { getFilter, setFilter, isFiltersActive } = await useFiltering();
+const allPaTerms = data.value.terms?.nodes || [];
 const selectedTerms = ref(getFilter(props.filterSlug) || []);
 
 const isOpen = ref(props.open);

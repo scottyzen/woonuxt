@@ -1,4 +1,6 @@
 <script setup>
+const { getFilter, setFilter, isFiltersActive } = useFiltering();
+
 const { filterSlug, label, hideEmpty, showCount, open } = defineProps({
   filterSlug: { type: String, default: '', required: true },
   label: { type: String, default: '' },
@@ -9,10 +11,12 @@ const { filterSlug, label, hideEmpty, showCount, open } = defineProps({
 
 const TaxonomyEnum = filterSlug.toUpperCase().replace('_', '');
 
-const { data } = await useAsyncGql('getAllTerms', { taxonomies: TaxonomyEnum, hideEmpty: hideEmpty });
+const { data } = await useAsyncGql('getAllTerms', {
+  taxonomies: TaxonomyEnum,
+  hideEmpty: props.hideEmpty,
+});
 
-const allPaTerms = data?.value?.terms?.nodes || [];
-const { getFilter, setFilter, isFiltersActive } = await useFiltering();
+const allPaTerms = data.value.terms?.nodes || [];
 const selectedTerms = ref(getFilter(filterSlug) || []);
 const filterTitle = ref(label || filterSlug);
 
