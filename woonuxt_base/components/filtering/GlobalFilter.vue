@@ -13,7 +13,7 @@ const TaxonomyEnum = filterSlug.toUpperCase().replace('_', '');
 
 const { data } = await useAsyncGql('getAllTerms', {
   taxonomies: TaxonomyEnum,
-  hideEmpty: props.hideEmpty,
+  hideEmpty,
 });
 
 const allPaTerms = data.value.terms?.nodes || [];

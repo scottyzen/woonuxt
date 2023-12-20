@@ -88,4 +88,8 @@ export default defineNuxtConfig({
     defaultLocale: 'en',
     strategy: 'no_prefix',
   },
+
+  experimental: {
+    componentIslands: true,
+  },
 });
