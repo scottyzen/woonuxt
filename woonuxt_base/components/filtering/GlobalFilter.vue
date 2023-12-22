@@ -11,10 +11,17 @@ const { filterSlug, label, hideEmpty, showCount, open } = defineProps({
 
 const TaxonomyEnum = filterSlug.toUpperCase().replace('_', '');
 
-const { data } = await useAsyncGql('getAllTerms', {
-  taxonomies: TaxonomyEnum,
-  hideEmpty,
-});
+const { data } = await useAsyncGql(
+  'getAllTerms',
+  {
+    taxonomies: TaxonomyEnum,
+    hideEmpty,
+  },
+  {
+    server: true,
+    getCachedData: true,
+  },
+);
 
 const allPaTerms = data.value.terms?.nodes || [];
 const selectedTerms = ref(getFilter(filterSlug) || []);
