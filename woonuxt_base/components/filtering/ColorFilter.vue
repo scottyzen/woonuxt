@@ -33,16 +33,14 @@ const checkboxChanged = () => {
 </script>
 
 <template>
-  <div v-if="allPaTerms.length">
-    <div class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center" @click="isOpen = !isOpen">
-      <span>{{ label || filterSlug }}</span>
-      <Icon name="ion:chevron-down-outline" class="transform" :class="isOpen ? 'rotate-180' : ''" />
-    </div>
-    <div v-show="isOpen" class="mt-3 mr-6 max-h-[240px] grid gap-1.5 swatches overflow-auto custom-scrollbar">
-      <div v-for="color in allPaTerms" :key="color.slug" :style="{ '--color': color.slug }" :title="color.name">
-        <input :id="color.slug" v-model="selectedTerms" class="hidden" type="checkbox" :value="color.slug" @change="checkboxChanged" />
-        <label :for="color.slug" class="cursor-pointer m-0"></label>
-      </div>
+  <div class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center" @click="isOpen = !isOpen">
+    <span>{{ label || filterSlug }}</span>
+    <Icon name="ion:chevron-down-outline" class="transform" :class="isOpen ? 'rotate-180' : ''" />
+  </div>
+  <div v-show="isOpen" class="mt-3 mr-6 max-h-[240px] grid gap-1.5 swatches overflow-auto custom-scrollbar">
+    <div v-for="color in allPaTerms" :key="color.slug" :style="{ '--color': color.slug }" :title="color.name">
+      <input :id="color.slug" v-model="selectedTerms" class="hidden" type="checkbox" :value="color.slug" @change="checkboxChanged" />
+      <label :for="color.slug" class="cursor-pointer m-0"></label>
     </div>
   </div>
 </template>

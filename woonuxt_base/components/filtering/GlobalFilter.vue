@@ -11,16 +11,10 @@ const { filterSlug, label, hideEmpty, showCount, open } = defineProps({
 
 const TaxonomyEnum = filterSlug.toUpperCase().replace('_', '');
 
-const { data } = await useAsyncGql(
-  'getAllTerms',
-  {
-    taxonomies: TaxonomyEnum,
-    hideEmpty,
-  },
-  {
-    server: true,
-  },
-);
+const { data } = await useAsyncGql('getAllTerms', {
+  taxonomies: TaxonomyEnum,
+  hideEmpty,
+});
 
 const allPaTerms = data.value.terms?.nodes || [];
 const selectedTerms = ref(getFilter(filterSlug) || []);
@@ -40,19 +34,17 @@ const checkboxChanged = () => {
 </script>
 
 <template>
-  <div v-if="allPaTerms.length">
-    <div class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center" @click="isOpen = !isOpen">
-      <span>{{ filterTitle }}</span>
-      <Icon name="ion:chevron-down-outline" class="transform" :class="isOpen ? 'rotate-180' : ''" />
-    </div>
-    <div v-show="isOpen" class="mt-3 mr-1 max-h-[240px] grid gap-1 overflow-auto custom-scrollbar">
-      <div v-for="{ count, slug, name } in allPaTerms" :key="slug" class="flex gap-2 items-center">
-        <input :id="slug" v-model="selectedTerms" type="checkbox" :value="slug" @change="checkboxChanged" />
-        <label :for="slug" class="cursor-pointer m-0 text-sm">
-          <span v-html="name" />
-          <span v-if="showCount" class="ml-1 text-gray-400 tabular-nums" aria-hidden="true">({{ count || 0 }})</span>
-        </label>
-      </div>
+  <div class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center" @click="isOpen = !isOpen">
+    <span>{{ filterTitle }}</span>
+    <Icon name="ion:chevron-down-outline" class="transform" :class="isOpen ? 'rotate-180' : ''" />
+  </div>
+  <div v-show="isOpen" class="mt-3 mr-1 max-h-[240px] grid gap-1 overflow-auto custom-scrollbar">
+    <div v-for="{ count, slug, name } in allPaTerms" :key="slug" class="flex gap-2 items-center">
+      <input :id="slug" v-model="selectedTerms" type="checkbox" :value="slug" @change="checkboxChanged" />
+      <label :for="slug" class="cursor-pointer m-0 text-sm">
+        <span v-html="name" />
+        <span v-if="showCount" class="ml-1 text-gray-400 tabular-nums" aria-hidden="true">({{ count || 0 }})</span>
+      </label>
     </div>
   </div>
 </template>
