@@ -19,7 +19,6 @@ const { data } = await useAsyncGql(
   },
   {
     server: true,
-    getCachedData: true,
   },
 );
 
