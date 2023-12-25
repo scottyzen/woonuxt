@@ -14,6 +14,7 @@ const productsToShow = computed(() => products.value.slice((page.value - 1) * pr
       </TransitionGroup>
       <Pagination />
     </section>
+    <NoProductsFound v-else />
   </Transition>
 </template>
 
@@ -22,6 +23,9 @@ const productsToShow = computed(() => products.value.slice((page.value - 1) * pr
   @apply my-4 min-h-[600px] grid transition-all gap-8 lg:my-8;
 
   grid-template-columns: repeat(2, 1fr);
+}
+.product-grid:empty {
+  display: none;
 }
 
 @media (min-width: 768px) {

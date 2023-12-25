@@ -27,7 +27,7 @@ useHead({
 </script>
 
 <template>
-  <div class="container flex items-start gap-16">
+  <div class="container flex items-start gap-16" v-if="allProducts.length">
     <Filters />
 
     <div class="w-full">
@@ -37,7 +37,7 @@ useHead({
         <LazyShowFilterTrigger class="md:hidden" />
       </div>
       <ProductGrid />
-      <NoProductsFound />
     </div>
   </div>
+  <NoProductsFound v-else>Could not fecth products from your store. Please check your configuration.</NoProductsFound>
 </template>
