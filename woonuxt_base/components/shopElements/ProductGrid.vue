@@ -8,12 +8,13 @@ const productsToShow = computed(() => products.value.slice((page.value - 1) * pr
 
 <template>
   <Transition name="fade" mode="out-in">
-    <section v-if="!!products.length" class="relative w-full">
+    <section v-if="products?.length" class="relative w-full">
       <TransitionGroup name="shrink" tag="div" mode="in-out" class="product-grid">
         <ProductCard v-for="(node, i) in productsToShow" :key="node.id || i" :node="node" :index="i" />
       </TransitionGroup>
       <Pagination />
     </section>
+    <NoProductsFound v-else />
   </Transition>
 </template>
 

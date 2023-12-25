@@ -4,7 +4,7 @@ const versionInfo = `WooNuxt v${wooNuxtVersionInfo}`;
 </script>
 
 <template>
-  <div class="bg-white">
+  <footer class="bg-white order-last">
     <div class="container flex flex-wrap justify-between gap-12 my-24 md:gap-24">
       <div class="mr-auto">
         <Logo />
@@ -56,5 +56,5 @@ const versionInfo = `WooNuxt v${wooNuxtVersionInfo}`;
         </p>
       </div>
     </div>
-  </div>
+  </footer>
 </template>
