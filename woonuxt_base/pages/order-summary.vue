@@ -41,22 +41,22 @@ const isGuest = computed(() => {
 
       <hr class="my-8" />
 
-      <div class="flex justify-between">
+      <div class="flex justify-between items-center">
         <div>
-          <div class="text-xs text-gray-400 uppercase">{{ $t('messages.shop.order') }}</div>
-          <div>#{{ order.databaseId! }}</div>
+          <div class="text-xs text-gray-400 uppercase mb-2">{{ $t('messages.shop.order') }}</div>
+          <div class="leading-none">#{{ order.databaseId! }}</div>
         </div>
         <div>
-          <div class="text-xs text-gray-400 uppercase">{{ $t('messages.general.date') }}</div>
-          <div>{{ formatDate(order.date!) }}</div>
+          <div class="text-xs text-gray-400 uppercase mb-2">{{ $t('messages.general.date') }}</div>
+          <div class="leading-none">{{ formatDate(order.date!) }}</div>
         </div>
         <div>
-          <div class="text-xs text-gray-400 uppercase">{{ $t('messages.general.status') }}</div>
-          <div>{{ order.status }}</div>
+          <div class="text-xs text-gray-400 uppercase mb-2">{{ $t('messages.general.status') }}</div>
+          <OrderStatusLabel :status="order.status" />
         </div>
         <div>
-          <div class="text-xs text-gray-400 uppercase">{{ $t('messages.general.paymentMethod') }}</div>
-          <div>{{ order.paymentMethodTitle }}</div>
+          <div class="text-xs text-gray-400 uppercase mb-2">{{ $t('messages.general.paymentMethod') }}</div>
+          <div class="leading-none">{{ order.paymentMethodTitle }}</div>
         </div>
       </div>
 

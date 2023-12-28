@@ -1,20 +1,25 @@
 <script setup>
+const router = useRouter();
 const { formatDate, scrollToTop } = useHelpers();
 const { getOrders, orders } = useAuth();
 
-if (orders.value === null) await getOrders();
+if (orders.value === null) getOrders();
 
-const refresh = async () => {
+const refresh = () => {
   orders.value = null;
   scrollToTop();
-  await getOrders();
+  getOrders();
+};
+
+const goToOrder = (orderNumber) => {
+  router.push(`/order-summary/${orderNumber}`);
 };
 </script>
 
 <template>
   <div class="bg-white rounded-lg flex shadow min-h-[250px] p-12 justify-center items-center">
     <div v-if="orders && orders.length" class="w-full">
-      <table class="w-full text-left table-auto">
+      <table class="w-full text-left table-auto" aria-label="Order List">
         <thead>
           <tr>
             <th>{{ $t('messages.shop.order') }}</th>
@@ -24,15 +29,13 @@ const refresh = async () => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="order in orders" :key="order.orderNumber">
+          <tr v-for="order in orders" :key="order.orderNumber" class="cursor-pointer hover:underline" @click="goToOrder(order.orderNumber)">
             <td class="rounded-l-lg">
-              <NuxtLink :to="`/order-summary/${order.orderNumber}`" class="cursor-pointer hover:underline">
-                {{ order.orderNumber }}
-              </NuxtLink>
+              {{ order.orderNumber }}
             </td>
             <td>{{ formatDate(order.date) }}</td>
-            <td :class="`order-${order.status}`" class="order-status">
-              {{ order.status }}
+            <td>
+              <OrderStatusLabel :status="order.status" />
             </td>
             <td class="text-right rounded-r-lg">
               {{ order.total }}
@@ -64,25 +67,5 @@ tbody tr {
 td,
 th {
   @apply py-2 px-3;
-}
-
-.order-status {
-  @apply border rounded-md font-semibold bg-gray-100 my-2 mx-3 text-xs leading-none p-1.5 inline-block;
-}
-
-.order-COMPLETED {
-  @apply bg-green-50 border-green-100 text-green-600;
-}
-
-.order-CANCELLED {
-  @apply bg-red-50 border-red-100 text-red-600;
-}
-
-.order-PENDING {
-  @apply bg-yellow-50 border-yellow-100 text-yellow-600;
-}
-
-.order-PROCESSING {
-  @apply bg-blue-50 border-blue-100 text-blue-600;
 }
 </style>
