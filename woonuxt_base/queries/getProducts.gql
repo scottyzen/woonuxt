@@ -3,7 +3,7 @@
 #import "./fragments/Terms.gql"
 #import "./fragments/ProductCategories.gql"
 
-query getProducts($after: String, $slug: [String], $first: Int = 9999, $orderby: [ProductsOrderbyInput] = { field: DATE, order: DESC }) {
+query getProducts($after: String, $slug: [String], $first: Int = 50, $orderby: [ProductsOrderbyInput] = { field: DATE, order: DESC }) {
   products(first: $first, after: $after, where: { categoryIn: $slug, typeNotIn: EXTERNAL, visibility: VISIBLE, minPrice: 0, orderby: $orderby, status: "publish" }) {
     pageInfo {
       hasNextPage
