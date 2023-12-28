@@ -14,22 +14,22 @@
   "dependencies": {
     "@stripe/stripe-js": "^2.2.2",
     "@vueform/slider": "^2.1.10",
-    "@vueuse/core": "^10.7.0"
+    "@vueuse/core": "^10.7.1"
   },
   "devDependencies": {
     "@nuxt/image": "rc",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@nuxtjs/i18n": "8.0.0-rc.5",
-    "@nuxtjs/tailwindcss": "^6.10.1",
+    "@nuxtjs/tailwindcss": "^6.10.3",
     "@tailwindcss/typography": "^0.5.10",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-nuxt": "^4.0.0",
-    "eslint-plugin-prettier": "^5.1.0",
+    "eslint-plugin-prettier": "^5.1.2",
     "nuxt": "^3.9.0",
     "nuxt-graphql-client": "^0.2.31",
-    "nuxt-icon": "^0.6.7",
+    "nuxt-icon": "^0.6.8",
     "prettier": "^3.1.1",
     "vue-stripe-js": "^1.0.1",
     "woonuxt-settings": "^1.0.46"
