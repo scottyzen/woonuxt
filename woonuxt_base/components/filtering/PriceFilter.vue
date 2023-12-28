@@ -48,23 +48,16 @@ watch(isFiltersActive, () => {
         <label for="price-to" class="leading-none px-2 text-gray-400 absolute">€</label>
       </div>
       <div class="mx-1 mt-1 col-span-full">
-        <Slider v-model="price" :tooltips="false" :lazy="false" :min="0" :max="maxPrice" @change="applyPrice" />
+        <Slider v-model="price" :tooltips="false" :lazy="false" :min="0" :max="maxPrice" ariaLabelledby="price-from price-to" @change="applyPrice" />
       </div>
     </div>
   </div>
 </template>
 
 <style src="@vueform/slider/themes/default.css"></style>
+
 <style lang="postcss">
 .slider-connect {
   @apply bg-primary;
-}
-
-#price-from:after {
-  content: 'FROM';
-  display: block;
-  position: fixed;
-  inset: 0;
-  background: red;
 }
 </style>
