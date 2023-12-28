@@ -58,3 +58,9 @@ const versionInfo = `WooNuxt v${wooNuxtVersionInfo}`;
     </div>
   </footer>
 </template>
+
+<style scoped lang="postcss">
+a {
+  @apply hover:underline;
+}
+</style>
