@@ -35,7 +35,7 @@ const goToOrder = (orderNumber) => {
             </td>
             <td>{{ formatDate(order.date) }}</td>
             <td>
-              <OrderStatusLable :status="order.status" />
+              <OrderStatusLabel :status="order.status" />
             </td>
             <td class="text-right rounded-r-lg">
               {{ order.total }}

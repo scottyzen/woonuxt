@@ -52,7 +52,7 @@ const isGuest = computed(() => {
         </div>
         <div>
           <div class="text-xs text-gray-400 uppercase mb-2">{{ $t('messages.general.status') }}</div>
-          <OrderStatusLable :status="order.status" />
+          <OrderStatusLabel :status="order.status" />
         </div>
         <div>
           <div class="text-xs text-gray-400 uppercase mb-2">{{ $t('messages.general.paymentMethod') }}</div>
