@@ -42,8 +42,8 @@ const showLoader = computed(() => !viewer && !customer);
         </nav>
 
         <main class="flex-1 w-full lg:my-8 rounded-lg">
-          <LazyAccountMyDetails v-if="activeTab === 'my-details'" :user="viewer" />
-          <LazyOrderList v-else-if="activeTab === 'orders'" />
+          <AccountMyDetails v-if="activeTab === 'my-details'" :user="viewer" />
+          <OrderList v-else-if="activeTab === 'orders'" />
         </main>
       </div>
     </template>
