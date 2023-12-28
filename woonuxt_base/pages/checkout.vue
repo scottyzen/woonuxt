@@ -3,14 +3,20 @@ import { StripeElements, StripeElement } from 'vue-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
 const { t } = useI18n();
-const { cart, toggleCart, isUpdatingCart, paymentGateways } = useCart();
+const { cart, isUpdatingCart, paymentGateways } = useCart();
 const { customer, viewer } = useAuth();
 const { orderInput, isProcessingOrder, proccessCheckout } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
 const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY;
+const stripeCardIsComplete = ref(false);
 
 const buttonText = ref(isProcessingOrder.value ? t('messages.general.processing') : t('messages.shop.checkoutButton'));
-const isCheckoutDisabled = computed(() => isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod);
+const isCheckoutDisabled = computed(() => {
+  if (orderInput.value.paymentMethod === 'stripe') {
+    return isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod || !stripeCardIsComplete.value;
+  }
+  return isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod;
+});
 
 const emailRegex = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$');
 const isInvalidEmail = ref(false);
@@ -57,6 +63,35 @@ const checkEmailOnBlur = (email) => {
 const checkEmailOnInput = (email) => {
   if (email || isInvalidEmail.value) isInvalidEmail.value = !emailRegex.test(email);
 };
+
+/**
+ * Watch orderInput.paymentMethod for stripe. If is stripe, add and event listener to .StripeElement to check if it's complete.
+ * It will have the class .StripeElement--complete when it's complete. Then set stripeCardIsComplete to true.
+ */
+watch(
+  () => orderInput.value.paymentMethod,
+  (newVal) => {
+    if (newVal === 'stripe') {
+      setTimeout(() => {
+        const stripeElement = document.querySelector('.StripeElement');
+        if (stripeElement) {
+          // Watch .StripeElement dom element. When it has the class .StripeElement--complete, set stripeCardIsComplete to true.
+          const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.attributeName === 'class') {
+                const attributeValue = mutation.target.getAttribute(mutation.attributeName);
+                stripeCardIsComplete.value = attributeValue.includes('StripeElement--complete');
+              }
+            });
+          });
+          observer.observe(stripeElement, { attributes: true });
+        }
+      }, 1000);
+    } else {
+      stripeCardIsComplete.value = false;
+    }
+  },
+);
 </script>
 
 <template>
