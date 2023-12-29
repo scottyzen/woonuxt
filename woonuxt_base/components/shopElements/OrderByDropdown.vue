@@ -11,7 +11,7 @@ watch([orderby, order], () => {
 </script>
 
 <template>
-  <div class="inline-flex ml-auto -space-x-px shadow-sm rounded-m isolate">
+  <div  class="sticky inline-flex ml-auto -space-x-px shadow-sm rounded-m isolate">
     <button
       class="relative inline-flex items-center p-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 focus:z-20"
       aria-label="Sort"
