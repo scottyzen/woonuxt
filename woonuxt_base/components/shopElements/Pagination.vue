@@ -1,75 +1,50 @@
 <script setup lang="ts">
 const route = useRoute();
-const { productsPerPage } = useHelpers();
-const { formatURI } = useHelpers();
-const { products } = useProducts();
+let { formatURI, } = useHelpers();
+const storedPageId = localStorage.getItem('pageId');
+const pageId = JSON.parse(storedPageId) || [];
+const pageNumber = route.params?.pageNumber_0 ?? "";
 
-// TODO: Refactor all this logic. It's a mess.
-const currentQuery = computed(() => {
-  const query = route.query;
-  const queryKeys = Object.keys(query);
-  let currentQuery = '';
-  if (queryKeys.length > 0) {
-    queryKeys.forEach((key, index) => {
-      currentQuery += index === 0 ? `${key}=${query[key]}` : `&${key}=${query[key]}`;
-    });
-  }
-  return formatURI(currentQuery);
-});
-
-const page = ref(route.params.pageNumber ? parseInt(route.params.pageNumber as string) : 1);
-const numberOfPages = computed<number>(() => Math.ceil(products.value.length / productsPerPage || 1));
-
-const prevSrc = (pageNumber: number) => {
-  if (currentQuery.value === '') {
-    return formatURI(`/products/page/${pageNumber > 1 ? pageNumber - 1 : pageNumber}`);
+const changePageNext = () => {
+  let pageIdValueNext = ""
+  if (pageNumber) {
+    pageIdValueNext = pageId.slice(-1);
   } else {
-    return formatURI(pageNumber > 1 ? `/products/page/${pageNumber - 1}/?${currentQuery.value}` : `/products/page/${pageNumber}/?${currentQuery.value}`);
+    pageIdValueNext = pageId.slice(0);
   }
+  return formatURI(`/products/page/${pageIdValueNext}`);
 };
 
-const nextSrc = (pageNumber: number) => {
-  if (currentQuery.value === '') {
-    return formatURI(`/products/page/${pageNumber < numberOfPages.value ? pageNumber + 1 : pageNumber}`);
+
+const changePageBack = () => {
+  const keys = Object.keys(pageId);
+  const indexOfTarget = keys.findIndex(key => pageId[key] === pageNumber);
+  if (indexOfTarget !== -1 && indexOfTarget > 0) {
+    const keyBeforeTarget = keys[indexOfTarget - 1];
+    const valueBeforeTarget = pageId[keyBeforeTarget];
+    return formatURI(`/products/page/${valueBeforeTarget}`);
   } else {
-    return formatURI(pageNumber < numberOfPages.value ? `/products/page/${pageNumber + 1}/?${currentQuery.value}` : `/products/page/${pageNumber}/?${currentQuery.value}`);
+    return formatURI(`/products/`);
   }
+
 };
 
-const numberSrc = (pageNumber: number) => {
-  if (currentQuery.value === '') {
-    return formatURI(`/products/page/${pageNumber}`);
-  } else {
-    return formatURI(`/products/page/${pageNumber}/?${currentQuery.value}`);
-  }
-};
+
 </script>
 
 <template>
   <div class="flex justify-center mt-8 mb-16 col-span-full tabular-nums">
     <!-- Pagination -->
-    <nav v-if="numberOfPages && numberOfPages > 1" class="inline-flex self-end -space-x-px rounded-md shadow-sm isolate" aria-label="Pagination">
-      <!-- PREV -->
-      <NuxtLink :to="prevSrc(page)" class="prev" :disabled="page == 1" :class="{ 'cursor-not-allowed': page == 1 }" :aria-disabled="page == 1" aria-label="Previous">
-        <Icon name="ion:chevron-back-outline" size="20" class="w-5 h-5" />
-      </NuxtLink>
+    <NuxtLink :to="changePageBack()" class="next mx-2" aria-label="Next">
 
-      <!-- NUMBERS -->
-      <NuxtLink v-for="pageNumber in numberOfPages" :key="pageNumber" :to="numberSrc(pageNumber)" :aria-current="pageNumber === page ? 'page' : undefined" class="page-number">{{
-        pageNumber
-      }}</NuxtLink>
+      <Icon name="ion:arrow-back-circle-sharp" size="20" class="w-5 h-5 mx-2" /> Go Back to fisrt page
+    </NuxtLink>
+    <NuxtLink :to="changePageNext()" class="next mx-2" aria-label="Next">
 
-      <!-- NEXT -->
-      <NuxtLink
-        :to="nextSrc(page)"
-        class="next"
-        :disabled="page === numberOfPages"
-        :class="{ 'cursor-not-allowed': page === numberOfPages }"
-        :aria-disabled="page === numberOfPages"
-        aria-label="Next">
-        <Icon name="ion:chevron-forward-outline" size="20" class="w-5 h-5" />
-      </NuxtLink>
-    </nav>
+      <Icon name="ion:arrow-forward-circle-sharp" size="20" class="w-5 h-5 mx-2" /> Next page
+    </NuxtLink>
+
+
   </div>
 </template>
 

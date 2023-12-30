@@ -2,33 +2,33 @@
 const { setProducts, updateProductList } = useProducts();
 const route = useRoute();
 
-const { isQueryEmpty } = useHelpers();
-const pageSize = 25;
-let afterProduct = "0";
-const productsRef = ref([{ data: '0' }]);
-setProducts(productsRef.value);
-async function datagrab(afterProductId) {
-  try {
-    console.log(productsRef.value[0].data)
+let { isQueryEmpty, productsPerPage } = useHelpers();
 
-    const updatedData = await useAsyncGql('getProducts', { first: 24, after: afterProductId })
-    const updatedProducts = updatedData.data._value.products.nodes
+const pageNumber = route.params?.pageNumber_0 ?? "";
+const { data } = await useAsyncGql('getProducts', { after: pageNumber, first: productsPerPage });
+const storedPageId = localStorage.getItem('pageId');
+let pageId;
 
-    if (productsRef.value[0].data) {
-      console.log('test 1')
-      productsRef.value = updatedProducts;
-    } else {
-      console.log('test 2')
-      productsRef.value = [...productsRef.value, ...updatedProducts];
-    }
-
-    afterProduct = updatedData.data._value.products.pageInfo.endCursor ?? [];
-    setProducts(productsRef.value);
-    console.log(updatedData)
-  } catch (e) { console.log('error: ' + e.message) }
+try {
+  // Attempt to parse the stored value as JSON
+  pageId = JSON.parse(storedPageId) || [];
+} catch (error) {
+  // If parsing fails, set pageId to an empty array
+  pageId = [];
 }
 
-datagrab(afterProduct)
+const afterPageId = data.value?.products?.pageInfo?.endCursor ?? "";
+if (pageId) {
+  pageId.push(afterPageId);
+  localStorage.setItem('pageId', JSON.stringify(pageId));
+} else {  
+  localStorage.setItem('pageId', JSON.stringify([afterPageId]));
+}
+localStorage.setItem('hasnextpage', data._value.products.pageInfo.hasNextPage);
+
+const allProducts = data.value?.products?.nodes ?? [];
+setProducts(allProducts);
+
 onMounted(() => {
   if (!isQueryEmpty.value) updateProductList();
 });
@@ -55,7 +55,6 @@ useHead({
       <div class="flex items-center justify-between w-full gap-4 mt-8 md:gap-8">
         <ProductResultCount />
         <OrderByDropdown class="hidden md:inline-flex" />
-        <button @click="datagrab(afterProduct)">Load more</button>
         <LazyShowFilterTrigger class="md:hidden" />
       </div>
       <ProductGrid />
