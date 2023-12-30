@@ -6,6 +6,20 @@ export function useHelpers() {
   const isShowingMobileMenu = useState<boolean>('isShowingMobileMenu', () => false);
   const wooNuxtVersionInfo: string = runtimeConfig.public.version || '0.0.0';
   const productsPerPage: number = runtimeConfig.public.PRODUCTS_PER_PAGE || 24;
+  let hasnextpage = false;
+  let pageafter = "";
+  let pagebefor = "";
+  let firstpage = "";
+
+  function updatehaspageInfo(newhasnextpage: boolean | false, newpageafter: string | "", newpagebefor: string | ""): void{ 
+    pagebefor = newpagebefor ;
+    pageafter = newpageafter ;
+    hasnextpage = newhasnextpage ;
+  }
+
+  function updatefirstpage(newfirstpage: string | ""): void{ 
+    firstpage = newfirstpage ;
+  }
 
   function toggleMobileMenu(state: boolean | undefined = undefined) {
     isShowingMobileMenu.value = state ?? !isShowingMobileMenu.value;
@@ -107,6 +121,10 @@ export function useHelpers() {
     wooNuxtVersionInfo,
     productsPerPage,
     isQueryEmpty,
+    hasnextpage,
+    pageafter,
+    pagebefor,
+    firstpage,
     formatArray,
     arraysEqual,
     clearAllCookies,
@@ -119,5 +137,7 @@ export function useHelpers() {
     formatURI,
     formatDate,
     scrollToTop,
+    updatehaspageInfo,
+    updatefirstpage,
   };
 }

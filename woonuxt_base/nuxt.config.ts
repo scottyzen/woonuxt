@@ -36,7 +36,7 @@ export default defineNuxtConfig({
     'pages:extend'(pages) {
       pages.push({
         name: 'product-page-pager',
-        path: '/products/page/:pageNumber',
+        path: '/products/page/:pageNumber_0',
         file: resolve('./pages/products.vue'),
       });
       pages.push({
