@@ -17,9 +17,9 @@
     "@vueuse/core": "^10.7.1"
   },
   "devDependencies": {
-    "@nuxt/image": "rc",
+    "@nuxt/image": "^1.1.0",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
-    "@nuxtjs/i18n": "8.0.0-rc.5",
+    "@nuxtjs/i18n": "^8.0.0",
     "@nuxtjs/tailwindcss": "^6.10.3",
     "@tailwindcss/typography": "^0.5.10",
     "eslint": "^8.56.0",
