@@ -17,6 +17,15 @@ const changePageNext = () => {
 
 
 const changePageBack = () => {
+  /* 
+  const pageId = {
+  "0": "YXJyYXljb25uZWN0aW9uOjEzNDg5MQ==",
+  "1": "YXJyYXljb25uZWN0aW9uOjEzNDQ2Ng==",
+  "2": "YXJyYXljb25uZWN0aW9uOjEzNDI3MQ==",
+  "3": "YXJyYXljb25uZWN0aW9uOjEzMzY4OA=="
+};
+const pageNumber = "YXJyYXljb25uZWN0aW9uOjEzNDI3MQ==";
+  */
   const keys = Object.keys(pageId);
   const indexOfTarget = keys.findIndex(key => pageId[key] === pageNumber);
   if (indexOfTarget !== -1 && indexOfTarget > 0) {
