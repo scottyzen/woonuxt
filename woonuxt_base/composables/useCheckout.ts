@@ -13,7 +13,7 @@ export function useCheckout() {
   // if Country or State are changed, calculate the shipping rates again
   async function updateShippingLocation() {
     const { customer, viewer } = useAuth();
-    const { isUpdatingCart, refreshCart } = useCart();
+    const { isUpdatingCart, refreshCart, cart } = useCart();
 
     isUpdatingCart.value = true;
 
@@ -38,38 +38,76 @@ export function useCheckout() {
     const { replaceQueryParam } = useHelpers();
 
     isProcessingOrder.value = true;
-
-    const { refreshCart, emptyCart } = useCart();
+    const { viewer } = useAuth();
+    const { refreshCart, emptyCart, cart } = useCart();
     const { customer } = useAuth();
-
+    console.log('cart');
+    const shippingTotal = customer._object.$scart.shippingTotal;
+    const shipingMethodId = customer._object.$scart.chosenShippingMethods[0];
+    const shipingCost = parseInt(shippingTotal.replace('.', ''), 10);
+    const listOfOrders = customer._object.$scart.contents;
+    const lineItems = listOfOrders.nodes.map((node) => ({
+      product_id: node.product.node.databaseId,
+      quantity: node.quantity,
+    }));
+    console.log(lineItems);
     const billing = {
-      address1: customer.value.billing?.address1,
-      address2: customer.value.billing?.address2,
+      address_1: customer.value.billing?.address1,
+      address_2: customer.value.billing?.address2,
       city: customer.value.billing?.city,
       company: customer.value.billing?.company,
       country: customer.value.billing?.country,
       email: customer.value.billing?.email,
-      firstName: customer.value.billing?.firstName,
-      lastName: customer.value.billing?.lastName,
+      first_name: customer.value.billing?.firstName,
+      last_name: customer.value.billing?.lastName,
       phone: customer.value.billing?.phone,
       postcode: customer.value.billing?.postcode,
       state: customer.value.billing?.state,
     };
 
     const shipping = {
-      address1: customer.value.shipping?.address1,
-      address2: customer.value.shipping?.address2,
+      address_1: customer.value.shipping?.address1,
+      address_2: customer.value.shipping?.address2,
       city: customer.value.shipping?.city,
       company: customer.value.shipping?.company,
       country: customer.value.shipping?.country,
       email: customer.value.billing?.email,
-      firstName: customer.value.shipping?.firstName,
-      lastName: customer.value.shipping?.lastName,
+      first_name: customer.value.shipping?.firstName,
+      last_name: customer.value.shipping?.lastName,
       phone: customer.value.shipping?.phone,
       postcode: customer.value.shipping?.postcode,
       state: customer.value.shipping?.state,
     };
+    //const { checkout } = await GqlCheckout(checkoutPayload);
+    var myHeaders = new Headers();
+    myHeaders.append('Authorization', 'Basic Y2tfNTZjNjgzNWMyMTIzNGVmYjg3M2ExYmY1YWI2NTUxYjdjYjdlMTM4NDpjc18wYmJmZTAzODJiZTQzZDFhM2MxNTUxMmQ0ZTFmYzMwNjQ4MjcyZTg1');
+    const isCheckout = useFetch('https://gamaoutillage.net/wp-json/wc/v3/orders', {
+      method: 'post',
+      headers: myHeaders,
+      body: {
+        payment_method: 'cod',
+        payment_method_title: 'Paiement à la livraison',
+        billing: billing,
+        shipping: shipping,
+        set_paid: false,
+        line_items: lineItems,
+        shipping_lines: [
+          {
+            shipingMethodId: shipingMethodId,
+            method_title: 'Tree Table Rate',
+            total: shipingCost,
+          },
+        ],
+      },
+    })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
+    /*
     try {
       let checkoutPayload = {
         billing,
@@ -89,7 +127,10 @@ export function useCheckout() {
       }
 
       const { checkout } = await GqlCheckout(checkoutPayload);
-
+      const isCheckout = useFetch('https://gamaoutillage.net/wp-json/wc/v3/orders', {
+        method: 'post',
+        body: {},
+      });
       if (orderInput.value.createAccount) {
         await loginUser({
           // @ts-ignore
@@ -142,6 +183,7 @@ export function useCheckout() {
       alert(errorMessage);
       return null;
     }
+    */
   };
 
   return {
