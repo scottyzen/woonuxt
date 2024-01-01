@@ -41,7 +41,7 @@ export function useCheckout() {
     const { viewer } = useAuth();
     const { refreshCart, emptyCart, cart } = useCart();
     const { customer } = useAuth();
-    console.log('cart');
+   // console.log('cart');
 
     const shippingTotal = customer._object.$scart.shippingTotal;
     const shipingMethodId = customer._object.$scart.chosenShippingMethods[0];
@@ -51,7 +51,7 @@ export function useCheckout() {
       product_id: node.product.node.databaseId,
       quantity: node.quantity,
     }));
-    console.log(lineItems);
+   // console.log(lineItems);
     const billing = {
       address_1: customer.value.billing?.address1,
       address_2: customer.value.billing?.address2,
@@ -102,8 +102,8 @@ export function useCheckout() {
           ],
         },
       });
-      console.log('isCheckout');
-      console.log(isCheckout);
+   //   console.log('isCheckout');
+     // console.log(isCheckout);
       isProcessingOrder.value = false;
       const orderId = isCheckout?.data?.value.id;
       const orderKey = isCheckout?.data?.value.order_key;

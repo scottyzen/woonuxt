@@ -7,7 +7,7 @@ const props = defineProps({
 
 const setActiveOption = async (id) => {
  await updateShippingMethod(id);
-  console.log()
+//  console.log()
 };
 </script>
 
