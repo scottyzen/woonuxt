@@ -42,7 +42,7 @@ export function useCheckout() {
     const { refreshCart, emptyCart, cart } = useCart();
     const { customer } = useAuth();
     console.log('cart');
-    
+
     const shippingTotal = customer._object.$scart.shippingTotal;
     const shipingMethodId = customer._object.$scart.chosenShippingMethods[0];
     const shipingCost = parseInt(shippingTotal.replace('.', ''), 10);
@@ -56,7 +56,7 @@ export function useCheckout() {
       address_1: customer.value.billing?.address1,
       address_2: customer.value.billing?.address2,
       city: customer.value.billing?.city,
-      company: customer.value.billing?.company,
+      company: `${customer.value.billing?.company}`,
       country: customer.value.billing?.country,
       email: customer.value.billing?.email,
       first_name: customer.value.billing?.firstName,
@@ -70,43 +70,55 @@ export function useCheckout() {
       address_1: customer.value.shipping?.address1,
       address_2: customer.value.shipping?.address2,
       city: customer.value.shipping?.city,
-      company: customer.value.shipping?.company,
+      company: `${customer.value.shipping?.company}`,
       country: customer.value.shipping?.country,
       email: customer.value.billing?.email,
       first_name: customer.value.shipping?.firstName,
       last_name: customer.value.shipping?.lastName,
       phone: customer.value.shipping?.phone,
-      postcode: customer.value.shipping?.postcode,
+      postcode: `${customer.value.shipping?.postcode}`,
       state: customer.value.shipping?.state,
     };
     //const { checkout } = await GqlCheckout(checkoutPayload);
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', 'Basic Y2tfNTZjNjgzNWMyMTIzNGVmYjg3M2ExYmY1YWI2NTUxYjdjYjdlMTM4NDpjc18wYmJmZTAzODJiZTQzZDFhM2MxNTUxMmQ0ZTFmYzMwNjQ4MjcyZTg1');
-    const isCheckout = useFetch('https://gamaoutillage.net/wp-json/wc/v3/orders', {
-      method: 'post',
-      headers: myHeaders,
-      body: {
-        payment_method: 'cod',
-        payment_method_title: 'Paiement à la livraison',
-        billing: billing,
-        shipping: shipping,
-        set_paid: false,
-        line_items: lineItems,
-        shipping_lines: [
-          {
-            shipingMethodId: shipingMethodId,
-            method_title: 'Tree Table Rate',
-            total: shipingCost,
-          },
-        ],
-      },
-    })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
+    try {
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', 'Basic Y2tfNTZjNjgzNWMyMTIzNGVmYjg3M2ExYmY1YWI2NTUxYjdjYjdlMTM4NDpjc18wYmJmZTAzODJiZTQzZDFhM2MxNTUxMmQ0ZTFmYzMwNjQ4MjcyZTg1');
+      const isCheckout = await useFetch('https://gamaoutillage.net/wp-json/wc/v3/orders', {
+        method: 'post',
+        headers: myHeaders,
+        body: {
+          payment_method: 'cod',
+          payment_method_title: 'Paiement à la livraison',
+          billing: billing,
+          shipping: shipping,
+          set_paid: false,
+          line_items: lineItems,
+          shipping_lines: [
+            {
+              method_id: shipingMethodId,
+              method_title: 'Tree Table Rate',
+              total: `${shipingCost}`,
+            },
+          ],
+        },
       });
+      console.log('isCheckout');
+      console.log(isCheckout);
+      isProcessingOrder.value = false;
+      const orderId = isCheckout?.data?.value.id;
+      const orderKey = isCheckout?.data?.value.order_key;
+      if ((isCheckout?.status.value) === 'success') {
+        emptyCart();
+        refreshCart();
+        router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
+      } else {
+        isProcessingOrder.value = false;
+        alert('There was an error processing your order. Please try again.');
+        window.location.reload();
+        isProcessingOrder.value = false;
+        return;
+      }
+    } catch (err) {}
 
     /*
     try {
@@ -139,19 +151,10 @@ export function useCheckout() {
           password: orderInput.value.password,
         });
       }
+*/
 
-      if ((await checkout?.result) === 'success') {
-        emptyCart();
-        refreshCart();
-      } else {
-        isProcessingOrder.value = false;
-        alert('There was an error processing your order. Please try again.');
-        window.location.reload();
-        return;
-      }
+    /*
 
-      const orderId = checkout?.order?.databaseId;
-      const orderKey = checkout?.order?.orderKey;
 
       // PayPal redirect
       if ((await checkout?.redirect) && orderInput.value.paymentMethod === 'paypal') {
