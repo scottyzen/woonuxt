@@ -6,7 +6,8 @@ const props = defineProps({
 });
 
 const setActiveOption = async (id) => {
-  await updateShippingMethod(id);
+ await updateShippingMethod(id);
+  console.log()
 };
 </script>
 
@@ -20,7 +21,7 @@ const setActiveOption = async (id) => {
       @click="setActiveOption(option.id)">
       <div>
         <div class="text-sm leading-tight text-gray-500" v-html="option.label"></div>
-        <div class="font-semibold text-gray-600">€{{ option.cost }}</div>
+        <div class="font-semibold text-gray-600">{{ option.cost }}</div>
       </div>
 
       <svg v-if="option.id === activeOption" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20" class="p-1 text-white rounded-full" fill="currentColor">

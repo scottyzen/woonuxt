@@ -1,5 +1,8 @@
 <script setup>
 const { cart, isUpdatingCart } = useCart();
+console.log('cart 1')
+console.log(cart)
+
 </script>
 
 <template>
