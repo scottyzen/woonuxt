@@ -42,6 +42,7 @@ export function useCheckout() {
     const { refreshCart, emptyCart, cart } = useCart();
     const { customer } = useAuth();
     console.log('cart');
+    
     const shippingTotal = customer._object.$scart.shippingTotal;
     const shipingMethodId = customer._object.$scart.chosenShippingMethods[0];
     const shipingCost = parseInt(shippingTotal.replace('.', ''), 10);
