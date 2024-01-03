@@ -1,10 +1,10 @@
 <template>
   <div class="relative mx-auto">
-    <NuxtImg
+    <img 
       width="1400"
       height="800"
       class="object-cover w-full h-[420px] lg:h-[560px] xl:h-[640px]"
-      src="/images/hero-xmas.jpg"
+      src="../../static/images/hero-xmas.jpg"
       alt="Hero image"
       loading="eager"
       format="webp"

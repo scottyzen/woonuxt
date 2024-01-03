@@ -46,13 +46,13 @@ const colorVariableImage = computed(() => {
       <img
         v-if="colorVariableImage"
         :src="colorVariableImage"
-        :alt="node.image?.altText || node.name"
+        :alt="node.image?.altText ?? node.name"
         :title="node.image?.title || node.name"
         :loading="index <= 3 ? 'eager' : 'lazy'" />
       <NuxtImg
         :width="imgWidth"
         :height="imgHeight"
-        :src="mainImage || '/images/placeholder.jpg'"
+        :src="mainImage || '/images/gammaNoImg.jpg'"
         :alt="node.image?.altText || node.name"
         :title="node.image?.title || node.name"
         :loading="index <= 3 ? 'eager' : 'lazy'"
