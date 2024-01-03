@@ -1,59 +1,77 @@
 <script setup lang="ts">
 const route = useRoute();
-let { formatURI, } = useHelpers();
-const storedPageId = localStorage.getItem('pageId');
-const pageId = JSON.parse(storedPageId) || [];
-const pageNumber = route.params?.pageNumber_0 ?? "";
+const { productsPerPage } = useHelpers();
+const { formatURI } = useHelpers();
+const { products } = useProducts();
 
-const changePageNext = () => {
-  let pageIdValueNext = ""
-  if (pageNumber) {
-    pageIdValueNext = pageId.slice(-1);
-  } else {
-    pageIdValueNext = pageId.slice(0);
+const currentQuery = computed(() => {
+  const query = route.query;
+  const queryKeys = Object.keys(query);
+  let currentQuery = '';
+  if (queryKeys.length > 0) {
+    queryKeys.forEach((key, index) => {
+      currentQuery += index === 0 ? `${key}=${query[key]}` : `&${key}=${query[key]}`;
+    });
   }
-  return formatURI(`/products/page/${pageIdValueNext}`);
-};
+  return formatURI(currentQuery);
+});
 
+const page = ref(route.params.pageNumber_0 ? parseInt(route.params.pageNumber_0 as string) : 1);
+let numberOfPages: number = parseInt(route.params.pageNumber_0 as string)
 
-const changePageBack = () => {
-  /* 
-  const pageId = {
-  "0": "YXJyYXljb25uZWN0aW9uOjEzNDg5MQ==",
-  "1": "YXJyYXljb25uZWN0aW9uOjEzNDQ2Ng==",
-  "2": "YXJyYXljb25uZWN0aW9uOjEzNDI3MQ==",
-  "3": "YXJyYXljb25uZWN0aW9uOjEzMzY4OA=="
-};
-const pageNumber = "YXJyYXljb25uZWN0aW9uOjEzNDI3MQ==";
-  */
-  const keys = Object.keys(pageId);
-  const indexOfTarget = keys.findIndex(key => pageId[key] === pageNumber);
-  if (indexOfTarget !== -1 && indexOfTarget > 0) {
-    const keyBeforeTarget = keys[indexOfTarget - 1];
-    const valueBeforeTarget = pageId[keyBeforeTarget];
-    return formatURI(`/products/page/${valueBeforeTarget}`);
+console.log('p')
+console.log(products.value.length)
+const productsCount = products.value.length
+console.log(page)
+const prevSrc = (pageNumber: number) => {
+  if (currentQuery.value === '') {
+    return formatURI(`/products/page/${pageNumber > 1 ? pageNumber - 1 : pageNumber}`);
   } else {
-    return formatURI(`/products/`);
+    return formatURI(pageNumber > 1 ? `/products/page/${pageNumber - 1}/?${currentQuery.value}` : `/products/page/${pageNumber}/?${currentQuery.value}`);
   }
-
 };
 
+const nextSrc = (pageNumber: number) => {
+  if (currentQuery.value === '') {
+    return formatURI(`/products/page/${pageNumber < page.value ? pageNumber + 1 : pageNumber}`);
+  } else {
+    return formatURI(pageNumber < page.value ? `/products/page/${pageNumber + 1}/?${currentQuery.value}` : `/products/page/${pageNumber}/?${currentQuery.value}`);
+  }
+};
 
+const numberSrc = (pageNumber: number) => {
+  if (currentQuery.value === '') {
+    return formatURI(`/products/page/${pageNumber}`);
+  } else {
+    return formatURI(`/products/page/${pageNumber}/?${currentQuery.value}`);
+  }
+};
 </script>
 
 <template>
   <div class="flex justify-center mt-8 mb-16 col-span-full tabular-nums">
     <!-- Pagination -->
-    <NuxtLink :to="changePageBack()" class="next mx-2" aria-label="Next">
+    <nav class="inline-flex self-end -space-x-px rounded-md shadow-sm isolate" aria-label="Pagination">
+      <!-- PREV -->
+      <NuxtLink :to="prevSrc(page)" class="prev" :disabled="page == 1" :class="{ 'cursor-not-allowed': page == 1 }"
+        :aria-disabled="page == 1" aria-label="Previous">
+        <Icon name="ion:chevron-back-outline" size="20" class="w-5 h-5" />
+      </NuxtLink>
 
-      <Icon name="ion:arrow-back-circle-sharp" size="20" class="w-5 h-5 mx-2" /> Go Back to fisrt page
-    </NuxtLink>
-    <NuxtLink :to="changePageNext()" class="next mx-2" aria-label="Next">
+      <!-- NUMBERS -->
+      <NuxtLink :to="numberSrc(page)" :aria-current="page === page ? 'page' : undefined" class="page-number">{{
+        page
+      }}</NuxtLink>
 
-      <Icon name="ion:arrow-forward-circle-sharp" size="20" class="w-5 h-5 mx-2" /> Next page
-    </NuxtLink>
+      <!-- NEXT -->
+
+      <NuxtLink :to="nextSrc(page + 1)" class="next" :disabled="productsCount < 10"
+        :class="{ 'cursor-not-allowed': productsCount < 10 }" :aria-disabled="productsCount < 10" aria-label="Next">
+        <Icon name="ion:chevron-forward-outline" size="20" class="w-5 h-5" />
+      </NuxtLink>
 
 
+    </nav>
   </div>
 </template>
 

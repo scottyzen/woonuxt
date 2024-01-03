@@ -112,7 +112,6 @@ export function useCheckout() {
         refreshCart();
         router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
       } else {
-        isProcessingOrder.value = false;
         alert('There was an error processing your order. Please try again.');
         window.location.reload();
         isProcessingOrder.value = false;

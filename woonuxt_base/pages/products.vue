@@ -1,32 +1,21 @@
-<script setup>
+<script setup >
+
 const { setProducts, updateProductList } = useProducts();
 const route = useRoute();
+const currentPage =  route.params.pageNumber_0 
+const { isQueryEmpty } = useHelpers();
 
-let { isQueryEmpty, productsPerPage } = useHelpers();
+const page = route.params.pageNumber_0 || '1'
+const  products = await useFetch('https://gamaoutillage.net/wp-json/wc/v3/products?status=publish&page='+ page ,
+ {
+  method: 'GET',
+  headers: {
+    Authorization : "Basic Y2tfZGYyMTgxNmY3ZDA2Nzk1ZjE1YjZiNzc1NWRiNjg5NWI3NWYzMTNiZDpjc19lZWIwZjMzNzJiMWZhYmJmNzVhZWQ3OTBhOWY4NjNkNjBiY2ZjNzZk",
+  }
+})
 
-const pageNumber = route.params?.pageNumber_0 ?? "";
-const { data } = await useAsyncGql('getProducts', { after: pageNumber, first: productsPerPage });
-const storedPageId = localStorage.getItem('pageId');
-let pageId;
-
-try {
-  // Attempt to parse the stored value as JSON
-  pageId = JSON.parse(storedPageId) || [];
-} catch (error) {
-  // If parsing fails, set pageId to an empty array
-  pageId = [];
-}
-
-const afterPageId = data.value?.products?.pageInfo?.endCursor ?? "";
-if (pageId) {
-  pageId.push(afterPageId);
-  localStorage.setItem('pageId', JSON.stringify(pageId));
-} else {  
-  localStorage.setItem('pageId', JSON.stringify([afterPageId]));
-}
-localStorage.setItem('hasnextpage', data._value.products.pageInfo.hasNextPage);
-
-const allProducts = data.value?.products?.nodes ?? [];
+const allProducts = products.data?.value?? [];
+console.log(route.params)
 setProducts(allProducts);
 
 onMounted(() => {
@@ -48,7 +37,7 @@ useHead({
 </script>
 
 <template>
-  <div class="container flex items-start gap-16">
+  <div class="container flex items-start gap-16" v-if="allProducts.length">
     <Filters />
 
     <div class="w-full">
@@ -58,7 +47,7 @@ useHead({
         <LazyShowFilterTrigger class="md:hidden" />
       </div>
       <ProductGrid />
-      <NoProductsFound />
     </div>
   </div>
+  <NoProductsFound v-else>Could not fecth products from your store. Please check your configuration.</NoProductsFound>
 </template>
