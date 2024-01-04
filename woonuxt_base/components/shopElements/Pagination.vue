@@ -67,6 +67,7 @@ const numberSrc = (pageNumber: number) => {
 
       <NuxtLink :to="nextSrc(page + 1)" class="next" :disabled="productsCount < 10"
         :class="{ 'cursor-not-allowed': productsCount < 10 }" :aria-disabled="productsCount < 10" aria-label="Next">
+        next page
         <Icon name="ion:chevron-forward-outline" size="20" class="w-5 h-5" />
       </NuxtLink>
 

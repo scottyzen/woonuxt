@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss';
 
 export default <Partial<Config>>{
-  content: ['./components/**/*.{js,vue,ts}', './layouts/**/*.vue', './pages/**/*.vue', './plugins/**/*.{js,ts}', './nuxt.config.{js,ts}', './app.vue'],
+  content: ['./components/**/*.{js,vue,ts}', './layouts/**/*.vue', './pages/**/*.vue', './plugins/**/*.{js,ts}', './nuxt.config.{js,ts}', './app.vue',  "./node_modules/flowbite/**/*.js"],
   theme: {
     container: {
       center: true,
@@ -20,5 +20,5 @@ export default <Partial<Config>>{
       },
     },
   },
-  plugins: [require('@tailwindcss/typography')],
+  plugins: [require('@tailwindcss/typography'), require('flowbite/plugin')]
 };
