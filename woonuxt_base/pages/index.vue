@@ -30,6 +30,37 @@ useHead({
       <div class="grid justify-center grid-cols-2 gap-4 mt-8 md:grid-cols-3 lg:grid-cols-6">
         <CategoryCard v-for="(category, i) in productCategories" :key="i" class="w-full" :node="category" />
       </div>
+      <div class="container relative flex pt-20 items-center">
+        <span class="flex-shrink mx-4 text-2xl text-gray-950">New products</span>
+        <div class="flex-grow border-t border-gray-400"></div>
+      </div>
+      <div class="container ">
+        <div class="grid grid-cols-4 overflow-y-auto justify-center gap-4  p-2 w-full ">
+          <card class=" rounded-xl shadow-lg p-2 w-80 ">
+            <cardImage class=" ">
+              <img class=" w-full  rounded-lg  " src="../static/images/hero-2.jpeg" alt="">
+            </cardImage>
+            <cardTitle class="flex p-2 m-2">
+              <h1 class=" text-2xl"> Product n1</h1>
+              <div class="  border-1 bg-pink-500 text-white m-2 px-4 py-1 rounded-full">New</div>
+            </cardTitle>
+            <cardInfo class="flex p-2 m-2">
+              <p>
+                Product n1 Product n1 Product n1 Product n1 Product n1 Product n1 Product n1 Product n1
+              </p>
+            </cardInfo>
+            <div class="flex justify-end ">
+              <Button class="  border-1 bg-blue-500 text-white m-2 px-4 py-1 rounded-lg">More</Button>
+            </div>
+          </card>
+        </div>
+      </div>
+      <div class="container relative flex p-5 items-center">
+        <div class="flex-grow border-t border-gray-400"></div>
+        <span class="flex-shrink mx-4 text-2xl"><button
+            class=" border-1 px-3 border-gray-640000 outline-gray-400 text-gray-400 outline-1 outline text-center items-center align-middle rounded-full p-1">
+            + More new products</button></span>
+      </div>
     </section>
 
     <section class="container grid gap-4 my-24 md:grid-cols-2 lg:grid-cols-4">
