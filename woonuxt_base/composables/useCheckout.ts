@@ -41,7 +41,7 @@ export function useCheckout() {
     const { viewer } = useAuth();
     const { refreshCart, emptyCart, cart } = useCart();
     const { customer } = useAuth();
-   // console.log('cart');
+    // console.log('cart');
 
     const shippingTotal = customer._object.$scart.shippingTotal;
     const shipingMethodId = customer._object.$scart.chosenShippingMethods[0];
@@ -51,7 +51,7 @@ export function useCheckout() {
       product_id: node.product.node.databaseId,
       quantity: node.quantity,
     }));
-   // console.log(lineItems);
+    // console.log(lineItems);
     const billing = {
       address_1: customer.value.billing?.address1,
       address_2: customer.value.billing?.address2,
@@ -81,33 +81,31 @@ export function useCheckout() {
     };
     //const { checkout } = await GqlCheckout(checkoutPayload);
     try {
-      var myHeaders = new Headers();
-      myHeaders.append('Authorization', 'Basic Y2tfNTZjNjgzNWMyMTIzNGVmYjg3M2ExYmY1YWI2NTUxYjdjYjdlMTM4NDpjc18wYmJmZTAzODJiZTQzZDFhM2MxNTUxMmQ0ZTFmYzMwNjQ4MjcyZTg1');
-      const isCheckout = await useFetch('https://gamaoutillage.net/wp-json/wc/v3/orders', {
-        method: 'post',
-        headers: myHeaders,
-        body: {
-          payment_method: 'cod',
-          payment_method_title: 'Paiement à la livraison',
-          billing: billing,
-          shipping: shipping,
-          set_paid: false,
-          line_items: lineItems,
-          shipping_lines: [
-            {
-              method_id: shipingMethodId,
-              method_title: 'Tree Table Rate',
-              total: `${shipingCost}`,
-            },
-          ],
+      const isCheckout = await useFetch('http://localhost:3055/checkout', {
+        params: {
+          data: {
+            payment_method: 'cod',
+            payment_method_title: 'Paiement à la livraison',
+            billing: billing,
+            shipping: shipping,
+            set_paid: false,
+            line_items: lineItems,
+            shipping_lines: [
+              {
+                method_id: shipingMethodId,
+                method_title: 'Tree Table Rate',
+                total: `${shipingCost}`,
+              },
+            ],
+          },
         },
       });
-   //   console.log('isCheckout');
-     // console.log(isCheckout);
+      //   console.log('isCheckout');
+      // console.log(isCheckout);
       isProcessingOrder.value = false;
       const orderId = isCheckout?.data?.value.id;
       const orderKey = isCheckout?.data?.value.order_key;
-      if ((isCheckout?.status.value) === 'success') {
+      if (isCheckout?.status.value === 'success') {
         emptyCart();
         refreshCart();
         router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);

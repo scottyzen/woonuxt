@@ -4,18 +4,15 @@ const { setProducts, updateProductList } = useProducts();
 const route = useRoute();
 const currentPage =  route.params.pageNumber_0 
 const { isQueryEmpty } = useHelpers();
-
+const runtimeConfig = useRuntimeConfig();
 const page = route.params.pageNumber_0 || '1'
-const  products = await useFetch('https://gamaoutillage.net/wp-json/wc/v3/products?status=publish&page='+ page ,
+const  products = await useFetch('http://localhost:3055/products',
  {
-  method: 'GET',
-  headers: {
-    Authorization : "Basic Y2tfZGYyMTgxNmY3ZDA2Nzk1ZjE1YjZiNzc1NWRiNjg5NWI3NWYzMTNiZDpjc19lZWIwZjMzNzJiMWZhYmJmNzVhZWQ3OTBhOWY4NjNkNjBiY2ZjNzZk",
-  }
+  params: {'page': page }
 })
 
 const allProducts = products.data?.value?? [];
-console.log(route.params)
+console.log(products)
 setProducts(allProducts);
 
 onMounted(() => {

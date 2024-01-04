@@ -34,13 +34,13 @@ useHead({
         <span class="flex-shrink mx-4 text-2xl text-gray-950">New products</span>
         <div class="flex-grow border-t border-gray-400"></div>
       </div>
-      <productList class="container ">
-        <div class="grid grid-cols-4 overflow-y-auto justify-center gap-4  p-2 w-full ">
-          <card class=" rounded-xl shadow-lg p-2 w-80 ">
+      <productList class="container  ">
+        <div class="flex   overflow-x-auto justify-start gap-2 p-2  ">
+          <card class=" rounded-xl  flex-shrink-0  shadow-lg p-2 w-80 ">
             <cardImage class=" ">
               <img class=" w-full  rounded-lg  " src="../static/images/hero-2.jpeg" alt="">
             </cardImage>
-            <cardTitle class="flex p-2 m-2">
+            <cardTitle class="flex p-2 m-2 items-center">
               <h1 class=" text-2xl"> Product n1</h1>
               <div class="  border-1 bg-pink-500 text-white m-2 px-4 py-1 rounded-full">New</div>
             </cardTitle>
@@ -49,8 +49,9 @@ useHead({
                 Product n1 Product n1 Product n1 Product n1 Product n1 Product n1 Product n1 Product n1
               </p>
             </cardInfo>
-            <div class="flex justify-end ">
-              <Button class="  border-1 bg-blue-500 text-white m-2 px-4 py-1 rounded-lg">More</Button>
+            <div class="flex justify-between items-center px-2 ">
+              <h1 class=" text-xl pl-2">500.00 DA</h1>
+              <Button class="  border-1 bg-blue-500 text-white m-2 px-6 py-1 rounded-lg">More</Button>
             </div>
           </card>
         </div>

@@ -20,7 +20,7 @@ export default defineNuxtConfig({
   },
 
   plugins: [resolve('./plugins/init.ts')],
-
+serverDir: resolve('./server'),
   components: [{ path: resolve('./components'), pathPrefix: false }],
 
   modules: ['woonuxt-settings', 'nuxt-graphql-client', '@nuxtjs/tailwindcss', 'nuxt-icon', '@nuxt/image', '@nuxtjs/i18n',],
@@ -74,7 +74,10 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       version: pkg.version || '0.0.0',
+      WP_API_KEY : process.env.WP_API_KEY
     },
+
+    
   },
 
   // Multilingual support
