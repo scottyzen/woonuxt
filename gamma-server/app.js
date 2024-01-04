@@ -5,25 +5,16 @@ const axios = require('axios')
 var cors = require('cors')
 require('dotenv').config()
 app.use(cors())
-
-
-
-app.get('/', (req, res) => {
-    res.send('you need api key to access')
-})
+const apiKey = process.env.WP_AUTH_TEST
 
 app.get('/checkout', async (req, res) => {
-    console.log(req.query.data)
-    const test = process.env.WP_AUTH_TEST
     const bodyInfo = JSON.parse(req?.query.data) || null
     if (bodyInfo) {
-        console.log(bodyInfo.payment_method)
-
         const checkout = {
             method: 'POST',
             url: 'https://gamaoutillage.net/wp-json/wc/v3/orders',
             headers: {
-                Authorization: test
+                Authorization: apiKey
             },
             params: {
                 payment_method: bodyInfo.payment_method,
@@ -36,21 +27,16 @@ app.get('/checkout', async (req, res) => {
             },
         }
         await axios.request(checkout).then((data) => {
-            console.log('success')
             const dataJ = data.data
             res.send(dataJ)
         })
     } else {
         res.send('fill all data')
-    }
-
-
-
-}
+    }}
 )
 
 app.get('/products', async (req, res) => {
-    const test = process.env.WP_AUTH_TEST
+  
     const page = req?.query.page || 1
     const products = {
         method: 'GET',
@@ -59,7 +45,7 @@ app.get('/products', async (req, res) => {
             page: page,
         },
         headers: {
-            Authorization: test
+            Authorization: apiKey
         }
     }
     await axios.request(products).then((data) => {
@@ -69,7 +55,9 @@ app.get('/products', async (req, res) => {
 }
 )
 
-
+app.get('/', (req, res) => {
+    res.send('you need api key to access')
+})
 
 
 app.listen(port, () => {
