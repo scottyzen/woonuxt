@@ -1,0 +1,77 @@
+const express = require('express')
+const app = express()
+const port = 3055
+const axios = require('axios')
+var cors = require('cors')
+require('dotenv').config()
+app.use(cors())
+
+
+
+app.get('/', (req, res) => {
+    res.send('you need api key to access')
+})
+
+app.get('/checkout', async (req, res) => {
+    console.log(req.query.data)
+    const test = process.env.WP_AUTH_TEST
+    const bodyInfo = JSON.parse(req?.query.data) || null
+    if (bodyInfo) {
+        console.log(bodyInfo.payment_method)
+
+        const checkout = {
+            method: 'POST',
+            url: 'https://gamaoutillage.net/wp-json/wc/v3/orders',
+            headers: {
+                Authorization: test
+            },
+            params: {
+                payment_method: bodyInfo.payment_method,
+                payment_method_title: 'Paiement à la livraison',
+                billing: bodyInfo.billing,
+                shipping: bodyInfo.shipping,
+                set_paid: false,
+                line_items: bodyInfo.lineItems,
+                shipping_lines: bodyInfo.shipping_lines
+            },
+        }
+        await axios.request(checkout).then((data) => {
+            console.log('success')
+            const dataJ = data.data
+            res.send(dataJ)
+        })
+    } else {
+        res.send('fill all data')
+    }
+
+
+
+}
+)
+
+app.get('/products', async (req, res) => {
+    const test = process.env.WP_AUTH_TEST
+    const page = req?.query.page || 1
+    const products = {
+        method: 'GET',
+        url: 'https://gamaoutillage.net/wp-json/wc/v3/products',
+        params: {
+            page: page,
+        },
+        headers: {
+            Authorization: test
+        }
+    }
+    await axios.request(products).then((data) => {
+        const dataJ = data.data
+        res.send(dataJ)
+    })
+}
+)
+
+
+
+
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`)
+})

@@ -17,5 +17,5 @@ export default defineNuxtConfig({
       interval: 1000,
       failOnError: false,
     },
-  },
+  }
 });
