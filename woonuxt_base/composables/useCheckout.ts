@@ -81,7 +81,7 @@ export function useCheckout() {
     };
     //const { checkout } = await GqlCheckout(checkoutPayload);
     try {
-      const isCheckout = await useFetch('http://localhost:3055/checkout', {
+      const isCheckout = await useFetch('https://batinour.com/appjs/checkout', {
         params: {
           data: {
             payment_method: 'cod',
