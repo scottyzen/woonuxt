@@ -5,7 +5,7 @@ interface Props {
 }
 
 const { node } = defineProps<Props>();
-const imageSrc = node.image?.sourceUrl || '/images/placeholder.jpg';
+const imageSrc = node.image?.sourceUrl || 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg';
 </script>
 
 <template>
@@ -14,11 +14,11 @@ const imageSrc = node.image?.sourceUrl || '/images/placeholder.jpg';
     :to="`/product-category/${formatURI(node.slug)}`"
     class="relative flex justify-center overflow-hidden border border-white rounded-xl item snap-mandatory snap-x">
     <NuxtImg
-      v-if="node.image?.sourceUrl"
+     
       width="250"
       height="300"
       class="absolute inset-0 object-cover w-full h-full"
-      :src="imageSrc"
+      :src="imageSrc || 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg'"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
       loading="lazy"
@@ -26,7 +26,7 @@ const imageSrc = node.image?.sourceUrl || '/images/placeholder.jpg';
       format="webp"
       densities="x1 x2" />
     <div class="absolute inset-x-0 bottom-0 opacity-50 bg-gradient-to-t from-black to-transparent h-1/2" />
-    <span class="relative z-10 mt-auto mb-2 text-sm font-semibold text-white capitalize md:text-base md:mb-4" v-html="node.name" />
+    <span class="relative z-10 mt-auto mb-2 p-2 text-sm font-semibold text-white capitalize md:text-base md:mb-4" v-html="node.name" />
   </NuxtLink>
 </template>
 

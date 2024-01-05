@@ -10,7 +10,11 @@ export function useProducts() {
     products.value = newProducts ?? [];
     allProducts = JSON.parse(JSON.stringify(newProducts));
   }
-
+  function setProductsTop(newProducts: Product[]): void {
+    if (!Array.isArray(newProducts)) throw new Error('Products must be an array.');
+    products.value = newProducts ?? [];
+    allProducts = JSON.parse(JSON.stringify(newProducts));
+  }
   const updateProductList = async (): Promise<void> => {
     const { scrollToTop } = useHelpers();
     const { isSortingActive, sortProducts } = useSorting();
