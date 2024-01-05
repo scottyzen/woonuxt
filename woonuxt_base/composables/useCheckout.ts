@@ -80,8 +80,10 @@ export function useCheckout() {
       state: customer.value.shipping?.state,
     };
     //const { checkout } = await GqlCheckout(checkoutPayload);
+    console.log(lineItems)
+    
     try {
-      const isCheckout = await useFetch('https://batinour.com/appjs/checkout', {
+      const isCheckout = await useFetch('http://localhost:3055/checkout', {
         params: {
           data: {
             payment_method: 'cod',
@@ -116,7 +118,7 @@ export function useCheckout() {
         return;
       }
     } catch (err) {}
-
+    
     /*
     try {
       let checkoutPayload = {
