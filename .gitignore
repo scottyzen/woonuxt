@@ -12,3 +12,4 @@ dist
 .vscode
 # Local Netlify folder
 .netlify
+gamma-server/gamma-server.zip

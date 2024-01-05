@@ -83,7 +83,7 @@ export function useCheckout() {
     console.log(lineItems)
     
     try {
-      const isCheckout = await useFetch('http://localhost:3055/checkout', {
+      const isCheckout = await useFetch('https://gama.soluve.cloud/checkout', {
         params: {
           data: {
             payment_method: 'cod',
