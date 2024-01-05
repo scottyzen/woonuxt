@@ -9,6 +9,8 @@ const apiKey = process.env.WP_AUTH_TEST
 
 app.get('/checkout', async (req, res) => {
     const bodyInfo = JSON.parse(req?.query.data) || null
+    console.log(bodyInfo.line_items[0])
+    
     if (bodyInfo) {
         const checkout = {
             method: 'POST',
@@ -22,7 +24,7 @@ app.get('/checkout', async (req, res) => {
                 billing: bodyInfo.billing,
                 shipping: bodyInfo.shipping,
                 set_paid: false,
-                line_items: bodyInfo.lineItems,
+                line_items: bodyInfo.line_items,
                 shipping_lines: bodyInfo.shipping_lines
             },
         }
@@ -32,7 +34,10 @@ app.get('/checkout', async (req, res) => {
         })
     } else {
         res.send('fill all data')
-    }}
+    }
+     
+   // res.send(dataJ)
+}
 )
 
 app.get('/products', async (req, res) => {

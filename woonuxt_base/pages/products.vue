@@ -6,7 +6,7 @@ const currentPage =  route.params.pageNumber_0
 const { isQueryEmpty } = useHelpers();
 const runtimeConfig = useRuntimeConfig();
 const page = route.params.pageNumber_0 || '1'
-const  products = await useFetch('https://batinour.com/appjs/products',
+const  products = await useFetch('http://localhost:3055/products',
  {
   params: {'page': page }
 })
