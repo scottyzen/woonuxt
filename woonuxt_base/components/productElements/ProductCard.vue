@@ -1,7 +1,7 @@
 <script setup>
 const { formatURI } = useHelpers();
 const route = useRoute();
-const props = defineProps({
+const { node } = defineProps({
   node: { type: Object, default: null },
   index: { type: Number, default: 1 },
 });
@@ -22,16 +22,16 @@ watch(
   },
 );
 
-const mainImage = computed(() => props.node?.image?.sourceUrl);
+const mainImage = computed(() => node?.image?.sourceUrl);
 
 const colorVariableImage = computed(() => {
   if (paColor.value.length) {
-    const activeColorImage = props.node?.variations?.nodes.filter((variation) => {
+    const activeColorImage = node?.variations?.nodes.filter((variation) => {
       const hasMatchingAttributes = variation.attributes.nodes.some((attribute) => paColor.value.some((color) => attribute.value.includes(color)));
       const hasMatchingSlug = paColor.value.some((color) => variation.slug.includes(color));
       return hasMatchingAttributes || hasMatchingSlug;
     });
-    if (activeColorImage && activeColorImage.length) {
+    if (activeColorImage?.length) {
       return activeColorImage[0].image?.sourceUrl;
     }
   }
@@ -50,6 +50,7 @@ const colorVariableImage = computed(() => {
         :title="node.image?.title || node.name"
         :loading="index <= 3 ? 'eager' : 'lazy'" />
       <NuxtImg
+        v-else
         :width="imgWidth"
         :height="imgHeight"
         :src="mainImage || '/images/placeholder.jpg'"
