@@ -14,11 +14,14 @@ const { data: newProducts } =  useFetch('https://gama.soluve.cloud/products',
     params: { 'page': 1, 'orderby': 'date' },
     lazy: false
   });
-  const { data: categories } = await useAsyncGql('getProductCategories', { first: 6 });
+async function getCategories() {
+  const { data: categories } =  useAsyncGql('getProductCategories', { first: 6 });
   productCategories = [...categories.value?.productCategories?.nodes];
+  return {productCategories}
+}
  
 onMounted(async () => {
-
+ await getCategories()
   console.log(productCategories)
 });
 
