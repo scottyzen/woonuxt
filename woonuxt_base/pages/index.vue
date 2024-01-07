@@ -1,26 +1,46 @@
 <script  setup>
-const { data } = await useAsyncGql('getProductCategories', { first: 6 });
-const productCategories = data.value?.productCategories?.nodes || [];
+//const { data } = await useAsyncGql('getProductCategories', { first: 6 });
+var productCategories = [];
+//const productCategories = null;
+var topProducts = null
+var newProducts = null
+let component_key = 1
 
 useHead({
-  title: `Home | WooNuxt`,
-  meta: [{ name: 'description', content: 'The best ecommerce store in the world' }],
+  title: `Gama outillage | Vente outillage professionnel Algérie`,
+  meta: [{ name: 'description', content: 'PINCE A CEINTRER 16*1 VIRAX · PINCE A CEINTRER 14*1 VIRAX · COUPE TUBE MINI 3-16MM VIRAX · COUPE TUBE CUIVRE C28 6-28MM VIRAX · COUPE TUBE CUIVRE C54 14-...' }],
   link: [{ rel: 'canonical', href: 'https://v3.woonuxt.com/' }],
 });
+async function getData() {
 
-const topProducts = await useFetch('https://gama.soluve.cloud/products',
-  {
-    params: { 'page': 1, 'orderby': 'popularity' }
-  })
-const newProducts = await useFetch('https://gama.soluve.cloud/products',
-  {
-    params: { 'page': 1, 'orderby': 'date' }
-  })
-function productCheck(params) {
+  const { data: categories } = await useAsyncGql('getProductCategories', { first: 6 });
+  productCategories = [...categories.value?.productCategories?.nodes];
+  const { data: topData, pending } = await useFetch('https://gama.soluve.cloud/products',
+    {
+      params: { 'page': 1, 'orderby': 'popularity' }
+    });
+  topProducts = toRaw(topData.value)
+  const { data: newData } = await useFetch('https://gama.soluve.cloud/products',
+    {
+      params: { 'page': 1, 'orderby': 'date' }
+    });
+  newProducts = toRaw(newData.value)
 
+  return { categories, newProducts, topProducts }
 }
-console.log(topProducts)
-console.log(newProducts)
+watch(
+  () => {
+  },
+);
+
+//function productCheck(params) {}
+onMounted(async () => {
+
+  await getData()
+  console.log(productCategories)
+
+});
+
 </script>
 
 <template>
@@ -43,7 +63,7 @@ console.log(newProducts)
         <NuxtLink class="text-primary" to="/categories">{{ $t('messages.general.viewAll') }}</NuxtLink>
       </div>
       <div class="grid justify-center grid-cols-2 gap-4 mt-8 md:grid-cols-3 lg:grid-cols-6">
-        <CategoryCard v-for="(category, i) in productCategories" :key="i" class="w-full" :node="category" />
+        <CategoryCard v-for="(category, i) in productCategories"  :key="i" class="w-full" :node="category" />
       </div>
     </section>
 
@@ -52,9 +72,9 @@ console.log(newProducts)
       <span class="flex-shrink mx-4 text-2xl text-gray-950">Best selling products</span>
       <div class="flex-grow border-t border-gray-400"></div>
     </div>
-    <topProductList class="  ">
+    <topProductList class="  " v-show="topProducts">
       <div class="flex   overflow-x-auto justify-start gap-2 p-2 container my-5 ">
-        <card class=" rounded-xl  flex-shrink-0   shadow-lg p-2 w-60 " v-for="pds in topProducts.data.value" :key="pds">
+        <card class=" rounded-xl  flex-shrink-0   shadow-lg p-2 w-60 " v-for="pds in topProducts" :key="pds">
           <cardImage class="  justify-center flex ">
             <img class=" w-60   rounded-lg  "
               :src="pds.images[0]?.src || 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg'"
@@ -87,11 +107,13 @@ console.log(newProducts)
       <span class="flex-shrink mx-4 text-2xl text-gray-950">New products</span>
       <div class="flex-grow border-t border-gray-400"></div>
     </div>
-    <newProductList class="  ">
+    <newProductList v-show="newProducts" class="  ">
       <div class=" flex justify-center items-center">
-      <div class=" ">
-          <div class="grid   max-sm:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-lg:grid-cols-5 overflow-x-auto gap-y-5 gap-2 p-2   ">
-            <card class=" rounded-xl  flex-shrink-0   shadow-lg p-2 max-sm:w-50 sm:w-60 " v-for="pds in newProducts.data.value" :key="pds">
+        <div class=" ">
+          <div
+            class="grid   max-sm:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-lg:grid-cols-5 overflow-x-auto gap-y-5 gap-2 p-2   ">
+            <card class=" rounded-xl  flex-shrink-0   shadow-lg p-2 max-sm:w-50 sm:w-60 " v-for="pds in newProducts"
+              :key="pds">
               <cardImage class="  justify-center flex ">
                 <img class=" w-full   rounded-lg  "
                   :src="pds.images[0]?.src || 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg'"
@@ -113,7 +135,7 @@ console.log(newProducts)
                 <nuxt-link :to="'/product/' + pds.slug">
                   <Button class="  border-1 bg-blue-500 text-white m-2 px-6 py-1 rounded-lg">More</Button>
                 </nuxt-link>
-    
+
               </div>
             </card>
           </div>
