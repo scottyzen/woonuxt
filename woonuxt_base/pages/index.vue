@@ -12,7 +12,7 @@ const { data: newProducts } = useFetch('https://gama.soluve.cloud/products',
     params: { 'page': 1, 'orderby': 'date' },
     lazy: false
   });
-const { data: categories } = useFetch('http://localhost:3055/categories',
+const { data: categories } = useFetch('https://gama.soluve.cloud/categories',
   {
     params: { 'per_page': 6 },
     lazy: false
