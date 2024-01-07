@@ -106,11 +106,11 @@ useHead({
         <div class=" flex justify-center items-center container">
           <div class=" ">
             <div
-              class="grid   max-sm:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-lg:grid-cols-5 overflow-x-auto gap-y-5 sm:gap-5 md:gap-10 lg:gap-x-48  p-2   ">
+              class="grid   max-sm:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-lg:grid-cols-5 overflow-x-auto gap-y-5 gap-x-3 lg:gap-x-5    p-2   ">
               <card class=" rounded-xl  flex-shrink-0   shadow-lg p-2 max-sm:w-50 sm:w-50 md:w-60 " v-for="pds in newProducts"
                 :key="pds">
                 <cardImage class="  justify-center flex ">
-                  <NuxtImg  class=" max-sm:w-40  sm:w-40 md:w-60   rounded-lg  "  quality="80"
+                  <NuxtPicture  format="avif,webp" class=" max-sm:w-40  sm:w-40 md:w-60   rounded-lg  "  quality="80"
                     :src="pds.images[0]?.src || 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg'"
                     alt=""/>
                 </cardImage>
