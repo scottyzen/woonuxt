@@ -42,13 +42,11 @@ app.get('/checkout', async (req, res) => {
 
 app.get('/products', async (req, res) => {
   
-    const page = req?.query.page || 1
+    const params = req?.query.page || 1
     const products = {
         method: 'GET',
         url: 'https://gamaoutillage.net/wp-json/wc/v3/products',
-        params: {
-            page: page,
-        },
+        params: params,
         headers: {
             Authorization: apiKey
         }
