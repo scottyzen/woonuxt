@@ -60,6 +60,7 @@
       "availability": "Disponibilité",
       "inStock": "En stock",
       "outOfStock": "Rupture de stock",
+      "onBackorder": "En réapprovisionnement",
       "sku": "SKU",
       "price": "Prix",
       "category": "Catégorie | Catégories",

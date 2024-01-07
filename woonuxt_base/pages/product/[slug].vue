@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { StockStatusEnum } from '@/woonuxt_base/types/commonTypes';
 const route = useRoute();
 const { arraysEqual, formatArray, checkForVariationTypeOfAny } = useHelpers();
 const { addToCart, isUpdatingCart } = useCart();
@@ -61,8 +62,8 @@ const updateSelectedVariations = (variations: Attribute[]): void => {
   variation.value = variations;
 };
 
-const stockStatus = computed(() => type.value?.stockStatus || 'OUT_OF_STOCK');
-const disabledAddToCart = computed(() => !type.value || stockStatus.value === 'OUT_OF_STOCK' || isUpdatingCart.value);
+const stockStatus = computed(() => type.value?.stockStatus || StockStatusEnum.OUT_OF_STOCK);
+const disabledAddToCart = computed(() => !type.value || stockStatus.value === StockStatusEnum.ON_BACKORDER || isUpdatingCart.value);
 </script>
 
 <template>
