@@ -2,35 +2,27 @@
 //const { data } = await useAsyncGql('getProductCategories', { first: 6 });
 var productCategories = [];
 //const productCategories = null;
-async function getCategories() {
-  const { data: categories } =  useAsyncGql('getProductCategories', { first: 6 });
-  productCategories = [...categories.value?.productCategories?.nodes];
-  return {productCategories}
-}
- 
-
   const { data: topProducts, pending : pendingLoad} = useFetch('https://gama.soluve.cloud/products', 
     {
     params: { 'page': 1, 'orderby': 'popularity' },
     lazy: false
   });
-
 const { data: newProducts } =  useFetch('https://gama.soluve.cloud/products',
   {
     params: { 'page': 1, 'orderby': 'date' },
     lazy: false
   });
+  const { data: categories } = useFetch('http://localhost:3055/categories',
+  {
+    params: { 'per_page': 6 },
+    lazy: false
+  })
+ console.log(categories);
 
-
-onMounted(async () => {
- //await getCategories()
-
-
-  console.log(productCategories)
+ 
+onMounted( () => {
 });
-
 //function productCheck(params) {}
-
 useHead({
   title: `Gama outillage | Vente outillage professionnel Algérie`,
   meta: [{ name: 'description', content: 'PINCE A CEINTRER 16*1 VIRAX · PINCE A CEINTRER 14*1 VIRAX · COUPE TUBE MINI 3-16MM VIRAX · COUPE TUBE CUIVRE C28 6-28MM VIRAX · COUPE TUBE CUIVRE C54 14-...' }],
@@ -57,9 +49,11 @@ useHead({
         <h2 class="text-lg font-semibold md:text-2xl">{{ $t('messages.shop.shopByCategory') }}</h2>
         <NuxtLink class="text-primary" to="/categories">{{ $t('messages.general.viewAll') }}</NuxtLink>
       </div>
-      <div class="grid justify-center grid-cols-2 gap-4 mt-8 md:grid-cols-3 lg:grid-cols-6">
-        <CategoryCard v-for="(category, i) in productCategories" :key="i" class="w-full" :node="category" />
-      </div>
+
+    
+        <div class="grid justify-center grid-cols-2 gap-4 mt-8 md:grid-cols-3 lg:grid-cols-6">
+          <CategoryCard v-for="(category, i) in categories" :key="i" class="w-full" :node="category" />
+        </div>
     </section>
 
     <!-- topProductList -->
@@ -75,7 +69,7 @@ useHead({
         <div class="flex   overflow-x-auto justify-start gap-2 p-2 container my-5 ">
           <card class=" rounded-xl  flex-shrink-0   shadow-lg p-2 w-60 " v-for="pds in topProducts" :key="pds">
             <cardImage class="  justify-center flex ">
-              <NuxtPicture class=" max-sm:w-40  sm:w-40 md:w-60     rounded-lg   "  format="avif,webp"
+              <NuxtImg class=" max-sm:w-40 sm:w-40 md:w-60 rounded-lg " quality="60"
                 :src="pds.images[0]?.src || 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg'"
                 alt="" />
             </cardImage>
@@ -114,7 +108,7 @@ useHead({
               <card class=" rounded-xl  flex-shrink-0   shadow-lg p-2 max-sm:w-50 sm:w-50 md:w-60 " v-for="pds in newProducts"
                 :key="pds">
                 <cardImage class="  justify-center flex ">
-                  <NuxtPicture  format="avif,webp" class=" max-sm:w-40  sm:w-40 md:w-60   rounded-lg  "  quality="80"
+                  <NuxtImg   class=" max-sm:w-40  sm:w-40 md:w-60   rounded-lg  "  quality="60"
                     :src="pds.images[0]?.src || 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg'"
                     alt=""/>
                 </cardImage>
