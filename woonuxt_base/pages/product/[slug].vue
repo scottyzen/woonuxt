@@ -1,16 +1,16 @@
 <script lang="ts" setup>
+import { StockStatusEnum } from '@/woonuxt_base/types/commonTypes';
 const route = useRoute();
 const { arraysEqual, formatArray, checkForVariationTypeOfAny } = useHelpers();
 const { addToCart, isUpdatingCart } = useCart();
-const { formatURI } = useHelpers();
 const slug = route.params.slug as string;
 
 const { data } = (await useAsyncGql('getProduct', { slug })) as { data: { value: { product: Product } } };
-const product = data?.value?.product;
+const product = ref<Product>(data?.value?.product);
 
 useHead({
-  title: product?.name ?? 'Product',
-  meta: [{ hid: 'description', name: 'description', content: product?.rawDescription ?? '' }],
+  title: product.value?.name ?? 'Product',
+  meta: [{ hid: 'description', name: 'description', content: product.value?.rawDescription ?? '' }],
 });
 
 const quantity = ref(1);
@@ -19,20 +19,36 @@ const variation = ref([]) as Ref<Variation[]>;
 const indexOfTypeAny = [] as number[];
 const attrValues = ref();
 
-const type = computed(() => (activeVariation.value ? activeVariation.value : product));
+const type = computed(() => (activeVariation.value ? activeVariation.value : product.value));
 const selectProductInput = computed(() => ({ productId: type.value.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
-const disabledAddToCart = computed(() => (!activeVariation.value && !!product.variations) || type.value.stockStatus !== 'IN_STOCK');
+const mergeLiveStockStatus = (payload: Product): void => {
+  product.value.stockStatus = payload.stockStatus ?? product.value.stockStatus;
 
-onMounted(() => {
-  if (product.variations) indexOfTypeAny.push(...checkForVariationTypeOfAny(product));
+  payload.variations?.nodes.forEach((variation: Variation, index: number) => {
+    if (product.value.variations?.nodes[index]) {
+      // @ts-ignore
+      product.value.variations.nodes[index].stockStatus = variation.stockStatus;
+    }
+  });
+};
+
+onMounted(async () => {
+  try {
+    const { product } = (await GqlGetStockStatus({ slug })) as { product: Product };
+    mergeLiveStockStatus(product);
+  } catch (error: any) {
+    const errorMessage = error?.gqlErrors?.[0].message;
+    if (errorMessage) console.error(errorMessage);
+  }
+  if (product.value.variations) indexOfTypeAny.push(...checkForVariationTypeOfAny(product.value));
 });
 
 const updateSelectedVariations = (variations: Attribute[]): void => {
-  if (!product.variations) return;
+  if (!product.value.variations) return;
 
   attrValues.value = variations.map((el) => ({ attributeName: el.name, attributeValue: el.value }));
   const cloneArray = JSON.parse(JSON.stringify(variations));
-  const getActiveVariation = product.variations.nodes.filter((variation: any) => {
+  const getActiveVariation = product.value.variations.nodes.filter((variation: any) => {
     // If there is any variation of type ANY set the value to ''
     if (variation.attributes) {
       indexOfTypeAny.forEach((index) => (cloneArray[index].value = ''));
@@ -45,6 +61,9 @@ const updateSelectedVariations = (variations: Attribute[]): void => {
   selectProductInput.value.variation = activeVariation.value ? attrValues.value : null;
   variation.value = variations;
 };
+
+const stockStatus = computed(() => type.value?.stockStatus || StockStatusEnum.OUT_OF_STOCK);
+const disabledAddToCart = computed(() => !type.value || stockStatus.value === StockStatusEnum.ON_BACKORDER || isUpdatingCart.value);
 </script>
 
 <template>
@@ -76,8 +95,7 @@ const updateSelectedVariations = (variations: Attribute[]): void => {
         <div class="grid gap-2 my-8 text-sm">
           <div class="flex items-center gap-2">
             <span class="text-gray-400">{{ $t('messages.shop.availability') }}: </span>
-            <span v-if="type.stockStatus == 'IN_STOCK'" class="text-green-600">{{ $t('messages.shop.inStock') }}</span>
-            <span v-else class="text-red-600">{{ $t('messages.shop.outOfStock') }}</span>
+            <StockStatus :status="stockStatus" @updated="mergeLiveStockStatus" />
           </div>
           <div class="flex items-center gap-2">
             <span class="text-gray-400">{{ $t('messages.shop.sku') }}: </span>
@@ -114,15 +132,17 @@ const updateSelectedVariations = (variations: Attribute[]): void => {
               <NuxtLink
                 v-for="category in product.productCategories.nodes"
                 :key="category.slug"
-                :to="`/product-category/${formatURI(category.slug)}`"
+                :to="`/product-category/${decodeURIComponent(category.slug)}`"
                 class="hover:text-primary"
                 :title="category.name"
-                >{{ category.name }}<span class="comma">, </span></NuxtLink
-              >
+                >{{ category.name }}<span class="comma">, </span>
+              </NuxtLink>
             </div>
           </div>
         </div>
+
         <hr />
+
         <div class="flex flex-wrap gap-4">
           <WishlistButton :product="product" />
           <ShareButton :product="product" />

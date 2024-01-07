@@ -11,9 +11,10 @@ const updateAttrs = () => {
   const selectedVariations = attrs.map((row): Attribute => {
     const radioValue = document.querySelector(`.name-${row.name}:checked`) as HTMLInputElement;
     const dropdownValue = document.querySelector(`#${row.name}`) as HTMLSelectElement;
+    const name = row.name.charAt(0).toLowerCase() + row.name.slice(1);
 
     return {
-      name: row.name,
+      name,
       value: radioValue?.value ?? dropdownValue?.value ?? '',
     };
   });

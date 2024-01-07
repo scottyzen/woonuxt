@@ -60,6 +60,7 @@
       "availability": "Availability",
       "inStock": "In Stock",
       "outOfStock": "Out of Stock",
+      "onBackorder": "On Backorder",
       "sku": "SKU",
       "price": "Price",
       "category": "Category | Categories",
