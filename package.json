@@ -12,10 +12,12 @@
     "serve": "nuxi generate && npx serve .output/public -l 8080"
   },
   "dependencies": {
+    "@pinia/nuxt": "^0.5.1",
     "@stripe/stripe-js": "^2.2.1",
     "@vueform/slider": "^2.1.10",
     "@vueuse/core": "^10.7.0",
     "flowbite": "^2.2.1",
+    "pinia": "^2.1.7",
     "woocommerce-api": "^1.5.0"
   },
   "devDependencies": {
@@ -35,5 +37,8 @@
     "prettier": "^3.1.1",
     "vue-stripe-js": "^1.0.1",
     "woonuxt-settings": "^1.0.46"
+  },
+  "overrides": {
+    "vue": "latest"
   }
 }

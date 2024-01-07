@@ -1,38 +1,4 @@
-<script  setup>
-//const { data } = await useAsyncGql('getProductCategories', { first: 6 });
-var productCategories = [];
-//const productCategories = null;
 
-  const { data: topProducts} = useFetch('https://gama.soluve.cloud/products', 
-    {
-    params: { 'page': 1, 'orderby': 'popularity' },
-    lazy: false
-  });
-
-const { data: newProducts } =  useFetch('https://gama.soluve.cloud/products',
-  {
-    params: { 'page': 1, 'orderby': 'date' },
-    lazy: false
-  });
-async function getCategories() {
-  const { data: categories } =  useAsyncGql('getProductCategories', { first: 6 });
-  productCategories = [...categories.value?.productCategories?.nodes];
-  return {productCategories}
-}
- 
-onMounted(async () => {
- await getCategories()
-  console.log(productCategories)
-});
-
-//function productCheck(params) {}
-
-useHead({
-  title: `Gama outillage | Vente outillage professionnel Algérie`,
-  meta: [{ name: 'description', content: 'PINCE A CEINTRER 16*1 VIRAX · PINCE A CEINTRER 14*1 VIRAX · COUPE TUBE MINI 3-16MM VIRAX · COUPE TUBE CUIVRE C28 6-28MM VIRAX · COUPE TUBE CUIVRE C54 14-...' }],
-  link: [{ rel: 'canonical', href: 'https://v3.woonuxt.com/' }],
-});
-</script>
 
 <template>
   <main>
@@ -53,97 +19,100 @@ useHead({
         <h2 class="text-lg font-semibold md:text-2xl">{{ $t('messages.shop.shopByCategory') }}</h2>
         <NuxtLink class="text-primary" to="/categories">{{ $t('messages.general.viewAll') }}</NuxtLink>
       </div>
+
       <div class="grid justify-center grid-cols-2 gap-4 mt-8 md:grid-cols-3 lg:grid-cols-6">
-        <CategoryCard v-for="(category, i) in productCategories" :key="i" class="w-full" :node="category" />
+        <CategoryCard v-for="(category, i) in ProductsStore.categories" :key="i" class="w-full" :node="category" />
       </div>
     </section>
 
     <!-- topProductList -->
-    <div v-if="pending">
-      loading .....
+
+    <div class="container relative flex pt-5 items-center">
+      <span class="flex-shrink mx-4 text-2xl text-gray-950">Best selling products</span>
+      <div class="flex-grow border-t border-gray-400"></div>
     </div>
-    <div v-else>
-      <div class="container relative flex pt-5 items-center">
-        <span class="flex-shrink mx-4 text-2xl text-gray-950">Best selling products</span>
-        <div class="flex-grow border-t border-gray-400"></div>
-      </div>
-      <topProductList class="  " >
-        <div class="flex   overflow-x-auto justify-start gap-2 p-2 container my-5 ">
-          <card class=" rounded-xl  flex-shrink-0   shadow-lg p-2 w-60 " v-for="pds in topProducts" :key="pds">
-            <cardImage class="  justify-center flex ">
-              <img class=" w-60   rounded-lg  "
-                :src="pds.images[0]?.src || 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg'"
-                alt="">
-            </cardImage>
-            <cardTitle class="flex p-2 m-2 items-center">
-              <h1 class=" text-sm"> {{ pds.name }}</h1>
-              <div class=" text-xs border-1 bg-pink-500 text-white m-2 px-4 py-1 rounded-full">Top</div>
-            </cardTitle>
-            <!-- if you want to display Product short description
+    <topProductList class="  ">
+      <div class="flex   overflow-x-auto justify-start gap-2 p-2 container my-5 ">
+        <card class=" rounded-xl  flex-shrink-0   shadow-lg p-2 w-60 " v-for="pds in ProductsStore.topProducts" :key="pds">
+          <cardImage class="  justify-center flex ">
+            <NuxtImg class=" max-sm:w-40 sm:w-40 md:w-60 rounded-lg " quality="60" width="600" height="600"
+              :src="pds.images[0]?.src || 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg'"
+              alt="" />
+          </cardImage>
+          <cardTitle class="flex p-2 m-2 items-center">
+            <h1 class=" text-sm"> {{ pds.name }}</h1>
+            <div class=" text-xs border-1 bg-pink-500 text-white m-2 px-4 py-1 rounded-full">Top</div>
+          </cardTitle>
+          <!-- if you want to display Product short description
                   <cardInfo class="flex p-2 m-2">
                     <p>
                       {{pds.short_description}}
                     </p>
                   </cardInfo>
                   -->
-            <div class="flex justify-between items-center px-2 ">
-              <h1 class=" text-xl pl-2">{{ pds.regular_price }} DA</h1>
-              <nuxt-link :to="'/product/' + pds.slug">
-                <Button class="  border-1 bg-blue-500 text-white m-2 px-6 py-1 rounded-lg">Buy now</Button>
-              </nuxt-link>
+          <div class="flex justify-between items-center px-2 ">
+            <h1 class=" text-xl pl-2">{{ pds.regular_price }} DA</h1>
+            <nuxt-link :to="'/product/' + pds.slug">
+              <Button class="  border-1 bg-blue-500 text-white m-2 px-6 py-1 rounded-lg">Buy now</Button>
+            </nuxt-link>
 
-            </div>
-          </card>
-        </div>
-      </topProductList>
-
-      <!-- newProductList -->
-      <div class="container relative flex pt-5 items-center mt-10">
-        <span class="flex-shrink mx-4 text-2xl text-gray-950">New products</span>
-        <div class="flex-grow border-t border-gray-400"></div>
+          </div>
+        </card>
       </div>
-      <newProductList >
-        <div class=" flex justify-center items-center container">
-          <div class=" ">
-            <div
-              class="grid   max-sm:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-lg:grid-cols-5 overflow-x-auto gap-y-5 gap-48 p-2   ">
-              <card class=" rounded-xl  flex-shrink-0   shadow-lg p-2 max-sm:w-50 sm:w-60 " v-for="pds in newProducts"
-                :key="pds">
-                <cardImage class="  justify-center flex ">
-                  <img class=" w-full   rounded-lg  "
-                    :src="pds.images[0]?.src || 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg'"
-                    alt="">
-                </cardImage>
-                <cardTitle class="flex p-2 m-2 items-center">
-                  <h1 class=" text-sm max-sm:text-xs"> {{ pds.name }}</h1>
-                  <div class="text-xs border-1 bg-pink-500 text-white m-2 px-4 py-1 rounded-full">New</div>
-                </cardTitle>
-                <!-- if you want to display Product short description
+    </topProductList>
+
+    <!-- newProductList -->
+    <div class="container relative flex pt-5 items-center mt-10">
+      <span class="flex-shrink mx-4 text-2xl text-gray-950">New products</span>
+      <div class="flex-grow border-t border-gray-400"></div>
+    </div>
+
+    <newProductList>
+      <div class=" flex justify-center items-center container">
+        <div class=" ">
+          <div
+            class="grid   max-sm:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-lg:grid-cols-5 overflow-x-auto gap-y-5 gap-x-3 lg:gap-x-5    p-2   ">
+            <card class=" rounded-xl  flex-shrink-0   shadow-lg p-2 max-sm:w-50 sm:w-50 md:w-60 "
+              v-for="pds in ProductsStore.newProducts" :key="pds">
+              <cardImage class="  justify-center flex ">
+                <NuxtImg class=" max-sm:w-40  sm:w-40 md:w-60   rounded-lg  " quality="60" width="600" height="600"
+                  :src="pds.images[0]?.src || 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg'"
+                  alt="" />
+              </cardImage>
+              <cardTitle class="flex p-2 m-2 items-center">
+                <h1 class=" text-sm max-sm:text-xs"> {{ pds.name }}</h1>
+                <div class="text-xs border-1 bg-pink-500 text-white m-2 px-4 py-1 rounded-full">New</div>
+              </cardTitle>
+              <!-- if you want to display Product short description
                   <cardInfo class="flex p-2 m-2">
                     <p>
                       {{pds.short_description}}
                     </p>
                   </cardInfo>
                   -->
-                <div class="flex justify-between items-center px-2 ">
-                  <h1 class=" text-xl pl-2">{{ pds.regular_price }} DA</h1>
+              <div class="max-sm:flex max-sm:justify-center sm:flex sm:justify-center">
+                <div class="md:flex md:justify-between items-center px-2 ">
+                  <h1 class=" text-xl pl-2 max-sm:flex max-sm:justify-center sm:flex sm:justify-center">{{
+                    pds.regular_price }} DA</h1>
                   <nuxt-link :to="'/product/' + pds.slug">
                     <Button class="  border-1 bg-blue-500 text-white m-2 px-6 py-1 rounded-lg">Buy now</Button>
                   </nuxt-link>
 
                 </div>
-              </card>
-            </div>
+              </div>
+
+            </card>
           </div>
         </div>
-      </newProductList>
-      <div class="container relative flex p-5 items-center">
-        <div class="flex-grow border-t border-gray-400"></div>
-        <span class="flex-shrink mx-4 text-lg"><button
-            class=" border-1 px-3 border-gray-640000 outline-gray-400 text-gray-400 outline-1 outline text-center items-center align-middle rounded-full p-1">
-            + More products</button></span>
       </div>
+    </newProductList>
+    <div class="container relative flex p-5 items-center">
+      <div class="flex-grow border-t border-gray-400"></div>
+      <span class="flex-shrink mx-4 text-lg"><button
+          class=" border-1 px-3 border-gray-640000 outline-gray-400 text-gray-400 outline-1 outline text-center items-center align-middle rounded-full p-1">
+          + More products</button></span> 
     </div>
+
 
 
 
@@ -179,7 +148,22 @@ useHead({
     </section>
   </main>
 </template>
+<script  setup>
+import {getProductsStore} from "~/stores/getProducts";
+const ProductsStore = getProductsStore()
 
+onMounted(async () => {
+console.log(ProductsStore)
+await ProductsStore.getProductsData()
+console.log(ProductsStore)
+});
+
+useHead({
+  title: `Gama outillage | Vente outillage professionnel Algérie`,
+  meta: [{ name: 'description', content: 'PINCE A CEINTRER 16*1 VIRAX · PINCE A CEINTRER 14*1 VIRAX · COUPE TUBE MINI 3-16MM VIRAX · COUPE TUBE CUIVRE C28 6-28MM VIRAX · COUPE TUBE CUIVRE C54 14-...' }],
+  link: [{ rel: 'canonical', href: 'https://v3.woonuxt.com/' }],
+});
+</script>
 <style scoped>
 .brand img {
   max-height: min(8vw, 120px);

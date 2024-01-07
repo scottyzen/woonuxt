@@ -42,11 +42,30 @@ app.get('/checkout', async (req, res) => {
 
 app.get('/products', async (req, res) => {
   
-    const params = req?.query.page || 1
+    const page = req?.query || 1
     const products = {
         method: 'GET',
         url: 'https://gamaoutillage.net/wp-json/wc/v3/products',
-        params: params,
+        params: page,
+        headers: {
+            Authorization: apiKey
+        }
+    }
+    await axios.request(products).then((data) => {
+        const dataJ = data.data
+        res.send(dataJ)
+    })
+}
+)
+
+app.get('/categories', async (req, res) => {
+  
+    const paramsObject = req?.query || 1
+    console.log(paramsObject)
+    const products = {
+        method: 'GET',
+        url: 'https://gamaoutillage.net/wp-json/wc/v3/products/categories',
+        params: paramsObject,
         headers: {
             Authorization: apiKey
         }
