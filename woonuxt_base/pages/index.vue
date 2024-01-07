@@ -75,9 +75,9 @@ useHead({
         <div class="flex   overflow-x-auto justify-start gap-2 p-2 container my-5 ">
           <card class=" rounded-xl  flex-shrink-0   shadow-lg p-2 w-60 " v-for="pds in topProducts" :key="pds">
             <cardImage class="  justify-center flex ">
-              <img class=" w-60   rounded-lg  "
+              <NuxtPicture class=" max-sm:w-40  sm:w-40 md:w-60     rounded-lg   "  format="avif,webp"
                 :src="pds.images[0]?.src || 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg'"
-                alt="">
+                alt="" />
             </cardImage>
             <cardTitle class="flex p-2 m-2 items-center">
               <h1 class=" text-sm"> {{ pds.name }}</h1>
