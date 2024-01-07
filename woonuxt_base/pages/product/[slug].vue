@@ -8,11 +8,6 @@ const slug = route.params.slug as string;
 const { data } = (await useAsyncGql('getProduct', { slug })) as { data: { value: { product: Product } } };
 const product = ref<Product>(data?.value?.product);
 
-useHead({
-  title: product.value?.name ?? 'Product',
-  meta: [{ hid: 'description', name: 'description', content: product.value?.rawDescription ?? '' }],
-});
-
 const quantity = ref(1);
 const activeVariation = ref(null) as Ref<Variation | null>;
 const variation = ref([]) as Ref<Variation[]>;
@@ -68,6 +63,7 @@ const disabledAddToCart = computed(() => !type.value || stockStatus.value === St
 
 <template>
   <main class="container relative py-6 xl:max-w-7xl" v-if="product">
+    <SEOHead :info="product" />
     <Breadcrumb :product="product" class="mb-6" />
 
     <div class="flex flex-col gap-10 md:flex-row md:justify-between lg:gap-24">
@@ -103,7 +99,7 @@ const disabledAddToCart = computed(() => !type.value || stockStatus.value === St
           </div>
         </div>
 
-        <div class="mb-8 font-light prose" v-html="product.description || product.shortDescription" />
+        <div class="mb-8 font-light prose" v-html="product.shortDescription || product.description" />
 
         <hr />
 

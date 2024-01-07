@@ -1,10 +1,17 @@
-import pkg from './package.json';
+import { version } from './package.json';
 import { createResolver } from '@nuxt/kit';
 const { resolve } = createResolver(import.meta.url);
+
+/**
+ * This will automatically be populated from your name of you WP site.
+ * You can override it by setting the SITE_TITLE environment variable.
+ */
+const SITE_TITLE = process.env.SITE_TITLE || 'WooNuxt';
 
 export default defineNuxtConfig({
   app: {
     head: {
+      titleTemplate: `%s - ${SITE_TITLE}`,
       htmlAttrs: { lang: 'en' },
       link: [{ rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' }],
     },
@@ -63,7 +70,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      version: pkg.version || '0.0.0',
+      version,
     },
   },
 
