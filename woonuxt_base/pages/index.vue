@@ -2,8 +2,14 @@
 //const { data } = await useAsyncGql('getProductCategories', { first: 6 });
 var productCategories = [];
 //const productCategories = null;
+async function getCategories() {
+  const { data: categories } =  useAsyncGql('getProductCategories', { first: 6 });
+  productCategories = [...categories.value?.productCategories?.nodes];
+  return {productCategories}
+}
+ 
 
-  const { data: topProducts} = useFetch('https://gama.soluve.cloud/products', 
+  const { data: topProducts, pending : pendingLoad} = useFetch('https://gama.soluve.cloud/products', 
     {
     params: { 'page': 1, 'orderby': 'popularity' },
     lazy: false
@@ -14,14 +20,12 @@ const { data: newProducts } =  useFetch('https://gama.soluve.cloud/products',
     params: { 'page': 1, 'orderby': 'date' },
     lazy: false
   });
-async function getCategories() {
-  const { data: categories } =  useAsyncGql('getProductCategories', { first: 6 });
-  productCategories = [...categories.value?.productCategories?.nodes];
-  return {productCategories}
-}
- 
+
+
 onMounted(async () => {
  //await getCategories()
+
+
   console.log(productCategories)
 });
 
@@ -59,7 +63,7 @@ useHead({
     </section>
 
     <!-- topProductList -->
-    <div v-if="pending">
+    <div v-if="pendingLoad">
       loading .....
     </div>
     <div v-else>
