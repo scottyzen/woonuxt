@@ -21,7 +21,7 @@ async function getCategories() {
 }
  
 onMounted(async () => {
- await getCategories()
+ //await getCategories()
   console.log(productCategories)
 });
 
