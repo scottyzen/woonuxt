@@ -26,7 +26,7 @@ const mergeLiveStockStatus = (payload: Product): void => {
   payload.variations?.nodes.forEach((variation: Variation, index: number) => {
     if (product.value.variations?.nodes[index]) {
       // @ts-ignore
-      product.value.variations.nodes[index].stockQuantity = variation.stockStatus;
+      product.value.variations.nodes[index].stockStatus = variation.stockStatus;
     }
   });
 };
@@ -134,12 +134,14 @@ const disabledAddToCart = computed(() => !type.value || stockStatus.value === 'O
                 :to="`/product-category/${decodeURIComponent(category.slug)}`"
                 class="hover:text-primary"
                 :title="category.name"
-                >{{ category.name }}<span class="comma">, </span></NuxtLink
-              >
+                >{{ category.name }}<span class="comma">, </span>
+              </NuxtLink>
             </div>
           </div>
         </div>
+
         <hr />
+
         <div class="flex flex-wrap gap-4">
           <WishlistButton :product="product" />
           <ShareButton :product="product" />
