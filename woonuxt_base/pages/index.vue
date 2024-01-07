@@ -106,13 +106,13 @@ useHead({
         <div class=" flex justify-center items-center container">
           <div class=" ">
             <div
-              class="grid   max-sm:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-lg:grid-cols-5 overflow-x-auto gap-y-5 gap-48 p-2   ">
-              <card class=" rounded-xl  flex-shrink-0   shadow-lg p-2 max-sm:w-50 sm:w-60 " v-for="pds in newProducts"
+              class="grid   max-sm:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-lg:grid-cols-5 overflow-x-auto gap-y-5 sm:gap-5 md:gap-10 lg:gap-x-48  p-2   ">
+              <card class=" rounded-xl  flex-shrink-0   shadow-lg p-2 max-sm:w-50 sm:w-50 md:w-60 " v-for="pds in newProducts"
                 :key="pds">
                 <cardImage class="  justify-center flex ">
-                  <img class=" w-full   rounded-lg  "
+                  <NuxtImg  class=" max-sm:w-40  sm:w-40 md:w-60   rounded-lg  "  quality="80"
                     :src="pds.images[0]?.src || 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg'"
-                    alt="">
+                    alt=""/>
                 </cardImage>
                 <cardTitle class="flex p-2 m-2 items-center">
                   <h1 class=" text-sm max-sm:text-xs"> {{ pds.name }}</h1>
@@ -125,13 +125,16 @@ useHead({
                     </p>
                   </cardInfo>
                   -->
-                <div class="flex justify-between items-center px-2 ">
-                  <h1 class=" text-xl pl-2">{{ pds.regular_price }} DA</h1>
+                  <div class="max-sm:flex max-sm:justify-center sm:flex sm:justify-center"> 
+                                    <div class="md:flex md:justify-between items-center px-2 ">
+                  <h1 class=" text-xl pl-2 max-sm:flex max-sm:justify-center sm:flex sm:justify-center">{{ pds.regular_price }} DA</h1>
                   <nuxt-link :to="'/product/' + pds.slug">
                     <Button class="  border-1 bg-blue-500 text-white m-2 px-6 py-1 rounded-lg">Buy now</Button>
                   </nuxt-link>
 
                 </div>
+                  </div>
+
               </card>
             </div>
           </div>
