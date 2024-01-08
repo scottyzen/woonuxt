@@ -156,6 +156,7 @@ onMounted(async () => {
 console.log(ProductsStore)
 await ProductsStore.getProductsData()
 console.log(ProductsStore)
+
 });
 
 useHead({
