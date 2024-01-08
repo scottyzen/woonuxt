@@ -64,7 +64,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       version: pkg.version || '0.0.0',
-      stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+      STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
     },
   },
 
