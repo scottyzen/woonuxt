@@ -1,41 +1,37 @@
 <script setup lang="ts">
+const { frontEndUrl, wooNuxtSEO } = useHelpers();
+const { path } = useRoute();
+
 const img = useImage();
 const { info } = defineProps({ info: { type: Object, required: true } });
-const imageURL = info.image.sourceUrl || '/images/placeholdcer.jpg';
 
-const twitterImageSrc = img.getSizes(imageURL, { width: 1600, height: 900 });
-const facebookImageSrc = img.getSizes(imageURL, { width: 1200, height: 630 });
-const pinterestImageSrc = img.getSizes(imageURL, { width: 1000, height: 1500 });
-const ogImageSrc = img.getSizes(imageURL, { width: 1200, height: 630 });
+const title = info.name;
+const canonical = `${frontEndUrl}${path}`;
+const siteName = process.env.SITE_TITLE || 'WooNuxt';
+
+const imageURL = info.image.sourceUrl || '/images/placeholder.jpg';
+const defaultImage = img.getSizes(imageURL, { width: 1200, height: 630 }).src;
+const twitterImageSrc = img.getSizes(imageURL, { width: 1600, height: 900 }).src;
 </script>
 
 <template>
   <div>
     <Head>
-      <Title>{{ info.name }}</Title>
+      <Title>{{ title }}</Title>
       <Meta name="description" hid="description" :content="info.description" />
-      <Meta property="og:url" hid="og:url" content="`https://v3.woonuxt.com/product/${info.slug}`" />
-      <Meta property="og:type" hid="og:type" content="website" />
+      <Meta name="image" hid="image" :content="defaultImage" />
+      <Meta property="og:site_name" hid="og:site_name" :content="siteName" />
+      <Meta property="og:url" hid="og:url" :content="canonical" />
       <Meta property="og:title" hid="og:title" :content="info.name" />
       <Meta property="og:description" hid="og:description" :content="info.description" />
-      <Meta property="og:image" hid="og:image" :content="ogImageSrc.src" />
-      <Meta property="twitter:card" hid="twitter:card" content="summary_large_image" />
-      <Meta property="twitter:domain" hid="twitter:domain" content="v3.woonuxt.com" />
-      <Meta property="twitter:url" hid="twitter:url" content="`https://v3.woonuxt.com/product/${info.slug}`" />
-      <Meta property="twitter:title" hid="twitter:title" :content="info.name" />
-      <Meta property="twitter:description" hid="twitter:description" :content="info.description" />
-      <Meta property="twitter:image" hid="twitter:image" :content="twitterImageSrc.src" />
-      <Meta property="pinterest:domain" hid="pinterest:domain" content="v3.woonuxt.com" />
-      <Meta property="pinterest:url" hid="pinterest:url" content="`https://v3.woonuxt.com/product/${info.slug}`" />
-      <Meta property="pinterest:title" hid="pinterest:title" :content="info.name" />
-      <Meta property="pinterest:description" hid="pinterest:description" :content="info.description" />
-      <Meta property="pinterest:image" hid="pinterest:image" :content="pinterestImageSrc.src || ''" />
-      <Meta property="og:image:width" hid="og:image:width" content="1200" />
-      <Meta property="og:image:height" hid="og:image:height" content="630" />
-      <Meta property="twitter:image:width" hid="twitter:image:width" content="1600" />
-      <Meta property="twitter:image:height" hid="twitter:image:height" content="900" />
-      <Meta property="pinterest:image:width" hid="pinterest:image:width" content="1000" />
-      <Meta property="pinterest:image:height" hid="pinterest:image:height" content="1500" />
+      <Meta property="og:image" hid="og:image" :content="defaultImage" />
+      <Meta v-if="wooNuxtSEO.facebook" property="article:publisher" hid="article:publisher" :content="wooNuxtSEO.facebook" />
+      <Meta name="twitter:card" hid="twitter:card" content="summary_large_image" />
+      <Meta name="twitter:title" hid="twitter:title" :content="info.name" />
+      <Meta name="twitter:description" hid="twitter:description" :content="info.description" />
+      <Meta name="twitter:image" hid="twitter:image" :content="twitterImageSrc" />
+      <Meta name="twitter:url" hid="twitter:url" :content="canonical" />
+      <Link rel="canonical" hid="canonical" :href="canonical" />
     </Head>
   </div>
 </template>
