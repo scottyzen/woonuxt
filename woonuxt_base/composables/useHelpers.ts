@@ -8,7 +8,7 @@ export function useHelpers() {
   const productsPerPage: number = runtimeConfig.public?.PRODUCTS_PER_PAGE || 24;
   const wooNuxtSEO = runtimeConfig.public?.wooNuxtSEO || {};
   const frontEndUrl = runtimeConfig.public?.FRONT_END_URL?.replace(/\/$/, '') || null;
-  const isDev = process.env.NODE_ENV === 'development';
+  const isDev: boolean = process.env.NODE_ENV === 'development';
 
   /**
    * Toggles the mobile menu.
