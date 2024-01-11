@@ -9,6 +9,8 @@
       "paymentMethod": "Payment Method",
       "clearFilters": "Clear Filters",
       "up": "Up",
+      "bestSellingProducts": "Best Selling",
+      "NewProducts": "New Products",
       "please": "Please",
       "shipping": "Shipping",
       "shippingDetails": "Shipping Details",
@@ -31,7 +33,8 @@
       "goHome": "Go Home",
       "newsletter": "Newsletter",
       "customerService": "Customer Service",
-      "processing": "Processing"
+      "processing": "Processing",
+      "moreProducts": "More Products"
     },
     "account": {
       "changePassword": "Change Password",
@@ -101,7 +104,8 @@
       "discount": "Discount",
       "giftCards": "Gift Cards",
       "searchProducts": "Search Products...",
-      "couponCode": "Coupon Code"
+      "couponCode": "Coupon Code",
+      "buyNow": "Buy Now"
     },
     "billing": {
       "billing": "Billing",

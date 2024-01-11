@@ -28,12 +28,17 @@
     <!-- topProductList -->
 
     <div class="container relative flex pt-5 items-center">
-      <span class="flex-shrink mx-4 text-2xl text-gray-950">Best selling products</span>
+      <span class="flex-shrink mx-4 text-2xl text-gray-950">{{ $t('messages.general.bestSellingProducts') }}</span>
       <div class="flex-grow border-t border-gray-400"></div>
     </div>
     <topProductList class="  ">
       <div class="flex   overflow-x-auto justify-start gap-2 p-2 container my-5 ">
-        <card class=" rounded-xl  flex-shrink-0   shadow-lg p-2 w-60 " v-for="pds in ProductsStore.topProducts" :key="pds">
+
+        <card class=" rounded-xl  flex-shrink-0   shadow-lg p-2 w-60 " v-for="pds in ProductsStore.topProducts"
+          :key="pds">
+          <div class=" items-end flex justify-end">
+            <div class="text-xs border-1 w-fit bg-pink-500 text-white m-2 px-4 py-1 rounded-full">Top</div>
+          </div>
           <cardImage class="  justify-center flex ">
             <NuxtImg class=" max-sm:w-40 sm:w-40 md:w-60 rounded-lg " quality="60" width="600" height="600"
               :src="pds.images[0]?.src || 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg'"
@@ -41,7 +46,6 @@
           </cardImage>
           <cardTitle class="flex p-2 m-2 items-center">
             <h1 class=" text-sm"> {{ pds.name }}</h1>
-            <div class=" text-xs border-1 bg-pink-500 text-white m-2 px-4 py-1 rounded-full">Top</div>
           </cardTitle>
           <!-- if you want to display Product short description
                   <cardInfo class="flex p-2 m-2">
@@ -50,20 +54,23 @@
                     </p>
                   </cardInfo>
                   -->
-          <div class="flex justify-between items-center px-2 ">
-            <h1 class=" text-xl pl-2">{{ pds.regular_price }} DA</h1>
-            <nuxt-link :to="'/product/' + pds.slug">
-              <Button class="  border-1 bg-blue-500 text-white m-2 px-6 py-1 rounded-lg">Buy now</Button>
-            </nuxt-link>
+          <div class="flex justify-between items-center">
+              <h1 class=" text-md pl-2  flex justify-center"> <b>{{ pds.regular_price || 0 }} DA</b> </h1>
+              <nuxt-link :to="'/product/' + pds.slug">
+                <Button
+                  class="  border-1 bg-blue-500 text-white m-2 px-6 py-1 rounded-lg">{{ $t('messages.shop.buyNow') }}</Button>
+              </nuxt-link>
 
+           
           </div>
+
         </card>
       </div>
     </topProductList>
 
     <!-- newProductList -->
     <div class="container relative flex pt-5 items-center mt-10">
-      <span class="flex-shrink mx-4 text-2xl text-gray-950">New products</span>
+      <span class="flex-shrink mx-4 text-2xl text-gray-950">{{ $t('messages.general.NewProducts') }}</span>
       <div class="flex-grow border-t border-gray-400"></div>
     </div>
 
@@ -72,16 +79,21 @@
         <div class=" ">
           <div
             class="grid   max-sm:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-lg:grid-cols-5 overflow-x-auto gap-y-5 gap-x-3 lg:gap-x-5    p-2   ">
+
             <card class=" rounded-xl  flex-shrink-0   shadow-lg p-2 max-sm:w-50 sm:w-50 md:w-60 "
               v-for="pds in ProductsStore.newProducts" :key="pds">
+              <div class=" items-end flex justify-end">
+                <div class="text-xs border-1 w-fit bg-pink-500 text-white m-2 px-4 py-1 rounded-full">New</div>
+              </div>
               <cardImage class="  justify-center flex ">
                 <NuxtImg class=" max-sm:w-40  sm:w-40 md:w-60   rounded-lg  " quality="60" width="600" height="600"
                   :src="pds.images[0]?.src || 'https://gamaoutillage.net/wp-content/uploads/2024/01/1665343934977@1x_1-1.jpg'"
                   alt="" />
               </cardImage>
-              <cardTitle class="flex p-2 m-2 items-center">
+              <cardTitle class=" p-2 m-2 items-center">
                 <h1 class=" text-sm max-sm:text-xs"> {{ pds.name }}</h1>
-                <div class="text-xs border-1 bg-pink-500 text-white m-2 px-4 py-1 rounded-full">New</div>
+
+
               </cardTitle>
               <!-- if you want to display Product short description
                   <cardInfo class="flex p-2 m-2">
@@ -90,15 +102,15 @@
                     </p>
                   </cardInfo>
                   -->
-              <div class="max-sm:flex max-sm:justify-center sm:flex sm:justify-center">
-                <div class="md:flex md:justify-between items-center px-2 ">
-                  <h1 class=" text-xl pl-2 max-sm:flex max-sm:justify-center sm:flex sm:justify-center">{{
-                    pds.regular_price }} DA</h1>
+              <div class="flex justify-between items-center">
+                  <h1 class=" text-md  pl-2  flex justify-end"> <b>{{
+                    pds.regular_price }} DA</b> </h1>
                   <nuxt-link :to="'/product/' + pds.slug">
-                    <Button class="  border-1 bg-blue-500 text-white m-2 px-6 py-1 rounded-lg">Buy now</Button>
+                    <Button
+                      class=" text-sm  border-1 bg-blue-500 text-white my-2 px-6 py-1 rounded-lg">{{ $t('messages.shop.buyNow') }}</Button>
                   </nuxt-link>
 
-                </div>
+                
               </div>
 
             </card>
@@ -110,7 +122,7 @@
       <div class="flex-grow border-t border-gray-400"></div>
       <span class="flex-shrink mx-4 text-lg"><button
           class=" border-1 px-3 border-gray-640000 outline-gray-400 text-gray-400 outline-1 outline text-center items-center align-middle rounded-full p-1">
-          + More products</button></span> 
+          + {{ $t('messages.general.moreProducts') }}</button></span>
     </div>
 
 
@@ -149,13 +161,14 @@
   </main>
 </template>
 <script  setup>
-import {getProductsStore} from "~/stores/getProducts";
+import { getProductsStore } from "~/stores/getProducts";
 const ProductsStore = getProductsStore()
 
 onMounted(async () => {
-console.log(ProductsStore)
-await ProductsStore.getProductsData()
-console.log(ProductsStore)
+  console.log(ProductsStore)
+  await ProductsStore.getProductsData()
+  console.log(ProductsStore)
+
 });
 
 useHead({
@@ -169,5 +182,4 @@ useHead({
   max-height: min(8vw, 120px);
   object-fit: contain;
   object-position: center;
-}
-</style>
+}</style>
