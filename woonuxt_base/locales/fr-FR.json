@@ -9,6 +9,8 @@
       "paymentMethod": "Méthode de paiement",
       "clearFilters": "Effacer les filtres",
       "up": "Plus",
+      "bestSellingProducts": "Meilleures ventes",
+      "NewProducts": "Nouveaux produits",
       "please": "Please",
       "shipping": "Livraison",
       "shippingDetails": "Détails de livraison",
@@ -31,7 +33,8 @@
       "goHome": "Retour à l'accueil",
       "newsletter": "Newsletter",
       "customerService": "Service Client",
-      "processing": "En cours de traitement"
+      "processing": "En cours de traitement",
+      "moreProducts": "Plus de produits"
     },
     "account": {
       "changePassword": "Modifier le mot de passe",
@@ -101,7 +104,8 @@
       "discount": "Remise",
       "giftCards": "Cartes cadeaux",
       "searchProducts": "Rechercher par produit...",
-      "couponCode": "Code du coupon de réduction"
+      "couponCode": "Code du coupon de réduction",
+      "buyNow": "Achetez"
     },
     "billing": {
       "billing": "Facturation",
