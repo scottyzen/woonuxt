@@ -137,6 +137,15 @@ export function useHelpers() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  /**
+   * Strips HTML tags from a string.
+   * @param {string} str - The string to strip.
+   * @returns {string} The stripped string.
+   */
+  const stripHtml = (str: string | null | undefined = ''): string => {
+    return str === null ? '' : str.replace(/(<([^>]+)>)/gi, '');
+  };
+
   return {
     isShowingMobileMenu,
     wooNuxtVersionInfo,
@@ -157,5 +166,6 @@ export function useHelpers() {
     formatURI,
     formatDate,
     scrollToTop,
+    stripHtml,
   };
 }
