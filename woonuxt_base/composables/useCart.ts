@@ -49,6 +49,7 @@ export function useCart() {
     try {
       const { addToCart } = await GqlAddToCart({ input });
       cart.value = addToCart?.cart ?? null;
+      toggleCart();
     } catch (error: any) {
       const errorMessage = error?.gqlErrors?.[0].message;
       if (errorMessage) console.error(errorMessage);
