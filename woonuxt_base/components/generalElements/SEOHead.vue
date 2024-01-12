@@ -5,11 +5,11 @@ const { info } = defineProps({ info: { type: Object as PropType<Product>, requir
 
 const title = info.name;
 const canonical = `${frontEndUrl}${path}`;
-const siteName = process.env.SITE_TITLE || 'WooNuxt';
+const siteName = process.env.SITE_TITLE ?? 'WooNuxt';
 
 const img = useImage();
 const imagePrefix = isDev ? '' : frontEndUrl;
-const imageURL = info.image?.sourceUrl || '/images/placeholder.jpg';
+const imageURL = info.image?.sourceUrl ?? '/images/placeholder.jpg';
 const defaultImage = imagePrefix + img.getSizes(imageURL, { width: 1200, height: 630 }).src;
 const twitterImageSrc = imagePrefix + img.getSizes(imageURL, { width: 1600, height: 900 }).src;
 const description = info.shortDescription || info.description ? stripHtml(info.shortDescription) : stripHtml(info.description);
