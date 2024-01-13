@@ -58,7 +58,7 @@ const updateSelectedVariations = (variations: Attribute[]): void => {
 };
 
 const stockStatus = computed(() => type.value?.stockStatus || StockStatusEnum.OUT_OF_STOCK);
-const disabledAddToCart = computed(() => !type.value || stockStatus.value === StockStatusEnum.ON_BACKORDER || isUpdatingCart.value);
+const disabledAddToCart = computed(() => !type.value || stockStatus.value === StockStatusEnum.OUT_OF_STOCK || isUpdatingCart.value);
 </script>
 
 <template>
@@ -76,7 +76,7 @@ const disabledAddToCart = computed(() => !type.value || stockStatus.value === St
         :node="type" />
       <NuxtImg v-else class="relative flex-1" src="/images/placeholder.jpg" :alt="product?.name || 'Product'" />
 
-      <div class="lg:max-w-md xl:max-w-lg md:py-2">
+      <div class="lg:max-w-md xl:max-w-lg md:py-2 w-full">
         <div class="flex justify-between mb-4">
           <div class="flex-1">
             <h1 class="flex flex-wrap items-center gap-2 mb-2 text-2xl font-sesmibold">
