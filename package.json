@@ -17,7 +17,7 @@
     "@vueuse/core": "^10.7.1"
   },
   "devDependencies": {
-    "@nuxt/image": "^1.1.0",
+    "@nuxt/image": "^1.2.0",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@nuxtjs/i18n": "^8.0.0",
     "@nuxtjs/tailwindcss": "^6.10.4",
@@ -30,7 +30,7 @@
     "nuxt": "^3.9.1",
     "nuxt-graphql-client": "^0.2.31",
     "nuxt-icon": "^0.6.8",
-    "prettier": "^3.1.1",
+    "prettier": "^3.2.1",
     "vue-stripe-js": "^1.0.1",
     "woonuxt-settings": "^1.0.50"
   }
