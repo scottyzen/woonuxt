@@ -14,7 +14,7 @@
   "dependencies": {
     "@stripe/stripe-js": "^2.3.0",
     "@vueform/slider": "^2.1.10",
-    "@vueuse/core": "^10.7.1"
+    "@vueuse/core": "^10.7.2"
   },
   "devDependencies": {
     "@nuxt/image": "^1.2.0",
@@ -27,11 +27,11 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-prettier": "^5.1.3",
-    "nuxt": "^3.9.1",
-    "nuxt-graphql-client": "^0.2.31",
+    "nuxt": "^3.9.2",
+    "nuxt-graphql-client": "^0.2.33",
     "nuxt-icon": "^0.6.8",
-    "prettier": "^3.2.1",
+    "prettier": "^3.2.2",
     "vue-stripe-js": "^1.0.1",
-    "woonuxt-settings": "^1.0.50"
+    "woonuxt-settings": "^1.0.51"
   }
 }

@@ -280,12 +280,8 @@ interface Order {
   customer?: Customer | null;
   lineItems?: { nodes?: LineItem[] } | null;
 }
-
-interface WooNuxtSEO {
-  facebook?: string | null;
-  twitter?: string | null;
-  youtube?: string | null;
-  pinterest?: string | null;
-  linkedin?: string | null;
-  instagram?: string | null;
+interface WooNuxtSEOItem {
+  provider: string;
+  url?: string;
+  handle?: string;
 }
