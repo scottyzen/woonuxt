@@ -9,6 +9,7 @@ const versionInfo = `WooNuxt v${wooNuxtVersionInfo}`;
       <div class="mr-auto">
         <Logo />
         <WebsiteShortDescription />
+        <!-- <SocialIcons /> -->
         <LangSwitcher class="mt-8" />
       </div>
       <div class="w-3/7 lg:w-auto">
@@ -48,13 +49,14 @@ const versionInfo = `WooNuxt v${wooNuxtVersionInfo}`;
         </div>
       </div>
     </div>
-    <div class="container border-t">
+    <div class="container border-t flex items-center justify-center mb-4">
       <div class="copywrite">
         <p class="py-4 text-xs text-center">
           <a href="https://woonuxt.com" :title="versionInfo">{{ versionInfo }}</a> - by
           <a href="https://scottyzen.com" title="Scott Kennedy - Web Developer" target="_blank">Scott Kennedy</a>
         </p>
       </div>
+      <SocialIcons class="ml-auto" />
     </div>
   </footer>
 </template>

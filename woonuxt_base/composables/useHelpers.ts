@@ -6,7 +6,7 @@ export function useHelpers() {
   const isShowingMobileMenu = useState<boolean>('isShowingMobileMenu', () => false);
   const wooNuxtVersionInfo: string = runtimeConfig.public?.version || '0.0.0';
   const productsPerPage: number = runtimeConfig.public?.PRODUCTS_PER_PAGE || 24;
-  const wooNuxtSEO: WooNuxtSEO = runtimeConfig.public?.wooNuxtSEO || {};
+  const wooNuxtSEO: WooNuxtSEO[] = runtimeConfig.public?.WOO_NUXT_SEO || [];
   const frontEndUrl = runtimeConfig.public?.FRONT_END_URL?.replace(/\/$/, '') || null;
   const isDev: boolean = process.env.NODE_ENV === 'development';
 
