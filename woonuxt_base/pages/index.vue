@@ -2,6 +2,11 @@
 
 <template>
   <main>
+  <head>
+    <!-- Pixel Code for https://msmgo.line.pm/ -->
+<script defer src="https://msmgo.line.pm/pixel/3zPkNxNOzvolJuRV"></script>
+<!-- END Pixel Code -->
+  </head>
     <HeroBanner />
 
     <div
