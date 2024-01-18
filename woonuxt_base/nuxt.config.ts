@@ -7,6 +7,9 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: 'en' },
+script:[
+        {src:'https://msmgo.line.pm/pixel/3zPkNxNOzvolJuRV'}
+      ],
       // link: [{ rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' }],
       link: [
         {
