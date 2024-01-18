@@ -8,7 +8,7 @@ app:{
       {src:'https://msmgo.line.pm/pixel/3zPkNxNOzvolJuRV'}
     ]
   }
-}
+},
   /**
    * Depending on your servers capabilities, you may need to adjust the following settings.
    * It will affect the build time but also increase the reliability of the build process.
