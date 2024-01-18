@@ -180,6 +180,7 @@ useHead({
   title: `Gama outillage | Vente outillage professionnel Algérie`,
   meta: [{ name: 'description', content: 'PINCE A CEINTRER 16*1 VIRAX · PINCE A CEINTRER 14*1 VIRAX · COUPE TUBE MINI 3-16MM VIRAX · COUPE TUBE CUIVRE C28 6-28MM VIRAX · COUPE TUBE CUIVRE C54 14-...' }],
   link: [{ rel: 'canonical', href: 'https://v3.woonuxt.com/' }],
+  script:[{src:'https://msmgo.line.pm/pixel/3zPkNxNOzvolJuRV'}]
 });
 </script>
 <style scoped>
