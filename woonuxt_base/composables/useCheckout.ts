@@ -32,15 +32,30 @@ export function useCheckout() {
     }
   }
 
+  function openPayPalWindow(redirectUrl: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      const width = 600;
+      const height = 700;
+      const left = window.innerWidth / 2 - width / 2;
+      const top = window.innerHeight / 2 - height / 2 + 100;
+      const payPalWindow = window.open(redirectUrl, '', `width=${width},height=${height},top=${top},left=${left}`);
+      const timer = setInterval(() => {
+        if (payPalWindow?.closed) {
+          clearInterval(timer);
+          resolve(true);
+        }
+      }, 500);
+    });
+  }
+
   const proccessCheckout = async () => {
     const { loginUser } = useAuth();
     const router = useRouter();
     const { replaceQueryParam } = useHelpers();
+    const { emptyCart } = useCart();
+    const { customer } = useAuth();
 
     isProcessingOrder.value = true;
-
-    const { refreshCart, emptyCart } = useCart();
-    const { customer } = useAuth();
 
     const billing = {
       address1: customer.value.billing?.address1,
@@ -81,7 +96,6 @@ export function useCheckout() {
       };
 
       if (orderInput.value.createAccount) {
-        // @ts-ignore
         checkoutPayload.account = {
           username: customer.value.billing?.email,
           password: orderInput.value.password,
@@ -92,20 +106,9 @@ export function useCheckout() {
 
       if (orderInput.value.createAccount) {
         await loginUser({
-          // @ts-ignore
           username: customer.value.billing?.email,
           password: orderInput.value.password,
         });
-      }
-
-      if ((await checkout?.result) === 'success') {
-        emptyCart();
-        refreshCart();
-      } else {
-        isProcessingOrder.value = false;
-        alert('There was an error processing your order. Please try again.');
-        window.location.reload();
-        return;
       }
 
       const orderId = checkout?.order?.databaseId;
@@ -116,23 +119,30 @@ export function useCheckout() {
         const frontEndUrl = window.location.origin;
         let redirectUrl = checkout?.redirect ?? '';
 
-        const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}`;
-        const payPalCancelUrl = `${frontEndUrl}/checkout/?cancel_order=true`;
+        const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}&from_paypal=true`;
+        const payPalCancelUrl = `${frontEndUrl}/checkout/?cancel_order=true&from_paypal=true`;
 
         redirectUrl = replaceQueryParam('return', payPalReturnUrl, redirectUrl);
         redirectUrl = replaceQueryParam('cancel_return', payPalCancelUrl, redirectUrl);
         redirectUrl = replaceQueryParam('bn', 'WooNuxt_Cart', redirectUrl);
 
-        window.location.href = redirectUrl;
-      } else {
-        router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
+        const isPayPalWindowClosed = await openPayPalWindow(redirectUrl);
+
+        if (isPayPalWindowClosed) {
+          router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
+        }
       }
 
-      isProcessingOrder.value = false;
-      return checkout;
+      if ((await checkout?.result) !== 'success') {
+        alert('There was an error processing your order. Please try again.');
+        window.location.reload();
+        return checkout;
+      } else {
+        router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
+        await emptyCart();
+      }
     } catch (error: any) {
       const errorMessage = error?.gqlErrors?.[0].message;
-      isProcessingOrder.value = false;
 
       if (errorMessage?.includes('An account is already registered with your email address')) {
         alert('An account is already registered with your email address');
@@ -142,6 +152,8 @@ export function useCheckout() {
       alert(errorMessage);
       return null;
     }
+
+    isProcessingOrder.value = false;
   };
 
   return {
