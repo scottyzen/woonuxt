@@ -29,7 +29,7 @@ export function useCart() {
     return null;
   }
 
-  function updateCart(payload: Cart): void {
+  function updateCart(payload: Cart | null): void {
     cart.value = payload;
   }
 
@@ -81,12 +81,12 @@ export function useCart() {
 
   // empty the cart
   async function emptyCart(): Promise<void> {
+    console.log('emptyCart()');
     try {
       const { emptyCart } = await GqlEmptyCart();
-      cart.value = emptyCart?.cart ?? null;
+      updateCart(emptyCart?.cart ?? null);
     } catch (error: any) {
-      const errorMessage = error?.gqlErrors?.[0].message;
-      if (errorMessage) console.error(errorMessage);
+      console.log(error);
     }
   }
 

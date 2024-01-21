@@ -34,8 +34,8 @@ export function useCheckout() {
 
   function openPayPalWindow(redirectUrl: string): Promise<boolean> {
     return new Promise((resolve) => {
-      const width = 600;
-      const height = 700;
+      const width = 750;
+      const height = 750;
       const left = window.innerWidth / 2 - width / 2;
       const top = window.innerHeight / 2 - height / 2 + 100;
       const payPalWindow = window.open(redirectUrl, '', `width=${width},height=${height},top=${top},left=${left}`);
@@ -52,7 +52,7 @@ export function useCheckout() {
     const { loginUser } = useAuth();
     const router = useRouter();
     const { replaceQueryParam } = useHelpers();
-    const { emptyCart } = useCart();
+    const { emptyCart, refreshCart } = useCart();
     const { customer } = useAuth();
 
     isProcessingOrder.value = true;
@@ -93,9 +93,11 @@ export function useCheckout() {
         paymentMethod: orderInput.value.paymentMethod,
         customerNote: orderInput.value.customerNote,
         shipToDifferentAddress: orderInput.value.shipToDifferentAddress,
+        transactionId: orderInput.value.transactionId,
       };
 
       if (orderInput.value.createAccount) {
+        // @ts-ignore
         checkoutPayload.account = {
           username: customer.value.billing?.email,
           password: orderInput.value.password,
@@ -106,16 +108,18 @@ export function useCheckout() {
 
       if (orderInput.value.createAccount) {
         await loginUser({
-          username: customer.value.billing?.email,
+          // @ts-ignore
+          username: customer.value.billing.email,
           password: orderInput.value.password,
         });
       }
 
       const orderId = checkout?.order?.databaseId;
       const orderKey = checkout?.order?.orderKey;
+      const isPayPal = orderInput.value.paymentMethod === 'paypal';
 
       // PayPal redirect
-      if ((await checkout?.redirect) && orderInput.value.paymentMethod === 'paypal') {
+      if ((await checkout?.redirect) && isPayPal) {
         const frontEndUrl = window.location.origin;
         let redirectUrl = checkout?.redirect ?? '';
 
@@ -129,8 +133,10 @@ export function useCheckout() {
         const isPayPalWindowClosed = await openPayPalWindow(redirectUrl);
 
         if (isPayPalWindowClosed) {
-          router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
+          router.push(`/checkout/order-received/${orderId}/?key=${orderKey}&fetch_delay=true`);
         }
+      } else {
+        router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
       }
 
       if ((await checkout?.result) !== 'success') {
@@ -138,8 +144,8 @@ export function useCheckout() {
         window.location.reload();
         return checkout;
       } else {
-        router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
         await emptyCart();
+        await refreshCart();
       }
     } catch (error: any) {
       const errorMessage = error?.gqlErrors?.[0].message;
