@@ -87,6 +87,7 @@
       "submit": "Enviar",
       "order": "Pedido | Pedidos",
       "orderSummary": "Resumo do Pedido",
+      "orderReceived": "Pedido Recebido",
       "orderNote": "Nota do Pedido | Notas do Pedido",
       "orderNotePlaceholder": "Notas sobre seu pedido, observações especiais para entrega.",
       "orderThanks": "Obrigado pelo seu pedido. Enviaremos um email com os detalhes do pedido.",

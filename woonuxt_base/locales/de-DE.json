@@ -87,6 +87,7 @@
       "submit": "Senden",
       "order": "Bestellung | Bestellungen",
       "orderSummary": "Bestellübersicht",
+      "orderReceived": "Vielen Dank für Ihre Bestellung. Wir senden Ihnen eine E-Mail mit den Bestelldetails zu.",
       "orderNote": "Bestellnotiz | Bestellnotizen",
       "orderNotePlaceholder": "Nachricht zu Ihrer Bestellung, zum Beispiel zur Lieferung.",
       "orderThanks": "Vielen Dank für Ihre Bestellung. Wir senden Ihnen eine E-Mail mit den Bestelldetails zu.",

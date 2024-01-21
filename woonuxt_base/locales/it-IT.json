@@ -87,6 +87,7 @@
       "submit": "Invia",
       "order": "Ordine | Ordini",
       "orderSummary": "Riepilogo dell'ordine",
+      "orderReceived": "Ordine ricevuto",
       "orderNote": "Nota dell'ordine | Note dell'ordine",
       "orderNotePlaceholder": "Note sul tuo ordine, ad esempio istruzioni speciali per la consegna.",
       "orderThanks": "Grazie per il tuo ordine. Ti invieremo un'email con i dettagli dell'ordine.",
