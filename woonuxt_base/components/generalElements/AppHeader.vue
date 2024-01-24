@@ -13,10 +13,10 @@ const { isShowingSearch } = useSearching();
       <div class="flex gap-4 justify-end items-center md:w-[160px] flex-1 ml-auto">
         <ProductSearch class="hidden sm:inline-flex max-w-[320px] w-[60%]" />
         <SearchTrigger />
-        <NuxtLink to="/wishlist" title="Wishlist">
+        <NuxtLink to="/wishlist" title="Wishlist" class="hidden sm:block">
           <Icon name="ion:heart-outline" size="20" />
         </NuxtLink>
-        <SignInLink />
+        <SignInLink class="hidden sm:block" />
         <CartTrigger />
       </div>
     </div>
