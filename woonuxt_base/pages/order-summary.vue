@@ -14,6 +14,7 @@ const errorMessage = ref('');
 const isGuest = computed(() => !customer.value.databaseId);
 const isSummaryPage = computed(() => name === 'order-summary');
 const isCheckoutPage = computed(() => name === 'order-received');
+const showRefreshButton = computed(() => order.value.status !== OrderStatusEnum.COMPLETED);
 
 onBeforeMount(() => {
   /**
@@ -23,16 +24,18 @@ onBeforeMount(() => {
   if (isCheckoutPage.value && (query.cancel_order || query.from_paypal || query.PayerID)) window.close();
 });
 
-onMounted(() => {
+onMounted(async () => {
+  await getOrder();
   /**
    * WooCommerce sometimes takes a while to update the order status.
    * This is a workaround to fetch the order again after a delay.
    * The length of the delay might need to be adjusted depending on your server.
    */
-  if (isCheckoutPage.value && fetchDelay.value && order.value.status !== OrderStatusEnum.COMPLETED) {
-    setTimeout(() => getOrder(), delayLength);
-  } else {
-    getOrder();
+
+  if (isCheckoutPage.value && fetchDelay.value && order.value.status !== !OrderStatusEnum.COMPLETED) {
+    setTimeout(() => {
+      getOrder();
+    }, delayLength);
   }
 });
 
@@ -45,6 +48,11 @@ async function getOrder() {
   }
   isLoaded.value = true;
 }
+
+const refreshOrder = async () => {
+  isLoaded.value = false;
+  await getOrder();
+};
 </script>
 
 <template>
@@ -61,7 +69,18 @@ async function getOrder() {
           </div>
         </template>
         <template v-else-if="isCheckoutPage">
-          <h1 class="mb-2 text-xl font-semibold">{{ $t('messages.shop.orderReceived') }}</h1>
+          <div class="flex w-full items-center justify-between mb-2">
+            <h1 class="text-xl font-semibold">{{ $t('messages.shop.orderReceived') }}</h1>
+            <button
+              v-if="showRefreshButton"
+              type="button"
+              class="border rounded-md p-2 inline-flex items-center justify-center bg-white"
+              title="Refresh order"
+              aria-label="Refresh order"
+              @click="refreshOrder">
+              <Icon name="ion:refresh-outline" />
+            </button>
+          </div>
           <p>{{ $t('messages.shop.orderThanks') }}</p>
         </template>
         <hr class="my-8" />

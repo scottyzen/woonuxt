@@ -37,7 +37,7 @@ export function useCheckout() {
       const width = 750;
       const height = 750;
       const left = window.innerWidth / 2 - width / 2;
-      const top = window.innerHeight / 2 - height / 2 + 100;
+      const top = window.innerHeight / 2 - height / 2 + 80;
       const payPalWindow = window.open(redirectUrl, '', `width=${width},height=${height},top=${top},left=${left}`);
       const timer = setInterval(() => {
         if (payPalWindow?.closed) {
