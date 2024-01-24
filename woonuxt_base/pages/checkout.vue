@@ -3,6 +3,7 @@ import { StripeElements, StripeElement } from 'vue-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
 const { t } = useI18n();
+const { query } = useRoute();
 const { cart, isUpdatingCart, paymentGateways } = useCart();
 const { customer, viewer } = useAuth();
 const { orderInput, isProcessingOrder, proccessCheckout } = useCheckout();
@@ -30,6 +31,7 @@ const elms = ref();
 
 // Initialize Stripe.js
 onBeforeMount(() => {
+  if (query.cancel_order) window.close();
   if (!stripeKey) {
     console.error('Stripe key is not set');
     return;
@@ -46,8 +48,9 @@ const payNow = async () => {
   try {
     if (orderInput.value.paymentMethod === 'stripe') {
       const cardElement = card.value.stripeElement;
-      const { source, error } = await elms.value.instance.createSource(cardElement);
+      const { source } = await elms.value.instance.createSource(cardElement);
       orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
+      orderInput.value.transactionId = source.created?.toString() || '';
     }
   } catch (error) {
     buttonText.value = t('messages.shop.placeOrder');
@@ -189,10 +192,9 @@ watch(
 
         <OrderSummary>
           <button
-            class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
+            class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary hover:bg-primary-dark disabled:cursor-not-allowed disabled:bg-gray-400"
             :disabled="isCheckoutDisabled">
-            {{ buttonText }}
-            <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
+            {{ buttonText }}<LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
           </button>
         </OrderSummary>
       </form>

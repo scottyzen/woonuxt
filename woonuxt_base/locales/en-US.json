@@ -87,6 +87,7 @@
       "submit": "Submit",
       "order": "Order | Orders",
       "orderSummary": "Order Summary",
+      "orderReceived": "Order Received",
       "orderNote": "Order Note | Order Notes",
       "orderNotePlaceholder": "Notes about your order, e.g. special notes for delivery.",
       "orderThanks": "Thank you for your order. We will send you an email with the order details.",
