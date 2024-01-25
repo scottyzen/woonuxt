@@ -1,6 +1,5 @@
-<script setup>
+<script setup lang="ts">
 const { toggleMobileMenu, wooNuxtVersionInfo } = useHelpers();
-const versionInfo = `WooNuxt Version ${wooNuxtVersionInfo}`;
 </script>
 
 <template>

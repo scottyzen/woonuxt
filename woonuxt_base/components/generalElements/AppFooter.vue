@@ -9,7 +9,6 @@ const versionInfo = `WooNuxt v${wooNuxtVersionInfo}`;
       <div class="mr-auto">
         <Logo />
         <WebsiteShortDescription />
-        <!-- <SocialIcons /> -->
         <LangSwitcher class="mt-8" />
       </div>
       <div class="w-3/7 lg:w-auto">

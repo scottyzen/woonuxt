@@ -1,5 +1,5 @@
-<script setup>
-const props = defineProps({
+<script setup lang="ts">
+defineProps({
   size: { default: '20', type: String || Number },
   color: { default: '#4B5563', type: String },
   speed: { default: '250ms', type: String },
