@@ -33,9 +33,9 @@ async function submitCoupon(): Promise<void> {
       <div v-if="errorMessage" class="mt-2 text-xs text-red-600" v-html="errorMessage"></div>
     </Transition>
     <Transition name="scale-y" mode="out-in">
-      <div v-if="cart && cart.appliedCoupons" class="text-xs font-semibold uppercase">
-        <div v-for="coupon in cart.appliedCoupons" :key="coupon.code" class="flex flex-wrap mt-2 flex-2">
-          <div class="bg-primary border-primary border rounded-md flex bg-opacity-5 border-opacity-10 text-primary leading-none p-1.5 gap-1 items-center">
+      <div v-if="cart && cart.appliedCoupons" class="text-xs font-semibold uppercase flex flex-wrap gap-2">
+        <div v-for="(coupon, index) in cart.appliedCoupons" :key="coupon?.code || index" class="flex flex-wrap mt-2 flex-2">
+          <div v-if="coupon?.code" class="bg-primary border-primary border rounded-md flex bg-opacity-5 border-opacity-10 text-primary leading-none p-1.5 gap-1 items-center">
             <span v-html="coupon.code" />
             <Icon name="ion:close" class="rounded-full cursor-pointer hover:bg-primary hover:text-white" @click="removeCoupon(coupon.code)" />
           </div>

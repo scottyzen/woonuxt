@@ -117,10 +117,13 @@ export function useCart() {
   // Remove coupon
   async function removeCoupon(code: string): Promise<void> {
     try {
+      isUpdatingCart.value = true;
       const { removeCoupons } = await GqlRemoveCoupons({ codes: [code] });
       cart.value = removeCoupons?.cart ?? null;
+      isUpdatingCart.value = false;
     } catch (error) {
       console.error(error);
+      isUpdatingCart.value = false;
     }
   }
 
