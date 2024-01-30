@@ -4,24 +4,19 @@ const { isShowingCart, toggleCart } = useCart();
 const { isShowingMobileMenu, toggleMobileMenu } = useHelpers();
 const { addBodyClass, removeBodyClass } = useHelpers();
 
-const underlayCick = () => {
+const closeCartAndMenu = () => {
   toggleCart(false);
   toggleMobileMenu(false);
 };
 
 watch([isShowingCart, isShowingMobileMenu], () => {
-  if (isShowingCart.value || isShowingMobileMenu.value) {
-    addBodyClass('overflow-hidden');
-  } else {
-    removeBodyClass('overflow-hidden');
-  }
+  isShowingCart.value || isShowingMobileMenu.value ? addBodyClass('overflow-hidden') : removeBodyClass('overflow-hidden');
 });
 
 watch(
   () => route.path,
   () => {
-    toggleCart(false);
-    toggleMobileMenu(false);
+    closeCartAndMenu();
   },
 );
 </script>
@@ -41,7 +36,7 @@ watch(
     <NuxtPage />
 
     <Transition name="fade">
-      <div v-if="isShowingCart || isShowingMobileMenu" class="bg-black opacity-25 inset-0 z-40 fixed" @click="underlayCick"></div>
+      <div v-if="isShowingCart || isShowingMobileMenu" class="bg-black opacity-25 inset-0 z-40 fixed" @click="closeCartAndMenu" />
     </Transition>
 
     <LazyAppFooter />
