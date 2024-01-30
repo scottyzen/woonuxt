@@ -31,9 +31,7 @@ const colorVariableImage = computed(() => {
       const hasMatchingSlug = paColor.value.some((color) => variation.slug.includes(color));
       return hasMatchingAttributes || hasMatchingSlug;
     });
-    if (activeColorImage?.length) {
-      return activeColorImage[0].image?.sourceUrl;
-    }
+    if (activeColorImage?.length) activeColorImage[0].image?.sourceUrl;
   }
   return null;
 });

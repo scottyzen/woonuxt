@@ -87,6 +87,7 @@
       "submit": "Valider",
       "order": "Commande | Commandes",
       "orderSummary": "Récapitulatif de la commance",
+      "orderReceived": "Nous avons bien reçu votre commande.",
       "orderNote": "Note de commande | Notes de commande",
       "orderNotePlaceholder": "Notes sur votre commande, par exemple, des notes spéciales à propos de votre livraison.",
       "orderThanks": "Merci de votre commande. Nous vous enverrons un e-mail avec les détails de la commande.",

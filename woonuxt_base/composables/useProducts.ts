@@ -4,7 +4,10 @@ export function useProducts() {
   // Declare the state variables and the setter functions
   const products = useState<Product[]>('products');
 
-  // Set the products state and the allProducts variable
+  /**
+   * Sets the products state variable and the allProducts variable.
+   * @param {Product[]} newProducts - The new products to set.
+   */
   function setProducts(newProducts: Product[]): void {
     if (!Array.isArray(newProducts)) throw new Error('Products must be an array.');
     products.value = newProducts ?? [];

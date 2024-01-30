@@ -18,10 +18,10 @@ You can find some common errors and how to fix them in [here](https://woonuxt.co
 
 ## Get Started
 
-- Download the lates WooNuxt Settings (woonuxt-settings.zip) from the releases page here: [Releases](https://github.com/scottyzen/woonuxt-settings/releases)
-- Install and activate the plugin on your WordPress site. This will install all the required plugins for WooNuxt, add some useful fields to the WPGraphQL schema, and automatically retrieve the WooCommerce payment gateway settings for Stripe and PayPal.
+- Download the latest WooNuxt Setting [(woonuxt-settings.zip)](<(https://github.com/scottyzen/woonuxt-settings/releases)>).
+- Install and activate the plugin on your WordPress site. This will install all the required plugins for WooNuxt, add some useful fields to the WPGraphQL schema, and automatically retrieve the WooCommerce payment gateway settings for [Stripe](https://wordpress.org/plugins/woocommerce-gateway-stripe/) and [PayPal](https://woo.com/document/paypal-standard/).
 - Once the plugin is activated you are ready to deploy WooNuxt on whatever hosting you like or click one of the fast deploy buttons below.
-- Once the plugin is activated the only required environment variable is `GQL_HOST`. Checkout the .env.example file for more details.
+- Once the plugin is activated the only required environment variable is `GQL_HOST`. Checkout the `.env.example` file for more details.
 
 [![button](https://user-images.githubusercontent.com/5116925/218880214-a16287a7-fd8c-4299-9e65-0871136f0771.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/scottyzen/woonuxt) [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fscottyzen%2FWooNuxt3&repository-name=WooNuxt&env=GQL_HOST,NUXT_IMAGE_DOMAINS)
 
@@ -39,44 +39,52 @@ Example: I have created a pages directory and added a `contact.vue` file in the 
 
 | Feature                                                   | Ongoing Enhancements | In the Pipeline | In Progress | Done | Next |
 | --------------------------------------------------------- | -------------------- | --------------- | ----------- | ---- | ---- |
-| Proformanance                                             | 🔷                   |                 |             | ✅   |      |
-| SEO                                                       |                      |                 | ✅          |      | 🔶   |
+| Performance                                               | 🔷                   |                 |             | ✅   |      |
+| SEO                                                       | 🔷                   |                 | ✅          | ✅   |      |
 | Cart                                                      |                      |                 |             | ✅   |      |
 | Search                                                    |                      |                 |             | ✅   |      |
 | Shipping                                                  |                      |                 |             | ✅   |      |
-| Checkout (Stripe, PayPay, Cash on Delivery)               |                      |                 |             | ✅   |      |
+| Checkout (Stripe, PayPal, Cash on Delivery)               | 🔷                   |                 |             | ✅   | 🔶   |
 | Filtering                                                 | 🔷                   |                 |             | ✅   |      |
 | Wishlists                                                 |                      |                 |             | ✅   |      |
-| Account                                                   |                      |                 | ✅          |      |      |
+| Account                                                   |                      |                 |             | ✅   |      |
 | Coupons                                                   |                      |                 |             | ✅   |      |
 | Product Reviews                                           |                      |                 | ✅          |      |      |
 | Product Category Pages                                    |                      |                 | ✅          |      |      |
 | WooNuxt Settings Module                                   | 🔷                   |                 | ✅          |      |      |
-| Better Typescript Supp                                    | 🔷                   |                 | ✅          |      |      |
-| Mobile layout                                             | 🔷                   |                 | ✅          |      |      |
+| Better TypeScript Support                                 | 🔷                   |                 | ✅          |      |      |
+| Mobile layout                                             | 🔷                   |                 |             | ✅   |      |
 | Countries & States Enums                                  |                      |                 |             | ✅   |      |
 | Cookie Popup & GDPR Compliance                            |                      | ✅              |             |      |      |
 | Progressive Web App (PWA)                                 |                      |                 | ✅          |      |      |
-| Queuing System (for checking out when the server is busy) |                      | ✅              |             |      |      |
+| Queuing System (for checking out when the server is busy) |                      | ✅              |             |      | 🔶   |
 | Language Support (i18n)                                   | 🔷                   |                 | ✅          |      |      |
 
 &nbsp;
 
 ### Required WordPress Plugins
 
-| Plugin Name    | Description                              | Link                                        |
-| -------------- | ---------------------------------------- | ------------------------------------------- |
-| WPGraphQL      | A free, open-source plugin for WordPress | https://www.wpgraphql.com/                  |
-| WooGraphQL     | GraphQL API for WooCommerce              | https://woographql.com/                     |
-| WPGraphQL Cors | Enable CORS for WPGraphQL                | https://github.com/funkhaus/wp-graphql-cors |
+| Plugin Name                                                   | Description                              |
+| ------------------------------------------------------------- | ---------------------------------------- |
+| [WPGraphQL](https://www.wpgraphql.com/)                       | A free, open-source plugin for WordPress |
+| [WooGraphQL](https://woographql.com/)                         | GraphQL API for WooCommerce              |
+| [WPGraphQL Cors](https://github.com/funkhaus/wp-graphql-cors) | Enable CORS for WPGraphQL                |
 
 > **Note** The the [woonuxt-settings.zip](https://github.com/scottyzen/woonuxt-settings/releases) plugin will help you install all the required plugins. WooGraphQL 0.13.0 and up is required to get the list of available countries and states. You can find the latest version of WooGraphQL [here](https://github.com/wp-graphql/wp-graphql-woocommerce/releases).
 
 &nbsp;
 
+### Payment Methods
+
+| Payment Method                                                      | Supported |
+| ------------------------------------------------------------------- | --------- |
+| [Stripe](https://wordpress.org/plugins/woocommerce-gateway-stripe/) | ✅        |
+| [PayPal Standard](https://woo.com/document/paypal-standard/)        | ✅        |
+| Cash on Delivery                                                    | ✅        |
+
 ### Required Environment Variables
 
-`GQL_HOST` - The URL of your WordPress site. This is the only required environment variable.
+`GQL_HOST` - The URL of your WordPress site. This is the only required environment variable. The WooNuxt Settings plugin will automatically populate the rest of the environment variables for you.
 
 &nbsp;
 
@@ -87,7 +95,7 @@ Example: I have created a pages directory and added a `contact.vue` file in the 
 | WordPress       | 6.4.2   |
 | WooCommerce     | 8.4.0   |
 | WPGraphQL       | 1.19.0  |
-| WooGraphQL      | 0.18.3  |
+| WooGraphQL      | 0.19.0  |
 | Node            | 20.10.0 |
 | PHP             | 8.2     |
 
@@ -106,7 +114,7 @@ Example: I have created a pages directory and added a `contact.vue` file in the 
 
 This is an ongoing project but it wouldn't be possible without the help of the following people: [Jason Bahl](https://github.com/jasonbahl) & [Geoffrey K Taylor](https://github.com/kidunot89) for their ongoing work on WPGraphQL and WooGraphQL respectively. Also, a big thanks to the Nuxt team for all their hard work making Nuxt 3 a pleasure to build upon. And the [WooCommerce](https://woocommerce.com/) team for making such a great e-commerce platform. Some other honorable mentions are [Funkhaus](https://funkhaus.us/) for their work on the WPGraphQL Cors plugin. And the people who have contributed to making WooNuxt better every day. [Zack Hatlen](https://github.com/zackha), [Galli](https://github.com/Zielgestalt), [Guillaume](https://github.com/GuillaumeDgr), Thank you all! 🙏
 
-I don't know where this project will go but I'm excited to see what the future holds. If you have any questions or would like to contribute to the project please feel free to reach out to me on [Twitter](https://twitter.com/scottyzen) or [GitHub](https://github.com/scottyzen).
+I don't know where this project will go, but I'm excited to see what the future holds. If you have any questions or would like to contribute to the project please feel free to reach out to me on [Twitter](https://twitter.com/scottyzen) or [GitHub](https://github.com/scottyzen).
 
 &nbsp;
 

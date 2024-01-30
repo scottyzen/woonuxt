@@ -48,7 +48,7 @@ const billing = toRef(props, 'modelValue');
 
     <div class="w-full">
       <label for="zip">ZIP ({{ $t('messages.general.optional') }})</label>
-      <input v-model="billing.postcode" placeholder="D01 1234" type="text" required />
+      <input v-model="billing.postcode" placeholder="D01 1234" type="text" />
     </div>
 
     <div class="w-full col-span-full">

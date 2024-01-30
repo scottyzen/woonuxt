@@ -21,7 +21,7 @@ watch(
 );
 
 useHead({
-  title: 'Products',
+  title: `Products`,
   meta: [{ hid: 'description', name: 'description', content: 'Products' }],
 });
 </script>

@@ -3,7 +3,6 @@
  * @description A composable that handles the filtering of products. For reference this
  * is what the filter query looks like: ?filter=pa_color[green,blue],pa_size[md]
  */
-
 export function useFiltering() {
   const route = useRoute();
   const router = useRouter();
@@ -34,7 +33,7 @@ export function useFiltering() {
     let newFilterQuery = filterQuery.value || '';
 
     // If there are filters and filterName is not one of them, add the filter query
-    if (!filterQuery.value || !filterQuery.value.includes(filterName)) {
+    if (!filterQuery.value?.includes(filterName)) {
       newFilterQuery = filterQuery.value ? `${filterQuery.value},${filterName}[${filterValue}]` : `${filterName}[${filterValue}]`;
     } else {
       // If filterValue is empty, remove the filter query
@@ -114,7 +113,7 @@ export function useFiltering() {
 
       // Star rating filter
       const starRating = getFilter('rating') || [];
-      const ratingCondition = starRating.length ? (product.averageRating ? product.averageRating >= parseFloat(starRating[0]) : false) : true;
+      const ratingCondition = starRating.length ? (product?.averageRating ?? 0) >= parseFloat(starRating[0]) : true;
 
       // Product attribute filters
       const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES?.map((attribute: any) => attribute.slug) || [];
