@@ -146,7 +146,7 @@ const disabledAddToCart = computed(() => !type.value || stockStatus.value === St
       </div>
     </div>
     <div v-if="product.description || product.reviews" class="my-32">
-      <LazyProductTabs :product="product" />
+      <ProductTabs :product="product" />
     </div>
     <div class="my-32" v-if="product.related">
       <div class="mb-4 text-xl font-semibold">{{ $t('messages.shop.youMayLike') }}</div>
