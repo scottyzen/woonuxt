@@ -36,7 +36,7 @@ fragment VariableProduct on VariableProduct {
       attributeId
     }
   }
-  variations {
+  variations(first: 999) {
     nodes {
       name
       databaseId
