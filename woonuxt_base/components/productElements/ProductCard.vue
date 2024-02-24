@@ -73,7 +73,20 @@ const colorVariableImage = computed(() => {
 .product-card img {
   @apply rounded-lg object-top object-cover w-full;
   aspect-ratio: 1/1.125;
+  background-image: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skelaton 1.5s infinite linear;
 }
+
+@keyframes skelaton {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 .product-card:hover {
   h2 {
     @apply text-primary;
