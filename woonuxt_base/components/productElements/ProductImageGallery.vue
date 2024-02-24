@@ -18,7 +18,7 @@ const changeImage = (index: number | null): void => {
     <SaleBadge :node="node" class="absolute text-base top-4 right-4" />
     <NuxtImg
       v-show="imageToShow === null"
-      class="rounded-xl object-contain w-full min-w-[350px]"
+      class="rounded-xl object-contain w-full min-w-[350px] skeleton"
       width="700"
       height="700"
       fit="outside"
@@ -29,7 +29,7 @@ const changeImage = (index: number | null): void => {
       fetchpriority="high" />
     <NuxtImg
       v-show="imageToShow === 0"
-      class="rounded-xl object-contain w-full min-w-[350px]"
+      class="rounded-xl object-contain w-full min-w-[350px] skeleton"
       width="700"
       height="700"
       fit="outside"
@@ -42,7 +42,7 @@ const changeImage = (index: number | null): void => {
       v-for="(galleryImg, i) in gallery.nodes"
       v-show="imageToShow === i + 1"
       :key="i"
-      class="rounded-xl object-contain w-full min-w-[350px]"
+      class="rounded-xl object-contain w-full min-w-[350px] skeleton"
       width="700"
       height="700"
       fit="outside"
@@ -51,11 +51,19 @@ const changeImage = (index: number | null): void => {
       :title="galleryImg.title || node.name"
       :src="galleryImg.sourceUrl || '/images/placeholder.jpg'" />
     <div v-if="gallery.nodes.length" class="my-4 gallery-images">
-      <NuxtImg class="cursor-pointer rounded-xl" width="110" height="140" format="webp" :src="firstImage" @click.native="changeImage(null)" :alt="node.name" :title="node.name" />
+      <NuxtImg
+        class="cursor-pointer rounded-xl skeleton"
+        width="110"
+        height="140"
+        format="webp"
+        :src="firstImage"
+        @click.native="changeImage(null)"
+        :alt="node.name"
+        :title="node.name" />
       <NuxtImg
         v-for="(galleryImg, i) in gallery.nodes"
         :key="i"
-        class="cursor-pointer rounded-xl"
+        class="cursor-pointer rounded-xl skeleton"
         width="110"
         height="140"
         fit="outside"

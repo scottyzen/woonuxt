@@ -19,13 +19,13 @@ const removeItem = () => {
 
 <template>
   <SwipeCard @remove="removeItem">
-    <li v-if="productType" class="flex items-center gap-3">
+    <div v-if="productType" class="flex items-center gap-3">
       <NuxtLink :to="productSlug">
         <img
           v-if="productType.image"
           width="64"
           height="64"
-          class="w-16 h-16 rounded-md"
+          class="w-16 h-16 rounded-md skeleton"
           :src="productType.image.cartSourceUrl || productType.image.sourceUrl || item.product.image.sourceUrl"
           :alt="productType.image?.altText || productType.name"
           :title="productType.image?.title || productType.name"
@@ -35,7 +35,7 @@ const removeItem = () => {
           src="/images/placeholder.jpg"
           width="64"
           height="64"
-          class="w-16 h-16 rounded-md"
+          class="w-16 h-16 rounded-md skeleton"
           :alt="productType.image?.altText || productType.name"
           :title="productType.image?.title || productType.name"
           loading="lazy" />
@@ -55,7 +55,7 @@ const removeItem = () => {
       <button title="Remove Item" aria-label="Remove Item" @click="removeItem" type="button">
         <Icon name="ion:close-outline" class="removeItem hover:text-red-500 cursor-pointer p-1.5" size="34" />
       </button>
-    </li>
+    </div>
   </SwipeCard>
 </template>
 
