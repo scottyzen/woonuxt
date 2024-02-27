@@ -8,6 +8,9 @@ export function useCheckout() {
     };
   });
 
+  const runtimeConfig = useRuntimeConfig();
+  const STRIPE_KEY = runtimeConfig.public?.STRIPE_KEY || process.env.STRIPE_KEY
+
   const isProcessingOrder = useState<boolean>('isProcessingOrder', () => false);
 
   // if Country or State are changed, calculate the shipping rates again
@@ -114,7 +117,42 @@ export function useCheckout() {
         });
       }
 
-      const orderId = checkout?.order?.databaseId;
+      
+
+      if ((await checkout?.result) !== 'success') {
+        alert('There was an error processing your order. Please try again.');
+        window.location.reload();
+        return checkout;
+      } else{
+        return checkout
+      }
+      // else {
+      
+      // }
+    } catch (error: any) {
+      isProcessingOrder.value = false;
+
+      const errorMessage = error?.gqlErrors?.[0].message;
+
+      if (errorMessage?.includes('An account is already registered with your email address')) {
+        alert('An account is already registered with your email address');
+        return null;
+      }
+
+      alert(errorMessage);
+      return null;
+    }
+
+    isProcessingOrder.value = false;
+  };
+
+  const handleRedirection = async ({checkout}:any) => {
+
+    const router = useRouter();
+    const { replaceQueryParam } = useHelpers();
+    const { emptyCart, refreshCart } = useCart();
+      
+    const orderId = checkout?.order?.databaseId;
       const orderKey = checkout?.order?.orderKey;
       const isPayPal = orderInput.value.paymentMethod === 'paypal';
 
@@ -139,35 +177,51 @@ export function useCheckout() {
         router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
       }
 
-      if ((await checkout?.result) !== 'success') {
-        alert('There was an error processing your order. Please try again.');
-        window.location.reload();
-        return checkout;
-      } else {
         await emptyCart();
         await refreshCart();
-      }
-    } catch (error: any) {
-      isProcessingOrder.value = false;
+  }
 
-      const errorMessage = error?.gqlErrors?.[0].message;
 
-      if (errorMessage?.includes('An account is already registered with your email address')) {
-        alert('An account is already registered with your email address');
-        return null;
-      }
+  const createClientSecret = async ({ amount, currency }: { amount: number, currency: string }) => {
 
-      alert(errorMessage);
-      return null;
-    }
+    var myHeaders = new Headers();
 
-    isProcessingOrder.value = false;
-  };
+
+
+    myHeaders.append("Authorization", `Bearer ${STRIPE_KEY}`);
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("amount", `${amount}`);
+    urlencoded.append("currency", currency);
+    urlencoded.append("automatic_payment_methods[enabled]", "true");
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: 'follow'
+    };
+
+    return await fetch("https://api.stripe.com/v1/payment_intents", requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        return result
+      })
+      .catch(error => {
+        console.log('error', error)
+        throw new Error(error?.message)
+        
+      });
+
+  }
 
   return {
     orderInput,
     isProcessingOrder,
     proccessCheckout,
+    handleRedirection,
     updateShippingLocation,
+    createClientSecret
   };
 }

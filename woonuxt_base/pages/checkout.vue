@@ -6,7 +6,7 @@ const { t } = useI18n();
 const { query } = useRoute();
 const { cart, isUpdatingCart, paymentGateways } = useCart();
 const { customer, viewer } = useAuth();
-const { orderInput, isProcessingOrder, proccessCheckout } = useCheckout();
+const { orderInput, isProcessingOrder, proccessCheckout, createClientSecret, handleRedirection } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
 const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY;
 const stripeCardIsComplete = ref(false);
@@ -48,15 +48,39 @@ const payNow = async () => {
   try {
     if (orderInput.value.paymentMethod === 'stripe') {
       const cardElement = card.value.stripeElement;
-      const { source } = await elms.value.instance.createSource(cardElement);
-      orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
-      orderInput.value.transactionId = source.created?.toString() || '';
+
+      const total = Number(cart?.value?.total?.replace("$", '')) * 100
+
+      const res = await createClientSecret({ amount: parseInt(total), currency: 'usd' })
+
+      orderInput.value.metaData.push({ key: '_stripe_source_id', value: "PM_76576576567567567567576" });
+      orderInput.value.transactionId = res?.created?.toString() || '';
+      const getCheckout = await proccessCheckout();
+
+      if (!getCheckout || getCheckout?.result != "success") {
+        return
+      }
+
+      const client_SECRET = await res['client_secret']
+      const payment_secure = await elms.value.instance.confirmCardPayment(client_SECRET, {
+        payment_method: {
+          card: cardElement,
+
+        }
+      });
+
+      if (payment_secure.error) {
+        alert('payment failed please try again later')
+        throw new Error('payment failed please try again later')
+      }
+
+      await handleRedirection({ checkout: getCheckout })
     }
   } catch (error) {
+    console.log(error, 'clientSeretclientSeretclientSeretclientSeret')
     buttonText.value = t('messages.shop.placeOrder');
+    return
   }
-
-  proccessCheckout();
 };
 
 const checkEmailOnBlur = (email) => {
@@ -105,30 +129,27 @@ watch(
         <div class="mb-20 text-xl text-gray-300">{{ $t('messages.shop.cartEmpty') }}</div>
       </div>
 
-      <form v-else class="container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-20" @submit.prevent="payNow">
+      <form name="myform" novalidate v-else
+        class="container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-20" @submit.prevent="payNow">
         <div class="grid w-full max-w-2xl gap-8 checkout-form md:flex-1">
           <!-- Customer details -->
           <div>
             <h2 class="w-full mb-2 text-2xl font-semibold leading-none">Contact Information</h2>
-            <p v-if="!viewer" class="mt-1 text-sm text-gray-500">Already have an account? <a href="/my-account" class="text-primary text-semibold">Log in</a>.</p>
+            <p v-if="!viewer" class="mt-1 text-sm text-gray-500">Already have an account? <a href="/my-account"
+                class="text-primary text-semibold">Log in</a>.</p>
             <div class="w-full mt-4">
               <label for="email">{{ $t('messages.billing.email') }}</label>
-              <input
-                v-model="customer.billing.email"
-                placeholder="johndoe@email.com"
-                type="email"
-                name="email"
-                :class="{ 'has-error': isInvalidEmail }"
-                @blur="checkEmailOnBlur(customer.billing.email)"
-                @input="checkEmailOnInput(customer.billing.email)"
-                required />
+              <input v-model="customer.billing.email" placeholder="johndoe@email.com" type="email" name="email"
+                :class="{ 'has-error': isInvalidEmail }" @blur="checkEmailOnBlur(customer.billing.email)"
+                @input="checkEmailOnInput(customer.billing.email)" required />
               <Transition name="scale-y" mode="out-in">
                 <div v-if="isInvalidEmail" class="mt-1 text-sm text-red-500">Invalid email address</div>
               </Transition>
             </div>
             <div class="w-full my-2" v-if="orderInput.createAccount">
               <label for="email">{{ $t('messages.account.password') }}</label>
-              <PasswordInput id="password" class="my-2" v-model="orderInput.password" placeholder="Password" :required="true" />
+              <PasswordInput id="password" class="my-2" v-model="orderInput.password" placeholder="Password"
+                :required="true" />
             </div>
             <div v-if="!viewer" class="flex items-center gap-2 my-2">
               <label for="creat-account">Create an account?</label>
@@ -143,7 +164,8 @@ watch(
 
           <label for="shipToDifferentAddress" class="flex items-center gap-2">
             <span>{{ $t('messages.billing.differentAddress') }}</span>
-            <input id="shipToDifferentAddress" v-model="orderInput.shipToDifferentAddress" type="checkbox" name="shipToDifferentAddress" />
+            <input id="shipToDifferentAddress" v-model="orderInput.shipToDifferentAddress" type="checkbox"
+              name="shipToDifferentAddress" />
           </label>
 
           <Transition name="scale-y" mode="out-in">
@@ -156,7 +178,8 @@ watch(
           <!-- Shipping methods -->
           <div v-if="cart.availableShippingMethods.length">
             <h3 class="mb-4 text-xl font-semibold">{{ $t('messages.general.shippingSelect') }}</h3>
-            <ShippingOptions :options="cart.availableShippingMethods[0].rates" :active-option="cart.chosenShippingMethods[0]" />
+            <ShippingOptions :options="cart.availableShippingMethods[0].rates"
+              :active-option="cart.chosenShippingMethods[0]" />
           </div>
 
           <!-- Pay methods -->
@@ -165,13 +188,8 @@ watch(
             <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :paymentGateways="paymentGateways" />
 
             <Transition name="scale-y" mode="out-in">
-              <StripeElements
-                v-show="orderInput.paymentMethod == 'stripe'"
-                v-slot="{ elements, instance }"
-                ref="elms"
-                :stripe-key="stripeKey"
-                :instance-options="instanceOptions"
-                :elements-options="elementsOptions">
+              <StripeElements v-show="orderInput.paymentMethod == 'stripe'" v-slot="{ elements, instance }" ref="elms"
+                :stripe-key="stripeKey" :instance-options="instanceOptions" :elements-options="elementsOptions">
                 <StripeElement ref="card" :elements="elements" :options="cardOptions" />
               </StripeElements>
             </Transition>
@@ -179,13 +197,9 @@ watch(
 
           <!-- Order note -->
           <div>
-            <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.shop.orderNote') }} ({{ $t('messages.general.optional') }})</h2>
-            <textarea
-              id="order-note"
-              v-model="orderInput.customerNote"
-              name="order-note"
-              class="w-full"
-              rows="4"
+            <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.shop.orderNote') }} ({{ $t('messages.general.optional')
+            }})</h2>
+            <textarea id="order-note" v-model="orderInput.customerNote" name="order-note" class="w-full" rows="4"
               :placeholder="$t('messages.shop.orderNotePlaceholder')"></textarea>
           </div>
         </div>
@@ -194,7 +208,8 @@ watch(
           <button
             class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary hover:bg-primary-dark disabled:cursor-not-allowed disabled:bg-gray-400"
             :disabled="isCheckoutDisabled">
-            {{ buttonText }}<LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
+            {{ buttonText }}
+            <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
           </button>
         </OrderSummary>
       </form>
