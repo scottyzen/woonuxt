@@ -6,7 +6,7 @@ const { t } = useI18n();
 const { query } = useRoute();
 const { cart, isUpdatingCart, paymentGateways } = useCart();
 const { customer, viewer } = useAuth();
-const { orderInput, isProcessingOrder, proccessCheckout, createClientSecret, handleRedirection } = useCheckout();
+const { orderInput, isProcessingOrder, proccessCheckout, createClientSecret, handleRedirection, updateOrderStatus } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
 const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY;
 const stripeCardIsComplete = ref(false);
@@ -53,8 +53,11 @@ const payNow = async () => {
 
       const res = await createClientSecret({ amount: parseInt(total), currency: 'usd' })
 
-      orderInput.value.metaData.push({ key: '_stripe_source_id', value: "PM_76576576567567567567576" });
-      orderInput.value.transactionId = res?.created?.toString() || '';
+     
+
+      orderInput.value.metaData.push({ key: '_stripe_intent_id', value: res?.id });
+      orderInput.value.transactionId = res?.id || '';
+      orderInput.value.isPaid = true
       const getCheckout = await proccessCheckout();
 
       if (!getCheckout || getCheckout?.result != "success") {
@@ -70,7 +73,9 @@ const payNow = async () => {
       });
 
       if (payment_secure.error) {
+        await updateOrderStatus({ orderId: getCheckout?.order?.databaseId })
         alert('payment failed please try again later')
+        window.location.reload();
         throw new Error('payment failed please try again later')
       }
 

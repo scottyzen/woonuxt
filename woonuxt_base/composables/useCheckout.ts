@@ -9,7 +9,7 @@ export function useCheckout() {
   });
 
   const runtimeConfig = useRuntimeConfig();
-  const STRIPE_KEY = runtimeConfig.public?.STRIPE_KEY || process.env.STRIPE_KEY
+  const API_HOST = runtimeConfig.public?.API_HOST || process.env.API_HOST
 
   const isProcessingOrder = useState<boolean>('isProcessingOrder', () => false);
 
@@ -97,6 +97,7 @@ export function useCheckout() {
         customerNote: orderInput.value.customerNote,
         shipToDifferentAddress: orderInput.value.shipToDifferentAddress,
         transactionId: orderInput.value.transactionId,
+        isPaid: orderInput.value.isPaid
       };
 
       if (orderInput.value.createAccount) {
@@ -117,17 +118,17 @@ export function useCheckout() {
         });
       }
 
-      
+
 
       if ((await checkout?.result) !== 'success') {
         alert('There was an error processing your order. Please try again.');
         window.location.reload();
         return checkout;
-      } else{
+      } else {
         return checkout
       }
       // else {
-      
+
       // }
     } catch (error: any) {
       isProcessingOrder.value = false;
@@ -146,73 +147,83 @@ export function useCheckout() {
     isProcessingOrder.value = false;
   };
 
-  const handleRedirection = async ({checkout}:any) => {
+
+  const updateOrderStatus = async ({ orderId }: { orderId: number }) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({ "order_id": orderId });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+
+     await fetch(`${API_HOST}/changeorder`, requestOptions)
+
+
+  }
+  const handleRedirection = async ({ checkout }: any) => {
 
     const router = useRouter();
     const { replaceQueryParam } = useHelpers();
     const { emptyCart, refreshCart } = useCart();
-      
+
     const orderId = checkout?.order?.databaseId;
-      const orderKey = checkout?.order?.orderKey;
-      const isPayPal = orderInput.value.paymentMethod === 'paypal';
+    const orderKey = checkout?.order?.orderKey;
+    const isPayPal = orderInput.value.paymentMethod === 'paypal';
 
-      // PayPal redirect
-      if ((await checkout?.redirect) && isPayPal) {
-        const frontEndUrl = window.location.origin;
-        let redirectUrl = checkout?.redirect ?? '';
+    // PayPal redirect
+    if ((await checkout?.redirect) && isPayPal) {
+      const frontEndUrl = window.location.origin;
+      let redirectUrl = checkout?.redirect ?? '';
 
-        const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}&from_paypal=true`;
-        const payPalCancelUrl = `${frontEndUrl}/checkout/?cancel_order=true&from_paypal=true`;
+      const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}&from_paypal=true`;
+      const payPalCancelUrl = `${frontEndUrl}/checkout/?cancel_order=true&from_paypal=true`;
 
-        redirectUrl = replaceQueryParam('return', payPalReturnUrl, redirectUrl);
-        redirectUrl = replaceQueryParam('cancel_return', payPalCancelUrl, redirectUrl);
-        redirectUrl = replaceQueryParam('bn', 'WooNuxt_Cart', redirectUrl);
+      redirectUrl = replaceQueryParam('return', payPalReturnUrl, redirectUrl);
+      redirectUrl = replaceQueryParam('cancel_return', payPalCancelUrl, redirectUrl);
+      redirectUrl = replaceQueryParam('bn', 'WooNuxt_Cart', redirectUrl);
 
-        const isPayPalWindowClosed = await openPayPalWindow(redirectUrl);
+      const isPayPalWindowClosed = await openPayPalWindow(redirectUrl);
 
-        if (isPayPalWindowClosed) {
-          router.push(`/checkout/order-received/${orderId}/?key=${orderKey}&fetch_delay=true`);
-        }
-      } else {
-        router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
+      if (isPayPalWindowClosed) {
+        router.push(`/checkout/order-received/${orderId}/?key=${orderKey}&fetch_delay=true`);
       }
+    } else {
+      router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
+    }
 
-        await emptyCart();
-        await refreshCart();
+    await emptyCart();
+    await refreshCart();
   }
 
 
   const createClientSecret = async ({ amount, currency }: { amount: number, currency: string }) => {
 
     var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
-
-
-    myHeaders.append("Authorization", `Bearer ${STRIPE_KEY}`);
-    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-
-    var urlencoded = new URLSearchParams();
-    urlencoded.append("amount", `${amount}`);
-    urlencoded.append("currency", currency);
-    urlencoded.append("automatic_payment_methods[enabled]", "true");
+    var raw = JSON.stringify({ "amount": amount, "currency": currency });
 
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
-      body: urlencoded,
+      body: raw,
       redirect: 'follow'
     };
 
-    return await fetch("https://api.stripe.com/v1/payment_intents", requestOptions)
+    return await fetch(`${API_HOST}/createpaymentintent`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        return result
+        return result?.data
       })
       .catch(error => {
         console.log('error', error)
         throw new Error(error?.message)
-        
-      });
+      })
 
   }
 
@@ -222,6 +233,7 @@ export function useCheckout() {
     proccessCheckout,
     handleRedirection,
     updateShippingLocation,
-    createClientSecret
+    createClientSecret,
+    updateOrderStatus
   };
 }

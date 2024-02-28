@@ -67,7 +67,7 @@ export default defineNuxtConfig({
     public: {
       version: pkg.version || '0.0.0',
       STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
-      STRIPE_KEY:process.env.STRIPE_KEY
+      API_HOST:process.env.API_HOST,
     },
   },
 
