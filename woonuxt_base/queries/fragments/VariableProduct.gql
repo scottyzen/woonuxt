@@ -22,6 +22,7 @@ fragment VariableProduct on VariableProduct {
   stockStatus
   totalSales
   stockQuantity
+  lowStockAmount
   attributes {
     nodes {
       name

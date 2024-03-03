@@ -44,6 +44,11 @@ fragment CartFragment on Cart {
           name
           slug
           price
+          stockStatus
+          regularPrice
+          rawRegularPrice: regularPrice(format: RAW)
+          salePrice
+          rawSalePrice: salePrice(format: RAW)
           image {
             sourceUrl(size: THUMBNAIL)
             cartSourceUrl: sourceUrl(size: THUMBNAIL)
