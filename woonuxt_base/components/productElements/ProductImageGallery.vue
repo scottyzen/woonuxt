@@ -49,29 +49,32 @@ const changeImage = (index: number | null): void => {
       format="webp"
       :alt="galleryImg.altText || galleryImg.title || node.name"
       :title="galleryImg.title || node.name"
-      :src="galleryImg.sourceUrl || '/images/placeholder.jpg'" />
+      :src="galleryImg.sourceUrl || '/images/placeholder.jpg'"
+      loading="lazy" />
     <div v-if="gallery.nodes.length" class="my-4 gallery-images">
       <NuxtImg
         class="cursor-pointer rounded-xl skeleton"
-        width="110"
-        height="140"
+        width="700"
+        height="700"
         format="webp"
         :src="firstImage"
         @click.native="changeImage(null)"
         :alt="node.name"
-        :title="node.name" />
+        :title="node.name"
+        loading="lazy" />
       <NuxtImg
         v-for="(galleryImg, i) in gallery.nodes"
         :key="i"
         class="cursor-pointer rounded-xl skeleton"
-        width="110"
-        height="140"
+        width="700"
+        height="700"
         fit="outside"
         format="webp"
         :src="galleryImg.sourceUrl"
         :alt="galleryImg.altText || galleryImg.title || node.name"
         :title="galleryImg.title || node.name"
-        @click.native="changeImage(i + 1)" />
+        @click.native="changeImage(i + 1)"
+        loading="lazy" />
     </div>
   </div>
 </template>
