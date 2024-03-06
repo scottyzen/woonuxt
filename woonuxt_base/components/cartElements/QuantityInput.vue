@@ -15,9 +15,7 @@
       min="0"
       :max="productType.stockQuantity"
       aria-label="Quantity"
-      class="flex items-center justify-center w-8 px-2 text-right text-xs focus:outline-none border-y border-gray-300"
-      :disabled="isUpdatingCart"
-      @input="updateQuantity" />
+      class="flex items-center justify-center w-8 px-2 text-right text-xs focus:outline-none border-y border-gray-300" />
     <button
       title="Increase Quantity"
       aria-label="Increase Quantity"
@@ -32,6 +30,7 @@
 
 <script setup lang="ts">
 const { updateItemQuantity, isUpdatingCart } = useCart();
+const { debounce } = useHelpers();
 
 const { item } = defineProps({ item: { type: Object, required: true } });
 
@@ -40,9 +39,15 @@ const quantity = ref(item.quantity);
 const key = item.key;
 const hasNoMoreStock = computed(() => (productType.value.stockQuantity ? productType.value.stockQuantity <= quantity.value : false));
 
-const updateQuantity = () => updateItemQuantity(key, quantity.value);
-const incrementQuantity = () => updateItemQuantity(key, quantity.value++);
-const decrementQuantity = () => quantity.value > 1 && updateItemQuantity(key, quantity.value--);
+const incrementQuantity = () => quantity.value++;
+const decrementQuantity = () => quantity.value > 1 && quantity.value--;
+
+watch(
+  quantity,
+  debounce(() => {
+    updateItemQuantity(key, quantity.value);
+  }, 250),
+);
 </script>
 
 <style scoped lang="postcss">

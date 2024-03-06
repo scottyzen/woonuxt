@@ -153,6 +153,20 @@ export function useHelpers() {
     return str === null ? '' : str.replace(/(<([^>]+)>)/gi, '');
   };
 
+  /**
+   * Debounces a function.
+   * @param {Function}
+   * @param {number} delay - The delay in milliseconds.
+   * @returns {Function} The debounced function.
+   */
+  const debounce = (func: Function, delay: number = 100) => {
+    let inDebounce: NodeJS.Timeout;
+    return function (this: any, ...args: any[]) {
+      clearTimeout(inDebounce);
+      inDebounce = setTimeout(() => func.apply(this, args), delay);
+    };
+  };
+
   return {
     isShowingMobileMenu,
     wooNuxtVersionInfo,
@@ -175,5 +189,6 @@ export function useHelpers() {
     formatPrice,
     scrollToTop,
     stripHtml,
+    debounce,
   };
 }
