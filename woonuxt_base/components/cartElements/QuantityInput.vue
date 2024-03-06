@@ -48,6 +48,11 @@ const decrementQuantity = () => quantity.value > 1 && updateItemQuantity(key, qu
 <style scoped lang="postcss">
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
-  @apply appearance-none m-0;
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 </style>
