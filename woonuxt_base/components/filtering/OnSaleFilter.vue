@@ -22,7 +22,7 @@ const checkboxClicked = (e) => {
 
 <template>
   <div>
-    <div class="flex font-semibold mt-8 leading-none justify-between items-center" @click="isOpen = !isOpen">
+    <div class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center" @click="isOpen = !isOpen">
       <span>Sale Products Only</span>
       <Icon name="ion:chevron-down-outline" class="transform" :class="isOpen ? 'rotate-180' : ''" />
     </div>

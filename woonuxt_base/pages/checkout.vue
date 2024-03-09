@@ -25,38 +25,52 @@ const isInvalidEmail = ref(false);
 const instanceOptions = ref({});
 const elementsOptions = ref({});
 const cardOptions = ref({ hidePostalCode: true });
-const stripeLoaded = ref(false);
 const card = ref();
 const elms = ref();
+
+const stripe = stripeKey ? await loadStripe(stripeKey) : null;
+console.log('stripe', stripe);
 
 // Initialize Stripe.js
 onBeforeMount(() => {
   if (query.cancel_order) window.close();
-  if (!stripeKey) {
-    console.error('Stripe key is not set');
-    return;
-  }
-
-  const stripePromise = loadStripe(stripeKey);
-  stripePromise.then(() => {
-    stripeLoaded.value = true;
-  });
 });
 
 const payNow = async () => {
   buttonText.value = t('messages.general.processing');
+
+  // paymentIntents
+  const { client_secret } = await fetch('/api/stripe', {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((res) => res.json());
+  console.log({ client_secret });
+
   try {
     if (orderInput.value.paymentMethod === 'stripe') {
       const cardElement = card.value.stripeElement;
-      const { source } = await elms.value.instance.createSource(cardElement);
+      console.log({ cardElement });
+      // const { source } = await elms.value.instance.createSource(cardElement);
+      const { error, paymentIntent } = await stripe.confirmCardPayment(client_secret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: {
+            name: 'Jenny Rosen',
+            email: 'scottyzen@hotmail.com',
+          },
+        },
+      });
+      console.log({ error, paymentIntent });
+
       orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
       orderInput.value.transactionId = source.created?.toString() || '';
     }
   } catch (error) {
+    console.error('Error:', error);
     buttonText.value = t('messages.shop.placeOrder');
   }
 
-  proccessCheckout();
+  // proccessCheckout();
 };
 
 const checkEmailOnBlur = (email) => {
