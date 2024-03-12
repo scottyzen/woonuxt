@@ -29,7 +29,6 @@ const card = ref();
 const elms = ref();
 
 const stripe = stripeKey ? await loadStripe(stripeKey) : null;
-console.log('stripe', stripe);
 
 // Initialize Stripe.js
 onBeforeMount(() => {
@@ -39,31 +38,32 @@ onBeforeMount(() => {
 const payNow = async () => {
   buttonText.value = t('messages.general.processing');
 
-  // paymentIntents
-  const { client_secret } = await fetch('/api/stripe', {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-  }).then((res) => res.json());
-  console.log({ client_secret });
-
   try {
     if (orderInput.value.paymentMethod === 'stripe') {
       const cardElement = card.value.stripeElement;
-      console.log({ cardElement });
-      // const { source } = await elms.value.instance.createSource(cardElement);
-      const { error, paymentIntent } = await stripe.confirmCardPayment(client_secret, {
+      const headers = { 'Content-Type': 'application/json' };
+
+      // createPaymentIntent
+      const { client_secret } = await fetch('/api/stripe', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          amount: 1200,
+          currency: 'usd',
+        }),
+      }).then((res) => res.json());
+      console.log({ all });
+
+      // confirmPayment
+      const data = await elms.value.instance.confirmCardPayment(client_secret, {
         payment_method: {
           card: cardElement,
-          billing_details: {
-            name: 'Jenny Rosen',
-            email: 'scottyzen@hotmail.com',
-          },
         },
       });
-      console.log({ error, paymentIntent });
+      console.log({ data });
 
-      orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
-      orderInput.value.transactionId = source.created?.toString() || '';
+      // orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
+      // orderInput.value.transactionId = source.created?.toString() || '';
     }
   } catch (error) {
     console.error('Error:', error);

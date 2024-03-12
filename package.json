@@ -12,10 +12,10 @@
     "serve": "nuxi generate && npx serve .output/public -l 8080"
   },
   "dependencies": {
-    "@stripe/stripe-js": "^2.4.0",
+    "@stripe/stripe-js": "^3.0.8",
     "@vueform/slider": "^2.1.10",
     "@vueuse/core": "^10.9.0",
-    "stripe": "^14.19.0"
+    "stripe": "^14.20.0"
   },
   "devDependencies": {
     "@nuxt/image": "^1.3.0",
