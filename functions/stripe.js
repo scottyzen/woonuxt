@@ -1,4 +1,4 @@
-const stripe = require('stripe')('sk_test_51KoqfeLqZEQtkS6nsr2zulvLqgTfgozVLzNFGpc2NPPEdCMbd2ZXL1QaPGLHc0PyhZ3SbLN8D9RWouiHz6VwX6l300HHCwEO1h');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event, context) => {
   const { email, amount, currency } = JSON.parse(event.body);
