@@ -44,7 +44,7 @@ const payNow = async () => {
       const headers = { 'Content-Type': 'application/json' };
 
       // createPaymentIntent
-      const { client_secret } = await fetch('/api/stripe', {
+      const all = await fetch('/api/stripe', {
         method: 'POST',
         headers,
         body: JSON.stringify({
@@ -55,7 +55,7 @@ const payNow = async () => {
       console.log({ all });
 
       // confirmPayment
-      const data = await elms.value.instance.confirmCardPayment(client_secret, {
+      const data = await elms.value.instance.confirmCardPayment(all.client_secret, {
         payment_method: {
           card: cardElement,
         },
