@@ -66,7 +66,7 @@ const payNow = async () => {
       // orderInput.value.transactionId = source.created?.toString() || '';
     }
   } catch (error) {
-    console.error('Error:', error);
+    console.error('payNow error:', error);
     buttonText.value = t('messages.shop.placeOrder');
   }
 
