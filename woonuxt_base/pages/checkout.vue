@@ -109,6 +109,10 @@ watch(
     }
   },
 );
+
+useSeoMeta({
+  title: t('messages.shop.checkout'),
+});
 </script>
 
 <template>
