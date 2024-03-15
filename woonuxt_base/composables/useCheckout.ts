@@ -48,7 +48,7 @@ export function useCheckout() {
     });
   }
 
-  const proccessCheckout = async () => {
+  const proccessCheckout = async (isPaid = false) => {
     const { loginUser } = useAuth();
     const router = useRouter();
     const { replaceQueryParam } = useHelpers();
@@ -94,6 +94,7 @@ export function useCheckout() {
         customerNote: orderInput.value.customerNote,
         shipToDifferentAddress: orderInput.value.shipToDifferentAddress,
         transactionId: orderInput.value.transactionId,
+        isPaid,
       };
 
       if (orderInput.value.createAccount) {
@@ -105,6 +106,7 @@ export function useCheckout() {
       }
 
       const { checkout } = await GqlCheckout(checkoutPayload);
+      console.log({ checkout });
 
       if (orderInput.value.createAccount) {
         await loginUser({

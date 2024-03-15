@@ -3,6 +3,7 @@
 
 fragment CartFragment on Cart {
   total
+  rawTotal: total(format: RAW)
   subtotal
   totalTax
   discountTotal

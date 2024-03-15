@@ -1,5 +1,4 @@
 <script setup>
-import { StripeElements, StripeElement } from 'vue-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
 const { t } = useI18n();
@@ -9,68 +8,47 @@ const { customer, viewer } = useAuth();
 const { orderInput, isProcessingOrder, proccessCheckout } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
 const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY;
-const stripeCardIsComplete = ref(false);
 
 const buttonText = ref(isProcessingOrder.value ? t('messages.general.processing') : t('messages.shop.checkoutButton'));
-const isCheckoutDisabled = computed(() => {
-  if (orderInput.value.paymentMethod === 'stripe') {
-    return isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod || !stripeCardIsComplete.value;
-  }
-  return isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod;
-});
+const isCheckoutDisabled = computed(() => isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod);
 
 const emailRegex = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$');
 const isInvalidEmail = ref(false);
+let stripe = stripeKey ? await loadStripe(stripeKey) : null;
+let elements = ref(null);
+const isPaid = ref(false);
 
-const instanceOptions = ref({});
-const elementsOptions = ref({});
-const cardOptions = ref({ hidePostalCode: true });
-const card = ref();
-const elms = ref();
-
-const stripe = stripeKey ? await loadStripe(stripeKey) : null;
-
-// Initialize Stripe.js
-onBeforeMount(() => {
+onBeforeMount(async () => {
   if (query.cancel_order) window.close();
 });
 
 const payNow = async () => {
   buttonText.value = t('messages.general.processing');
+  const stripeReturnUrl = window.location.href;
+  const isStripe = orderInput.value.paymentMethod === 'stripe';
 
   try {
-    if (orderInput.value.paymentMethod === 'stripe') {
-      const cardElement = card.value.stripeElement;
-      const headers = { 'Content-Type': 'application/json' };
-
-      // createPaymentIntent
-      const all = await fetch('/api/stripe', {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          amount: 1200,
-          currency: 'usd',
-        }),
-      }).then((res) => res.json());
-      console.log({ all });
-
-      // confirmPayment
-      const data = await elms.value.instance.confirmCardPayment(all.client_secret, {
-        payment_method: {
-          card: cardElement,
-        },
+    if (isStripe) {
+      const { paymentIntent } = await stripe?.confirmPayment({
+        elements: elements.value,
+        redirect: 'if_required',
+        confirmParams: { return_url: stripeReturnUrl },
       });
-      console.log({ data });
 
-      // orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
-      // orderInput.value.transactionId = source.created?.toString() || '';
+      orderInput.value.metaData.push({ key: '_stripe_intent_id', value: paymentIntent.id });
+      orderInput.value.transactionId = paymentIntent.created?.toString() || '';
+      isPaid.value = paymentIntent.status === 'succeeded';
     }
   } catch (error) {
     console.error('payNow error:', error);
     buttonText.value = t('messages.shop.placeOrder');
   }
 
-  // proccessCheckout();
+  proccessCheckout(isPaid.value);
+};
+
+const handleStripeElementsChange = (el) => {
+  elements.value = el;
 };
 
 const checkEmailOnBlur = (email) => {
@@ -80,35 +58,6 @@ const checkEmailOnBlur = (email) => {
 const checkEmailOnInput = (email) => {
   if (email || isInvalidEmail.value) isInvalidEmail.value = !emailRegex.test(email);
 };
-
-/**
- * Watch orderInput.paymentMethod for stripe. If is stripe, add and event listener to .StripeElement to check if it's complete.
- * It will have the class .StripeElement--complete when it's complete. Then set stripeCardIsComplete to true.
- */
-watch(
-  () => orderInput.value.paymentMethod,
-  (newVal) => {
-    if (newVal === 'stripe') {
-      setTimeout(() => {
-        const stripeElement = document.querySelector('.StripeElement');
-        if (stripeElement) {
-          // Watch .StripeElement dom element. When it has the class .StripeElement--complete, set stripeCardIsComplete to true.
-          const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-              if (mutation.attributeName === 'class') {
-                const attributeValue = mutation.target.getAttribute(mutation.attributeName);
-                stripeCardIsComplete.value = attributeValue.includes('StripeElement--complete');
-              }
-            });
-          });
-          observer.observe(stripeElement, { attributes: true });
-        }
-      }, 1000);
-    } else {
-      stripeCardIsComplete.value = false;
-    }
-  },
-);
 
 useSeoMeta({
   title: t('messages.shop.checkout'),
@@ -181,18 +130,7 @@ useSeoMeta({
           <div v-if="paymentGateways.length" class="mt-2 col-span-full">
             <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.billing.paymentOptions') }}</h2>
             <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :paymentGateways="paymentGateways" />
-
-            <Transition name="scale-y" mode="out-in">
-              <StripeElements
-                v-show="orderInput.paymentMethod == 'stripe'"
-                v-slot="{ elements, instance }"
-                ref="elms"
-                :stripe-key="stripeKey"
-                :instance-options="instanceOptions"
-                :elements-options="elementsOptions">
-                <StripeElement ref="card" :elements="elements" :options="cardOptions" />
-              </StripeElements>
-            </Transition>
+            <StripeElement v-if="stripe" v-show="orderInput.paymentMethod == 'stripe'" :stripe @updateElements="handleStripeElementsChange" />
           </div>
 
           <!-- Order note -->
@@ -226,7 +164,6 @@ useSeoMeta({
 .checkout-form input[type='tel'],
 .checkout-form input[type='password'],
 .checkout-form textarea,
-.checkout-form .StripeElement,
 .checkout-form select {
   @apply bg-white border rounded-md outline-none border-gray-300 shadow-sm w-full py-2 px-4;
 }
@@ -238,9 +175,5 @@ useSeoMeta({
 
 .checkout-form label {
   @apply my-1.5 text-xs text-gray-600 uppercase;
-}
-
-.checkout-form .StripeElement {
-  padding: 1rem 0.75rem;
 }
 </style>
