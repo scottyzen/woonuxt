@@ -14,7 +14,7 @@ const isCheckoutDisabled = computed(() => isProcessingOrder.value || isUpdatingC
 
 const emailRegex = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$');
 const isInvalidEmail = ref(false);
-let stripe = stripeKey ? await loadStripe(stripeKey) : null;
+const stripe = stripeKey ? await loadStripe(stripeKey) : null;
 let elements = ref(null);
 const isPaid = ref(false);
 
