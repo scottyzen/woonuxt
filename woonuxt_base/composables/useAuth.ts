@@ -1,3 +1,6 @@
+import { GqlLogin, GqlLogout, GqlRegisterCustomer, GqlResetPasswordEmail, GqlGetOrders } from '#gql';
+import type { RegisterCustomerInput } from '#gql';
+
 export const useAuth = () => {
   const { refreshCart } = useCart();
 
@@ -51,7 +54,7 @@ export const useAuth = () => {
   };
 
   // Register the user
-  const registerUser = async (userInfo: CreateAccountInput): Promise<{ success: boolean; error: any }> => {
+  const registerUser = async (userInfo: RegisterCustomerInput): Promise<{ success: boolean; error: any }> => {
     isPending.value = true;
     try {
       await GqlRegisterCustomer({ input: userInfo });

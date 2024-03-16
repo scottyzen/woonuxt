@@ -1,3 +1,6 @@
+import { GqlGetCart, GqlAddToCart, GqlUpDateCartQuantity, GqlEmptyCart, GqlChangeShippingMethod, GqlApplyCoupon, GqlRemoveCoupons } from '#gql';
+import type { AddToCartInput } from '#gql';
+
 /**
  * @name useCart
  * @description A composable that handles the cart in local storage
