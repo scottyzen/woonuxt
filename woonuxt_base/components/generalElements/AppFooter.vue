@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const { wooNuxtVersionInfo } = useHelpers();
-const versionInfo = `WooNuxt v${wooNuxtVersionInfo}`;
 </script>
 
 <template>
@@ -51,7 +50,7 @@ const versionInfo = `WooNuxt v${wooNuxtVersionInfo}`;
     <div class="container border-t flex items-center justify-center mb-4">
       <div class="copywrite">
         <p class="py-4 text-xs text-center">
-          <a href="https://woonuxt.com" :title="versionInfo">{{ versionInfo }}</a> - by
+          <a href="https://woonuxt.com" :title="`WooNuxt v${wooNuxtVersionInfo}`">{{ `WooNuxt v${wooNuxtVersionInfo}` }}</a> - by
           <a href="https://scottyzen.com" title="Scott Kennedy - Web Developer" target="_blank">Scott Kennedy</a>
         </p>
       </div>

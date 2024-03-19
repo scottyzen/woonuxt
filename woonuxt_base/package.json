@@ -1,6 +1,6 @@
 {
   "name": "woonuxt",
-  "version": "3.4.19",
+  "version": "3.4.22",
   "main": "./nuxt.config.ts",
   "type": "module",
   "files": [

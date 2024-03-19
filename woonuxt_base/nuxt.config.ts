@@ -1,4 +1,3 @@
-import pkg from './package.json';
 import { createResolver } from '@nuxt/kit';
 const { resolve } = createResolver(import.meta.url);
 
@@ -20,9 +19,27 @@ export default defineNuxtConfig({
 
   components: [{ path: resolve('./components'), pathPrefix: false }],
 
-  modules: ['woonuxt-settings', 'nuxt-graphql-client', '@nuxtjs/tailwindcss', 'nuxt-icon', '@nuxt/image', '@nuxtjs/i18n'],
+  modules: [
+    'woonuxt-settings',
+    // resolve('./modules/woonuxt.ts'),
+    'nuxt-graphql-client',
+    '@nuxtjs/tailwindcss',
+    'nuxt-icon',
+    '@nuxt/image',
+    '@nuxtjs/i18n',
+  ],
+
+  'graphql-client': {
+    clients: {
+      default: {
+        host: process.env.GQL_HOST || 'http://localhost:4000/graphql',
+        corsOptions: { mode: 'cors', credentials: 'include' },
+      },
+    },
+  },
 
   image: {
+    provider: 'ipx',
     domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
   },
 
@@ -60,13 +77,6 @@ export default defineNuxtConfig({
     routeRules: {
       '/checkout/order-received/**': { ssr: false },
       '/order-summary/**': { ssr: false },
-    },
-  },
-
-  runtimeConfig: {
-    public: {
-      version: pkg.version || '0.0.0',
-      STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
     },
   },
 

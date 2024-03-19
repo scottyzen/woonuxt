@@ -1,3 +1,5 @@
+import type { CheckoutInput, UpdateCustomerInput } from '#gql';
+
 export function useCheckout() {
   const orderInput = useState<any>('orderInput', () => {
     return {
@@ -23,7 +25,7 @@ export function useCheckout() {
           id: viewer?.value?.id,
           shipping: orderInput.value.shipToDifferentAddress ? customer.value.shipping : customer.value.billing,
           billing: customer.value.billing,
-        },
+        } as UpdateCustomerInput,
       });
 
       if (updateCustomer) refreshCart();
@@ -105,7 +107,7 @@ export function useCheckout() {
         };
       }
 
-      const { checkout } = await GqlCheckout(checkoutPayload);
+      const { checkout } = await GqlCheckout(checkoutPayload as CheckoutInput);
       console.log({ checkout });
 
       if (orderInput.value.createAccount) {

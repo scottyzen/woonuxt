@@ -1,5 +1,4 @@
 <script setup>
-import { GqlGetStripePaymentIntent } from '#gql';
 const { stripe } = defineProps(['stripe']);
 const emit = defineEmits(['elements']);
 

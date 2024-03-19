@@ -1,4 +1,3 @@
-import { GqlGetCart, GqlAddToCart, GqlUpDateCartQuantity, GqlEmptyCart, GqlChangeShippingMethod, GqlApplyCoupon, GqlRemoveCoupons } from '#gql';
 import type { AddToCartInput } from '#gql';
 
 /**

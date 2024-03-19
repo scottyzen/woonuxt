@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { StockStatusEnum } from '@/woonuxt_base/types/commonTypes';
+import { StockStatusEnum } from '~/.nuxt/gql/default';
 
 const props = defineProps({
   status: { type: String, required: false },
