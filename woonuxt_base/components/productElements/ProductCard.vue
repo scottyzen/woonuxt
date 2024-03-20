@@ -22,7 +22,7 @@ watch(
   },
 );
 
-const mainImage = computed(() => node?.image?.sourceUrl);
+const mainImage = computed(() => node?.image?.producCardSourceUrl);
 
 const colorVariableImage = computed(() => {
   if (paColor.value.length) {
@@ -31,7 +31,7 @@ const colorVariableImage = computed(() => {
       const hasMatchingSlug = paColor.value.some((color) => variation.slug.includes(color));
       return hasMatchingAttributes || hasMatchingSlug;
     });
-    if (activeColorImage?.length) activeColorImage[0].image?.sourceUrl;
+    if (activeColorImage?.length) return activeColorImage[0].image?.producCardSourceUrl;
   }
   return null;
 });
