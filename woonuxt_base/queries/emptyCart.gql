@@ -1,5 +1,3 @@
-#import "~/queries/fragments/CartFragment.gql"
-
 mutation EmptyCart {
   emptyCart(input: { clearPersistentCart: true }) {
     cart {

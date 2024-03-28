@@ -1,11 +1,11 @@
 <script setup>
 const props = defineProps({
-  modelValue: { type: String, required: true, default: 'stripe' },
+  modelValue: { type: [String, Object], required: true },
   paymentGateways: { type: Array, required: true },
 });
 
 const paymentMethod = toRef(props, 'modelValue');
-
+const activePaymentMethod = computed(() => paymentMethod.value);
 const emits = defineEmits(['update:modelValue']);
 
 const updatePaymentMethod = (value) => {
@@ -14,39 +14,41 @@ const updatePaymentMethod = (value) => {
 
 onMounted(() => {
   // Emit first payment method
-  if (props.paymentGateways.length) updatePaymentMethod(props.paymentGateways[0].id);
+  if (props.paymentGateways.length) updatePaymentMethod(props.paymentGateways[0]);
 });
 </script>
 
 <template>
-  <div class="grid gap-4 leading-tight payment-options">
-    <div v-for="gateway in paymentGateways" :key="gateway.id" class="option" :class="{ 'active-option': paymentMethod === gateway.id }" @click="updatePaymentMethod(gateway.id)">
-      <icon v-if="gateway.id === 'stripe'" name="ion:card-outline" size="20" class="text-gray-600" />
-      <icon v-else-if="gateway.id === 'paypal'" name="ion:logo-paypal" size="20" class="text-gray-600" />
-      <icon v-else name="ion:cash-outline" size="20" class="text-gray-600" />
-      <span>{{ gateway.title }}</span>
-      <icon name="ion:checkmark-circle" size="20" class="ml-auto text-primary checkmark" />
+  <div class="flex gap-4 leading-tight flex-wrap">
+    <div
+      v-for="gateway in paymentGateways"
+      :key="gateway.id"
+      class="option"
+      :class="{ 'active-option': paymentMethod === gateway.id }"
+      @click="updatePaymentMethod(gateway)"
+      :title="gateway.description">
+      <icon v-if="gateway.id === 'stripe'" name="ion:card-outline" size="20" />
+      <icon v-else-if="gateway.id === 'paypal'" name="ion:logo-paypal" size="20" />
+      <icon v-else name="ion:cash-outline" size="20" />
+      <span class="whitespace-nowrap" v-html="gateway.title" />
+      <icon name="ion:checkmark-circle" size="20" class="ml-auto text-primary checkmark opacity-0" />
+    </div>
+    <div v-if="activePaymentMethod.description" class="prose">
+      <p class="text-sm text-gray-500" v-html="activePaymentMethod.description" />
     </div>
   </div>
 </template>
 
 <style lang="postcss" scoped>
-.payment-options {
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-}
+.option {
+  @apply bg-white border rounded-lg text-gray-600 cursor-pointer flex flex-1 text-sm py-3 px-4 gap-2 items-center hover:border-purple-300;
 
-.payment-options .option {
-  @apply bg-white border rounded-lg cursor-pointer flex w-full py-3 px-4 gap-2 items-center hover:border-purple-300;
-}
+  &.active-option {
+    @apply border-primary cursor-default border-opacity-50 shadow-sm pointer-events-none;
 
-.payment-options .active-option {
-  @apply border-primary cursor-default border-opacity-50 shadow-sm;
-  pointer-events: none;
-}
-.payment-options .option .checkmark {
-  opacity: 0;
-}
-.payment-options .active-option .checkmark {
-  opacity: 1;
+    & .checkmark {
+      @apply opacity-100;
+    }
+  }
 }
 </style>

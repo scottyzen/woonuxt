@@ -1,5 +1,3 @@
-#import "~/queries/fragments/CartFragment.gql"
-
 mutation addToCart($input: AddToCartInput!) {
   addToCart(input: $input) {
     cart {

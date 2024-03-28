@@ -48,7 +48,7 @@ const shipping = toRef(props, 'modelValue');
 
     <div class="w-full">
       <label for="country">{{ $t('messages.billing.country') }}</label>
-      <LazyCountrySelect v-model="shipping.country" :default-value="shipping.country" :allowed-countries="allowedCountries" @change="updateShippingLocation" />
+      <CountrySelect v-model="shipping.country" :default-value="shipping.country" @change="updateShippingLocation" />
     </div>
 
     <div class="w-full col-span-full">

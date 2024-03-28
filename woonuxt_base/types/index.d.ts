@@ -3,26 +3,14 @@ interface ProductAttributeInput {
   attributeValue: string;
 }
 
-interface AddToCartInput {
-  clientMutationId?: string;
-  extraData?: string;
-  productId: number;
-  quantity: number;
-  variation?: ProductAttributeInput[];
-  variationId?: number | null | undefined;
-}
-
-interface MetaDataInput {
-  key: string;
-  value: string;
-  id?: string;
-}
-
-interface CreateAccountInput {
-  password: string;
-  username: string;
-  email: string;
-}
+// interface AddToCartInput {
+//   clientMutationId?: string;
+//   extraData?: string;
+//   productId: number;
+//   quantity: number;
+//   variation?: ProductAttributeInput[];
+//   variationId?: number | null | undefined;
+// }
 
 interface Customer {
   lastName?: string | null;
@@ -39,10 +27,11 @@ interface Address {
   address1?: string | null;
   address2?: string | null;
   city?: string | null;
-  country?: CountriesEnum | null;
+  country?: Array | null;
   email?: string | null;
   firstName?: string | null;
   lastName?: string | null;
+  username?: string | null;
   phone?: string | null;
   postcode?: string | null;
   state?: string | null;
@@ -246,6 +235,7 @@ interface ShippingMethodRate {
 
 interface Cart {
   total?: string | null;
+  rawTotal?: string | null;
   subtotal?: string | null;
   totalTax?: string | null;
   discountTotal?: string | null;

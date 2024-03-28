@@ -10,6 +10,7 @@ fragment VariableProduct on VariableProduct {
   image {
     sourceUrl
     cartSourceUrl: sourceUrl(size: THUMBNAIL)
+    producCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
     altText
     title
   }
@@ -51,6 +52,7 @@ fragment VariableProduct on VariableProduct {
       image {
         sourceUrl
         cartSourceUrl: sourceUrl(size: THUMBNAIL)
+        producCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
         altText
         title
         id

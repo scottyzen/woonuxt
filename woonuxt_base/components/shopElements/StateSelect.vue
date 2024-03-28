@@ -1,11 +1,6 @@
 <script setup>
-const props = defineProps({
-  modelValue: { type: String, required: true },
-  countryCode: { type: String, required: true, default: 'IE' },
-});
-
+const props = defineProps(['modelValue', 'countryCode']);
 const emit = defineEmits(['update:modelValue']);
-
 const states = ref([]);
 
 function select(evt) {
@@ -13,8 +8,9 @@ function select(evt) {
 }
 
 async function updateState() {
+  const country = props?.countryCode || 'IE';
   try {
-    const { countryStates } = await GqlGetStates({ country: props.countryCode });
+    const { countryStates } = await GqlGetStates({ country });
     states.value = countryStates;
   } catch (error) {
     console.error(error);

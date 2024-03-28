@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { OrderStatusEnum } from '@/woonuxt_base/types/commonTypes';
+import { OrderStatusEnum } from '~/.nuxt/gql/default';
 
 const { query, params, name } = useRoute();
 const { customer } = useAuth();
@@ -15,6 +15,7 @@ const isGuest = computed(() => !customer.value.databaseId);
 const isSummaryPage = computed(() => name === 'order-summary');
 const isCheckoutPage = computed(() => name === 'order-received');
 const showRefreshButton = computed(() => order.value.status !== OrderStatusEnum.COMPLETED);
+const hasDiscount = computed<boolean>(() => !!parseFloat(order.value.discountTotal?.replace(/[^0-9.]/g, '')));
 
 onBeforeMount(() => {
   /**
@@ -140,6 +141,10 @@ const refreshOrder = async () => {
           <div class="flex justify-between">
             <span>{{ $t('messages.general.shipping') }}</span>
             <span>{{ order.shippingTotal }}</span>
+          </div>
+          <div v-if="hasDiscount" class="flex justify-between text-primary">
+            <span>{{ $t('messages.shop.discount') }}</span>
+            <span>- {{ order.discountTotal }}</span>
           </div>
           <hr class="my-8" />
           <div class="flex justify-between">

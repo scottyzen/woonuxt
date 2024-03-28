@@ -15,9 +15,7 @@ watch([isShowingCart, isShowingMobileMenu], () => {
 
 watch(
   () => route.path,
-  () => {
-    closeCartAndMenu();
-  },
+  () => closeCartAndMenu(),
 );
 </script>
 

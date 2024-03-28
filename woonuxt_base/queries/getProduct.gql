@@ -1,7 +1,3 @@
-#import "./queries/fragments/SimpleProduct.gql"
-#import "./queries/fragments/VariableProduct.gql"
-#import "./fragments/Terms.gql"
-
 query getProduct($slug: ID!) {
   product(id: $slug, idType: SLUG) {
     name
