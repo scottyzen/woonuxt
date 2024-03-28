@@ -31,7 +31,7 @@ const colorVariableImage = computed(() => {
       const hasMatchingSlug = paColor.value.some((color) => variation.slug.includes(color));
       return hasMatchingAttributes || hasMatchingSlug;
     });
-    if (activeColorImage?.length) return activeColorImage[0].image?.producCardSourceUrl;
+    if (activeColorImage?.length) return activeColorImage[0].image;
   }
   return null;
 });
@@ -43,10 +43,10 @@ const colorVariableImage = computed(() => {
       <SaleBadge :node="node" class="absolute top-2 right-2" />
       <img
         v-if="colorVariableImage"
-        :src="colorVariableImage"
-        :alt="node.image?.altText || node.name"
-        :title="node.image?.title || node.name"
-        :loading="index <= 3 ? 'eager' : 'lazy'"
+        :src="colorVariableImage.producCardSourceUrl"
+        :alt="colorVariableImage?.altText || node.name"
+        :title="colorVariableImage?.title || node.name"
+        loading="lazy"
         class="skeleton" />
       <NuxtImg
         v-else
