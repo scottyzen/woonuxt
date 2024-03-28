@@ -1,36 +1,32 @@
-<script setup>
+<script setup lang="ts">
+const { cart } = useCart();
 const { stripe } = defineProps(['stripe']);
-const emit = defineEmits(['elements']);
 
-const refreshStripeElements = async () => {
-  if (!stripe) return;
+const rawCartTotal = computed(() => cart.value && parseFloat(cart.value.rawTotal as string) * 100);
+const emit = defineEmits(['updateElement']);
+let elements = null as any;
 
-  const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
-  const stripeEl = document.getElementById('stripe-payment');
-  const elements = stripe?.elements({ clientSecret: stripePaymentIntent.clientSecret });
-  const payEl = elements?.create('payment', { layout: 'tabs' });
-
-  if (payEl && stripeEl) {
-    payEl.mount(stripeEl);
-    emit('updateElements', elements);
-  }
+const options = {
+  mode: 'payment',
+  currency: 'eur',
+  amount: rawCartTotal.value,
+  // paymentMethodCreation: 'manual',
 };
 
-const { cart } = useCart();
-watch(
-  () => cart.value,
-  (newVal) => {
-    if (newVal) refreshStripeElements();
-  },
-);
+const createStripeElements = async () => {
+  elements = stripe.elements(options);
+  const paymentElement = elements.create('card', { hidePostalCode: true });
+  paymentElement.mount('#card-element');
+  emit('updateElement', elements);
+};
 
 onMounted(() => {
-  refreshStripeElements();
+  createStripeElements();
 });
 </script>
 
 <template>
-  <div id="stripe-payment" class="w-full">
-    <LoadingIcon />
+  <div id="card-element">
+    <!-- Elements will create form elements here -->
   </div>
 </template>
