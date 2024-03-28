@@ -17,8 +17,8 @@
 
     <form class="mt-6" @submit.prevent="handleFormSubmit(userInfo)">
       <label v-if="formView == 'register' || formView == 'forgotPassword'" for="email"
-        >Email <span class="text-red-500">*</span> <br />
-        <input id="email" v-model="userInfo.email" placeholder="Email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required />
+        >Email or Username <span class="text-red-500">*</span> <br />
+        <input id="email" v-model="userInfo.email" placeholder="Email" type="text" required />
       </label>
       <p v-if="formView == 'forgotPassword'" class="text-sm text-gray-500">Please enter your email address and we will send you a link to reset your password.</p>
       <div v-if="formView != 'forgotPassword'">
