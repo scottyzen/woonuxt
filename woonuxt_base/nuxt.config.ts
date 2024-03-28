@@ -19,15 +19,7 @@ export default defineNuxtConfig({
 
   components: [{ path: resolve('./components'), pathPrefix: false }],
 
-  modules: [
-    'woonuxt-settings',
-    // resolve('./modules/woonuxt.ts'),
-    'nuxt-graphql-client',
-    '@nuxtjs/tailwindcss',
-    'nuxt-icon',
-    '@nuxt/image',
-    '@nuxtjs/i18n',
-  ],
+  modules: ['woonuxt-settings', 'nuxt-graphql-client', '@nuxtjs/tailwindcss', 'nuxt-icon', '@nuxt/image', '@nuxtjs/i18n'],
 
   'graphql-client': {
     clients: {
