@@ -24,31 +24,32 @@ onBeforeMount(async () => {
 
 const payNow = async () => {
   buttonText.value = t('messages.general.processing');
-  const stripeReturnUrl = window.location.href;
-  const isStripe = orderInput.value.paymentMethod === 'stripe';
+
+  const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
+  const { clientSecret } = stripePaymentIntent;
 
   try {
-    if (isStripe) {
-      const { paymentIntent } = await stripe?.confirmPayment({
-        elements: elements.value,
-        redirect: 'if_required',
-        confirmParams: { return_url: stripeReturnUrl },
-      });
+    if (orderInput.value.paymentMethod.id === 'stripe') {
+      const cardElement = elements.value.getElement('card');
+      const { setupIntent } = await stripe.confirmCardSetup(clientSecret, { payment_method: { card: cardElement } });
+      const { source } = await stripe.createSource(cardElement);
 
-      orderInput.value.metaData.push({ key: '_stripe_intent_id', value: paymentIntent.id });
-      orderInput.value.transactionId = paymentIntent.created?.toString() || '';
-      isPaid.value = paymentIntent.status === 'succeeded';
+      if (source) orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
+      if (setupIntent) orderInput.value.metaData.push({ key: '_stripe_intent_id', value: setupIntent.id });
+
+      isPaid.value = setupIntent?.status === 'succeeded' || false;
+      orderInput.value.transactionId = source?.created?.toString() || new Date().getTime().toString();
     }
   } catch (error) {
-    console.error('payNow error:', error);
+    console.error(error);
     buttonText.value = t('messages.shop.placeOrder');
   }
 
   proccessCheckout(isPaid.value);
 };
 
-const handleStripeElementsChange = (el) => {
-  elements.value = el;
+const handleStripeElement = (stripeElements) => {
+  elements.value = stripeElements;
 };
 
 const checkEmailOnBlur = (email) => {
@@ -75,9 +76,9 @@ useSeoMeta({
       <form v-else class="container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-20" @submit.prevent="payNow">
         <div class="grid w-full max-w-2xl gap-8 checkout-form md:flex-1">
           <!-- Customer details -->
-          <div>
+          <div v-if="!viewer">
             <h2 class="w-full mb-2 text-2xl font-semibold leading-none">Contact Information</h2>
-            <p v-if="!viewer" class="mt-1 text-sm text-gray-500">Already have an account? <a href="/my-account" class="text-primary text-semibold">Log in</a>.</p>
+            <p class="mt-1 text-sm text-gray-500">Already have an account? <a href="/my-account" class="text-primary text-semibold">Log in</a>.</p>
             <div class="w-full mt-4">
               <label for="email">{{ $t('messages.billing.email') }}</label>
               <input
@@ -93,10 +94,16 @@ useSeoMeta({
                 <div v-if="isInvalidEmail" class="mt-1 text-sm text-red-500">Invalid email address</div>
               </Transition>
             </div>
-            <div class="w-full my-2" v-if="orderInput.createAccount">
-              <label for="email">{{ $t('messages.account.password') }}</label>
-              <PasswordInput id="password" class="my-2" v-model="orderInput.password" placeholder="Password" :required="true" />
-            </div>
+            <template v-if="orderInput.createAccount">
+              <div class="w-full mt-4">
+                <label for="username">{{ $t('messages.account.username') }}</label>
+                <input v-model="orderInput.username" placeholder="Username" type="text" name="username" required />
+              </div>
+              <div class="w-full my-2" v-if="orderInput.createAccount">
+                <label for="email">{{ $t('messages.account.password') }}</label>
+                <PasswordInput id="password" class="my-2" v-model="orderInput.password" placeholder="Password" :required="true" />
+              </div>
+            </template>
             <div v-if="!viewer" class="flex items-center gap-2 my-2">
               <label for="creat-account">Create an account?</label>
               <input id="creat-account" v-model="orderInput.createAccount" type="checkbox" name="creat-account" />
@@ -129,8 +136,8 @@ useSeoMeta({
           <!-- Pay methods -->
           <div v-if="paymentGateways.length" class="mt-2 col-span-full">
             <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.billing.paymentOptions') }}</h2>
-            <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :paymentGateways="paymentGateways" />
-            <StripeElement v-if="stripe" v-show="orderInput.paymentMethod == 'stripe'" :stripe @updateElements="handleStripeElementsChange" />
+            <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :paymentGateways />
+            <StripeElement v-if="stripe" v-show="orderInput.paymentMethod.id == 'stripe'" :stripe @updateElement="handleStripeElement" />
           </div>
 
           <!-- Order note -->
@@ -164,7 +171,8 @@ useSeoMeta({
 .checkout-form input[type='tel'],
 .checkout-form input[type='password'],
 .checkout-form textarea,
-.checkout-form select {
+.checkout-form select,
+.checkout-form .StripeElement {
   @apply bg-white border rounded-md outline-none border-gray-300 shadow-sm w-full py-2 px-4;
 }
 
@@ -175,5 +183,9 @@ useSeoMeta({
 
 .checkout-form label {
   @apply my-1.5 text-xs text-gray-600 uppercase;
+}
+
+.checkout-form .StripeElement {
+  padding: 1rem 0.75rem;
 }
 </style>

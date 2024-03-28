@@ -1,4 +1,4 @@
-import type { CheckoutInput, UpdateCustomerInput } from '#gql';
+import type { CheckoutInput, UpdateCustomerInput, CreateAccountInput } from '#gql';
 
 export function useCheckout() {
   const orderInput = useState<any>('orderInput', () => {
@@ -59,68 +59,37 @@ export function useCheckout() {
 
     isProcessingOrder.value = true;
 
-    const billing = {
-      address1: customer.value.billing?.address1,
-      address2: customer.value.billing?.address2,
-      city: customer.value.billing?.city,
-      company: customer.value.billing?.company,
-      country: customer.value.billing?.country,
-      email: customer.value.billing?.email,
-      firstName: customer.value.billing?.firstName,
-      lastName: customer.value.billing?.lastName,
-      phone: customer.value.billing?.phone,
-      postcode: customer.value.billing?.postcode,
-      state: customer.value.billing?.state,
-    };
-
-    const shipping = {
-      address1: customer.value.shipping?.address1,
-      address2: customer.value.shipping?.address2,
-      city: customer.value.shipping?.city,
-      company: customer.value.shipping?.company,
-      country: customer.value.shipping?.country,
-      email: customer.value.billing?.email,
-      firstName: customer.value.shipping?.firstName,
-      lastName: customer.value.shipping?.lastName,
-      phone: customer.value.shipping?.phone,
-      postcode: customer.value.shipping?.postcode,
-      state: customer.value.shipping?.state,
-    };
+    const { username, password, shipToDifferentAddress } = orderInput.value;
+    const billing = customer.value.billing;
+    const shipping = shipToDifferentAddress ? customer.value.shipping : billing;
 
     try {
-      let checkoutPayload = {
+      let checkoutPayload: CheckoutInput = {
         billing,
-        shipping: orderInput.value.shipToDifferentAddress ? shipping : billing,
+        shipping,
         metaData: orderInput.value.metaData,
-        paymentMethod: orderInput.value.paymentMethod,
+        paymentMethod: orderInput.value.paymentMethod.id,
         customerNote: orderInput.value.customerNote,
-        shipToDifferentAddress: orderInput.value.shipToDifferentAddress,
+        shipToDifferentAddress,
         transactionId: orderInput.value.transactionId,
         isPaid,
       };
 
+      // Create account
       if (orderInput.value.createAccount) {
-        // @ts-ignore
-        checkoutPayload.account = {
-          username: customer.value.billing?.email,
-          password: orderInput.value.password,
-        };
+        checkoutPayload.account = { username, password } as CreateAccountInput;
       }
 
-      const { checkout } = await GqlCheckout(checkoutPayload as CheckoutInput);
-      console.log({ checkout });
+      const { checkout } = await GqlCheckout(checkoutPayload);
 
+      // Login user if account was created during checkout
       if (orderInput.value.createAccount) {
-        await loginUser({
-          // @ts-ignore
-          username: customer.value.billing.email,
-          password: orderInput.value.password,
-        });
+        await loginUser({ username, password });
       }
 
       const orderId = checkout?.order?.databaseId;
       const orderKey = checkout?.order?.orderKey;
-      const isPayPal = orderInput.value.paymentMethod === 'paypal';
+      const isPayPal = orderInput.value.paymentMethod.id === 'paypal';
 
       // PayPal redirect
       if ((await checkout?.redirect) && isPayPal) {
