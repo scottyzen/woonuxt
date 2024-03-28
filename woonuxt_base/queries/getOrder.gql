@@ -8,6 +8,7 @@ query getOrder($id: ID!) {
     subtotal
     total
     subtotal
+    discountTotal
     totalTax
     shippingTotal
     paymentMethodTitle
