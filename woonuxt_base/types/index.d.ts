@@ -31,6 +31,7 @@ interface Address {
   email?: string | null;
   firstName?: string | null;
   lastName?: string | null;
+  username?: string | null;
   phone?: string | null;
   postcode?: string | null;
   state?: string | null;
@@ -234,6 +235,7 @@ interface ShippingMethodRate {
 
 interface Cart {
   total?: string | null;
+  rawTotal?: string | null;
   subtotal?: string | null;
   totalTax?: string | null;
   discountTotal?: string | null;
