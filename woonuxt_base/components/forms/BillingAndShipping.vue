@@ -45,7 +45,7 @@
 
       <div class="w-full">
         <label for="country">{{ $t('messages.billing.country') }}</label>
-        <LazyCountrySelect v-model="customer.billing.country" :default-value="customer.billing.country" :allowed-countries="allowedCountries" />
+        <CountrySelect v-model="customer.billing.country" :default-value="customer.billing.country" />
       </div>
 
       <div class="w-full">
@@ -99,12 +99,12 @@
 
       <div class="w-full">
         <label for="billing-state">{{ $t('messages.billing.state') }}</label>
-        <LazyStateSelect v-model="customer.shipping.state" :default-value="customer.shipping.state" :country-code="customer.shipping.country" />
+        <StateSelect v-model="customer.shipping.state" :default-value="customer.shipping.state" :country-code="customer.shipping.country" />
       </div>
 
       <div class="w-full">
         <label for="country">{{ $t('messages.billing.country') }}</label>
-        <LazyCountrySelect v-model="customer.shipping.country" :default-value="customer.shipping.country" :allowed-countries="allowedCountries" />
+        <CountrySelect v-model="customer.shipping.country" :default-value="customer.shipping?.country" />
       </div>
 
       <div class="w-full">
@@ -127,7 +127,6 @@
 
 <script setup lang="ts">
 const { viewer, customer } = useAuth();
-const { allowedCountries } = GqlGetStates({ country: 'IE' });
 const { t } = useI18n();
 
 const loading = ref<boolean>(false);
