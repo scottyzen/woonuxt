@@ -114,36 +114,42 @@
     </div>
 
     <div class="bg-white backdrop-blur-sm bg-opacity-75 border-t col-span-full p-4 sticky bottom-0 rounded-b-lg">
-      <button class="rounded-md flex font-semibold bg-primary ml-auto text-white py-2 px-4 gap-4 items-center">
+      <button
+        class="rounded-md flex font-semibold ml-auto text-white py-2 px-4 gap-4 items-center disabled:bg-gray-400 disabled:cursor-not-allowed"
+        :class="button.color"
+        :disabled="loading">
         <LoadingIcon v-if="loading" color="#fff" size="20" />
-        <span>{{ buttonText }}</span>
+        <span>{{ button.text }}</span>
       </button>
     </div>
   </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { viewer, customer } = useAuth();
 const { allowedCountries } = GqlGetStates({ country: 'IE' });
+const { t } = useI18n();
 
-const loading = ref(false);
-const buttonText = computed(() => (loading.value ? 'Updating...' : 'Update Details'));
+const loading = ref<boolean>(false);
+const button = ref<{ text: string; color: string }>({ text: t('messages.account.updateDetails'), color: 'bg-primary hover:bg-primary-dark' });
 
-async function saveChanges() {
+async function saveChanges(): Promise<void> {
   loading.value = true;
+  button.value.text = t('messages.account.updating');
+  const shipping = customer.value.shipping;
+  const billing = customer.value.billing;
+
   try {
-    const { updateCustomer } = await GqlUpdateCustomer({
-      input: {
-        id: viewer.value.id,
-        shipping: customer.value.shipping,
-        billing: customer.value.billing,
-      },
-    });
-    if (updateCustomer) {
-      loading.value = false;
-    }
+    const { updateCustomer } = await GqlUpdateCustomer({ input: { id: viewer.value.id, shipping, billing } });
+    if (updateCustomer) button.value = { text: t('messages.account.updateSuccess'), color: 'bg-green-500' };
   } catch (error) {
-    loading.value = false;
+    button.value = { text: t('messages.account.failed'), color: 'bg-red-500' };
   }
+
+  loading.value = false;
+
+  setTimeout(() => {
+    button.value = { text: t('messages.account.updateDetails'), color: 'bg-primary hover:bg-primary-dark' };
+  }, 2000);
 }
 </script>
