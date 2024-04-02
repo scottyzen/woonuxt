@@ -12,14 +12,14 @@
     "serve": "nuxi generate && npx serve .output/public -l 8080"
   },
   "dependencies": {
-    "@stripe/stripe-js": "^3.1.0",
+    "@stripe/stripe-js": "^3.2.0",
     "@vueform/slider": "^2.1.10",
     "@vueuse/core": "^10.9.0"
   },
   "devDependencies": {
-    "@nuxt/image": "^1.4.0",
+    "@nuxt/image": "^1.5.0",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
-    "@nuxtjs/i18n": "^8.2.0",
+    "@nuxtjs/i18n": "^8.3.0",
     "@nuxtjs/tailwindcss": "^6.11.4",
     "@tailwindcss/typography": "^0.5.12",
     "eslint": "^8.57.0",
