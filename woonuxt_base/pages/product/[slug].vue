@@ -65,7 +65,7 @@ const disabledAddToCart = computed(() => !type.value || stockStatus.value === St
 <template>
   <main class="container relative py-6 xl:max-w-7xl" v-if="product">
     <SEOHead :info="product" />
-    <Breadcrumb :product="product" class="mb-6" />
+    <Breadcrumb :product class="mb-6" />
 
     <div class="flex flex-col gap-10 md:flex-row md:justify-between lg:gap-24">
       <ProductImageGallery
@@ -141,13 +141,13 @@ const disabledAddToCart = computed(() => !type.value || stockStatus.value === St
         <hr />
 
         <div class="flex flex-wrap gap-4">
-          <WishlistButton :product="product" />
-          <ShareButton :product="product" />
+          <WishlistButton :product />
+          <ShareButton :product />
         </div>
       </div>
     </div>
     <div v-if="product.description || product.reviews" class="my-32">
-      <ProductTabs :product="product" />
+      <ProductTabs :product />
     </div>
     <div class="my-32" v-if="product.related">
       <div class="mb-4 text-xl font-semibold">{{ $t('messages.shop.youMayLike') }}</div>
