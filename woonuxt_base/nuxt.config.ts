@@ -37,36 +37,21 @@ export default defineNuxtConfig({
 
   hooks: {
     'pages:extend'(pages) {
-      pages.push({
-        name: 'product-page-pager',
-        path: '/products/page/:pageNumber',
-        file: resolve('./pages/products.vue'),
-      });
-      pages.push({
-        name: 'product-category-page',
-        path: '/product-category/:categorySlug',
-        file: resolve('./pages/product-category/[slug].vue'),
-      });
-      pages.push({
-        name: 'product-category-page-pager',
-        path: '/product-category/:categorySlug/page/:pageNumber',
-        file: resolve('./pages/product-category/[slug].vue'),
-      });
-      pages.push({
-        name: 'order-received',
-        path: '/checkout/order-received/:orderId',
-        file: resolve('./pages/order-summary.vue'),
-      });
-      pages.push({
-        name: 'order-summary',
-        path: '/order-summary/:orderId',
-        file: resolve('./pages/order-summary.vue'),
-      });
+      const addPage = (name: string, path: string, file: string) => {
+        pages.push({ name, path, file: resolve(file) });
+      };
+
+      addPage('product-page-pager', '/products/page/:pageNumber', './pages/products.vue');
+      addPage('product-category-page', '/product-category/:categorySlug', './pages/product-category/[slug].vue');
+      addPage('product-category-page-pager', '/product-category/:categorySlug/page/:pageNumber', './pages/product-category/[slug].vue');
+      addPage('order-received', '/checkout/order-received/:orderId', './pages/order-summary.vue');
+      addPage('order-summary', '/order-summary/:orderId', './pages/order-summary.vue');
     },
   },
 
   nitro: {
     routeRules: {
+      '/**': { isr: true },
       '/checkout/order-received/**': { ssr: false },
       '/order-summary/**': { ssr: false },
     },
