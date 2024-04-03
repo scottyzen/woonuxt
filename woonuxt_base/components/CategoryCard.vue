@@ -1,13 +1,7 @@
 <script setup lang="ts">
 const { formatURI } = useHelpers();
-
-interface Props {
-  node: ProductCategory;
-}
-
-const { node } = defineProps<Props>();
-
-const imageSrc = node.image?.sourceUrl || '/images/placeholder.jpg';
+const props = defineProps(['node']);
+const imageSrc = props.node.image?.sourceUrl || '/images/placeholder.jpg';
 </script>
 
 <template>
