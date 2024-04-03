@@ -51,7 +51,7 @@ export default defineNuxtConfig({
 
   nitro: {
     routeRules: {
-      '/**': { isr: true },
+      '/*': { isr: true },
       '/checkout/order-received/**': { ssr: false },
       '/order-summary/**': { ssr: false },
     },
