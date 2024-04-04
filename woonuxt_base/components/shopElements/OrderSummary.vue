@@ -7,7 +7,7 @@ const { cart, isUpdatingCart } = useCart();
     <h2 class="mb-6 text-xl font-semibold leading-none">{{ $t('messages.shop.orderSummary') }}</h2>
 
     <ul class="flex flex-col gap-4 -mr-2 overflow-y-scroll">
-      <CartCard v-for="item in cart.contents.nodes" :key="item.key" :item="item" />
+      <CartCard v-for="item in cart.contents.nodes" :key="item.key" :item />
     </ul>
 
     <AddCoupon class="my-8" />

@@ -51,6 +51,7 @@ interface Viewer {
 
 interface ProductCategory {
   databaseId: number;
+  id: string;
   slug: string;
   name: string;
   count: number;
@@ -196,10 +197,9 @@ interface Variation {
 }
 
 interface ProductImage {
-  sourceUrl?: string | null;
-  altText?: string | null;
-  title?: string | null;
-  cartSourceUrl?: string | null;
+  sourceUrl?: string | null | undefined;
+  altText?: string | null | undefined;
+  title?: string | null | undefined;
 }
 
 interface CartItem {
