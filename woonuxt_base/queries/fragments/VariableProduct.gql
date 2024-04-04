@@ -13,6 +13,7 @@ fragment VariableProduct on VariableProduct {
     producCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
     altText
     title
+    databaseId
   }
   averageRating
   reviewCount
@@ -53,6 +54,7 @@ fragment VariableProduct on VariableProduct {
         sourceUrl
         cartSourceUrl: sourceUrl(size: THUMBNAIL)
         producCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
+        databaseId
         altText
         title
         id
@@ -68,6 +70,7 @@ fragment VariableProduct on VariableProduct {
   galleryImages {
     nodes {
       sourceUrl
+      databaseId
       altText
       title
     }

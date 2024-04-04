@@ -1,70 +1,56 @@
 <script setup lang="ts">
-defineProps({
-  firstImage: { type: String, required: true },
-  mainImage: { type: String, required: true },
+const props = defineProps({
+  mainImage: { type: Object, required: true },
   gallery: { type: Object, required: true },
   node: { type: Object, required: true },
+  activeVariation: { type: Object, required: false },
 });
 
-const imageToShow = ref<number | null>(0);
+const primaryImage = computed(() => ({
+  sourceUrl: props.mainImage.sourceUrl || '/images/placeholder.jpg',
+  title: props.mainImage.title,
+  altText: props.mainImage.altText,
+  databaseId: props.mainImage.databaseId,
+}));
 
-const changeImage = (index: number | null): void => {
-  imageToShow.value = index;
+const imageToShow = ref(primaryImage.value);
+
+const galleryImages = computed(() => {
+  // Add the primary image to the start of the gallery and remove duplicates
+  return [primaryImage.value, ...props.gallery.nodes].filter((img, index, self) => index === self.findIndex((t) => t?.databaseId === img?.databaseId));
+});
+
+const changeImage = (image: any) => {
+  if (image) imageToShow.value = image;
 };
+
+watch(
+  () => props.activeVariation,
+  (newVal) => {
+    if (newVal) {
+      const foundImage = galleryImages.value.find((img) => img.databaseId === newVal.image?.databaseId);
+      if (foundImage) imageToShow.value = foundImage;
+    }
+  },
+);
 </script>
 
 <template>
   <div v-if="mainImage">
     <SaleBadge :node="node" class="absolute text-base top-4 right-4" />
     <NuxtImg
-      v-show="imageToShow === null"
       class="rounded-xl object-contain w-full min-w-[350px] skeleton"
       width="700"
       height="700"
       fit="outside"
       format="webp"
-      :src="firstImage"
-      :alt="node.name"
-      :title="node.name"
-      fetchpriority="high" />
-    <NuxtImg
-      v-show="imageToShow === 0"
-      class="rounded-xl object-contain w-full min-w-[350px] skeleton"
-      width="700"
-      height="700"
-      fit="outside"
-      format="webp"
-      :src="mainImage"
-      :alt="node.name"
-      :title="node.name"
-      fetchpriority="high" />
-    <NuxtImg
-      v-for="(galleryImg, i) in gallery.nodes"
-      v-show="imageToShow === i + 1"
-      :key="i"
-      class="rounded-xl object-contain w-full min-w-[350px] skeleton"
-      width="700"
-      height="700"
-      fit="outside"
-      format="webp"
-      :alt="galleryImg.altText || galleryImg.title || node.name"
-      :title="galleryImg.title || node.name"
-      :src="galleryImg.sourceUrl || '/images/placeholder.jpg'"
-      loading="lazy" />
+      :alt="imageToShow.altText || imageToShow.title || node.name"
+      :title="imageToShow.title || node.name"
+      :src="imageToShow.sourceUrl || '/images/placeholder.jpg'" />
     <div v-if="gallery.nodes.length" class="my-4 gallery-images">
       <NuxtImg
-        class="cursor-pointer rounded-xl skeleton"
-        width="700"
-        height="700"
-        format="webp"
-        :src="firstImage"
-        @click.native="changeImage(null)"
-        :alt="node.name"
-        :title="node.name"
-        loading="lazy" />
-      <NuxtImg
-        v-for="(galleryImg, i) in gallery.nodes"
-        :key="i"
+        v-for="galleryImg in galleryImages"
+        :key="galleryImg.databaseId"
         class="cursor-pointer rounded-xl skeleton"
         width="700"
         height="700"
@@ -73,13 +59,13 @@ const changeImage = (index: number | null): void => {
         :src="galleryImg.sourceUrl"
         :alt="galleryImg.altText || galleryImg.title || node.name"
         :title="galleryImg.title || node.name"
-        @click.native="changeImage(i + 1)"
+        @click.native="changeImage(galleryImg)"
         loading="lazy" />
     </div>
   </div>
 </template>
 
-<style>
+<style scoped>
 .gallery-images {
   display: flex;
   overflow: auto;

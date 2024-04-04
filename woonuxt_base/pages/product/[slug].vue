@@ -14,6 +14,8 @@ const activeVariation = ref(null) as Ref<Variation | null>;
 const variation = ref([]) as Ref<Variation[]>;
 const indexOfTypeAny = [] as number[];
 const attrValues = ref();
+const isSimpleProduct = computed(() => product.value.type === 'SIMPLE');
+const isVariableProduct = computed(() => product.value.type === 'VARIABLE');
 
 const type = computed(() => (activeVariation.value ? activeVariation.value : product.value));
 const selectProductInput = computed(() => ({ productId: type.value.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
@@ -58,8 +60,14 @@ const updateSelectedVariations = (variations: Attribute[]): void => {
   variation.value = variations;
 };
 
-const stockStatus = computed(() => type.value?.stockStatus || StockStatusEnum.OUT_OF_STOCK);
-const disabledAddToCart = computed(() => !type.value || stockStatus.value === StockStatusEnum.OUT_OF_STOCK || isUpdatingCart.value);
+const stockStatus = computed(() => {
+  if (isVariableProduct.value) return activeVariation.value?.stockStatus || StockStatusEnum.OUT_OF_STOCK;
+  return type.value?.stockStatus || StockStatusEnum.OUT_OF_STOCK;
+});
+const disabledAddToCart = computed(() => {
+  if (isSimpleProduct.value) return !type.value || stockStatus.value === StockStatusEnum.OUT_OF_STOCK || isUpdatingCart.value;
+  return !type.value || stockStatus.value === StockStatusEnum.OUT_OF_STOCK || !activeVariation.value || isUpdatingCart.value;
+});
 </script>
 
 <template>
@@ -69,12 +77,12 @@ const disabledAddToCart = computed(() => !type.value || stockStatus.value === St
 
     <div class="flex flex-col gap-10 md:flex-row md:justify-between lg:gap-24">
       <ProductImageGallery
-        v-if="product.image?.sourceUrl"
+        v-if="product.image"
         class="relative flex-1"
-        :first-image="product.image.sourceUrl"
-        :main-image="type.image ? type.image?.sourceUrl || product.image.sourceUrl : '/images/placeholder.jpg'"
+        :main-image="product.image"
         :gallery="product.galleryImages!"
-        :node="type" />
+        :node="type"
+        :activeVariation="activeVariation || {}" />
       <NuxtImg v-else class="relative flex-1 skeleton" src="/images/placeholder.jpg" :alt="product?.name || 'Product'" />
 
       <div class="lg:max-w-md xl:max-w-lg md:py-2 w-full">
@@ -92,7 +100,7 @@ const disabledAddToCart = computed(() => !type.value || stockStatus.value === St
         <div class="grid gap-2 my-8 text-sm">
           <div class="flex items-center gap-2">
             <span class="text-gray-400">{{ $t('messages.shop.availability') }}: </span>
-            <StockStatus :status="stockStatus" @updated="mergeLiveStockStatus" />
+            <StockStatus :stockStatus @updated="mergeLiveStockStatus" />
           </div>
           <div class="flex items-center gap-2">
             <span class="text-gray-400">{{ $t('messages.shop.sku') }}: </span>
