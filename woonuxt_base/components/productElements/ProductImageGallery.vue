@@ -40,8 +40,8 @@ watch(
     <SaleBadge :node="node" class="absolute text-base top-4 right-4" />
     <NuxtImg
       class="rounded-xl object-contain w-full min-w-[350px] skeleton"
-      width="700"
-      height="700"
+      width="640"
+      height="640"
       fit="outside"
       format="webp"
       :alt="imageToShow.altText || imageToShow.title || node.name"
@@ -52,8 +52,8 @@ watch(
         v-for="galleryImg in galleryImages"
         :key="galleryImg.databaseId"
         class="cursor-pointer rounded-xl skeleton"
-        width="700"
-        height="700"
+        width="640"
+        height="640"
         fit="outside"
         format="webp"
         :src="galleryImg.sourceUrl"
