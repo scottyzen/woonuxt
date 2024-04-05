@@ -45,10 +45,10 @@ export function useSorting() {
       const bRegularPrice: number = b.rawRegularPrice ? parseFloat([...b.rawRegularPrice.split(',')].reduce((a, b) => String(Math.max(Number(a), Number(b))))) : 0;
       const aDiscount: number = a.onSale ? Math.round(((aSalePrice - aRegularPrice) / aRegularPrice) * 100) : 0;
       const bDiscount: number = b.onSale ? Math.round(((bSalePrice - bRegularPrice) / bRegularPrice) * 100) : 0;
-      const aName: string = a.name ? a.name : '';
-      const bName: string = b.name ? b.name : '';
-      const aRating: number = a.averageRating ? a.averageRating : 0;
-      const bRating: number = b.averageRating ? b.averageRating : 0;
+      const aName: string = a.name || '';
+      const bName: string = b.name || '';
+      const aRating: number = a.averageRating || 0;
+      const bRating: number = b.averageRating || 0;
 
       switch (orderby) {
         case 'price':
