@@ -44,9 +44,10 @@ watch(
       height="640"
       fit="outside"
       format="webp"
-      :alt="imageToShow.altText || imageToShow.title || node.name"
+      :alt="imageToShow.altText || node.name"
       :title="imageToShow.title || node.name"
-      :src="imageToShow.sourceUrl || '/images/placeholder.jpg'" />
+      :src="imageToShow.sourceUrl || '/images/placeholder.jpg'"
+      fetchpriority="high" />
     <div v-if="gallery.nodes.length" class="my-4 gallery-images">
       <NuxtImg
         v-for="galleryImg in galleryImages"
@@ -57,7 +58,7 @@ watch(
         fit="outside"
         format="webp"
         :src="galleryImg.sourceUrl"
-        :alt="galleryImg.altText || galleryImg.title || node.name"
+        :alt="galleryImg.altText || node.name"
         :title="galleryImg.title || node.name"
         @click.native="changeImage(galleryImg)"
         loading="lazy" />
