@@ -27,7 +27,7 @@ const changeImage = (image: any) => {
 watch(
   () => props.activeVariation,
   (newVal) => {
-    if (newVal) {
+    if (newVal?.image) {
       const foundImage = galleryImages.value.find((img) => img.databaseId === newVal.image?.databaseId);
       if (foundImage) imageToShow.value = foundImage;
     }
