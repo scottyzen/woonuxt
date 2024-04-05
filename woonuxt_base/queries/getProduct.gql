@@ -13,8 +13,21 @@ query getProduct($slug: ID!) {
       nodes {
         variation
         name
-        label
+        id
         options
+        label
+        scope
+        ... on GlobalProductAttribute {
+          slug
+          terms {
+            nodes {
+              name
+              slug
+              taxonomyName
+              databaseId
+            }
+          }
+        }
       }
     }
     productCategories {

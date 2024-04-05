@@ -25,18 +25,12 @@ fragment VariableProduct on VariableProduct {
   totalSales
   stockQuantity
   lowStockAmount
-  attributes {
-    nodes {
-      name
-      options
-      variation
-      visible
-    }
-  }
   defaultAttributes {
     nodes {
       name
       attributeId
+      value
+      label
     }
   }
   variations(first: 999) {
