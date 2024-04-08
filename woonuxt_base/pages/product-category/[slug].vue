@@ -7,7 +7,7 @@ const slug = route.params.slug;
 const { data } = await useAsyncGql('getProducts', { slug });
 setProducts(data.value?.products?.nodes || []);
 
-onMounted(() => {
+onActivated(() => {
   if (!isQueryEmpty.value) updateProductList();
 });
 
