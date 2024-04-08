@@ -33,7 +33,7 @@ fragment VariableProduct on VariableProduct {
       label
     }
   }
-  variations(first: 999) {
+  variations(first: 100) {
     nodes {
       name
       databaseId
