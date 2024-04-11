@@ -51,8 +51,6 @@ export default defineNuxtConfig({
 
   nitro: {
     routeRules: {
-      '/': { prerender: true },
-      '/products/**': { swr: 3600 },
       '/checkout/order-received/**': { ssr: false },
       '/order-summary/**': { ssr: false },
     },
