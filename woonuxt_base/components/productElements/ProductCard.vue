@@ -36,11 +36,11 @@ const colorVariableImage = computed(() => {
   return null;
 });
 
-const handleImgFail = (parentEl) => {
+const handleImgFail = (parentEl, image) => {
   if (parentEl) {
     const img = parentEl.querySelector('img');
     if (img?.src) {
-      img.src = fallbackSrc;
+      img.src = image?.sourceUrl || '/images/placeholder.jpg';
       img.srcset = '';
     }
   }
@@ -64,7 +64,7 @@ const handleImgFail = (parentEl) => {
         class="skeleton"
         densities="x1 x2"
         placeholder="/images/placeholder.jpg"
-        @error="handleImgFail($el)" />
+        @error="handleImgFail($el, node.image)" />
       <img
         v-if="colorVariableImage"
         :src="colorVariableImage.producCardSourceUrl"
