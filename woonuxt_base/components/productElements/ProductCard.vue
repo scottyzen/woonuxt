@@ -60,7 +60,7 @@ const colorVariableImage = computed(() => {
         format="webp"
         class="skeleton"
         densities="x1 x2"
-        @error="$event.target.src = '/images/placeholder.jpg'" />
+        placeholder="/images/placeholder.jpg" />
     </NuxtLink>
     <div class="p-2">
       <StarRating :rating="node.averageRating" :count="node.reviewCount" />
