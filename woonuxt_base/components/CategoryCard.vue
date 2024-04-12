@@ -5,6 +5,7 @@ const imageSrc = ref(props.node.image?.sourceUrl || '/images/placeholder.jpg');
 const fallbackSrc = `${props.node.image?.sourceUrl}` || '/images/placeholder.jpg';
 
 const handleImgFail = () => {
+  console.log('Image failed to load');
   imageSrc.value = fallbackSrc;
 };
 </script>
