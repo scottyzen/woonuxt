@@ -64,7 +64,6 @@ const handleImgFail = (parentEl, image) => {
         format="webp"
         class="skeleton"
         densities="x1 x2"
-        placeholder="/images/placeholder.jpg"
         @error="handleImgFail($el, props.node?.image?.producCardSourceUrl)" />
       <img
         v-if="colorVariableImage"
