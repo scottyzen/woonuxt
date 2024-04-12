@@ -1,12 +1,17 @@
 <script setup lang="ts">
 const { formatURI } = useHelpers();
 const props = defineProps(['node']);
-const imageSrc = ref(props.node.image?.sourceUrl || '/images/placeholder.jpg');
+const imageSrc = props.node.image?.sourceUrl;
 const fallbackSrc = `${props.node.image?.sourceUrl}` || '/images/placeholder.jpg';
 
-const handleImgFail = () => {
-  console.log('Image failed to load', fallbackSrc);
-  imageSrc.value = fallbackSrc;
+const handleImgFail = (parentEl: HTMLElement) => {
+  if (parentEl) {
+    const img = parentEl.querySelector('img');
+    if (img?.src) {
+      img.src = fallbackSrc;
+      img.srcset = '';
+    }
+  }
 };
 </script>
 
@@ -27,7 +32,7 @@ const handleImgFail = () => {
       fit="inside"
       format="webp"
       densities="x1 x2"
-      @error="handleImgFail" />
+      @error="handleImgFail($el)" />
     <div class="absolute inset-x-0 bottom-0 opacity-50 bg-gradient-to-t from-black to-transparent h-1/2" />
     <span class="relative z-10 mt-auto mb-2 text-sm font-semibold text-white capitalize md:text-base md:mb-4" v-html="node.name" />
   </NuxtLink>
