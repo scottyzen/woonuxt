@@ -5,6 +5,7 @@ const imageSrc = props.node.image?.sourceUrl;
 const fallbackSrc = `${props.node.image?.sourceUrl}` || '/images/placeholder.jpg';
 
 const handleImgFail = (parentEl: HTMLElement) => {
+  console.log('handleImgFail');
   if (parentEl) {
     const img = parentEl.querySelector('img');
     if (img?.src) {

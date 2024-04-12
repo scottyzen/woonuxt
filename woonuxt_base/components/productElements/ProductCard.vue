@@ -35,21 +35,24 @@ const colorVariableImage = computed(() => {
   }
   return null;
 });
+
+const handleImgFail = (parentEl) => {
+  if (parentEl) {
+    const img = parentEl.querySelector('img');
+    if (img?.src) {
+      img.src = fallbackSrc;
+      img.srcset = '';
+    }
+  }
+};
 </script>
 
 <template>
   <div class="relative product-card">
     <NuxtLink :to="`/product/${formatURI(node.slug)}`" :title="node.name">
       <SaleBadge :node="node" class="absolute top-2 right-2" />
-      <img
-        v-if="colorVariableImage"
-        :src="colorVariableImage.producCardSourceUrl"
-        :alt="colorVariableImage?.altText || node.name"
-        :title="colorVariableImage?.title || node.name"
-        loading="lazy"
-        class="skeleton" />
       <NuxtImg
-        v-else
+        v-if="!colorVariableImage"
         :width="imgWidth"
         :height="imgHeight"
         :src="mainImage || '/images/placeholder.jpg'"
@@ -60,7 +63,15 @@ const colorVariableImage = computed(() => {
         format="webp"
         class="skeleton"
         densities="x1 x2"
-        placeholder="/images/placeholder.jpg" />
+        placeholder="/images/placeholder.jpg"
+        @error="handleImgFail($el)" />
+      <img
+        v-if="colorVariableImage"
+        :src="colorVariableImage.producCardSourceUrl"
+        :alt="colorVariableImage?.altText || node.name"
+        :title="colorVariableImage?.title || node.name"
+        loading="lazy"
+        class="skeleton" />
     </NuxtLink>
     <div class="p-2">
       <StarRating :rating="node.averageRating" :count="node.reviewCount" />
