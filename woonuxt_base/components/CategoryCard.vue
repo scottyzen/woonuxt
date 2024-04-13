@@ -31,7 +31,6 @@ const handleImgFail = (parentEl: HTMLElement) => {
       :title="node.image?.title || node.name"
       loading="lazy"
       fit="inside"
-      format="webp"
       densities="x1 x2"
       @error="handleImgFail($el)" />
     <div class="absolute inset-x-0 bottom-0 opacity-50 bg-gradient-to-t from-black to-transparent h-1/2" />

@@ -7,7 +7,6 @@
       src="/images/hero-4.jpg"
       alt="Hero image"
       loading="eager"
-      format="webp"
       fit="outside"
       sizes="sm:100vw lg:1400px"
       fetchpriority="high"

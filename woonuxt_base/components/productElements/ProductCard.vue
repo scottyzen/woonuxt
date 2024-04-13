@@ -61,7 +61,6 @@ const handleImgFail = (parentEl, image) => {
         :title="node.image?.title || node.name"
         :loading="index <= 3 ? 'eager' : 'lazy'"
         fit="outside"
-        format="webp"
         class="skeleton"
         densities="x1 x2"
         @error="handleImgFail($el, props.node?.image?.producCardSourceUrl)" />
