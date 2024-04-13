@@ -34,6 +34,7 @@ export default defineNuxtConfig({
     provider: process.env.IMAGE_PROVIDER || 'ipx',
     domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
     format: ['webp'],
+    dir: resolve('./public'),
   },
 
   hooks: {
