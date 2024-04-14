@@ -1,5 +1,5 @@
 <script setup>
-const { formatURI } = useHelpers();
+const { formatURI, imageFallback } = useHelpers();
 const route = useRoute();
 const props = defineProps({
   node: { type: Object, default: null },
@@ -35,17 +35,6 @@ const colorVariableImage = computed(() => {
   }
   return null;
 });
-
-const handleImgFail = (parentEl, image) => {
-  if (parentEl) {
-    const img = parentEl.querySelector('img');
-    console.log('handleImgFail', img, image);
-    if (img?.src) {
-      img.src = image || '/images/placeholder.jpg';
-      img.srcset = '';
-    }
-  }
-};
 </script>
 
 <template>
@@ -63,7 +52,7 @@ const handleImgFail = (parentEl, image) => {
         fit="outside"
         class="skeleton"
         densities="x1 x2"
-        @error="handleImgFail($el, props.node?.image?.producCardSourceUrl)" />
+        @error="imageFallback" />
       <img
         v-if="colorVariableImage"
         :src="colorVariableImage.producCardSourceUrl"
