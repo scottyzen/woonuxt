@@ -169,13 +169,18 @@ export function useHelpers() {
     };
   };
 
+  const alreadyFailedImages = new Set<string>();
+
   /**
    * Fallback for images that fail to load.
    * @param {Event} event - Image error event.
    */
   const imageFallback = async (event: Event) => {
     const { target } = event;
+
     if (target instanceof HTMLImageElement) {
+      if (alreadyFailedImages.has(target.src)) return;
+      alreadyFailedImages.add(target.src);
       const lastURL = decodeURIComponent(target.src).split('http').pop();
       const fallbackSrc = lastURL ? `http${lastURL}` : '/images/placeholder.jpg';
       target.src = fallbackSrc;
