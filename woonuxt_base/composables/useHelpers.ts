@@ -176,7 +176,7 @@ export function useHelpers() {
   const imageFallback = async (event: Event) => {
     const { target } = event;
     if (target instanceof HTMLImageElement) {
-      const lastURL = target.src.split('http').pop();
+      const lastURL = decodeURIComponent(target.src).split('http').pop();
       const fallbackSrc = lastURL ? `http${lastURL}` : '/images/placeholder.jpg';
       target.src = fallbackSrc;
       target.srcset = '';
