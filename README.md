@@ -4,7 +4,7 @@
 
 ## Introduction
 
-The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for WooCommerce. It's built on Nuxt 3 and uses the WPGraphQL API to retrieve all the data it needs. It's also fully customizable and can be extended with your own components and modules. You can see a live demo of WooNuxt by clicking the button below.
+The goal of WooNuxt is to provide a modern, fast, and SEO-friendly front-end for WooCommerce. It's built on Nuxt 3 and uses the WPGraphQL API to retrieve all the data it needs. It's also fully customizable and can be extended with your own components and modules. You can see a live demo of WooNuxt by clicking the button below.
 
 - [**Live Demo on Netlify**](https://v3.woonuxt.com/) ⚡️
 - [**Live Demo on Vercel**](https://woonuxt-v3.vercel.app/) ⚡️
@@ -13,7 +13,7 @@ The goal of WooNuxt is to provide a modern, fast, and SEO friendly front-end for
 
 ## Troubleshooting
 
-You can find some common errors and how to fix them in [here](https://woonuxt.com/faq#some-common-errors-to-troubleshoot)
+You can find some common errors and how to fix them [here](https://woonuxt.com/faq#some-common-errors-to-troubleshoot)
 
 &nbsp;
 
@@ -30,7 +30,7 @@ You can find some common errors and how to fix them in [here](https://woonuxt.co
 
 ## How to customize & extend WooNuxt 🎨
 
-WooNuxt now uses the Nuxt layers feature to make it easy to customize any part of WooNuxt just like you would with a WordPress theme with it's child theme.
+WooNuxt now uses the Nuxt layers feature to make it easy to customize any part of WooNuxt just like you would with a WordPress theme with its child theme.
 
 Example: I have created a pages directory and added a `contact.vue` file in the pages directory. This will override the default contact page that comes with WooNuxt. You can do this with any page or component. So think of the `woonuxt_base` folder as the parent theme and the root folder as the child theme.
 

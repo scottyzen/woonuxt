@@ -1,6 +1,4 @@
 <script setup lang="ts">
-const { imageFallback } = useHelpers();
-
 const props = defineProps({
   mainImage: { type: Object, required: true },
   gallery: { type: Object, required: true },
@@ -48,8 +46,7 @@ watch(
       :alt="imageToShow.altText || node.name"
       :title="imageToShow.title || node.name"
       :src="imageToShow.sourceUrl || '/images/placeholder.jpg'"
-      fetchpriority="high"
-      @error="imageFallback" />
+      fetchpriority="high" />
     <div v-if="gallery.nodes.length" class="my-4 gallery-images">
       <NuxtImg
         v-for="galleryImg in galleryImages"
@@ -62,8 +59,7 @@ watch(
         :alt="galleryImg.altText || node.name"
         :title="galleryImg.title || node.name"
         @click.native="changeImage(galleryImg)"
-        loading="lazy"
-        @error="imageFallback" />
+        loading="lazy" />
     </div>
   </div>
 </template>

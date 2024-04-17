@@ -1,5 +1,5 @@
 <script setup>
-const { formatURI, imageFallback } = useHelpers();
+const { formatURI } = useHelpers();
 const route = useRoute();
 const props = defineProps({
   node: { type: Object, default: null },
@@ -51,8 +51,7 @@ const colorVariableImage = computed(() => {
         :loading="index <= 3 ? 'eager' : 'lazy'"
         fit="outside"
         class="skeleton"
-        densities="x1 x2"
-        @error="imageFallback" />
+        densities="x1 x2" />
       <img
         v-if="colorVariableImage"
         :src="colorVariableImage.producCardSourceUrl"
