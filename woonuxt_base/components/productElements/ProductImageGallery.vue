@@ -38,8 +38,8 @@ watch(
 <template>
   <div v-if="mainImage">
     <SaleBadge :node="node" class="absolute text-base top-4 right-4" />
-    <NuxtImg
-      class="rounded-xl object-contain w-full min-w-[350px] skeleton"
+    <NuxtPicture
+      :imgAttrs="{ class: 'rounded-xl object-contain w-full min-w-[350px] skeleton' }"
       width="640"
       height="640"
       fit="outside"
@@ -48,10 +48,10 @@ watch(
       :src="imageToShow.sourceUrl || '/images/placeholder.jpg'"
       fetchpriority="high" />
     <div v-if="gallery.nodes.length" class="my-4 gallery-images">
-      <NuxtImg
+      <NuxtPicture
         v-for="galleryImg in galleryImages"
         :key="galleryImg.databaseId"
-        class="cursor-pointer rounded-xl skeleton"
+        :imgAttrs="{ class: 'cursor-pointer rounded-xl skeleton' }"
         width="640"
         height="640"
         fit="outside"

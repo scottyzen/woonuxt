@@ -41,7 +41,7 @@ const colorVariableImage = computed(() => {
   <div class="relative product-card">
     <NuxtLink :to="`/product/${formatURI(node.slug)}`" :title="node.name">
       <SaleBadge :node="node" class="absolute top-2 right-2" />
-      <NuxtImg
+      <NuxtPicture
         v-if="!colorVariableImage"
         :width="imgWidth"
         :height="imgHeight"
@@ -50,7 +50,6 @@ const colorVariableImage = computed(() => {
         :title="node.image?.title || node.name"
         :loading="index <= 3 ? 'eager' : 'lazy'"
         fit="outside"
-        class="skeleton"
         densities="x1 x2" />
       <img
         v-if="colorVariableImage"
