@@ -32,7 +32,7 @@ export default defineNuxtConfig({
 
   image: {
     domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
-    format: ['avif'],
+    screens: { sm: 640, md: 768, lg: 1024, xl: 1280 },
   },
 
   hooks: {

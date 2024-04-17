@@ -40,14 +40,15 @@ const salePercentage = computed(() => {
           :alt="productType.image?.altText || productType.name"
           :title="productType.image?.title || productType.name"
           loading="lazy" />
-        <NuxtPicture
+        <NuxtImg
           v-else
           src="/images/placeholder.jpg"
           width="64"
           height="64"
-          :imgAttrs="{ class: 'w-16 h-16 rounded-md skeleton' }"
+          class="w-16 h-16 rounded-md skeleton"
           :alt="productType.image?.altText || productType.name"
           :title="productType.image?.title || productType.name"
+          format="avif"
           loading="lazy" />
       </NuxtLink>
       <div class="flex-1">
