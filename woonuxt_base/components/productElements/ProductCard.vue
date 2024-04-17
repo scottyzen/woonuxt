@@ -49,8 +49,7 @@ const colorVariableImage = computed(() => {
         :alt="node.image?.altText || node.name"
         :title="node.image?.title || node.name"
         :loading="index <= 3 ? 'eager' : 'lazy'"
-        fit="outside"
-        densities="x1 x2" />
+        fit="outside" />
       <img
         v-if="colorVariableImage"
         :src="colorVariableImage.producCardSourceUrl"
