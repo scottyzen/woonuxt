@@ -6,6 +6,9 @@
 
 The goal of WooNuxt is to provide a modern, fast, and SEO-friendly front-end for WooCommerce. It's built on Nuxt 3 and uses the WPGraphQL API to retrieve all the data it needs. It's also fully customizable and can be extended with your own components and modules. You can see a live demo of WooNuxt by clicking the button below.
 
+> [!CAUTION]
+> Please note that there is currently an issue with Netlify and the @Nuxt/image module which is causing images to not load. For the time being, I recommend deploying WooNuxt on Vercel and checking out the demo that is hosted there (link below).
+
 - [**Live Demo on Netlify**](https://v3.woonuxt.com/) ⚡️
 - [**Live Demo on Vercel**](https://woonuxt-v3.vercel.app/) ⚡️
 
