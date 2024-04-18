@@ -42,6 +42,8 @@ watch(
 </template>
 
 <style lang="postcss">
+@import url('primevue/resources/themes/aura-light-green/theme.css');
+
 html,
 body {
   @apply bg-gray-100 text-gray-900;

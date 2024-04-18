@@ -17,7 +17,7 @@ export function useCart() {
     try {
       const { cart, customer, viewer, paymentGateways } = await GqlGetCart();
 
-      const { updateCustomer, updateViewer } = useAuth();
+      const { updateCustomer, updateViewer, logoutUser } = useAuth();
       if (cart) updateCart(cart);
       if (customer) updateCustomer(customer);
       if (viewer) updateViewer(viewer);
@@ -25,7 +25,8 @@ export function useCart() {
 
       return cart;
     } catch (error: any) {
-      console.error(error);
+      const errorMessage = error?.gqlErrors?.[0].message;
+      if (errorMessage) console.error(errorMessage);
     }
 
     return null;

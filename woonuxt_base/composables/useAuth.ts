@@ -39,6 +39,7 @@ export const useAuth = () => {
     isPending.value = true;
     try {
       const { logout } = await GqlLogout();
+      console.log('logout', logout);
       if (logout) {
         isPending.value = false;
         await refreshCart();

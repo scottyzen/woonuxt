@@ -30,6 +30,7 @@
     "nuxt": "^3.11.2",
     "nuxt-graphql-client": "^0.2.34",
     "nuxt-icon": "^0.6.10",
+    "nuxt-primevue": "^0.3.1",
     "prettier": "^3.2.5",
     "woonuxt-settings": "^1.0.53"
   }
