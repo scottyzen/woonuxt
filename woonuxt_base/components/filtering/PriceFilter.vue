@@ -35,7 +35,8 @@ watch(isFiltersActive, () => {
           class="bg-white border rounded-lg max-w-full border-gray-200 leading-none w-auto p-2 pl-6 md:text-sm"
           type="number"
           placeholder="From"
-          min="0" />
+          min="0"
+          @change="applyPrice" />
         <label for="price-from" class="leading-none px-2 text-gray-400 absolute">€</label>
       </div>
       <div class="flex relative items-center">
@@ -45,11 +46,12 @@ watch(isFiltersActive, () => {
           class="bg-white border rounded-lg max-w-full border-gray-200 leading-none w-auto p-2 pl-6 md:text-sm"
           type="number"
           placeholder="Up to"
-          min="1" />
+          min="1"
+          @change="applyPrice" />
         <label for="price-to" class="leading-none px-2 text-gray-400 absolute">€</label>
       </div>
       <div class="mx-1 mt-1 col-span-full px-1">
-        <Slider v-model="price" range @slideend="applyPrice" :min="0" :max="maxPrice" />
+        <Slider v-model="price" aria-labelledby="price-range" range @slideend="applyPrice" :min="0" :max="maxPrice" />
       </div>
     </div>
   </div>

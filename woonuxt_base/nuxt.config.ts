@@ -35,6 +35,12 @@ export default defineNuxtConfig({
     domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
   },
 
+  primevue: {
+    components: {
+      include: ['Slider'],
+    },
+  },
+
   hooks: {
     'pages:extend'(pages) {
       const addPage = (name: string, path: string, file: string) => {
