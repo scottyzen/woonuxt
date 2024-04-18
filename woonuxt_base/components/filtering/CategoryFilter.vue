@@ -10,7 +10,7 @@ const route = useRoute();
 const { data } = await useAsyncGql('getProductCategories');
 
 const allCategories = data.value?.productCategories?.nodes || [];
-const { getFilter, setFilter, isFiltersActive } = await useFiltering();
+const { getFilter, setFilter, isFiltersActive } = useFiltering();
 const selectedTerms = ref(getFilter('category') || []);
 
 const categorySlug = route.params.categorySlug;

@@ -17,7 +17,7 @@ export function useCart() {
     try {
       const { cart, customer, viewer, paymentGateways } = await GqlGetCart();
 
-      const { updateCustomer, updateViewer, logoutUser } = useAuth();
+      const { updateCustomer, updateViewer } = useAuth();
       if (cart) updateCart(cart);
       if (customer) updateCustomer(customer);
       if (viewer) updateViewer(viewer);
