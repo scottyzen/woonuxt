@@ -48,7 +48,7 @@ watch(isFiltersActive, () => {
           min="1" />
         <label for="price-to" class="leading-none px-2 text-gray-400 absolute">€</label>
       </div>
-      <div class="mx-1 mt-1 col-span-full">
+      <div class="mx-1 mt-1 col-span-full px-1">
         <Slider v-model="price" range @slideend="applyPrice" :min="0" :max="maxPrice" />
       </div>
     </div>
