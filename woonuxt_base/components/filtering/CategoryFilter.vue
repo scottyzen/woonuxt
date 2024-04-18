@@ -5,7 +5,6 @@ const props = defineProps({
   showCount: { type: Boolean, default: false },
   open: { type: Boolean, default: true },
 });
-const route = useRoute();
 
 const { data } = await useAsyncGql('getProductCategories');
 
@@ -13,6 +12,7 @@ const allCategories = data.value?.productCategories?.nodes || [];
 const { getFilter, setFilter, isFiltersActive } = useFiltering();
 const selectedTerms = ref(getFilter('category') || []);
 
+const route = useRoute();
 const categorySlug = route.params.categorySlug;
 if (categorySlug) selectedTerms.value = [categorySlug];
 
