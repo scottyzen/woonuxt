@@ -19,7 +19,7 @@ export default defineNuxtConfig({
 
   components: [{ path: resolve('./components'), pathPrefix: false }],
 
-  modules: ['woonuxt-settings', 'nuxt-graphql-client', '@nuxtjs/tailwindcss', 'nuxt-icon', '@nuxt/image', '@nuxtjs/i18n'],
+  modules: ['woonuxt-settings', 'nuxt-graphql-client', '@nuxtjs/tailwindcss', 'nuxt-icon', '@nuxt/image', '@nuxtjs/i18n', 'nuxt-primevue'],
 
   'graphql-client': {
     clients: {
@@ -33,6 +33,12 @@ export default defineNuxtConfig({
   image: {
     domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
     screens: { sm: 640, md: 768, lg: 1024, xl: 1280 },
+  },
+
+  primevue: {
+    components: {
+      include: ['Slider'],
+    },
   },
 
   hooks: {

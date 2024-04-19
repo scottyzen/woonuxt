@@ -25,7 +25,8 @@ export function useCart() {
 
       return cart;
     } catch (error: any) {
-      console.error(error);
+      const errorMessage = error?.gqlErrors?.[0].message;
+      if (errorMessage) console.error(errorMessage);
     }
 
     return null;

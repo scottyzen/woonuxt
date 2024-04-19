@@ -1,5 +1,5 @@
 fragment Terms on Product {
-  terms(first: 1000) {
+  terms(first: 100) {
     nodes {
       taxonomyName
       slug
