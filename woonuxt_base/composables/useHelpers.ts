@@ -169,6 +169,8 @@ export function useHelpers() {
     };
   };
 
+  const alreadyFailedImages = new Set<string>();
+
   return {
     isShowingMobileMenu,
     wooNuxtVersionInfo,

@@ -31,8 +31,8 @@ export default defineNuxtConfig({
   },
 
   image: {
-    provider: 'ipx',
     domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
+    screens: { sm: 640, md: 768, lg: 1024, xl: 1280 },
   },
 
   primevue: {
@@ -57,8 +57,6 @@ export default defineNuxtConfig({
 
   nitro: {
     routeRules: {
-      '/': { prerender: true },
-      '/products/**': { swr: 3600 },
       '/checkout/order-received/**': { ssr: false },
       '/order-summary/**': { ssr: false },
     },

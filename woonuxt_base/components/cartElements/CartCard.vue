@@ -48,6 +48,7 @@ const salePercentage = computed(() => {
           class="w-16 h-16 rounded-md skeleton"
           :alt="productType.image?.altText || productType.name"
           :title="productType.image?.title || productType.name"
+          format="avif"
           loading="lazy" />
       </NuxtLink>
       <div class="flex-1">
