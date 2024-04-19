@@ -2,13 +2,11 @@
   "name": "woonuxt",
   "private": true,
   "scripts": {
-    "dev": "nuxi dev",
-    "build": "nuxi build",
-    "generate": "nuxi generate",
-    "preview": "nuxi preview",
-    "postinstall": "nuxi prepare",
-    "lint": "eslint --fix --ext .vue,.ts,.tsx,.js,.mjs .",
-    "pretty": "prettier --write .",
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
     "serve": "nuxi generate && npx serve .output/public -l 8080"
   },
   "dependencies": {

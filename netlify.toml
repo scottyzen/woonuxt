@@ -3,7 +3,4 @@
   NUXT_IMAGE_DOMAINS = "Comma separated list of domains. example.com,example2.com"
 
 [build]
-  command = "nuxi generate"
-
-[images]
-  remote_images = ["https://secure.woonuxt.com/.*"]
+  command = "nuxt generate"
