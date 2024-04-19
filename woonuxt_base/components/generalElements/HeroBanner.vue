@@ -9,7 +9,7 @@
       loading="eager"
       fit="outside"
       sizes="sm:100vw lg:1400px"
-      format="avif"
+      format="wep"
       fetchpriority="high"
       preload />
     <div class="container absolute inset-0 flex flex-col items-start justify-center bg-gradient-to-l from-gray-200 md:bg-none p-8">
