@@ -11,10 +11,6 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' },
   },
 
-  experimental: {
-    sharedPrerenderData: true,
-  },
-
   plugins: [resolve('./plugins/init.ts')],
 
   components: [{ path: resolve('./components'), pathPrefix: false }],
@@ -32,8 +28,6 @@ export default defineNuxtConfig({
 
   image: {
     domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
-    provider: process.env.IMAGE_PROVIDER || 'ipx',
-    screens: { sm: 640, md: 768, lg: 1024, xl: 1280 },
   },
 
   primevue: {
