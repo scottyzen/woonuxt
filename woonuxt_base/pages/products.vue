@@ -1,28 +1,17 @@
 <script setup lang="ts">
 const { setProducts, updateProductList } = useProducts();
-let temporaryProducts = [] as any[];
-
-const fetchAllProducts = async (after = '') => {
-  const { products } = await GqlGetProducts({ after });
-  if (products?.nodes.length) temporaryProducts.push(...products.nodes);
-
-  if (products?.pageInfo.hasNextPage) {
-    const endCursor = products.pageInfo.endCursor;
-    if (endCursor) await fetchAllProducts(endCursor);
-  }
-
-  return temporaryProducts;
-};
-
-const allProducts = await fetchAllProducts();
-if (allProducts.length) setProducts(allProducts);
+const route = useRoute();
 
 const { isQueryEmpty } = useHelpers();
+
+const { data } = await useAsyncGql('getProducts');
+const allProducts = (data.value?.products?.nodes as Product[]) || [];
+setProducts(allProducts);
+
 onActivated(() => {
   if (!isQueryEmpty.value) updateProductList();
 });
 
-const route = useRoute();
 watch(
   () => route.query,
   () => {
@@ -50,5 +39,5 @@ useHead({
       <ProductGrid />
     </div>
   </div>
-  <NoProductsFound v-else> Could not fecth products from your store. Please check your configuration.</NoProductsFound>
+  <NoProductsFound v-else>Could not fecth products from your store. Please check your configuration.</NoProductsFound>
 </template>
