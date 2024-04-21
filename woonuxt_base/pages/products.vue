@@ -8,7 +8,7 @@ const { data } = await useAsyncGql('getProducts');
 const allProducts = (data.value?.products?.nodes || []) as Product[];
 setProducts(allProducts);
 
-onActivated(() => {
+onMounted(() => {
   if (!isQueryEmpty.value) updateProductList();
 });
 
