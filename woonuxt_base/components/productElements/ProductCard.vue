@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const { formatURI } = useHelpers();
 const route = useRoute();
 const props = defineProps({
@@ -22,18 +22,17 @@ watch(
   },
 );
 
-const mainImage = computed(() => props.node?.image?.producCardSourceUrl);
-
-const colorVariableImage = computed(() => {
+const mainImage = computed<string>(() => props.node?.image?.producCardSourceUrl || props.node?.image?.sourceUrl || '/images/placeholder.jpg');
+const imagetoDisplay = computed<string>(() => {
   if (paColor.value.length) {
     const activeColorImage = props.node?.variations?.nodes.filter((variation) => {
       const hasMatchingAttributes = variation.attributes.nodes.some((attribute) => paColor.value.some((color) => attribute.value.includes(color)));
       const hasMatchingSlug = paColor.value.some((color) => variation.slug.includes(color));
       return hasMatchingAttributes || hasMatchingSlug;
     });
-    if (activeColorImage?.length) return activeColorImage[0].image;
+    if (activeColorImage?.length) return activeColorImage[0].image?.producCardSourceUrl || activeColorImage[0].image?.sourceUrl || mainImage.value;
   }
-  return null;
+  return mainImage.value;
 });
 </script>
 
@@ -42,23 +41,16 @@ const colorVariableImage = computed(() => {
     <NuxtLink :to="`/product/${formatURI(node.slug)}`" :title="node.name">
       <SaleBadge :node="node" class="absolute top-2 right-2" />
       <NuxtImg
-        v-if="!colorVariableImage"
+        v-if="imagetoDisplay"
         :width="imgWidth"
         :height="imgHeight"
-        :src="mainImage || '/images/placeholder.jpg'"
+        :src="imagetoDisplay"
         :alt="node.image?.altText || node.name"
         :title="node.image?.title || node.name"
         :loading="index <= 3 ? 'eager' : 'lazy'"
         fit="outside"
         class="skeleton"
         format="webp" />
-      <img
-        v-if="colorVariableImage"
-        :src="colorVariableImage.producCardSourceUrl"
-        :alt="colorVariableImage?.altText || node.name"
-        :title="colorVariableImage?.title || node.name"
-        loading="lazy"
-        class="skeleton" />
     </NuxtLink>
     <div class="p-2">
       <StarRating :rating="node.averageRating" :count="node.reviewCount" />
