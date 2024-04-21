@@ -51,7 +51,7 @@ const colorVariableImage = computed(() => {
         :loading="index <= 3 ? 'eager' : 'lazy'"
         fit="outside"
         class="skeleton"
-        format="wep" />
+        format="webp" />
       <img
         v-if="colorVariableImage"
         :src="colorVariableImage.producCardSourceUrl"

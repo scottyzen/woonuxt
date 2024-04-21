@@ -48,7 +48,7 @@ watch(
       :title="imageToShow.title || node.name"
       :src="imageToShow.sourceUrl || '/images/placeholder.jpg'"
       fetchpriority="high"
-      format="wep" />
+      format="webp" />
     <div v-if="gallery.nodes.length" class="my-4 gallery-images">
       <NuxtImg
         v-for="galleryImg in galleryImages"
@@ -62,7 +62,7 @@ watch(
         :title="galleryImg.title || node.name"
         @click.native="changeImage(galleryImg)"
         loading="lazy"
-        format="wep" />
+        format="webp" />
     </div>
   </div>
 </template>
