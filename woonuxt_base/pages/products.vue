@@ -5,7 +5,7 @@ const route = useRoute();
 const { isQueryEmpty } = useHelpers();
 
 const { data } = await useAsyncGql('getProducts');
-const allProducts = (data.value?.products?.nodes as Product[]) || [];
+const allProducts = (data.value?.products?.nodes || []) as Product[];
 setProducts(allProducts);
 
 onActivated(() => {
