@@ -1,5 +1,5 @@
 <script setup>
-import Slider from 'primevue/slider';
+import Slider from '@vueform/slider';
 
 const { getFilter, setFilter, isFiltersActive } = useFiltering();
 const runtimeConfig = useRuntimeConfig();
@@ -35,8 +35,7 @@ watch(isFiltersActive, () => {
           class="bg-white border rounded-lg max-w-full border-gray-200 leading-none w-auto p-2 pl-6 md:text-sm"
           type="number"
           placeholder="From"
-          min="0"
-          @change="applyPrice" />
+          min="0" />
         <label for="price-from" class="leading-none px-2 text-gray-400 absolute">€</label>
       </div>
       <div class="flex relative items-center">
@@ -46,21 +45,14 @@ watch(isFiltersActive, () => {
           class="bg-white border rounded-lg max-w-full border-gray-200 leading-none w-auto p-2 pl-6 md:text-sm"
           type="number"
           placeholder="Up to"
-          min="1"
-          @change="applyPrice" />
+          min="1" />
         <label for="price-to" class="leading-none px-2 text-gray-400 absolute">€</label>
       </div>
-      <div class="mx-1 mt-1 col-span-full px-1">
-        <Slider v-model="price" aria-labelledby="price-range" range @slideend="applyPrice" :min="0" :max="maxPrice" />
+      <div class="mx-1 mt-1 col-span-full">
+        <Slider v-model="price" :tooltips="false" :min="0" :max="maxPrice" ariaLabelledby="price-from price-to" @change="applyPrice" />
       </div>
     </div>
   </div>
 </template>
 
-<style lang="postcss">
-@import url('primevue/resources/themes/aura-light-green/theme.css');
-
-.p-slider-range {
-  @apply bg-primary;
-}
-</style>
+<style src="@vueform/slider/themes/default.css"></style>

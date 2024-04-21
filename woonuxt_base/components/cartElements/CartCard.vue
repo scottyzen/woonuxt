@@ -1,7 +1,7 @@
 <script setup>
 const { updateItemQuantity } = useCart();
 const { addToWishlist } = useWishlist();
-const { formatURI } = useHelpers();
+const { formatURI, fallbackImage } = useHelpers();
 
 const { item } = defineProps({
   item: { type: Object, required: true },
@@ -31,24 +31,13 @@ const salePercentage = computed(() => {
   <SwipeCard @remove="removeItem">
     <div v-if="productType" class="flex items-center gap-3 group">
       <NuxtLink :to="productSlug">
-        <img
-          v-if="productType.image"
-          width="64"
-          height="64"
-          class="w-16 h-16 rounded-md skeleton"
-          :src="productType.image.cartSourceUrl || productType.image.sourceUrl || item.product.image.sourceUrl"
-          :alt="productType.image?.altText || productType.name"
-          :title="productType.image?.title || productType.name"
-          loading="lazy" />
         <NuxtImg
-          v-else
-          src="/images/placeholder.jpg"
           width="64"
           height="64"
           class="w-16 h-16 rounded-md skeleton"
+          :src="productType.image.cartSourceUrl || productType.image.sourceUrl || item.product.image.sourceUrl || fallbackImage"
           :alt="productType.image?.altText || productType.name"
           :title="productType.image?.title || productType.name"
-          format="webp"
           loading="lazy" />
       </NuxtLink>
       <div class="flex-1">

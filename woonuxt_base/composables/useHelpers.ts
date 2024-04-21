@@ -11,6 +11,7 @@ export function useHelpers() {
   const wooNuxtSEO = runtimeConfig.public?.WOO_NUXT_SEO as WooNuxtSEOItem[];
   const frontEndUrl = runtimeConfig.public?.FRONT_END_URL?.replace(/\/$/, '') || null;
   const isDev: boolean = process.env.NODE_ENV === 'development';
+  const fallbackImage = '/images/placeholder.jpg';
 
   /**
    * Toggles the mobile menu.
@@ -169,8 +170,6 @@ export function useHelpers() {
     };
   };
 
-  const alreadyFailedImages = new Set<string>();
-
   return {
     isShowingMobileMenu,
     wooNuxtVersionInfo,
@@ -179,6 +178,7 @@ export function useHelpers() {
     wooNuxtSEO,
     frontEndUrl,
     isDev,
+    fallbackImage,
     formatArray,
     arraysEqual,
     clearAllCookies,

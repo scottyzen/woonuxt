@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { fallbackImage } = useHelpers();
+
 const props = defineProps({
   mainImage: { type: Object, required: true },
   gallery: { type: Object, required: true },
@@ -7,7 +9,7 @@ const props = defineProps({
 });
 
 const primaryImage = computed(() => ({
-  sourceUrl: props.mainImage.sourceUrl || '/images/placeholder.jpg',
+  sourceUrl: props.mainImage.sourceUrl || fallbackImage,
   title: props.mainImage.title,
   altText: props.mainImage.altText,
   databaseId: props.mainImage.databaseId,
@@ -36,7 +38,7 @@ watch(
 </script>
 
 <template>
-  <div v-if="mainImage">
+  <div>
     <SaleBadge :node="node" class="absolute text-base top-4 right-4" />
     <NuxtImg
       class="rounded-xl object-contain w-full min-w-[350px] skeleton"
@@ -46,7 +48,7 @@ watch(
       fit="outside"
       :alt="imageToShow.altText || node.name"
       :title="imageToShow.title || node.name"
-      :src="imageToShow.sourceUrl || '/images/placeholder.jpg'"
+      :src="imageToShow.sourceUrl || fallbackImage"
       fetchpriority="high"
       format="webp" />
     <div v-if="gallery.nodes.length" class="my-4 gallery-images">
