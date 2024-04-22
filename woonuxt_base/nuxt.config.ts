@@ -2,6 +2,8 @@ import { createResolver } from '@nuxt/kit';
 const { resolve } = createResolver(import.meta.url);
 
 export default defineNuxtConfig({
+  ssr: true,
+
   app: {
     head: {
       titleTemplate: `%s | ${process.env.SITE_TITLE ?? 'WooNuxt'}`,
@@ -24,11 +26,6 @@ export default defineNuxtConfig({
         corsOptions: { mode: 'cors', credentials: 'include' },
       },
     },
-  },
-
-  image: {
-    domains: process.env.NUXT_IMAGE_DOMAINS ? process.env.NUXT_IMAGE_DOMAINS.replace(/ /g, '').split(',') : [],
-    dir: 'public/images',
   },
 
   hooks: {
