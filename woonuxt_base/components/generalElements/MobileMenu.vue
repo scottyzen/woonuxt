@@ -7,8 +7,8 @@ const { toggleMobileMenu, wooNuxtVersionInfo } = useHelpers();
     <CloseIcon class="bg-white rounded-xl shadow-xl p-1.5" @click="toggleMobileMenu(false)" />
     <div class="mt-8 text-center">{{ $t('messages.general.menu') }}</div>
     <MainMenu class="m-4 grid p-4 text-gray-500 gap-6" />
-    <div class="mt-auto text-center p-8 text-[10px] text-gray-400 uppercase">
-      <a href="/" :title="wooNuxtVersionInfo">{{ wooNuxtVersionInfo }}</a>
+    <div class="mt-auto text-center p-8 text-[10px] text-gray-400">
+      <a href="/" :title="wooNuxtVersionInfo">WooNuxt v{{ wooNuxtVersionInfo }}</a>
     </div>
   </div>
 </template>

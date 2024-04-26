@@ -47,6 +47,7 @@ interface Viewer {
   username?: string | null;
   nicename?: string | null;
   wooSessionToken?: string | null;
+  avatar?: { url?: string | null } | null;
 }
 
 interface ProductCategory {
@@ -95,8 +96,8 @@ interface Reviews {
 }
 
 interface Product {
-  name?: string | null;
-  databaseId?: number | null;
+  name: string;
+  databaseId: number;
   id?: string | null;
   slug?: string | null;
   sku?: string | null;
@@ -198,6 +199,7 @@ interface Variation {
 
 interface ProductImage {
   sourceUrl?: string | null | undefined;
+  cartSourceUrl?: string | null | undefined;
   altText?: string | null | undefined;
   title?: string | null | undefined;
 }

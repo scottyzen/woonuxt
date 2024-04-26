@@ -14,6 +14,9 @@ query getCart {
     username
     nicename
     wooSessionToken
+    avatar {
+      url
+    }
   }
   paymentGateways {
     nodes {

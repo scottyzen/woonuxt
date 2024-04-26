@@ -16,8 +16,8 @@ const { product } = defineProps<{ product: Product }>();
         v-if="product?.image?.cartSourceUrl"
         class="rounded-lg object-cover h-20 w-20"
         :src="product.image?.cartSourceUrl || product.image?.sourceUrl || '/images/placeholder.jpg'"
-        :alt="product.image?.altText || product.name || 'Product Image'"
-        :title="product.image?.altText || product.name || 'Product Image'"
+        :alt="product.image?.altText || product.name"
+        :title="product.image?.altText || product.name"
         width="100"
         height="120" />
     </NuxtLink>
