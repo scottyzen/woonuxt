@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. I'll try my best to keep it updated.
 
+# 3.6.0 (27-04-2024)
+
+## CHANGES
+
+- Updated dependencies
+- Fix images not loading on Netlify
+- Add users avatar to the header when logged in
+- Add placeholder fot category and product images
+- Add basic `error.vue` page
+
+# 3.5.0
+
+## CHANGES (19-04-2024)
+
+- Update styling of PriceFilter component
+- Switch slider to Primevue
+- Update hover text color in Filters component
+- Add keep-alive to NuxtPage (Improves DX)
+- fetchAllProducts to get all products
+- Updated dependencies
+
 ## 3.4.27 (06-04-2024)
 
 ### Bug Fixes
