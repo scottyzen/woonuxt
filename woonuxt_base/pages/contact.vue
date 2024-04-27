@@ -15,15 +15,6 @@
         inventore. Maxime officiis tempore voluptatum ipsa, ab possimus atque corporis repellendus obcaecati, numquam fuga ullam doloremque ea reprehenderit earum quam culpa neque
         dolor sint voluptates qui rem? Ipsam reiciendis non illum?
       </p>
-      <NuxtImg
-        class="hidden"
-        src="https://secure.woonuxt.com/wp-content/uploads/2021/10/Screenshot-2021-10-10-at-11.10.03-a.m.-768x826.png"
-        width="500"
-        height="500"
-        alt="Image test"
-        loading="lazy"
-        fit="outside"
-        format="webp" />
     </div>
   </div>
 </template>
