@@ -1,0 +1,9 @@
+[template.environment]
+  GQL_HOST = "WordPress URL http://example.com"
+  NUXT_IMAGE_DOMAINS = "Comma separated list of domains. example.com,example2.com"
+
+[build]
+  command = "nuxt generate"
+
+[images]
+  remote_images = ["https://secure.woonuxt.com/.*"]
