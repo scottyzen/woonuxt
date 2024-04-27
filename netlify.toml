@@ -6,4 +6,4 @@
   command = "nuxt generate"
 
 [images]
-  remote_images = ["https://example.com/.*"]
+  remote_images = ["https://secure.woonuxt.com/.*"]
