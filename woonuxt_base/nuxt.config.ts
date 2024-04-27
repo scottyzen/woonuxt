@@ -11,6 +11,10 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' },
   },
 
+  experimental: {
+    sharedPrerenderData: true,
+  },
+
   plugins: [resolve('./plugins/init.ts')],
 
   components: [{ path: resolve('./components'), pathPrefix: false }],

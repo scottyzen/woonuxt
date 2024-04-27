@@ -3,15 +3,15 @@
     <NuxtImg
       width="1400"
       height="800"
-      class="object-cover w-full h-[420px] lg:h-[560px] xl:h-[640px] skeleton"
+      class="object-cover w-full h-[420px] lg:h-[560px] xl:h-[640px]"
       src="/images/hero-4.jpg"
       alt="Hero image"
       loading="eager"
-      fit="outside"
       sizes="sm:100vw lg:1400px"
-      format="webp"
       fetchpriority="high"
-      preload />
+      preload
+      placeholder
+      placeholder-class="blur-xl" />
     <div class="container absolute inset-0 flex flex-col items-start justify-center bg-gradient-to-l from-gray-200 md:bg-none p-8">
       <h1 class="text-3xl font-bold md:mb-4 md:text-4xl lg:text-6xl">Just landed.</h1>
       <h2 class="text-lg font-bold md:mb-4 lg:text-3xl">The New Year Collection</h2>

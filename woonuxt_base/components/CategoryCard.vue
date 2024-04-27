@@ -1,6 +1,9 @@
 <script setup lang="ts">
 const { formatURI, fallbackImage } = useHelpers();
-defineProps(['node']);
+const props = defineProps({
+  node: { type: Object, required: true },
+  imageLoading: { type: String as PropType<'lazy' | 'eager'>, default: 'lazy' },
+});
 
 const imageWidth = 220;
 const ImageHeight = Math.round(imageWidth * 1.25);
@@ -14,13 +17,13 @@ const ImageHeight = Math.round(imageWidth * 1.25);
     <NuxtImg
       :width="imageWidth"
       :height="ImageHeight"
-      class="absolute inset-0 object-cover w-full h-full skeleton"
+      class="absolute inset-0 object-cover w-full h-full"
       :src="node.image?.sourceUrl || fallbackImage"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
-      loading="lazy"
-      format="avif"
-      fit="outside" />
+      :loading="imageLoading"
+      placeholder
+      placeholder-class="blur-xl" />
     <div class="absolute inset-x-0 bottom-0 opacity-50 bg-gradient-to-t from-black to-transparent h-1/2" />
     <span class="relative z-10 mt-auto mb-2 text-sm font-semibold text-white capitalize md:text-base md:mb-4" v-html="node.name" />
   </NuxtLink>

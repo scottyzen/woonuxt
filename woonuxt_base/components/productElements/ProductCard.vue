@@ -48,10 +48,8 @@ const imagetoDisplay = computed<string>(() => {
         :alt="node.image?.altText || node.name"
         :title="node.image?.title || node.name"
         :loading="index <= 3 ? 'eager' : 'lazy'"
-        fit="outside"
-        class="skeleton"
-        format="avif"
-        placeholder />
+        placeholder
+        placeholder-class="blur-xl" />
     </NuxtLink>
     <div class="p-2">
       <StarRating :rating="node.averageRating" :count="node.reviewCount" />

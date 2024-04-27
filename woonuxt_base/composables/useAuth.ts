@@ -110,11 +110,14 @@ export const useAuth = () => {
     }
   };
 
+  const avatar = computed(() => viewer.value?.avatar?.url || null);
+
   return {
     viewer,
     customer,
     isPending,
     orders,
+    avatar,
     loginUser,
     updateCustomer,
     updateViewer,
