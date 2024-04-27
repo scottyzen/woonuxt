@@ -50,7 +50,8 @@ const imagetoDisplay = computed<string>(() => {
         :loading="index <= 3 ? 'eager' : 'lazy'"
         fit="outside"
         class="skeleton"
-        format="webp" />
+        format="avif"
+        placeholder />
     </NuxtLink>
     <div class="p-2">
       <StarRating :rating="node.averageRating" :count="node.reviewCount" />
