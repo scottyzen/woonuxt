@@ -83,7 +83,7 @@ const disabledAddToCart = computed(() => {
         :gallery="product.galleryImages!"
         :node="type"
         :activeVariation="activeVariation || {}" />
-      <NuxtImg v-else class="relative flex-1 skeleton" format="webp" src="/images/placeholder.jpg" :alt="product?.name || 'Product'" />
+      <NuxtImg v-else class="relative flex-1 skeleton" src="/images/placeholder.jpg" :alt="product?.name || 'Product'" />
 
       <div class="lg:max-w-md xl:max-w-lg md:py-2 w-full">
         <div class="flex justify-between mb-4">

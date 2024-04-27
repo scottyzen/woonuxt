@@ -45,12 +45,10 @@ watch(
       :imgAttrs="{ class: 'rounded-xl object-contain w-full min-w-[350px] skeleton' }"
       width="640"
       height="640"
-      fit="outside"
       :alt="imageToShow.altText || node.name"
       :title="imageToShow.title || node.name"
       :src="imageToShow.sourceUrl || fallbackImage"
-      fetchpriority="high"
-      format="webp" />
+      fetchpriority="high" />
     <div v-if="gallery.nodes.length" class="my-4 gallery-images">
       <NuxtImg
         v-for="galleryImg in galleryImages"
@@ -58,13 +56,11 @@ watch(
         class="cursor-pointer rounded-xl skeleton"
         width="640"
         height="640"
-        fit="outside"
         :src="galleryImg.sourceUrl"
         :alt="galleryImg.altText || node.name"
         :title="galleryImg.title || node.name"
         @click.native="changeImage(galleryImg)"
-        loading="lazy"
-        format="webp" />
+        loading="lazy" />
     </div>
   </div>
 </template>

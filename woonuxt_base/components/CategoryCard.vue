@@ -18,9 +18,7 @@ const ImageHeight = Math.round(imageWidth * 1.25);
       :src="node.image?.sourceUrl || fallbackImage"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
-      loading="lazy"
-      format="avif"
-      fit="outside" />
+      loading="lazy" />
     <div class="absolute inset-x-0 bottom-0 opacity-50 bg-gradient-to-t from-black to-transparent h-1/2" />
     <span class="relative z-10 mt-auto mb-2 text-sm font-semibold text-white capitalize md:text-base md:mb-4" v-html="node.name" />
   </NuxtLink>
