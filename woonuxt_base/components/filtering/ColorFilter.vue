@@ -1,25 +1,15 @@
-<script setup>
+<script setup lang="ts">
 const { getFilter, setFilter, isFiltersActive } = useFiltering();
 
 const props = defineProps({
-  filterSlug: { type: String, default: '', required: true },
-  label: { type: String, default: '' },
-  hideEmpty: { type: Boolean, default: false },
-  showCount: { type: Boolean, default: false },
-  open: { type: Boolean, default: true },
+  productAttribute: { type: Object as PropType<GlobalProductAttribute>, required: true },
+  allPaTerms: { type: Array, default: [] as ProductTerm[] },
 });
 
-const TaxonomyEnum = props?.filterSlug.toUpperCase().replace('_', '');
-
-const { data } = await useAsyncGql('getAllTerms', {
-  taxonomies: TaxonomyEnum,
-  hideEmpty: props.hideEmpty,
-});
-
-const allPaTerms = data.value.terms?.nodes || [];
-const selectedTerms = ref(getFilter(props.filterSlug) || []);
-
-const isOpen = ref(props.open);
+const selectedTerms = ref<string[]>(getFilter(props.productAttribute.slug) || []);
+const filterTitle = ref<string>(props.productAttribute.label || props.productAttribute.slug || 'Colour');
+const isOpen = ref<boolean>(props.productAttribute.openByDefault || false);
+const showCount = ref<boolean>(props.productAttribute.showCount || false);
 
 watch(isFiltersActive, () => {
   // uncheck all checkboxes when filters are cleared
@@ -28,13 +18,13 @@ watch(isFiltersActive, () => {
 
 // Update the URL when the checkbox is changed
 const checkboxChanged = () => {
-  setFilter(props.filterSlug, selectedTerms.value);
+  setFilter(props.productAttribute.slug, selectedTerms.value);
 };
 </script>
 
 <template>
   <div class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center" @click="isOpen = !isOpen">
-    <span>{{ label || filterSlug }}</span>
+    <span>{{ filterTitle }}</span>
     <Icon name="ion:chevron-down-outline" class="transform" :class="isOpen ? 'rotate-180' : ''" />
   </div>
   <div v-show="isOpen" class="mt-3 mr-6 max-h-[240px] grid gap-1.5 swatches overflow-auto custom-scrollbar">

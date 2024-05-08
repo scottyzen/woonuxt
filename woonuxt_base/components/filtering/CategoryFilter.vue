@@ -1,22 +1,19 @@
-<script setup>
+<script setup lang="ts">
+const route = useRoute();
 const props = defineProps({
   label: { type: String, default: '' },
   hideEmpty: { type: Boolean, default: false },
   showCount: { type: Boolean, default: false },
   open: { type: Boolean, default: true },
+  allCategories: { type: Array, required: true },
 });
 
-const { data } = await useAsyncGql('getProductCategories');
-
-const allCategories = data.value?.productCategories?.nodes || [];
 const { getFilter, setFilter, isFiltersActive } = useFiltering();
-const selectedTerms = ref(getFilter('category') || []);
-
-const route = useRoute();
+const selectedTerms = ref<string[]>(getFilter('category') || []);
 const categorySlug = route.params.categorySlug;
 if (categorySlug) selectedTerms.value = [categorySlug];
 
-const isOpen = ref(props.open);
+const isOpen = ref<Boolean>(props.open);
 
 watch(isFiltersActive, () => {
   // uncheck all checkboxes when filters are cleared

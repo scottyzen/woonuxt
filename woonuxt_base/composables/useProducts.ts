@@ -1,8 +1,17 @@
+import { data } from '../public/all_products.json';
+
 let allProducts = [] as Product[];
 
 export function useProducts() {
   // Declare the state variables and the setter functions
   const products = useState<Product[]>('products');
+
+  async function initProducts() {
+    console.log('Initializing products...');
+    const allProducts = data?.products?.nodes || [];
+    // @ts-ignore
+    setProducts(allProducts);
+  }
 
   /**
    * Sets the products state variable and the allProducts variable.
@@ -10,6 +19,8 @@ export function useProducts() {
    */
   function setProducts(newProducts: Product[]): void {
     if (!Array.isArray(newProducts)) throw new Error('Products must be an array.');
+    if (newProducts.length === 0) throw new Error('Products array cannot be empty.');
+    if (allProducts.length > 0) return;
     products.value = newProducts ?? [];
     allProducts = JSON.parse(JSON.stringify(newProducts));
   }
@@ -42,5 +53,5 @@ export function useProducts() {
     }
   };
 
-  return { products, allProducts, setProducts, updateProductList };
+  return { products, allProducts, initProducts, setProducts, updateProductList };
 }

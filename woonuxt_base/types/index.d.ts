@@ -73,8 +73,10 @@ interface ProductAttribute {
 }
 
 interface ProductTerm {
-  taxonomyName?: string | null;
-  slug?: string | null;
+  taxonomyName: string;
+  slug: string;
+  name: string;
+  count: number;
 }
 
 interface Author {
@@ -277,3 +279,11 @@ interface WooNuxtSEOItem {
   url?: string;
   handle?: string;
 }
+
+type GlobalProductAttribute = {
+  slug: string;
+  showCount: boolean;
+  openByDefault: boolean;
+  label: string;
+  hideEmpty: boolean;
+};

@@ -1,8 +1,11 @@
 <script setup lang="ts">
 const route = useRoute();
+const { initProducts } = useProducts();
 const { isShowingCart, toggleCart } = useCart();
 const { isShowingMobileMenu, toggleMobileMenu } = useHelpers();
 const { addBodyClass, removeBodyClass } = useHelpers();
+
+initProducts();
 
 const closeCartAndMenu = () => {
   toggleCart(false);

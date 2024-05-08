@@ -1,12 +1,8 @@
 <script setup lang="ts">
-const { setProducts, updateProductList } = useProducts();
+const { updateProductList, products } = useProducts();
 const route = useRoute();
 
 const { isQueryEmpty } = useHelpers();
-
-const { data } = await useAsyncGql('getProducts');
-const allProducts = (data.value?.products?.nodes || []) as Product[];
-setProducts(allProducts);
 
 onMounted(() => {
   if (!isQueryEmpty.value) updateProductList();
@@ -27,7 +23,7 @@ useHead({
 </script>
 
 <template>
-  <div class="container flex items-start gap-16" v-if="allProducts.length">
+  <div class="container flex items-start gap-16" v-if="products.length">
     <Filters />
 
     <div class="w-full">

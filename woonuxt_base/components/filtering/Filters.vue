@@ -1,11 +1,26 @@
-<script setup>
+<script setup lang="ts">
 const { isFiltersActive } = useFiltering();
 const { removeBodyClass } = useHelpers();
 const runtimeConfig = useRuntimeConfig();
 
-const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES || [];
+const globalProductAttributes: GlobalProductAttribute[] = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES || [];
+const taxonomies = globalProductAttributes?.map((attr) => attr.slug.toUpperCase().replace('_', '')) || [];
+
 // hide-categories prop is used to hide the category filter on the product category page
 const { hideCategories } = defineProps({ hideCategories: { type: Boolean, default: false } });
+const { data: categories } = await useAsyncGql('getProductCategories');
+const allCategories = computed(() => categories.value?.productCategories?.nodes);
+
+const { data: terms } = await useAsyncGql('getAllTerms', { taxonomies, hideEmpty: true });
+const formattedTaxonomies = computed(() => {
+  return terms.value?.terms?.nodes?.reduce((acc, term) => {
+    if (!acc[term.taxonomyName]) {
+      acc[term.taxonomyName] = [];
+    }
+    acc[term.taxonomyName].push(term);
+    return acc;
+  }, {});
+});
 </script>
 
 <template>
@@ -13,26 +28,14 @@ const { hideCategories } = defineProps({ hideCategories: { type: Boolean, defaul
     <OrderByDropdown class="block w-full md:hidden" />
     <div class="relative z-30 grid mb-12 space-y-8 divide-y">
       <PriceFilter />
-      <CategoryFilter v-if="!hideCategories" />
-      <div v-for="attribute in globalProductAttributes" :key="attribute.slug">
-        <ColorFilter
-          v-if="attribute.slug == 'pa_color' || attribute.slug == 'pa_colour'"
-          :filter-slug="attribute.slug"
-          :label="attribute.label"
-          :open="attribute.openByDefault"
-          :show-count="attribute.showCount"
-          :hide-empty="attribute.hideEmpty" />
-        <GlobalFilter
-          v-else
-          :filter-slug="attribute.slug"
-          :label="attribute.label"
-          :open="attribute.openByDefault"
-          :show-count="attribute.showCount"
-          :hide-empty="attribute.hideEmpty" />
+      <CategoryFilter v-if="categories" :allCategories />
+      <div v-if="terms" v-for="attribute in globalProductAttributes" :key="attribute.slug">
+        <ColorFilter v-if="attribute.slug == 'pa_color' || attribute.slug == 'pa_colour'" :productAttribute="attribute" :all-pa-terms="formattedTaxonomies[attribute.slug]" />
+        <GlobalFilter v-else :productAttribute="attribute" :all-pa-terms="formattedTaxonomies[attribute.slug]" />
       </div>
       <OnSaleFilter />
-      <LazyStarRatingFilter />
-      <LazyResetFiltersButton v-if="isFiltersActive" />
+      <StarRatingFilter />
+      <ResetFiltersButton v-if="isFiltersActive" />
     </div>
   </aside>
   <div class="fixed inset-0 z-50 hidden bg-black opacity-25 filter-overlay" @click="removeBodyClass('show-filters')"></div>

@@ -4,6 +4,7 @@ query getAllTerms($hideEmpty: Boolean = false, $taxonomies: [TaxonomyEnum]!, $fi
       name
       slug
       count
+      taxonomyName
     }
   }
 }

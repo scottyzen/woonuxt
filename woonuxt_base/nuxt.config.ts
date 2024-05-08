@@ -19,17 +19,20 @@ export default defineNuxtConfig({
 
   components: [{ path: resolve('./components'), pathPrefix: false }],
 
-  modules: ['woonuxt-settings', 'nuxt-graphql-client', '@nuxtjs/tailwindcss', 'nuxt-icon', '@nuxt/image', '@nuxtjs/i18n', resolve('./modules/myFile.ts')],
-
-  image: {
-    provider: 'netlify',
-    domains: ['https://secure.woonuxt.com/', 'https://woonuxt.com', 'https://cdn.woonuxt.com'],
-  },
+  modules: [
+    // 'woonuxt-settings',
+    resolve('./modules/myFile.ts'),
+    'nuxt-graphql-client',
+    '@nuxtjs/tailwindcss',
+    'nuxt-icon',
+    '@nuxt/image',
+    '@nuxtjs/i18n',
+  ],
 
   'graphql-client': {
     clients: {
       default: {
-        host: process.env.GQL_HOST || 'http://localhost:4000/graphql',
+        host: process.env.GQL_HOST ?? 'http://localhost:4000/graphql',
         corsOptions: { mode: 'cors', credentials: 'include' },
       },
     },
