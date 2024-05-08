@@ -3,11 +3,18 @@ const { getFilter, setFilter, isFiltersActive } = useFiltering();
 
 const props = defineProps({
   productAttribute: { type: Object as PropType<GlobalProductAttribute>, required: true },
-  allPaTerms: { type: Array, default: [] as ProductTerm[] },
 });
 
+const TaxonomyEnum = props.productAttribute.slug.toUpperCase().replace('_', '');
+
+const { data } = await useAsyncGql('getAllTerms', {
+  taxonomies: TaxonomyEnum,
+  hideEmpty: props.productAttribute.hideEmpty,
+});
+const allPaTerms = computed(() => data.value?.terms?.nodes || []);
+
 const selectedTerms = ref<string[]>(getFilter(props.productAttribute.slug) || []);
-const filterTitle = ref<string>(props.productAttribute.label || props.productAttribute.slug || 'Colour');
+const filterTitle = ref<string>(props.productAttribute?.label || props.productAttribute?.slug || 'Colour');
 const isOpen = ref<boolean>(props.productAttribute.openByDefault || false);
 const showCount = ref<boolean>(props.productAttribute.showCount || false);
 
@@ -23,7 +30,7 @@ const checkboxChanged = () => {
 </script>
 
 <template>
-  <div class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center" @click="isOpen = !isOpen">
+  <div v-if="allPaTerms.length" class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center" @click="isOpen = !isOpen">
     <span>{{ filterTitle }}</span>
     <Icon name="ion:chevron-down-outline" class="transform" :class="isOpen ? 'rotate-180' : ''" />
   </div>
