@@ -21,11 +21,6 @@ export default defineNuxtConfig({
 
   modules: ['woonuxt-settings', 'nuxt-graphql-client', '@nuxtjs/tailwindcss', 'nuxt-icon', '@nuxt/image', '@nuxtjs/i18n'],
 
-  image: {
-    provider: 'netlify',
-    domains: ['secure.woonuxt.com'],
-  },
-
   'graphql-client': {
     clients: {
       default: {
