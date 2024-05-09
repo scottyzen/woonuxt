@@ -1,4 +1,4 @@
-import { createResolver, defineNuxtModule, logger } from '@nuxt/kit';
+import { createResolver, defineNuxtModule, logger, useNuxtApp } from '@nuxt/kit';
 import { existsSync, writeFileSync } from 'fs';
 import { $fetch } from 'ohmyfetch';
 
@@ -250,7 +250,7 @@ export default defineNuxtModule<ModuleOptions>({
           method: 'POST',
           body: JSON.stringify({
             query: allProductsQuery,
-            variables: { after, first: 20 },
+            variables: { after, first: 100 },
           }),
         });
 
@@ -270,14 +270,14 @@ export default defineNuxtModule<ModuleOptions>({
       }
     };
 
-    const allProducts = await fetchAllProducts();
-
     nuxt.hook('build:before', async () => {
       try {
-        // if (existsSync(src)) {
-        //   logger.info('All products file already exists.');
-        //   return;
-        // }
+        if (existsSync(src)) {
+          logger.info('All products file already exists.');
+          return;
+        }
+
+        const allProducts = await fetchAllProducts();
 
         writeFileSync(
           src,
@@ -289,6 +289,7 @@ export default defineNuxtModule<ModuleOptions>({
             },
           }),
         );
+
         logger.success('All products file created.');
       } catch (error) {
         logger.error('Error copying file:', error);

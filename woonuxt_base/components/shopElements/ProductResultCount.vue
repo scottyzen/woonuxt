@@ -6,7 +6,7 @@ const page = ref(parseInt(route.params.pageNumber as string) || 1);
 </script>
 
 <template>
-  <span class="text-sm font-light">
+  <span v-if="products" class="text-sm font-light">
     <span>Showing </span>
     <span v-if="products.length === 0" class="font-normal">No products</span>
     <template v-else>

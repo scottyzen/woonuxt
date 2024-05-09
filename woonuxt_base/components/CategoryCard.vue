@@ -12,7 +12,7 @@ const ImageHeight = Math.round(imageWidth * 1.25);
 <template>
   <NuxtLink
     v-if="node"
-    :to="`/product-category/${formatURI(node.slug)}`"
+    :to="`/products?filter=category[${formatURI(node.slug)}]`"
     class="relative flex justify-center overflow-hidden border border-white rounded-xl item snap-mandatory snap-x">
     <NuxtImg
       :width="imageWidth"

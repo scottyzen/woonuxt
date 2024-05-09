@@ -7,7 +7,6 @@ export function useProducts() {
   const products = useState<Product[]>('products');
 
   async function initProducts() {
-    console.log('Initializing products...');
     const allProducts = data?.products?.nodes || [];
     // @ts-ignore
     setProducts(allProducts);

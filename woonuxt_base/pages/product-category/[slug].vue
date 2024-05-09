@@ -1,5 +1,5 @@
 <script setup>
-const { setProducts, updateProductList } = useProducts();
+const { setProducts, updateProductList, products } = useProducts();
 const { isQueryEmpty } = useHelpers();
 const route = useRoute();
 const slug = route.params.slug;
@@ -26,7 +26,7 @@ useHead({
 </script>
 
 <template>
-  <div class="container flex items-start gap-16">
+  <div v-if="products" class="container flex items-start gap-16">
     <Filters :hide-categories="true" />
 
     <div class="w-full">
