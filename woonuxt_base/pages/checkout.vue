@@ -134,7 +134,7 @@ useSeoMeta({
           </div>
 
           <!-- Pay methods -->
-          <div v-if="paymentGateways.length" class="mt-2 col-span-full">
+          <div v-if="paymentGateways.nodes.length" class="mt-2 col-span-full">
             <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.billing.paymentOptions') }}</h2>
             <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :paymentGateways />
             <StripeElement v-if="stripe" v-show="orderInput.paymentMethod.id == 'stripe'" :stripe @updateElement="handleStripeElement" />

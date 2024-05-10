@@ -1,32 +1,32 @@
-<script setup>
-const props = defineProps({
-  modelValue: { type: [String, Object], required: true },
-  paymentGateways: { type: Array, required: true },
-});
+<script setup lang="ts">
+const props = defineProps<{
+  modelValue: string | object;
+  paymentGateways: PaymentGateways;
+}>();
 
 const paymentMethod = toRef(props, 'modelValue');
-const activePaymentMethod = computed(() => paymentMethod.value);
+const activePaymentMethod = computed<PaymentGateway>(() => paymentMethod.value as PaymentGateway);
 const emits = defineEmits(['update:modelValue']);
 
-const updatePaymentMethod = (value) => {
+const updatePaymentMethod = (value: any) => {
   emits('update:modelValue', value);
 };
 
 onMounted(() => {
   // Emit first payment method
-  if (props.paymentGateways.length) updatePaymentMethod(props.paymentGateways[0]);
+  if (props.paymentGateways?.nodes.length) updatePaymentMethod(props.paymentGateways?.nodes[0]);
 });
 </script>
 
 <template>
   <div class="flex gap-4 leading-tight flex-wrap">
     <div
-      v-for="gateway in paymentGateways"
+      v-for="gateway in paymentGateways?.nodes"
       :key="gateway.id"
       class="option"
       :class="{ 'active-option': paymentMethod === gateway.id }"
       @click="updatePaymentMethod(gateway)"
-      :title="gateway.description">
+      :title="gateway?.description || gateway?.title || 'Payment Method'">
       <icon v-if="gateway.id === 'stripe'" name="ion:card-outline" size="20" />
       <icon v-else-if="gateway.id === 'paypal'" name="ion:logo-paypal" size="20" />
       <icon v-else name="ion:cash-outline" size="20" />

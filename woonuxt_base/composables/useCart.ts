@@ -4,13 +4,12 @@ import type { AddToCartInput } from '#gql';
  * @name useCart
  * @description A composable that handles the cart in local storage
  */
-
 export function useCart() {
-  const cart = useState<Cart | null>('cart');
+  const cart = useState<Cart>('cart');
   const isShowingCart = useState<boolean>('isShowingCart', () => false);
   const isUpdatingCart = useState<boolean>('isUpdatingCart', () => false);
   const isUpdatingCoupon = useState<boolean>('isUpdatingCoupon', () => false);
-  const paymentGateways = useState<PaymentGateway[]>('paymentGateways', () => []);
+  const paymentGateways = useState<PaymentGateways>('paymentGateways', () => null);
   const { logGQLError } = useHelpers();
 
   // Refesh the cart from the server
@@ -22,7 +21,7 @@ export function useCart() {
       if (cart) updateCart(cart);
       if (customer) updateCustomer(customer);
       if (viewer) updateViewer(viewer);
-      if (paymentGateways) updatePaymentGateways(paymentGateways.nodes);
+      if (paymentGateways) updatePaymentGateways(paymentGateways);
 
       return { cart, customer, viewer, paymentGateways };
     } catch (error: any) {
@@ -36,7 +35,7 @@ export function useCart() {
     cart.value = payload;
   }
 
-  function updatePaymentGateways(payload: PaymentGateway[]): void {
+  function updatePaymentGateways(payload: PaymentGateways): void {
     paymentGateways.value = payload;
   }
 

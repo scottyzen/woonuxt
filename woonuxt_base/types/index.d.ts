@@ -1,26 +1,11 @@
+type Cart = import('#gql').GetCartQuery['cart'];
+type Customer = import('#gql').GetCartQuery['customer'];
+type Viewer = import('#gql').GetCartQuery['viewer'];
+type PaymentGateways = import('#gql').GetCartQuery['paymentGateways'];
+
 interface ProductAttributeInput {
   attributeName: string;
   attributeValue: string;
-}
-
-// interface AddToCartInput {
-//   clientMutationId?: string;
-//   extraData?: string;
-//   productId: number;
-//   quantity: number;
-//   variation?: ProductAttributeInput[];
-//   variationId?: number | null | undefined;
-// }
-
-interface Customer {
-  lastName?: string | null;
-  email?: string | null;
-  firstName?: string | null;
-  username?: string | null;
-  databaseId?: number | null;
-  sessionToken?: string | null;
-  billing?: Address | null;
-  shipping?: Address | null;
 }
 
 interface Address {
@@ -36,18 +21,6 @@ interface Address {
   postcode?: string | null;
   state?: string | null;
   company?: string | null;
-}
-
-interface Viewer {
-  lastName?: string | null;
-  email?: string | null;
-  databaseId: number;
-  id: string;
-  firstName?: string | null;
-  username?: string | null;
-  nicename?: string | null;
-  wooSessionToken?: string | null;
-  avatar?: { url?: string | null } | null;
 }
 
 interface ProductCategory {
@@ -220,6 +193,7 @@ interface CartContents {
 interface PaymentGateway {
   title?: string | null;
   id?: string | null;
+  description?: string | null;
 }
 
 interface AppliedCoupon {
@@ -233,20 +207,6 @@ interface ShippingMethodRate {
   cost?: string | null;
   id: string;
   label?: string | null;
-}
-
-interface Cart {
-  total?: string | null;
-  rawTotal?: string | null;
-  subtotal?: string | null;
-  totalTax?: string | null;
-  discountTotal?: string | null;
-  shippingTotal?: string | null;
-  chosenShippingMethods?: Array<string | null> | null;
-  isEmpty?: boolean | null;
-  appliedCoupons?: Array<AppliedCoupon | null> | null;
-  availableShippingMethods?: Array<{ rates?: Array<ShippingMethodRate | null> | null } | null> | null;
-  contents?: CartContents | null;
 }
 
 interface LineItem {
