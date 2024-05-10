@@ -58,6 +58,13 @@ export function useHelpers() {
   }
 
   /**
+   * Clear all local storage.
+   */
+  function clearAllLocalStorage(): void {
+    localStorage.clear();
+  }
+
+  /**
    * Replaces a query parameter in a URL.Replace a query parameter in a URL
    * @param {string} param - The query parameter to replace.
    * @param {string} newval - The new value for the query parameter.
@@ -170,6 +177,17 @@ export function useHelpers() {
     };
   };
 
+  /**
+   *  Logs a GraphQL error message.
+   * @param error
+   */
+  const logGQLError = (error: any) => {
+    const errorMessage = error?.gqlErrors?.[0]?.message;
+    if (errorMessage) {
+      console.error(errorMessage);
+    }
+  };
+
   return {
     isShowingMobileMenu,
     wooNuxtVersionInfo,
@@ -182,6 +200,7 @@ export function useHelpers() {
     formatArray,
     arraysEqual,
     clearAllCookies,
+    clearAllLocalStorage,
     replaceQueryParam,
     addBodyClass,
     removeBodyClass,
@@ -194,5 +213,6 @@ export function useHelpers() {
     scrollToTop,
     stripHtml,
     debounce,
+    logGQLError,
   };
 }
