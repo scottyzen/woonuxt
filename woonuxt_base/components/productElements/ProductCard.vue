@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const { formatURI } = useHelpers();
 const route = useRoute();
 const props = defineProps({
   node: { type: Object, default: null },
@@ -38,7 +37,7 @@ const imagetoDisplay = computed<string>(() => {
 
 <template>
   <div class="relative product-card">
-    <NuxtLink :to="`/product/${formatURI(node.slug)}`" :title="node.name">
+    <NuxtLink :to="`/product/${decodeURIComponent(node.slug)}`" :title="node.name">
       <SaleBadge :node="node" class="absolute top-2 right-2" />
       <NuxtImg
         v-if="imagetoDisplay"
@@ -53,7 +52,7 @@ const imagetoDisplay = computed<string>(() => {
     </NuxtLink>
     <div class="p-2">
       <StarRating :rating="node.averageRating" :count="node.reviewCount" />
-      <NuxtLink :to="`/product/${formatURI(node.slug)}`" :title="node.name">
+      <NuxtLink :to="`/product/${decodeURIComponent(node.slug)}`" :title="node.name">
         <h2 class="mb-2 font-light leading-tight">{{ node.name }}</h2>
       </NuxtLink>
       <ProductPrice class="text-sm" :sale-price="node.salePrice" :regular-price="node.regularPrice" />

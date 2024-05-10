@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const runtimeConfig = useRuntimeConfig();
-const { formatURI } = useHelpers();
 
 const { product } = defineProps<{ product: Product }>();
 
@@ -24,7 +23,7 @@ const format = computed(() => [
       <span> /</span>
     </span>
     <span v-for="(link, i) in format" :key="link.name || i">
-      <NuxtLink v-if="link.slug" :to="formatURI(link.slug)" class="hover:text-primary">{{ link.name }}</NuxtLink>
+      <NuxtLink v-if="link.slug" :to="decodeURIComponent(link.slug)" class="hover:text-primary">{{ link.name }}</NuxtLink>
       <span v-else class="text-gray-800">{{ link.name }}</span>
       <span v-if="i + 1 < format.length"> /</span>
     </span>

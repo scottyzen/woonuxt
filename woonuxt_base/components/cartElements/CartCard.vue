@@ -1,14 +1,14 @@
 <script setup>
 const { updateItemQuantity } = useCart();
 const { addToWishlist } = useWishlist();
-const { formatURI, fallbackImage } = useHelpers();
+const { fallbackImage } = useHelpers();
 
 const { item } = defineProps({
   item: { type: Object, required: true },
 });
 
 const productType = computed(() => (item.variation ? item.variation?.node : item.product?.node));
-const productSlug = computed(() => `/product/${formatURI(item.product.node.slug)}`);
+const productSlug = computed(() => `/product/${decodeURIComponent(item.product.node.slug)}`);
 const isLowStock = computed(() => (productType.value.stockQuantity ? productType.value.lowStockAmount >= productType.value.stockQuantity : false));
 
 const removeItem = () => {

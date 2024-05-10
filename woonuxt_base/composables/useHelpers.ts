@@ -125,8 +125,6 @@ export function useHelpers() {
     return indexOfTypeAny;
   };
 
-  const formatURI = (str: string): string => decodeURIComponent(str);
-
   /**
    * Determines if the route query is empty.
    * @returns {boolean} True if the route query is empty, false otherwise.
@@ -207,7 +205,6 @@ export function useHelpers() {
     toggleBodyClass,
     toggleMobileMenu,
     checkForVariationTypeOfAny,
-    formatURI,
     formatDate,
     formatPrice,
     scrollToTop,

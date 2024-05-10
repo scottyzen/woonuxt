@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { formatURI, fallbackImage } = useHelpers();
+const { fallbackImage } = useHelpers();
 const props = defineProps({
   node: { type: Object, required: true },
   imageLoading: { type: String as PropType<'lazy' | 'eager'>, default: 'lazy' },
@@ -12,7 +12,7 @@ const ImageHeight = Math.round(imageWidth * 1.25);
 <template>
   <NuxtLink
     v-if="node"
-    :to="`/product-category/${formatURI(node.slug)}`"
+    :to="`/product-category/${decodeURIComponent(node.slug)}`"
     class="relative flex justify-center overflow-hidden border border-white rounded-xl item snap-mandatory snap-x">
     <NuxtImg
       :width="imageWidth"
