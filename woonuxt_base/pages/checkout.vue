@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { loadStripe } from '@stripe/stripe-js';
 
 const { t } = useI18n();
@@ -7,16 +7,15 @@ const { cart, isUpdatingCart, paymentGateways } = useCart();
 const { customer, viewer } = useAuth();
 const { orderInput, isProcessingOrder, proccessCheckout } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
-const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY;
+const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
 
-const buttonText = ref(isProcessingOrder.value ? t('messages.general.processing') : t('messages.shop.checkoutButton'));
-const isCheckoutDisabled = computed(() => isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod);
+const buttonText = ref<string>(isProcessingOrder.value ? t('messages.general.processing') : t('messages.shop.checkoutButton'));
+const isCheckoutDisabled = computed<boolean>(() => isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod);
 
-const emailRegex = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$');
-const isInvalidEmail = ref(false);
+const isInvalidEmail = ref<boolean>(false);
 const stripe = stripeKey ? await loadStripe(stripeKey) : null;
 let elements = ref(null);
-const isPaid = ref(false);
+const isPaid = ref<boolean>(false);
 
 onBeforeMount(async () => {
   if (query.cancel_order) window.close();
@@ -52,12 +51,14 @@ const handleStripeElement = (stripeElements) => {
   elements.value = stripeElements;
 };
 
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
 const checkEmailOnBlur = (email) => {
   if (email) isInvalidEmail.value = !emailRegex.test(email);
 };
 
 const checkEmailOnInput = (email) => {
-  if (email || isInvalidEmail.value) isInvalidEmail.value = !emailRegex.test(email);
+  if (email && isInvalidEmail.value) isInvalidEmail.value = !emailRegex.test(email);
 };
 
 useSeoMeta({
