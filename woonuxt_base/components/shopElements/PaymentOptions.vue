@@ -24,7 +24,7 @@ onMounted(() => {
       v-for="gateway in paymentGateways?.nodes"
       :key="gateway.id"
       class="option"
-      :class="{ 'active-option': paymentMethod === gateway.id }"
+      :class="{ 'active-option': gateway.id === activePaymentMethod.id }"
       @click="updatePaymentMethod(gateway)"
       :title="gateway?.description || gateway?.title || 'Payment Method'">
       <icon v-if="gateway.id === 'stripe'" name="ion:card-outline" size="20" />
