@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. I'll try my best to keep it updated.
 
+# 3.6.2 (20-05-2024)
+
+Add `AUTO_OPEN_CART` to `.env` to automatically open the cart when adding a product to the cart.
+
 # 3.6.1 (17-05-2024)
 
 ## CHANGES
