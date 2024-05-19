@@ -52,7 +52,8 @@ export function useCart() {
     try {
       const { addToCart } = await GqlAddToCart({ input });
       cart.value = addToCart?.cart ?? null;
-      if (runtimeConfig.public.AUTO_OPEN_CART) toggleCart(true);
+      // Auto open the cart when an item is added to the cart if the setting is enabled
+      if (runtimeConfig.public?.AUTO_OPEN_CART === 'true' && !isShowingCart.value) toggleCart(true);
     } catch (error: any) {
       logGQLError(error);
     }
@@ -66,7 +67,7 @@ export function useCart() {
   }
 
   // update the quantity of an item in the cart
-  async function updateItemQuantity(key: string, quantity: number): Promise<number> {
+  async function updateItemQuantity(key: string, quantity: number): Promise<number | undefined> {
     isUpdatingCart.value = true;
     try {
       const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity });
@@ -75,6 +76,7 @@ export function useCart() {
     } catch (error: any) {
       logGQLError(error);
     }
+    return undefined;
   }
 
   // empty the cart
