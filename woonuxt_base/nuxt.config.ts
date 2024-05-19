@@ -53,12 +53,6 @@ export default defineNuxtConfig({
     },
   },
 
-  runtimeConfig: {
-    public: {
-      AUTO_OPEN_CART: process.env?.AUTO_OPEN_CART === 'true',
-    },
-  },
-
   // Multilingual support
   i18n: {
     locales: [
