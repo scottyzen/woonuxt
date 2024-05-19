@@ -62,6 +62,7 @@ export default defineNuxtConfig({
     public: {
       version: pkg.version || '0.0.0',
       STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
+      AUTO_OPEN_CART: process.env?.AUTO_OPEN_CART === 'true',
     },
   },
 

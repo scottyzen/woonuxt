@@ -9,6 +9,7 @@ export function useCart() {
   const isUpdatingCart = useState<boolean>('isUpdatingCart', () => false);
   const isUpdatingCoupon = useState<boolean>('isUpdatingCoupon', () => false);
   const paymentGateways = useState<PaymentGateway[]>('paymentGateways', () => []);
+  const runtimeConfig = useRuntimeConfig();
 
   // Refesh the cart from the server
   async function refreshCart() {
@@ -49,7 +50,7 @@ export function useCart() {
     try {
       const { addToCart } = await GqlAddToCart({ input });
       cart.value = addToCart?.cart ?? null;
-      toggleCart();
+      if (runtimeConfig.public.AUTO_OPEN_CART) toggleCart(true);
     } catch (error: any) {
       const errorMessage = error?.gqlErrors?.[0].message;
       if (errorMessage) console.error(errorMessage);
