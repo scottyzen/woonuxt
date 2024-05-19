@@ -1,6 +1,3 @@
-#import "~/queries/fragments/CartFragment.gql"
-#import "~/queries/fragments/CustomerFragment.gql"
-
 query getCart {
   cart {
     ...CartFragment
@@ -17,11 +14,15 @@ query getCart {
     username
     nicename
     wooSessionToken
+    avatar {
+      url
+    }
   }
   paymentGateways {
     nodes {
       title
       id
+      description
     }
   }
 }

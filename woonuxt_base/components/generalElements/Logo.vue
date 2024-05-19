@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const runtimeConfig = useRuntimeConfig();
-const logoUrl = runtimeConfig?.public?.LOGO || null;
+const img = useImage();
+
+const logoUrl = runtimeConfig?.public?.LOGO ? img(runtimeConfig?.public?.LOGO) : null;
 </script>
 
 <template>

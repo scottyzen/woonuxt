@@ -1,14 +1,17 @@
+import pkg from '~/woonuxt_base/package.json';
+
 // A collection of helper functions.
 export function useHelpers() {
   const route = useRoute();
   const runtimeConfig = useRuntimeConfig();
 
   const isShowingMobileMenu = useState<boolean>('isShowingMobileMenu', () => false);
-  const wooNuxtVersionInfo: string = runtimeConfig.public?.version || '0.0.0';
+  const wooNuxtVersionInfo: string = pkg.version || '0.0.0';
   const productsPerPage: number = runtimeConfig.public?.PRODUCTS_PER_PAGE || 24;
-  const wooNuxtSEO: WooNuxtSEO[] = runtimeConfig.public?.WOO_NUXT_SEO || [];
+  const wooNuxtSEO = runtimeConfig.public?.WOO_NUXT_SEO as WooNuxtSEOItem[];
   const frontEndUrl = runtimeConfig.public?.FRONT_END_URL?.replace(/\/$/, '') || null;
   const isDev: boolean = process.env.NODE_ENV === 'development';
+  const fallbackImage = '/images/placeholder.jpg';
 
   /**
    * Toggles the mobile menu.
@@ -52,6 +55,13 @@ export function useHelpers() {
       const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
       document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
     }
+  }
+
+  /**
+   * Clear all local storage.
+   */
+  function clearAllLocalStorage(): void {
+    localStorage.clear();
   }
 
   /**
@@ -100,13 +110,13 @@ export function useHelpers() {
    * @returns {number[]} An array of the indexes of variations with a type of 'any'.
    */
   const checkForVariationTypeOfAny = (product: Product): number[] => {
-    const numberOfVariation = product?.attributes?.nodes?.length || 0;
+    const numberOfVariation = product?.attributes?.nodes?.length ?? 0;
     let indexOfTypeAny = [] as number[];
 
     for (let index = 0; index < numberOfVariation; index++) {
       const tempArray = [] as string[];
       product.variations?.nodes.forEach((element) => {
-        if (element.attributes?.nodes[index]?.value) tempArray.push(element.attributes.nodes[index].value as string);
+        if (element.attributes?.nodes[index]?.value) tempArray.push(element.attributes.nodes[index].value);
       });
 
       if (!tempArray.some(Boolean)) indexOfTypeAny.push(index);
@@ -114,8 +124,6 @@ export function useHelpers() {
 
     return indexOfTypeAny;
   };
-
-  const formatURI = (str: string): string => decodeURIComponent(str);
 
   /**
    * Determines if the route query is empty.
@@ -153,6 +161,31 @@ export function useHelpers() {
     return str === null ? '' : str.replace(/(<([^>]+)>)/gi, '');
   };
 
+  /**
+   * Debounces a function.
+   * @param {Function}
+   * @param {number} delay - The delay in milliseconds.
+   * @returns {Function} The debounced function.
+   */
+  const debounce = (func: Function, delay: number = 100) => {
+    let inDebounce: NodeJS.Timeout;
+    return function (this: any, ...args: any[]) {
+      clearTimeout(inDebounce);
+      inDebounce = setTimeout(() => func.apply(this, args), delay);
+    };
+  };
+
+  /**
+   *  Logs a GraphQL error message.
+   * @param error
+   */
+  const logGQLError = (error: any) => {
+    const errorMessage = error?.gqlErrors?.[0]?.message;
+    if (errorMessage) {
+      console.error(errorMessage);
+    }
+  };
+
   return {
     isShowingMobileMenu,
     wooNuxtVersionInfo,
@@ -161,19 +194,22 @@ export function useHelpers() {
     wooNuxtSEO,
     frontEndUrl,
     isDev,
+    fallbackImage,
     formatArray,
     arraysEqual,
     clearAllCookies,
+    clearAllLocalStorage,
     replaceQueryParam,
     addBodyClass,
     removeBodyClass,
     toggleBodyClass,
     toggleMobileMenu,
     checkForVariationTypeOfAny,
-    formatURI,
     formatDate,
     formatPrice,
     scrollToTop,
     stripHtml,
+    debounce,
+    logGQLError,
   };
 }

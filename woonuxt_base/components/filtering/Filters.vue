@@ -48,6 +48,11 @@ const { hideCategories } = defineProps({ hideCategories: { type: Boolean, defaul
 
 #filters {
   @apply w-[280px];
+
+  & .slider-connect {
+    @apply bg-primary;
+  }
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -55,6 +60,7 @@ const { hideCategories } = defineProps({ hideCategories: { type: Boolean, defaul
   input[type='checkbox'],
   input[type='radio'] {
     @apply bg-white border rounded-lg cursor-pointer font-sans outline-none border-gray-300 w-full p-3 transition-all duration-150 appearance-none hover:border-primary;
+
     width: 1em;
     height: 1em;
     position: relative;
@@ -101,12 +107,12 @@ const { hideCategories } = defineProps({ hideCategories: { type: Boolean, defaul
   input[type='checkbox']:checked:after,
   input[type='checkbox'] + label,
   input[type='radio'] + label {
-    @apply cursor-pointer text-gray-500 hover:text-gray-800;
+    @apply cursor-pointer text-gray-600 hover:text-primary;
   }
 
   input[type='checkbox']:checked + label,
   input[type='radio']:checked + label {
-    @apply text-gray-800;
+    @apply text-gray-800 hover:text-primary-dark;
   }
 
   input[type='checkbox']:checked,
@@ -136,6 +142,7 @@ const { hideCategories } = defineProps({ hideCategories: { type: Boolean, defaul
 @media (max-width: 768px) {
   #filters {
     @apply bg-white h-full p-8 transform pl-2 transition-all ease-in-out bottom-0 left-4 -translate-x-[110vw] duration-300 overflow-auto fixed;
+
     box-shadow:
       -100px 0 0 white,
       -200px 0 0 white,

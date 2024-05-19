@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts">
 const { setProducts, updateProductList } = useProducts();
 const route = useRoute();
 
 const { isQueryEmpty } = useHelpers();
 
 const { data } = await useAsyncGql('getProducts');
-const allProducts = data.value?.products?.nodes ?? [];
+const allProducts = (data.value?.products?.nodes || []) as Product[];
 setProducts(allProducts);
 
 onMounted(() => {

@@ -1,67 +1,31 @@
+type Cart = import('#gql').GetCartQuery['cart'];
+type Customer = import('#gql').GetCartQuery['customer'];
+type Viewer = import('#gql').GetCartQuery['viewer'];
+type PaymentGateways = import('#gql').GetCartQuery['paymentGateways'];
+
 interface ProductAttributeInput {
   attributeName: string;
   attributeValue: string;
-}
-
-interface AddToCartInput {
-  clientMutationId?: string;
-  extraData?: string;
-  productId: number;
-  quantity: number;
-  variation?: ProductAttributeInput[];
-  variationId?: number | null | undefined;
-}
-
-interface MetaDataInput {
-  key: string;
-  value: string;
-  id?: string;
-}
-
-interface CreateAccountInput {
-  password: string;
-  username: string;
-  email: string;
-}
-
-interface Customer {
-  lastName?: string | null;
-  email?: string | null;
-  firstName?: string | null;
-  username?: string | null;
-  databaseId?: number | null;
-  sessionToken?: string | null;
-  billing?: Address | null;
-  shipping?: Address | null;
 }
 
 interface Address {
   address1?: string | null;
   address2?: string | null;
   city?: string | null;
-  country?: CountriesEnum | null;
+  country?: Array | null;
   email?: string | null;
   firstName?: string | null;
   lastName?: string | null;
+  username?: string | null;
   phone?: string | null;
   postcode?: string | null;
   state?: string | null;
   company?: string | null;
 }
 
-interface Viewer {
-  lastName?: string | null;
-  email?: string | null;
-  databaseId: number;
-  id: string;
-  firstName?: string | null;
-  username?: string | null;
-  nicename?: string | null;
-  wooSessionToken?: string | null;
-}
-
 interface ProductCategory {
   databaseId: number;
+  id: string;
   slug: string;
   name: string;
   count: number;
@@ -105,8 +69,8 @@ interface Reviews {
 }
 
 interface Product {
-  name?: string | null;
-  databaseId?: number | null;
+  name: string;
+  databaseId: number;
   id?: string | null;
   slug?: string | null;
   sku?: string | null;
@@ -207,10 +171,10 @@ interface Variation {
 }
 
 interface ProductImage {
-  sourceUrl?: string | null;
-  altText?: string | null;
-  title?: string | null;
-  cartSourceUrl?: string | null;
+  sourceUrl?: string | null | undefined;
+  cartSourceUrl?: string | null | undefined;
+  altText?: string | null | undefined;
+  title?: string | null | undefined;
 }
 
 interface CartItem {
@@ -229,6 +193,7 @@ interface CartContents {
 interface PaymentGateway {
   title?: string | null;
   id?: string | null;
+  description?: string | null;
 }
 
 interface AppliedCoupon {
@@ -242,19 +207,6 @@ interface ShippingMethodRate {
   cost?: string | null;
   id: string;
   label?: string | null;
-}
-
-interface Cart {
-  total?: string | null;
-  subtotal?: string | null;
-  totalTax?: string | null;
-  discountTotal?: string | null;
-  shippingTotal?: string | null;
-  chosenShippingMethods?: Array<string | null> | null;
-  isEmpty?: boolean | null;
-  appliedCoupons?: Array<AppliedCoupon | null> | null;
-  availableShippingMethods?: Array<{ rates?: Array<ShippingMethodRate | null> | null } | null> | null;
-  contents?: CartContents | null;
 }
 
 interface LineItem {

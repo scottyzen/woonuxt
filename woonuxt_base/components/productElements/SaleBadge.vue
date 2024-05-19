@@ -1,11 +1,11 @@
 <script setup lang="ts">
-const props = defineProps({
+const { node } = defineProps({
   node: { type: Object, default: null },
 });
 
 const salePercentage = computed((): number => {
-  const salePrice = parseFloat(props.node.salePrice.replace(/[^0-9]/g, ''));
-  const regularPrice = parseFloat(props.node.regularPrice.replace(/[^0-9]/g, ''));
+  const salePrice = parseFloat(node.salePrice.replace(/\D/g, ''));
+  const regularPrice = parseFloat(node.regularPrice.replace(/\D/g, ''));
   return Math.round(((salePrice - regularPrice) / regularPrice) * 100);
 });
 </script>

@@ -1,8 +1,6 @@
-#import "./fragments/SimpleProduct.gql"
-#import "./fragments/VariableProduct.gql"
-
 fragment CartFragment on Cart {
   total
+  rawTotal: total(format: RAW)
   subtotal
   totalTax
   discountTotal
@@ -44,6 +42,11 @@ fragment CartFragment on Cart {
           name
           slug
           price
+          stockStatus
+          regularPrice
+          rawRegularPrice: regularPrice(format: RAW)
+          salePrice
+          rawSalePrice: salePrice(format: RAW)
           image {
             sourceUrl(size: THUMBNAIL)
             cartSourceUrl: sourceUrl(size: THUMBNAIL)

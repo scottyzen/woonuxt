@@ -36,7 +36,6 @@ useHead({
         <ShowFilterTrigger class="md:hidden" />
       </div>
       <ProductGrid />
-      <LazyNoProductsFound />
     </div>
   </div>
 </template>

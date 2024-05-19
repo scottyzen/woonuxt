@@ -9,6 +9,7 @@ fragment SimpleProduct on SimpleProduct {
   rawSalePrice: salePrice(format: RAW)
   stockStatus
   stockQuantity
+  lowStockAmount
   averageRating
   weight
   length
@@ -18,6 +19,8 @@ fragment SimpleProduct on SimpleProduct {
   image {
     sourceUrl
     cartSourceUrl: sourceUrl(size: THUMBNAIL)
+    producCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
+    databaseId
     altText
     title
   }

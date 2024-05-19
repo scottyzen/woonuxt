@@ -10,8 +10,10 @@ fragment VariableProduct on VariableProduct {
   image {
     sourceUrl
     cartSourceUrl: sourceUrl(size: THUMBNAIL)
+    producCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
     altText
     title
+    databaseId
   }
   averageRating
   reviewCount
@@ -22,21 +24,16 @@ fragment VariableProduct on VariableProduct {
   stockStatus
   totalSales
   stockQuantity
-  attributes {
-    nodes {
-      name
-      options
-      variation
-      visible
-    }
-  }
+  lowStockAmount
   defaultAttributes {
     nodes {
       name
       attributeId
+      value
+      label
     }
   }
-  variations {
+  variations(first: 100) {
     nodes {
       name
       databaseId
@@ -50,6 +47,8 @@ fragment VariableProduct on VariableProduct {
       image {
         sourceUrl
         cartSourceUrl: sourceUrl(size: THUMBNAIL)
+        producCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
+        databaseId
         altText
         title
         id
@@ -65,6 +64,7 @@ fragment VariableProduct on VariableProduct {
   galleryImages {
     nodes {
       sourceUrl
+      databaseId
       altText
       title
     }

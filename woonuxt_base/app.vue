@@ -4,25 +4,18 @@ const { isShowingCart, toggleCart } = useCart();
 const { isShowingMobileMenu, toggleMobileMenu } = useHelpers();
 const { addBodyClass, removeBodyClass } = useHelpers();
 
-const underlayCick = () => {
+const closeCartAndMenu = () => {
   toggleCart(false);
   toggleMobileMenu(false);
 };
 
 watch([isShowingCart, isShowingMobileMenu], () => {
-  if (isShowingCart.value || isShowingMobileMenu.value) {
-    addBodyClass('overflow-hidden');
-  } else {
-    removeBodyClass('overflow-hidden');
-  }
+  isShowingCart.value || isShowingMobileMenu.value ? addBodyClass('overflow-hidden') : removeBodyClass('overflow-hidden');
 });
 
 watch(
   () => route.path,
-  () => {
-    toggleCart(false);
-    toggleMobileMenu(false);
-  },
+  () => closeCartAndMenu(),
 );
 </script>
 
@@ -41,7 +34,7 @@ watch(
     <NuxtPage />
 
     <Transition name="fade">
-      <div v-if="isShowingCart || isShowingMobileMenu" class="bg-black opacity-25 inset-0 z-40 fixed" @click="underlayCick"></div>
+      <div v-if="isShowingCart || isShowingMobileMenu" class="bg-black opacity-25 inset-0 z-40 fixed" @click="closeCartAndMenu" />
     </Transition>
 
     <LazyAppFooter />
@@ -186,5 +179,20 @@ select {
 .page-leave-active {
   animation-name: fadeOut;
   animation-duration: 200ms;
+}
+
+@keyframes skelaton {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+img.skeleton {
+  animation: skelaton 2000ms infinite cubic-bezier(0.4, 0, 0.2, 1);
+  background-image: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
 }
 </style>

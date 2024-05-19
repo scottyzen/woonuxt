@@ -3,11 +3,11 @@ const { cart, isUpdatingCart } = useCart();
 </script>
 
 <template>
-  <aside v-if="cart" class="bg-white rounded-lg shadow-lg mb-8 w-full min-h-[280px] p-8 relative md:max-w-sm md:top-36 md:sticky">
+  <aside v-if="cart" class="bg-white rounded-lg shadow-lg mb-8 w-full min-h-[280px] p-8 relative md:max-w-md md:top-32 md:sticky">
     <h2 class="mb-6 text-xl font-semibold leading-none">{{ $t('messages.shop.orderSummary') }}</h2>
 
     <ul class="flex flex-col gap-4 -mr-2 overflow-y-scroll">
-      <CartCard v-for="item in cart.contents.nodes" :key="item.key" :item="item" />
+      <CartCard v-for="item in cart.contents.nodes" :key="item.key" :item />
     </ul>
 
     <AddCoupon class="my-8" />

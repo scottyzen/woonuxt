@@ -53,7 +53,11 @@
       "myAccount": "Il mio account",
       "loginToAccount": "Accedi al tuo account",
       "loggingIn": "Accesso in corso...",
-      "personalInfo": "Informazioni personali"
+      "personalInfo": "Informazioni personali",
+      "updating": "Aggiornamento",
+      "updateDetails": "Aggiorna dettagli",
+      "updateSuccess": "Aggiornato con successo",
+      "failed": "Aggiornamento fallito"
     },
     "shop": {
       "shopByCategory": "Acquista per categoria",

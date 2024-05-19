@@ -2,7 +2,6 @@
 const route = useRoute();
 const { products } = useProducts();
 const { productsPerPage } = useHelpers();
-const runtimeConfig = useRuntimeConfig();
 const page = ref(parseInt(route.params.pageNumber as string) || 1);
 </script>
 
