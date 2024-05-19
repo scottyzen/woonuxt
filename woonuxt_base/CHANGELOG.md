@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. I'll try my best to keep it updated.
 
+# 3.6.1 (17-05-2024)
+
+## CHANGES
+
+- Handle login error and improve error message in `useAuth.ts`
+- Remove `formatURI` function
+- Minor TypeScript improvements
+- Update checkout page to use TypeScript in script setup block
+- Add `logGQLError` & `clearAllLocalStorage` helper functions
+- Update npm dependencies for `@nuxt/image` and `@stripe/stripe-js`
+
 # 3.6.0 (27-04-2024)
 
 ## CHANGES

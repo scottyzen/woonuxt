@@ -1,6 +1,6 @@
 export default defineNuxtPlugin(async (nuxtApp) => {
   if (process.client) {
-    const { clearAllCookies } = useHelpers();
+    const { clearAllCookies, clearAllLocalStorage } = useHelpers();
     const sessionToken = useCookie('woocommerce-session');
     if (sessionToken.value) useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken.value}` });
 
@@ -23,6 +23,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       const success = await refreshCart();
       if (!success) {
         clearAllCookies();
+        clearAllLocalStorage();
 
         // Add a new cookie to prevent infinite reloads
         const reloadCount = useCookie('reloadCount');

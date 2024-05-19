@@ -1,6 +1,4 @@
 <script setup lang="ts">
-const { formatURI } = useHelpers();
-
 interface Props {
   attributes: any[];
   defaultAttributes?: { nodes: Attribute[] };
@@ -48,7 +46,7 @@ onMounted(() => {
       <div v-if="attr.name == 'pa_color' || attr.name == 'color'" class="grid gap-2">
         <div class="text-sm">
           {{ $t('messages.general.color') }}
-          <span v-if="activeVariations.length" class="text-gray-400 capitalize">{{ formatURI(activeVariations[i].value) }}</span>
+          <span v-if="activeVariations.length" class="text-gray-400 capitalize">{{ decodeURIComponent(activeVariations[i].value) }}</span>
         </div>
         <div class="flex gap-2">
           <span v-for="(option, optionIndex) in attr.options" :key="optionIndex">
@@ -72,10 +70,10 @@ onMounted(() => {
       <!-- DROPDOWN -->
       <div v-else-if="attr.options && attr.options?.length > 8" class="grid gap-2">
         <div class="text-sm">
-          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400 capitalize">{{ formatURI(activeVariations[i].value) }}</span>
+          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400 capitalize">{{ decodeURIComponent(activeVariations[i].value) }}</span>
         </div>
         <select :id="attr.name" :ref="attr.name" :name="attr.name" required class="border-white shadow" @change="updateAttrs">
-          <option disabled hidden>{{ $t('messages.general.choose') }} {{ formatURI(attr.label) }}</option>
+          <option disabled hidden>{{ $t('messages.general.choose') }} {{ decodeURIComponent(attr.label) }}</option>
           <option v-for="(option, dropdownIndex) in attr.options" :key="option" :value="option" v-html="option" :selected="dropdownIndex == 0" />
         </select>
       </div>
@@ -83,7 +81,7 @@ onMounted(() => {
       <!-- CHECKBOXES -->
       <div v-else class="grid gap-2">
         <div class="text-sm">
-          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400 capitalize">: {{ formatURI(activeVariations[i].value) }}</span>
+          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400 capitalize">: {{ decodeURIComponent(activeVariations[i].value) }}</span>
         </div>
         <div class="flex gap-2">
           <span v-for="(option, index) in attr.options" :key="index">
@@ -98,7 +96,7 @@ onMounted(() => {
                 :name="attr.name"
                 :value="option"
                 @change="updateAttrs" />
-              <span class="radio-button" :class="`picker-${option}`" :title="`${attr.name}: ${option}`">{{ formatURI(option) }}</span>
+              <span class="radio-button" :class="`picker-${option}`" :title="`${attr.name}: ${option}`">{{ decodeURIComponent(option) }}</span>
             </label>
           </span>
         </div>

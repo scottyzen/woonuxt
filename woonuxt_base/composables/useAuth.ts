@@ -17,19 +17,27 @@ export const useAuth = () => {
       const { loginWithCookies } = await GqlLogin(credentials);
 
       if (loginWithCookies?.status === 'SUCCESS') {
-        const cart = await refreshCart();
-        if (cart && viewer.value === null) {
-          return { success: false, error: 'Password was correct, but there was an error logging in. Please try again later. If the problem persists, please contact support.' };
+        const { viewer } = await refreshCart();
+        if (viewer === null) {
+          return {
+            success: false,
+            error: 'Your credentials are correct, but there was an error logging in. Please try again later. If the problem persists, please contact support.',
+          };
         }
-      } else {
-        isPending.value = false;
-        return { success: false, error: loginWithCookies?.status };
       }
-      return { success: true, error: null };
+
+      isPending.value = false;
+      return {
+        success: true,
+        error: null,
+      };
     } catch (error: any) {
       isPending.value = false;
-      const gqlError = error?.gqlErrors?.[0];
-      return { success: false, error: gqlError?.message };
+
+      return {
+        success: false,
+        error: error?.gqlErrors?.[0]?.message,
+      };
     }
   };
 
@@ -110,7 +118,7 @@ export const useAuth = () => {
     }
   };
 
-  const avatar = computed(() => viewer.value?.avatar?.url || null);
+  const avatar = computed(() => viewer.value?.avatar?.url ?? null);
 
   return {
     viewer,

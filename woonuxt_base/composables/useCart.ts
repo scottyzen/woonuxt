@@ -4,13 +4,13 @@ import type { AddToCartInput } from '#gql';
  * @name useCart
  * @description A composable that handles the cart in local storage
  */
-
 export function useCart() {
-  const cart = useState<Cart | null>('cart');
+  const cart = useState<Cart>('cart');
   const isShowingCart = useState<boolean>('isShowingCart', () => false);
   const isUpdatingCart = useState<boolean>('isUpdatingCart', () => false);
   const isUpdatingCoupon = useState<boolean>('isUpdatingCoupon', () => false);
-  const paymentGateways = useState<PaymentGateway[]>('paymentGateways', () => []);
+  const paymentGateways = useState<PaymentGateways>('paymentGateways', () => null);
+  const { logGQLError } = useHelpers();
 
   // Refesh the cart from the server
   async function refreshCart() {
@@ -21,12 +21,11 @@ export function useCart() {
       if (cart) updateCart(cart);
       if (customer) updateCustomer(customer);
       if (viewer) updateViewer(viewer);
-      if (paymentGateways) updatePaymentGateways(paymentGateways.nodes);
+      if (paymentGateways) updatePaymentGateways(paymentGateways);
 
-      return cart;
+      return { cart, customer, viewer, paymentGateways };
     } catch (error: any) {
-      const errorMessage = error?.gqlErrors?.[0].message;
-      if (errorMessage) console.error(errorMessage);
+      logGQLError(error);
     }
 
     return null;
@@ -36,7 +35,7 @@ export function useCart() {
     cart.value = payload;
   }
 
-  function updatePaymentGateways(payload: PaymentGateway[]): void {
+  function updatePaymentGateways(payload: PaymentGateways): void {
     paymentGateways.value = payload;
   }
 
@@ -53,8 +52,7 @@ export function useCart() {
       const { addToCart } = await GqlAddToCart({ input });
       cart.value = addToCart?.cart ?? null;
     } catch (error: any) {
-      const errorMessage = error?.gqlErrors?.[0].message;
-      if (errorMessage) console.error(errorMessage);
+      logGQLError(error);
     }
   }
 
@@ -73,12 +71,7 @@ export function useCart() {
       cart.value = updateItemQuantities?.cart ?? null;
       return quantity;
     } catch (error: any) {
-      const errorMessage = error?.gqlErrors?.[0]?.message;
-      if (errorMessage) {
-        console.error(errorMessage);
-        throw new Error(errorMessage);
-      }
-      throw new Error('An unknown error occurred while updating item quantity');
+      logGQLError(error);
     }
   }
 
@@ -88,7 +81,7 @@ export function useCart() {
       const { emptyCart } = await GqlEmptyCart();
       updateCart(emptyCart?.cart ?? null);
     } catch (error: any) {
-      console.log(error);
+      logGQLError(error);
     }
   }
 
@@ -108,11 +101,7 @@ export function useCart() {
       isUpdatingCoupon.value = false;
     } catch (error: any) {
       isUpdatingCoupon.value = false;
-      const gqlErrors = error?.gqlErrors;
-      if (gqlErrors) {
-        const message = gqlErrors[0]?.message;
-        if (message) return { message };
-      }
+      logGQLError(error);
     }
     return { message: null };
   }
@@ -125,7 +114,7 @@ export function useCart() {
       cart.value = removeCoupons?.cart ?? null;
       isUpdatingCart.value = false;
     } catch (error) {
-      console.error(error);
+      logGQLError(error);
       isUpdatingCart.value = false;
     }
   }

@@ -58,6 +58,13 @@ export function useHelpers() {
   }
 
   /**
+   * Clear all local storage.
+   */
+  function clearAllLocalStorage(): void {
+    localStorage.clear();
+  }
+
+  /**
    * Replaces a query parameter in a URL.Replace a query parameter in a URL
    * @param {string} param - The query parameter to replace.
    * @param {string} newval - The new value for the query parameter.
@@ -118,8 +125,6 @@ export function useHelpers() {
     return indexOfTypeAny;
   };
 
-  const formatURI = (str: string): string => decodeURIComponent(str);
-
   /**
    * Determines if the route query is empty.
    * @returns {boolean} True if the route query is empty, false otherwise.
@@ -170,6 +175,17 @@ export function useHelpers() {
     };
   };
 
+  /**
+   *  Logs a GraphQL error message.
+   * @param error
+   */
+  const logGQLError = (error: any) => {
+    const errorMessage = error?.gqlErrors?.[0]?.message;
+    if (errorMessage) {
+      console.error(errorMessage);
+    }
+  };
+
   return {
     isShowingMobileMenu,
     wooNuxtVersionInfo,
@@ -182,17 +198,18 @@ export function useHelpers() {
     formatArray,
     arraysEqual,
     clearAllCookies,
+    clearAllLocalStorage,
     replaceQueryParam,
     addBodyClass,
     removeBodyClass,
     toggleBodyClass,
     toggleMobileMenu,
     checkForVariationTypeOfAny,
-    formatURI,
     formatDate,
     formatPrice,
     scrollToTop,
     stripHtml,
     debounce,
+    logGQLError,
   };
 }
