@@ -96,10 +96,10 @@ Example: I have created a pages directory and added a `contact.vue` file in the 
 
 | Plugin/Software | Version |
 | --------------- | ------- |
-| WordPress       | 6.5.2   |
-| WooCommerce     | 8.6.1   |
-| WPGraphQL       | 1.23.0  |
-| WooGraphQL      | 0.19.0  |
+| WordPress       | 6.5.6   |
+| WooCommerce     | 8.9.1   |
+| WPGraphQL       | 1.26.0  |
+| WooGraphQL      | 0.20.0  |
 | WPGraphQL CORS  | 2.1     |
 | Node            | 20.10.0 |
 | PHP             | 8.2     |
