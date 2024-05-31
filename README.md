@@ -96,7 +96,7 @@ Example: I have created a pages directory and added a `contact.vue` file in the 
 
 | Plugin/Software | Version |
 | --------------- | ------- |
-| WordPress       | 6.5.6   |
+| WordPress       | 6.5.3   |
 | WooCommerce     | 8.9.1   |
 | WPGraphQL       | 1.26.0  |
 | WooGraphQL      | 0.20.0  |
