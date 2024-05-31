@@ -25,3 +25,5 @@ logs
 
 # Local Netlify folder
 .netlify
+
+*.pem

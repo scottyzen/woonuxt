@@ -115,6 +115,18 @@ Example: I have created a pages directory and added a `contact.vue` file in the 
 | Italian 🇮🇹    | it   |
 | Portuguese 🇵🇹 | pt   |
 
+### Local SSL Setup
+
+- Install [mkcert](https://github.com/FiloSottile/mkcert) on your machine.
+- Run `mkcert localhost` to generate a certificate for localhost.
+- Then run `mkcert -install` to install the certificate authority.
+- Append ssl when running the dev server, example:
+
+```bash
+# Run the dev server with SSL
+npm run dev:ssl
+```
+
 #### Credits
 
 This is an ongoing project but it wouldn't be possible without the help of the following people: [Jason Bahl](https://github.com/jasonbahl) & [Geoffrey K Taylor](https://github.com/kidunot89) for their ongoing work on WPGraphQL and WooGraphQL respectively. Also, a big thanks to the Nuxt team for all their hard work making Nuxt 3 a pleasure to build upon. And the [WooCommerce](https://woocommerce.com/) team for making such a great e-commerce platform. Some other honorable mentions are [Funkhaus](https://funkhaus.us/) for their work on the WPGraphQL Cors plugin. And the people who have contributed to making WooNuxt better every day. [Zack Hatlen](https://github.com/zackha), [Galli](https://github.com/Zielgestalt), [Guillaume](https://github.com/GuillaumeDgr), Thank you all! 🙏
