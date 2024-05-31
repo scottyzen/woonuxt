@@ -118,14 +118,9 @@ Example: I have created a pages directory and added a `contact.vue` file in the 
 ### Local SSL Setup
 
 - Install [mkcert](https://github.com/FiloSottile/mkcert) on your machine.
-- Run `mkcert localhost` to generate a certificate for localhost.
+- Run `mkcert localhost` to generate a certificate for localhost. You should now have a `localhost.pem` and `localhost-key.pem` file in your current directory. See the image below for an example.
 - Then run `mkcert -install` to install the certificate authority.
-- Append ssl when running the dev server, example:
-
-```bash
-# Run the dev server with SSL
-npm run dev:ssl
-```
+- Finally, run `npm run dev:ssl` to start the dev server with SSL.
 
 #### Credits
 
