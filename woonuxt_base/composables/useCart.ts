@@ -27,9 +27,8 @@ export function useCart() {
       return { cart, customer, viewer, paymentGateways };
     } catch (error: any) {
       logGQLError(error);
+      return { cart: null, customer: null, viewer: null, paymentGateways: null };
     }
-
-    return null;
   }
 
   function updateCart(payload: Cart | null): void {
@@ -75,8 +74,8 @@ export function useCart() {
       return quantity;
     } catch (error: any) {
       logGQLError(error);
+      return undefined;
     }
-    return undefined;
   }
 
   // empty the cart
