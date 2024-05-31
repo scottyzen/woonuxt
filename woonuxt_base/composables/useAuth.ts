@@ -21,7 +21,8 @@ export const useAuth = () => {
         if (viewer === null) {
           return {
             success: false,
-            error: 'Your credentials are correct, but there was an error logging in. Please try again later. If the problem persists, please contact support.',
+            error:
+              'Your credentials are correct, but there was an error logging in. This is most likely due to an SSL error. Please try again later. If the problem persists, please contact support.',
           };
         }
       }
