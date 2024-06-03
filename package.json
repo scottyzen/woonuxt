@@ -23,7 +23,7 @@
     "nuxt": "^3.11.2",
     "nuxt-graphql-client": "^0.2.34",
     "nuxt-icon": "^0.6.10",
-    "prettier": "^3.2.5",
+    "prettier": "^3.3.0",
     "woonuxt-settings": "^1.0.54"
   },
   "overrides": {
