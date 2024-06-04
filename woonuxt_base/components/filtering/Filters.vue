@@ -14,7 +14,7 @@ const { hideCategories } = defineProps({ hideCategories: { type: Boolean, defaul
     <div class="relative z-30 grid mb-12 space-y-8 divide-y">
       <PriceFilter />
       <CategoryFilter v-if="!hideCategories" />
-      <template v-for="attribute in globalProductAttributes" :key="attribute.slug">
+      <div v-for="attribute in globalProductAttributes" :key="attribute.slug">
         <ColorFilter
           v-if="attribute.slug == 'pa_color' || attribute.slug == 'pa_colour'"
           :filter-slug="attribute.slug"
@@ -29,7 +29,7 @@ const { hideCategories } = defineProps({ hideCategories: { type: Boolean, defaul
           :open="attribute.openByDefault"
           :show-count="attribute.showCount"
           :hide-empty="attribute.hideEmpty" />
-      </template>
+      </div>
       <OnSaleFilter />
       <LazyStarRatingFilter />
       <LazyResetFiltersButton v-if="isFiltersActive" />
