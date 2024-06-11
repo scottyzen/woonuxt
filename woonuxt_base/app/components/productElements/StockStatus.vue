@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { StockStatusEnum } from '~/.nuxt/gql/default';
+const StockStatusEnum = {
+  IN_STOCK: 'IN_STOCK',
+  OUT_OF_STOCK: 'OUT_OF_STOCK',
+  ON_BACKORDER: 'ON_BACKORDER',
+};
 
 defineProps({
   stockStatus: { type: String, required: false },

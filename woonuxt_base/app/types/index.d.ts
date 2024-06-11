@@ -3,6 +3,9 @@ type Customer = import('#gql').GetCartQuery['customer'];
 type Viewer = import('#gql').GetCartQuery['viewer'];
 type PaymentGateways = import('#gql').GetCartQuery['paymentGateways'];
 
+type ProductTypesEnum = 'SIMPLE' | 'VARIABLE' | 'GROUP' | 'EXTERNAL' | 'VARIATION';
+type StockStatusEnum = 'IN_STOCK' | 'OUT_OF_STOCK' | 'ON_BACKORDER';
+
 interface ProductAttributeInput {
   attributeName: string;
   attributeValue: string;

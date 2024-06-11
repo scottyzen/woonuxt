@@ -2,6 +2,10 @@ import { createResolver } from '@nuxt/kit';
 const { resolve } = createResolver(import.meta.url);
 
 export default defineNuxtConfig({
+  future: {
+    compatibilityVersion: 4,
+  },
+
   app: {
     head: {
       titleTemplate: `%s | ${process.env.SITE_TITLE ?? 'WooNuxt'}`,
@@ -15,13 +19,14 @@ export default defineNuxtConfig({
     sharedPrerenderData: true,
   },
 
-  plugins: [resolve('./plugins/init.ts')],
+  plugins: [resolve('./app/plugins/init.ts')],
 
-  components: [{ path: resolve('./components'), pathPrefix: false }],
+  components: [{ path: resolve('./app/components'), pathPrefix: false }],
 
   modules: ['woonuxt-settings', 'nuxt-graphql-client', '@nuxtjs/tailwindcss', 'nuxt-icon', '@nuxt/image', '@nuxtjs/i18n'],
 
   'graphql-client': {
+    documentPaths: [resolve('./app/queries')],
     clients: {
       default: {
         host: process.env.GQL_HOST || 'http://localhost:4000/graphql',
@@ -33,14 +38,14 @@ export default defineNuxtConfig({
   hooks: {
     'pages:extend'(pages) {
       const addPage = (name: string, path: string, file: string) => {
-        pages.push({ name, path, file: resolve(file) });
+        pages.push({ name, path, file: resolve(`./app/pages/${file}`) });
       };
 
-      addPage('product-page-pager', '/products/page/:pageNumber', './pages/products.vue');
-      addPage('product-category-page', '/product-category/:categorySlug', './pages/product-category/[slug].vue');
-      addPage('product-category-page-pager', '/product-category/:categorySlug/page/:pageNumber', './pages/product-category/[slug].vue');
-      addPage('order-received', '/checkout/order-received/:orderId', './pages/order-summary.vue');
-      addPage('order-summary', '/order-summary/:orderId', './pages/order-summary.vue');
+      addPage('product-page-pager', '/products/page/:pageNumber', 'products.vue');
+      addPage('product-category-page', '/product-category/:categorySlug', 'product-category/[slug].vue');
+      addPage('product-category-page-pager', '/product-category/:categorySlug/page/:pageNumber', 'product-category/[slug].vue');
+      addPage('order-received', '/checkout/order-received/:orderId', 'order-summary.vue');
+      addPage('order-summary', '/order-summary/:orderId', 'order-summary.vue');
     },
   },
 

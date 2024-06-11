@@ -1,4 +1,4 @@
-import pkg from '~/woonuxt_base/package.json';
+import pkg from '../../../woonuxt_base/package.json';
 
 // A collection of helper functions.
 export function useHelpers() {
