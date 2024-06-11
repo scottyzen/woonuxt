@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { StockStatusEnum } from '~/.nuxt/gql/default';
+import { StockStatusEnum } from '../../../app/constants';
 import type { AddToCartInput } from '#gql';
+
 const route = useRoute();
 const { arraysEqual, formatArray, checkForVariationTypeOfAny } = useHelpers();
 const { addToCart, isUpdatingCart } = useCart();

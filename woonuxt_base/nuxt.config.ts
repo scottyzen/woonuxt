@@ -26,7 +26,6 @@ export default defineNuxtConfig({
   modules: ['woonuxt-settings', 'nuxt-graphql-client', '@nuxtjs/tailwindcss', 'nuxt-icon', '@nuxt/image', '@nuxtjs/i18n'],
 
   'graphql-client': {
-    documentPaths: [resolve('./app/queries')],
     clients: {
       default: {
         host: process.env.GQL_HOST || 'http://localhost:4000/graphql',

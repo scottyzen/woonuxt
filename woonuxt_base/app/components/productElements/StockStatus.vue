@@ -1,9 +1,5 @@
 <script setup lang="ts">
-const StockStatusEnum = {
-  IN_STOCK: 'IN_STOCK',
-  OUT_OF_STOCK: 'OUT_OF_STOCK',
-  ON_BACKORDER: 'ON_BACKORDER',
-};
+import { StockStatusEnum } from '../../../app/constants';
 
 defineProps({
   stockStatus: { type: String, required: false },

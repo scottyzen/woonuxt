@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { OrderStatusEnum } from '~/.nuxt/gql/default';
+import { OrderStatusEnum } from '../../../.nuxt/gql/default';
 
 const { query, params, name } = useRoute();
 const { customer } = useAuth();
@@ -11,7 +11,7 @@ const delayLength = 2500;
 const isLoaded = ref<boolean>(false);
 const errorMessage = ref('');
 
-const isGuest = computed(() => !customer.value.databaseId);
+const isGuest = computed(() => !customer.value?.databaseId);
 const isSummaryPage = computed(() => name === 'order-summary');
 const isCheckoutPage = computed(() => name === 'order-received');
 const showRefreshButton = computed(() => order.value.status !== OrderStatusEnum.COMPLETED);
