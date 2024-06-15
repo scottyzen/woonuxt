@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { StockStatusEnum } from '../../../app/constants';
+import { StockStatusEnum } from '#woo';
 
 defineProps({
   stockStatus: { type: String, required: false },

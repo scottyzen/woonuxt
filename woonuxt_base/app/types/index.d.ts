@@ -2,9 +2,11 @@ type Cart = import('#gql').GetCartQuery['cart'];
 type Customer = import('#gql').GetCartQuery['customer'];
 type Viewer = import('#gql').GetCartQuery['viewer'];
 type PaymentGateways = import('#gql').GetCartQuery['paymentGateways'];
-
-type ProductTypesEnum = 'SIMPLE' | 'VARIABLE' | 'GROUP' | 'EXTERNAL' | 'VARIATION';
-type StockStatusEnum = 'IN_STOCK' | 'OUT_OF_STOCK' | 'ON_BACKORDER';
+type ProducBase = import('#gql').GetProductQuery['product'];
+type Order = import('#gql').GetOrderQuery['order'];
+type SimpleProduct = import('#gql').SimpleProductFragment;
+type VariableProduct = import('#gql').VariableProductFragment;
+type Product = ProducBase & SimpleProduct & VariableProduct;
 
 interface ProductAttributeInput {
   attributeName: string;
@@ -71,93 +73,6 @@ interface Reviews {
   edges?: Array<{ rating?: number | null; node?: Review | null }> | null;
 }
 
-interface Product {
-  name: string;
-  databaseId: number;
-  id?: string | null;
-  slug?: string | null;
-  sku?: string | null;
-  onSale?: boolean | null;
-  type?: ProductTypesEnum | null;
-  price?: string | null;
-  date?: string | null;
-  regularPrice?: string | null;
-  salePrice?: string | null;
-  stockStatus?: StockStatusEnum | null;
-  stockQuantity?: number | null;
-  description?: string | null;
-  rawDescription?: string | null;
-  shortDescription?: string | null;
-  averageRating?: number | null;
-  weight?: string | null;
-  length?: string | null;
-  width?: string | null;
-  height?: string | null;
-  reviewCount?: number | null;
-  rawPrice?: string | null;
-  rawRegularPrice?: string | null;
-  rawSalePrice?: string | null;
-  image?: ProductImage | null;
-  terms?: { nodes: Array<ProductTerm> } | null;
-  galleryImages?: Array<{ sourceUrl?: string | null }> | null;
-  attributes?: { nodes: Array<Attribute> } | null;
-  productCategories?: { nodes: Array<ProductCategory> } | null;
-  defaultAttributes?: Array<{ name?: string | null; attributeId?: number | null }> | null;
-  variations?: { nodes: Variation[] } | null;
-  node: SimpleProduct | VariableProduct;
-  related?: { nodes: Array<Product> } | null;
-  reviews?: Reviews | null;
-}
-
-interface SimpleProduct {
-  name?: string | null;
-  price?: string | null;
-  regularPrice?: string | null;
-  salePrice?: string | null;
-  stockStatus?: StockStatusEnum | null;
-  stockQuantity?: number | null;
-  description?: string | null;
-  shortDescription?: string | null;
-  averageRating?: number | null;
-  weight?: string | null;
-  length?: string | null;
-  width?: string | null;
-  height?: string | null;
-  reviewCount?: number | null;
-  rawPrice?: string | null;
-  rawRegularPrice?: string | null;
-  rawSalePrice?: string | null;
-  image?: ProductImage | null;
-  galleryImages?: { nodes: Array<{ sourceUrl?: string | null }> } | null;
-}
-
-interface VariableProduct {
-  name?: string | null;
-  description?: string | null;
-  shortDescription?: string | null;
-  weight?: string | null;
-  length?: string | null;
-  width?: string | null;
-  height?: string | null;
-  averageRating?: number | null;
-  reviewCount?: number | null;
-  regularPrice?: string | null;
-  salePrice?: string | null;
-  stockStatus?: StockStatusEnum | null;
-  totalSales?: number | null;
-  stockQuantity?: number | null;
-  rawPrice?: string | null;
-  rawRegularPrice?: string | null;
-  rawSalePrice?: string | null;
-  image?: ProductImage | null;
-  attributes?: { nodes: Array<ProductAttribute> } | null;
-  defaultAttributes?: { nodes: Array<Attribute> } | null;
-  variations?: {
-    nodes: Variation[];
-  } | null;
-  galleryImages?: { nodes: Array<{ sourceUrl?: string | null }> } | null;
-}
-
 interface Variation {
   name?: string | null;
   databaseId?: number;
@@ -166,7 +81,7 @@ interface Variation {
   salePrice?: string | null;
   slug?: string | null;
   stockQuantity?: number | null;
-  stockStatus?: StockStatusEnum | null;
+  stockStatus: StockStatusEnum | null;
   hasAttributes?: boolean | null;
   image?: ProductImage | null;
   attributes?: { nodes: Attribute[] } | null;
@@ -219,22 +134,6 @@ interface LineItem {
   variation?: Variation | null;
 }
 
-interface Order {
-  needsPayment?: boolean | null;
-  needsProcessing?: boolean | null;
-  status?: OrderStatusEnum | null;
-  databaseId?: number | null;
-  orderKey?: string | null;
-  subtotal?: string | null;
-  total?: string | null;
-  totalTax?: string | null;
-  shippingTotal?: string | null;
-  paymentMethodTitle?: string | null;
-  paymentMethod?: string | null;
-  date?: string | null;
-  customer?: Customer | null;
-  lineItems?: { nodes?: LineItem[] } | null;
-}
 interface WooNuxtSEOItem {
   provider: string;
   url?: string;

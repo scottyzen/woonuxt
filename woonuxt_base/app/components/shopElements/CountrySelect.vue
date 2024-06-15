@@ -1,5 +1,5 @@
 <script setup>
-import { countries } from '../../../app/constants';
+import { countries } from '#constants';
 const { allowedCountries } = await GqlGetStates({ country: 'IE' });
 
 const props = defineProps(['modelValue']);

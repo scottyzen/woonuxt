@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { OrderStatusEnum } from '../../../.nuxt/gql/default';
+import { OrderStatusEnum } from '#woo';
 
 const { query, params, name } = useRoute();
 const { customer } = useAuth();

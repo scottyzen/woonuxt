@@ -34,6 +34,11 @@ export default defineNuxtConfig({
     },
   },
 
+  alias: {
+    '#constants': resolve('./app/constants'),
+    '#woo': '../.nuxt/gql/default',
+  },
+
   hooks: {
     'pages:extend'(pages) {
       const addPage = (name: string, path: string, file: string) => {
