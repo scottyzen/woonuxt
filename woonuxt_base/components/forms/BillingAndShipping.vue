@@ -99,12 +99,12 @@
 
       <div class="w-full">
         <label for="billing-state">{{ $t('messages.billing.state') }}</label>
-        <StateSelect v-model="customer.shipping.state" :default-value="customer.shipping.state" :country-code="customer.shipping.country" />
+        <StateSelect v-model="customer.shipping.state" :default-value="customer.shipping.state" />
       </div>
 
       <div class="w-full">
         <label for="country">{{ $t('messages.billing.country') }}</label>
-        <CountrySelect v-model="customer.shipping.country" :default-value="customer.shipping?.country" />
+        <CountrySelect v-model="customer.shipping.country" :default-value="customer.shipping?.country" :country-code="customer.shipping.country" />
       </div>
 
       <div class="w-full">
