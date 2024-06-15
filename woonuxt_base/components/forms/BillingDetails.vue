@@ -37,13 +37,13 @@ const billing = toRef(props, 'modelValue');
     </div>
 
     <div class="w-full">
-      <label for="country">County</label>
-      <StateSelect v-model="billing.state" :default-value="billing.state" :country-code="billing.country" @change="updateShippingLocation" />
+      <label for="state">{{ $t('messages.billing.state') }}</label>
+      <StateSelect v-model="billing.state" :default-value="billing.state" @change="updateShippingLocation" />
     </div>
 
     <div class="w-full">
       <label for="country">{{ $t('messages.billing.country') }}</label>
-      <CountrySelect v-model="billing.country" :default-value="billing.country" @change="updateShippingLocation" />
+      <CountrySelect v-model="billing.country" :default-value="billing.country" :country-code="billing.country" @change="updateShippingLocation" />
     </div>
 
     <div class="w-full">
