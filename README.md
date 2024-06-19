@@ -4,21 +4,17 @@
 
 ## Introduction
 
-The goal of WooNuxt is to provide a modern, fast, and SEO-friendly front-end for WooCommerce. It's built on Nuxt 3 and uses the WPGraphQL API to retrieve all the data it needs. It's also fully customizable and can be extended with your own components and modules. You can see a live demo of WooNuxt by clicking the button below.
+The goal of WooNuxt is to provide a modern, fast, and SEO-friendly front-end for WooCommerce. It's built on Nuxt 3 and uses the WPGraphQL API to retrieve all the data it needs. It's also fully customizable and can be extended with your custom components and modules. You can see a live demo of WooNuxt by clicking the button below.
 
-> [!CAUTION]
-> Please note that there is currently an issue with Netlify and the @Nuxt/image module which is causing images to not load. For the time being, I recommend deploying WooNuxt on Vercel and checking out the demo that is hosted there (link below).
-
-- [**Live Demo on Netlify**](https://v3.woonuxt.com/) ⚡️
-- [**Live Demo on Vercel**](https://woonuxt-v3.vercel.app/) ⚡️
-
-&nbsp;
+| Demo            | URL                            |
+| --------------- | ------------------------------ |
+| Netlify Demo    | https://v3.woonuxt.com/        |
+| Vercel Demo     | https://woonuxt-v3.vercel.app/ |
+| Customized Demo | https://myshop.woonuxt.com/    |
 
 ## Troubleshooting
 
 You can find some common errors and how to fix them [here](https://woonuxt.com/faq#some-common-errors-to-troubleshoot)
-
-&nbsp;
 
 ## Get Started
 
@@ -29,15 +25,14 @@ You can find some common errors and how to fix them [here](https://woonuxt.com/f
 
 [![button](https://user-images.githubusercontent.com/5116925/218880214-a16287a7-fd8c-4299-9e65-0871136f0771.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/scottyzen/woonuxt) [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fscottyzen%2FWooNuxt3&repository-name=WooNuxt&env=GQL_HOST,NUXT_IMAGE_DOMAINS)
 
-&nbsp;
-
 ## How to customize & extend WooNuxt 🎨
 
 WooNuxt now uses the Nuxt layers feature to make it easy to customize any part of WooNuxt just like you would with a WordPress theme with its child theme.
 
 Example: I have created a pages directory and added a `contact.vue` file in the pages directory. This will override the default contact page that comes with WooNuxt. You can do this with any page or component. So think of the `woonuxt_base` folder as the parent theme and the root folder as the child theme.
 
-&nbsp;
+Here is a [branch](https://github.com/scottyzen/woonuxt/tree/myshop) with an example of some basic customizations:
+And here is the live demo of the customized WooNuxt site: [My Shop](https://myshop.woonuxt.com/).
 
 ### Progress
 
