@@ -1,5 +1,5 @@
 export default defineNuxtPlugin(async (nuxtApp) => {
-  if (process.client) {
+  if (!import.meta.env.SSR) {
     const { clearAllCookies, clearAllLocalStorage } = useHelpers();
     const sessionToken = useCookie('woocommerce-session');
     if (sessionToken.value) useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken.value}` });

@@ -1,13 +1,19 @@
 <script lang="ts" setup>
+import { ProductsOrderByEnum } from '#woo';
+const { name, description, siteImage } = useAppConfig();
+
 const { data } = await useAsyncGql('getProductCategories', { first: 6 });
 const productCategories = data.value?.productCategories?.nodes || [];
 
+const { data: productData } = await useAsyncGql('getProducts', { first: 5, orderby: ProductsOrderByEnum.POPULARITY });
+const popularProducts = productData.value.products?.nodes || [];
+
 useSeoMeta({
   title: `Home`,
-  ogTitle: `WooNuxt`,
-  description: `This is an example of a WooNuxt store. It provides a modern, fast, and SEO friendly ecommerce store built with Nuxt and WooCommerce.`,
-  ogDescription: `This is an example of a WooNuxt store. It provides a modern, fast, and SEO friendly ecommerce store built with Nuxt and WooCommerce.`,
-  ogImage: `https://user-images.githubusercontent.com/5116925/218879668-f4c1f9fd-bef4-44b0-bc7f-e87d994aa3a1.png`,
+  ogTitle: name || `WooNuxt`,
+  description: description,
+  ogDescription: description,
+  ogImage: siteImage,
   twitterCard: `summary_large_image`,
 });
 </script>
@@ -64,6 +70,14 @@ useSeoMeta({
           <p class="text-sm">24/7 Online support</p>
         </div>
       </div>
+    </section>
+
+    <section class="container my-16" v-if="popularProducts">
+      <div class="flex items-end justify-between">
+        <h2 class="text-lg font-semibold md:text-2xl">Popular Products</h2>
+        <NuxtLink class="text-primary" to="/products">{{ $t('messages.general.viewAll') }}</NuxtLink>
+      </div>
+      <ProductRow :products="popularProducts" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5 mt-8" />
     </section>
   </main>
 </template>
