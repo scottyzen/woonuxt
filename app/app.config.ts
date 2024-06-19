@@ -1,3 +1,6 @@
 export default defineAppConfig({
-  name: 'My Store',
+  siteName: 'My Store',
+  storeSettings: {
+    autoOpenCart: true,
+  },
 });
