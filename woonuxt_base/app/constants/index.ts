@@ -1,9 +1,3 @@
-export const StockStatusEnum = {
-  IN_STOCK: 'IN_STOCK',
-  OUT_OF_STOCK: 'OUT_OF_STOCK',
-  ON_BACKORDER: 'ON_BACKORDER',
-};
-
 export const countries = [
   { countryName: 'Afghanistan', countryCode: 'AF' },
   { countryName: 'Åland Islands', countryCode: 'AX' },
