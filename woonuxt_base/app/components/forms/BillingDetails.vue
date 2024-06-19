@@ -37,7 +37,7 @@ const billing = toRef(props, 'modelValue');
     </div>
 
     <div class="w-full">
-      <label for="country">County</label>
+      <label for="state">{{ $t('messages.billing.state') }}</label>
       <StateSelect v-model="billing.state" :default-value="billing.state" :country-code="billing.country" @change="updateShippingLocation" />
     </div>
 
