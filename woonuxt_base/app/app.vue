@@ -3,6 +3,7 @@ const route = useRoute();
 const { isShowingCart, toggleCart } = useCart();
 const { isShowingMobileMenu, toggleMobileMenu } = useHelpers();
 const { addBodyClass, removeBodyClass } = useHelpers();
+const { siteName } = useAppConfig();
 
 const closeCartAndMenu = () => {
   toggleCart(false);
@@ -17,6 +18,10 @@ watch(
   () => route.path,
   () => closeCartAndMenu(),
 );
+
+useHead({
+  titleTemplate: `%s - ${siteName}`,
+});
 </script>
 
 <template>

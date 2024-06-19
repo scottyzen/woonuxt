@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { StockStatusEnum } from '~/.nuxt/gql/default';
-import type { AddToCartInput } from '#gql';
+import { StockStatusEnum, ProductTypesEnum, type AddToCartInput } from '#woo';
+
 const route = useRoute();
 const { arraysEqual, formatArray, checkForVariationTypeOfAny } = useHelpers();
 const { addToCart, isUpdatingCart } = useCart();
@@ -9,22 +9,22 @@ const slug = route.params.slug as string;
 const { data } = (await useAsyncGql('getProduct', { slug })) as { data: { value: { product: Product } } };
 const product = ref<Product>(data?.value?.product);
 
-const quantity = ref(1);
-const activeVariation = ref(null) as Ref<Variation | null>;
-const variation = ref([]) as Ref<Variation[]>;
-const indexOfTypeAny = [] as number[];
+const quantity = ref<number>(1);
+const activeVariation = ref<Variation | null>(null);
+const variation = ref<Attribute[]>([]);
+const indexOfTypeAny = ref<number[]>([]);
 const attrValues = ref();
-const isSimpleProduct = computed(() => product.value.type === 'SIMPLE');
-const isVariableProduct = computed(() => product.value.type === 'VARIABLE');
+const isSimpleProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.SIMPLE);
+const isVariableProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.VARIABLE);
 
-const type = computed(() => (activeVariation.value ? activeVariation.value : product.value));
-const selectProductInput = computed(() => ({ productId: type.value.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
+const type = computed(() => activeVariation.value || product.value);
+const selectProductInput = computed<any>(() => ({ productId: type.value?.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
+
 const mergeLiveStockStatus = (payload: Product): void => {
-  product.value.stockStatus = payload.stockStatus ?? product.value.stockStatus;
+  product.value.stockStatus = payload.stockStatus ?? product.value?.stockStatus;
 
-  payload.variations?.nodes.forEach((variation: Variation, index: number) => {
-    if (product.value.variations?.nodes[index]) {
-      // @ts-ignore
+  payload.variations?.nodes?.forEach((variation: Variation, index: number) => {
+    if (product.value?.variations?.nodes[index]) {
       product.value.variations.nodes[index].stockStatus = variation.stockStatus;
     }
   });
@@ -32,13 +32,13 @@ const mergeLiveStockStatus = (payload: Product): void => {
 
 onMounted(async () => {
   try {
-    const { product } = (await GqlGetStockStatus({ slug })) as { product: Product };
-    mergeLiveStockStatus(product);
+    const { product } = await GqlGetStockStatus({ slug });
+    if (product) mergeLiveStockStatus(product as Product);
   } catch (error: any) {
     const errorMessage = error?.gqlErrors?.[0].message;
     if (errorMessage) console.error(errorMessage);
   }
-  if (product.value.variations) indexOfTypeAny.push(...checkForVariationTypeOfAny(product.value));
+  if (product.value.variations) indexOfTypeAny.value.push(...checkForVariationTypeOfAny(product.value));
 });
 
 const updateSelectedVariations = (variations: Attribute[]): void => {
@@ -46,10 +46,10 @@ const updateSelectedVariations = (variations: Attribute[]): void => {
 
   attrValues.value = variations.map((el) => ({ attributeName: el.name, attributeValue: el.value }));
   const cloneArray = JSON.parse(JSON.stringify(variations));
-  const getActiveVariation = product.value.variations.nodes.filter((variation: any) => {
+  const getActiveVariation = product.value.variations?.nodes.filter((variation: any) => {
     // If there is any variation of type ANY set the value to ''
     if (variation.attributes) {
-      indexOfTypeAny.forEach((index) => (cloneArray[index].value = ''));
+      indexOfTypeAny.value.forEach((index) => (cloneArray[index].value = ''));
       return arraysEqual(formatArray(variation.attributes.nodes), formatArray(cloneArray));
     }
   });

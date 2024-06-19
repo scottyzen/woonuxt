@@ -11,7 +11,6 @@ export function useCart() {
   const isUpdatingCoupon = useState<boolean>('isUpdatingCoupon', () => false);
   const paymentGateways = useState<PaymentGateways>('paymentGateways', () => null);
   const { logGQLError } = useHelpers();
-  const runtimeConfig = useRuntimeConfig();
 
   // Refesh the cart from the server
   async function refreshCart() {
@@ -52,7 +51,8 @@ export function useCart() {
       const { addToCart } = await GqlAddToCart({ input });
       cart.value = addToCart?.cart ?? null;
       // Auto open the cart when an item is added to the cart if the setting is enabled
-      if (runtimeConfig.public?.AUTO_OPEN_CART === 'true' && !isShowingCart.value) toggleCart(true);
+      const { storeSettings } = useAppConfig();
+      if (storeSettings.autoOpenCart && !isShowingCart.value) toggleCart(true);
     } catch (error: any) {
       logGQLError(error);
     }
