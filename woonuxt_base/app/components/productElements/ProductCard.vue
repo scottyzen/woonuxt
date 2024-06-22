@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const route = useRoute();
+const { storeSettings } = useAppConfig();
 const props = defineProps({
   node: { type: Object, default: null },
   index: { type: Number, default: 1 },
@@ -51,7 +52,7 @@ const imagetoDisplay = computed<string>(() => {
         placeholder-class="blur-xl" />
     </NuxtLink>
     <div class="p-2">
-      <StarRating :rating="node.averageRating" :count="node.reviewCount" />
+      <StarRating :rating="node.averageRating" :count="node.reviewCount" v-if="storeSettings.showReviews" />
       <NuxtLink :to="`/product/${decodeURIComponent(node.slug)}`" :title="node.name">
         <h2 class="mb-2 font-light leading-tight">{{ node.name }}</h2>
       </NuxtLink>
