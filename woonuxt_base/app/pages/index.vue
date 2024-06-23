@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ProductsOrderByEnum } from '#woo';
-const { name, description, siteImage } = useAppConfig();
+const { siteName, description, shortDescription, siteImage } = useAppConfig();
 
 const { data } = await useAsyncGql('getProductCategories', { first: 6 });
 const productCategories = data.value?.productCategories?.nodes || [];
@@ -10,9 +10,9 @@ const popularProducts = productData.value.products?.nodes || [];
 
 useSeoMeta({
   title: `Home`,
-  ogTitle: name || `WooNuxt`,
+  ogTitle: siteName,
   description: description,
-  ogDescription: description,
+  ogDescription: shortDescription,
   ogImage: siteImage,
   twitterCard: `summary_large_image`,
 });
