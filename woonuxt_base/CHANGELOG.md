@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. I'll try my best to keep it updated.
 
+## v4.0.1 (26-06-2024)
+
+- Add option showReviews #176
+- Update `nuxt-graphql-client` to v0.2.35
+
 ## v4.0.0 (19-06-2024)
 
 - Enable Nuxt 4 compatibility option in `nuxt.config.js`
