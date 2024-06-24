@@ -2,6 +2,7 @@
 import { StockStatusEnum, ProductTypesEnum, type AddToCartInput } from '#woo';
 
 const route = useRoute();
+const { storeSettings } = useAppConfig();
 const { arraysEqual, formatArray, checkForVariationTypeOfAny } = useHelpers();
 const { addToCart, isUpdatingCart } = useCart();
 const slug = route.params.slug as string;
@@ -92,7 +93,7 @@ const disabledAddToCart = computed(() => {
               {{ type.name }}
               <WPAdminLink :link="`/wp-admin/post.php?post=${product.databaseId}&action=edit`">Edit</WPAdminLink>
             </h1>
-            <StarRating :rating="product.averageRating || 0" :count="product.reviewCount || 0" />
+            <StarRating :rating="product.averageRating || 0" :count="product.reviewCount || 0" v-if="storeSettings.showReviews" />
           </div>
           <ProductPrice class="text-xl" :sale-price="type.salePrice" :regular-price="type.regularPrice" />
         </div>

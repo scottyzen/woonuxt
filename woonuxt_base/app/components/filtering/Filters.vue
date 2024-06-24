@@ -2,6 +2,7 @@
 const { isFiltersActive } = useFiltering();
 const { removeBodyClass } = useHelpers();
 const runtimeConfig = useRuntimeConfig();
+const { storeSettings } = useAppConfig();
 
 const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES || [];
 // hide-categories prop is used to hide the category filter on the product category page
@@ -31,7 +32,7 @@ const { hideCategories } = defineProps({ hideCategories: { type: Boolean, defaul
           :hide-empty="attribute.hideEmpty" />
       </div>
       <OnSaleFilter />
-      <LazyStarRatingFilter />
+      <LazyStarRatingFilter v-if="storeSettings.showReviews" />
       <LazyResetFiltersButton v-if="isFiltersActive" />
     </div>
   </aside>
