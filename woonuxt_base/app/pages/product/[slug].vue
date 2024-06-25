@@ -103,7 +103,7 @@ const disabledAddToCart = computed(() => {
             <span class="text-gray-400">{{ $t('messages.shop.availability') }}: </span>
             <StockStatus :stockStatus @updated="mergeLiveStockStatus" />
           </div>
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2" v-if="storeSettings.showSKU">
             <span class="text-gray-400">{{ $t('messages.shop.sku') }}: </span>
             <span>{{ product.sku || 'N/A' }}</span>
           </div>
@@ -132,23 +132,24 @@ const disabledAddToCart = computed(() => {
           </div>
         </form>
 
-        <div class="grid gap-2 my-8 text-sm">
-          <div class="flex items-center gap-2">
-            <span class="text-gray-400">{{ $t('messages.shop.category', 2) }}:</span>
-            <div class="product-categories" v-if="product.productCategories">
-              <NuxtLink
-                v-for="category in product.productCategories.nodes"
-                :key="category.slug"
-                :to="`/product-category/${decodeURIComponent(category.slug)}`"
-                class="hover:text-primary"
-                :title="category.name"
-                >{{ category.name }}<span class="comma">, </span>
-              </NuxtLink>
+        <div v-if="storeSettings.showInProductCategories">
+          <div class="grid gap-2 my-8 text-sm">
+            <div class="flex items-center gap-2">
+              <span class="text-gray-400">{{ $t('messages.shop.category', 2) }}:</span>
+              <div class="product-categories" v-if="product.productCategories">
+                <NuxtLink
+                  v-for="category in product.productCategories.nodes"
+                  :key="category.slug"
+                  :to="`/product-category/${decodeURIComponent(category.slug)}`"
+                  class="hover:text-primary"
+                  :title="category.name"
+                  >{{ category.name }}<span class="comma">, </span>
+                </NuxtLink>
+              </div>
             </div>
           </div>
+          <hr />
         </div>
-
-        <hr />
 
         <div class="flex flex-wrap gap-4">
           <WishlistButton :product />
@@ -159,7 +160,7 @@ const disabledAddToCart = computed(() => {
     <div v-if="product.description || product.reviews" class="my-32">
       <ProductTabs :product />
     </div>
-    <div class="my-32" v-if="product.related">
+    <div class="my-32" v-if="product.related && storeSettings.showRelatedProducts">
       <div class="mb-4 text-xl font-semibold">{{ $t('messages.shop.youMayLike') }}</div>
       <ProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
     </div>

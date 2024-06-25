@@ -10,5 +10,10 @@ export default defineAppConfig({
   storeSettings: {
     autoOpenCart: false,
     showReviews: true,
+    showFilters: true,
+    showOrderByDropdown: true,
+    showSKU: true,
+    showRelatedProducts: true,
+    showInProductCategories: true,
   },
 });
