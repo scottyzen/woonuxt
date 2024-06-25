@@ -94,12 +94,15 @@ export const useAuth = () => {
 
   const sendResetPasswordEmail = async (email: string): Promise<{ success: boolean; error: any }> => {
     try {
+      isPending.value = true;
       const { sendPasswordResetEmail } = await GqlResetPasswordEmail({ username: email });
       if (sendPasswordResetEmail?.success) {
+        isPending.value = false;
         return { success: true, error: null };
       }
       return { success: false, error: 'There was an error sending the reset password email. Please try again later.' };
     } catch (error: any) {
+      isPending.value = false;
       const gqlError = error?.gqlErrors?.[0];
       return { success: false, error: gqlError?.message };
     }
