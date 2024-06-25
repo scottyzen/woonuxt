@@ -9,13 +9,13 @@ query getOrders {
         downloadableItems {
           nodes {
             name
-            downloadsRemaining
-            url
             product {
               name
               slug
             }
+            url
             accessExpires
+            downloadsRemaining
           }
         }
         lineItems {

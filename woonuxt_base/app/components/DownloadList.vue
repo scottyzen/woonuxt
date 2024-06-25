@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const router = useRouter();
 const { formatDate, scrollToTop } = useHelpers();
 const { getOrders, downloadableOrders } = useAuth();
@@ -18,7 +18,7 @@ const refresh = () => {
   getOrders();
 };
 
-const downloadFile = (downloadUrl) => {
+const downloadFile = (downloadUrl: string) => {
   window.open(downloadUrl, '_blank');
 };
 </script>
