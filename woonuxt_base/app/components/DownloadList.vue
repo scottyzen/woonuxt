@@ -68,7 +68,7 @@ tbody tr:nth-child(odd) {
 }
 
 tbody tr {
-  @apply text-sm text-gray-500 hover:text-gray-800;
+  @apply text-sm text-gray-500;
 }
 
 td,
