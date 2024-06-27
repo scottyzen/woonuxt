@@ -40,9 +40,15 @@
       "newPassword": "Nuova password",
       "confirmNewPassword": "Conferma nuova password",
       "updatePassword": "Aggiorna password",
+      "forgotPassword": "Hai dimenticato la password?",
       "username": "Nome utente",
       "login": "Accedi",
       "logout": "Esci",
+      "backToLogin": "Torna al Login",
+      "enterEmailForReset": "Inserisci il tuo indirizzo e-mail e ti invieremo un link per reimpostare la tua password.",
+      "ifRegistered": "Se il tuo indirizzo e-mail è registrato presso di noi, riceverai un'e-mail con un link per reimpostare la tua password.",
+      "requestNewLink": "Richiedi un nuovo link",
+      "resetPassword": "Reimposta password",
       "sendPasswordResetEmail": "Invia email per il reset della password",
       "register": "Registrati",
       "accountRegister": "Iscriviti",
@@ -131,6 +137,8 @@
     "error": {
       "invalidUsername": "Nessun account trovato con questo nome utente. Registrati per un nuovo account.",
       "incorrectPassword": "Password errata. Riprova.",
+      "passwordMismatch": "Le password non coincidono. Per favore riprova.",
+      "invalidPasswordResetLink": "Il link per reimpostare la password non è valido.",
       "general": "Qualcosa è andato storto",
       "noOrder": "Non abbiamo trovato il tuo ordine. Riprova più tardi."
     }

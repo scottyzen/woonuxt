@@ -40,9 +40,15 @@
       "newPassword": "New Password",
       "confirmNewPassword": "Confirm New Password",
       "updatePassword": "Update Password",
+      "forgotPassword": "Forgot password?",
       "username": "Username",
       "login": "Log In",
       "logout": "Logout",
+      "backToLogin": "Back to Login",
+      "enterEmailForReset": "Please enter your email address and we will send you a link to reset your password.",
+      "ifRegistered": "If your email address is registered with us, you will receive an email with a link to reset your password.",
+      "requestNewLink": "Please request a new link",
+      "resetPassword": "Reset password",
       "sendPasswordResetEmail": "Send Password Reset Email",
       "register": "Register",
       "accountRegister": "Sign up",
@@ -131,6 +137,8 @@
     "error": {
       "invalidUsername": "No account found with that username. Sign up for a new account.",
       "incorrectPassword": "Incorrect password. Please try again.",
+      "passwordMismatch": "Passwords do not match. Please try again.",
+      "invalidPasswordResetLink": "Password reset link is invalid.",
       "general": "Something went wrong",
       "noOrder": "We could not find your order. Please try again later."
     }
