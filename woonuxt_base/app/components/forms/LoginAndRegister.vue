@@ -18,9 +18,7 @@
         {{ $t('messages.billing.email') }} <span class="text-red-500">*</span> <br />
         <input id="email" v-model="userInfo.email" placeholder="Email" type="text" required />
       </label>
-      <p v-if="formView === 'forgotPassword'" class="text-sm text-gray-500">
-        {{ $t('messages.account.enterEmailForReset') }}
-      </p>
+      <p v-if="formView === 'forgotPassword'" class="text-sm text-gray-500">{{ $t('messages.account.enterEmailForReset') }}</p>
       <div v-if="formView !== 'forgotPassword'">
         <label for="username">
           {{ $t('messages.account.username') }} <span class="text-red-500">*</span> <br />
