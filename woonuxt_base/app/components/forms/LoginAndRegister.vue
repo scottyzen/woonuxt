@@ -2,9 +2,7 @@
   <div class="max-w-lg mx-auto my-16 min-h-[600px] lg:my-24">
     <div class="flex flex-col items-center">
       <Logo class="mb-6 scale-125" />
-      <h1 class="text-xl font-semibold lg:text-3xl">
-        {{ formTitle }}
-      </h1>
+      <h1 class="text-xl font-semibold lg:text-3xl">{{ formTitle }}</h1>
       <div v-if="formView === 'login'" class="my-2 text-center">
         {{ $t('messages.account.noAccount') }}
         <a class="font-semibold cursor-pointer text-primary" @click="navigate('register')"> {{ $t('messages.account.accountRegister') }} </a>.
@@ -44,12 +42,8 @@
         <span>{{ buttonText }}</span>
       </button>
     </form>
-    <div class="my-8 text-center cursor-pointer" @click="navigate('forgotPassword')" v-if="formView === 'login'">
-      {{ $t('messages.account.forgotPassword') }}
-    </div>
-    <div class="my-8 text-center cursor-pointer" @click="navigate('login')" v-if="formView === 'forgotPassword'">
-      {{ $t('messages.account.backToLogin') }}
-    </div>
+    <div class="my-8 text-center cursor-pointer" @click="navigate('forgotPassword')" v-if="formView === 'login'">{{ $t('messages.account.forgotPassword') }}</div>
+    <div class="my-8 text-center cursor-pointer" @click="navigate('login')" v-if="formView === 'forgotPassword'">{{ $t('messages.account.backToLogin') }}</div>
   </div>
 </template>
 
@@ -73,7 +67,6 @@ const updateFormView = () => {
   }
 };
 watch(route, updateFormView, { immediate: true });
-
 
 const login = async (userInfo) => {
   const { success, error } = await loginUser(userInfo);
