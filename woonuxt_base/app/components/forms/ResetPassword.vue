@@ -36,6 +36,8 @@ const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 const { resetPasswordWithKey, loginUser } = useAuth();
+const { viewer, customer } = useAuth();
+
 
 const password = ref('');
 const confirmPassword = ref('');
@@ -70,9 +72,11 @@ const handlePasswordReset = async () => {
       throw new Error(resetResult.error);
     }
 
-    const loginResult = await loginUser({ username: userInfo.login, password: userInfo.password });
-    if (!loginResult.success) {
-      throw new Error(loginResult.error);
+    if (viewer) {
+      const loginResult = await loginUser({ username: userInfo.login, password: userInfo.password });
+      if (!loginResult.success) {
+        throw new Error(loginResult.error);
+      }
     }
     router.push('/my-account');
   } catch (error: any) {
