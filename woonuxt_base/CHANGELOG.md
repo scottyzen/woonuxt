@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. I'll try my best to keep it updated.
 
+## v4.0.2 (29-06-2024)
+
+- Add more options to `app.config.ts` #178
+
 ## v4.0.1 (26-06-2024)
 
 - Add option showReviews #176

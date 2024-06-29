@@ -132,7 +132,7 @@ const disabledAddToCart = computed(() => {
           </div>
         </form>
 
-        <div v-if="storeSettings.showInProductCategories">
+        <div v-if="storeSettings.showProductCategoriesOnSingleProduct">
           <div class="grid gap-2 my-8 text-sm">
             <div class="flex items-center gap-2">
               <span class="text-gray-400">{{ $t('messages.shop.category', 2) }}:</span>
