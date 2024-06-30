@@ -4,7 +4,6 @@ type Viewer = import('#gql').GetCartQuery['viewer'];
 type PaymentGateways = import('#gql').GetCartQuery['paymentGateways'];
 type ProductBase = import('#gql').GetProductQuery['product'];
 type Order = import('#gql').GetOrderQuery['order'];
-type Downloads = import('#gql').GetDownloadsQuery['customer']
 type SimpleProduct = import('#gql').SimpleProductFragment;
 type VariableProduct = import('#gql').VariableProductFragment;
 type Product = ProductBase & SimpleProduct & VariableProduct;
@@ -139,4 +138,18 @@ interface WooNuxtSEOItem {
   provider: string;
   url?: string;
   handle?: string;
+}
+
+interface DownloadableProduct {
+  slug?: string | null;
+  name?: string | null;
+}
+
+interface DownloadableItem {
+  id: string;
+  product?: DownloadableProduct | null;
+  downloadsRemaining?: number | null;
+  accessExpires?: string | null;
+  url?: string | null;
+  name?: string | null;
 }

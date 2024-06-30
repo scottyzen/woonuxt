@@ -6,18 +6,6 @@ query getOrders {
         total
         date
         status
-        downloadableItems {
-          nodes {
-            name
-            product {
-              name
-              slug
-            }
-            url
-            accessExpires
-            downloadsRemaining
-          }
-        }
         lineItems {
           nodes {
             product {

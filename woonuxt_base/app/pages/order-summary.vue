@@ -129,6 +129,11 @@ const refreshOrder = async () => {
 
         <hr class="my-8" />
 
+        <div v-if="order.downloadableItems.nodes">
+          <DownloadableItems :downloadableItems="order.downloadableItems.nodes" />
+          <hr class="my-8" />
+        </div>
+
         <div>
           <div class="flex justify-between">
             <span>{{ $t('messages.shop.subtotal') }}</span>
