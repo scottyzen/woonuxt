@@ -8,7 +8,7 @@ export const useAuth = () => {
   const viewer = useState<Viewer | null>('viewer', () => null);
   const isPending = useState<boolean>('isPending', () => false);
   const orders = useState<Order[] | null>('orders', () => null);
-  const downloadableOrders = useState<Order[] | null>('downloadableOrders', () => null);
+  const downloads = useState<Downloads | null>('downloads', () => null);
 
   // Log in the user
   const loginUser = async (credentials: CreateAccountInput): Promise<{ success: boolean; error: any }> => {
@@ -111,11 +111,27 @@ export const useAuth = () => {
       const { customer } = await GqlGetOrders();
       if (customer) {
         orders.value = customer.orders?.nodes ?? [];
-        downloadableOrders.value = orders.value?.filter(order => (order?.downloadableItems?.nodes.length ?? 0) > 0);
         return { success: true, error: null };
       }
       return { success: false, error: 'There was an error getting your orders. Please try again later.' };
     } catch (error: any) {
+      const gqlError = error?.gqlErrors?.[0];
+      return { success: false, error: gqlError?.message };
+    }
+  };
+
+  const getDownloads = async (): Promise<{ success: boolean; error: any }> => {
+    try {
+      console.log("here")
+      const { customer } = await GqlGetDownloads();
+      if (customer) {
+        downloads.value = customer;
+        return { success: true, error: null };
+      }
+      return { success: false, error: 'There was an error getting your orders. Please try again later.' };
+    } catch (error: any) {
+      console.log("erroir", error);
+
       const gqlError = error?.gqlErrors?.[0];
       return { success: false, error: gqlError?.message };
     }
@@ -128,7 +144,7 @@ export const useAuth = () => {
     customer,
     isPending,
     orders,
-    downloadableOrders,
+    downloads,
     avatar,
     loginUser,
     updateCustomer,
@@ -137,5 +153,6 @@ export const useAuth = () => {
     registerUser,
     sendResetPasswordEmail,
     getOrders,
+    getDownloads,
   };
 };

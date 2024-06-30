@@ -1,21 +1,18 @@
 <script setup lang="ts">
 const router = useRouter();
 const { formatDate, scrollToTop } = useHelpers();
-const { getOrders, downloadableOrders } = useAuth();
+const { getDownloads, downloads } = useAuth();
 
-if (downloadableOrders.value === null) getOrders();
+if (downloads.value === null) getDownloads();
 
 const allDownloadableItems = computed(() => {
-  if (downloadableOrders.value) {
-    return downloadableOrders.value.flatMap((order) => order.downloadableItems.nodes);
-  }
-  return [];
+  return downloads.value?.downloadableItems?.nodes;
 });
 
 const refresh = () => {
-  downloadableOrders.value = null;
+  downloads.value = null;
   scrollToTop();
-  getOrders();
+  getDownloads();
 };
 
 const downloadFile = (downloadUrl: string) => {
@@ -38,11 +35,11 @@ const downloadFile = (downloadUrl: string) => {
         <tbody>
           <tr v-for="download in allDownloadableItems" :key="download.id">
             <td class="rounded-l-lg ">
-              <router-link :to="`/product/${download.product.slug}`" class="cursor-pointer hover:underline">{{ download.product.name }}</router-link>
+              <router-link :to="`/product/${download.product?.slug}`" class="cursor-pointer hover:underline">{{ download.product?.name }}</router-link>
             </td>
             <td>{{ download.downloadsRemaining ? download.downloadsRemaining : '∞' }}</td>
             <td>{{ download.accessExpires ? formatDate(download.accessExpires) : 'Never' }}</td>
-            <td class="text-right rounded-r-lg">
+            <td class="text-right rounded-r-lg" v-if="download.url">
               <button @click.stop="downloadFile(download.url)" class="text-blue-500 hover:text-blue-700 hover:underline cursor-pointer ">
                 {{ download.name }}
               </button>
@@ -57,7 +54,7 @@ const downloadFile = (downloadUrl: string) => {
         </button>
       </div>
     </div>
-    <div v-else-if="downloadableOrders && downloadableOrders.length === 0" class="min-h-[250px] flex items-center justify-center text-gray-500 text-lg">No downloads found.</div>
+    <div v-else-if="allDownloadableItems && allDownloadableItems.length === 0" class="min-h-[250px] flex items-center justify-center text-gray-500 text-lg">No downloads found.</div>
     <LoadingIcon v-else size="24" stroke="2" />
   </div>
 </template>
