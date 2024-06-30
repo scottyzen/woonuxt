@@ -2,12 +2,12 @@ type Cart = import('#gql').GetCartQuery['cart'];
 type Customer = import('#gql').GetCartQuery['customer'];
 type Viewer = import('#gql').GetCartQuery['viewer'];
 type PaymentGateways = import('#gql').GetCartQuery['paymentGateways'];
-type ProducBase = import('#gql').GetProductQuery['product'];
+type ProductBase = import('#gql').GetProductQuery['product'];
 type Order = import('#gql').GetOrderQuery['order'];
 type Downloads = import('#gql').GetDownloadsQuery['customer']
 type SimpleProduct = import('#gql').SimpleProductFragment;
 type VariableProduct = import('#gql').VariableProductFragment;
-type Product = ProducBase & SimpleProduct & VariableProduct;
+type Product = ProductBase & SimpleProduct & VariableProduct;
 
 interface ProductAttributeInput {
   attributeName: string;
