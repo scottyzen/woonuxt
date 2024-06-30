@@ -122,7 +122,6 @@ export const useAuth = () => {
 
   const getDownloads = async (): Promise<{ success: boolean; error: any }> => {
     try {
-      console.log("here")
       const { customer } = await GqlGetDownloads();
       if (customer) {
         downloads.value = customer;
@@ -130,8 +129,6 @@ export const useAuth = () => {
       }
       return { success: false, error: 'There was an error getting your orders. Please try again later.' };
     } catch (error: any) {
-      console.log("erroir", error);
-
       const gqlError = error?.gqlErrors?.[0];
       return { success: false, error: gqlError?.message };
     }
