@@ -1,0 +1,17 @@
+# OrderToDownloadableItemConnection or CustomerToDownloadableItemConnection
+
+fragment DownloadableItems on Customer {
+  downloadableItems(first: 100) {
+    nodes {
+      id
+      name
+      product {
+        name
+        slug
+      }
+      url
+      accessExpires
+      downloadsRemaining
+    }
+  }
+}

@@ -6,6 +6,7 @@ type ProductBase = import('#gql').GetProductQuery['product'];
 type Order = import('#gql').GetOrderQuery['order'];
 type SimpleProduct = import('#gql').SimpleProductFragment;
 type VariableProduct = import('#gql').VariableProductFragment;
+type DownloadableItems = import('#gql').DownloadableItemsFragment;
 type Product = ProductBase & SimpleProduct & VariableProduct;
 
 interface ProductAttributeInput {
@@ -138,18 +139,4 @@ interface WooNuxtSEOItem {
   provider: string;
   url?: string;
   handle?: string;
-}
-
-interface DownloadableProduct {
-  slug: string;
-  name: string;
-}
-
-interface DownloadableItem {
-  id: string;
-  product: DownloadableProduct;
-  downloadsRemaining?: number | null;
-  url?: string | null;
-  accessExpires?: string | null;
-  name: string | null;
 }

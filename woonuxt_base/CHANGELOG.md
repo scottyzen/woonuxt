@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. I'll try my best to keep it updated.
 
+## v4.0.3 (1-07-2024)
+
+- Add Downloads List #177
+- Add option to show/hide Breadcrumb on SingleProduct #181
+
 ## v4.0.2 (29-06-2024)
 
 - Add more options to `app.config.ts` #178
