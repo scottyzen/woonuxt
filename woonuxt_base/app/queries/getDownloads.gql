@@ -1,0 +1,17 @@
+query getDownloads {
+  customer {
+    downloadableItems {
+      nodes {
+        id
+        name
+        product {
+          name
+          slug
+        }
+        url
+        accessExpires
+        downloadsRemaining
+      }
+    }
+  }
+}

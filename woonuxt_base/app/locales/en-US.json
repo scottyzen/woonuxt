@@ -17,6 +17,7 @@
       "myDetails": "My Details",
       "home": "Home",
       "allProducts": "Products",
+      "product": "Product",
       "contact": "Contact",
       "menu": "Menu",
       "color": "Color",
@@ -28,6 +29,7 @@
       "clear": "Clear",
       "optional": "Optional",
       "downloads": "Downloads",
+      "download": "Download",
       "goHome": "Go Home",
       "newsletter": "Newsletter",
       "customerService": "Customer Service",
@@ -107,7 +109,9 @@
       "discount": "Discount",
       "giftCards": "Gift Cards",
       "searchProducts": "Search Products...",
-      "couponCode": "Coupon Code"
+      "couponCode": "Coupon Code",
+      "downloadsRemaining": "Downloads remaining",
+      "expires": "Expires"
     },
     "billing": {
       "billing": "Billing",

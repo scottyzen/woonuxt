@@ -17,6 +17,7 @@
       "myDetails": "I miei dettagli",
       "home": "Home",
       "allProducts": "Prodotti",
+      "product": "Prodotto",
       "contact": "Contatto",
       "menu": "Menu",
       "color": "Colore",
@@ -28,6 +29,7 @@
       "clear": "Cancella",
       "optional": "Opzionale",
       "downloads": "Download",
+      "download": "Scarica",
       "goHome": "Torna alla Home",
       "newsletter": "Newsletter",
       "customerService": "Servizio clienti",
@@ -107,7 +109,9 @@
       "discount": "Sconto",
       "giftCards": "Carte regalo",
       "searchProducts": "Cerca prodotti...",
-      "couponCode": "Codice coupon"
+      "couponCode": "Codice coupon",
+      "downloadsRemaining": "Download rimanenti",
+      "expires": "Scade"
     },
     "billing": {
       "billing": "Fatturazione",

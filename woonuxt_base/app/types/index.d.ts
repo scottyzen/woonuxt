@@ -2,11 +2,11 @@ type Cart = import('#gql').GetCartQuery['cart'];
 type Customer = import('#gql').GetCartQuery['customer'];
 type Viewer = import('#gql').GetCartQuery['viewer'];
 type PaymentGateways = import('#gql').GetCartQuery['paymentGateways'];
-type ProducBase = import('#gql').GetProductQuery['product'];
+type ProductBase = import('#gql').GetProductQuery['product'];
 type Order = import('#gql').GetOrderQuery['order'];
 type SimpleProduct = import('#gql').SimpleProductFragment;
 type VariableProduct = import('#gql').VariableProductFragment;
-type Product = ProducBase & SimpleProduct & VariableProduct;
+type Product = ProductBase & SimpleProduct & VariableProduct;
 
 interface ProductAttributeInput {
   attributeName: string;
@@ -138,4 +138,18 @@ interface WooNuxtSEOItem {
   provider: string;
   url?: string;
   handle?: string;
+}
+
+interface DownloadableProduct {
+  slug: string;
+  name: string;
+}
+
+interface DownloadableItem {
+  id: string;
+  product: DownloadableProduct;
+  downloadsRemaining?: number | null;
+  url?: string | null;
+  accessExpires?: string | null;
+  name: string | null;
 }
