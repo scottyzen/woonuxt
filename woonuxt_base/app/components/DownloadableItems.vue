@@ -5,9 +5,6 @@ const props = defineProps({
   downloadableItems: { type: Object as PropType<DownloadableItem[]>, required: true },
 });
 
-const downloadFile = (downloadUrl: string) => {
-  window.open(downloadUrl, '_blank');
-};
 </script>
 
 <template>
