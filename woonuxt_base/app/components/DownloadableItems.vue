@@ -28,9 +28,7 @@ const downloadFile = (downloadUrl: string) => {
         <td>{{ download.downloadsRemaining ? download.downloadsRemaining : '∞' }}</td>
         <td>{{ download.accessExpires ? formatDate(download.accessExpires) : 'Never' }}</td>
         <td class="text-right rounded-r-lg" v-if="download.url">
-          <button @click.stop="downloadFile(download.url)" class="text-blue-500 hover:text-blue-700 hover:underline cursor-pointer">
-            {{ download.name }}
-          </button>
+          <a :href="download.url" :download="download.name" class="text-blue-500 hover:text-blue-700 hover:underline cursor-pointer">{{ download.name }}</a>
         </td>
       </tr>
     </tbody>
