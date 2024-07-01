@@ -14,7 +14,7 @@ const errorMessage = ref('');
 const isGuest = computed(() => !customer.value?.databaseId);
 const isSummaryPage = computed(() => name === 'order-summary');
 const isCheckoutPage = computed(() => name === 'order-received');
-const orderIsNotComplet = computed(() => order.value.status !== OrderStatusEnum.COMPLETED);
+const orderIsNotCompleted = computed(() => order.value.status !== OrderStatusEnum.COMPLETED);
 const hasDiscount = computed<boolean>(() => !!parseFloat(order.value.discountTotal?.replace(/[^0-9.]/g, '')));
 
 onBeforeMount(() => {
@@ -73,7 +73,7 @@ const refreshOrder = async () => {
           <div class="flex w-full items-center justify-between mb-2">
             <h1 class="text-xl font-semibold">{{ $t('messages.shop.orderReceived') }}</h1>
             <button
-              v-if="orderIsNotComplet"
+              v-if="orderIsNotCompleted"
               type="button"
               class="border rounded-md p-2 inline-flex items-center justify-center bg-white"
               title="Refresh order"
@@ -129,7 +129,7 @@ const refreshOrder = async () => {
 
         <hr class="my-8" />
 
-        <div v-if="order.downloadableItems?.nodes && order.downloadableItems.nodes.length && !orderIsNotComplet">
+        <div v-if="order.downloadableItems?.nodes && order.downloadableItems.nodes.length && !orderIsNotCompleted">
           <DownloadableItems :downloadableItems="order.downloadableItems.nodes" />
           <hr class="my-8" />
         </div>
