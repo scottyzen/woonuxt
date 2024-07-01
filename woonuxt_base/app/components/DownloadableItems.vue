@@ -2,7 +2,7 @@
 const { formatDate } = useHelpers();
 
 const props = defineProps({
-  downloadableItems: { type: Object, required: true },
+  downloadableItems: { type: Object as PropType<DownloadableItem[]>, required: true },
 });
 
 const downloadFile = (downloadUrl: string) => {
