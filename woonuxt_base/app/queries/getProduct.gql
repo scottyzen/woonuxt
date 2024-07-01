@@ -45,7 +45,14 @@ query getProduct($slug: ID!) {
     }
     ...Terms
     ...SimpleProduct
-    ...VariableProduct
+    ... on VariableProduct {
+      defaultAttributes {
+        nodes {
+          name
+          value
+        }
+      }
+    }
     related(first: 5) {
       nodes {
         name
