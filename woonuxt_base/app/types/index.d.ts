@@ -141,15 +141,15 @@ interface WooNuxtSEOItem {
 }
 
 interface DownloadableProduct {
-  slug?: string | null;
-  name?: string | null;
+  slug: string;
+  name: string;
 }
 
 interface DownloadableItem {
   id: string;
-  product?: DownloadableProduct | null;
+  product: DownloadableProduct;
   downloadsRemaining?: number | null;
-  accessExpires?: string | null;
   url?: string | null;
-  name?: string | null;
+  accessExpires?: string | null;
+  name: string | null;
 }

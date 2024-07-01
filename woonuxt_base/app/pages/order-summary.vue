@@ -14,7 +14,7 @@ const errorMessage = ref('');
 const isGuest = computed(() => !customer.value?.databaseId);
 const isSummaryPage = computed(() => name === 'order-summary');
 const isCheckoutPage = computed(() => name === 'order-received');
-const showRefreshButton = computed(() => order.value.status !== OrderStatusEnum.COMPLETED);
+const orderIsNotComplet = computed(() => order.value.status !== OrderStatusEnum.COMPLETED);
 const hasDiscount = computed<boolean>(() => !!parseFloat(order.value.discountTotal?.replace(/[^0-9.]/g, '')));
 
 onBeforeMount(() => {
@@ -73,7 +73,7 @@ const refreshOrder = async () => {
           <div class="flex w-full items-center justify-between mb-2">
             <h1 class="text-xl font-semibold">{{ $t('messages.shop.orderReceived') }}</h1>
             <button
-              v-if="showRefreshButton"
+              v-if="orderIsNotComplet"
               type="button"
               class="border rounded-md p-2 inline-flex items-center justify-center bg-white"
               title="Refresh order"
@@ -109,7 +109,7 @@ const refreshOrder = async () => {
         <hr class="my-8" />
 
         <div class="grid gap-2">
-          <div v-if="order.lineItems" v-for="item in order.lineItems.nodes" :key="item.product?.databaseId!" class="flex items-center justify-between gap-8">
+          <div v-if="order.lineItems" v-for="item in order.lineItems.nodes" :key="item.id" class="flex items-center justify-between gap-8">
             <img
               v-if="item.product?.node"
               class="w-16 h-16 rounded-xl"
@@ -129,7 +129,7 @@ const refreshOrder = async () => {
 
         <hr class="my-8" />
 
-        <div v-if="order.downloadableItems.nodes">
+        <div v-if="order.downloadableItems?.nodes && order.downloadableItems.nodes.length && !orderIsNotComplet">
           <DownloadableItems :downloadableItems="order.downloadableItems.nodes" />
           <hr class="my-8" />
         </div>

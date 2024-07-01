@@ -25,15 +25,19 @@ query getOrder($id: ID!) {
           name
           slug
         }
-        url
         accessExpires
         downloadsRemaining
+        download {
+          file
+          name
+        }
       }
     }
     lineItems {
       nodes {
         quantity
         total
+        id
         product {
           node {
             name

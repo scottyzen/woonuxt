@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const router = useRouter();
 const { scrollToTop } = useHelpers();
 const { getDownloads, downloads } = useAuth();
 
@@ -10,7 +9,6 @@ const refresh = () => {
   scrollToTop();
   getDownloads();
 };
-
 </script>
 
 <template>
@@ -28,6 +26,3 @@ const refresh = () => {
     <LoadingIcon v-else size="24" stroke="2" />
   </div>
 </template>
-
-<style lang="postcss" scoped>
-</style>

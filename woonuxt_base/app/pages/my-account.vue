@@ -5,6 +5,10 @@ const route = useRoute();
 
 const activeTab = computed(() => route.query.tab || 'my-details');
 const showLoader = computed(() => !viewer && !customer);
+
+useSeoMeta({
+  title: `My Account`,
+});
 </script>
 
 <template>
