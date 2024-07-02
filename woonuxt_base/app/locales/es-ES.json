@@ -42,9 +42,16 @@
       "newPassword": "Nueva contraseña",
       "confirmNewPassword": "Confirmar nueva contraseña",
       "updatePassword": "Actualizar contraseña",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
       "username": "Nombre de usuario",
+      "emailOrUsername": "Correo electrónico o nombre de usuario",
       "login": "Iniciar sesión",
       "logout": "Cerrar sesión",
+      "backToLogin": "Volver a Iniciar sesión",
+      "enterEmailForReset": "Ingrese su dirección de correo electrónico y le enviaremos un enlace para restablecer su contraseña.",
+      "ifRegistered": "Si tu dirección de correo electrónico está registrada con nosotros, recibirás un correo electrónico con un enlace para restablecer tu contraseña.",
+      "requestNewLink": "Solicita un nuevo enlace",
+      "resetPassword": "Restablecer la contraseña",
       "sendPasswordResetEmail": "Enviar correo electrónico de restablecimiento de contraseña",
       "register": "Registrarse",
       "accountRegister": "registrarse",
@@ -135,6 +142,8 @@
     "error": {
       "invalidUsername": "Nombre de usuario inválido. Por favor, regístrate.",
       "invalidPassword": "Contraseña inválida. Por favor, inténtalo de nuevo.",
+      "passwordMismatch": "Las contraseñas no coinciden. Por favor, inténtalo de nuevo.",
+      "invalidPasswordResetLink": "El enlace de restablecimiento de contraseña no es válido.",
       "general": "Ha ocurrido un error",
       "noOrder": "No hemos podido encontrar tu pedido. Por favor, inténtalo de nuevo más tarde."
     }

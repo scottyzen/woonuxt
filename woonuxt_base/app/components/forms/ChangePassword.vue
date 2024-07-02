@@ -7,12 +7,12 @@
 
       <div class="w-full">
         <label for="new-password">{{ $t('messages.account.newPassword') }}</label>
-        <input v-model="password.new" placeholder="••••••••••" type="text" required />
+        <PasswordInput v-model="password.new" placeholder="••••••••••" type="text" required />
       </div>
 
       <div class="w-full">
         <label for="new-password-confirm">{{ $t('messages.account.confirmNewPassword') }}</label>
-        <input v-model="password.confirm" placeholder="••••••••••" type="text" required />
+        <PasswordInput v-model="password.confirm" placeholder="••••••••••" type="text" required />
       </div>
 
       <Transition name="scale-y" mode="out-in">
@@ -44,7 +44,7 @@ const errorMessage = ref<string>('');
 const updatePassword = async () => {
   errorMessage.value = '';
   if (password.value.new !== password.value.confirm) {
-    errorMessage.value = 'Passwords do not match. Please try again.';
+    errorMessage.value = t('messages.error.passwordMismatch');
     return;
   }
 

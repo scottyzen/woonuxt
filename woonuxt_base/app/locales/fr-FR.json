@@ -42,9 +42,16 @@
       "newPassword": "Nouveau mot de passe",
       "confirmNewPassword": "Confirmez le nouveau mot de passe",
       "updatePassword": "Mettre à jour le mot de passe",
+      "forgotPassword": "Mot de passe oublié ?",
       "username": "Nom d'utilisateur",
+      "emailOrUsername": "E-mail ou nom d'utilisateur",
       "login": "Se connecter",
       "logout": "Se déconnecter",
+      "backToLogin": "Retour à la connexion",
+      "enterEmailForReset": "Veuillez entrer votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+      "ifRegistered": "Si votre adresse e-mail est enregistrée chez nous, vous recevrez un e-mail contenant un lien pour réinitialiser votre mot de passe.",
+      "requestNewLink": "Veuillez demander un nouveau lien",
+      "resetPassword": "Réinitialiser le mot de passe",
       "sendPasswordResetEmail": "Envoyer un e-mail de réinitialisation du mot de passe",
       "register": "S'inscrire",
       "accountRegister": "S'inscrire",
@@ -135,6 +142,8 @@
     "error": {
       "invalidUsername": "Aucun compte n'a été trouvé avec ce nom d'utilisateur. Veuillez vous inscrire.",
       "incorrectPassword": "Mot de passe invalide. Veuillez réessayer.",
+      "passwordMismatch": "Les mots de passe ne correspondent pas. Veuillez réessayer.",
+      "invalidPasswordResetLink": "Le lien de réinitialisation du mot de passe est invalide.",
       "general": "Une erreur est survenue",
       "noOrder": "Impossible de trouver votre commande. Veuillez réessayer plus tard."
     }

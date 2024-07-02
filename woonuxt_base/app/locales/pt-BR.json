@@ -42,9 +42,16 @@
       "newPassword": "Nova Senha",
       "confirmNewPassword": "Confirme a Nova Senha",
       "updatePassword": "Atualizar Senha",
+      "forgotPassword": "Esqueceu a senha?",
       "username": "Nome de Usuário",
+      "emailOrUsername": "E-mail ou nome de usuário",
       "login": "Entrar",
       "logout": "Sair",
+      "backToLogin": "Voltar ao Login",
+      "enterEmailForReset": "Por favor, insira seu endereço de e-mail e enviaremos um link para redefinir sua senha.",
+      "ifRegistered": "Se o seu endereço de e-mail estiver registrado conosco, você receberá um e-mail com um link para redefinir sua senha.",
+      "requestNewLink": "Solicite um novo link",
+      "resetPassword": "Redefinir senha",
       "sendPasswordResetEmail": "Enviar Email para Redefinição de Senha",
       "register": "Registrar",
       "accountRegister": "Inscrever-se",
@@ -135,6 +142,8 @@
     "error": {
       "invalidUsername": "Nenhuma conta encontrada com esse nome de usuário. Inscreva-se para uma nova conta.",
       "incorrectPassword": "Senha incorreta. Por favor, tente novamente.",
+      "passwordMismatch": "As senhas não coincidem. Por favor, tente novamente.",
+      "invalidPasswordResetLink": "O link de redefinição de senha é inválido.",
       "general": "Algo deu errado",
       "noOrder": "Não conseguimos encontrar seu pedido. Por favor, tente novamente mais tarde."
     }
