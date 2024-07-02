@@ -15,13 +15,15 @@
 
     <form class="mt-6" @submit.prevent="handleFormSubmit(userInfo)">
       <label v-if="formView === 'register' || formView === 'forgotPassword'" for="email">
-        {{ $t('messages.billing.email') }} <span class="text-red-500">*</span> <br />
+        {{ (formView === 'register') ? $t('messages.billing.email') : $t('messages.account.emailOrUsername') }}
+        <span class="text-red-500">*</span> <br />
         <input id="email" v-model="userInfo.email" placeholder="Email" type="text" required />
       </label>
       <p v-if="formView === 'forgotPassword'" class="text-sm text-gray-500">{{ $t('messages.account.enterEmailForReset') }}</p>
       <div v-if="formView !== 'forgotPassword'">
         <label for="username">
-          {{ $t('messages.account.username') }} <span class="text-red-500">*</span> <br />
+          {{ (formView === 'login') ? $t('messages.account.emailOrUsername') : $t('messages.account.username') }}
+          <span class="text-red-500">*</span> <br />
           <input id="username" v-model="userInfo.username" placeholder="Username" type="text" required />
         </label>
         <label for="password">

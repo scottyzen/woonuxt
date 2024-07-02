@@ -42,6 +42,7 @@
       "updatePassword": "Aggiorna password",
       "forgotPassword": "Hai dimenticato la password?",
       "username": "Nome utente",
+      "emailOrUsername": "Email o nome utente",
       "login": "Accedi",
       "logout": "Esci",
       "backToLogin": "Torna al Login",

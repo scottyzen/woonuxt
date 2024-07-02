@@ -42,6 +42,7 @@
       "updatePassword": "Update Password",
       "forgotPassword": "Forgot password?",
       "username": "Username",
+      "emailOrUsername": "Email or Username",
       "login": "Log In",
       "logout": "Logout",
       "backToLogin": "Back to Login",

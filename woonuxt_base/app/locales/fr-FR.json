@@ -42,6 +42,7 @@
       "updatePassword": "Mettre à jour le mot de passe",
       "forgotPassword": "Mot de passe oublié ?",
       "username": "Nom d'utilisateur",
+      "emailOrUsername": "E-mail ou nom d'utilisateur",
       "login": "Se connecter",
       "logout": "Se déconnecter",
       "backToLogin": "Retour à la connexion",
