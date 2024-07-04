@@ -17,7 +17,7 @@ const isSummaryPage = computed<boolean>(() => name === 'order-summary');
 const isCheckoutPage = computed<boolean>(() => name === 'order-received');
 const orderIsNotCompleted = computed<boolean>(() => order.value?.status !== OrderStatusEnum.COMPLETED);
 const hasDiscount = computed<boolean>(() => !!parseFloat(order.value?.rawDiscountTotal || '0'));
-const downloadableItems = computed(() => order.value?.customer?.downloadableItems?.nodes || []);
+const downloadableItems = computed(() => order.value?.downloadableItems?.nodes || []);
 
 onBeforeMount(() => {
   /**

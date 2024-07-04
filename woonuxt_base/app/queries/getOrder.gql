@@ -18,7 +18,16 @@ query getOrder($id: ID!) {
     subtotal
     customer {
       email
-      ...DownloadableItems
+      downloadableItems(first: 100) {
+        nodes {
+          ...DownloadableItemFragment
+        }
+      }
+    }
+    downloadableItems(first: 100) {
+      nodes {
+        ...DownloadableItemFragment
+      }
     }
     lineItems {
       nodes {

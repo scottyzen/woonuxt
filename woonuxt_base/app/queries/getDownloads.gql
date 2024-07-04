@@ -1,5 +1,9 @@
 query getDownloads {
   customer {
-    ...DownloadableItems
+    downloadableItems(first: 100) {
+      nodes {
+        ...DownloadableItemFragment
+      }
+    }
   }
 }

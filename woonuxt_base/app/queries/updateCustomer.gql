@@ -1,7 +1,11 @@
 mutation UpdateCustomer($input: UpdateCustomerInput!) {
   updateCustomer(input: $input) {
     customer {
-      ...DownloadableItems
+      downloadableItems(first: 100) {
+        nodes {
+          ...DownloadableItemFragment
+        }
+      }
     }
   }
 }
