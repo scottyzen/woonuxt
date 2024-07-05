@@ -21,6 +21,16 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
       const { refreshCart } = useCart();
       const success = await refreshCart();
+
+      useGqlError((err: any) => {
+        const serverErrors = ['The iss do not match with this server', 'Invalid session token'];
+        if (serverErrors.includes(err?.gqlErrors?.[0]?.message)) {
+          clearAllCookies();
+          clearAllLocalStorage();
+          window.location.reload();
+        }
+      });
+
       if (!success) {
         clearAllCookies();
         clearAllLocalStorage();
