@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. I'll try my best to keep it updated.
 
+## v4.0.5 (4-07-2024)
+
+- Handle server errors in useGqlError callback
+- Improve order summary page layout and styling
+- Add null check for date in formatDate function
+- Better TypeScript types in index.d.ts
+- Add error logging for GraphQL queries in useAuth.ts
+- Updated queries & fragment
+
+## v4.0.4 (4-07-2024)
+
+- Fix downloadable products not showing on the correct order summary page
+
 ## v4.0.3 (1-07-2024)
 
 - Add Downloads List #177
