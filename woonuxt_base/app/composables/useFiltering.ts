@@ -103,17 +103,19 @@ export function useFiltering() {
     return products.filter((product) => {
       // Category filter
       const category = getFilter('category') || []; // ["category-slug"]
-      const categoryCondition = category.length ? product.productCategories?.nodes?.find((node: any) => category.includes(node.slug)) : true;
+      const categoryCondition = category.length ? product.productCategories?.nodes?.find((node) => category.includes(node.slug as string)) : true;
 
       // price filter
-      const priceRange = getFilter('price') || [];
+      const priceRange = getFilter('price') || []; // ["0", "100"]
       // Variable products returns an array of prices, so we need to find the highest price.
       const productPrice = product.rawPrice ? parseFloat([...product.rawPrice.split(',')].reduce((a, b) => String(Math.max(Number(a), Number(b))))) : 0;
-      const priceCondition = priceRange.length ? productPrice >= parseFloat(priceRange[0]) && productPrice <= parseFloat(priceRange[1]) : true;
+      const priceCondition = priceRange.length
+        ? productPrice >= parseFloat(priceRange[0] as string) && productPrice <= parseFloat(priceRange[1] as string)
+        : true;
 
       // Star rating filter
       const starRating = getFilter('rating') || [];
-      const ratingCondition = starRating.length ? (product?.averageRating ?? 0) >= parseFloat(starRating[0]) : true;
+      const ratingCondition = starRating.length ? (product?.averageRating || 0) >= parseFloat(starRating[0] as string) : true;
 
       // Product attribute filters
       const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES?.map((attribute: any) => attribute.slug) || [];
@@ -126,7 +128,7 @@ export function useFiltering() {
         .every((condition: any) => condition);
 
       // onSale filter
-      const onSale = getFilter('sale') || [];
+      const onSale = getFilter('sale');
       const saleItemsOnlyCondition = onSale.length ? product.onSale : true;
 
       return ratingCondition && priceCondition && attributeCondition && categoryCondition && saleItemsOnlyCondition;
