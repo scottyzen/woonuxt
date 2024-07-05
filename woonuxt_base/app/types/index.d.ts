@@ -3,41 +3,18 @@ type Customer = import('#gql').GetCartQuery['customer'];
 type Viewer = import('#gql').GetCartQuery['viewer'];
 type PaymentGateways = import('#gql').GetCartQuery['paymentGateways'];
 type ProductBase = import('#gql').GetProductQuery['product'];
-type Order = import('#gql').GetOrderQuery['order'];
+type Order = import('#gql').OrderFragmentFragment;
 type SimpleProduct = import('#gql').SimpleProductFragment;
 type VariableProduct = import('#gql').VariableProductFragment;
-type DownloadableItems = import('#gql').DownloadableItemsFragment;
+type DownloadableItem = import('#gql').DownloadableItemFragment;
+type ProductCategory = import('#gql').ProductCategoryFragment;
 type Product = ProductBase & SimpleProduct & VariableProduct;
+type Address = import('#gql').AddressFragment;
 
 interface ProductAttributeInput {
   attributeName: string;
   attributeValue: string;
 }
-
-interface Address {
-  address1?: string | null;
-  address2?: string | null;
-  city?: string | null;
-  country?: Array | null;
-  email?: string | null;
-  firstName?: string | null;
-  lastName?: string | null;
-  username?: string | null;
-  phone?: string | null;
-  postcode?: string | null;
-  state?: string | null;
-  company?: string | null;
-}
-
-interface ProductCategory {
-  databaseId: number;
-  id: string;
-  slug: string;
-  name: string;
-  count: number;
-  image?: ProductImage | null;
-}
-
 interface Attribute {
   value: string;
   name: string;
