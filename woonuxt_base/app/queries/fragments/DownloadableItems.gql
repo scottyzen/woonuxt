@@ -1,4 +1,4 @@
-fragment DownloadableItemFragment on DownloadableItem {
+fragment DownloadableItem on DownloadableItem {
   id
   name
   product {

@@ -3,7 +3,7 @@ mutation UpdateCustomer($input: UpdateCustomerInput!) {
     customer {
       downloadableItems(first: 100) {
         nodes {
-          ...DownloadableItemFragment
+          ...DownloadableItem
         }
       }
     }

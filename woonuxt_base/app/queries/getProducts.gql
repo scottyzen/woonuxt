@@ -10,7 +10,6 @@ query getProducts($after: String, $slug: [String], $first: Int = 9999, $orderby:
     }
     nodes {
       name
-      onSale
       slug
       type
       databaseId

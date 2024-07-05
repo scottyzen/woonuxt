@@ -1,0 +1,61 @@
+fragment OrderFragment on Order {
+  orderNumber
+  date
+  status
+  needsPayment
+  needsProcessing
+  databaseId
+  orderKey
+  total
+  subtotal
+  discountTotal
+  rawDiscountTotal: discountTotal(format: RAW)
+  totalTax
+  shippingTotal
+  paymentMethodTitle
+  paymentMethod
+  customer {
+    email
+    downloadableItems(first: 100) {
+      nodes {
+        ...DownloadableItem
+      }
+    }
+  }
+  downloadableItems(first: 100) {
+    nodes {
+      ...DownloadableItem
+    }
+  }
+  lineItems {
+    nodes {
+      quantity
+      total
+      id
+      product {
+        node {
+          name
+          slug
+          image {
+            sourceUrl(size: THUMBNAIL)
+            altText
+            title
+          }
+        }
+      }
+      variation {
+        node {
+          name
+          image {
+            sourceUrl(size: THUMBNAIL)
+            altText
+            title
+          }
+        }
+      }
+    }
+  }
+  customer {
+    ...CustomerFragment
+  }
+}
