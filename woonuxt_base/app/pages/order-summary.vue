@@ -65,13 +65,18 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="w-full min-h-[600px] flex items-center p-8 text-gray-800 md:bg-white md:rounded-xl md:mx-auto md:shadow-lg md:my-24 md:mt-8 md:max-w-3xl md:p-16 flex-col">
+  <div
+    class="w-full min-h-[600px] flex items-center p-8 text-gray-800 md:bg-white md:rounded-xl md:mx-auto md:shadow-lg md:my-24 md:mt-8 md:max-w-3xl md:p-16 flex-col">
     <LoadingIcon v-if="!isLoaded" class="flex-1" />
     <template v-else>
       <div class="w-full">
         <template v-if="isSummaryPage">
           <div class="flex items-center gap-4">
-            <NuxtLink to="/my-account?tab=orders" class="inline-flex items-center justify-center p-2 border rounded-md" title="Back to orders" aria-label="Back to orders">
+            <NuxtLink
+              to="/my-account?tab=orders"
+              class="inline-flex items-center justify-center p-2 border rounded-md"
+              title="Back to orders"
+              aria-label="Back to orders">
               <Icon name="ion:chevron-back-outline" />
             </NuxtLink>
             <h1 class="text-xl font-semibold">{{ $t('messages.shop.orderSummary') }}</h1>
@@ -106,7 +111,7 @@ useSeoMeta({
           </div>
           <div>
             <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.status') }}</div>
-            <OrderStatusLabel v-if="order.status" :status="order.status" />
+            <OrderStatusLabel :order="order" />
           </div>
           <div>
             <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.paymentMethod') }}</div>

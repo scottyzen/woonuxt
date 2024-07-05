@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const router = useRouter();
 const { formatDate, scrollToTop } = useHelpers();
 const { getOrders, orders } = useAuth();
@@ -11,7 +11,7 @@ const refresh = () => {
   getOrders();
 };
 
-const goToOrder = (orderNumber) => {
+const goToOrder = (orderNumber: string): void => {
   router.push(`/order-summary/${orderNumber}`);
 };
 </script>
@@ -30,16 +30,10 @@ const goToOrder = (orderNumber) => {
         </thead>
         <tbody>
           <tr v-for="order in orders" :key="order.orderNumber" class="cursor-pointer hover:underline" @click="goToOrder(order.orderNumber)">
-            <td class="rounded-l-lg">
-              {{ order.orderNumber }}
-            </td>
+            <td class="rounded-l-lg">{{ order.orderNumber }}</td>
             <td>{{ formatDate(order.date) }}</td>
-            <td>
-              <OrderStatusLabel :status="order.status" />
-            </td>
-            <td class="text-right rounded-r-lg">
-              {{ order.total }}
-            </td>
+            <td><OrderStatusLabel :order="order" /></td>
+            <td class="text-right rounded-r-lg">{{ order.total }}</td>
           </tr>
         </tbody>
       </table>
