@@ -23,7 +23,8 @@ const optionsTermsMap = computed(() => {
 });
 
 const getOptionTermName = (attrName: string, option: string) => {
-  return optionsTermsMap.value[attrName]?.[option].name ?? option;
+  const fallbackName = option.charAt(0).toLowerCase() + option.slice(1)
+  return optionsTermsMap.value[attrName]?.[option].name ?? fallbackName;
 }
 
 const activeVariations = ref<Attribute[]>([]);
@@ -33,9 +34,7 @@ const updateAttrs = () => {
     const radioValue = document.querySelector(`.name-${row.name}:checked`) as HTMLInputElement;
     const dropdownValue = document.querySelector(`#${row.name}`) as HTMLSelectElement;
     const value = radioValue?.value ?? dropdownValue?.value ?? '';
-
-    const fallbackName = row.name.charAt(0).toLowerCase() + row.name.slice(1);
-    const name = optionsTermsMap.value[row.name]?.[value].name ?? fallbackName;
+    const name = getOptionTermName(row.name, value);
     return { name, value };
   });
   activeVariations.value = selectedVariations;
