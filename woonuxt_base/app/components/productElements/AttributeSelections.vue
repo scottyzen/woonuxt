@@ -66,7 +66,7 @@ onMounted(() => {
       <div v-if="attr.name == 'pa_color' || attr.name == 'color'" class="grid gap-2">
         <div class="text-sm">
           {{ $t('messages.general.color') }}
-          <span v-if="activeVariations.length" class="text-gray-400 capitalize">{{ activeVariations[i].name }}</span>
+          <span v-if="activeVariations.length" class="text-gray-400">{{ activeVariations[i].name }}</span>
         </div>
         <div class="flex gap-2">
           <span v-for="(option, optionIndex) in attr.options" :key="optionIndex">
@@ -92,18 +92,18 @@ onMounted(() => {
       <!-- DROPDOWN -->
       <div v-else-if="attr.options && attr.options?.length > 8" class="grid gap-2">
         <div class="text-sm">
-          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400 capitalize">{{ activeVariations[i].name }}</span>
+          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400">{{ activeVariations[i].name }}</span>
         </div>
         <select :id="attr.name" :ref="attr.name" :name="attr.name" required class="border-white shadow" @change="updateAttrs">
           <option disabled hidden>{{ $t('messages.general.choose') }} {{ decodeURIComponent(attr.label) }}</option>
-          <option v-for="(option, dropdownIndex) in attr.options" :key="dropdownIndex" :value="option" v-html="getOptionTermName(attr.name, option)" :selected="dropdownIndex == 0" />
+          <option v-for="(option, dropdownIndex) in attr.options" :key="dropdownIndex" :value="option" class="capitalize" v-html="getOptionTermName(attr.name, option)" :selected="dropdownIndex == 0" />
         </select>
       </div>
 
       <!-- CHECKBOXES -->
       <div v-else class="grid gap-2">
         <div class="text-sm">
-          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400 capitalize">: {{ activeVariations[i].name }}</span>
+          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400">: {{ activeVariations[i].name }}</span>
         </div>
         <div class="flex gap-2">
           <span v-for="(option, index) in attr.options" :key="index">
