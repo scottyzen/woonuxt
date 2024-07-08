@@ -7,17 +7,37 @@ interface Props {
 const { attributes, defaultAttributes } = defineProps<Props>();
 const emit = defineEmits(['attrs-changed']);
 
+const optionsTermsMap = computed(() => {
+  const result: Record<string, any> = {};
+  for (const attr of attributes) {
+    const optionTermsMap: Record<string, string> = {};
+    for (const option of attr.options) {
+      const term = attr.terms.nodes.find((node: { slug: string; }) => node.slug === option);
+      if (term) {
+        optionTermsMap[option] = term;
+      }
+    }
+    result[attr.name] = optionTermsMap;
+  }
+  return result;
+});
+
+const getOptionTermName = (attrName: string, option: string) => {
+  return optionsTermsMap.value[attrName]?.[option].name ?? option;
+}
+
 const activeVariations = ref<Attribute[]>([]);
 
 const updateAttrs = () => {
   const selectedVariations = attributes.map((row): Attribute => {
     const radioValue = document.querySelector(`.name-${row.name}:checked`) as HTMLInputElement;
     const dropdownValue = document.querySelector(`#${row.name}`) as HTMLSelectElement;
-    const name = row.name.charAt(0).toLowerCase() + row.name.slice(1);
     const value = radioValue?.value ?? dropdownValue?.value ?? '';
+
+    const fallbackName = row.name.charAt(0).toLowerCase() + row.name.slice(1);
+    const name = optionsTermsMap.value[row.name]?.[value].name ?? fallbackName;
     return { name, value };
   });
-
   activeVariations.value = selectedVariations;
   emit('attrs-changed', selectedVariations);
 };
@@ -46,23 +66,25 @@ onMounted(() => {
       <div v-if="attr.name == 'pa_color' || attr.name == 'color'" class="grid gap-2">
         <div class="text-sm">
           {{ $t('messages.general.color') }}
-          <span v-if="activeVariations.length" class="text-gray-400 capitalize">{{ decodeURIComponent(activeVariations[i].value) }}</span>
+          <span v-if="activeVariations.length" class="text-gray-400 capitalize">{{ activeVariations[i].name }}</span>
         </div>
         <div class="flex gap-2">
           <span v-for="(option, optionIndex) in attr.options" :key="optionIndex">
-            <label :for="`${option}_${optionIndex}`">
-              <input
-                :id="`${option}_${optionIndex}`"
-                :ref="attr.name"
-                class="hidden"
-                :checked="optionIndex == 0"
-                type="radio"
-                :class="`name-${attr.name}`"
-                :name="attr.name"
-                :value="option"
-                @change="updateAttrs" />
-              <span class="color-button" :class="`color-${option}`" :title="`${attr.name}: ${option}`"></span>
-            </label>
+            <Tooltip :text="getOptionTermName(attr.name, option)">
+              <label :for="`${option}_${optionIndex}`">
+                <input
+                  :id="`${option}_${optionIndex}`"
+                  :ref="attr.name"
+                  class="hidden"
+                  :checked="optionIndex == 0"
+                  type="radio"
+                  :class="`name-${attr.name}`"
+                  :name="attr.name"
+                  :value="option"
+                  @change="updateAttrs" />
+                <span class="color-button" :class="`color-${option}`" :title="`${attr.name}: ${option}`"></span>
+              </label>
+            </Tooltip>
           </span>
         </div>
       </div>
@@ -70,18 +92,18 @@ onMounted(() => {
       <!-- DROPDOWN -->
       <div v-else-if="attr.options && attr.options?.length > 8" class="grid gap-2">
         <div class="text-sm">
-          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400 capitalize">{{ decodeURIComponent(activeVariations[i].value) }}</span>
+          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400 capitalize">{{ activeVariations[i].name }}</span>
         </div>
         <select :id="attr.name" :ref="attr.name" :name="attr.name" required class="border-white shadow" @change="updateAttrs">
           <option disabled hidden>{{ $t('messages.general.choose') }} {{ decodeURIComponent(attr.label) }}</option>
-          <option v-for="(option, dropdownIndex) in attr.options" :key="dropdownIndex" :value="option" v-html="option.toUpperCase()" :selected="dropdownIndex == 0" />
+          <option v-for="(option, dropdownIndex) in attr.options" :key="dropdownIndex" :value="option" v-html="getOptionTermName(attr.name, option)" :selected="dropdownIndex == 0" />
         </select>
       </div>
 
       <!-- CHECKBOXES -->
       <div v-else class="grid gap-2">
         <div class="text-sm">
-          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400 capitalize">: {{ decodeURIComponent(activeVariations[i].value) }}</span>
+          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400 capitalize">: {{ activeVariations[i].name }}</span>
         </div>
         <div class="flex gap-2">
           <span v-for="(option, index) in attr.options" :key="index">
@@ -96,7 +118,7 @@ onMounted(() => {
                 :name="attr.name"
                 :value="option"
                 @change="updateAttrs" />
-              <span class="radio-button" :class="`picker-${option}`" :title="`${attr.name}: ${option}`">{{ decodeURIComponent(option) }}</span>
+              <span class="radio-button" :class="`picker-${option}`" :title="`${attr.name}: ${option}`">{{ getOptionTermName(attr.name, option) }}</span>
             </label>
           </span>
         </div>
