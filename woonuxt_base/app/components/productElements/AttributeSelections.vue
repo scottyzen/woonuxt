@@ -95,7 +95,7 @@ onMounted(() => {
         </div>
         <select :id="attr.name" :ref="attr.name" :name="attr.name" required class="border-white shadow" @change="updateAttrs">
           <option disabled hidden>{{ $t('messages.general.choose') }} {{ decodeURIComponent(attr.label) }}</option>
-          <option v-for="(option, dropdownIndex) in attr.options" :key="dropdownIndex" :value="option" class="capitalize" v-html="getOptionTermName(attr.name, option)" :selected="dropdownIndex == 0" />
+          <option v-for="(option, dropdownIndex) in attr.options" :key="dropdownIndex" :value="option" v-html="getOptionTermName(attr.name, option)" :selected="dropdownIndex == 0" />
         </select>
       </div>
 
