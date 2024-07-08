@@ -3,49 +3,12 @@ const { text } = defineProps({ text: { type: String, required: true } });
 </script>
 
 <template>
-  <div class="tooltip-wrapper">
+  <div class="relative inline-block group">
+    <!-- Slot for the element the tooltip is attached to -->
     <slot></slot>
-    <div class="tooltip">{{ text }}</div>
+    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 -translate-y-4 invisible group-hover:visible opacity-0 group-hover:opacity-100 bg-black bg-opacity-80 text-white text-sm rounded px-2 py-2 transition-opacity duration-300 whitespace-nowrap">
+      {{ text }}
+      <div class="absolute left-1/2 transform -translate-x-1/2 top-full w-0 h-0 border-8 border-transparent border-t-black border-t-opacity-80"></div>
+    </div>
   </div>
 </template>
-  
-  <style scoped>
-.tooltip-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltip {
-  visibility: hidden;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  text-align: center;
-  border-radius: 4px;
-  padding: 5px 10px;
-  position: absolute;
-  z-index: 1;
-  bottom: 140%;
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 0;
-  transition: opacity 0.3s;
-  white-space: nowrap;
-}
-
-.tooltip::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -7px;
-  border-width: 7px;
-  border-style: solid;
-  border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
-}
-
-.tooltip-wrapper:hover .tooltip {
-  visibility: visible;
-  opacity: 1;
-}
-</style>
-  
