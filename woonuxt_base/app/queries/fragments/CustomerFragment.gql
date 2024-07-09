@@ -7,29 +7,23 @@ fragment CustomerFragment on Customer {
   sessionToken
   isPayingCustomer
   billing {
-    address1
-    address2
-    city
-    country
-    email
-    firstName
-    lastName
-    phone
-    postcode
-    company
-    state
+    ...Address
   }
   shipping {
-    address1
-    address2
-    city
-    country
-    email
-    firstName
-    lastName
-    phone
-    postcode
-    company
-    state
+    ...Address
   }
+}
+
+fragment Address on CustomerAddress {
+  address1
+  address2
+  city
+  country
+  email
+  firstName
+  lastName
+  phone
+  postcode
+  company
+  state
 }

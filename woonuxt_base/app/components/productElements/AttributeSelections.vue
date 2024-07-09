@@ -26,8 +26,8 @@ const setDefaultAttributes = () => {
   if (defaultAttributes?.nodes) {
     defaultAttributes?.nodes.forEach((attr: Attribute) => {
       const radio = document.querySelector(`.name-${attr.name}[value="${attr.value}"]`) as HTMLInputElement;
-      const dropdown = document.querySelector(`#${attr.name}[value="${attr.value}"]`) as HTMLSelectElement;
       if (radio) radio.checked = true;
+      const dropdown = document.querySelector(`#${attr.name}`) as HTMLSelectElement;
       if (dropdown) dropdown.value = attr.value;
     });
   }
@@ -74,7 +74,7 @@ onMounted(() => {
         </div>
         <select :id="attr.name" :ref="attr.name" :name="attr.name" required class="border-white shadow" @change="updateAttrs">
           <option disabled hidden>{{ $t('messages.general.choose') }} {{ decodeURIComponent(attr.label) }}</option>
-          <option v-for="(option, dropdownIndex) in attr.options" :key="option" :value="option" v-html="option" :selected="dropdownIndex == 0" />
+          <option v-for="(option, dropdownIndex) in attr.options" :key="dropdownIndex" :value="option" v-html="option" :selected="dropdownIndex == 0" />
         </select>
       </div>
 

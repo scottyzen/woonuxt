@@ -137,7 +137,10 @@ export function useHelpers() {
    * @param {string} date - The date string to format.
    * @returns {string} The formatted date string.
    */
-  const formatDate = (date: string): string => new Date(date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  const formatDate = (date?: string | null): string => {
+    if (!date) return '';
+    return new Date(date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  };
 
   /**
    * Formats a price string.
@@ -177,10 +180,11 @@ export function useHelpers() {
   };
 
   /**
-   *  Logs a GraphQL error message.
+   *  Logs a GraphQL error message. Only show logs in development or when the 'debug' query parameter is present.
    * @param error
    */
   const logGQLError = (error: any) => {
+    if (!isDev && !route.query.debug) return;
     const errorMessage = error?.gqlErrors?.[0]?.message;
     if (errorMessage) {
       console.error(errorMessage);

@@ -6,8 +6,8 @@ const route = useRoute();
 const activeTab = computed(() => route.query.tab || 'my-details');
 const showLoader = computed(() => !viewer && !customer);
 
-useHead({
-  title: 'My Account',
+useSeoMeta({
+  title: `My Account`,
 });
 </script>
 
@@ -48,6 +48,7 @@ useHead({
         <main class="flex-1 w-full lg:my-8 rounded-lg">
           <AccountMyDetails v-if="activeTab === 'my-details'" :user="viewer" />
           <OrderList v-else-if="activeTab === 'orders'" />
+          <DownloadList v-else-if="activeTab === 'downloads'" />
         </main>
       </div>
     </template>

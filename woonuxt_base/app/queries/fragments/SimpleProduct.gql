@@ -16,6 +16,7 @@ fragment SimpleProduct on SimpleProduct {
   width
   height
   reviewCount
+  onSale
   image {
     sourceUrl
     cartSourceUrl: sourceUrl(size: THUMBNAIL)

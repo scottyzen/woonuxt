@@ -1,17 +1,28 @@
 <script setup lang="ts">
+const { t } = useI18n();
 const { node } = defineProps({
-  node: { type: Object, default: null },
+  node: { type: Object as PropType<Product>, required: true },
 });
 
-const salePercentage = computed((): number => {
-  const salePrice = parseFloat(node.salePrice.replace(/\D/g, ''));
-  const regularPrice = parseFloat(node.regularPrice.replace(/\D/g, ''));
-  return Math.round(((salePrice - regularPrice) / regularPrice) * 100);
+const { storeSettings } = useAppConfig();
+
+const salePercentage = computed((): string => {
+  if (!node?.rawSalePrice || !node?.rawRegularPrice) return '';
+  const salePrice = parseFloat(node?.rawSalePrice);
+  const regularPrice = parseFloat(node?.rawRegularPrice);
+  return Math.round(((salePrice - regularPrice) / regularPrice) * 100) + ` %`;
+});
+
+const showSaleBadge = computed(() => node.rawSalePrice && storeSettings.saleBadge !== 'hidden');
+
+const textToDisplay = computed(() => {
+  if (storeSettings?.saleBadge === 'percent') return salePercentage.value;
+  return t('messages.shop.onSale') ? t('messages.shop.onSale') : 'Sale';
 });
 </script>
 
 <template>
-  <span v-if="node.salePrice" class="red-badge">{{ salePercentage }} %</span>
+  <span v-if="showSaleBadge" class="red-badge">{{ textToDisplay }}</span>
 </template>
 
 <style lang="postcss" scoped>

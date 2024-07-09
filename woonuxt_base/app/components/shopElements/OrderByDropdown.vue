@@ -1,5 +1,6 @@
 <script setup>
 const { getOrderQuery, setOrderQuery } = await useSorting();
+const { storeSettings } = useAppConfig();
 const selectedOrder = ref(getOrderQuery());
 const orderby = ref(selectedOrder.value.orderBy || 'date');
 const order = ref(selectedOrder.value.order);
@@ -22,7 +23,7 @@ watch([orderby, order], () => {
       <option value="date">{{ $t('messages.general.latest') }}</option>
       <option value="alphabetically">{{ $t('messages.general.alphabetically') }}</option>
       <option value="price">{{ $t('messages.shop.price') }}</option>
-      <option value="rating">{{ $t('messages.shop.rating') }}</option>
+      <option v-if="storeSettings.showReviews" value="rating">{{ $t('messages.shop.rating') }}</option>
       <option value="discount">{{ $t('messages.shop.discount') }}</option>
     </select>
   </div>

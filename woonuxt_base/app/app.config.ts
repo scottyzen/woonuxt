@@ -1,5 +1,7 @@
 /**
  * App configuration.
+ * This file is used to configure the app settings.
+ * Below are the default values.
  */
 export default defineAppConfig({
   siteName: 'WooNuxt',
@@ -10,5 +12,12 @@ export default defineAppConfig({
   storeSettings: {
     autoOpenCart: false,
     showReviews: true,
+    showFilters: true,
+    showOrderByDropdown: true,
+    showSKU: true,
+    showRelatedProducts: true,
+    showProductCategoriesOnSingleProduct: true,
+    showBreadcrumbOnSingleProduct: true,
+    saleBadge: 'percent', // 'percent', 'onSale' or 'hidden'
   },
 });

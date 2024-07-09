@@ -3,11 +3,13 @@ import type { RegisterCustomerInput, CreateAccountInput } from '#gql';
 
 export const useAuth = () => {
   const { refreshCart } = useCart();
+  const { logGQLError } = useHelpers();
 
   const customer = useState<Customer>('customer', () => ({ billing: {}, shipping: {} }));
   const viewer = useState<Viewer | null>('viewer', () => null);
   const isPending = useState<boolean>('isPending', () => false);
   const orders = useState<Order[] | null>('orders', () => null);
+  const downloads = useState<DownloadableItem[] | null>('downloads', () => null);
 
   // Log in the user
   const loginUser = async (credentials: CreateAccountInput): Promise<{ success: boolean; error: any }> => {
@@ -33,6 +35,7 @@ export const useAuth = () => {
         error: null,
       };
     } catch (error: any) {
+      logGQLError(error);
       isPending.value = false;
 
       return {
@@ -57,6 +60,7 @@ export const useAuth = () => {
       }
       return { success: true, error: null };
     } catch (error) {
+      logGQLError(error);
       isPending.value = false;
       return { success: false, error };
     }
@@ -69,6 +73,7 @@ export const useAuth = () => {
       await GqlRegisterCustomer({ input: userInfo });
       return { success: true, error: null };
     } catch (error: any) {
+      logGQLError;
       const gqlError = error?.gqlErrors?.[0];
       isPending.value = false;
       return { success: false, error: gqlError?.message };
@@ -102,6 +107,7 @@ export const useAuth = () => {
       }
       return { success: false, error: 'There was an error sending the reset password email. Please try again later.' };
     } catch (error: any) {
+      logGQLError;
       isPending.value = false;
       const gqlError = error?.gqlErrors?.[0];
       return { success: false, error: gqlError?.message };
@@ -134,6 +140,22 @@ export const useAuth = () => {
       }
       return { success: false, error: 'There was an error getting your orders. Please try again later.' };
     } catch (error: any) {
+      logGQLError(error);
+      const gqlError = error?.gqlErrors?.[0];
+      return { success: false, error: gqlError?.message };
+    }
+  };
+
+  const getDownloads = async (): Promise<{ success: boolean; error: any }> => {
+    try {
+      const { customer } = await GqlGetDownloads();
+      if (customer) {
+        downloads.value = customer.downloadableItems?.nodes ?? [];
+        return { success: true, error: null };
+      }
+      return { success: false, error: 'There was an error getting your downloads. Please try again later.' };
+    } catch (error: any) {
+      logGQLError(error);
       const gqlError = error?.gqlErrors?.[0];
       return { success: false, error: gqlError?.message };
     }
@@ -146,6 +168,7 @@ export const useAuth = () => {
     customer,
     isPending,
     orders,
+    downloads,
     avatar,
     loginUser,
     updateCustomer,
@@ -155,5 +178,6 @@ export const useAuth = () => {
     sendResetPasswordEmail,
     resetPasswordWithKey,
     getOrders,
+    getDownloads,
   };
 };
