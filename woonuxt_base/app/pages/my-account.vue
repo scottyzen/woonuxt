@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const { logoutUser, viewer, customer, isPending } = useAuth();
+const { logoutUser, viewer, customer, isPending, avatar } = useAuth();
 const { cart } = useCart();
 const route = useRoute();
 
@@ -17,38 +17,48 @@ useSeoMeta({
       <LoadingIcon class="m-auto" />
     </div>
     <template v-else>
-      <LoginAndRegister v-if="!viewer" />
-      <div v-else class="flex flex-col items-start w-full lg:gap-8 mb-24 lg:flex-row">
-        <nav class="flex lg:grid flex-wrap w-full gap-1 my-8 text-gray-600 min-w-[240px] top-24 lg:w-auto lg:sticky">
-          <NuxtLink
-            to="/my-account?tab=my-details"
-            class="flex items-center gap-4 p-3 px-4 rounded-lg hover:bg-white hover:text-primary"
-            :class="{ active: activeTab == 'my-details' }">
-            <Icon name="ion:information-circle-outline" size="22" />
-            {{ $t('messages.general.myDetails') }}
-          </NuxtLink>
-          <NuxtLink to="/my-account?tab=orders" class="flex items-center gap-4 p-3 px-4 rounded-lg hover:bg-white hover:text-primary" :class="{ active: activeTab == 'orders' }">
-            <Icon name="ion:bag-check-outline" size="22" />
-            {{ $t('messages.shop.order', 2) }}
-          </NuxtLink>
-          <NuxtLink
-            to="/my-account?tab=downloads"
-            class="flex items-center gap-4 p-3 px-4 rounded-lg hover:bg-white hover:text-primary"
-            :class="{ active: activeTab == 'downloads' }">
-            <Icon name="ion:cloud-download-outline" size="22" />
-            {{ $t('messages.general.downloads') }}
-          </NuxtLink>
-          <button class="flex items-center gap-4 p-3 px-4 rounded-lg hover:bg-white hover:text-primary" @click="logoutUser">
+      <LazyLoginAndRegister v-if="!viewer" />
+      <div v-else class="flex flex-col items-start justify-between w-full lg:gap-12 mb-24 lg:flex-row">
+        <div class="mt-2 lg:sticky top-16 w-full lg:max-w-[260px]">
+          <section class="my-8 flex gap-4 items-start justify-center flex-wrap w-full">
+            <img v-if="avatar" :src="avatar" class="rounded-full aspect-square border border-white" alt="user-image" width="48" height="48" />
+            <div class="flex-1 text-balance leading-tight w-full text-ellipsis overflow-hidden">
+              <div class="text-lg font-semibold">Welcome, {{ viewer?.firstName }}</div>
+              <span v-if="viewer?.email" class="text-gray-400 font-light" :title="viewer?.email">{{ viewer?.email }}</span>
+            </div>
+          </section>
+          <hr class="my-8" />
+          <nav class="flex text-gray-700 lg:grid flex-wrap w-full gap-1.5 my-8 min-w-[240px] lg:w-auto items-start">
+            <NuxtLink to="/my-account?tab=my-details" class="flex items-center gap-4 p-2 px-4" :class="{ active: activeTab == 'my-details' }">
+              <Icon name="ion:information-circle-outline" size="22" />
+              {{ $t('messages.general.myDetails') }}
+            </NuxtLink>
+            <NuxtLink to="/my-account?tab=orders" class="flex items-center gap-4 p-2 px-4" :class="{ active: activeTab == 'orders' }">
+              <Icon name="ion:bag-check-outline" size="22" />
+              {{ $t('messages.shop.order', 2) }}
+            </NuxtLink>
+            <NuxtLink to="/my-account?tab=downloads" class="flex items-center gap-4 p-2 px-4" :class="{ active: activeTab == 'downloads' }">
+              <Icon name="ion:cloud-download-outline" size="22" />
+              {{ $t('messages.general.downloads') }}
+            </NuxtLink>
+            <NuxtLink to="/my-account?tab=wishlist" class="flex items-center gap-4 p-2 px-4" :class="{ active: activeTab == 'wishlist' }">
+              <Icon name="ion:heart-outline" size="22" />
+              Wishlist
+            </NuxtLink>
+          </nav>
+          <hr class="my-8" />
+          <button class="flex text-gray-700 items-center gap-4 p-2 px-4 w-full rounded-lg hover:bg-white hover:text-red-700" @click="logoutUser">
             <LoadingIcon v-if="isPending" size="22" />
             <Icon v-else name="ion:log-out-outline" size="22" />
             {{ $t('messages.account.logout') }}
           </button>
-        </nav>
+        </div>
 
-        <main class="flex-1 w-full lg:my-8 rounded-lg">
+        <main class="flex-1 w-full lg:my-8 rounded-lg max-w-screen-lg lg:sticky top-24">
           <AccountMyDetails v-if="activeTab === 'my-details'" :user="viewer" />
           <OrderList v-else-if="activeTab === 'orders'" />
           <DownloadList v-else-if="activeTab === 'downloads'" />
+          <WishList v-else-if="activeTab === 'wishlist'" />
         </main>
       </div>
     </template>
@@ -56,7 +66,13 @@ useSeoMeta({
 </template>
 
 <style lang="postcss" scoped>
-a.active {
-  @apply text-primary;
+a {
+  @apply rounded-md;
+
+  &.active,
+  &:focus,
+  &:hover {
+    @apply bg-white shadow;
+  }
 }
 </style>
