@@ -19,7 +19,7 @@
       <Transition name="scale-y" mode="out-in">
         <div v-if="errorMessage" class="text-sm my-4">
           <span class="text-red-500" v-html="errorMessage"></span>
-          <router-link v-if="isInvalidLink" class="underline cursor-pointer pl-1" to="/my-account?action=forgotPassword">{{ $t('messages.account.requestNewLink') }}</router-link>
+          <NuxtLink v-if="isInvalidLink" class="underline cursor-pointer pl-1" to="/my-account?action=forgotPassword">{{ $t('messages.account.requestNewLink') }}</NuxtLink>
         </div>
       </Transition>
 
