@@ -10,7 +10,7 @@ const emit = defineEmits(['attrs-changed']);
 const activeVariations = ref<Attribute[]>([]);
 
 const getSelectedName = computed(() => (row: any, variation: Attribute) => {
-  return row.terms.nodes.find((node: { slug: string }) => node.slug === variation.value)?.name;
+  return row.terms.nodes.find((node: { slug: string }) => node.slug === variation.value).name;
 });
 
 const updateAttrs = () => {
