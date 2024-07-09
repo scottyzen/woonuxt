@@ -8,12 +8,12 @@
     <form class="mt-6" @submit.prevent="handlePasswordReset">
       <label for="password">
         {{ $t('messages.account.newPassword') }} <span class="text-red-500">*</span><br />
-        <PasswordInput id="password" class="mb-4 border rounded-lg w-full p-3 px-4 bg-white" v-model="password" placeholder="New Password" :required="true" />
+        <PasswordInput id="password" className="mb-4 border rounded-lg w-full p-3 px-4 bg-white" v-model="password" placeholder="New Password" :required="true" />
       </label>
 
       <label for="confirmPassword">
         {{ $t('messages.account.confirmNewPassword') }} <span class="text-red-500">*</span><br />
-        <PasswordInput id="confirmPassword" class="border rounded-lg w-full p-3 px-4 bg-white" v-model="confirmPassword" placeholder="Confirm Password" :required="true" />
+        <PasswordInput id="confirmPassword" className="border rounded-lg w-full p-3 px-4 bg-white" v-model="confirmPassword" placeholder="Confirm Password" :required="true" />
       </label>
 
       <Transition name="scale-y" mode="out-in">
@@ -37,7 +37,6 @@ const router = useRouter();
 const route = useRoute();
 const { resetPasswordWithKey, loginUser } = useAuth();
 const { viewer, customer } = useAuth();
-
 
 const password = ref('');
 const confirmPassword = ref('');
