@@ -28,6 +28,10 @@
         <span>{{ $t('messages.account.resetPassword') }}</span>
       </button>
     </form>
+
+    <div class="my-8 text-center cursor-pointer">
+      <NuxtLink to="/my-account">{{ $t('messages.account.backToLogin') }}</NuxtLink>
+    </div>
   </div>
 </template>
 
@@ -36,13 +40,17 @@ const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 const { resetPasswordWithKey, loginUser } = useAuth();
-const { viewer, customer } = useAuth();
+const { viewer } = useAuth();
 
 const password = ref('');
 const confirmPassword = ref('');
 const errorMessage = ref('');
 const isPending = ref(false);
 const isInvalidLink = ref(false);
+
+if (viewer) {
+  router.push('/my-account');
+}
 
 const handlePasswordReset = async () => {
   try {
@@ -77,6 +85,7 @@ const handlePasswordReset = async () => {
         throw new Error(loginResult.error);
       }
     }
+
     router.push('/my-account');
   } catch (error: any) {
     errorMessage.value = error.message || t('messages.error.general');
