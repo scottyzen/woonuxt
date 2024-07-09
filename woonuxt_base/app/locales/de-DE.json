@@ -42,10 +42,17 @@
       "newPassword": "Neues Passwort",
       "confirmNewPassword": "Neues Passwort bestätigen",
       "updatePassword": "Passwort aktualisieren",
+      "forgotPassword": "Passwort vergessen?",
       "username": "Benutzername",
+      "emailOrUsername": "E-Mail oder Benutzername",
       "login": "Anmelden",
       "logout": "Logout",
-      "sendPasswordResetEmail": "Passwort zurücksetzen",
+      "backToLogin": "Zurück zum Login",
+      "enterEmailForReset": "Bitte geben Sie Ihre E-Mail-Adresse ein, und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts.",
+      "ifRegistered": "Wenn Ihre E-Mail-Adresse bei uns registriert ist, erhalten Sie eine E-Mail mit einem Link zum Zurücksetzen Ihres Passworts.",
+      "requestNewLink": "Bitte fordern Sie einen neuen Link an",
+      "resetPassword": "Passwort zurücksetzen",
+      "sendPasswordResetEmail": "Passwort-zurücksetzen-E-Mail senden",
       "register": "Registrieren",
       "accountRegister": "registrieren",
       "accountLogin": "einloggen",
@@ -135,6 +142,8 @@
     "error": {
       "invalidUsername": "Ungültiger Benutzername. Bitte registrieren Sie sich.",
       "invalidPassword": "Ungültiges Passwort. Bitte versuchen Sie es erneut.",
+      "passwordMismatch": "Die Passwörter stimmen nicht überein. Bitte versuche es erneut.",
+      "invalidPasswordResetLink": "Der Passwort-Reset-Link ist ungültig.",
       "general": "Etwas ist schief gelaufen",
       "noOrder": "Wir konnten Ihre Bestellung nicht finden. Bitte versuchen Sie es später noch einmal."
     }

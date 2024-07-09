@@ -17,7 +17,7 @@ useSeoMeta({
       <LoadingIcon class="m-auto" />
     </div>
     <template v-else>
-      <LazyLoginAndRegister v-if="!viewer" />
+      <LoginAndRegister v-if="!viewer" />
       <div v-else class="flex flex-col items-start w-full lg:gap-8 mb-24 lg:flex-row">
         <nav class="flex lg:grid flex-wrap w-full gap-1 my-8 text-gray-600 min-w-[240px] top-24 lg:w-auto lg:sticky">
           <NuxtLink

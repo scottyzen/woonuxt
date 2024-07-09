@@ -114,6 +114,23 @@ export const useAuth = () => {
     }
   };
 
+  const resetPasswordWithKey = async ({ key, login, password }: { key: string; login: string; password: string }): Promise<{ success: boolean; error: any }> => {
+    try {
+      isPending.value = true;
+      const { resetUserPassword } = await GqlResetPasswordKey({ key, login, password });
+      const wasPasswordReset = Boolean(resetUserPassword?.user?.id);
+      if (wasPasswordReset) {
+        isPending.value = false;
+        return { success: true, error: null };
+      }
+      return { success: false, error: 'There was an error resetting the password. Please try again later.' };
+    } catch (error: any) {
+      isPending.value = false;
+      const gqlError = error?.gqlErrors?.[0];
+      return { success: false, error: gqlError?.message };
+    }
+  };
+
   const getOrders = async (): Promise<{ success: boolean; error: any }> => {
     try {
       const { customer } = await GqlGetOrders();
@@ -159,6 +176,7 @@ export const useAuth = () => {
     logoutUser,
     registerUser,
     sendResetPasswordEmail,
+    resetPasswordWithKey,
     getOrders,
     getDownloads,
   };
