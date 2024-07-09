@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. I'll try my best to keep it updated.
 
+## v4.0.6 (4-09-2024)
+
+- Add user avatar and email to sidebar of account page
+- Add Wishlist to my account page
+- Add ResetPassword from email #180
+- Add new Nuxt `compatibilityDate`
+
 ## v4.0.5 (4-07-2024)
 
 - Handle server errors in useGqlError callback

@@ -20,12 +20,17 @@ useSeoMeta({
       <LazyLoginAndRegister v-if="!viewer" />
       <div v-else class="flex flex-col items-start justify-between w-full lg:gap-12 mb-24 lg:flex-row">
         <div class="mt-2 lg:sticky top-16 w-full lg:max-w-[260px]">
-          <section class="my-8 flex gap-4 items-start justify-center flex-wrap w-full">
+          <section class="my-8 flex gap-4 items-start justify-center w-full">
             <img v-if="avatar" :src="avatar" class="rounded-full aspect-square border border-white" alt="user-image" width="48" height="48" />
             <div class="flex-1 text-balance leading-tight w-full text-ellipsis overflow-hidden">
               <div class="text-lg font-semibold">Welcome, {{ viewer?.firstName }}</div>
               <span v-if="viewer?.email" class="text-gray-400 font-light" :title="viewer?.email">{{ viewer?.email }}</span>
             </div>
+            <button class="flex text-gray-700 items-center flex-col p-2 px-4 rounded-lg hover:bg-white hover:text-red-700 lg:hidden" @click="logoutUser">
+              <LoadingIcon v-if="isPending" size="22" />
+              <Icon v-else name="ion:log-out-outline" size="22" />
+              <small>{{ $t('messages.account.logout') }}</small>
+            </button>
           </section>
           <hr class="my-8" />
           <nav class="flex text-gray-700 lg:grid flex-wrap w-full gap-1.5 my-8 min-w-[240px] lg:w-auto items-start">
@@ -46,12 +51,14 @@ useSeoMeta({
               Wishlist
             </NuxtLink>
           </nav>
-          <hr class="my-8" />
-          <button class="flex text-gray-700 items-center gap-4 p-2 px-4 w-full rounded-lg hover:bg-white hover:text-red-700" @click="logoutUser">
-            <LoadingIcon v-if="isPending" size="22" />
-            <Icon v-else name="ion:log-out-outline" size="22" />
-            {{ $t('messages.account.logout') }}
-          </button>
+          <template class="hidden lg:block">
+            <hr class="my-8" />
+            <button class="flex text-gray-700 items-center gap-4 p-2 px-4 w-full rounded-lg hover:bg-white hover:text-red-700" @click="logoutUser">
+              <LoadingIcon v-if="isPending" size="22" />
+              <Icon v-else name="ion:log-out-outline" size="22" />
+              {{ $t('messages.account.logout') }}
+            </button>
+          </template>
         </div>
 
         <main class="flex-1 w-full lg:my-8 rounded-lg max-w-screen-lg lg:sticky top-24">
@@ -73,6 +80,16 @@ a {
   &:focus,
   &:hover {
     @apply bg-white shadow;
+  }
+}
+
+nav {
+  a {
+    & svg {
+      @media (max-width: 640px) {
+        display: none !important;
+      }
+    }
   }
 }
 </style>
