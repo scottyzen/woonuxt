@@ -48,7 +48,7 @@
       "login": "Se connecter",
       "logout": "Se déconnecter",
       "backToLogin": "Retour à la connexion",
-      "enterEmailForReset": "Veuillez entrer votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+      "enterEmailOrUsernameForReset": "Veuillez entrer votre adresse e-mail ou votre nom d'utilisateur et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
       "ifRegistered": "Si votre adresse e-mail est enregistrée chez nous, vous recevrez un e-mail contenant un lien pour réinitialiser votre mot de passe.",
       "requestNewLink": "Veuillez demander un nouveau lien",
       "resetPassword": "Réinitialiser le mot de passe",

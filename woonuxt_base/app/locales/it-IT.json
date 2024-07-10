@@ -48,7 +48,7 @@
       "login": "Accedi",
       "logout": "Esci",
       "backToLogin": "Torna al Login",
-      "enterEmailForReset": "Inserisci il tuo indirizzo e-mail e ti invieremo un link per reimpostare la tua password.",
+      "enterEmailOrUsernameForReset": "Inserisci il tuo indirizzo e-mail o nome utente e ti invieremo un link per reimpostare la tua password.",
       "ifRegistered": "Se il tuo indirizzo e-mail è registrato presso di noi, riceverai un'e-mail con un link per reimpostare la tua password.",
       "requestNewLink": "Richiedi un nuovo link",
       "resetPassword": "Reimposta password",
