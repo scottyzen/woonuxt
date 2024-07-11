@@ -15,20 +15,21 @@
 
     <form class="mt-6" @submit.prevent="handleFormSubmit(userInfo)">
       <label v-if="formView === 'register' || formView === 'forgotPassword'" for="email">
-        {{ (formView === 'register') ? $t('messages.billing.email') : $t('messages.account.emailOrUsername') }}
+        {{ emailLabel }}
         <span class="text-red-500">*</span> <br />
-        <input id="email" v-model="userInfo.email" placeholder="Email" type="text" required />
+        <input id="email" v-model="userInfo.email" :placeholder="inputPlaceholder.email" type="text" required />
       </label>
-      <p v-if="formView === 'forgotPassword'" class="text-sm text-gray-500">{{ $t('messages.account.enterEmailForReset') }}</p>
+      <p v-if="formView === 'forgotPassword'" class="text-sm text-gray-500">{{ $t('messages.account.enterEmailOrUsernameForReset') }}</p>
       <div v-if="formView !== 'forgotPassword'">
         <label for="username">
-          {{ (formView === 'login') ? $t('messages.account.emailOrUsername') : $t('messages.account.username') }}
+          {{ usernameLabel }}
           <span class="text-red-500">*</span> <br />
-          <input id="username" v-model="userInfo.username" placeholder="Username" type="text" required />
+          <input id="username" v-model="userInfo.username" :placeholder="inputPlaceholder.username" type="text" required />
         </label>
         <label for="password">
-          {{ $t('messages.account.password') }} <span class="text-red-500">*</span> <br />
-          <PasswordInput id="password" className="border rounded-lg w-full p-3 px-4 bg-white" v-model="userInfo.password" placeholder="Password" :required="true" />
+          {{ passwordLabel }} <span class="text-red-500">*</span> <br />
+          <PasswordInput id="password" className="border rounded-lg w-full p-3 px-4 bg-white" v-model="userInfo.password" :placeholder="inputPlaceholder.password"
+          :required="true" />
         </label>
       </div>
       <Transition name="scale-y" mode="out-in">
@@ -147,6 +148,27 @@ const buttonText = computed(() => {
     return t('messages.account.sendPasswordResetEmail');
   }
 });
+
+const emailLabel = computed(() => {
+  return (formView.value === 'register') ? t('messages.billing.email') : t('messages.account.emailOrUsername');
+});
+
+const usernameLabel = computed(() => {
+  return (formView.value === 'login') ? t('messages.account.emailOrUsername') : t('messages.account.username');
+});
+
+const passwordLabel = computed(() => {
+  return t('messages.account.password');
+});
+
+const inputPlaceholder = computed(() => {
+  return {
+    email: emailLabel.value,
+    username: usernameLabel.value,
+    password: passwordLabel.value,
+  };
+});
+
 </script>
 
 <style lang="postcss" scoped>

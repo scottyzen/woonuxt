@@ -48,7 +48,7 @@
       "login": "Log In",
       "logout": "Logout",
       "backToLogin": "Back to Login",
-      "enterEmailForReset": "Please enter your email address or username and we will send you a link to reset your password.",
+      "enterEmailOrUsernameForReset": "Please enter your email address or username and we will send you a link to reset your password.",
       "ifRegistered": "If your email address is registered with us, you will receive an email with a link to reset your password.",
       "requestNewLink": "Please request a new link",
       "resetPassword": "Reset password",
