@@ -48,7 +48,7 @@
       "login": "Entrar",
       "logout": "Sair",
       "backToLogin": "Voltar ao Login",
-      "enterEmailForReset": "Por favor, insira seu endereço de e-mail e enviaremos um link para redefinir sua senha.",
+      "enterEmailOrUsernameForReset": "Por favor, insira seu endereço de e-mail ou nome de usuário e enviaremos um link para redefinir sua senha.",
       "ifRegistered": "Se o seu endereço de e-mail estiver registrado conosco, você receberá um e-mail com um link para redefinir sua senha.",
       "requestNewLink": "Solicite um novo link",
       "resetPassword": "Redefinir senha",

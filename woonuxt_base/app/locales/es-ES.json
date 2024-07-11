@@ -48,7 +48,7 @@
       "login": "Iniciar sesión",
       "logout": "Cerrar sesión",
       "backToLogin": "Volver a Iniciar sesión",
-      "enterEmailForReset": "Ingrese su dirección de correo electrónico y le enviaremos un enlace para restablecer su contraseña.",
+      "enterEmailOrUsernameForReset": "Ingrese su dirección de correo electrónico o nombre de usuario y le enviaremos un enlace para restablecer su contraseña.",
       "ifRegistered": "Si tu dirección de correo electrónico está registrada con nosotros, recibirás un correo electrónico con un enlace para restablecer tu contraseña.",
       "requestNewLink": "Solicita un nuevo enlace",
       "resetPassword": "Restablecer la contraseña",

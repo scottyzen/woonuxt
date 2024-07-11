@@ -62,7 +62,7 @@ fragment VariableProduct on VariableProduct {
       }
     }
   }
-  galleryImages {
+  galleryImages(first: 20) {
     nodes {
       sourceUrl
       databaseId
