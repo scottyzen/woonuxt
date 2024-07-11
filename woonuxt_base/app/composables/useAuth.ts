@@ -17,9 +17,9 @@ export const useAuth = () => {
     isPending.value = true;
 
     try {
-      const { loginWithCookies } = await GqlLogin(credentials);
+      const { login } = await GqlLogin(credentials);
 
-      if (loginWithCookies?.status === 'SUCCESS') {
+      if (login?.authToken !== null) {
         const { viewer } = await refreshCart();
         if (viewer === null) {
           return {
