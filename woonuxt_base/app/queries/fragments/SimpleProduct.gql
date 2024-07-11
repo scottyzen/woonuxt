@@ -25,7 +25,7 @@ fragment SimpleProduct on SimpleProduct {
     altText
     title
   }
-  galleryImages {
+  galleryImages(first: 20) {
     nodes {
       sourceUrl
       altText
