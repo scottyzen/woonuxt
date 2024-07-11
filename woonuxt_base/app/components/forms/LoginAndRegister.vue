@@ -44,6 +44,8 @@
     </form>
     <div class="my-8 text-center cursor-pointer" @click="navigate('forgotPassword')" v-if="formView === 'login'">{{ $t('messages.account.forgotPassword') }}</div>
     <div class="my-8 text-center cursor-pointer" @click="navigate('login')" v-if="formView === 'forgotPassword'">{{ $t('messages.account.backToLogin') }}</div>
+
+    <LoginProviders v-if="formView === 'login' || formView === 'register'" :loginClients="loginClients" />
   </div>
 </template>
 
@@ -51,7 +53,10 @@
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const { loginUser, isPending, registerUser, sendResetPasswordEmail } = useAuth();
+const { loginUser, isPending, registerUser, sendResetPasswordEmail, loginClients, getLoginClients } = useAuth();
+
+if (loginClients.value === null) getLoginClients();
+
 const userInfo = ref({ email: '', password: '', username: '' });
 const formView = ref('login');
 const message = ref('');
