@@ -31,8 +31,8 @@ if (code && state && provider) {
 </script>
 
 <template>
-  <div class="login-providers flex flex-col items-center gap-x-4 pt-4">
-    <div v-for="(loginClient, index) in props.loginClients" :key="index" class="provider">
+  <div class="flex justify-center items-center gap-4 pt-4">
+    <div v-for="(loginClient, index) in props.loginClients" :key="index">
       <NuxtLink v-if="loginClient && loginClient?.authorizationUrl" :to="loginClient?.authorizationUrl">
         <Icon :name="getIcon(loginClient.provider)" size="56" class="mx-2" />
       </NuxtLink>
