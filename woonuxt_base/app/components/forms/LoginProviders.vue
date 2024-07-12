@@ -21,13 +21,19 @@ const getIcon = (provider: any) => {
 };
 
 const route = useRoute();
+const router = useRouter();
 const { loginWithProvider } = useAuth();
 
-const { provider, code, state } = route.query as { provider?: string, code?: string, state?: string };
+const { provider, code, state } = route.query as { provider?: string; code?: string; state?: string };
 if (code && state && provider) {
-  loginWithProvider(state, code, provider.toUpperCase());
+  loginWithProvider(state, code, provider.toUpperCase())
+    .then(() => {
+      router.replace({ query: {} });
+    })
+    .catch((error) => {
+      console.error('Login failed:', error);
+    });
 }
-
 </script>
 
 <template>
