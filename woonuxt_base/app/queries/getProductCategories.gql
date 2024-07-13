@@ -1,0 +1,20 @@
+query getProductCategories($first: Int = 20) {
+  productCategories(first: $first, where: { orderby: COUNT, order: DESC, hideEmpty: true }) {
+    nodes {
+      ...ProductCategory
+    }
+  }
+}
+
+fragment ProductCategory on ProductCategory {
+  count
+  databaseId
+  id
+  name
+  slug
+  image {
+    sourceUrl(size: MEDIUM_LARGE)
+    altText
+    title
+  }
+}

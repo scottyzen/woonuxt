@@ -1,7 +1,0 @@
-mutation UpdateCustomer($input: UpdateCustomerInput!) {
-  updateCustomer(input: $input) {
-    customer {
-      ...CustomerFragment
-    }
-  }
-}

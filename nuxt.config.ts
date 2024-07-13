@@ -1,6 +1,11 @@
 export default defineNuxtConfig({
+  future: {
+    compatibilityVersion: 4,
+  },
+
   // Get all the pages, components, composables and plugins from the parent theme
   extends: ['./woonuxt_base'],
+
   components: [{ path: './components', pathPrefix: false }],
 
   /**
@@ -18,4 +23,6 @@ export default defineNuxtConfig({
       failOnError: false,
     },
   },
+
+  compatibilityDate: '2024-07-09',
 });

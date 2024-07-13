@@ -1,0 +1,29 @@
+fragment CustomerFragment on Customer {
+  lastName
+  email
+  firstName
+  username
+  databaseId
+  sessionToken
+  isPayingCustomer
+  billing {
+    ...Address
+  }
+  shipping {
+    ...Address
+  }
+}
+
+fragment Address on CustomerAddress {
+  address1
+  address2
+  city
+  country
+  email
+  firstName
+  lastName
+  phone
+  postcode
+  company
+  state
+}

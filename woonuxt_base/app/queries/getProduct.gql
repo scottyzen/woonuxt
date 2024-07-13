@@ -1,0 +1,77 @@
+query getProduct($slug: ID!) {
+  product(id: $slug, idType: SLUG) {
+    name
+    type
+    databaseId
+    id
+    metaData {
+      id
+      key
+      value
+    }
+    slug
+    sku
+    description
+    rawDescription: description(format: RAW)
+    shortDescription
+    attributes {
+      nodes {
+        variation
+        name
+        id
+        options
+        label
+        scope
+        ... on GlobalProductAttribute {
+          slug
+          terms {
+            nodes {
+              name
+              slug
+              taxonomyName
+              databaseId
+            }
+          }
+        }
+      }
+    }
+    productCategories {
+      nodes {
+        databaseId
+        slug
+        name
+        count
+      }
+    }
+    ...Terms
+    ...SimpleProduct
+    ...VariableProduct
+    related(first: 5) {
+      nodes {
+        name
+        slug
+        ...SimpleProduct
+        ...VariableProduct
+      }
+    }
+    reviews {
+      averageRating
+      edges {
+        rating
+        node {
+          content
+          id
+          date
+          author {
+            node {
+              name
+              avatar {
+                url
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

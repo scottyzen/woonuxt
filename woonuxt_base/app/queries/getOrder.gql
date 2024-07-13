@@ -1,0 +1,5 @@
+query getOrder($id: ID!) {
+  order(id: $id, idType: DATABASE_ID) {
+    ...OrderFragment
+  }
+}
