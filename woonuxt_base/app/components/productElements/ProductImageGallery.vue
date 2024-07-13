@@ -48,7 +48,6 @@ watch(
       :title="imageToShow.title || node.name"
       :src="imageToShow.sourceUrl || fallbackImage"
       :sizes="`100vw lg:480px`"
-      fit="outside"
       fetchpriority="high"
       placeholder
       placeholder-class="blur-xl" />
@@ -63,7 +62,6 @@ watch(
         :alt="galleryImg.altText || node.name"
         :title="galleryImg.title || node.name"
         :sizes="`100vw lg:480px`"
-        fit="outside"
         placeholder
         placeholder-class="blur-xl"
         loading="lazy"
