@@ -24,7 +24,7 @@
     "nuxt-graphql-client": "^0.2.35",
     "nuxt-icon": "^0.6.10",
     "prettier": "^3.3.2",
-    "woonuxt-settings": "^1.0.55"
+    "woonuxt-settings": "^1.0.56"
   },
   "overrides": {
     "sharp": "0.32.6"
