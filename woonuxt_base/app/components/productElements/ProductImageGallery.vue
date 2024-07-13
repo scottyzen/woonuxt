@@ -42,11 +42,13 @@ watch(
     <SaleBadge :node="node" class="absolute text-base top-4 right-4" />
     <NuxtImg
       class="rounded-xl object-contain w-full min-w-[350px]"
-      width="640"
-      height="640"
+      width="480"
+      height="480"
       :alt="imageToShow.altText || node.name"
       :title="imageToShow.title || node.name"
       :src="imageToShow.sourceUrl || fallbackImage"
+      :sizes="`100vw lg:480px`"
+      fit="outside"
       fetchpriority="high"
       placeholder
       placeholder-class="blur-xl" />
@@ -55,15 +57,17 @@ watch(
         v-for="galleryImg in galleryImages"
         :key="galleryImg.databaseId"
         class="cursor-pointer rounded-xl"
-        width="640"
-        height="640"
+        width="480"
+        height="480"
         :src="galleryImg.sourceUrl"
         :alt="galleryImg.altText || node.name"
         :title="galleryImg.title || node.name"
-        @click.native="changeImage(galleryImg)"
+        :sizes="`100vw lg:480px`"
+        fit="outside"
         placeholder
         placeholder-class="blur-xl"
-        loading="lazy" />
+        loading="lazy"
+        @click.native="changeImage(galleryImg)" />
     </div>
   </div>
 </template>
