@@ -6,7 +6,7 @@ const props = defineProps({
   index: { type: Number, default: 1 },
 });
 
-const imgWidth = 250;
+const imgWidth = 220;
 const imgHeight = Math.round(imgWidth * 1.125);
 
 // example: ?filter=pa_color[green,blue],pa_size[large]
