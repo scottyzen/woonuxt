@@ -31,7 +31,7 @@ const salePercentage = computed(() => {
   <SwipeCard @remove="removeItem">
     <div v-if="productType" class="flex items-center gap-3 group">
       <NuxtLink :to="productSlug">
-        <img
+        <NuxtImg
           width="64"
           height="64"
           class="w-16 h-16 rounded-md skeleton"
