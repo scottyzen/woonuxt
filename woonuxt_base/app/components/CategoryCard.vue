@@ -23,7 +23,6 @@ const imgHeight = Math.round(imgWidth * 1.125);
       :title="node.image?.title || node.name"
       :loading="imageLoading"
       :sizes="`${imgWidth / 2}px md:${imgWidth}px`"
-      fit="outside"
       placeholder
       placeholder-class="blur-xl" />
     <div class="absolute inset-x-0 bottom-0 opacity-50 bg-gradient-to-t from-black to-transparent h-1/2" />
