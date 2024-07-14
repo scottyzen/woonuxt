@@ -2,8 +2,7 @@
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
-const { resetPasswordWithKey, loginUser } = useAuth();
-const { viewer } = useAuth();
+const { viewer, resetPasswordWithKey, loginUser } = useAuth();
 
 const password = ref('');
 const confirmPassword = ref('');
@@ -73,13 +72,20 @@ useHead({
 
       <label for="confirmPassword" class="mb-4">
         {{ $t('messages.account.confirmNewPassword') }} <span class="text-red-500">*</span><br />
-        <PasswordInput id="confirmPassword" className="border rounded-lg w-full p-3 px-4 bg-white" v-model="confirmPassword" placeholder="Confirm Password" :required="true" />
+        <PasswordInput
+          id="confirmPassword"
+          className="border rounded-lg w-full p-3 px-4 bg-white"
+          v-model="confirmPassword"
+          placeholder="Confirm Password"
+          :required="true" />
       </label>
 
       <Transition name="scale-y" mode="out-in">
         <div v-if="errorMessage" class="text-sm mb-4">
           <span class="text-red-500" v-html="errorMessage"></span>
-          <NuxtLink v-if="isInvalidLink" class="underline cursor-pointer pl-1" to="/my-account?action=forgotPassword">{{ $t('messages.account.requestNewLink') }}</NuxtLink>
+          <NuxtLink v-if="isInvalidLink" class="underline cursor-pointer pl-1" to="/my-account?action=forgotPassword">{{
+            $t('messages.account.requestNewLink')
+          }}</NuxtLink>
         </div>
       </Transition>
 
