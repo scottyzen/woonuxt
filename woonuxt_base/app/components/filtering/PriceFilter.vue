@@ -4,6 +4,8 @@ import Slider from '@vueform/slider';
 const { getFilter, setFilter, isFiltersActive } = useFiltering();
 const runtimeConfig = useRuntimeConfig();
 const maxPrice = runtimeConfig?.public?.MAX_PRICE || 1000;
+const currencySymbol = runtimeConfig?.public?.CURRENCY_SYMBOL || '$';
+
 const activeFilters = ref(getFilter('price'));
 const price = activeFilters.value.length ? ref(activeFilters.value) : ref([0, maxPrice]);
 const isOpen = ref(true);
@@ -36,7 +38,7 @@ watch(isFiltersActive, () => {
           type="number"
           placeholder="From"
           min="0" />
-        <label for="price-from" class="leading-none px-2 text-gray-400 absolute">€</label>
+        <label for="price-from" class="leading-none px-2 text-gray-400 absolute" v-html="currencySymbol" />
       </div>
       <div class="flex relative items-center">
         <input
@@ -46,7 +48,7 @@ watch(isFiltersActive, () => {
           type="number"
           placeholder="Up to"
           min="1" />
-        <label for="price-to" class="leading-none px-2 text-gray-400 absolute">€</label>
+        <label for="price-to" class="leading-none px-2 text-gray-400 absolute" v-html="currencySymbol" />
       </div>
       <div class="mx-1 mt-1 col-span-full">
         <Slider v-model="price" :tooltips="false" :min="0" :max="maxPrice" ariaLabelledby="price-from price-to" @change="applyPrice" />
