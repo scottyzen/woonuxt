@@ -24,7 +24,7 @@ query getProduct($slug: ID!) {
         scope
         ... on GlobalProductAttribute {
           slug
-          terms {
+          terms(where: {orderby: TERM_ORDER}) {
             nodes {
               name
               slug
