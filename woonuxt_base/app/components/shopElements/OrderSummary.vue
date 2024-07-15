@@ -19,7 +19,9 @@ const { cart, isUpdatingCart } = useCart();
       </div>
       <div class="flex justify-between">
         <span>{{ $t('messages.general.shipping') }}</span>
-        <span class="text-gray-700 tabular-nums">+ <span v-html="cart.shippingTotal" /></span>
+        <span class="text-gray-700 tabular-nums">
+          {{ parseFloat(cart.shippingTotal) > 0 ? '+' : '' }} {{ cart.shippingTotal }}
+        </span>
       </div>
       <Transition name="scale-y" mode="out-in">
         <div v-if="cart && cart.appliedCoupons" class="flex justify-between">
