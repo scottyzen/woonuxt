@@ -23,7 +23,9 @@ const prevSrc = (pageNumber: number) => {
   if (currentQuery.value === '') {
     return decodeURIComponent(`/products/page/${pageNumber > 1 ? pageNumber - 1 : pageNumber}`);
   } else {
-    return decodeURIComponent(pageNumber > 1 ? `/products/page/${pageNumber - 1}/?${currentQuery.value}` : `/products/page/${pageNumber}/?${currentQuery.value}`);
+    return decodeURIComponent(
+      pageNumber > 1 ? `/products/page/${pageNumber - 1}/?${currentQuery.value}` : `/products/page/${pageNumber}/?${currentQuery.value}`,
+    );
   }
 };
 
@@ -31,7 +33,9 @@ const nextSrc = (pageNumber: number) => {
   if (currentQuery.value === '') {
     return decodeURIComponent(`/products/page/${pageNumber < numberOfPages.value ? pageNumber + 1 : pageNumber}`);
   } else {
-    return decodeURIComponent(pageNumber < numberOfPages.value ? `/products/page/${pageNumber + 1}/?${currentQuery.value}` : `/products/page/${pageNumber}/?${currentQuery.value}`);
+    return decodeURIComponent(
+      pageNumber < numberOfPages.value ? `/products/page/${pageNumber + 1}/?${currentQuery.value}` : `/products/page/${pageNumber}/?${currentQuery.value}`,
+    );
   }
 };
 
@@ -49,14 +53,25 @@ const numberSrc = (pageNumber: number) => {
     <!-- Pagination -->
     <nav v-if="numberOfPages && numberOfPages > 1" class="inline-flex self-end -space-x-px rounded-md shadow-sm isolate" aria-label="Pagination">
       <!-- PREV -->
-      <NuxtLink :to="prevSrc(page)" class="prev" :disabled="page == 1" :class="{ 'cursor-not-allowed': page == 1 }" :aria-disabled="page == 1" aria-label="Previous">
+      <NuxtLink
+        :to="prevSrc(page)"
+        class="prev"
+        :disabled="page == 1"
+        :class="{ 'cursor-not-allowed': page == 1 }"
+        :aria-disabled="page == 1"
+        aria-label="Previous">
         <Icon name="ion:chevron-back-outline" size="20" class="w-5 h-5" />
       </NuxtLink>
 
       <!-- NUMBERS -->
-      <NuxtLink v-for="pageNumber in numberOfPages" :key="pageNumber" :to="numberSrc(pageNumber)" :aria-current="pageNumber === page ? 'page' : undefined" class="page-number">{{
-        pageNumber
-      }}</NuxtLink>
+      <NuxtLink
+        v-for="pageNumber in numberOfPages"
+        :key="pageNumber"
+        :to="numberSrc(pageNumber)"
+        :aria-current="pageNumber === page ? 'page' : undefined"
+        class="page-number">
+        {{ pageNumber }}
+      </NuxtLink>
 
       <!-- NEXT -->
       <NuxtLink
