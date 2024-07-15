@@ -11,7 +11,7 @@ onBeforeUnmount(() => {
     <button
       class="relative inline-flex items-center p-2 text-sm text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:z-20"
       aria-label="Show filters"
-      @click="toggleBodyClass('show-filters')"
+      @click.prevent="toggleBodyClass('show-filters')"
       title="Show filters">
       <Icon name="ion:funnel-outline" size="18" class="transition-transform transform transform-origin-center" />
     </button>
