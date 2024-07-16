@@ -88,7 +88,8 @@ export function useCheckout() {
 
       const orderId = checkout?.order?.databaseId;
       const orderKey = checkout?.order?.orderKey;
-      const isPayPal = orderInput.value.paymentMethod.id === 'paypal';
+      const orderInputPaymentId = orderInput.value.paymentMethod.id;
+      const isPayPal = orderInputPaymentId === 'paypal' || orderInputPaymentId === 'ppcp-gateway';
 
       // PayPal redirect
       if ((await checkout?.redirect) && isPayPal) {
