@@ -3,10 +3,10 @@ const { cart, isUpdatingCart } = useCart();
 </script>
 
 <template>
-  <aside v-if="cart" class="bg-white rounded-lg shadow-lg mb-8 w-full min-h-[280px] p-8 relative md:max-w-md md:top-32 md:sticky">
+  <aside v-if="cart" class="bg-white rounded-lg shadow-lg mb-8 w-full min-h-[280px] p-4 sm:p-8 relative md:max-w-md md:top-32 md:sticky">
     <h2 class="mb-6 text-xl font-semibold leading-none">{{ $t('messages.shop.orderSummary') }}</h2>
 
-    <ul class="flex flex-col gap-4 -mr-2 overflow-y-scroll">
+    <ul class="flex flex-col gap-4 overflow-y-auto">
       <CartCard v-for="item in cart.contents.nodes" :key="item.key" :item />
     </ul>
 
@@ -19,7 +19,9 @@ const { cart, isUpdatingCart } = useCart();
       </div>
       <div class="flex justify-between">
         <span>{{ $t('messages.general.shipping') }}</span>
-        <span class="text-gray-700 tabular-nums">+ <span v-html="cart.shippingTotal" /></span>
+        <span class="text-gray-700 tabular-nums">
+          {{ parseFloat(cart.shippingTotal) > 0 ? '+' : '' }} {{ cart.shippingTotal }}
+        </span>
       </div>
       <Transition name="scale-y" mode="out-in">
         <div v-if="cart && cart.appliedCoupons" class="flex justify-between">
