@@ -53,11 +53,11 @@ const handleStripeElement = (stripeElements) => {
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
-const checkEmailOnBlur = (email) => {
+const checkEmailOnBlur = (email: string) => {
   if (email) isInvalidEmail.value = !emailRegex.test(email);
 };
 
-const checkEmailOnInput = (email) => {
+const checkEmailOnInput = (email: string) => {
   if (email && isInvalidEmail.value) isInvalidEmail.value = !emailRegex.test(email);
 };
 
@@ -122,7 +122,7 @@ useSeoMeta({
           </label>
 
           <Transition name="scale-y" mode="out-in">
-            <div v-if="orderInput.shipToDifferentAddress">
+            <div v-show="orderInput.shipToDifferentAddress">
               <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.general.shippingDetails') }}</h2>
               <ShippingDetails v-model="customer.shipping" />
             </div>
