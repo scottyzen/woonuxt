@@ -1,5 +1,4 @@
 <script setup>
-const { allowedCountries } = await GqlGetStates({ country: 'IE' });
 const { orderInput } = useCheckout();
 const { updateShippingLocation } = useCheckout();
 
