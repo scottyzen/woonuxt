@@ -7,7 +7,6 @@
       src="/images/hero-4.jpg"
       alt="Hero image"
       loading="eager"
-      sizes="400px sm:100vw lg:1400px"
       fetchpriority="high"
       preload
       placeholder
