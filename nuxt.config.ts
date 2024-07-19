@@ -23,6 +23,4 @@ export default defineNuxtConfig({
       failOnError: false,
     },
   },
-
-  compatibilityDate: '2024-07-09',
 });

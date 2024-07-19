@@ -28,8 +28,9 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
         </div>
       </template>
       <!-- Empty Cart Message -->
-      <div v-else class="flex flex-col items-center justify-center flex-1 mb-12">
-        <div class="mb-20 text-xl text-gray-300">{{ $t('messages.shop.cartEmpty') }}</div>
+      <div v-else class="flex flex-col items-center justify-center flex-1 mb-12 text-gray-300">
+        <Icon name="ion:cart-outline" size="96" class="opacity-50 mb-5" />
+        <div class="mb-20 text-xl">{{ $t('messages.shop.cartEmpty') }}</div>
       </div>
     </ClientOnly>
     <!-- Cart Loading Overlay -->

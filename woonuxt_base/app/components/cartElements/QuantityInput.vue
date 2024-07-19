@@ -1,3 +1,24 @@
+<script setup lang="ts">
+const { updateItemQuantity, isUpdatingCart } = useCart();
+const { debounce } = useHelpers();
+
+const { item } = defineProps({ item: { type: Object, required: true } });
+
+const productType = computed(() => (item.variation ? item.variation?.node : item.product?.node));
+const quantity = ref(item.quantity);
+const hasNoMoreStock = computed(() => (productType.value.stockQuantity ? productType.value.stockQuantity <= quantity.value : false));
+
+const incrementQuantity = () => quantity.value++;
+const decrementQuantity = () => quantity.value--;
+
+watch(
+  quantity,
+  debounce(() => {
+    updateItemQuantity(item.key, quantity.value >= 0 ? quantity.value : 0);
+  }, 250),
+);
+</script>
+
 <template>
   <div class="flex rounded bg-white text-sm leading-none shadow-sm shadow-gray-200 isolate">
     <button
@@ -6,7 +27,7 @@
       @click="decrementQuantity"
       type="button"
       class="focus:outline-none border-r w-6 h-6 border rounded-l border-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed"
-      :disabled="isUpdatingCart || quantity <= 1">
+      :disabled="isUpdatingCart || quantity <= 0">
       <Icon name="ion:remove" size="14" />
     </button>
     <input
@@ -27,28 +48,6 @@
     </button>
   </div>
 </template>
-
-<script setup lang="ts">
-const { updateItemQuantity, isUpdatingCart } = useCart();
-const { debounce } = useHelpers();
-
-const { item } = defineProps({ item: { type: Object, required: true } });
-
-const productType = computed(() => (item.variation ? item.variation?.node : item.product?.node));
-const quantity = ref(item.quantity);
-const key = item.key;
-const hasNoMoreStock = computed(() => (productType.value.stockQuantity ? productType.value.stockQuantity <= quantity.value : false));
-
-const incrementQuantity = () => quantity.value++;
-const decrementQuantity = () => quantity.value > 1 && quantity.value--;
-
-watch(
-  quantity,
-  debounce(() => {
-    updateItemQuantity(key, quantity.value);
-  }, 250),
-);
-</script>
 
 <style scoped lang="postcss">
 input[type='number']::-webkit-inner-spin-button,
