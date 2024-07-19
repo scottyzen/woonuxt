@@ -111,6 +111,8 @@
       "rating": "Bewertung | Bewertungen",
       "cart": "Warenkorb",
       "cartEmpty": "Ihr Warenkorb ist leer",
+      "addProductsInYourCart": "Bitte fügen Sie einige Produkte in Ihren Warenkorb hinzu.",
+      "browseOurProducts": "Stöbern Sie in unseren Produkten",
       "checkout": "Kasse",
       "checkoutButton": "jetzt bezahlen",
       "discount": "Rabatt",
