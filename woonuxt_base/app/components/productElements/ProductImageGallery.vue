@@ -47,6 +47,7 @@ watch(
       :alt="imageToShow.altText || node.name"
       :title="imageToShow.title || node.name"
       :src="imageToShow.sourceUrl || fallbackImage"
+      :sizes="`100vw lg:640px`"
       fetchpriority="high"
       placeholder
       placeholder-class="blur-xl" />
@@ -60,10 +61,11 @@ watch(
         :src="galleryImg.sourceUrl"
         :alt="galleryImg.altText || node.name"
         :title="galleryImg.title || node.name"
-        @click.native="changeImage(galleryImg)"
+        :sizes="`100vw lg:640px`"
         placeholder
         placeholder-class="blur-xl"
-        loading="lazy" />
+        loading="lazy"
+        @click.native="changeImage(galleryImg)" />
     </div>
   </div>
 </template>

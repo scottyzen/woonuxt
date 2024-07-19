@@ -51,17 +51,16 @@ export function useCheckout() {
   }
 
   const proccessCheckout = async (isPaid = false) => {
-    const { loginUser } = useAuth();
+    const { customer, loginUser } = useAuth();
     const router = useRouter();
     const { replaceQueryParam } = useHelpers();
     const { emptyCart, refreshCart } = useCart();
-    const { customer } = useAuth();
 
     isProcessingOrder.value = true;
 
     const { username, password, shipToDifferentAddress } = orderInput.value;
-    const billing = customer.value.billing;
-    const shipping = shipToDifferentAddress ? customer.value.shipping : billing;
+    const billing = customer.value?.billing;
+    const shipping = shipToDifferentAddress ? customer.value?.shipping : billing;
 
     try {
       let checkoutPayload: CheckoutInput = {
@@ -89,7 +88,8 @@ export function useCheckout() {
 
       const orderId = checkout?.order?.databaseId;
       const orderKey = checkout?.order?.orderKey;
-      const isPayPal = orderInput.value.paymentMethod.id === 'paypal';
+      const orderInputPaymentId = orderInput.value.paymentMethod.id;
+      const isPayPal = orderInputPaymentId === 'paypal' || orderInputPaymentId === 'ppcp-gateway';
 
       // PayPal redirect
       if ((await checkout?.redirect) && isPayPal) {

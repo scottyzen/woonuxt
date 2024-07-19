@@ -2,33 +2,34 @@
   <div class="max-w-lg mx-auto my-16 min-h-[600px] lg:my-24">
     <div class="flex flex-col items-center">
       <Logo class="mb-6 scale-125" />
-      <h1 class="text-xl font-semibold lg:text-3xl">{{ $t('messages.account.loginToAccount') }}</h1>
-      <div v-if="formView == 'login'" class="my-2 text-center">
+      <h1 class="text-xl font-semibold lg:text-3xl">{{ formTitle }}</h1>
+      <div v-if="formView === 'login'" class="my-2 text-center">
         {{ $t('messages.account.noAccount') }}
-        <a class="font-semibold cursor-pointer text-primary" @click="formView = 'register'">{{ $t('messages.account.accountRegister') }}</a
-        >.
+        <a class="font-semibold cursor-pointer text-primary" @click="navigate('register')"> {{ $t('messages.account.accountRegister') }} </a>.
       </div>
-      <div v-if="formView == 'register'" class="my-2 text-center">
+      <div v-if="formView === 'register'" class="my-2 text-center">
         {{ $t('messages.account.hasAccount') }}
-        <a class="font-semibold cursor-pointer text-primary" @click="formView = 'login'">{{ $t('messages.general.please') }} {{ $t('messages.account.accountLogin') }}</a
-        >.
+        <a class="font-semibold cursor-pointer text-primary" @click="navigate('login')"> {{ $t('messages.general.please') }} {{ $t('messages.account.accountLogin') }} </a>.
       </div>
     </div>
 
     <form class="mt-6" @submit.prevent="handleFormSubmit(userInfo)">
-      <label v-if="formView == 'register' || formView == 'forgotPassword'" for="email"
-        >Email or Username <span class="text-red-500">*</span> <br />
-        <input id="email" v-model="userInfo.email" placeholder="Email" type="text" required />
+      <label v-if="formView === 'register' || formView === 'forgotPassword'" for="email">
+        {{ emailLabel }}
+        <span class="text-red-500">*</span> <br />
+        <input id="email" v-model="userInfo.email" :placeholder="inputPlaceholder.email" type="text" required />
       </label>
-      <p v-if="formView == 'forgotPassword'" class="text-sm text-gray-500">Please enter your email address and we will send you a link to reset your password.</p>
-      <div v-if="formView != 'forgotPassword'">
-        <label for="username"
-          >{{ $t('messages.account.username') }} <span class="text-red-500">*</span> <br />
-          <input id="username" v-model="userInfo.username" placeholder="Username" type="text" required />
+      <p v-if="formView === 'forgotPassword'" class="text-sm text-gray-500">{{ $t('messages.account.enterEmailOrUsernameForReset') }}</p>
+      <div v-if="formView !== 'forgotPassword'">
+        <label for="username">
+          {{ usernameLabel }}
+          <span class="text-red-500">*</span> <br />
+          <input id="username" v-model="userInfo.username" :placeholder="inputPlaceholder.username" type="text" required />
         </label>
-        <label for="password"
-          >{{ $t('messages.account.password') }} <span class="text-red-500">*</span> <br />
-          <PasswordInput id="password" class="mb-4" className="border rounded-lg w-full p-3 px-4 bg-white" v-model="userInfo.password" placeholder="Password" :required="true" />
+        <label for="password">
+          {{ passwordLabel }} <span class="text-red-500">*</span> <br />
+          <PasswordInput id="password" className="border rounded-lg w-full p-3 px-4 bg-white" v-model="userInfo.password" :placeholder="inputPlaceholder.password"
+          :required="true" />
         </label>
       </div>
       <Transition name="scale-y" mode="out-in">
@@ -42,18 +43,31 @@
         <span>{{ buttonText }}</span>
       </button>
     </form>
-    <div class="my-8 text-center cursor-pointer" @click="formView = 'forgotPassword'" v-if="formView == 'login'">Forgot password?</div>
-    <div class="my-8 text-center cursor-pointer" @click="formView = 'login'" v-if="formView == 'forgotPassword'">Back to login</div>
+    <div class="my-8 text-center cursor-pointer" @click="navigate('forgotPassword')" v-if="formView === 'login'">{{ $t('messages.account.forgotPassword') }}</div>
+    <div class="my-8 text-center cursor-pointer" @click="navigate('login')" v-if="formView === 'forgotPassword'">{{ $t('messages.account.backToLogin') }}</div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { t } = useI18n();
+const route = useRoute();
+const router = useRouter();
 const { loginUser, isPending, registerUser, sendResetPasswordEmail } = useAuth();
 const userInfo = ref({ email: '', password: '', username: '' });
 const formView = ref('login');
 const message = ref('');
 const errorMessage = ref('');
+
+const updateFormView = () => {
+  if (route.query.action === 'forgotPassword') {
+    formView.value = 'forgotPassword';
+  } else if (route.query.action === 'register') {
+    formView.value = 'register';
+  } else {
+    formView.value = 'login';
+  }
+};
+watch(route, updateFormView, { immediate: true });
 
 const login = async (userInfo) => {
   const { success, error } = await loginUser(userInfo);
@@ -98,11 +112,32 @@ const resetPassword = async (userInfo) => {
   const { success, error } = await sendResetPasswordEmail(userInfo.email);
   if (success) {
     errorMessage.value = '';
-    message.value = 'If your email address is registered with us, you will receive an email with a link to reset your password.';
+    message.value = t('messages.account.ifRegistered');
   } else {
     errorMessage.value = error;
   }
 };
+
+const navigate = (view) => {
+  formView.value = view;
+  if (view === 'forgotPassword') {
+    router.push({ query: { action: 'forgotPassword' } });
+  } else if (view === 'register') {
+    router.push({ query: { action: 'register' } });
+  } else {
+    router.push({ query: {} });
+  }
+};
+
+const formTitle = computed(() => {
+  if (formView.value === 'login') {
+    return t('messages.account.loginToAccount');
+  } else if (formView.value === 'register') {
+    return t('messages.account.accountRegister');
+  } else if (formView.value === 'forgotPassword') {
+    return t('messages.account.forgotPassword');
+  }
+});
 
 const buttonText = computed(() => {
   if (formView.value === 'login') {
@@ -112,8 +147,28 @@ const buttonText = computed(() => {
   } else if (formView.value === 'forgotPassword') {
     return t('messages.account.sendPasswordResetEmail');
   }
-  return 'login';
 });
+
+const emailLabel = computed(() => {
+  return (formView.value === 'register') ? t('messages.billing.email') : t('messages.account.emailOrUsername');
+});
+
+const usernameLabel = computed(() => {
+  return (formView.value === 'login') ? t('messages.account.emailOrUsername') : t('messages.account.username');
+});
+
+const passwordLabel = computed(() => {
+  return t('messages.account.password');
+});
+
+const inputPlaceholder = computed(() => {
+  return {
+    email: emailLabel.value,
+    username: usernameLabel.value,
+    password: passwordLabel.value,
+  };
+});
+
 </script>
 
 <style lang="postcss" scoped>

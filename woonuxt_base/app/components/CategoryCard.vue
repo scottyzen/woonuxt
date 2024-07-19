@@ -5,8 +5,8 @@ const props = defineProps({
   imageLoading: { type: String as PropType<'lazy' | 'eager'>, default: 'lazy' },
 });
 
-const imageWidth = 220;
-const ImageHeight = Math.round(imageWidth * 1.25);
+const imgWidth = 220;
+const imgHeight = Math.round(imgWidth * 1.125);
 </script>
 
 <template>
@@ -15,13 +15,14 @@ const ImageHeight = Math.round(imageWidth * 1.25);
     :to="`/product-category/${decodeURIComponent(node.slug)}`"
     class="relative flex justify-center overflow-hidden border border-white rounded-xl item snap-mandatory snap-x">
     <NuxtImg
-      :width="imageWidth"
-      :height="ImageHeight"
+      :width="imgWidth"
+      :height="imgHeight"
       class="absolute inset-0 object-cover w-full h-full"
       :src="node.image?.sourceUrl || fallbackImage"
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
       :loading="imageLoading"
+      :sizes="`${imgWidth / 2}px md:${imgWidth}px`"
       placeholder
       placeholder-class="blur-xl" />
     <div class="absolute inset-x-0 bottom-0 opacity-50 bg-gradient-to-t from-black to-transparent h-1/2" />

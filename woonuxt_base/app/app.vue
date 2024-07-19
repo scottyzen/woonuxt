@@ -1,8 +1,7 @@
 <script setup lang="ts">
 const route = useRoute();
 const { isShowingCart, toggleCart } = useCart();
-const { isShowingMobileMenu, toggleMobileMenu } = useHelpers();
-const { addBodyClass, removeBodyClass } = useHelpers();
+const { isShowingMobileMenu, toggleMobileMenu, addBodyClass, removeBodyClass } = useHelpers();
 const { siteName } = useAppConfig();
 
 const closeCartAndMenu = () => {

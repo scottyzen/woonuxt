@@ -1,10 +1,11 @@
 <script setup lang="ts">
-const props = defineProps<{ status: string }>();
-const readableStatus = computed(() => props.status.replace(/_/g, ' '));
+const props = defineProps<{ order: Order }>();
+
+const readableStatus = computed(() => props.order?.status?.replace(/_/g, ' ') || '');
 </script>
 
 <template>
-  <span :class="`order-${status}`" class="order-status">{{ readableStatus }}</span>
+  <span :class="`order-${order?.status}`" class="order-status">{{ readableStatus }}</span>
 </template>
 
 <style lang="postcss" scoped>

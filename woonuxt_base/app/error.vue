@@ -2,8 +2,7 @@
 const route = useRoute();
 const { error } = defineProps<{ error: any }>();
 const { isShowingCart, toggleCart } = useCart();
-const { isShowingMobileMenu, toggleMobileMenu } = useHelpers();
-const { addBodyClass, removeBodyClass } = useHelpers();
+const { isShowingMobileMenu, toggleMobileMenu, addBodyClass, removeBodyClass } = useHelpers();
 
 const closeCartAndMenu = () => {
   toggleCart(false);

@@ -16,6 +16,7 @@ fragment SimpleProduct on SimpleProduct {
   width
   height
   reviewCount
+  onSale
   image {
     sourceUrl
     cartSourceUrl: sourceUrl(size: THUMBNAIL)
@@ -24,7 +25,7 @@ fragment SimpleProduct on SimpleProduct {
     altText
     title
   }
-  galleryImages {
+  galleryImages(first: 20) {
     nodes {
       sourceUrl
       altText

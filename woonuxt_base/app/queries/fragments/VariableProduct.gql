@@ -17,6 +17,7 @@ fragment VariableProduct on VariableProduct {
   }
   averageRating
   reviewCount
+  onSale
   regularPrice
   rawRegularPrice: regularPrice(format: RAW)
   salePrice
@@ -61,7 +62,7 @@ fragment VariableProduct on VariableProduct {
       }
     }
   }
-  galleryImages {
+  galleryImages(first: 20) {
     nodes {
       sourceUrl
       databaseId
