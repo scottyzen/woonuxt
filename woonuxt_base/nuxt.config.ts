@@ -2,6 +2,7 @@ import { createResolver } from '@nuxt/kit';
 const { resolve } = createResolver(import.meta.url);
 
 export default defineNuxtConfig({
+  compatibilityDate: '2024-07-09',
   future: {
     compatibilityVersion: 4,
   },
