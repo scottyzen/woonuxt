@@ -1,11 +1,11 @@
 <script setup lang="ts">
 const { allProducts } = useProducts();
-const { clearSearchQuery, isSearchActive } = useSearching();
-const { resetFilter, isFiltersActive } = useFiltering();
+const { clearSearchQuery } = useSearching();
+const { resetFilter } = useFiltering();
 
 const clearAll = () => {
-  if (isFiltersActive.value) resetFilter();
-  if (isSearchActive.value) clearSearchQuery();
+  resetFilter();
+  clearSearchQuery();
 };
 </script>
 

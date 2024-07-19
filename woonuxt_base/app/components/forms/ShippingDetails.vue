@@ -1,8 +1,5 @@
-<script setup>
-const { orderInput } = useCheckout();
+<script lang="ts" setup>
 const { updateShippingLocation } = useCheckout();
-
-const shipToDifferentAddress = computed(() => orderInput.value.shipToDifferentAddress);
 
 const props = defineProps({
   modelValue: { type: Object, required: true },
@@ -15,17 +12,17 @@ const shipping = toRef(props, 'modelValue');
   <div class="grid w-full gap-4 lg:grid-cols-2">
     <div class="w-full">
       <label for="first-name">{{ $t('messages.billing.firstName') }}</label>
-      <input v-model="shipping.firstName" placeholder="John" type="text" :required="shipToDifferentAddress" />
+      <input v-model="shipping.firstName" placeholder="John" type="text" required />
     </div>
 
     <div class="w-full">
       <label for="last-name">{{ $t('messages.billing.lastName') }}</label>
-      <input v-model="shipping.lastName" placeholder="Doe" type="text" :required="shipToDifferentAddress" />
+      <input v-model="shipping.lastName" placeholder="Doe" type="text" required />
     </div>
 
     <div class="w-full col-span-full">
       <label for="address1">{{ $t('messages.billing.address1') }}</label>
-      <input v-model="shipping.address1" placeholder="O'Connell Street" type="text" :required="shipToDifferentAddress" />
+      <input v-model="shipping.address1" placeholder="O'Connell Street" type="text" required />
     </div>
 
     <div class="w-full col-span-full">
@@ -35,7 +32,7 @@ const shipping = toRef(props, 'modelValue');
 
     <div class="w-full">
       <label for="city">{{ $t('messages.billing.city') }}</label>
-      <input v-model="shipping.city" placeholder="Dublin" type="text" :required="shipToDifferentAddress" />
+      <input v-model="shipping.city" placeholder="Dublin" type="text" required />
     </div>
 
     <div class="w-full">

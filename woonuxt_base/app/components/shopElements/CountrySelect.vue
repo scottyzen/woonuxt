@@ -1,11 +1,11 @@
 <script setup>
 import { countries } from '#constants';
-const { allowedCountries } = await GqlGetStates({ country: 'IE' });
 
-const props = defineProps(['modelValue']);
+const props = defineProps(['modelValue', 'props.allowedCountries']);
 const emit = defineEmits(['update:modelValue']);
-// @ts-ignore
-const countriesToShow = computed(() => (allowedCountries?.length ? countries.filter((country) => allowedCountries.includes(country.countryCode)) : countries));
+const countriesToShow = computed(() =>
+  props.allowedCountries?.length ? countries.filter((country) => props.allowedCountries.includes(country.countryCode)) : countries,
+);
 
 function select(evt) {
   emit('update:modelValue', evt.target.value);
