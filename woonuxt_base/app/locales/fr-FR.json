@@ -111,6 +111,8 @@
       "rating": "Note | Notes",
       "cart": "Panier",
       "cartEmpty": "Votre panier est vide.",
+      "addProductsInYourCart": "Veuillez ajouter des produits à votre panier.",
+      "browseOurProducts": "Parcourez nos produits",
       "checkout": "Commander",
       "checkoutButton": "Commander",
       "discount": "Remise",

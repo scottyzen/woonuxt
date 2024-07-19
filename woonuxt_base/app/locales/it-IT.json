@@ -111,6 +111,8 @@
       "rating": "Valutazione | Valutazioni",
       "cart": "Carrello",
       "cartEmpty": "Il tuo carrello è vuoto.",
+      "addProductsInYourCart": "Per favore, aggiungi alcuni prodotti al tuo carrello.",
+      "browseOurProducts": "Sfoglia i nostri prodotti",
       "checkout": "Pagamento",
       "checkoutButton": "Procedi al pagamento",
       "discount": "Sconto",

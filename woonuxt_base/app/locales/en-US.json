@@ -111,6 +111,8 @@
       "rating": "Rating | Ratings",
       "cart": "Cart",
       "cartEmpty": "Your cart is empty.",
+      "addProductsInYourCart": "Please, add some products to your cart.",
+      "browseOurProducts": "Browse our products",
       "checkout": "Checkout",
       "checkoutButton": "Checkout",
       "discount": "Discount",
