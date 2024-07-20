@@ -9,7 +9,10 @@
       </div>
       <div v-if="formView === 'register'" class="my-2 text-center">
         {{ $t('messages.account.hasAccount') }}
-        <a class="font-semibold cursor-pointer text-primary" @click="navigate('login')"> {{ $t('messages.general.please') }} {{ $t('messages.account.accountLogin') }} </a>.
+        <a class="font-semibold cursor-pointer text-primary" @click="navigate('login')">
+          {{ $t('messages.general.please') }} {{ $t('messages.account.accountLogin') }}
+        </a>
+        .
       </div>
     </div>
 
@@ -43,7 +46,9 @@
         <span>{{ buttonText }}</span>
       </button>
     </form>
-    <div class="my-8 text-center cursor-pointer" @click="navigate('forgotPassword')" v-if="formView === 'login'">{{ $t('messages.account.forgotPassword') }}</div>
+    <div class="my-8 text-center cursor-pointer" @click="navigate('forgotPassword')" v-if="formView === 'login'">
+      {{ $t('messages.account.forgotPassword') }}
+    </div>
     <div class="my-8 text-center cursor-pointer" @click="navigate('login')" v-if="formView === 'forgotPassword'">{{ $t('messages.account.backToLogin') }}</div>
   </div>
 </template>
@@ -150,11 +155,11 @@ const buttonText = computed(() => {
 });
 
 const emailLabel = computed(() => {
-  return (formView.value === 'register') ? t('messages.billing.email') : t('messages.account.emailOrUsername');
+  return formView.value === 'register' ? t('messages.billing.email') : t('messages.account.emailOrUsername');
 });
 
 const usernameLabel = computed(() => {
-  return (formView.value === 'login') ? t('messages.account.emailOrUsername') : t('messages.account.username');
+  return formView.value === 'login' ? t('messages.account.emailOrUsername') : t('messages.account.username');
 });
 
 const passwordLabel = computed(() => {
