@@ -20,19 +20,24 @@
       <label v-if="formView === 'register' || formView === 'forgotPassword'" for="email">
         {{ emailLabel }}
         <span class="text-red-500">*</span> <br />
-        <input id="email" v-model="userInfo.email" :placeholder="inputPlaceholder.email" type="text" required />
+        <input id="email" v-model="userInfo.email" :placeholder="inputPlaceholder.email" autocomplete="email" type="text" required />
       </label>
       <p v-if="formView === 'forgotPassword'" class="text-sm text-gray-500">{{ $t('messages.account.enterEmailOrUsernameForReset') }}</p>
       <div v-if="formView !== 'forgotPassword'">
         <label for="username">
           {{ usernameLabel }}
           <span class="text-red-500">*</span> <br />
-          <input id="username" v-model="userInfo.username" :placeholder="inputPlaceholder.username" type="text" required />
+          <input id="username" v-model="userInfo.username" :placeholder="inputPlaceholder.username" autocomplete="username" type="text" required />
         </label>
         <label for="password">
           {{ passwordLabel }} <span class="text-red-500">*</span> <br />
-          <PasswordInput id="password" className="border rounded-lg w-full p-3 px-4 bg-white" v-model="userInfo.password" :placeholder="inputPlaceholder.password"
-          :required="true" />
+          <PasswordInput
+            id="password"
+            className="border rounded-lg w-full p-3 px-4 bg-white"
+            v-model="userInfo.password"
+            :placeholder="inputPlaceholder.password"
+            :autocomplete="formView === 'login' ? 'current-password' : 'new-password'"
+            :required="true" />
         </label>
       </div>
       <Transition name="scale-y" mode="out-in">
@@ -173,7 +178,6 @@ const inputPlaceholder = computed(() => {
     password: passwordLabel.value,
   };
 });
-
 </script>
 
 <style lang="postcss" scoped>
