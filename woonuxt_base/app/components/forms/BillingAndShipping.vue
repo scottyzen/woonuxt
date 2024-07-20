@@ -15,12 +15,12 @@
 
       <div class="w-full">
         <label for="billing-phone">{{ $t('messages.billing.phone') }}</label>
-        <input v-model="customer.billing.phone" type="tel" placeholder="123-456-7890" autocomplete="tel" />
+        <input v-model="customer.billing.phone" placeholder="123-456-7890" autocomplete="tel" type="tel" />
       </div>
 
       <div class="w-full">
         <label for="billing-company">Company</label>
-        <input v-model="customer.billing.company" type="text" placeholder="Company Name" autocomplete="organization" />
+        <input v-model="customer.billing.company" placeholder="Company Name" autocomplete="organization" type="text" />
       </div>
 
       <div class="w-full">
@@ -74,12 +74,12 @@
 
       <div class="w-full">
         <label for="billing-phone">{{ $t('messages.billing.phone') }}</label>
-        <input v-model="customer.shipping.phone" type="tel" placeholder="123-456-7890" autocomplete="tel" />
+        <input v-model="customer.shipping.phone" placeholder="123-456-7890" autocomplete="tel" type="tel" />
       </div>
 
       <div class="w-full">
         <label for="billing-company">Company</label>
-        <input v-model="customer.shipping.company" type="text" placeholder="Company Name" autocomplete="organization" />
+        <input v-model="customer.shipping.company" placeholder="Company Name" autocomplete="organization" type="text" />
       </div>
 
       <div class="w-full">
