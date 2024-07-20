@@ -15,7 +15,7 @@
 
       <div class="w-full">
         <label for="billing-phone">{{ $t('messages.billing.phone') }}</label>
-        <input v-model="customer.billing.phone" placeholder="123-456-7890" autocomplete="tel" type="tel" />
+        <input v-model="customer.billing.phone" placeholder="+353871234567" autocomplete="tel" type="tel" />
       </div>
 
       <div class="w-full">
