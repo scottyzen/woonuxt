@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 const { updateShippingLocation } = useCheckout();
-const { allowedCountries, countryStates } = await GqlGetStates();
 
 const props = defineProps({
   modelValue: { type: Object, required: true },
@@ -8,6 +7,9 @@ const props = defineProps({
 });
 
 const billing = toRef(props, 'modelValue');
+
+const { allowedCountries, countryStates } = await GqlGetStates({ country: billing.value.country });
+
 </script>
 
 <template>
