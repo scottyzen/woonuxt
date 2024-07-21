@@ -62,6 +62,12 @@ export default defineNuxtConfig({
     },
   },
 
+  // if nuxt generated this is needed 
+  // https://github.com/nuxt/icon/issues/179#issuecomment-2230860618
+  icon: {
+    provider: 'iconify'
+  },
+
   // Multilingual support
   i18n: {
     locales: [
