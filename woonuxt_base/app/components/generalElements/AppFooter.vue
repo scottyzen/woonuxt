@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { wooNuxtVersionInfo } = useHelpers();
+const { viewer } = useAuth();
 </script>
 
 <template>
@@ -42,7 +43,7 @@ const { wooNuxtVersionInfo } = useHelpers();
         <div class="text-sm">
           <NuxtLink to="/my-account/" class="py-1.5 block">{{ $t('messages.account.myAccount') }}</NuxtLink>
           <NuxtLink to="/my-account/?tab=orders" class="py-1.5 block">{{ $t('messages.shop.orderHistory') }}</NuxtLink>
-          <NuxtLink to="/wishlist" class="py-1.5 block">{{ $t('messages.shop.wishlist') }}</NuxtLink>
+          <NuxtLink :to="viewer ? '/my-account?tab=wishlist' : '/wishlist'" class="py-1.5 block">{{ $t('messages.shop.wishlist') }}</NuxtLink>
           <a href="/" class="py-1.5 block">{{ $t('messages.general.newsletter') }}</a>
         </div>
       </div>
