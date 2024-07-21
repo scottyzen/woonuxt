@@ -10,6 +10,10 @@ const errorMessage = ref('');
 const isPending = ref(false);
 const isInvalidLink = ref(false);
 
+if (!route.query.key && !route.query.login) {
+  router.push('/my-account?action=forgotPassword');
+}
+
 const handlePasswordReset = async () => {
   try {
     errorMessage.value = '';
