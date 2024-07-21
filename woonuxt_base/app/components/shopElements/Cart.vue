@@ -4,7 +4,7 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
 
 <template>
   <div class="fixed top-0 bottom-0 right-0 z-50 flex flex-col w-11/12 max-w-lg overflow-x-hidden bg-white shadow-lg">
-    <Icon name="ion:close-outline" class="absolute p-1 bg-white rounded-lg shadow-lg top-6 left-6 md:left-8" size="34" @click="toggleCart(false)" />
+    <Icon name="ion:close-outline" class="absolute p-1 rounded-lg shadow-lg top-6 left-6 md:left-8 cursor-pointer" size="34" @click="toggleCart(false)" />
     <EmptyCart v-if="cart && !cart.isEmpty" class="rounded-lg shadow-lg p-1.5 hover:bg-red-400 hover:text-white" />
 
     <div class="mt-8 text-center">
