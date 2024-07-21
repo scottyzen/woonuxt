@@ -5,6 +5,7 @@ const { modelValue, className, placeholder, required } = defineProps({
   modelValue: { type: String, required: true },
   className: { type: String, default: '' },
   placeholder: { type: String, default: '' },
+  autocomplete: { type: String, default: 'new-password' },
   required: { type: Boolean, default: false },
 });
 
@@ -25,6 +26,7 @@ const handleInputChanged = (e: Event) => {
       @input="handleInputChanged"
       :class="className"
       :placeholder="placeholder"
+      :autocomplete="autocomplete"
       :required="required" />
     <Icon name="ion:eye-outline" size="20" class="absolute cursor-pointer right-4" @click="showPassword = !showPassword" v-if="showPassword" />
     <Icon name="ion:eye-off-outline" size="20" class="absolute cursor-pointer right-4" @click="showPassword = !showPassword" v-else />

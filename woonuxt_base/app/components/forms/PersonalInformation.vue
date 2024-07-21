@@ -5,16 +5,16 @@
 
       <div class="w-full">
         <label for="first-name">{{ $t('messages.billing.firstName') }}</label>
-        <input v-model="customer.firstName" placeholder="John" type="text" />
+        <input v-model="customer.firstName" placeholder="John" autocomplete="given-name" type="text" />
       </div>
 
       <div class="w-full">
         <label for="last-name">{{ $t('messages.billing.lastName') }}</label>
-        <input v-model="customer.lastName" placeholder="Doe" type="text" />
+        <input v-model="customer.lastName" placeholder="Doe" autocomplete="family-name" type="text" />
       </div>
       <div class="w-full col-span-full">
         <label for="email">{{ $t('messages.billing.email') }}</label>
-        <input v-model="customer.email" placeholder="johndoe@email.com" type="email" />
+        <input v-model="customer.email" placeholder="johndoe@email.com" autocomplete="email" type="email" />
       </div>
     </div>
     <div class="bg-white backdrop-blur-sm bg-opacity-75 border-t col-span-full p-4 sticky bottom-0 rounded-b-lg">
