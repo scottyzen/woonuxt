@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const { viewer, avatar, logoutUser, isPending } = useAuth();
 const linkTitle = computed<string>(() => viewer.value?.username || 'Sign In');
-const wishlistLink = computed<string>(() => (viewer.value ? '/my-account?tab=wishlist' : '/wishlist'));
 </script>
 
 <template>
