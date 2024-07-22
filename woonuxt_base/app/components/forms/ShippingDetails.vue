@@ -36,8 +36,8 @@ const shipping = toRef(props, 'modelValue');
     </div>
 
     <div class="w-full">
-      <label for="zip">ZIP ({{ $t('messages.general.optional') }})</label>
-      <input v-model="shipping.postcode" placeholder="10001" autocomplete="postal-code" type="text" />
+      <label for="zip">Postal Code</label>
+      <input v-model="shipping.postcode" placeholder="10001" autocomplete="postal-code" type="text" required />
     </div>
 
     <div class="w-full">

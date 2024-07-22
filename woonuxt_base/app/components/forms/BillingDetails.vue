@@ -50,8 +50,8 @@ const { allowedCountries, countryStates } = await GqlGetStates({ country: billin
     </div>
 
     <div class="w-full">
-      <label for="zip">ZIP ({{ $t('messages.general.optional') }})</label>
-      <input v-model="billing.postcode" placeholder="10001" autocomplete="postal-code" type="text" />
+      <label for="zip">Postal Code</label>
+      <input v-model="billing.postcode" placeholder="10001" autocomplete="postal-code" type="text" required />
     </div>
 
     <div class="w-full col-span-full">
