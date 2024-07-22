@@ -36,11 +36,6 @@ const shipping = toRef(props, 'modelValue');
     </div>
 
     <div class="w-full">
-      <label for="zip">{{ $t('messages.billing.zip') }}</label>
-      <input v-model="shipping.postcode" placeholder="10001" autocomplete="postal-code" type="text" required />
-    </div>
-
-    <div class="w-full">
       <label for="state">{{ $t('messages.billing.state') }} ({{ $t('messages.general.optional') }})</label>
       <StateSelect v-model="shipping.state" :default-value="shipping.state" :country-code="shipping.country" @change="updateShippingLocation" />
     </div>
@@ -48,6 +43,11 @@ const shipping = toRef(props, 'modelValue');
     <div class="w-full">
       <label for="country">{{ $t('messages.billing.country') }}</label>
       <CountrySelect v-model="shipping.country" :default-value="shipping.country" @change="updateShippingLocation" />
+    </div>
+
+    <div class="w-full">
+      <label for="zip">{{ $t('messages.billing.zip') }}</label>
+      <input v-model="shipping.postcode" placeholder="10001" autocomplete="postal-code" type="text" required />
     </div>
 
     <div class="w-full col-span-full">
