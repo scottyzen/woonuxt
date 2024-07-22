@@ -100,7 +100,7 @@ useSeoMeta({
         <hr class="my-8" />
       </div>
       <div v-if="order && !isGuest" class="flex-1 w-full">
-        <div class="flex items-center justify-between">
+        <div class="flex items-start justify-between">
           <div>
             <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.shop.order') }}</div>
             <div class="leading-none">#{{ order.databaseId! }}</div>
