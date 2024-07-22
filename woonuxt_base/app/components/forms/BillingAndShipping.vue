@@ -15,7 +15,7 @@
 
       <div class="w-full">
         <label for="billing-phone">{{ $t('messages.billing.phone') }}</label>
-        <input v-model="customer.billing.phone" placeholder="+353871234567" autocomplete="tel" type="tel" />
+        <input v-model="customer.billing.phone" placeholder="+1 234 567 8901" autocomplete="tel" type="tel" />
       </div>
 
       <div class="w-full">
@@ -74,7 +74,7 @@
 
       <div class="w-full">
         <label for="billing-phone">{{ $t('messages.billing.phone') }}</label>
-        <input v-model="customer.shipping.phone" placeholder="123-456-7890" autocomplete="tel" type="tel" />
+        <input v-model="customer.shipping.phone" placeholder="+1 234 567 8901" autocomplete="tel" type="tel" />
       </div>
 
       <div class="w-full">
@@ -84,7 +84,7 @@
 
       <div class="w-full">
         <label for="billing-address">{{ $t('messages.billing.address1') }}</label>
-        <input v-model="customer.shipping.address1" placeholder="123 Main St" autocomplete="address-line1" type="text" />
+        <input v-model="customer.shipping.address1" placeholder="O'Connell Street 47" autocomplete="address-line1" type="text" />
       </div>
 
       <div class="w-full">

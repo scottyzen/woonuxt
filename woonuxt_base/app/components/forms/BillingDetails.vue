@@ -26,17 +26,17 @@ const { allowedCountries, countryStates } = await GqlGetStates({ country: billin
 
     <div class="w-full col-span-full">
       <label for="address1">{{ $t('messages.billing.address1') }}</label>
-      <input v-model="billing.address1" placeholder="O'Connell Street" autocomplete="street-address" type="text" required />
+      <input v-model="billing.address1" placeholder="O'Connell Street 47" autocomplete="street-address" type="text" required />
     </div>
 
     <div class="w-full col-span-full">
       <label for="address2">{{ $t('messages.billing.address2') }}</label>
-      <input v-model="billing.address2" placeholder="Dublin 1" autocomplete="address-line2" type="text" />
+      <input v-model="billing.address2" placeholder="Apartment, studio, or floor" autocomplete="address-line2" type="text" />
     </div>
 
     <div class="w-full">
       <label for="city">{{ $t('messages.billing.city') }}</label>
-      <input v-model="billing.city" placeholder="Dublin" autocomplete="locality" type="text" required />
+      <input v-model="billing.city" placeholder="New York" autocomplete="locality" type="text" required />
     </div>
 
     <div class="w-full">
@@ -51,12 +51,12 @@ const { allowedCountries, countryStates } = await GqlGetStates({ country: billin
 
     <div class="w-full">
       <label for="zip">ZIP ({{ $t('messages.general.optional') }})</label>
-      <input v-model="billing.postcode" placeholder="D01 1234" autocomplete="postal-code" type="text" />
+      <input v-model="billing.postcode" placeholder="10001" autocomplete="postal-code" type="text" />
     </div>
 
     <div class="w-full col-span-full">
       <label for="phone">{{ $t('messages.billing.phone') }} ({{ $t('messages.general.optional') }})</label>
-      <input v-model="billing.phone" placeholder="+353871234567" autocomplete="tel" type="tel" />
+      <input v-model="billing.phone" placeholder="+1 234 567 8901" autocomplete="tel" type="tel" />
     </div>
   </div>
 </template>
