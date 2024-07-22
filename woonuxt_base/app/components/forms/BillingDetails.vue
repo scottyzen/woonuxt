@@ -30,7 +30,7 @@ const { allowedCountries, countryStates } = await GqlGetStates({ country: billin
     </div>
 
     <div class="w-full col-span-full">
-      <label for="address2">{{ $t('messages.billing.address2') }}</label>
+      <label for="address2">{{ $t('messages.billing.address2') }} ({{ $t('messages.general.optional') }})</label>
       <input v-model="billing.address2" placeholder="Apartment, studio, or floor" autocomplete="address-line2" type="text" />
     </div>
 
@@ -40,7 +40,7 @@ const { allowedCountries, countryStates } = await GqlGetStates({ country: billin
     </div>
 
     <div class="w-full">
-      <label for="state">{{ $t('messages.billing.state') }}</label>
+      <label for="state">{{ $t('messages.billing.state') }} ({{ $t('messages.general.optional') }})</label>
       <StateSelect v-model="billing.state" :default-value="billing.state" :country-code="billing.country" @change="updateShippingLocation" :countryStates />
     </div>
 

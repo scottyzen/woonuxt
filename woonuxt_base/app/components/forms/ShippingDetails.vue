@@ -26,7 +26,7 @@ const shipping = toRef(props, 'modelValue');
     </div>
 
     <div class="w-full col-span-full">
-      <label for="address2">{{ $t('messages.billing.address2') }}</label>
+      <label for="address2">{{ $t('messages.billing.address2') }} ({{ $t('messages.general.optional') }})</label>
       <input v-model="shipping.address2" placeholder="Apartment, studio, or floor" autocomplete="address-line2" type="text" />
     </div>
 
@@ -41,7 +41,7 @@ const shipping = toRef(props, 'modelValue');
     </div>
 
     <div class="w-full">
-      <label for="state">{{ $t('messages.billing.state') }}</label>
+      <label for="state">{{ $t('messages.billing.state') }} ({{ $t('messages.general.optional') }})</label>
       <StateSelect v-model="shipping.state" :default-value="shipping.state" :country-code="shipping.country" @change="updateShippingLocation" />
     </div>
 
