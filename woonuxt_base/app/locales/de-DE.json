@@ -131,7 +131,7 @@
       "address2": "Addresszeile 2",
       "city": "Ort",
       "state": "State",
-      "zip": "PLZ",
+      "zip": "Postleitzahl / ZIP",
       "country": "Land",
       "countryCode": "Ländercode",
       "phone": "Telefon",
