@@ -131,7 +131,7 @@
       "address2": "Endereço 2",
       "city": "Cidade",
       "state": "Estado",
-      "zip": "CEP",
+      "zip": "CEP / ZIP",
       "country": "País",
       "countryCode": "Código do País",
       "phone": "Telefone",

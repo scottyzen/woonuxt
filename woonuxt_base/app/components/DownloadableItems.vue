@@ -36,8 +36,12 @@ tbody tr:nth-child(odd) {
   background-color: #fafafa;
 }
 
+thead tr {
+  @apply text-xs sm:text-base;
+}
+
 tbody tr {
-  @apply text-sm text-gray-500;
+  @apply text-xs sm:text-sm text-gray-500;
 }
 
 td,

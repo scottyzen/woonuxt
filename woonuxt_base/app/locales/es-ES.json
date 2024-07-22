@@ -131,7 +131,7 @@
       "address2": "Dirección 2",
       "city": "Ciudad",
       "state": "Estado",
-      "zip": "Código postal",
+      "zip": "Código Postal / ZIP",
       "country": "País",
       "countryCode": "Código de país",
       "phone": "Teléfono",
