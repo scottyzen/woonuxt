@@ -35,6 +35,8 @@ watch(
     }
   },
 );
+
+const imgWidth = 640;
 </script>
 
 <template>
@@ -42,12 +44,11 @@ watch(
     <SaleBadge :node="node" class="absolute text-base top-4 right-4" />
     <NuxtImg
       class="rounded-xl object-contain w-full min-w-[350px]"
-      width="640"
-      height="640"
+      :width="imgWidth"
+      :height="imgWidth"
       :alt="imageToShow.altText || node.name"
       :title="imageToShow.title || node.name"
       :src="imageToShow.sourceUrl || fallbackImage"
-      :sizes="`100vw lg:640px`"
       fetchpriority="high"
       placeholder
       placeholder-class="blur-xl" />
@@ -56,12 +57,11 @@ watch(
         v-for="galleryImg in galleryImages"
         :key="galleryImg.databaseId"
         class="cursor-pointer rounded-xl"
-        width="640"
-        height="640"
+        :width="imgWidth"
+        :height="imgWidth"
         :src="galleryImg.sourceUrl"
         :alt="galleryImg.altText || node.name"
         :title="galleryImg.title || node.name"
-        :sizes="`100vw lg:640px`"
         placeholder
         placeholder-class="blur-xl"
         loading="lazy"

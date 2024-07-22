@@ -6,7 +6,7 @@ const props = defineProps({
   index: { type: Number, default: 1 },
 });
 
-const imgWidth = 220;
+const imgWidth = 500;
 const imgHeight = Math.round(imgWidth * 1.125);
 
 // example: ?filter=pa_color[green,blue],pa_size[large]
@@ -48,7 +48,6 @@ const imagetoDisplay = computed<string>(() => {
         :alt="node.image?.altText || node.name || 'Product image'"
         :title="node.image?.title || node.name"
         :loading="index <= 3 ? 'eager' : 'lazy'"
-        :sizes="`${imgWidth / 2}px md:${imgWidth}px`"
         placeholder
         placeholder-class="blur-xl" />
     </NuxtLink>
