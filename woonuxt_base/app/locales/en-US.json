@@ -33,7 +33,8 @@
       "goHome": "Go Home",
       "newsletter": "Newsletter",
       "customerService": "Customer Service",
-      "processing": "Processing"
+      "processing": "Processing",
+      "readOnly": "Readonly"
     },
     "account": {
       "changePassword": "Change Password",
