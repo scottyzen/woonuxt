@@ -124,7 +124,7 @@ useSeoMeta({
             <BillingDetails v-model="customer.billing" :sameAsShippingAddress="orderInput.shipToDifferentAddress" />
           </div>
 
-          <label for="shipToDifferentAddress" class="flex items-center gap-2">
+          <label v-if="cart.availableShippingMethods.length > 0" for="shipToDifferentAddress" class="flex items-center gap-2">
             <span>{{ $t('messages.billing.differentAddress') }}</span>
             <input id="shipToDifferentAddress" v-model="orderInput.shipToDifferentAddress" type="checkbox" name="shipToDifferentAddress" />
           </label>
