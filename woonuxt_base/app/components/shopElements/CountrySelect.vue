@@ -1,11 +1,15 @@
 <script setup>
-import { countries } from '#constants';
 
-const props = defineProps(['modelValue', 'props.allowedCountries']);
+const props = defineProps({
+  modelValue: { type: String, default: '' },
+});
+
+const { getAllowedCountries, countriesToShow } = useCountry();
 const emit = defineEmits(['update:modelValue']);
-const countriesToShow = computed(() =>
-  props.allowedCountries?.length ? countries.filter((country) => props.allowedCountries.includes(country.countryCode)) : countries,
-);
+
+onMounted(() => {
+  getAllowedCountries();
+});
 
 function select(evt) {
   emit('update:modelValue', evt.target.value);
@@ -15,8 +19,8 @@ function select(evt) {
 <template>
   <select :value="modelValue" @change="select" required>
     <option value="" disabled>Select a country</option>
-    <option v-for="country in countriesToShow" :key="country.countryName" :value="country.countryCode">
-      {{ country.countryName }}
+    <option v-for="country in countriesToShow" :key="country.code" :value="country.code">
+      {{ country.name }}
     </option>
   </select>
 </template>
