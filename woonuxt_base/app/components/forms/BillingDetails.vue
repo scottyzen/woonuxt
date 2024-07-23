@@ -3,7 +3,6 @@ const { updateShippingLocation } = useCheckout();
 
 const props = defineProps({
   modelValue: { type: Object, required: true },
-  sameAsShippingAddress: { type: Boolean, default: true },
 });
 
 const billing = toRef(props, 'modelValue');
