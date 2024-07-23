@@ -5,6 +5,8 @@ import type { AddToCartInput } from '#gql';
  * @description A composable that handles the cart in local storage
  */
 export function useCart() {
+  const { storeSettings } = useAppConfig();
+
   const cart = useState<Cart>('cart');
   const isShowingCart = useState<boolean>('isShowingCart', () => false);
   const isUpdatingCart = useState<boolean>('isUpdatingCart', () => false);
@@ -136,6 +138,8 @@ export function useCart() {
     });
   });
 
+  const isBillingAddressEnabled = computed(() => storeSettings.hideBillingAddressForVirtualProducts ? !allProductsAreVirtual.value : true);
+
   return {
     cart,
     isShowingCart,
@@ -152,6 +156,6 @@ export function useCart() {
     updateShippingMethod,
     applyCoupon,
     removeCoupon,
-    allProductsAreVirtual,
+    isBillingAddressEnabled,
   };
 }

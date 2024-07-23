@@ -4,7 +4,7 @@ import type { Stripe, StripeElements, CreateSourceData, StripeCardElement } from
 
 const { t } = useI18n();
 const { query } = useRoute();
-const { cart, isUpdatingCart, paymentGateways, allProductsAreVirtual } = useCart();
+const { cart, isUpdatingCart, paymentGateways } = useCart();
 const { customer, viewer } = useAuth();
 const { orderInput, isProcessingOrder, proccessCheckout } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
@@ -69,7 +69,6 @@ useSeoMeta({
 
 <template>
   <div class="flex flex-col min-h-[600px]">
-    {{ allProductsAreVirtual }}
     <template v-if="cart && customer">
       <div v-if="cart.isEmpty" class="flex flex-col items-center justify-center flex-1 mb-12">
         <Icon name="ion:cart-outline" size="156" class="opacity-25 mb-5" />

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 const { updateShippingLocation } = useCheckout();
+const { isBillingAddressEnabled } = useCart();
 
 const props = defineProps({
   modelValue: { type: Object, required: true },
@@ -23,37 +24,37 @@ const { allowedCountries, countryStates } = await GqlGetStates({ country: billin
       <input v-model="billing.lastName" placeholder="Doe" autocomplete="family-name" type="text" required />
     </div>
 
-    <div class="w-full col-span-full">
+    <div v-if="isBillingAddressEnabled" class="w-full col-span-full">
       <label for="address1">{{ $t('messages.billing.address1') }}</label>
       <input v-model="billing.address1" placeholder="O'Connell Street 47" autocomplete="street-address" type="text" required />
     </div>
 
-    <div class="w-full col-span-full">
+    <div v-if="isBillingAddressEnabled" class="w-full col-span-full">
       <label for="address2">{{ $t('messages.billing.address2') }} ({{ $t('messages.general.optional') }})</label>
       <input v-model="billing.address2" placeholder="Apartment, studio, or floor" autocomplete="address-line2" type="text" />
     </div>
 
-    <div class="w-full">
+    <div v-if="isBillingAddressEnabled" class="w-full">
       <label for="city">{{ $t('messages.billing.city') }}</label>
       <input v-model="billing.city" placeholder="New York" autocomplete="locality" type="text" required />
     </div>
 
-    <div class="w-full">
+    <div v-if="isBillingAddressEnabled" class="w-full">
       <label for="state">{{ $t('messages.billing.state') }} ({{ $t('messages.general.optional') }})</label>
       <StateSelect v-model="billing.state" :default-value="billing.state" :country-code="billing.country" @change="updateShippingLocation" :countryStates />
     </div>
 
-    <div class="w-full">
+    <div v-if="isBillingAddressEnabled" class="w-full">
       <label for="country">{{ $t('messages.billing.country') }}</label>
       <CountrySelect v-model="billing.country" :default-value="billing.country" @change="updateShippingLocation" :allowedCountries />
     </div>
 
-    <div class="w-full">
+    <div v-if="isBillingAddressEnabled" class="w-full">
       <label for="zip">{{ $t('messages.billing.zip') }}</label>
       <input v-model="billing.postcode" placeholder="10001" autocomplete="postal-code" type="text" required />
     </div>
 
-    <div class="w-full col-span-full">
+    <div v-if="isBillingAddressEnabled" class="w-full col-span-full">
       <label for="phone">{{ $t('messages.billing.phone') }} ({{ $t('messages.general.optional') }})</label>
       <input v-model="billing.phone" placeholder="+1 234 567 8901" autocomplete="tel" type="tel" />
     </div>
