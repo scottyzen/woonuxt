@@ -126,6 +126,16 @@ export function useCart() {
     isUpdatingCart.value = false;
   });
 
+  const allProductsAreVirtual = computed(() => {
+    const nodes = cart.value?.contents?.nodes || [];
+    if (nodes.length === 0) return false;
+
+    return nodes.every(node => {
+      const product = node.product?.node as SimpleProduct;
+      return product?.virtual === true;
+    });
+  });
+
   return {
     cart,
     isShowingCart,
@@ -142,5 +152,6 @@ export function useCart() {
     updateShippingMethod,
     applyCoupon,
     removeCoupon,
+    allProductsAreVirtual,
   };
 }
