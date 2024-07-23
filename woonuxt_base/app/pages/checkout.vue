@@ -106,7 +106,7 @@ useSeoMeta({
             <template v-if="orderInput.createAccount">
               <div class="w-full mt-4">
                 <label for="username">{{ $t('messages.account.username') }}</label>
-                <input v-model="orderInput.username" placeholder="Username" autocomplete="username" type="text" name="username" required />
+                <input v-model="orderInput.username" placeholder="johndoe" autocomplete="username" type="text" name="username" required />
               </div>
               <div class="w-full my-2" v-if="orderInput.createAccount">
                 <label for="email">{{ $t('messages.account.password') }}</label>
