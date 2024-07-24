@@ -33,7 +33,8 @@
       "goHome": "Retour à l'accueil",
       "newsletter": "Newsletter",
       "customerService": "Service Client",
-      "processing": "En cours de traitement"
+      "processing": "En cours de traitement",
+      "readOnly": "Lecture seule"
     },
     "account": {
       "changePassword": "Modifier le mot de passe",

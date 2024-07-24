@@ -173,9 +173,9 @@ const passwordLabel = computed(() => {
 
 const inputPlaceholder = computed(() => {
   return {
-    email: emailLabel.value,
-    username: usernameLabel.value,
-    password: passwordLabel.value,
+    email: formView.value === 'register' ? 'johndoe@email.com' : 'johndoe@email.com or johndoe',
+    username: formView.value === 'login' ? 'johndoe@email.com or johndoe' : 'johndoe',
+    password: '********',
   };
 });
 </script>

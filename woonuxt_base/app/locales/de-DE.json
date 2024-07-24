@@ -33,7 +33,8 @@
       "goHome": "Zur Startseite",
       "newsletter": "Newsletter",
       "customerService": "Kundenservice",
-      "processing": "Wird verarbeitet..."
+      "processing": "Wird verarbeitet",
+      "readOnly": "Nur-Lesen"
     },
     "account": {
       "changePassword": "Passwort ändern",
