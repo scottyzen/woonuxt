@@ -8,31 +8,48 @@ const { cart, isUpdatingCart, paymentGateways } = useCart();
 const { customer, viewer } = useAuth();
 const { orderInput, isProcessingOrder, proccessCheckout } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
-const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
 
 const buttonText = ref<string>(isProcessingOrder.value ? t('messages.general.processing') : t('messages.shop.checkoutButton'));
 const isCheckoutDisabled = computed<boolean>(() => isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod);
 
 const isInvalidEmail = ref<boolean>(false);
-const stripe: Stripe | null = stripeKey ? await loadStripe(stripeKey) : null;
-const elements = ref();
+const stripe = ref<Stripe | null>(null);
+const elements = ref<StripeElements | null>(null);
 const isPaid = ref<boolean>(false);
 
 onBeforeMount(async () => {
   if (query.cancel_order) window.close();
+  initStripe();
 });
 
-const payNow = async () => {
-  buttonText.value = t('messages.general.processing');
+const initStripe = async () => {
+  const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
+  if (stripeKey) {
+    stripe.value = await loadStripe(stripeKey);
+  }
+};
 
-  const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
-  const clientSecret = stripePaymentIntent?.clientSecret || '';
+const handleStripeElement = (stripeElements: StripeElements): void => {
+  elements.value = stripeElements;
+};
+
+const payNow = async () => {
+  if (isProcessingOrder.value) return;
 
   try {
-    if (orderInput.value.paymentMethod.id === 'stripe' && stripe && elements.value) {
+    isProcessingOrder.value = true;
+    buttonText.value = t('messages.general.processing');
+
+    if (orderInput.value.paymentMethod.id === 'stripe') {
+      if (!stripe.value || !elements.value) return;
+
+      const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
+      const clientSecret = stripePaymentIntent?.clientSecret;
+      if (!clientSecret) throw new Error('Payment intent client secret missing!');
+
       const cardElement = elements.value.getElement('card') as StripeCardElement;
-      const { setupIntent } = await stripe.confirmCardSetup(clientSecret, { payment_method: { card: cardElement } });
-      const { source } = await stripe.createSource(cardElement as CreateSourceData);
+      const { setupIntent } = await stripe.value.confirmCardSetup(clientSecret, { payment_method: { card: cardElement } });
+      const { source } = await stripe.value.createSource(cardElement as CreateSourceData);
 
       if (source) orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
       if (setupIntent) orderInput.value.metaData.push({ key: '_stripe_intent_id', value: setupIntent.id });
@@ -40,16 +57,12 @@ const payNow = async () => {
       isPaid.value = setupIntent?.status === 'succeeded' || false;
       orderInput.value.transactionId = source?.created?.toString() || new Date().getTime().toString();
     }
+    proccessCheckout(isPaid.value);
   } catch (error) {
     console.error(error);
+    isProcessingOrder.value = false;
     buttonText.value = t('messages.shop.placeOrder');
   }
-
-  proccessCheckout(isPaid.value);
-};
-
-const handleStripeElement = (stripeElements: StripeElements): void => {
-  elements.value = stripeElements;
 };
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
