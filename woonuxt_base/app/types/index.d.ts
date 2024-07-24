@@ -10,7 +10,6 @@ type DownloadableItem = import('#gql').DownloadableItemFragment;
 type ProductCategory = import('#gql').ProductCategoryFragment;
 type Product = ProductBase & SimpleProduct & VariableProduct;
 type Address = import('#gql').AddressFragment;
-type StripePaymentIntent = import('#gql').GetStripePaymentIntentQuery['stripePaymentIntent'];
 
 interface ProductAttributeInput {
   attributeName: string;
