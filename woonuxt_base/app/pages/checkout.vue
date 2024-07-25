@@ -6,7 +6,7 @@ const { t } = useI18n();
 const { query } = useRoute();
 const { cart, isUpdatingCart, paymentGateways } = useCart();
 const { customer, viewer } = useAuth();
-const { orderInput, isProcessingOrder, proccessCheckout } = useCheckout();
+const { orderInput, isProcessingOrder, proccessCheckout, stripePaymentCheckout, validateStripePaymentFromRedirect } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
 
 const isCheckoutDisabled = computed<boolean>(
@@ -14,16 +14,19 @@ const isCheckoutDisabled = computed<boolean>(
     isProcessingOrder.value ||
     isUpdatingCart.value ||
     !orderInput.value.paymentMethod ||
-    (orderInput.value.paymentMethod.id === 'stripe' && (!stripe.value || !elements.value))
+    (orderInput.value.paymentMethod.id === 'stripe' && !stripeElementsLoaded.value)
 );
 
 const isInvalidEmail = ref<boolean>(false);
 const stripe = ref<Stripe | null>(null);
 const elements = ref<StripeElements | null>(null);
-const isPaid = ref<boolean>(false);
+const stripeElementsLoaded = ref<boolean>(false);
 
 onBeforeMount(async () => {
   if (query.cancel_order) window.close();
+});
+
+onMounted(() => {
   initStripe();
 });
 
@@ -36,6 +39,12 @@ const initStripe = async () => {
 
 const handleStripeElement = (stripeElements: StripeElements): void => {
   elements.value = stripeElements;
+
+  // Wait for stripe elements to load and check if we came back from redirect!
+  stripeElements.getElement('payment')?.on('ready', () => {
+    stripeElementsLoaded.value = true;
+    checkSetupIntentStatusFromRedirect();
+  });
 };
 
 const payNow = async () => {
@@ -45,27 +54,22 @@ const payNow = async () => {
     isProcessingOrder.value = true;
 
     if (orderInput.value.paymentMethod.id === 'stripe') {
-      if (!stripe.value || !elements.value) return;
-
-      const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
-      const clientSecret = stripePaymentIntent?.clientSecret;
-      if (!clientSecret) throw new Error('Payment intent client secret missing!');
-
-      const cardElement = elements.value.getElement('card') as StripeCardElement;
-      const { setupIntent } = await stripe.value.confirmCardSetup(clientSecret, { payment_method: { card: cardElement } });
-      const { source } = await stripe.value.createSource(cardElement as CreateSourceData);
-
-      if (source) orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
-      if (setupIntent) orderInput.value.metaData.push({ key: '_stripe_intent_id', value: setupIntent.id });
-
-      isPaid.value = setupIntent?.status === 'succeeded' || false;
-      orderInput.value.transactionId = source?.created?.toString() || new Date().getTime().toString();
+      if (!stripe.value || !elements.value || !stripeElementsLoaded) throw new Error('Stripe not ready!');
+      await stripePaymentCheckout(stripe.value, elements.value);
+    } else {
+      await proccessCheckout(false);
     }
-    proccessCheckout(isPaid.value);
   } catch (error) {
     console.error(error);
     isProcessingOrder.value = false;
   }
+};
+
+const checkSetupIntentStatusFromRedirect = async () => {
+  const clientSecret = query.setup_intent_client_secret as string;
+  const redirectStatus = query.redirect_status as string;
+  if (!stripe.value || !elements.value || !stripeElementsLoaded || !clientSecret || !redirectStatus) return;
+  await validateStripePaymentFromRedirect(stripe.value, clientSecret, redirectStatus);
 };
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;

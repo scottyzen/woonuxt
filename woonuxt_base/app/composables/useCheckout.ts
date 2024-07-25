@@ -1,6 +1,8 @@
 import type { CheckoutInput, UpdateCustomerInput, CreateAccountInput } from '#gql';
+import type { Stripe, StripeElements } from '@stripe/stripe-js';
 
 export function useCheckout() {
+  const { t } = useI18n();
   const orderInput = useState<any>('orderInput', () => {
     return {
       customerNote: '',
@@ -8,6 +10,13 @@ export function useCheckout() {
       shipToDifferentAddress: false,
       metaData: [{ key: 'order_via', value: 'WooNuxt' }],
     };
+  });
+
+  onMounted(() => {
+    const savedOrderInput = localStorage.getItem('WooNuxtOrderInput');
+    if (savedOrderInput) {
+      orderInput.value = JSON.parse(savedOrderInput);
+    }
   });
 
   const isProcessingOrder = useState<boolean>('isProcessingOrder', () => false);
@@ -88,11 +97,11 @@ export function useCheckout() {
 
       const orderId = checkout?.order?.databaseId;
       const orderKey = checkout?.order?.orderKey;
-      const orderInputPaymentId = orderInput.value.paymentMethod.id;
-      const isPayPal = orderInputPaymentId === 'paypal' || orderInputPaymentId === 'ppcp-gateway';
+      const paymentMethodId = orderInput.value.paymentMethod.id;
+      const isPayPal = paymentMethodId === 'paypal' || paymentMethodId === 'ppcp-gateway';
 
       // PayPal redirect
-      if ((await checkout?.redirect) && isPayPal) {
+      if ((checkout?.redirect) && isPayPal) {
         const frontEndUrl = window.location.origin;
         let redirectUrl = checkout?.redirect ?? '';
 
@@ -112,34 +121,112 @@ export function useCheckout() {
         router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
       }
 
-      if ((await checkout?.result) !== 'success') {
+      if (checkout?.result !== 'success') {
         alert(t('messages.error.orderFailed'));
         window.location.reload();
-        return checkout;
       } else {
         await emptyCart();
         await refreshCart();
       }
     } catch (error: any) {
-      isProcessingOrder.value = false;
-
       const errorMessage = error?.gqlErrors?.[0].message;
 
       if (errorMessage?.includes('An account is already registered with your email address')) {
         alert('An account is already registered with your email address');
-        return null;
+      } else {
+        alert(errorMessage);
       }
 
-      alert(errorMessage);
-      return null;
+    } finally {
+      manageCheckoutLocalStorage(false);
+      isProcessingOrder.value = false;
+    }
+  };
+
+  const stripePaymentCheckout = async (stripe: Stripe, elements: StripeElements) => {
+
+    const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
+    const clientSecret = stripePaymentIntent?.clientSecret;
+    if (!clientSecret) throw new Error('Stripe PaymentIntent client secret missing!');
+
+    const { error: submitError } = await elements.submit();
+    if (submitError) {
+      throw new Error(submitError.message);
     }
 
-    isProcessingOrder.value = false;
+    orderInput.value.metaData.push({ key: '_stripe_intent_id', value: stripePaymentIntent.id });
+    orderInput.value.transactionId = stripePaymentIntent.id;
+
+    // Let's save checkout orderInput & customer to maintain state after redirect
+    // We are not sure whether the confirmSetup will redirect if needed or continue code execution
+    manageCheckoutLocalStorage(true);
+
+    const confirmSetup = await stripe.confirmSetup({
+      elements,
+      clientSecret,
+      confirmParams: {
+        return_url: `${window.location.origin}/checkout`,
+      },
+      redirect: 'if_required',
+    });
+
+    if (confirmSetup.error) {
+      throw new Error(confirmSetup.error.message);
+    }
+
+    if (confirmSetup.setupIntent.status === 'succeeded') {
+      proccessCheckout(true);
+    }
+  }
+
+  const validateStripePaymentFromRedirect = async (stripe: Stripe, clientSecret: string, redirectStatus: string) => {
+
+    const clear = () => {
+      useRouter().push({ query: {} });
+      manageCheckoutLocalStorage(false);
+      alert(t('messages.error.orderFailed'));
+    }
+
+    if (redirectStatus !== 'succeeded') {
+      clear();
+      return;
+    }
+
+    isProcessingOrder.value = true;
+    try {
+      const paymentIntent = await stripe.retrieveSetupIntent(clientSecret);
+      if (paymentIntent?.setupIntent?.status === 'succeeded') {
+        proccessCheckout(true);
+      }
+    } catch (error) {
+      isProcessingOrder.value = false;
+      console.error(error);
+      clear();
+    }
   };
+
+  /**
+   * Manages the local storage for checkout data, specifically saving and removing 
+   * the 'WooNuxtOrderInput' and 'WooNuxtCustomer' items. This is necessary to maintain
+   * the state after a redirect, ensuring the orderInput and customer information persist.
+   *
+   * @param {boolean} shouldStore - Indicates whether to save or remove the data in local storage.
+   */
+  const manageCheckoutLocalStorage = (shouldStore: boolean) => {
+    if (shouldStore) {
+      localStorage.setItem('WooNuxtOrderInput', JSON.stringify(orderInput.value));
+      localStorage.setItem('WooNuxtCustomer', JSON.stringify(useAuth().customer.value));
+    } else {
+      localStorage.removeItem('WooNuxtOrderInput');
+      localStorage.removeItem('WooNuxtCustomer');
+    }
+  }
 
   return {
     orderInput,
     isProcessingOrder,
+    stripePaymentCheckout,
+    validateStripePaymentFromRedirect,
     proccessCheckout,
     updateShippingLocation,
   };

@@ -12,16 +12,14 @@ const emit = defineEmits(['updateElement']);
 let elements: StripeElements | null = null;
 
 const options: StripeElementsOptionsMode = {
-  mode: 'payment',
+  mode: 'setup',
   currency: 'eur',
-  amount: rawCartTotal.value || 0,
-  // paymentMethodCreation: 'manual',
 };
 
 const createStripeElements = async () => {
   elements = stripe.elements(options);
-  const cardElement = elements.create('card', { hidePostalCode: true });
-  cardElement.mount('#card-element');
+  const paymentElement = elements.create('payment');
+  paymentElement.mount('#payment-element');
   emit('updateElement', elements);
 };
 
@@ -31,7 +29,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div id="card-element">
+  <div id="payment-element">
     <!-- Elements will create form elements here -->
   </div>
 </template>
