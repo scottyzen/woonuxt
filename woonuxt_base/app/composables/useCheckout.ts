@@ -113,7 +113,7 @@ export function useCheckout() {
       }
 
       if ((await checkout?.result) !== 'success') {
-        alert('There was an error processing your order. Please try again.');
+        alert(t('messages.error.orderFailed'));
         window.location.reload();
         return checkout;
       } else {

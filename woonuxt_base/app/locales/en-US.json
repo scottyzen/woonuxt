@@ -147,6 +147,7 @@
       "incorrectPassword": "Incorrect password. Please try again.",
       "passwordMismatch": "Passwords do not match. Please try again.",
       "invalidPasswordResetLink": "Password reset link is invalid.",
+      "orderFailed": "There was an error processing your order. Please try again.",
       "general": "Something went wrong",
       "noOrder": "We could not find your order. Please try again later."
     }
