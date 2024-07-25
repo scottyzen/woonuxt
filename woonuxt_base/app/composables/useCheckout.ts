@@ -101,7 +101,7 @@ export function useCheckout() {
       const isPayPal = paymentMethodId === 'paypal' || paymentMethodId === 'ppcp-gateway';
 
       // PayPal redirect
-      if ((checkout?.redirect) && isPayPal) {
+      if (checkout?.redirect && isPayPal) {
         const frontEndUrl = window.location.origin;
         let redirectUrl = checkout?.redirect ?? '';
 
@@ -136,7 +136,6 @@ export function useCheckout() {
       } else {
         alert(errorMessage);
       }
-
     } finally {
       manageCheckoutLocalStorage(false);
       isProcessingOrder.value = false;
@@ -144,7 +143,6 @@ export function useCheckout() {
   };
 
   const stripePaymentCheckout = async (stripe: Stripe, elements: StripeElements) => {
-
     const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
     const clientSecret = stripePaymentIntent?.clientSecret;
     if (!clientSecret) throw new Error('Stripe PaymentIntent client secret missing!');
@@ -154,8 +152,10 @@ export function useCheckout() {
       throw new Error(submitError.message);
     }
 
-    orderInput.value.metaData.push({ key: '_stripe_intent_id', value: stripePaymentIntent.id });
-    orderInput.value.transactionId = stripePaymentIntent.id;
+    if (stripePaymentIntent?.id) {
+      orderInput.value.metaData.push({ key: '_stripe_intent_id', value: stripePaymentIntent.id });
+      orderInput.value.transactionId = stripePaymentIntent.id;
+    }
 
     // Let's save checkout orderInput & customer to maintain state after redirect
     // We are not sure whether the confirmSetup will redirect if needed or continue code execution
@@ -177,15 +177,14 @@ export function useCheckout() {
     if (confirmSetup.setupIntent.status === 'succeeded') {
       proccessCheckout(true);
     }
-  }
+  };
 
   const validateStripePaymentFromRedirect = async (stripe: Stripe, clientSecret: string, redirectStatus: string) => {
-
     const clear = () => {
       useRouter().push({ query: {} });
       manageCheckoutLocalStorage(false);
       alert(t('messages.error.orderFailed'));
-    }
+    };
 
     if (redirectStatus !== 'succeeded') {
       clear();
@@ -206,7 +205,7 @@ export function useCheckout() {
   };
 
   /**
-   * Manages the local storage for checkout data, specifically saving and removing 
+   * Manages the local storage for checkout data, specifically saving and removing
    * the 'WooNuxtOrderInput' and 'WooNuxtCustomer' items. This is necessary to maintain
    * the state after a redirect, ensuring the orderInput and customer information persist.
    *
@@ -220,7 +219,7 @@ export function useCheckout() {
       localStorage.removeItem('WooNuxtOrderInput');
       localStorage.removeItem('WooNuxtCustomer');
     }
-  }
+  };
 
   return {
     orderInput,
