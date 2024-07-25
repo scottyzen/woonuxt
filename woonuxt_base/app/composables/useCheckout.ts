@@ -146,16 +146,15 @@ export function useCheckout() {
     const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
     const clientSecret = stripePaymentIntent?.clientSecret;
     if (!clientSecret) throw new Error('Stripe PaymentIntent client secret missing!');
+    if (!stripePaymentIntent.id) throw new Error('Stripe PaymentIntent id missing!');
 
     const { error: submitError } = await elements.submit();
     if (submitError) {
       throw new Error(submitError.message);
     }
 
-    if (stripePaymentIntent?.id) {
-      orderInput.value.metaData.push({ key: '_stripe_intent_id', value: stripePaymentIntent.id });
-      orderInput.value.transactionId = stripePaymentIntent.id;
-    }
+    orderInput.value.metaData.push({ key: '_stripe_intent_id', value: stripePaymentIntent.id });
+    orderInput.value.transactionId = stripePaymentIntent.id;
 
     // Let's save checkout orderInput & customer to maintain state after redirect
     // We are not sure whether the confirmSetup will redirect if needed or continue code execution
