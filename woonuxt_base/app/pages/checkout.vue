@@ -9,7 +9,13 @@ const { customer, viewer } = useAuth();
 const { orderInput, isProcessingOrder, proccessCheckout } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
 
-const isCheckoutDisabled = computed<boolean>(() => isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod);
+const isCheckoutDisabled = computed<boolean>(
+  () =>
+    isProcessingOrder.value ||
+    isUpdatingCart.value ||
+    !orderInput.value.paymentMethod ||
+    (orderInput.value.paymentMethod.id === 'stripe' && (!stripe.value || !elements.value))
+);
 
 const isInvalidEmail = ref<boolean>(false);
 const stripe = ref<Stripe | null>(null);
