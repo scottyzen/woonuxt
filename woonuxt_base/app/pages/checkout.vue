@@ -62,11 +62,12 @@ const payNow = async () => {
   } catch (error) {
     console.error(error);
     isProcessingOrder.value = false;
+    alert(error);
   }
 };
 
 const checkSetupIntentStatusFromRedirect = async () => {
-  const clientSecret = query.setup_intent_client_secret as string;
+  const clientSecret = query.payment_intent_client_secret as string;
   const redirectStatus = query.redirect_status as string;
   if (!stripe.value || !elements.value || !stripeElementsLoaded || !clientSecret || !redirectStatus) return;
   await validateStripePaymentFromRedirect(stripe.value, clientSecret, redirectStatus);

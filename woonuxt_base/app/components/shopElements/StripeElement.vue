@@ -12,8 +12,9 @@ const emit = defineEmits(['updateElement']);
 let elements: StripeElements | null = null;
 
 const options: StripeElementsOptionsMode = {
-  mode: 'setup',
+  mode: 'payment',
   currency: 'eur',
+  amount: rawCartTotal.value || 0,
 };
 
 const createStripeElements = async () => {

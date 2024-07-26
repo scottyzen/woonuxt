@@ -160,7 +160,7 @@ export function useCheckout() {
     // We are not sure whether the confirmSetup will redirect if needed or continue code execution
     manageCheckoutLocalStorage(true);
 
-    const confirmSetup = await stripe.confirmSetup({
+    const confirmSetup = await stripe.confirmPayment({
       elements,
       clientSecret,
       confirmParams: {
@@ -173,7 +173,7 @@ export function useCheckout() {
       throw new Error(confirmSetup.error.message);
     }
 
-    if (confirmSetup.setupIntent.status === 'succeeded') {
+    if (confirmSetup.paymentIntent.status === 'succeeded') {
       proccessCheckout(true);
     }
   };
@@ -189,11 +189,11 @@ export function useCheckout() {
       clear();
       return;
     }
-
+  
     isProcessingOrder.value = true;
     try {
-      const paymentIntent = await stripe.retrieveSetupIntent(clientSecret);
-      if (paymentIntent?.setupIntent?.status === 'succeeded') {
+      const paymentIntent = await stripe.retrievePaymentIntent(clientSecret);
+      if (paymentIntent?.paymentIntent?.status === 'succeeded') {
         proccessCheckout(true);
       }
     } catch (error) {
