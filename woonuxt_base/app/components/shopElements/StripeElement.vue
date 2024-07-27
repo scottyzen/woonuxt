@@ -24,8 +24,16 @@ const createStripeElements = async () => {
   emit('updateElement', elements);
 };
 
+const updateStripeElements = async () => {
+  elements?.update({ amount: rawCartTotal.value || 0 });
+};
+
 onMounted(() => {
   createStripeElements();
+});
+
+watch(rawCartTotal, (newAmount) => {
+  updateStripeElements();
 });
 </script>
 
