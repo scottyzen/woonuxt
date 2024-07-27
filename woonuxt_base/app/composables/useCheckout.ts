@@ -143,15 +143,16 @@ export function useCheckout() {
   };
 
   const stripePaymentCheckout = async (stripe: Stripe, elements: StripeElements) => {
-    const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
-    const clientSecret = stripePaymentIntent?.clientSecret;
-    if (!clientSecret) throw new Error('Stripe PaymentIntent client secret missing!');
-    if (!stripePaymentIntent.id) throw new Error('Stripe PaymentIntent id missing!');
 
     const { error: submitError } = await elements.submit();
     if (submitError) {
       throw new Error(submitError.message);
     }
+
+    const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
+    const clientSecret = stripePaymentIntent?.clientSecret;
+    if (!clientSecret) throw new Error('Stripe PaymentIntent client secret missing!');
+    if (!stripePaymentIntent.id) throw new Error('Stripe PaymentIntent id missing!');
 
     orderInput.value.metaData.push({ key: '_stripe_intent_id', value: stripePaymentIntent.id });
     orderInput.value.transactionId = stripePaymentIntent.id;
