@@ -180,19 +180,10 @@ export function useCheckout() {
   };
 
   const validateStripePaymentFromRedirect = async (stripe: Stripe, clientSecret: string, redirectStatus: string) => {
-    const clear = () => {
-      useRouter().push({ query: {} });
-      manageCheckoutLocalStorage(false);
-      alert(t('messages.error.orderFailed'));
-    };
-
-    if (redirectStatus !== 'succeeded') {
-      clear();
-      return;
-    }
-  
-    isProcessingOrder.value = true;
     try {
+      if (redirectStatus !== 'succeeded') throw new Error('Redirect status not suceeded');
+
+      isProcessingOrder.value = true;
       const paymentIntent = await stripe.retrievePaymentIntent(clientSecret);
       if (paymentIntent?.paymentIntent?.status === 'succeeded') {
         proccessCheckout(true);
@@ -200,7 +191,10 @@ export function useCheckout() {
     } catch (error) {
       isProcessingOrder.value = false;
       console.error(error);
-      clear();
+
+      useRouter().push({ query: {} });
+      manageCheckoutLocalStorage(false);
+      alert(t('messages.error.orderFailed'));
     }
   };
 
