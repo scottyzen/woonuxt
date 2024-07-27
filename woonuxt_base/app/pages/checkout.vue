@@ -26,12 +26,13 @@ onBeforeMount(async () => {
   if (query.cancel_order) window.close();
 });
 
-onMounted(() => {
-  initStripe();
+onMounted(async () => {
+  await initStripe();
+  await checkSetupIntentStatusFromRedirect();
 });
 
 const initStripe = async () => {
-  const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
+  const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY;
   if (stripeKey) {
     stripe.value = await loadStripe(stripeKey);
   }
@@ -40,10 +41,9 @@ const initStripe = async () => {
 const handleStripeElement = (stripeElements: StripeElements): void => {
   elements.value = stripeElements;
 
-  // Wait for stripe elements to load and check if we came back from redirect!
+  // Wait for stripe elements to load
   stripeElements.getElement('payment')?.on('ready', () => {
     stripeElementsLoaded.value = true;
-    checkSetupIntentStatusFromRedirect();
   });
 };
 
@@ -69,7 +69,7 @@ const payNow = async () => {
 const checkSetupIntentStatusFromRedirect = async () => {
   const clientSecret = query.payment_intent_client_secret as string;
   const redirectStatus = query.redirect_status as string;
-  if (!stripe.value || !elements.value || !stripeElementsLoaded || !clientSecret || !redirectStatus) return;
+  if (!stripe.value || !clientSecret || !redirectStatus) return;
   await validateStripePaymentFromRedirect(stripe.value, clientSecret, redirectStatus);
 };
 
