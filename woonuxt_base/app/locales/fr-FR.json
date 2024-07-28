@@ -33,7 +33,8 @@
       "goHome": "Retour à l'accueil",
       "newsletter": "Newsletter",
       "customerService": "Service Client",
-      "processing": "En cours de traitement"
+      "processing": "En cours de traitement",
+      "readOnly": "Lecture seule"
     },
     "account": {
       "changePassword": "Modifier le mot de passe",
@@ -111,6 +112,8 @@
       "rating": "Note | Notes",
       "cart": "Panier",
       "cartEmpty": "Votre panier est vide.",
+      "addProductsInYourCart": "Veuillez ajouter des produits à votre panier.",
+      "browseOurProducts": "Parcourez nos produits",
       "checkout": "Commander",
       "checkoutButton": "Commander",
       "discount": "Remise",
@@ -129,7 +132,7 @@
       "address2": "Adresse 2",
       "city": "Ville",
       "state": "État",
-      "zip": "Région",
+      "zip": "Code Postal / ZIP",
       "country": "Pays",
       "countryCode": "Code postal",
       "phone": "Téléphone",

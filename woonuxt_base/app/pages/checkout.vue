@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { loadStripe } from '@stripe/stripe-js';
+import type { Stripe, StripeElements, CreateSourceData, StripeCardElement } from '@stripe/stripe-js';
 
 const { t } = useI18n();
 const { query } = useRoute();
@@ -13,8 +14,8 @@ const buttonText = ref<string>(isProcessingOrder.value ? t('messages.general.pro
 const isCheckoutDisabled = computed<boolean>(() => isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod);
 
 const isInvalidEmail = ref<boolean>(false);
-const stripe = stripeKey ? await loadStripe(stripeKey) : null;
-let elements = ref(null);
+const stripe: Stripe | null = stripeKey ? await loadStripe(stripeKey) : null;
+const elements = ref();
 const isPaid = ref<boolean>(false);
 
 onBeforeMount(async () => {
@@ -25,13 +26,13 @@ const payNow = async () => {
   buttonText.value = t('messages.general.processing');
 
   const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
-  const { clientSecret } = stripePaymentIntent;
+  const clientSecret = stripePaymentIntent?.clientSecret || '';
 
   try {
-    if (orderInput.value.paymentMethod.id === 'stripe') {
-      const cardElement = elements.value.getElement('card');
+    if (orderInput.value.paymentMethod.id === 'stripe' && stripe && elements.value) {
+      const cardElement = elements.value.getElement('card') as StripeCardElement;
       const { setupIntent } = await stripe.confirmCardSetup(clientSecret, { payment_method: { card: cardElement } });
-      const { source } = await stripe.createSource(cardElement);
+      const { source } = await stripe.createSource(cardElement as CreateSourceData);
 
       if (source) orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
       if (setupIntent) orderInput.value.metaData.push({ key: '_stripe_intent_id', value: setupIntent.id });
@@ -47,17 +48,17 @@ const payNow = async () => {
   proccessCheckout(isPaid.value);
 };
 
-const handleStripeElement = (stripeElements) => {
+const handleStripeElement = (stripeElements: StripeElements): void => {
   elements.value = stripeElements;
 };
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
-const checkEmailOnBlur = (email) => {
+const checkEmailOnBlur = (email?: string | null): void => {
   if (email) isInvalidEmail.value = !emailRegex.test(email);
 };
 
-const checkEmailOnInput = (email) => {
+const checkEmailOnInput = (email?: string | null): void => {
   if (email && isInvalidEmail.value) isInvalidEmail.value = !emailRegex.test(email);
 };
 
@@ -68,16 +69,22 @@ useSeoMeta({
 
 <template>
   <div class="flex flex-col min-h-[600px]">
-    <LoadingIcon v-if="!cart" class="m-auto" />
-    <template v-else>
+    <template v-if="cart && customer">
       <div v-if="cart.isEmpty" class="flex flex-col items-center justify-center flex-1 mb-12">
-        <div class="mb-20 text-xl text-gray-300">{{ $t('messages.shop.cartEmpty') }}</div>
+        <Icon name="ion:cart-outline" size="156" class="opacity-25 mb-5" />
+        <h2 class="text-2xl font-bold mb-2">{{ $t('messages.shop.cartEmpty') }}</h2>
+        <span class="text-gray-400 mb-4">{{ $t('messages.shop.addProductsInYourCart') }}</span>
+        <NuxtLink
+          to="/products"
+          class="flex items-center justify-center gap-3 p-2 px-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary hover:bg-primary-dark">
+          {{ $t('messages.shop.browseOurProducts') }}
+        </NuxtLink>
       </div>
 
       <form v-else class="container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-20" @submit.prevent="payNow">
         <div class="grid w-full max-w-2xl gap-8 checkout-form md:flex-1">
           <!-- Customer details -->
-          <div v-if="!viewer">
+          <div v-if="!viewer && customer.billing">
             <h2 class="w-full mb-2 text-2xl font-semibold leading-none">Contact Information</h2>
             <p class="mt-1 text-sm text-gray-500">Already have an account? <a href="/my-account" class="text-primary text-semibold">Log in</a>.</p>
             <div class="w-full mt-4">
@@ -85,6 +92,7 @@ useSeoMeta({
               <input
                 v-model="customer.billing.email"
                 placeholder="johndoe@email.com"
+                autocomplete="email"
                 type="email"
                 name="email"
                 :class="{ 'has-error': isInvalidEmail }"
@@ -98,7 +106,7 @@ useSeoMeta({
             <template v-if="orderInput.createAccount">
               <div class="w-full mt-4">
                 <label for="username">{{ $t('messages.account.username') }}</label>
-                <input v-model="orderInput.username" placeholder="Username" type="text" name="username" required />
+                <input v-model="orderInput.username" placeholder="johndoe" autocomplete="username" type="text" name="username" required />
               </div>
               <div class="w-full my-2" v-if="orderInput.createAccount">
                 <label for="email">{{ $t('messages.account.password') }}</label>
@@ -113,10 +121,10 @@ useSeoMeta({
 
           <div>
             <h2 class="w-full mb-3 text-2xl font-semibold">{{ $t('messages.billing.billingDetails') }}</h2>
-            <BillingDetails v-model="customer.billing" :sameAsShippingAddress="orderInput.shipToDifferentAddress" />
+            <BillingDetails v-model="customer.billing" />
           </div>
 
-          <label for="shipToDifferentAddress" class="flex items-center gap-2">
+          <label v-if="cart.availableShippingMethods.length > 0" for="shipToDifferentAddress" class="flex items-center gap-2">
             <span>{{ $t('messages.billing.differentAddress') }}</span>
             <input id="shipToDifferentAddress" v-model="orderInput.shipToDifferentAddress" type="checkbox" name="shipToDifferentAddress" />
           </label>
@@ -135,7 +143,7 @@ useSeoMeta({
           </div>
 
           <!-- Pay methods -->
-          <div v-if="paymentGateways.nodes.length" class="mt-2 col-span-full">
+          <div v-if="paymentGateways?.nodes.length" class="mt-2 col-span-full">
             <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.billing.paymentOptions') }}</h2>
             <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :paymentGateways />
             <StripeElement v-if="stripe" v-show="orderInput.paymentMethod.id == 'stripe'" :stripe @updateElement="handleStripeElement" />
@@ -163,6 +171,7 @@ useSeoMeta({
         </OrderSummary>
       </form>
     </template>
+    <LoadingIcon v-else class="m-auto" />
   </div>
 </template>
 

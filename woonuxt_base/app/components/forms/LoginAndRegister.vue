@@ -9,7 +9,10 @@
       </div>
       <div v-if="formView === 'register'" class="my-2 text-center">
         {{ $t('messages.account.hasAccount') }}
-        <a class="font-semibold cursor-pointer text-primary" @click="navigate('login')"> {{ $t('messages.general.please') }} {{ $t('messages.account.accountLogin') }} </a>.
+        <a class="font-semibold cursor-pointer text-primary" @click="navigate('login')">
+          {{ $t('messages.general.please') }} {{ $t('messages.account.accountLogin') }}
+        </a>
+        .
       </div>
     </div>
 
@@ -17,19 +20,24 @@
       <label v-if="formView === 'register' || formView === 'forgotPassword'" for="email">
         {{ emailLabel }}
         <span class="text-red-500">*</span> <br />
-        <input id="email" v-model="userInfo.email" :placeholder="inputPlaceholder.email" type="text" required />
+        <input id="email" v-model="userInfo.email" :placeholder="inputPlaceholder.email" autocomplete="email" type="text" required />
       </label>
       <p v-if="formView === 'forgotPassword'" class="text-sm text-gray-500">{{ $t('messages.account.enterEmailOrUsernameForReset') }}</p>
       <div v-if="formView !== 'forgotPassword'">
         <label for="username">
           {{ usernameLabel }}
           <span class="text-red-500">*</span> <br />
-          <input id="username" v-model="userInfo.username" :placeholder="inputPlaceholder.username" type="text" required />
+          <input id="username" v-model="userInfo.username" :placeholder="inputPlaceholder.username" autocomplete="username" type="text" required />
         </label>
         <label for="password">
           {{ passwordLabel }} <span class="text-red-500">*</span> <br />
-          <PasswordInput id="password" className="border rounded-lg w-full p-3 px-4 bg-white" v-model="userInfo.password" :placeholder="inputPlaceholder.password"
-          :required="true" />
+          <PasswordInput
+            id="password"
+            className="border rounded-lg w-full p-3 px-4 bg-white"
+            v-model="userInfo.password"
+            :placeholder="inputPlaceholder.password"
+            :autocomplete="formView === 'login' ? 'current-password' : 'new-password'"
+            :required="true" />
         </label>
       </div>
       <Transition name="scale-y" mode="out-in">
@@ -43,7 +51,9 @@
         <span>{{ buttonText }}</span>
       </button>
     </form>
-    <div class="my-8 text-center cursor-pointer" @click="navigate('forgotPassword')" v-if="formView === 'login'">{{ $t('messages.account.forgotPassword') }}</div>
+    <div class="my-8 text-center cursor-pointer" @click="navigate('forgotPassword')" v-if="formView === 'login'">
+      {{ $t('messages.account.forgotPassword') }}
+    </div>
     <div class="my-8 text-center cursor-pointer" @click="navigate('login')" v-if="formView === 'forgotPassword'">{{ $t('messages.account.backToLogin') }}</div>
 
     <LoginProviders v-if="formView === 'login' || formView === 'register'" :loginClients="loginClients" />
@@ -155,11 +165,11 @@ const buttonText = computed(() => {
 });
 
 const emailLabel = computed(() => {
-  return (formView.value === 'register') ? t('messages.billing.email') : t('messages.account.emailOrUsername');
+  return formView.value === 'register' ? t('messages.billing.email') : t('messages.account.emailOrUsername');
 });
 
 const usernameLabel = computed(() => {
-  return (formView.value === 'login') ? t('messages.account.emailOrUsername') : t('messages.account.username');
+  return formView.value === 'login' ? t('messages.account.emailOrUsername') : t('messages.account.username');
 });
 
 const passwordLabel = computed(() => {
@@ -168,12 +178,11 @@ const passwordLabel = computed(() => {
 
 const inputPlaceholder = computed(() => {
   return {
-    email: emailLabel.value,
-    username: usernameLabel.value,
-    password: passwordLabel.value,
+    email: formView.value === 'register' ? 'johndoe@email.com' : 'johndoe@email.com or johndoe',
+    username: formView.value === 'login' ? 'johndoe@email.com or johndoe' : 'johndoe',
+    password: '********',
   };
 });
-
 </script>
 
 <style lang="postcss" scoped>

@@ -33,7 +33,8 @@
       "goHome": "Ir para Início",
       "newsletter": "Newsletter",
       "customerService": "Atendimento ao Cliente",
-      "processing": "Processando"
+      "processing": "Processando",
+      "readOnly": "Somente leitura"
     },
     "account": {
       "changePassword": "Alterar Senha",
@@ -111,6 +112,8 @@
       "rating": "Avaliação | Avaliações",
       "cart": "Carrinho",
       "cartEmpty": "Seu carrinho está vazio.",
+      "addProductsInYourCart": "Por favor, adicione alguns produtos ao seu carrinho.",
+      "browseOurProducts": "Navegue pelos nossos produtos",
       "checkout": "Finalizar Compra",
       "checkoutButton": "Finalizar",
       "discount": "Desconto",
@@ -129,7 +132,7 @@
       "address2": "Endereço 2",
       "city": "Cidade",
       "state": "Estado",
-      "zip": "CEP",
+      "zip": "CEP / ZIP",
       "country": "País",
       "countryCode": "Código do País",
       "phone": "Telefone",

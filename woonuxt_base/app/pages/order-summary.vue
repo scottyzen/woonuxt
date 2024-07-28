@@ -66,7 +66,7 @@ useSeoMeta({
 
 <template>
   <div
-    class="w-full min-h-[600px] flex items-center p-8 text-gray-800 md:bg-white md:rounded-xl md:mx-auto md:shadow-lg md:my-24 md:mt-8 md:max-w-3xl md:p-16 flex-col">
+    class="w-full min-h-[600px] flex items-center p-4 text-gray-800 md:bg-white md:rounded-xl md:mx-auto md:shadow-lg md:my-24 md:mt-8 md:max-w-3xl md:p-16 flex-col">
     <LoadingIcon v-if="!isLoaded" class="flex-1" />
     <template v-else>
       <div class="w-full">
@@ -100,21 +100,21 @@ useSeoMeta({
         <hr class="my-8" />
       </div>
       <div v-if="order && !isGuest" class="flex-1 w-full">
-        <div class="flex items-center justify-between">
-          <div>
+        <div class="flex items-start justify-between">
+          <div class="w-[21%]">
             <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.shop.order') }}</div>
             <div class="leading-none">#{{ order.databaseId! }}</div>
           </div>
-          <div>
-            <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.date') }}</div>
+          <div class="w-[21%]">
+            <div class=" mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.date') }}</div>
             <div class="leading-none">{{ formatDate(order.date!) }}</div>
           </div>
-          <div>
-            <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.status') }}</div>
+          <div class="w-[21%]">
+            <div class=" mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.status') }}</div>
             <OrderStatusLabel :order="order" />
           </div>
-          <div>
-            <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.paymentMethod') }}</div>
+          <div class="w-[21%]">
+            <div class=" mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.paymentMethod') }}</div>
             <div class="leading-none">{{ order.paymentMethodTitle }}</div>
           </div>
         </div>

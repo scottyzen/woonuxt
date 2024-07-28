@@ -33,7 +33,8 @@
       "goHome": "Go Home",
       "newsletter": "Newsletter",
       "customerService": "Customer Service",
-      "processing": "Processing"
+      "processing": "Processing",
+      "readOnly": "Readonly"
     },
     "account": {
       "changePassword": "Change Password",
@@ -111,6 +112,8 @@
       "rating": "Rating | Ratings",
       "cart": "Cart",
       "cartEmpty": "Your cart is empty.",
+      "addProductsInYourCart": "Please, add some products to your cart.",
+      "browseOurProducts": "Browse our products",
       "checkout": "Checkout",
       "checkoutButton": "Checkout",
       "discount": "Discount",
@@ -129,7 +132,7 @@
       "address2": "Address 2",
       "city": "City",
       "state": "State",
-      "zip": "Zip",
+      "zip": "Postal Code / ZIP",
       "country": "Country",
       "countryCode": "Country Code",
       "phone": "Phone",

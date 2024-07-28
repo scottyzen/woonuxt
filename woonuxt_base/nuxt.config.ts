@@ -2,6 +2,7 @@ import { createResolver } from '@nuxt/kit';
 const { resolve } = createResolver(import.meta.url);
 
 export default defineNuxtConfig({
+  compatibilityDate: '2024-07-09',
   future: {
     compatibilityVersion: 4,
   },
@@ -59,6 +60,12 @@ export default defineNuxtConfig({
       '/checkout/order-received/**': { ssr: false },
       '/order-summary/**': { ssr: false },
     },
+  },
+
+  // if nuxt generated this is needed 
+  // https://github.com/nuxt/icon/issues/179#issuecomment-2230860618
+  icon: {
+    provider: 'iconify'
   },
 
   // Multilingual support

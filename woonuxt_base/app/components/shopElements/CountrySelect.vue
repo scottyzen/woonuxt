@@ -1,11 +1,11 @@
 <script setup>
 import { countries } from '#constants';
-const { allowedCountries } = await GqlGetStates({ country: 'IE' });
 
-const props = defineProps(['modelValue']);
+const props = defineProps(['modelValue', 'props.allowedCountries']);
 const emit = defineEmits(['update:modelValue']);
-// @ts-ignore
-const countriesToShow = computed(() => (allowedCountries?.length ? countries.filter((country) => allowedCountries.includes(country.countryCode)) : countries));
+const countriesToShow = computed(() =>
+  props.allowedCountries?.length ? countries.filter((country) => props.allowedCountries.includes(country.countryCode)) : countries,
+);
 
 function select(evt) {
   emit('update:modelValue', evt.target.value);
@@ -13,7 +13,7 @@ function select(evt) {
 </script>
 
 <template>
-  <select :value="modelValue" @change="select">
+  <select :value="modelValue" @change="select" required>
     <option value="" disabled>Select a country</option>
     <option v-for="country in countriesToShow" :key="country.countryName" :value="country.countryCode">
       {{ country.countryName }}

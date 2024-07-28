@@ -5,41 +5,41 @@
 
       <div class="w-full">
         <label for="first-name">{{ $t('messages.billing.firstName') }}</label>
-        <input v-model="customer.billing.firstName" placeholder="John" type="text" required />
+        <input v-model="customer.billing.firstName" placeholder="John" autocomplete="given-name" type="text" required />
       </div>
 
       <div class="w-full">
         <label for="last-name">{{ $t('messages.billing.lastName') }}</label>
-        <input v-model="customer.billing.lastName" placeholder="Doe" type="text" required />
+        <input v-model="customer.billing.lastName" placeholder="Doe" autocomplete="family-name" type="text" required />
       </div>
 
       <div class="w-full">
         <label for="billing-phone">{{ $t('messages.billing.phone') }}</label>
-        <input v-model="customer.billing.phone" type="tel" />
+        <input v-model="customer.billing.phone" placeholder="+1 234 567 8901" autocomplete="tel" type="tel" />
       </div>
 
       <div class="w-full">
-        <label for="billing-company">Company</label>
-        <input v-model="customer.billing.company" type="text" />
+        <label for="billing-company">Company ({{ $t('messages.general.optional') }})</label>
+        <input v-model="customer.billing.company" placeholder="Company Name" autocomplete="organization" type="text" />
       </div>
 
       <div class="w-full">
         <label for="billing-address">{{ $t('messages.billing.address1') }}</label>
-        <input v-model="customer.billing.address1" placeholder="123 Main St" type="text" />
+        <input v-model="customer.billing.address1" placeholder="123 Main St" autocomplete="address-line1" type="text" />
       </div>
 
       <div class="w-full">
-        <label for="billing-address-2">{{ $t('messages.billing.address2') }}</label>
-        <input v-model="customer.billing.address2" placeholder="Apartment, studio, or floor" type="text" />
+        <label for="billing-address-2">{{ $t('messages.billing.address2') }} ({{ $t('messages.general.optional') }})</label>
+        <input v-model="customer.billing.address2" placeholder="Apartment, studio, or floor" autocomplete="address-line2" type="text" />
       </div>
 
       <div class="w-full">
         <label for="billing-city">{{ $t('messages.billing.city') }}</label>
-        <input v-model="customer.billing.city" placeholder="New York" type="text" />
+        <input v-model="customer.billing.city" placeholder="New York" autocomplete="address-level2" type="text" />
       </div>
 
       <div class="w-full">
-        <label for="billing-state">{{ $t('messages.billing.state') }}</label>
+        <label for="billing-state">{{ $t('messages.billing.state') }} ({{ $t('messages.general.optional') }})</label>
         <LazyStateSelect v-model="customer.billing.state" :default-value="customer.billing.state" :country-code="customer.billing.country" />
       </div>
 
@@ -50,12 +50,12 @@
 
       <div class="w-full">
         <label for="billing-zip">{{ $t('messages.billing.zip') }}</label>
-        <input v-model="customer.billing.postcode" placeholder="10001" type="text" />
+        <input v-model="customer.billing.postcode" placeholder="10001" autocomplete="postal-code" type="text" />
       </div>
 
       <div class="w-full col-span-full">
         <label for="email">{{ $t('messages.billing.email') }}</label>
-        <input v-model="customer.billing.email" placeholder="johndoe@email.com" type="email" required />
+        <input v-model="customer.billing.email" placeholder="johndoe@email.com" autocomplete="email" type="email" required />
       </div>
     </div>
 
@@ -64,41 +64,41 @@
 
       <div class="w-full">
         <label for="first-name">{{ $t('messages.billing.firstName') }}</label>
-        <input v-model="customer.shipping.firstName" placeholder="John" type="text" required />
+        <input v-model="customer.shipping.firstName" placeholder="John" autocomplete="given-name" type="text" required />
       </div>
 
       <div class="w-full">
         <label for="last-name">{{ $t('messages.billing.lastName') }}</label>
-        <input v-model="customer.shipping.lastName" placeholder="Doe" type="text" required />
+        <input v-model="customer.shipping.lastName" placeholder="Doe" autocomplete="family-name" type="text" required />
       </div>
 
       <div class="w-full">
         <label for="billing-phone">{{ $t('messages.billing.phone') }}</label>
-        <input v-model="customer.shipping.phone" type="tel" />
+        <input v-model="customer.shipping.phone" placeholder="+1 234 567 8901" autocomplete="tel" type="tel" />
       </div>
 
       <div class="w-full">
-        <label for="billing-company">Company</label>
-        <input v-model="customer.shipping.company" type="text" />
+        <label for="billing-company">Company ({{ $t('messages.general.optional') }})</label>
+        <input v-model="customer.shipping.company" placeholder="Company Name" autocomplete="organization" type="text" />
       </div>
 
       <div class="w-full">
         <label for="billing-address">{{ $t('messages.billing.address1') }}</label>
-        <input v-model="customer.shipping.address1" placeholder="123 Main St" type="text" />
+        <input v-model="customer.shipping.address1" placeholder="O'Connell Street 47" autocomplete="address-line1" type="text" />
       </div>
 
       <div class="w-full">
-        <label for="billing-address-2">{{ $t('messages.billing.address2') }}</label>
-        <input v-model="customer.shipping.address2" placeholder="Apartment, studio, or floor" type="text" />
+        <label for="billing-address-2">{{ $t('messages.billing.address2') }} ({{ $t('messages.general.optional') }})</label>
+        <input v-model="customer.shipping.address2" placeholder="Apartment, studio, or floor" autocomplete="address-line2" type="text" />
       </div>
 
       <div class="w-full">
         <label for="billing-city">{{ $t('messages.billing.city') }}</label>
-        <input v-model="customer.shipping.city" placeholder="New York" type="text" />
+        <input v-model="customer.shipping.city" placeholder="New York" autocomplete="address-level2" type="text" />
       </div>
 
       <div class="w-full">
-        <label for="billing-state">{{ $t('messages.billing.state') }}</label>
+        <label for="billing-state">{{ $t('messages.billing.state') }} ({{ $t('messages.general.optional') }})</label>
         <StateSelect v-model="customer.shipping.state" :default-value="customer.shipping.state" :country-code="customer.shipping.country" />
       </div>
 
@@ -109,7 +109,7 @@
 
       <div class="w-full">
         <label for="billing-zip">{{ $t('messages.billing.zip') }}</label>
-        <input v-model="customer.shipping.postcode" placeholder="10001" type="text" />
+        <input v-model="customer.shipping.postcode" placeholder="10001" autocomplete="postal-code" type="text" />
       </div>
     </div>
 

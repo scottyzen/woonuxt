@@ -212,6 +212,7 @@ export const useAuth = () => {
   };
 
   const avatar = computed(() => viewer.value?.avatar?.url ?? null);
+  const wishlistLink = computed<string>(() => (viewer.value ? '/my-account?tab=wishlist' : '/wishlist'));
 
   return {
     viewer,
@@ -220,6 +221,7 @@ export const useAuth = () => {
     orders,
     downloads,
     avatar,
+    wishlistLink,
     loginUser,
     loginClients,
     loginWithProvider,

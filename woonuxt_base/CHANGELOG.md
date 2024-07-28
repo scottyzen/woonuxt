@@ -2,7 +2,23 @@
 
 All notable changes to this project will be documented in this file. I'll try my best to keep it updated.
 
-## v4.0.6 (4-09-2024)
+## v4.0.16 (22-07-2024)`
+
+- feature: Add option showMoveToWishlist #192
+- feature: Add browse product button to empty cart #194
+- feature: Add autoComplete to multiple forms #200
+- refactor: Reduce the number of API call on checkout page
+- fix: Order terms order #191
+- fix: link in lost-password #195
+- fix: Initial country value for states #197
+- chore: Add @nuxt/icon module for icon support
+- chore: Update ShippingOptions component with currency symbol from runtime config
+- chore: Update npm dependencies to latest versions
+- chore: Update `.env.example` #190
+- chore: Refactor QuantityInput component
+- chore: Other minor improvements and bug fixes
+
+## v4.0.6 (4-07-2024)`
 
 - Add user avatar and email to sidebar of account page
 - Add Wishlist to my account page
