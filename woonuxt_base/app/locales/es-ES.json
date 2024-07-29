@@ -148,6 +148,7 @@
       "passwordMismatch": "Las contraseñas no coinciden. Por favor, inténtalo de nuevo.",
       "invalidPasswordResetLink": "El enlace de restablecimiento de contraseña no es válido.",
       "orderFailed": "Hubo un error al procesar su pedido. Por favor, inténtelo de nuevo.",
+      "paymentFailed": "El pago ha fallado. Por favor, intenta con otro método de pago.",
       "general": "Ha ocurrido un error",
       "noOrder": "No hemos podido encontrar tu pedido. Por favor, inténtalo de nuevo más tarde."
     }

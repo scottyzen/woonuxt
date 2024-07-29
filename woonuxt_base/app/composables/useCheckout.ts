@@ -175,7 +175,7 @@ export function useCheckout() {
     }
 
     if (confirmSetup.paymentIntent.status === 'succeeded') {
-      proccessCheckout(true);
+      await proccessCheckout(true);
     }
   };
 
@@ -185,8 +185,23 @@ export function useCheckout() {
 
       isProcessingOrder.value = true;
       const paymentIntent = await stripe.retrievePaymentIntent(clientSecret);
-      if (paymentIntent?.paymentIntent?.status === 'succeeded') {
-        proccessCheckout(true);
+
+      switch (paymentIntent?.paymentIntent?.status) {
+        case "succeeded":
+          await proccessCheckout(true);
+          break;
+        case "processing":
+          await proccessCheckout(false);
+          break;
+        case "requires_payment_method":
+          // If the payment attempt fails (for example due to a decline), the PaymentIntent’s status returns to requires_payment_method 
+          // so that the payment can be retried.
+          useRouter().push({ query: {} });
+          manageCheckoutLocalStorage(false);
+          alert(t('messages.error.paymentFailed'));
+          break;
+        default:
+          throw new Error("Something went wrong. ('" + paymentIntent?.paymentIntent?.status + "')");
       }
     } catch (error) {
       isProcessingOrder.value = false;

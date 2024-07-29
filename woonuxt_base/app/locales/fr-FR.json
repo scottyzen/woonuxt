@@ -148,6 +148,7 @@
       "passwordMismatch": "Les mots de passe ne correspondent pas. Veuillez réessayer.",
       "invalidPasswordResetLink": "Le lien de réinitialisation du mot de passe est invalide.",
       "orderFailed": "Une erreur s'est produite lors du traitement de votre commande. Veuillez réessayer.",
+      "paymentFailed": "Le paiement a échoué. Veuillez essayer un autre mode de paiement.",
       "general": "Une erreur est survenue",
       "noOrder": "Impossible de trouver votre commande. Veuillez réessayer plus tard."
     }

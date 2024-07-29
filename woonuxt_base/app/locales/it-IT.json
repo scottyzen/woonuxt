@@ -148,6 +148,7 @@
       "passwordMismatch": "Le password non coincidono. Per favore riprova.",
       "invalidPasswordResetLink": "Il link per reimpostare la password non è valido.",
       "orderFailed": "Si è verificato un errore durante l'elaborazione del tuo ordine. Per favore, riprova.",
+      "paymentFailed": "Pagamento fallito. Per favore, prova un altro metodo di pagamento.",
       "general": "Qualcosa è andato storto",
       "noOrder": "Non abbiamo trovato il tuo ordine. Riprova più tardi."
     }

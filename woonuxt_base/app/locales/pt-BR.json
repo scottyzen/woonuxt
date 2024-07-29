@@ -148,6 +148,7 @@
       "passwordMismatch": "As senhas não coincidem. Por favor, tente novamente.",
       "invalidPasswordResetLink": "O link de redefinição de senha é inválido.",
       "orderFailed": "Houve um erro ao processar seu pedido. Por favor, tente novamente.",
+      "paymentFailed": "Pagamento falhou. Por favor, tente outro método de pagamento.",
       "general": "Algo deu errado",
       "noOrder": "Não conseguimos encontrar seu pedido. Por favor, tente novamente mais tarde."
     }

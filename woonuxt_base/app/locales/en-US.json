@@ -148,6 +148,7 @@
       "passwordMismatch": "Passwords do not match. Please try again.",
       "invalidPasswordResetLink": "Password reset link is invalid.",
       "orderFailed": "There was an error processing your order. Please try again.",
+      "paymentFailed": "Payment failed. Please try another payment method.",
       "general": "Something went wrong",
       "noOrder": "We could not find your order. Please try again later."
     }
