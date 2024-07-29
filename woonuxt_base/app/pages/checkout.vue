@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { loadStripe } from '@stripe/stripe-js';
-import type { Stripe, StripeElements, CreateSourceData, StripeCardElement } from '@stripe/stripe-js';
+import type { Stripe, StripeElements } from '@stripe/stripe-js';
 
 const { t } = useI18n();
 const { query } = useRoute();
