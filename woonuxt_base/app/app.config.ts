@@ -20,6 +20,8 @@ export default defineAppConfig({
     showBreadcrumbOnSingleProduct: true,
     showMoveToWishlist: true,
     hideBillingAddressForVirtualProducts: false,
+    stripePaymentMethod: 'payment', // 'card', 'payment' ( 'card' => shows CardElement, 'payment' => shows payment tabs from stripe )
+    stripePaymentMethodTypes: [], // Leave empty to get default payment types -> or ['card', 'paypal'] to get paypal to show paypal from stripe when stripePaymentMethod === 'payment'
     saleBadge: 'percent', // 'percent', 'onSale' or 'hidden'
   },
 });

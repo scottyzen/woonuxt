@@ -6,7 +6,7 @@ const { t } = useI18n();
 const { query } = useRoute();
 const { cart, isUpdatingCart, paymentGateways } = useCart();
 const { customer, viewer } = useAuth();
-const { orderInput, isProcessingOrder, proccessCheckout, stripePaymentCheckout, validateStripePaymentFromRedirect } = useCheckout();
+const { orderInput, isProcessingOrder, proccessCheckout, stripeCheckout, validateStripePaymentFromRedirect } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
 
 const isCheckoutDisabled = computed<boolean>(
@@ -39,9 +39,8 @@ const handleStripeElement = (stripeElements: StripeElements): void => {
   elements.value = stripeElements;
 
   // Wait for stripe elements to load
-  stripeElements.getElement('payment')?.on('ready', () => {
-    stripeElementsLoaded.value = true;
-  });
+  stripeElements.getElement('payment')?.on('ready', () => (stripeElementsLoaded.value = true));
+  stripeElements.getElement('card')?.on('ready', () => (stripeElementsLoaded.value = true));
 };
 
 const payNow = async () => {
@@ -52,7 +51,7 @@ const payNow = async () => {
 
     if (orderInput.value.paymentMethod.id === 'stripe') {
       if (!stripe.value || !elements.value || !stripeElementsLoaded) throw new Error('Stripe not ready!');
-      await stripePaymentCheckout(stripe.value, elements.value);
+      await stripeCheckout(stripe.value, elements.value);
     } else {
       await proccessCheckout(false);
     }

@@ -1,8 +1,10 @@
 import type { CheckoutInput, UpdateCustomerInput, CreateAccountInput } from '#gql';
-import type { Stripe, StripeElements } from '@stripe/stripe-js';
+import { StripePaymentMethodEnum } from '#gql/default';
+import type { CreateSourceData, Stripe, StripeCardElement, StripeElements } from '@stripe/stripe-js';
 
 export function useCheckout() {
   const { t } = useI18n();
+  const { storeSettings } = useAppConfig();
   const orderInput = useState<any>('orderInput', () => {
     return {
       customerNote: '',
@@ -142,6 +144,42 @@ export function useCheckout() {
     }
   };
 
+  const stripeCheckout = async (stripe: Stripe, elements: StripeElements) => {
+    let isPaid: boolean;
+
+    if (storeSettings.stripePaymentMethod === 'card') {
+      isPaid = await stripeCardCheckout(stripe, elements);
+
+    } else if (storeSettings.stripePaymentMethod === 'payment') {
+      isPaid = await stripePaymentCheckout(stripe, elements);
+    } else {
+      throw new Error("Invalid storeSettings.stripePaymentMethod");
+    }
+
+    if (isPaid) {
+      await proccessCheckout(true);
+    } else {
+      throw new Error(t('messages.error.orderFailed'));
+    }
+  }
+
+  const stripeCardCheckout = async (stripe: Stripe, elements: StripeElements) => {
+    const cardElement = elements.getElement('card') as StripeCardElement;
+    const { stripePaymentIntent } = await GqlGetStripePaymentIntent({ stripePaymentMethod: StripePaymentMethodEnum.SETUP });
+    const clientSecret = stripePaymentIntent?.clientSecret;
+    if (!clientSecret) throw new Error('Stripe PaymentIntent client secret missing!');
+
+    const { setupIntent } = await stripe.confirmCardSetup(clientSecret, { payment_method: { card: cardElement } });
+    const { source } = await stripe.createSource(cardElement as CreateSourceData);
+
+    if (source) orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
+    if (setupIntent) orderInput.value.metaData.push({ key: '_stripe_intent_id', value: setupIntent.id });
+
+    orderInput.value.transactionId = setupIntent?.id || stripePaymentIntent.id;
+
+    return setupIntent?.status === 'succeeded' || false
+  };
+
   const stripePaymentCheckout = async (stripe: Stripe, elements: StripeElements) => {
 
     const { error: submitError } = await elements.submit();
@@ -149,7 +187,7 @@ export function useCheckout() {
       throw new Error(submitError.message);
     }
 
-    const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
+    const { stripePaymentIntent } = await GqlGetStripePaymentIntent({ stripePaymentMethod: StripePaymentMethodEnum.PAYMENT });
     const clientSecret = stripePaymentIntent?.clientSecret;
     if (!clientSecret) throw new Error('Stripe PaymentIntent client secret missing!');
     if (!stripePaymentIntent.id) throw new Error('Stripe PaymentIntent id missing!');
@@ -174,9 +212,7 @@ export function useCheckout() {
       throw new Error(confirmSetup.error.message);
     }
 
-    if (confirmSetup.paymentIntent.status === 'succeeded') {
-      await proccessCheckout(true);
-    }
+    return confirmSetup.paymentIntent.status === 'succeeded' || false;
   };
 
   const validateStripePaymentFromRedirect = async (stripe: Stripe, clientSecret: string, redirectStatus: string) => {
@@ -233,7 +269,7 @@ export function useCheckout() {
   return {
     orderInput,
     isProcessingOrder,
-    stripePaymentCheckout,
+    stripeCheckout,
     validateStripePaymentFromRedirect,
     proccessCheckout,
     updateShippingLocation,

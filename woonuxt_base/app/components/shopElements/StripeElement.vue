@@ -2,6 +2,7 @@
 import type { Stripe, StripeElements, StripeElementsOptionsMode } from '@stripe/stripe-js';
 
 const { cart } = useCart();
+const { storeSettings } = useAppConfig();
 
 const { stripe } = defineProps({
   stripe: { type: Object as PropType<Stripe>, default: null, required: true },
@@ -19,8 +20,15 @@ const options: StripeElementsOptionsMode = {
 
 const createStripeElements = async () => {
   elements = stripe.elements(options);
-  const paymentElement = elements.create('payment');
-  paymentElement.mount('#payment-element');
+
+  if (storeSettings.stripePaymentMethod === 'payment') {
+    const paymentElement = elements.create('payment');
+    paymentElement.mount('#payment-element');
+  } else {
+    const paymentElement = elements.create('card', { hidePostalCode: true });
+    paymentElement.mount('#card-element');
+  }
+
   emit('updateElement', elements);
 };
 
@@ -38,7 +46,10 @@ watch(rawCartTotal, (newAmount) => {
 </script>
 
 <template>
-  <div id="payment-element">
+  <div v-if="storeSettings.stripePaymentMethod === 'payment'" id="payment-element">
+    <!-- Elements will create form elements here -->
+  </div>
+  <div v-else id="card-element">
     <!-- Elements will create form elements here -->
   </div>
 </template>
