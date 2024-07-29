@@ -24,9 +24,6 @@ const stripeElementsLoaded = ref<boolean>(false);
 
 onBeforeMount(async () => {
   if (query.cancel_order) window.close();
-});
-
-onMounted(async () => {
   await initStripe();
   await checkSetupIntentStatusFromRedirect();
 });
