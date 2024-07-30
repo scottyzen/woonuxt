@@ -57,11 +57,10 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
     // Check if the current route path is one of the pages that need immediate initialization
     const pagesToInitializeRightAway = ['/checkout', '/my-account', '/order-summary'];
-    const { path } = useRoute();
-    const shouldInitialize = pagesToInitializeRightAway.some(page => path.includes(page));
+    const isPathThatRequiresInit = pagesToInitializeRightAway.some(page => useRoute().path.includes(page));
 
-    if (isDev || shouldInitialize) {
-      initStore();
+    if (isDev || isPathThatRequiresInit) {
+      await initStore();
       return;
     }
 
@@ -70,7 +69,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         window.addEventListener(event, initStore, { once: true });
       });
     } else {
-      initStore();
+      await initStore();
     }
   }
 });
