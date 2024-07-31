@@ -66,7 +66,7 @@ const payNow = async () => {
     if (error instanceof CheckoutInlineError) {
       errorMessage.value = error.message;
     } else {
-    alert(error);
+      alert(error);
     }
   }
 };
