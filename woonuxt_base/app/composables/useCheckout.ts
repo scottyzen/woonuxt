@@ -169,7 +169,11 @@ export function useCheckout() {
     const clientSecret = stripePaymentIntent?.clientSecret;
     if (!clientSecret) throw new Error('Stripe PaymentIntent client secret missing!');
 
-    const { setupIntent } = await stripe.confirmCardSetup(clientSecret, { payment_method: { card: cardElement } });
+    const { setupIntent, error } = await stripe.confirmCardSetup(clientSecret, { payment_method: { card: cardElement } });
+    if (error) {
+      throw new Error(error.message);
+    }
+
     const { source } = await stripe.createSource(cardElement as CreateSourceData);
 
     if (source) orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
@@ -177,7 +181,7 @@ export function useCheckout() {
 
     orderInput.value.transactionId = setupIntent?.id || stripePaymentIntent.id;
 
-    return setupIntent?.status === 'succeeded' || false
+    return setupIntent?.status === 'succeeded' || false;
   };
 
   const stripePaymentCheckout = async (stripe: Stripe, elements: StripeElements) => {
@@ -199,7 +203,7 @@ export function useCheckout() {
     // We are not sure whether the confirmSetup will redirect if needed or continue code execution
     manageCheckoutLocalStorage(true);
 
-    const confirmSetup = await stripe.confirmPayment({
+    const confirmPayment = await stripe.confirmPayment({
       elements,
       clientSecret,
       confirmParams: {
@@ -208,11 +212,11 @@ export function useCheckout() {
       redirect: 'if_required',
     });
 
-    if (confirmSetup.error) {
-      throw new Error(confirmSetup.error.message);
+    if (confirmPayment.error) {
+      throw new Error(confirmPayment.error.message);
     }
 
-    return confirmSetup.paymentIntent.status === 'succeeded' || false;
+    return confirmPayment.paymentIntent.status === 'succeeded' || false;
   };
 
   const validateStripePaymentFromRedirect = async (stripe: Stripe, clientSecret: string, redirectStatus: string) => {
