@@ -7,7 +7,7 @@ const { t } = useI18n();
 const { query } = useRoute();
 const { cart, isUpdatingCart, paymentGateways } = useCart();
 const { customer, viewer } = useAuth();
-const { orderInput, isProcessingOrder, proccessCheckout, stripeCheckout, validateStripePaymentFromRedirect } = useCheckout();
+const { orderInput, isProcessingOrder, proccessCheckout, stripeCheckout, errorMessage, validateStripePaymentFromRedirect } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
 
 const isCheckoutDisabled = computed<boolean>(
@@ -19,7 +19,6 @@ const isCheckoutDisabled = computed<boolean>(
 );
 
 const isInvalidEmail = ref<boolean>(false);
-const errorMessage = useState<string | null>('errorMessage', () => null);
 
 const stripe = ref<Stripe | null>(null);
 const elements = ref<StripeElements | null>(null);

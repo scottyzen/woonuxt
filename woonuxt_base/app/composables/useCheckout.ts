@@ -6,6 +6,7 @@ import { CheckoutInlineError } from '../types/CheckoutInlineError';
 export function useCheckout() {
   const { t } = useI18n();
   const { storeSettings } = useAppConfig();
+  const errorMessage = useState<string | null>('errorMessage', () => null);
   const orderInput = useState<any>('orderInput', () => {
     return {
       customerNote: '',
@@ -222,7 +223,7 @@ export function useCheckout() {
 
   const validateStripePaymentFromRedirect = async (stripe: Stripe, clientSecret: string, redirectStatus: string) => {
     try {
-      if (redirectStatus !== 'succeeded') throw new Error('Redirect status not suceeded');
+      if (redirectStatus !== 'succeeded') throw new CheckoutInlineError(t('messages.error.paymentFailed'));
 
       isProcessingOrder.value = true;
       const { paymentIntent, error } = await stripe.retrievePaymentIntent(clientSecret);
@@ -240,7 +241,7 @@ export function useCheckout() {
         case "requires_payment_method":
           // If the payment attempt fails (for example due to a decline), 
           // the PaymentIntent’s status returns to requires_payment_method so that the payment can be retried.
-          throw new Error(t('messages.error.paymentFailed'));
+          throw new CheckoutInlineError(t('messages.error.paymentFailed'));
         default:
           throw new Error("Something went wrong. ('" + paymentIntent?.status + "')");
       }
@@ -250,7 +251,12 @@ export function useCheckout() {
 
       useRouter().push({ query: {} });
       manageCheckoutLocalStorage(false);
-      alert(error?.message || t('messages.error.orderFailed'));
+      
+      if (error instanceof CheckoutInlineError) {
+        errorMessage.value = error.message;
+      } else {
+        alert(error);
+      }
     }
   };
 
@@ -274,6 +280,7 @@ export function useCheckout() {
   return {
     orderInput,
     isProcessingOrder,
+    errorMessage,
     stripeCheckout,
     validateStripePaymentFromRedirect,
     proccessCheckout,
