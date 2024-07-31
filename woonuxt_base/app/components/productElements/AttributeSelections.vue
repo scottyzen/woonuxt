@@ -10,7 +10,11 @@ const emit = defineEmits(['attrs-changed']);
 const activeVariations = ref<Attribute[]>([]);
 
 const getSelectedName = (attr: any, activeVariation: Attribute) => {
-  return attr.terms.nodes.find((node: { slug: string }) => node.slug === activeVariation.value).name;
+  if (attr?.terms?.nodes) {
+    return attr.terms.nodes.find((node: { slug: string }) => node.slug === activeVariation.value).name;
+  }
+
+  return activeVariation.value || '';
 };
 
 const updateAttrs = () => {
@@ -49,7 +53,8 @@ onMounted(() => {
       <!-- LOCAL -->
       <div v-if="attr.scope == 'LOCAL'" class="grid gap-2">
         <div class="text-sm">
-          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400">: {{ activeVariations[i].name }}</span>
+          {{ attr.label }}
+          <span v-if="activeVariations.length && activeVariations[i]" class="text-gray-400">: {{ getSelectedName(attr, activeVariations[i]) }}</span>
         </div>
         <div class="flex gap-2">
           <span v-for="(option, index) in attr.options" :key="index">
