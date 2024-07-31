@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { loadStripe } from '@stripe/stripe-js';
 import type { Stripe, StripeElements } from '@stripe/stripe-js';
+import { CheckoutInlineError } from '../types/CheckoutInlineError';
 
 const { t } = useI18n();
 const { query } = useRoute();
@@ -18,6 +19,8 @@ const isCheckoutDisabled = computed<boolean>(
 );
 
 const isInvalidEmail = ref<boolean>(false);
+const errorMessage = useState<string | null>('errorMessage', () => null);
+
 const stripe = ref<Stripe | null>(null);
 const elements = ref<StripeElements | null>(null);
 const stripeElementsLoaded = ref<boolean>(false);
@@ -45,6 +48,7 @@ const handleStripeElement = (stripeElements: StripeElements): void => {
 
 const payNow = async () => {
   if (isProcessingOrder.value) return;
+  errorMessage.value = null;
 
   try {
     isProcessingOrder.value = true;
@@ -58,7 +62,12 @@ const payNow = async () => {
   } catch (error) {
     console.error(error);
     isProcessingOrder.value = false;
+
+    if (error instanceof CheckoutInlineError) {
+      errorMessage.value = error.message;
+    } else {
     alert(error);
+    }
   }
 };
 
@@ -180,6 +189,9 @@ useSeoMeta({
         </div>
 
         <OrderSummary>
+          <Transition name="scale-y" mode="out-in">
+            <div v-if="errorMessage" class="text-red-600 my-2">{{ errorMessage }}</div>
+          </Transition>
           <button
             class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary hover:bg-primary-dark disabled:cursor-not-allowed disabled:bg-gray-400"
             :disabled="isCheckoutDisabled">

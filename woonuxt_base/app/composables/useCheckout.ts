@@ -1,6 +1,7 @@
 import type { CheckoutInput, UpdateCustomerInput, CreateAccountInput } from '#gql';
 import { StripePaymentMethodEnum } from '#gql/default';
 import type { CreateSourceData, Stripe, StripeCardElement, StripeElements } from '@stripe/stripe-js';
+import { CheckoutInlineError } from '../types/CheckoutInlineError';
 
 export function useCheckout() {
   const { t } = useI18n();
@@ -171,11 +172,11 @@ export function useCheckout() {
 
     const { setupIntent, error } = await stripe.confirmCardSetup(clientSecret, { payment_method: { card: cardElement } });
     if (error) {
-      throw new Error(error.message);
+      throw new CheckoutInlineError(error.message);
     }
-
+    
     const { source } = await stripe.createSource(cardElement as CreateSourceData);
-
+    
     if (source) orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
     if (setupIntent) orderInput.value.metaData.push({ key: '_stripe_intent_id', value: setupIntent.id });
 
@@ -188,7 +189,7 @@ export function useCheckout() {
 
     const { error: submitError } = await elements.submit();
     if (submitError) {
-      throw new Error(submitError.message);
+      throw new CheckoutInlineError(submitError.message);
     }
 
     const { stripePaymentIntent } = await GqlGetStripePaymentIntent({ stripePaymentMethod: StripePaymentMethodEnum.PAYMENT });
@@ -203,7 +204,7 @@ export function useCheckout() {
     // We are not sure whether the confirmSetup will redirect if needed or continue code execution
     manageCheckoutLocalStorage(true);
 
-    const confirmPayment = await stripe.confirmPayment({
+    const { paymentIntent, error } = await stripe.confirmPayment({
       elements,
       clientSecret,
       confirmParams: {
@@ -212,11 +213,11 @@ export function useCheckout() {
       redirect: 'if_required',
     });
 
-    if (confirmPayment.error) {
-      throw new Error(confirmPayment.error.message);
+    if (error) {
+      throw new CheckoutInlineError(error.message);
     }
 
-    return confirmPayment.paymentIntent.status === 'succeeded' || false;
+    return paymentIntent.status === 'succeeded' || false;
   };
 
   const validateStripePaymentFromRedirect = async (stripe: Stripe, clientSecret: string, redirectStatus: string) => {
@@ -224,9 +225,12 @@ export function useCheckout() {
       if (redirectStatus !== 'succeeded') throw new Error('Redirect status not suceeded');
 
       isProcessingOrder.value = true;
-      const paymentIntent = await stripe.retrievePaymentIntent(clientSecret);
+      const { paymentIntent, error } = await stripe.retrievePaymentIntent(clientSecret);
+      if (error) {
+        throw new Error(error.message);
+      }
 
-      switch (paymentIntent?.paymentIntent?.status) {
+      switch (paymentIntent?.status) {
         case "succeeded":
           await proccessCheckout(true);
           break;
@@ -234,22 +238,19 @@ export function useCheckout() {
           await proccessCheckout(false);
           break;
         case "requires_payment_method":
-          // If the payment attempt fails (for example due to a decline), the PaymentIntent’s status returns to requires_payment_method 
-          // so that the payment can be retried.
-          useRouter().push({ query: {} });
-          manageCheckoutLocalStorage(false);
-          alert(t('messages.error.paymentFailed'));
-          break;
+          // If the payment attempt fails (for example due to a decline), 
+          // the PaymentIntent’s status returns to requires_payment_method so that the payment can be retried.
+          throw new Error(t('messages.error.paymentFailed'));
         default:
-          throw new Error("Something went wrong. ('" + paymentIntent?.paymentIntent?.status + "')");
+          throw new Error("Something went wrong. ('" + paymentIntent?.status + "')");
       }
-    } catch (error) {
+    } catch (error: any) {
       isProcessingOrder.value = false;
       console.error(error);
 
       useRouter().push({ query: {} });
       manageCheckoutLocalStorage(false);
-      alert(t('messages.error.orderFailed'));
+      alert(error?.message || t('messages.error.orderFailed'));
     }
   };
 
