@@ -110,7 +110,7 @@ useSeoMeta({
               </div>
               <div class="w-full my-2" v-if="orderInput.createAccount">
                 <label for="email">{{ $t('messages.account.password') }}</label>
-                <PasswordInput id="password" class="my-2" v-model="orderInput.password" placeholder="Password" :required="true" />
+                <PasswordInput id="password" class="my-2" v-model="orderInput.password" placeholder="••••••••••" :required="true" />
               </div>
             </template>
             <div v-if="!viewer" class="flex items-center gap-2 my-2">
