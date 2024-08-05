@@ -3,6 +3,21 @@ const props = defineProps({
   loginClients: { type: Object as PropType<LoginClients>, default: [] },
 });
 
+const route = useRoute();
+const router = useRouter();
+const { loginWithProvider } = useAuth();
+
+const { provider, code, state } = route.query as { provider?: string; code?: string; state?: string };
+if (code && state && provider) {
+  loginWithProvider(state, code, provider.toUpperCase())
+    .then(() => {
+      router.replace({ query: {} });
+    })
+    .catch((error) => {
+      console.error('Login failed:', error);
+    });
+}
+
 const getIcon = (provider: any) => {
   switch (provider) {
     case 'FACEBOOK':
@@ -19,21 +34,6 @@ const getIcon = (provider: any) => {
       return 'ion:log-in';
   }
 };
-
-const route = useRoute();
-const router = useRouter();
-const { loginWithProvider } = useAuth();
-
-const { provider, code, state } = route.query as { provider?: string; code?: string; state?: string };
-if (code && state && provider) {
-  loginWithProvider(state, code, provider.toUpperCase())
-    .then(() => {
-      router.replace({ query: {} });
-    })
-    .catch((error) => {
-      console.error('Login failed:', error);
-    });
-}
 </script>
 
 <template>
