@@ -91,9 +91,9 @@ And here is the live demo of the customized WooNuxt site: [My Shop](https://mysh
 
 | Plugin/Software | Version |
 | --------------- | ------- |
-| WordPress       | 6.5.5   |
-| WooCommerce     | 8.9.2   |
-| WPGraphQL       | 1.27.0  |
+| WordPress       | 6.6.1   |
+| WooCommerce     | 9.1.2   |
+| WPGraphQL       | 1.27.2  |
 | WooGraphQL      | 0.20.0  |
 | WPGraphQL CORS  | 2.1     |
 | Node            | 20.10.0 |

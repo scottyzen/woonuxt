@@ -1,5 +1,6 @@
 export default defineNuxtPlugin(async (nuxtApp) => {
   if (!import.meta.env.SSR) {
+    const { storeSettings } = useAppConfig();
     const { clearAllCookies, clearAllLocalStorage } = useHelpers();
     const sessionToken = useCookie('woocommerce-session');
     if (sessionToken.value) useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken.value}` });
@@ -51,11 +52,18 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       }
     }
 
-    eventsToFireOn.forEach((event) => {
-      window.addEventListener(event, initStore, { once: true });
-    });
-
     // If we are in development mode, we want to initialise the store immediately
-    if (process.env.NODE_ENV === 'development') initStore();
+    if (process.env.NODE_ENV === 'development') {
+      initStore();
+      return;
+    }
+
+    if (storeSettings.initStoreOnUserActionToReduceServerLoad) {
+      eventsToFireOn.forEach((event) => {
+        window.addEventListener(event, initStore, { once: true });
+      });
+    } else {
+      initStore();
+    }
   }
 });
