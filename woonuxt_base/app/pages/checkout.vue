@@ -156,7 +156,7 @@ useSeoMeta({
               id="order-note"
               v-model="orderInput.customerNote"
               name="order-note"
-              class="w-full"
+              class="w-full min-h-[100px]"
               rows="4"
               :placeholder="$t('messages.shop.orderNotePlaceholder')"></textarea>
           </div>
