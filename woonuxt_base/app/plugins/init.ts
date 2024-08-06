@@ -62,7 +62,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     const shouldInit = isDev || isPathThatRequiresInit || !storeSettings.initStoreOnUserActionToReduceServerLoad;
 
     if (shouldInit) {
-      await initStore();
+      initStore();
     } else {
       eventsToFireOn.forEach((event) => {
         window.addEventListener(event, initStore, { once: true });
