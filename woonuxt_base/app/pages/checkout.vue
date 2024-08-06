@@ -106,7 +106,7 @@ useSeoMeta({
             <template v-if="orderInput.createAccount">
               <div class="w-full mt-4">
                 <label for="username">{{ $t('messages.account.username') }}</label>
-                <input v-model="orderInput.username" placeholder="Username" autocomplete="username" type="text" name="username" required />
+                <input v-model="orderInput.username" placeholder="johndoe" autocomplete="username" type="text" name="username" required />
               </div>
               <div class="w-full my-2" v-if="orderInput.createAccount">
                 <label for="email">{{ $t('messages.account.password') }}</label>
@@ -121,10 +121,10 @@ useSeoMeta({
 
           <div>
             <h2 class="w-full mb-3 text-2xl font-semibold">{{ $t('messages.billing.billingDetails') }}</h2>
-            <BillingDetails v-model="customer.billing" :sameAsShippingAddress="orderInput.shipToDifferentAddress" />
+            <BillingDetails v-model="customer.billing" />
           </div>
 
-          <label for="shipToDifferentAddress" class="flex items-center gap-2">
+          <label v-if="cart.availableShippingMethods.length > 0" for="shipToDifferentAddress" class="flex items-center gap-2">
             <span>{{ $t('messages.billing.differentAddress') }}</span>
             <input id="shipToDifferentAddress" v-model="orderInput.shipToDifferentAddress" type="checkbox" name="shipToDifferentAddress" />
           </label>

@@ -12,7 +12,13 @@
         <label for="last-name">{{ $t('messages.billing.lastName') }}</label>
         <input v-model="customer.lastName" placeholder="Doe" autocomplete="family-name" type="text" />
       </div>
-      <div class="w-full col-span-full">
+
+      <div class="w-full">
+        <label for="username">{{ $t('messages.account.username') }} ({{ $t('messages.general.readOnly') }})</label>
+        <input v-model="customer.username" placeholder="johndoe" autocomplete="username" type="text" readonly  />
+      </div>
+
+      <div class="w-full">
         <label for="email">{{ $t('messages.billing.email') }}</label>
         <input v-model="customer.email" placeholder="johndoe@email.com" autocomplete="email" type="email" />
       </div>

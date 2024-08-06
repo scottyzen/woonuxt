@@ -33,7 +33,8 @@
       "goHome": "Ir para Início",
       "newsletter": "Newsletter",
       "customerService": "Atendimento ao Cliente",
-      "processing": "Processando"
+      "processing": "Processando",
+      "readOnly": "Somente leitura"
     },
     "account": {
       "changePassword": "Alterar Senha",

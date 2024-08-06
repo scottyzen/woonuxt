@@ -9,9 +9,13 @@ const emit = defineEmits(['attrs-changed']);
 
 const activeVariations = ref<Attribute[]>([]);
 
-const getSelectedName = computed(() => (attr: any, activeVariation: Attribute) => {
-  return attr.terms.nodes.find((node: { slug: string }) => node.slug === activeVariation.value).name;
-});
+const getSelectedName = (attr: any, activeVariation: Attribute) => {
+  if (attr?.terms?.nodes) {
+    return attr.terms.nodes.find((node: { slug: string }) => node.slug === activeVariation.value).name;
+  }
+
+  return activeVariation.value || '';
+};
 
 const updateAttrs = () => {
   const selectedVariations = attributes.map((row): Attribute => {
@@ -46,8 +50,33 @@ onMounted(() => {
 <template>
   <div class="flex flex-col gap-1 justify-between" v-if="attributes">
     <div v-for="(attr, i) in attributes" :key="i" class="flex flex-wrap py-2 relative justify-between">
+      <!-- LOCAL -->
+      <div v-if="attr.scope == 'LOCAL'" class="grid gap-2">
+        <div class="text-sm">
+          {{ attr.label }}
+          <span v-if="activeVariations.length && activeVariations[i]" class="text-gray-400">: {{ getSelectedName(attr, activeVariations[i]) }}</span>
+        </div>
+        <div class="flex gap-2">
+          <span v-for="(option, index) in attr.options" :key="index">
+            <label :for="`${option}_${index}`">
+              <input
+                :id="`${option}_${index}`"
+                :ref="attr.name"
+                class="hidden"
+                :checked="index == 0"
+                type="radio"
+                :class="`name-${attr.name}`"
+                :name="attr.name"
+                :value="option"
+                @change="updateAttrs" />
+              <span class="radio-button" :class="`picker-${option}`" :title="`${attr.name}: ${option}`">{{ option }}</span>
+            </label>
+          </span>
+        </div>
+      </div>
+
       <!-- COLOR SWATCHES -->
-      <div v-if="attr.name == 'pa_color' || attr.name == 'color'" class="grid gap-2">
+      <div v-else-if="attr.name == 'pa_color' || attr.name == 'color'" class="grid gap-2">
         <div class="text-sm">
           {{ $t('messages.general.color') }}
           <span v-if="activeVariations.length" class="text-gray-400">{{ getSelectedName(attr, activeVariations[i]) }}</span>
