@@ -6,9 +6,12 @@ const provider = route.params.provider as string;
 
 const code = route.query.code as string;
 const state = route.query.state as string;
+const error = route.query.error as string;
 
-if (code && state && provider) {
+if (code && state && provider && !error) {
   router.push({ name: 'my-account', query: { ...route.query, provider } });
+} else {
+  router.push('/my-account');
 }
 </script>
 
