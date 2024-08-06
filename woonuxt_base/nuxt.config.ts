@@ -12,7 +12,7 @@ export default defineNuxtConfig({
       htmlAttrs: { lang: 'en' },
       link: [{ rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' }],
     },
-    pageTransition: { name: 'page', mode: 'out-in' },
+    pageTransition: { name: 'page', mode: 'default' },
   },
 
   experimental: {
@@ -60,12 +60,6 @@ export default defineNuxtConfig({
       '/checkout/order-received/**': { ssr: false },
       '/order-summary/**': { ssr: false },
     },
-  },
-
-  // if nuxt generated this is needed 
-  // https://github.com/nuxt/icon/issues/179#issuecomment-2230860618
-  icon: {
-    provider: 'iconify'
   },
 
   // Multilingual support

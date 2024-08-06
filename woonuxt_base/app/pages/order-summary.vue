@@ -106,15 +106,15 @@ useSeoMeta({
             <div class="leading-none">#{{ order.databaseId! }}</div>
           </div>
           <div class="w-[21%]">
-            <div class=" mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.date') }}</div>
+            <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.date') }}</div>
             <div class="leading-none">{{ formatDate(order.date!) }}</div>
           </div>
           <div class="w-[21%]">
-            <div class=" mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.status') }}</div>
-            <OrderStatusLabel :order="order" />
+            <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.status') }}</div>
+            <OrderStatusLabel v-if="order.status" :order="order" />
           </div>
           <div class="w-[21%]">
-            <div class=" mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.paymentMethod') }}</div>
+            <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.paymentMethod') }}</div>
             <div class="leading-none">{{ order.paymentMethodTitle }}</div>
           </div>
         </div>
