@@ -29,19 +29,19 @@ export const useAuth = () => {
         }
       }
 
-      isPending.value = false;
       return {
         success: true,
         error: null,
       };
     } catch (error: any) {
       logGQLError(error);
-      isPending.value = false;
 
       return {
         success: false,
         error: error?.gqlErrors?.[0]?.message,
       };
+    } finally {
+      isPending.value = false;
     }
   };
 
