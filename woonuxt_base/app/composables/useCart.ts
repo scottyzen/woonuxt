@@ -132,13 +132,13 @@ export function useCart() {
     const nodes = cart.value?.contents?.nodes || [];
     if (nodes.length === 0) return false;
 
-    return nodes.every(node => {
+    return nodes.every((node) => {
       const product = node.product?.node as SimpleProduct;
       return product?.virtual === true;
     });
   });
 
-  const isBillingAddressEnabled = computed(() => storeSettings.hideBillingAddressForVirtualProducts ? !allProductsAreVirtual.value : true);
+  const isBillingAddressEnabled = computed(() => (storeSettings.hideBillingAddressForVirtualProducts ? !allProductsAreVirtual.value : true));
 
   return {
     cart,
