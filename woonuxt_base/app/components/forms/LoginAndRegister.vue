@@ -128,7 +128,7 @@ const resetPassword = async (userInfo) => {
   }
 };
 
-const navigate = (view) => {
+const navigate = (view: string) => {
   formView.value = view;
   if (view === 'forgotPassword') {
     router.push({ query: { action: 'forgotPassword' } });
@@ -159,22 +159,14 @@ const buttonText = computed(() => {
   }
 });
 
-const emailLabel = computed(() => {
-  return formView.value === 'register' ? t('messages.billing.email') : t('messages.account.emailOrUsername');
-});
-
-const usernameLabel = computed(() => {
-  return formView.value === 'login' ? t('messages.account.emailOrUsername') : t('messages.account.username');
-});
-
-const passwordLabel = computed(() => {
-  return t('messages.account.password');
-});
+const emailLabel = computed(() => (formView.value === 'register' ? t('messages.billing.email') : t('messages.account.emailOrUsername')));
+const usernameLabel = computed(() => (formView.value === 'login' ? t('messages.account.emailOrUsername') : t('messages.account.username')));
+const passwordLabel = computed(() => t('messages.account.password'));
 
 const inputPlaceholder = computed(() => {
   return {
-    email: formView.value === 'register' ? 'johndoe@email.com' : 'johndoe@email.com or johndoe',
-    username: formView.value === 'login' ? 'johndoe@email.com or johndoe' : 'johndoe',
+    email: 'johndoe@email.com',
+    username: formView.value === 'login' ? 'johndoe@email.com' : 'johndoe',
     password: '********',
   };
 });

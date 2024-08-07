@@ -16,7 +16,7 @@ defineProps({
         <stop :stop-color="color" offset="100%" />
       </linearGradient>
     </defs>
-    <g :fill="color" fill-rule="evenodd">
+    <g fill="none" fill-rule="evenodd">
       <g transform="translate(1 1)">
         <path id="Oval-2" d="M36 18c0-9.94-8.06-18-18-18" stroke="url(#a)" :stroke-width="stroke">
           <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" :dur="speed" repeatCount="indefinite" />

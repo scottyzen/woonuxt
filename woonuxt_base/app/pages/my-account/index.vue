@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const { logoutUser, viewer, customer, isPending, avatar } = useAuth();
+const { logoutUser, viewer, customer, avatar } = useAuth();
 const { cart } = useCart();
 const route = useRoute();
 
@@ -27,8 +27,8 @@ useSeoMeta({
               <span v-if="viewer?.email" class="text-gray-400 font-light" :title="viewer?.email">{{ viewer?.email }}</span>
             </div>
             <button class="flex text-gray-700 items-center flex-col p-2 px-4 rounded-lg hover:bg-white hover:text-red-700 lg:hidden" @click="logoutUser">
-              <LoadingIcon v-if="isPending" size="22" />
-              <Icon v-else name="ion:log-out-outline" size="22" />
+              <LoadingIcon size="22" />
+              <Icon name="ion:log-out-outline" size="22" />
               <small>{{ $t('messages.account.logout') }}</small>
             </button>
           </section>
@@ -54,8 +54,7 @@ useSeoMeta({
           <template class="hidden lg:block">
             <hr class="my-8" />
             <button class="flex text-gray-700 items-center gap-4 p-2 px-4 w-full rounded-lg hover:bg-white hover:text-red-700" @click="logoutUser">
-              <LoadingIcon v-if="isPending" size="22" />
-              <Icon v-else name="ion:log-out-outline" size="22" />
+              <Icon name="ion:log-out-outline" size="22" />
               {{ $t('messages.account.logout') }}
             </button>
           </template>
@@ -73,7 +72,7 @@ useSeoMeta({
 </template>
 
 <style lang="postcss" scoped>
-a {
+nav a {
   @apply rounded-md;
 
   &.active,
@@ -81,14 +80,10 @@ a {
   &:hover {
     @apply bg-white shadow;
   }
-}
 
-nav {
-  a {
-    & svg {
-      @media (max-width: 640px) {
-        display: none !important;
-      }
+  & svg {
+    @media (max-width: 640px) {
+      display: none !important;
     }
   }
 }

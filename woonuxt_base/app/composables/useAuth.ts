@@ -2,8 +2,8 @@ import { GqlLogin, GqlLogout, GqlRegisterCustomer, GqlResetPasswordEmail, GqlGet
 import type { RegisterCustomerInput, CreateAccountInput } from '#gql';
 
 export const useAuth = () => {
-  const { refreshCart } = useCart();
-  const { logGQLError } = useHelpers();
+  const { refreshCart, emptyCart, cart } = useCart();
+  const { logGQLError, clearAllCookies } = useHelpers();
 
   const customer = useState<Customer>('customer', () => ({ billing: {}, shipping: {} }));
   const viewer = useState<Viewer | null>('viewer', () => null);
@@ -47,21 +47,19 @@ export const useAuth = () => {
 
   // Log out the user
   const logoutUser = async (): Promise<{ success: boolean; error: any }> => {
-    const { clearAllCookies } = useHelpers();
-    isPending.value = true;
+    viewer.value = null;
+    cart.value = null;
+    customer.value = { billing: {}, shipping: {} };
+
     try {
       const { logout } = await GqlLogout();
       if (logout) {
-        isPending.value = false;
-        await refreshCart();
         clearAllCookies();
-        viewer.value = null;
-        customer.value = { billing: {}, shipping: {} };
+        await emptyCart();
       }
       return { success: true, error: null };
     } catch (error) {
       logGQLError(error);
-      isPending.value = false;
       return { success: false, error };
     }
   };
