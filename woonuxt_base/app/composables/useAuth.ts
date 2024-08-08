@@ -51,10 +51,10 @@ export const useAuth = () => {
     try {
       const { logout } = await GqlLogout();
       if (logout) {
-        viewer.value = null;
-        cart.value = null;
-        customer.value = { billing: {}, shipping: {} };
+        await refreshCart();
         clearAllCookies();
+        viewer.value = null;
+        customer.value = { billing: {}, shipping: {} };
       }
       return { success: true, error: null };
     } catch (error) {
