@@ -1,5 +1,5 @@
-import { GqlLogin, GqlLogout, GqlRegisterCustomer, GqlResetPasswordEmail, GqlGetOrders } from '#gql';
-import type { RegisterCustomerInput, CreateAccountInput } from '#gql';
+import { GqlLogin, GqlLogout, GqlRegisterCustomer, GqlResetPasswordEmail, GqlGetOrders,  } from '#gql';
+import type { RegisterCustomerInput, CreateAccountInput, LoginInput } from '#gql';
 
 export const useAuth = () => {
   const { refreshCart, emptyCart, cart } = useCart();
@@ -10,15 +10,50 @@ export const useAuth = () => {
   const isPending = useState<boolean>('isPending', () => false);
   const orders = useState<Order[] | null>('orders', () => null);
   const downloads = useState<DownloadableItem[] | null>('downloads', () => null);
+  const loginClients = useState<LoginClients | null>('loginClients', () => null);
 
   // Log in the user
   const loginUser = async (credentials: CreateAccountInput): Promise<{ success: boolean; error: any }> => {
     isPending.value = true;
 
     try {
-      const { loginWithCookies } = await GqlLogin(credentials);
+      const { login } = await GqlLogin(credentials);
 
-      if (loginWithCookies?.status === 'SUCCESS') {
+      if (login?.authToken !== null) {
+        const { viewer } = await refreshCart();
+        if (viewer === null) {
+          return {
+            success: false,
+            error:
+              'Your credentials are correct, but there was an error logging in. This is most likely due to an SSL error. Please try again later. If the problem persists, please contact support.',
+          };
+        }
+      }
+
+      isPending.value = false;
+      return {
+        success: true,
+        error: null,
+      };
+    } catch (error: any) {
+      logGQLError(error);
+      isPending.value = false;
+
+      return {
+        success: false,
+        error: error?.gqlErrors?.[0]?.message,
+      };
+    }
+  };
+
+  const loginWithProvider = async (state: string, code: string, provider: any): Promise<{ success: boolean; error: any }> => {
+    isPending.value = true;
+
+    try {
+      const input: LoginInput = { oauthResponse: { state, code }, provider }
+      const response = await GqlLoginWithProvider({ input });
+
+      if (response.login?.authToken) {
         const { viewer } = await refreshCart();
         if (viewer === null) {
           return {
@@ -167,6 +202,21 @@ export const useAuth = () => {
     }
   };
 
+  const getLoginClients = async () => {
+    try {
+      const response = await GqlGetLoginClients();
+      if (response.loginClients) {
+        loginClients.value = response.loginClients;
+        return { success: true, error: null };
+      }
+      return { success: false, error: 'There was an error getting your OAuth clients. Please try again later.' };
+    } catch (error: any) {
+      logGQLError(error);
+      const gqlError = error?.gqlErrors?.[0];
+      return { success: false, error: gqlError?.message };
+    }
+  };
+
   const avatar = computed(() => viewer.value?.avatar?.url ?? null);
   const wishlistLink = computed<string>(() => (viewer.value ? '/my-account?tab=wishlist' : '/wishlist'));
 
@@ -179,6 +229,8 @@ export const useAuth = () => {
     avatar,
     wishlistLink,
     loginUser,
+    loginClients,
+    loginWithProvider,
     updateCustomer,
     updateViewer,
     logoutUser,
@@ -187,5 +239,6 @@ export const useAuth = () => {
     resetPasswordWithKey,
     getOrders,
     getDownloads,
+    getLoginClients,
   };
 };
