@@ -2,7 +2,7 @@ import { GqlLogin, GqlLogout, GqlRegisterCustomer, GqlResetPasswordEmail, GqlGet
 import type { RegisterCustomerInput, CreateAccountInput } from '#gql';
 
 export const useAuth = () => {
-  const { refreshCart, emptyCart, cart } = useCart();
+  const { refreshCart, cart } = useCart();
   const { logGQLError, clearAllCookies } = useHelpers();
 
   const customer = useState<Customer>('customer', () => ({ billing: {}, shipping: {} }));
@@ -47,20 +47,21 @@ export const useAuth = () => {
 
   // Log out the user
   const logoutUser = async (): Promise<{ success: boolean; error: any }> => {
-    viewer.value = null;
-    cart.value = null;
-    customer.value = { billing: {}, shipping: {} };
-
+    isPending.value = true;
     try {
       const { logout } = await GqlLogout();
       if (logout) {
+        viewer.value = null;
+        cart.value = null;
+        customer.value = { billing: {}, shipping: {} };
         clearAllCookies();
-        await emptyCart();
       }
       return { success: true, error: null };
     } catch (error) {
       logGQLError(error);
       return { success: false, error };
+    } finally {
+      isPending.value = false;
     }
   };
 
