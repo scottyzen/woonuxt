@@ -7,12 +7,12 @@
 
       <div class="w-full">
         <label for="new-password">{{ $t('messages.account.newPassword') }}</label>
-        <PasswordInput v-model="password.new" placeholder="••••••••••" type="text" required />
+        <PasswordInput id="new-password" v-model="password.new" placeholder="••••••••••" type="text" required />
       </div>
 
       <div class="w-full">
         <label for="new-password-confirm">{{ $t('messages.account.confirmNewPassword') }}</label>
-        <PasswordInput v-model="password.confirm" placeholder="••••••••••" type="text" required />
+        <PasswordInput id="new-password-confirm" v-model="password.confirm" placeholder="••••••••••" type="text" required />
       </div>
 
       <Transition name="scale-y" mode="out-in">

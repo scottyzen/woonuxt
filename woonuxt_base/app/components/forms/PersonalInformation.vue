@@ -5,22 +5,22 @@
 
       <div class="w-full">
         <label for="first-name">{{ $t('messages.billing.firstName') }}</label>
-        <input v-model="customer.firstName" placeholder="John" autocomplete="given-name" type="text" />
+        <input id="first-name" v-model="customer.firstName" placeholder="John" autocomplete="given-name" type="text" />
       </div>
 
       <div class="w-full">
         <label for="last-name">{{ $t('messages.billing.lastName') }}</label>
-        <input v-model="customer.lastName" placeholder="Doe" autocomplete="family-name" type="text" />
+        <input id="last-name" v-model="customer.lastName" placeholder="Doe" autocomplete="family-name" type="text" />
       </div>
 
       <div class="w-full">
         <label for="username">{{ $t('messages.account.username') }} ({{ $t('messages.general.readOnly') }})</label>
-        <input v-model="customer.username" placeholder="johndoe" autocomplete="username" type="text" readonly  />
+        <input id="username" v-model="customer.username" placeholder="johndoe" autocomplete="username" type="text" readonly  />
       </div>
 
       <div class="w-full">
         <label for="email">{{ $t('messages.billing.email') }}</label>
-        <input v-model="customer.email" placeholder="johndoe@email.com" autocomplete="email" type="email" />
+        <input id="email" v-model="customer.email" placeholder="johndoe@email.com" autocomplete="email" type="email" />
       </div>
     </div>
     <div class="bg-white backdrop-blur-sm bg-opacity-75 border-t col-span-full p-4 sticky bottom-0 rounded-b-lg">
