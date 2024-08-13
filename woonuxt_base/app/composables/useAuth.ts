@@ -2,8 +2,8 @@ import { GqlLogin, GqlLogout, GqlRegisterCustomer, GqlResetPasswordEmail, GqlGet
 import type { RegisterCustomerInput, CreateAccountInput } from '#gql';
 
 export const useAuth = () => {
-  const { refreshCart } = useCart();
-  const { logGQLError } = useHelpers();
+  const { refreshCart, emptyCart, cart } = useCart();
+  const { logGQLError, clearAllCookies } = useHelpers();
 
   const customer = useState<Customer>('customer', () => ({ billing: {}, shipping: {} }));
   const viewer = useState<Viewer | null>('viewer', () => null);
@@ -36,39 +36,37 @@ export const useAuth = () => {
         }
       }
 
-      isPending.value = false;
       return {
         success: true,
         error: null,
       };
     } catch (error: any) {
       logGQLError(error);
-      isPending.value = false;
 
       return {
         success: false,
         error: error?.gqlErrors?.[0]?.message,
       };
+    } finally {
+      isPending.value = false;
     }
   };
 
   // Log out the user
   const logoutUser = async (): Promise<{ success: boolean; error: any }> => {
-    const { clearAllCookies } = useHelpers();
-    isPending.value = true;
+    viewer.value = null;
+    cart.value = null;
+    customer.value = { billing: {}, shipping: {} };
+
     try {
       const { logout } = await GqlLogout();
       if (logout) {
-        isPending.value = false;
-        await refreshCart();
         clearAllCookies();
-        viewer.value = null;
-        customer.value = { billing: {}, shipping: {} };
+        await emptyCart();
       }
       return { success: true, error: null };
     } catch (error) {
       logGQLError(error);
-      isPending.value = false;
       return { success: false, error };
     }
   };
@@ -80,7 +78,7 @@ export const useAuth = () => {
       await GqlRegisterCustomer({ input: userInfo });
       return { success: true, error: null };
     } catch (error: any) {
-      logGQLError;
+      logGQLError(error);
       const gqlError = error?.gqlErrors?.[0];
       isPending.value = false;
       return { success: false, error: gqlError?.message };
@@ -114,14 +112,22 @@ export const useAuth = () => {
       }
       return { success: false, error: 'There was an error sending the reset password email. Please try again later.' };
     } catch (error: any) {
-      logGQLError;
+      logGQLError(error);
       isPending.value = false;
       const gqlError = error?.gqlErrors?.[0];
       return { success: false, error: gqlError?.message };
     }
   };
 
-  const resetPasswordWithKey = async ({ key, login, password }: { key: string; login: string; password: string }): Promise<{ success: boolean; error: any }> => {
+  const resetPasswordWithKey = async ({
+    key,
+    login,
+    password,
+  }: {
+    key: string;
+    login: string;
+    password: string;
+  }): Promise<{ success: boolean; error: any }> => {
     try {
       isPending.value = true;
       const { resetUserPassword } = await GqlResetPasswordKey({ key, login, password });

@@ -132,11 +132,11 @@ const disabledAddToCart = computed(() => {
           </div>
         </form>
 
-        <div v-if="storeSettings.showProductCategoriesOnSingleProduct">
+        <div v-if="storeSettings.showProductCategoriesOnSingleProduct && product.productCategories">
           <div class="grid gap-2 my-8 text-sm">
             <div class="flex items-center gap-2">
               <span class="text-gray-400">{{ $t('messages.shop.category', 2) }}:</span>
-              <div class="product-categories" v-if="product.productCategories">
+              <div class="product-categories">
                 <NuxtLink
                   v-for="category in product.productCategories.nodes"
                   :key="category.slug"
