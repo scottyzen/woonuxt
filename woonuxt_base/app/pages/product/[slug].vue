@@ -5,6 +5,7 @@ const route = useRoute();
 const { storeSettings } = useAppConfig();
 const { arraysEqual, formatArray, checkForVariationTypeOfAny } = useHelpers();
 const { addToCart, isUpdatingCart } = useCart();
+const { t } = useI18n();
 const slug = route.params.slug as string;
 
 const { data } = (await useAsyncGql('getProduct', { slug })) as { data: { value: { product: Product } } };
