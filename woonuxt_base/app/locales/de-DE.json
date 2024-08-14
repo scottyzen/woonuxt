@@ -71,6 +71,7 @@
     },
     "shop": {
       "shopByCategory": "Kategorien",
+      "popularProducts": "Beliebte Produkte",
       "availability": "Verfügbarkeit",
       "inStock": "auf Lager",
       "outOfStock": "ausverkauft",
@@ -121,7 +122,18 @@
       "searchProducts": "Produkte suchen...",
       "couponCode": "Gutscheincode",
       "downloadsRemaining": "Verbleibende Downloads",
-      "expires": "Läuft ab"
+      "expires": "Läuft ab",
+      "productNotFound": "Produkt nicht gefunden",
+      "productResultCount": {
+        "showing": "Anzeige",
+        "to": "bis",
+        "of": "von"
+      },
+      "noProductsFound": {
+        "title": "Keine Produkte gefunden",
+        "subText": "Versuchen Sie, Ihre Suche oder Filter anzupassen, um das zu finden, was Sie suchen.",
+        "clearFiltersAndSearch": "Alle Filter und die Suche zurücksetzen"
+      }
     },
     "billing": {
       "billing": "Rechnung",
