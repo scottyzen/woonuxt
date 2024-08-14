@@ -121,7 +121,8 @@
       "searchProducts": "Pesquisar Produtos...",
       "couponCode": "Código do Cupom",
       "downloadsRemaining": "Downloads restantes",
-      "expires": "Expira"
+      "expires": "Expira",
+      "productNotFound": "Produto não encontrado"
     },
     "billing": {
       "billing": "Cobrança",

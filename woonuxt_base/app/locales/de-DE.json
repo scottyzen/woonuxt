@@ -121,7 +121,8 @@
       "searchProducts": "Produkte suchen...",
       "couponCode": "Gutscheincode",
       "downloadsRemaining": "Verbleibende Downloads",
-      "expires": "Läuft ab"
+      "expires": "Läuft ab",
+      "productNotFound": "Produkt nicht gefunden"
     },
     "billing": {
       "billing": "Rechnung",

@@ -121,7 +121,8 @@
       "searchProducts": "Cerca prodotti...",
       "couponCode": "Codice coupon",
       "downloadsRemaining": "Download rimanenti",
-      "expires": "Scade"
+      "expires": "Scade",
+      "productNotFound": "Prodotto non trovato"
     },
     "billing": {
       "billing": "Fatturazione",
