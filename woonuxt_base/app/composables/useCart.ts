@@ -84,6 +84,7 @@ export function useCart() {
   // empty the cart
   async function emptyCart(): Promise<void> {
     try {
+      isUpdatingCart.value = true;
       const { emptyCart } = await GqlEmptyCart();
       updateCart(emptyCart?.cart ?? null);
     } catch (error: any) {
