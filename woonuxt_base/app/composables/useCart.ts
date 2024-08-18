@@ -12,7 +12,7 @@ export function useCart() {
   const isUpdatingCart = useState<boolean>('isUpdatingCart', () => false);
   const isUpdatingCoupon = useState<boolean>('isUpdatingCoupon', () => false);
   const paymentGateways = useState<PaymentGateways>('paymentGateways', () => null);
-  const { logGQLError } = useHelpers();
+  const { logGQLError, clearAllCookies } = useHelpers();
 
   // Refesh the cart from the server
   async function refreshCart() {
@@ -28,6 +28,7 @@ export function useCart() {
       return { cart, customer, viewer, paymentGateways };
     } catch (error: any) {
       logGQLError(error);
+      clearAllCookies();
       return { cart: null, customer: null, viewer: null, paymentGateways: null };
     }
   }
