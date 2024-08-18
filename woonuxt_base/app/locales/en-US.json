@@ -121,7 +121,8 @@
       "searchProducts": "Search Products...",
       "couponCode": "Coupon Code",
       "downloadsRemaining": "Downloads remaining",
-      "expires": "Expires"
+      "expires": "Expires",
+      "productNotFound": "Product not found"
     },
     "billing": {
       "billing": "Billing",
