@@ -12,6 +12,9 @@ const productType = computed(() => (item.variation ? item.variation?.node : item
 const productSlug = computed(() => `/product/${decodeURIComponent(item.product.node.slug)}`);
 const isLowStock = computed(() => (productType.value.stockQuantity ? productType.value.lowStockAmount >= productType.value.stockQuantity : false));
 const imgScr = computed(() => productType.value.image?.cartSourceUrl || productType.value.image?.sourceUrl || item.product.image?.sourceUrl || FALLBACK_IMG);
+const regularPrice = computed(() => parseFloat(productType.value.rawRegularPrice));
+const salePrice = computed(() => parseFloat(productType.value.rawSalePrice));
+const salePercentage = computed(() => Math.round(((regularPrice.value - salePrice.value) / regularPrice.value) * 100) + '%');
 
 const removeItem = () => {
   updateItemQuantity(item.key, 0);
@@ -21,12 +24,6 @@ const moveToWishList = () => {
   addToWishlist(item.product.node);
   removeItem();
 };
-
-const salePercentage = computed(() => {
-  const regularPrice = parseFloat(productType.value.regularPrice.replace(/\D/g, ''));
-  const salePrice = parseFloat(productType.value.salePrice.replace(/\D/g, ''));
-  return Math.round(((regularPrice - salePrice) / regularPrice) * 100) + '%';
-});
 </script>
 
 <template>
