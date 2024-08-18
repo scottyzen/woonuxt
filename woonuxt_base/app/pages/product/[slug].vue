@@ -11,6 +11,11 @@ const slug = route.params.slug as string;
 const { data } = (await useAsyncGql('getProduct', { slug })) as { data: { value: { product: Product } } };
 const product = ref<Product>(data?.value?.product);
 
+// If the product is not found, throw an error
+if (!product.value) {
+  throw createError({ statusCode: 404, statusMessage: t('messages.shop.productNotFound') });
+}
+
 const quantity = ref<number>(1);
 const activeVariation = ref<Variation | null>(null);
 const variation = ref<Attribute[]>([]);
@@ -166,10 +171,6 @@ const disabledAddToCart = computed(() => {
         <div class="mb-4 text-xl font-semibold">{{ $t('messages.shop.youMayLike') }}</div>
         <ProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
       </div>
-    </div>
-
-    <div class="flex items-center justify-center min-h-[500px]" v-else>
-      <h1 class="text-xl font-bold">{{ t('messages.shop.productNotFound') }}</h1>
     </div>
   </main>
 </template>
