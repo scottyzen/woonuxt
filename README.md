@@ -93,10 +93,10 @@ And here is the live demo of the customized WooNuxt site: [My Shop](https://mysh
 | --------------- | ------- |
 | WordPress       | 6.6.1   |
 | WooCommerce     | 9.1.2   |
-| WPGraphQL       | 1.27.2  |
-| WooGraphQL      | 0.20.0  |
+| WPGraphQL       | 1.28.0  |
+| WooGraphQL      | 0.21.0  |
 | WPGraphQL CORS  | 2.1     |
-| Node            | 20.10.0 |
+| Node            | 20.16.0 |
 | PHP             | 8.2     |
 
 ### Current translations

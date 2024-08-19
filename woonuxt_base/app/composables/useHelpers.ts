@@ -11,7 +11,7 @@ export function useHelpers() {
   const wooNuxtSEO = runtimeConfig.public?.WOO_NUXT_SEO as WooNuxtSEOItem[];
   const frontEndUrl = runtimeConfig.public?.FRONT_END_URL?.replace(/\/$/, '') || null;
   const isDev: boolean = process.env.NODE_ENV === 'development';
-  const fallbackImage = '/images/placeholder.jpg';
+  const FALLBACK_IMG = '/images/placeholder.jpg';
 
   /**
    * Toggles the mobile menu.
@@ -199,7 +199,7 @@ export function useHelpers() {
     wooNuxtSEO,
     frontEndUrl,
     isDev,
-    fallbackImage,
+    FALLBACK_IMG,
     formatArray,
     arraysEqual,
     clearAllCookies,

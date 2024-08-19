@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { fallbackImage } = useHelpers();
+const { FALLBACK_IMG } = useHelpers();
 
 const props = defineProps({
   mainImage: { type: Object, required: true },
@@ -9,7 +9,7 @@ const props = defineProps({
 });
 
 const primaryImage = computed(() => ({
-  sourceUrl: props.mainImage.sourceUrl || fallbackImage,
+  sourceUrl: props.mainImage.sourceUrl || FALLBACK_IMG,
   title: props.mainImage.title,
   altText: props.mainImage.altText,
   databaseId: props.mainImage.databaseId,
@@ -48,7 +48,7 @@ const imgWidth = 640;
       :height="imgWidth"
       :alt="imageToShow.altText || node.name"
       :title="imageToShow.title || node.name"
-      :src="imageToShow.sourceUrl || fallbackImage"
+      :src="imageToShow.sourceUrl || FALLBACK_IMG"
       fetchpriority="high"
       placeholder
       placeholder-class="blur-xl" />
