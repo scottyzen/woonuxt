@@ -2,17 +2,17 @@
 import { OrderStatusEnum } from '#woo';
 
 const { query, params, name } = useRoute();
-const { customer } = useAuth();
+const { customer, viewer } = useAuth();
 const { formatDate, formatPrice } = useHelpers();
 const { t } = useI18n();
 
-const order = ref<Order>({});
+const order = ref<Order | null>(null);
 const fetchDelay = ref<boolean>(query.fetch_delay === 'true');
 const delayLength = 2500;
 const isLoaded = ref<boolean>(false);
 const errorMessage = ref('');
 
-const isGuest = computed(() => !customer.value?.databaseId);
+const isGuest = computed(() => !customer.value?.email);
 const isSummaryPage = computed<boolean>(() => name === 'order-summary');
 const isCheckoutPage = computed<boolean>(() => name === 'order-received');
 const orderIsNotCompleted = computed<boolean>(() => order.value?.status !== OrderStatusEnum.COMPLETED);
@@ -45,7 +45,11 @@ onMounted(async () => {
 async function getOrder() {
   try {
     const data = await GqlGetOrder({ id: params.orderId as string });
-    if (data.order) order.value = data.order;
+    if (data.order) {
+      order.value = data.order;
+    } else {
+      errorMessage.value = 'Could not find order';
+    }
   } catch (err: any) {
     errorMessage.value = err?.gqlErrors?.[0].message || 'Could not find order';
   }
@@ -107,7 +111,7 @@ useSeoMeta({
           </div>
           <div class="w-[21%]">
             <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.date') }}</div>
-            <div class="leading-none">{{ formatDate(order.date!) }}</div>
+            <div class="leading-none">{{ formatDate(order.date) }}</div>
           </div>
           <div class="w-[21%]">
             <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.status') }}</div>
@@ -119,27 +123,29 @@ useSeoMeta({
           </div>
         </div>
 
-        <hr class="my-8" />
+        <template v-if="order.lineItems">
+          <hr class="my-8" />
 
-        <div class="grid gap-2">
-          <div v-if="order.lineItems" v-for="item in order.lineItems.nodes" :key="item.id" class="flex items-center justify-between gap-8">
-            <NuxtLink v-if="item.product?.node" :to="`/product/${item.product.node.slug}`">
-              <NuxtImg
-                class="w-16 h-16 rounded-xl"
-                :src="item.variation?.node?.image?.sourceUrl || item.product.node?.image?.sourceUrl || '/images/placeholder.png'"
-                :alt="item.variation?.node?.image?.altText || item.product.node?.image?.altText || 'Product image'"
-                :title="item.variation?.node?.image?.title || item.product.node?.image?.title || 'Product image'"
-                width="64"
-                height="64"
-                loading="lazy" />
-            </NuxtLink>
-            <div class="flex-1 leading-tight">
-              {{ item.variation ? item.variation?.node?.name : item.product?.node.name! }}
+          <div class="grid gap-2">
+            <div v-for="item in order.lineItems.nodes" :key="item.id" class="flex items-center justify-between gap-8">
+              <NuxtLink v-if="item.product?.node" :to="`/product/${item.product.node.slug}`">
+                <NuxtImg
+                  class="w-16 h-16 rounded-xl"
+                  :src="item.variation?.node?.image?.sourceUrl || item.product.node?.image?.sourceUrl || '/images/placeholder.png'"
+                  :alt="item.variation?.node?.image?.altText || item.product.node?.image?.altText || 'Product image'"
+                  :title="item.variation?.node?.image?.title || item.product.node?.image?.title || 'Product image'"
+                  width="64"
+                  height="64"
+                  loading="lazy" />
+              </NuxtLink>
+              <div class="flex-1 leading-tight">
+                {{ item.variation ? item.variation?.node?.name : item.product?.node.name! }}
+              </div>
+              <div class="text-sm text-gray-600">Qty. {{ item.quantity }}</div>
+              <span class="text-sm font-semibold">{{ formatPrice(item.total!) }}</span>
             </div>
-            <div class="text-sm text-gray-600">Qty. {{ item.quantity }}</div>
-            <span class="text-sm font-semibold">{{ formatPrice(item.total!) }}</span>
           </div>
-        </div>
+        </template>
 
         <hr class="my-8" />
 
