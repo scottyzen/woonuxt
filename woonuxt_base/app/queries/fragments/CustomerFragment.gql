@@ -1,4 +1,4 @@
-fragment CustomerFragment on Customer {
+fragment Customer on Customer {
   lastName
   email
   firstName
