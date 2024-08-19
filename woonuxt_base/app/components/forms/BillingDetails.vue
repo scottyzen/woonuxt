@@ -7,9 +7,6 @@ const props = defineProps({
 });
 
 const billing = toRef(props, 'modelValue');
-
-const { allowedCountries, countryStates } = await GqlGetStates({ country: billing.value.country });
-
 </script>
 
 <template>
@@ -41,12 +38,18 @@ const { allowedCountries, countryStates } = await GqlGetStates({ country: billin
 
     <div v-if="isBillingAddressEnabled" class="w-full">
       <label for="state">{{ $t('messages.billing.state') }} ({{ $t('messages.general.optional') }})</label>
-      <StateSelect id="state" v-model="billing.state" :default-value="billing.state" :country-code="billing.country" @change="updateShippingLocation" :countryStates />
+      <StateSelect
+        id="state"
+        v-model="billing.state"
+        :default-value="billing.state"
+        :country-code="billing.country"
+        @change="updateShippingLocation"
+        autocomplete="address-level1" />
     </div>
 
     <div v-if="isBillingAddressEnabled" class="w-full">
       <label for="country">{{ $t('messages.billing.country') }}</label>
-      <CountrySelect id="country" v-model="billing.country" :default-value="billing.country" @change="updateShippingLocation" :allowedCountries />
+      <CountrySelect id="country" v-model="billing.country" :default-value="billing.country" @change="updateShippingLocation" autocomplete="country" />
     </div>
 
     <div v-if="isBillingAddressEnabled" class="w-full">

@@ -70,6 +70,11 @@ interface ShippingMethodRate {
   label?: string | null;
 }
 
+interface GeoLocation {
+  code: string;
+  name: string;
+};
+
 interface LineItem {
   quantity?: number | null;
   total?: string | null;
