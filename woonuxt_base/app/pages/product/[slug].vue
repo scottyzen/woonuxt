@@ -9,13 +9,12 @@ const { t } = useI18n();
 const slug = route.params.slug as string;
 
 const { data } = (await useAsyncGql('getProduct', { slug })) as { data: { value: { product: Product } } };
-const product = ref<Product>(data?.value?.product);
-
-// If the product is not found, throw an error
-if (!product.value) {
+if (!data?.value?.product) {
+  // If the product is not found, throw an error
   throw createError({ statusCode: 404, statusMessage: t('messages.shop.productNotFound') });
 }
 
+const product = ref<Product>(data?.value?.product);
 const quantity = ref<number>(1);
 const activeVariation = ref<Variation | null>(null);
 const variation = ref<Attribute[]>([]);
