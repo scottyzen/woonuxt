@@ -2,7 +2,7 @@
 import { OrderStatusEnum } from '#woo';
 
 const { query, params, name } = useRoute();
-const { customer, viewer } = useAuth();
+const { customer } = useAuth();
 const { formatDate, formatPrice } = useHelpers();
 const { t } = useI18n();
 
