@@ -9,7 +9,9 @@ query getCart {
     ...Viewer
   }
   paymentGateways {
-    ...PaymentGateways
+    nodes {
+      ...PaymentGateway
+    }
   }
 }
 
@@ -27,10 +29,8 @@ fragment Viewer on User {
   }
 }
 
-fragment PaymentGateways on RootQueryToPaymentGatewayConnection {
-  nodes {
-    title
-    id
-    description
-  }
+fragment PaymentGateway on PaymentGateway {
+  title
+  id
+  description
 }
