@@ -19,7 +19,7 @@ export const useAuth = () => {
       const { loginWithCookies } = await GqlLogin(credentials);
 
       if (loginWithCookies?.status === 'SUCCESS') {
-        const { viewer } = await refreshCart();
+        await refreshCart();
         if (viewer === null) {
           return {
             success: false,
