@@ -1,15 +1,15 @@
 <script setup lang="ts">
 interface Props {
   attributes: any[];
-  defaultAttributes?: { nodes: Attribute[] };
+  defaultAttributes?: { nodes: VariationAttribute[] };
 }
 
 const { attributes, defaultAttributes } = defineProps<Props>();
 const emit = defineEmits(['attrs-changed']);
 
-const activeVariations = ref<Attribute[]>([]);
+const activeVariations = ref<VariationAttribute[]>([]);
 
-const getSelectedName = (attr: any, activeVariation: Attribute) => {
+const getSelectedName = (attr: any, activeVariation: VariationAttribute) => {
   if (attr?.terms?.nodes) {
     return attr.terms.nodes.find((node: { slug: string }) => node.slug === activeVariation.value).name;
   }
@@ -18,7 +18,7 @@ const getSelectedName = (attr: any, activeVariation: Attribute) => {
 };
 
 const updateAttrs = () => {
-  const selectedVariations = attributes.map((row): Attribute => {
+  const selectedVariations = attributes.map((row): VariationAttribute => {
     const radioValue = document.querySelector(`.name-${row.name}:checked`) as HTMLInputElement;
     const dropdownValue = document.querySelector(`#${row.name}`) as HTMLSelectElement;
     const name = row.name.charAt(0).toLowerCase() + row.name.slice(1);
@@ -32,7 +32,7 @@ const updateAttrs = () => {
 
 const setDefaultAttributes = () => {
   if (defaultAttributes?.nodes) {
-    defaultAttributes?.nodes.forEach((attr: Attribute) => {
+    defaultAttributes?.nodes.forEach((attr: VariationAttribute) => {
       const radio = document.querySelector(`.name-${attr.name}[value="${attr.value}"]`) as HTMLInputElement;
       if (radio) radio.checked = true;
       const dropdown = document.querySelector(`#${attr.name}`) as HTMLSelectElement;
