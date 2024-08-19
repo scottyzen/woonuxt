@@ -7,7 +7,7 @@ interface Props {
 const { attributes, defaultAttributes } = defineProps<Props>();
 const emit = defineEmits(['attrs-changed']);
 
-const activeVariations = ref<Attribute[]>([]);
+const activeVariations = ref<VariationAttribute[]>([]);
 
 const getSelectedName = (attr: any, activeVariation: VariationAttribute) => {
   if (attr?.terms?.nodes) {
@@ -18,7 +18,7 @@ const getSelectedName = (attr: any, activeVariation: VariationAttribute) => {
 };
 
 const updateAttrs = () => {
-  const selectedVariations = attributes.map((row): Attribute => {
+  const selectedVariations = attributes.map((row): VariationAttribute => {
     const radioValue = document.querySelector(`.name-${row.name}:checked`) as HTMLInputElement;
     const dropdownValue = document.querySelector(`#${row.name}`) as HTMLSelectElement;
     const name = row.name.charAt(0).toLowerCase() + row.name.slice(1);
