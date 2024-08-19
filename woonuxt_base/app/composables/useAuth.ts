@@ -2,8 +2,9 @@ import { GqlLogin, GqlLogout, GqlRegisterCustomer, GqlResetPasswordEmail, GqlGet
 import type { RegisterCustomerInput, CreateAccountInput, LoginInput } from '#gql';
 
 export const useAuth = () => {
-  const { refreshCart, cart } = useCart();
+  const { refreshCart } = useCart();
   const { logGQLError, clearAllCookies } = useHelpers();
+  const router = useRouter();
 
   const customer = useState<Customer>('customer', () => ({ billing: {}, shipping: {} }));
   const viewer = useState<Viewer | null>('viewer', () => null);
@@ -90,6 +91,7 @@ export const useAuth = () => {
         clearAllCookies();
         viewer.value = null;
         customer.value = { billing: {}, shipping: {} };
+        router.push('/my-account');
       }
       return { success: true, error: null };
     } catch (error) {

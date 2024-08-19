@@ -1,7 +1,7 @@
 type Cart = import('#gql').CartFragment;
 type Customer = import('#gql').CustomerFragment;
 type Viewer = import('#gql').ViewerFragment;
-type PaymentGateways = import('#gql').PaymentGatewaysFragment;
+type PaymentGateway = import('#gql').PaymentGatewayFragment;
 type Order = import('#gql').OrderFragmentFragment;
 type ProductBase = import('#gql').GetProductQuery['product'];
 type SimpleProduct = import('#gql').SimpleProductFragment;
@@ -11,23 +11,17 @@ type ProductCategory = import('#gql').ProductCategoryFragment;
 type Product = ProductBase & SimpleProduct & VariableProduct;
 type Address = import('#gql').AddressFragment;
 type Terms = import('#gql').TermsFragment;
+type VariationAttribute = import('#gql').VariationAttributeFragment;
+type Comment = import('#gql').CommentFragment;
+type ProductAttribute = import('#gql').ProductAttributeFragment;
 type LoginClients = import('#gql').GetLoginClientsQuery['loginClients'];
 
 interface ProductAttributeInput {
   attributeName: string;
   attributeValue: string;
 }
-interface Attribute {
-  value: string;
-  name: string;
-}
-
-interface ProductAttribute {
-  name: string;
-  label: string;
-  options?: Array<string> | null;
-  variation?: boolean | null;
-  visible?: boolean | null;
+interface PaymentGateways {
+  nodes: PaymentGateway[];
 }
 
 interface Variation {
@@ -38,10 +32,10 @@ interface Variation {
   salePrice?: string | null;
   slug?: string | null;
   stockQuantity?: number | null;
-  stockStatus: StockStatusEnum | null;
+  stockStatus?: StockStatusEnum | null;
   hasAttributes?: boolean | null;
   image?: ProductImage | null;
-  attributes?: { nodes: Attribute[] } | null;
+  attributes?: { nodes: VariationAttribute[] } | null;
   node?: SimpleProduct | VariableProduct;
 }
 
@@ -50,12 +44,6 @@ interface ProductImage {
   cartSourceUrl?: string | null | undefined;
   altText?: string | null | undefined;
   title?: string | null | undefined;
-}
-
-interface PaymentGateway {
-  title?: string | null;
-  id?: string | null;
-  description?: string | null;
 }
 
 interface AppliedCoupon {
@@ -74,7 +62,7 @@ interface ShippingMethodRate {
 interface GeoLocation {
   code: string;
   name: string;
-};
+}
 
 interface LineItem {
   quantity?: number | null;

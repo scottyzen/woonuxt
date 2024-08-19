@@ -16,7 +16,7 @@ if (!data.value?.product) {
 const product = ref<Product>(data?.value?.product);
 const quantity = ref<number>(1);
 const activeVariation = ref<Variation | null>(null);
-const variation = ref<Attribute[]>([]);
+const variation = ref<VariationAttribute[]>([]);
 const indexOfTypeAny = ref<number[]>([]);
 const attrValues = ref();
 const isSimpleProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.SIMPLE);
@@ -46,7 +46,7 @@ onMounted(async () => {
   if (product.value?.variations) indexOfTypeAny.value.push(...checkForVariationTypeOfAny(product.value));
 });
 
-const updateSelectedVariations = (variations: Attribute[]): void => {
+const updateSelectedVariations = (variations: VariationAttribute[]): void => {
   if (!product.value.variations) return;
 
   attrValues.value = variations.map((el) => ({ attributeName: el.name, attributeValue: el.value }));

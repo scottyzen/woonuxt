@@ -7,12 +7,12 @@
       src="/images/hero-4.jpg"
       alt="Hero image"
       loading="eager"
-      sizes="100vw md:1400px"
+      sizes="sm:100vw md:1400px"
       fetchpriority="high"
       preload
       placeholder
       placeholder-class="blur-xl" />
-    <div class="container absolute inset-0 flex flex-col items-start justify-center bg-gradient-to-l from-gray-200 md:bg-none p-8">
+    <div class="container absolute inset-0 flex flex-col items-start justify-center bg-gradient-to-l from-gray-200 md:bg-none">
       <h1 class="text-3xl font-bold md:mb-4 md:text-4xl lg:text-6xl">Just landed.</h1>
       <h2 class="text-lg font-bold md:mb-4 lg:text-3xl">The New Year Collection</h2>
       <div class="max-w-sm mb-8 text-md font-light lg:max-w-md text-balance">

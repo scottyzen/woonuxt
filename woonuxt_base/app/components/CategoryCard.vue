@@ -22,7 +22,7 @@ const imgHeight = Math.round(imgWidth * 1.125);
       :alt="node.image?.altText || node.name"
       :title="node.image?.title || node.name"
       :loading="imageLoading"
-      :sizes="`${imgWidth / 2}px md:${imgWidth}px`"
+      :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
       placeholder
       placeholder-class="blur-xl" />
     <div class="absolute inset-x-0 bottom-0 opacity-50 bg-gradient-to-t from-black to-transparent h-1/2" />

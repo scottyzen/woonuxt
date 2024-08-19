@@ -50,9 +50,7 @@ mutation Checkout(
             node {
               name
               image {
-                sourceUrl
-                altText
-                title
+                ...Image
               }
             }
           }
@@ -60,9 +58,7 @@ mutation Checkout(
             node {
               name
               image {
-                sourceUrl
-                altText
-                title
+                ...Image
               }
             }
           }
