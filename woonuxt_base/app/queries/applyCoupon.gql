@@ -7,7 +7,7 @@ mutation applyCoupon($code: String!) {
       discountAmount
     }
     cart {
-      ...CartFragment
+      ...Cart
     }
   }
 }

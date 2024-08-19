@@ -1,15 +1,16 @@
-type Cart = import('#gql').GetCartQuery['cart'];
-type Customer = import('#gql').GetCartQuery['customer'];
-type Viewer = import('#gql').GetCartQuery['viewer'];
-type PaymentGateways = import('#gql').GetCartQuery['paymentGateways'];
-type ProductBase = import('#gql').GetProductQuery['product'];
+type Cart = import('#gql').CartFragment;
+type Customer = import('#gql').CustomerFragment;
+type Viewer = import('#gql').ViewerFragment;
+type PaymentGateways = import('#gql').PaymentGatewaysFragment;
 type Order = import('#gql').OrderFragmentFragment;
+type ProductBase = import('#gql').GetProductQuery['product'];
 type SimpleProduct = import('#gql').SimpleProductFragment;
 type VariableProduct = import('#gql').VariableProductFragment;
 type DownloadableItem = import('#gql').DownloadableItemFragment;
 type ProductCategory = import('#gql').ProductCategoryFragment;
 type Product = ProductBase & SimpleProduct & VariableProduct;
 type Address = import('#gql').AddressFragment;
+type Terms = import('#gql').TermsFragment;
 
 interface ProductAttributeInput {
   attributeName: string;
@@ -26,29 +27,6 @@ interface ProductAttribute {
   options?: Array<string> | null;
   variation?: boolean | null;
   visible?: boolean | null;
-}
-
-interface ProductTerm {
-  taxonomyName?: string | null;
-  slug?: string | null;
-}
-
-interface Author {
-  name?: string | null;
-  avatar?: { url?: string | null } | null;
-}
-
-interface Review {
-  rating?: number | null;
-  content?: string | null;
-  id?: string | null;
-  date?: string | null;
-  author?: { node?: Author | null } | null;
-}
-
-interface Reviews {
-  averageRating?: number | null;
-  edges?: Array<{ rating?: number | null; node?: Review | null }> | null;
 }
 
 interface Variation {
@@ -71,19 +49,6 @@ interface ProductImage {
   cartSourceUrl?: string | null | undefined;
   altText?: string | null | undefined;
   title?: string | null | undefined;
-}
-
-interface CartItem {
-  quantity?: number | null;
-  key: string;
-  product?: Product | null;
-  variation?: { node: Variation } | null;
-}
-
-interface CartContents {
-  itemCount?: number | null;
-  productCount?: number | null;
-  nodes?: CartItem[];
 }
 
 interface PaymentGateway {

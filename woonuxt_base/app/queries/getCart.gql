@@ -1,28 +1,36 @@
 query getCart {
   cart {
-    ...CartFragment
+    ...Cart
   }
   customer {
-    ...CustomerFragment
+    ...Customer
   }
   viewer {
-    lastName
-    email
-    databaseId
-    id
-    firstName
-    username
-    nicename
-    wooSessionToken
-    avatar {
-      url
-    }
+    ...Viewer
   }
   paymentGateways {
-    nodes {
-      title
-      id
-      description
-    }
+    ...PaymentGateways
+  }
+}
+
+fragment Viewer on User {
+  lastName
+  email
+  databaseId
+  id
+  firstName
+  username
+  nicename
+  wooSessionToken
+  avatar {
+    url
+  }
+}
+
+fragment PaymentGateways on RootQueryToPaymentGatewayConnection {
+  nodes {
+    title
+    id
+    description
   }
 }

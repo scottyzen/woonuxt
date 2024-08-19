@@ -21,7 +21,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       initialised = true;
 
       const { refreshCart } = useCart();
-      const success = await refreshCart();
+      const success: boolean = await refreshCart();
 
       useGqlError((err: any) => {
         const serverErrors = ['The iss do not match with this server', 'Invalid session token'];
@@ -54,10 +54,10 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
     // If we are in development mode, we want to initialise the store immediately
     const isDev = process.env.NODE_ENV === 'development';
-    
+
     // Check if the current route path is one of the pages that need immediate initialization
     const pagesToInitializeRightAway = ['/checkout', '/my-account', '/order-summary'];
-    const isPathThatRequiresInit = pagesToInitializeRightAway.some(page => useRoute().path.includes(page));
+    const isPathThatRequiresInit = pagesToInitializeRightAway.some((page) => useRoute().path.includes(page));
 
     const shouldInit = isDev || isPathThatRequiresInit || !storeSettings.initStoreOnUserActionToReduceServerLoad;
 

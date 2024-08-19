@@ -1,7 +1,7 @@
 mutation EmptyCart {
   emptyCart(input: { clearPersistentCart: true }) {
     cart {
-      ...CartFragment
+      ...Cart
     }
   }
 }
