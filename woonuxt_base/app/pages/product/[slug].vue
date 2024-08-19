@@ -8,10 +8,9 @@ const { addToCart, isUpdatingCart } = useCart();
 const { t } = useI18n();
 const slug = route.params.slug as string;
 
-const { data } = (await useAsyncGql('getProduct', { slug })) as { data: { value: { product: Product } } };
-if (!data?.value?.product) {
-  // If the product is not found, throw an error
-  throw createError({ statusCode: 404, statusMessage: t('messages.shop.productNotFound') });
+const { data } = await useAsyncGql('getProduct', { slug });
+if (!data.value?.product) {
+  throw showError({ statusCode: 404, statusMessage: t('messages.shop.productNotFound') });
 }
 
 const product = ref<Product>(data?.value?.product);
