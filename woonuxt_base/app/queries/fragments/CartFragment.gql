@@ -1,4 +1,4 @@
-fragment CartFragment on Cart {
+fragment Cart on Cart {
   total
   rawTotal: total(format: RAW)
   subtotal

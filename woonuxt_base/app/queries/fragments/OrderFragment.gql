@@ -56,6 +56,6 @@ fragment OrderFragment on Order {
     }
   }
   customer {
-    ...CustomerFragment
+    ...Customer
   }
 }

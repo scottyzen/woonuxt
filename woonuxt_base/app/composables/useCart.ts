@@ -7,33 +7,44 @@ import type { AddToCartInput } from '#gql';
 export function useCart() {
   const { storeSettings } = useAppConfig();
 
-  const cart = useState<Cart>('cart');
+  const cart = useState<Cart | null>('cart', () => null);
   const isShowingCart = useState<boolean>('isShowingCart', () => false);
   const isUpdatingCart = useState<boolean>('isUpdatingCart', () => false);
   const isUpdatingCoupon = useState<boolean>('isUpdatingCoupon', () => false);
-  const paymentGateways = useState<PaymentGateways>('paymentGateways', () => null);
-  const { logGQLError } = useHelpers();
+  const paymentGateways = useState<PaymentGateways | null>('paymentGateways', () => null);
+  const { logGQLError, clearAllCookies } = useHelpers();
 
-  // Refesh the cart from the server
-  async function refreshCart() {
+  /** Refesh the cart from the server
+   * @returns {Promise<boolean>} - A promise that resolves
+   * to true if the cart was successfully refreshed
+   */
+  async function refreshCart(): Promise<boolean> {
     try {
       const { cart, customer, viewer, paymentGateways } = await GqlGetCart();
-
       const { updateCustomer, updateViewer } = useAuth();
+
       if (cart) updateCart(cart);
       if (customer) updateCustomer(customer);
       if (viewer) updateViewer(viewer);
       if (paymentGateways) updatePaymentGateways(paymentGateways);
 
-      return { cart, customer, viewer, paymentGateways };
+      return true; // Cart was successfully refreshed
     } catch (error: any) {
       logGQLError(error);
-      return { cart: null, customer: null, viewer: null, paymentGateways: null };
+      clearAllCookies();
+      resetInitialState();
+
+      return false;
     }
   }
 
-  function updateCart(payload: Cart | null): void {
-    cart.value = payload;
+  function resetInitialState() {
+    cart.value = null;
+    paymentGateways.value = null;
+  }
+
+  function updateCart(payload?: Cart | null): void {
+    cart.value = payload || null;
   }
 
   function updatePaymentGateways(payload: PaymentGateways): void {
@@ -51,7 +62,7 @@ export function useCart() {
 
     try {
       const { addToCart } = await GqlAddToCart({ input });
-      cart.value = addToCart?.cart ?? null;
+      if (addToCart?.cart) cart.value = addToCart.cart;
       // Auto open the cart when an item is added to the cart if the setting is enabled
       const { storeSettings } = useAppConfig();
       if (storeSettings.autoOpenCart && !isShowingCart.value) toggleCart(true);
@@ -64,27 +75,26 @@ export function useCart() {
   async function removeItem(key: string) {
     isUpdatingCart.value = true;
     const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity: 0 });
-    cart.value = updateItemQuantities?.cart ?? null;
+    updateCart(updateItemQuantities?.cart);
   }
 
   // update the quantity of an item in the cart
-  async function updateItemQuantity(key: string, quantity: number): Promise<number | undefined> {
+  async function updateItemQuantity(key: string, quantity: number): Promise<void> {
     isUpdatingCart.value = true;
     try {
       const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity });
-      cart.value = updateItemQuantities?.cart ?? null;
-      return quantity;
+      updateCart(updateItemQuantities?.cart);
     } catch (error: any) {
       logGQLError(error);
-      return undefined;
     }
   }
 
   // empty the cart
   async function emptyCart(): Promise<void> {
     try {
+      isUpdatingCart.value = true;
       const { emptyCart } = await GqlEmptyCart();
-      updateCart(emptyCart?.cart ?? null);
+      updateCart(emptyCart?.cart);
     } catch (error: any) {
       logGQLError(error);
     }
@@ -94,7 +104,7 @@ export function useCart() {
   async function updateShippingMethod(shippingMethods: string) {
     isUpdatingCart.value = true;
     const { updateShippingMethod } = await GqlChangeShippingMethod({ shippingMethods });
-    cart.value = updateShippingMethod?.cart ?? null;
+    updateCart(updateShippingMethod?.cart);
   }
 
   // Apply coupon
@@ -102,7 +112,7 @@ export function useCart() {
     try {
       isUpdatingCoupon.value = true;
       const { applyCoupon } = await GqlApplyCoupon({ code });
-      cart.value = applyCoupon?.cart ?? null;
+      updateCart(applyCoupon?.cart);
       isUpdatingCoupon.value = false;
     } catch (error: any) {
       isUpdatingCoupon.value = false;
@@ -116,28 +126,25 @@ export function useCart() {
     try {
       isUpdatingCart.value = true;
       const { removeCoupons } = await GqlRemoveCoupons({ codes: [code] });
-      cart.value = removeCoupons?.cart ?? null;
-      isUpdatingCart.value = false;
+      updateCart(removeCoupons?.cart);
     } catch (error) {
       logGQLError(error);
       isUpdatingCart.value = false;
     }
   }
 
+  // Stop the loading spinner when the cart is updated
   watch(cart, (val) => {
     isUpdatingCart.value = false;
   });
 
+  // Check if all products in the cart are virtual
   const allProductsAreVirtual = computed(() => {
     const nodes = cart.value?.contents?.nodes || [];
-    if (nodes.length === 0) return false;
-
-    return nodes.every((node) => {
-      const product = node.product?.node as SimpleProduct;
-      return product?.virtual === true;
-    });
+    return nodes.length === 0 ? false : nodes.every((node) => (node.product?.node as SimpleProduct)?.virtual === true);
   });
 
+  // Check if the billing address is enabled
   const isBillingAddressEnabled = computed(() => (storeSettings.hideBillingAddressForVirtualProducts ? !allProductsAreVirtual.value : true));
 
   return {
@@ -146,6 +153,7 @@ export function useCart() {
     isUpdatingCart,
     isUpdatingCoupon,
     paymentGateways,
+    isBillingAddressEnabled,
     updateCart,
     refreshCart,
     toggleCart,
@@ -156,6 +164,5 @@ export function useCart() {
     updateShippingMethod,
     applyCoupon,
     removeCoupon,
-    isBillingAddressEnabled,
   };
 }
