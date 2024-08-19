@@ -48,6 +48,7 @@ const imagetoDisplay = computed<string>(() => {
         :alt="node.image?.altText || node.name || 'Product image'"
         :title="node.image?.title || node.name"
         :loading="index <= 3 ? 'eager' : 'lazy'"
+        :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
         placeholder
         placeholder-class="blur-xl" />
     </NuxtLink>
