@@ -36,6 +36,7 @@ fragment Cart on Cart {
           type
           ...SimpleProduct
           ...VariableProduct
+          ...ExternalProduct
         }
       }
       variation {

@@ -34,10 +34,12 @@ query getProduct($slug: ID!) {
     ...Terms
     ...SimpleProduct
     ...VariableProduct
+    ...ExternalProduct
     related(first: 5) {
       nodes {
         ...SimpleProduct
         ...VariableProduct
+        ...ExternalProduct
       }
     }
     reviews {
