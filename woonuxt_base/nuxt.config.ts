@@ -17,6 +17,12 @@ export default defineNuxtConfig({
 
   experimental: {
     sharedPrerenderData: true,
+    defaults: {
+      nuxtLink: {
+        prefetch: true,
+        prefetchOn: { visibility: false },
+      },
+    },
   },
 
   plugins: [resolve('./app/plugins/init.ts')],
