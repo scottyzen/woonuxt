@@ -6,7 +6,7 @@ const props = defineProps({
   index: { type: Number, default: 1 },
 });
 
-const imgWidth = 250;
+const imgWidth = 280;
 const imgHeight = Math.round(imgWidth * 1.125);
 
 // example: ?filter=pa_color[green,blue],pa_size[large]
@@ -62,7 +62,7 @@ const imagetoDisplay = computed<string>(() => {
   </div>
 </template>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
 .product-card img {
   @apply rounded-lg object-top object-cover w-full;
   aspect-ratio: 1/1.125;
