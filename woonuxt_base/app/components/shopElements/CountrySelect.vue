@@ -1,5 +1,4 @@
 <script setup>
-
 const props = defineProps({
   modelValue: { type: String, default: '' },
 });
@@ -17,16 +16,10 @@ function select(evt) {
 </script>
 
 <template>
-  <select :value="modelValue" @change="select" required>
+  <select :value="modelValue" @change="select" required class="h-[42px]">
     <option value="" disabled>Select a country</option>
     <option v-for="country in countriesToShow" :key="country.code" :value="country.code">
       {{ country.name }}
     </option>
   </select>
 </template>
-
-<style scoped lang="postcss">
-select {
-  height: 42px;
-}
-</style>

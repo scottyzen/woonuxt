@@ -4,7 +4,7 @@ const { FALLBACK_IMG } = useHelpers();
 const props = defineProps({
   mainImage: { type: Object, required: true },
   gallery: { type: Object, required: true },
-  node: { type: Object, required: true },
+  node: { type: Object as PropType<Product>, required: true },
   activeVariation: { type: Object, required: false },
 });
 
@@ -41,7 +41,7 @@ const imgWidth = 640;
 
 <template>
   <div>
-    <SaleBadge :node="node" class="absolute text-base top-4 right-4" />
+    <SaleBadge :node class="absolute text-base top-4 right-4" />
     <NuxtImg
       class="rounded-xl object-contain w-full min-w-[350px]"
       :width="imgWidth"
