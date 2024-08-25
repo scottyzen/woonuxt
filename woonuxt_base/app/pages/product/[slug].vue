@@ -21,6 +21,7 @@ const indexOfTypeAny = ref<number[]>([]);
 const attrValues = ref();
 const isSimpleProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.SIMPLE);
 const isVariableProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.VARIABLE);
+const isExternalProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.EXTERNAL);
 
 const type = computed(() => activeVariation.value || product.value);
 const selectProductInput = computed<any>(() => ({ productId: type.value?.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
@@ -96,19 +97,19 @@ const disabledAddToCart = computed(() => {
             <div class="flex-1">
               <h1 class="flex flex-wrap items-center gap-2 mb-2 text-2xl font-sesmibold">
                 {{ type.name }}
-                <WPAdminLink :link="`/wp-admin/post.php?post=${product.databaseId}&action=edit`">Edit</WPAdminLink>
+                <LazyWPAdminLink :link="`/wp-admin/post.php?post=${product.databaseId}&action=edit`">Edit</LazyWPAdminLink>
               </h1>
               <StarRating :rating="product.averageRating || 0" :count="product.reviewCount || 0" v-if="storeSettings.showReviews" />
             </div>
             <ProductPrice class="text-xl" :sale-price="type.salePrice" :regular-price="type.regularPrice" />
           </div>
 
-          <div class="grid gap-2 my-8 text-sm">
-            <div class="flex items-center gap-2">
+          <div class="grid gap-2 my-8 text-sm empty:hidden">
+            <div v-if="!isExternalProduct" class="flex items-center gap-2">
               <span class="text-gray-400">{{ $t('messages.shop.availability') }}: </span>
               <StockStatus :stockStatus @updated="mergeLiveStockStatus" />
             </div>
-            <div class="flex items-center gap-2" v-if="storeSettings.showSKU">
+            <div class="flex items-center gap-2" v-if="storeSettings.showSKU && product.sku">
               <span class="text-gray-400">{{ $t('messages.shop.sku') }}: </span>
               <span>{{ product.sku || 'N/A' }}</span>
             </div>
@@ -120,13 +121,15 @@ const disabledAddToCart = computed(() => {
 
           <form @submit.prevent="addToCart(selectProductInput)">
             <AttributeSelections
-              v-if="product.type == 'VARIABLE' && product.attributes && product.variations"
+              v-if="isVariableProduct && product.attributes && product.variations"
               class="mt-4 mb-8"
               :attributes="product.attributes.nodes"
               :defaultAttributes="product.defaultAttributes"
               :variations="product.variations.nodes"
               @attrs-changed="updateSelectedVariations" />
-            <div class="fixed bottom-0 left-0 z-10 flex items-center w-full gap-4 p-4 mt-12 bg-white md:static md:bg-transparent bg-opacity-90 md:p-0">
+            <div
+              v-if="isVariableProduct || isSimpleProduct"
+              class="fixed bottom-0 left-0 z-10 flex items-center w-full gap-4 p-4 mt-12 bg-white md:static md:bg-transparent bg-opacity-90 md:p-0">
               <input
                 v-model="quantity"
                 type="number"
@@ -135,6 +138,13 @@ const disabledAddToCart = computed(() => {
                 class="bg-white border rounded-lg flex text-left p-2.5 w-20 gap-4 items-center justify-center focus:outline-none" />
               <AddToCartButton class="flex-1 w-full md:max-w-xs" :disabled="disabledAddToCart" :class="{ loading: isUpdatingCart }" />
             </div>
+            <a
+              v-if="isExternalProduct && product.externalUrl"
+              :href="product.externalUrl"
+              target="_blank"
+              class="rounded-lg flex font-bold bg-gray-800 text-white text-center min-w-[150px] p-2.5 gap-4 items-center justify-center focus:outline-none">
+              {{ product?.buttonText || 'View product' }}
+            </a>
           </form>
 
           <div v-if="storeSettings.showProductCategoriesOnSingleProduct && product.productCategories">

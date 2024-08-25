@@ -6,9 +6,10 @@ type Order = import('#gql').OrderFragmentFragment;
 type ProductBase = import('#gql').GetProductQuery['product'];
 type SimpleProduct = import('#gql').SimpleProductFragment;
 type VariableProduct = import('#gql').VariableProductFragment;
+type ExternalProduct = import('#gql').ExternalProductFragment;
 type DownloadableItem = import('#gql').DownloadableItemFragment;
 type ProductCategory = import('#gql').ProductCategoryFragment;
-type Product = ProductBase & SimpleProduct & VariableProduct;
+type Product = ProductBase & SimpleProduct & VariableProduct & ExternalProduct;
 type Address = import('#gql').AddressFragment;
 type Terms = import('#gql').TermsFragment;
 type VariationAttribute = import('#gql').VariationAttributeFragment;
@@ -74,4 +75,12 @@ interface WooNuxtSEOItem {
   provider: string;
   url?: string;
   handle?: string;
+}
+interface WooNuxtFilter {
+  slug: string;
+  label?: string;
+  hideEmpty: boolean;
+  showCount: boolean;
+  openByDefault: boolean;
+  terms: Terms;
 }

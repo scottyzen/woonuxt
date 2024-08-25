@@ -6,7 +6,7 @@ const props = defineProps({
   index: { type: Number, default: 1 },
 });
 
-const imgWidth = 250;
+const imgWidth = 280;
 const imgHeight = Math.round(imgWidth * 1.125);
 
 // example: ?filter=pa_color[green,blue],pa_size[large]
@@ -37,9 +37,9 @@ const imagetoDisplay = computed<string>(() => {
 </script>
 
 <template>
-  <div class="relative product-card">
+  <div class="relative group">
     <NuxtLink v-if="node.slug" :to="`/product/${decodeURIComponent(node.slug)}`" :title="node.name">
-      <SaleBadge :node="node" class="absolute top-2 right-2" />
+      <SaleBadge :node class="absolute top-2 right-2" />
       <NuxtImg
         v-if="imagetoDisplay"
         :width="imgWidth"
@@ -49,28 +49,16 @@ const imagetoDisplay = computed<string>(() => {
         :title="node.image?.title || node.name"
         :loading="index <= 3 ? 'eager' : 'lazy'"
         :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
+        class="rounded-lg object-top object-cover w-full aspect-9/8"
         placeholder
         placeholder-class="blur-xl" />
     </NuxtLink>
     <div class="p-2">
       <StarRating v-if="storeSettings.showReviews" :rating="node.averageRating" :count="node.reviewCount" />
       <NuxtLink v-if="node.slug" :to="`/product/${decodeURIComponent(node.slug)}`" :title="node.name">
-        <h2 class="mb-2 font-light leading-tight">{{ node.name }}</h2>
+        <h2 class="mb-2 font-light leading-tight group-hover:text-primary">{{ node.name }}</h2>
       </NuxtLink>
       <ProductPrice class="text-sm" :sale-price="node.salePrice" :regular-price="node.regularPrice" />
     </div>
   </div>
 </template>
-
-<style lang="postcss">
-.product-card img {
-  @apply rounded-lg object-top object-cover w-full;
-  aspect-ratio: 1/1.125;
-}
-
-.product-card:hover {
-  h2 {
-    @apply text-primary;
-  }
-}
-</style>

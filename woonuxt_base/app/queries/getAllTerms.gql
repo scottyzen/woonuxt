@@ -1,6 +1,7 @@
-query getAllTerms($hideEmpty: Boolean = false, $taxonomies: [TaxonomyEnum]!, $first: Int = 100) {
+query getAllTerms($hideEmpty: Boolean = true, $taxonomies: [TaxonomyEnum]!, $first: Int = 100) {
   terms(where: { taxonomies: $taxonomies, hideEmpty: $hideEmpty }, first: $first) {
     nodes {
+      taxonomyName
       name
       slug
       count

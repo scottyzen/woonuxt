@@ -15,6 +15,9 @@ export default <Partial<Config>>{
           dark: '#754fa3',
         },
       },
+      aspectRatio: {
+        '9/8': '1 / 1.125',
+      },
       screens: {
         '2xl': '1400px',
       },

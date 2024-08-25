@@ -39,5 +39,5 @@ useHead({
       <ProductGrid />
     </div>
   </div>
-  <NoProductsFound v-else>Could not fecth products from your store. Please check your configuration.</NoProductsFound>
+  <NoProductsFound v-else>Could not fetch products from your store. Please check your configuration.</NoProductsFound>
 </template>
