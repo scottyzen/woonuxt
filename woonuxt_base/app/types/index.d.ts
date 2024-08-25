@@ -76,3 +76,11 @@ interface WooNuxtSEOItem {
   url?: string;
   handle?: string;
 }
+interface WooNuxtFilter {
+  slug: string;
+  label?: string;
+  hideEmpty: boolean;
+  showCount: boolean;
+  openByDefault: boolean;
+  terms: Terms;
+}
