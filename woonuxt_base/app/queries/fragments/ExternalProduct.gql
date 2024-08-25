@@ -1,0 +1,4 @@
+fragment ExternalProduct on ExternalProduct {
+  externalUrl
+  buttonText
+}

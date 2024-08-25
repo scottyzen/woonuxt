@@ -1,25 +1,13 @@
-<script setup>
+<script setup lang="ts">
 const { getFilter, setFilter, isFiltersActive } = useFiltering();
 
-const props = defineProps({
-  filterSlug: { type: String, default: '', required: true },
-  label: { type: String, default: '' },
-  hideEmpty: { type: Boolean, default: false },
-  showCount: { type: Boolean, default: false },
-  open: { type: Boolean, default: true },
+const { attribute } = defineProps({
+  attribute: { type: Object, required: true },
 });
 
-const TaxonomyEnum = props?.filterSlug.toUpperCase().replace('_', '');
-
-const { data } = await useAsyncGql('getAllTerms', {
-  taxonomies: TaxonomyEnum,
-  hideEmpty: props.hideEmpty,
-});
-
-const allPaTerms = data.value.terms?.nodes || [];
-const selectedTerms = ref(getFilter(props.filterSlug) || []);
-
-const isOpen = ref(props.open);
+const selectedTerms = ref(getFilter(attribute.slug) || []);
+const filterTitle = ref(attribute.label || attribute.slug);
+const isOpen = ref(attribute.openByDefault);
 
 watch(isFiltersActive, () => {
   // uncheck all checkboxes when filters are cleared
@@ -28,17 +16,17 @@ watch(isFiltersActive, () => {
 
 // Update the URL when the checkbox is changed
 const checkboxChanged = () => {
-  setFilter(props.filterSlug, selectedTerms.value);
+  setFilter(attribute.slug, selectedTerms.value);
 };
 </script>
 
 <template>
   <div class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center" @click="isOpen = !isOpen">
-    <span>{{ label || filterSlug }}</span>
+    <span>{{ filterTitle }}</span>
     <Icon name="ion:chevron-down-outline" class="transform" :class="isOpen ? 'rotate-180' : ''" />
   </div>
   <div v-show="isOpen" class="mt-3 mr-6 max-h-[240px] grid gap-1.5 swatches overflow-auto custom-scrollbar">
-    <div v-for="color in allPaTerms" :key="color.slug" :style="{ '--color': color.slug }" :title="color.name">
+    <div v-for="color in attribute.terms" :key="color.slug" :style="{ '--color': color.slug }" :title="color.name">
       <input :id="color.slug" v-model="selectedTerms" class="hidden" type="checkbox" :value="color.slug" @change="checkboxChanged" />
       <label :for="color.slug" class="cursor-pointer m-0"></label>
     </div>

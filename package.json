@@ -13,18 +13,18 @@
   "dependencies": {
     "@stripe/stripe-js": "^4.3.0",
     "@vueform/slider": "^2.1.10",
-    "@vueuse/core": "^11.0.1"
+    "@vueuse/core": "^11.0.3"
   },
   "devDependencies": {
-    "@nuxt/icon": "^1.4.5",
+    "@nuxt/icon": "^1.4.10",
     "@nuxt/image": "1.7.0",
-    "@nuxtjs/i18n": "^8.5.0",
+    "@nuxtjs/i18n": "^8.5.1",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@tailwindcss/typography": "^0.5.14",
-    "nuxt": "^3.12.4",
+    "nuxt": "^3.13.0",
     "nuxt-graphql-client": "^0.2.36",
     "prettier": "^3.3.3",
-    "woonuxt-settings": "^1.0.59"
+    "woonuxt-settings": "^1.0.60"
   },
   "overrides": {
     "sharp": "0.32.6"

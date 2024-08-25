@@ -1,22 +1,19 @@
 <script setup>
+const { getFilter, setFilter, isFiltersActive } = useFiltering();
+
 const props = defineProps({
+  terms: { type: Array, required: true },
   label: { type: String, default: '' },
-  hideEmpty: { type: Boolean, default: false },
+  openByDefault: { type: Boolean, default: true },
   showCount: { type: Boolean, default: false },
-  open: { type: Boolean, default: true },
 });
 
-const { data } = await useAsyncGql('getProductCategories');
-
-const allCategories = data.value?.productCategories?.nodes || [];
-const { getFilter, setFilter, isFiltersActive } = useFiltering();
+const isOpen = ref(props.openByDefault);
 const selectedTerms = ref(getFilter('category') || []);
 
 const route = useRoute();
 const categorySlug = route.params.categorySlug;
 if (categorySlug) selectedTerms.value = [categorySlug];
-
-const isOpen = ref(props.open);
 
 watch(isFiltersActive, () => {
   // uncheck all checkboxes when filters are cleared
@@ -30,17 +27,17 @@ const checkboxChanged = () => {
 </script>
 
 <template>
-  <div v-if="allCategories.length">
+  <div v-if="terms.length">
     <div class="cursor-pointer flex font-semibold mt-8 justify-between items-center" @click="isOpen = !isOpen">
       <span>{{ label || $t('messages.shop.category', 2) }}</span>
       <Icon name="ion:chevron-down-outline" class="transform" :class="isOpen ? 'rotate-180' : ''" />
     </div>
     <div v-show="isOpen" class="mt-3 mr-1 max-h-[240px] grid gap-1.5 overflow-auto custom-scrollbar">
-      <div v-for="color in allCategories" :key="color.slug" class="flex gap-2 items-start">
-        <input :id="color.slug" v-model="selectedTerms" type="checkbox" :value="color.slug" @change="checkboxChanged" />
-        <label :for="color.slug" class="cursor-pointer m-0 text-sm flex-1 leading-tight">
-          <span v-html="color.name" />
-          <span v-if="showCount" class="ml-1 text-gray-400 tabular-nums">({{ color.count || 0 }})</span>
+      <div v-for="term in terms" :key="term.slug" class="flex gap-2 items-start">
+        <input :id="term.slug" v-model="selectedTerms" type="checkbox" :value="term.slug" @change="checkboxChanged" />
+        <label :for="term.slug" class="cursor-pointer m-0 text-sm flex-1 leading-tight">
+          <span v-html="term.name" />
+          <small v-if="showCount" class="ml-1 text-gray-400 tabular-nums" aria-hidden="true">({{ term.count || 0 }})</small>
         </label>
       </div>
     </div>
