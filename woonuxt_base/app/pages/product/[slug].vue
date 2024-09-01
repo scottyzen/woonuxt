@@ -85,7 +85,7 @@ const disabledAddToCart = computed(() => {
 
       <div class="flex flex-col gap-10 md:flex-row md:justify-between lg:gap-24">
         <ProductImageGallery
-          v-if="product.image && type"
+          v-if="product.image"
           class="relative flex-1"
           :main-image="product.image"
           :gallery="product.galleryImages!"
@@ -122,7 +122,7 @@ const disabledAddToCart = computed(() => {
 
           <form @submit.prevent="addToCart(selectProductInput)">
             <AttributeSelections
-              v-if="isVariableProduct && product.attributes && product.variations?.nodes"
+              v-if="isVariableProduct && product.attributes && product.variations"
               class="mt-4 mb-8"
               :attributes="product.attributes.nodes"
               :defaultAttributes="product.defaultAttributes"
