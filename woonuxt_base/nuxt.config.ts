@@ -17,6 +17,7 @@ export default defineNuxtConfig({
 
   experimental: {
     sharedPrerenderData: true,
+    buildCache: true,
     defaults: {
       nuxtLink: {
         prefetch: true,
