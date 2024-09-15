@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { updateItemQuantity, isUpdatingCart } = useCart();
+const { updateItemQuantity, isUpdatingCart, cart } = useCart();
 const { debounce } = useHelpers();
 
 const { item } = defineProps({ item: { type: Object, required: true } });
@@ -14,9 +14,20 @@ const decrementQuantity = () => quantity.value--;
 watch(
   quantity,
   debounce(() => {
-    updateItemQuantity(item.key, quantity.value >= 0 ? quantity.value : 0);
+    if (quantity.value !== "") {
+      updateItemQuantity(item.key, quantity.value);
+    }
   }, 250),
 );
+
+const onFocusOut = () => {
+  if (quantity.value === "") { // If the quantity is empty, set it to the cart item quantity
+    const cartItem = cart.value?.contents?.nodes?.find(node => node.key === item.key);
+    if (cartItem) {
+      quantity.value = cartItem.quantity;
+    }
+  }
+};
 </script>
 
 <template>
@@ -36,6 +47,7 @@ watch(
       min="0"
       :max="productType.stockQuantity"
       aria-label="Quantity"
+      @focusout="onFocusOut"
       class="flex items-center justify-center w-8 px-2 text-right text-xs focus:outline-none border-y border-gray-300" />
     <button
       title="Increase Quantity"
