@@ -17,7 +17,7 @@ const product = ref<Product>(data?.value?.product);
 const quantity = ref<number>(1);
 const activeVariation = ref<Variation | null>(null);
 const variation = ref<VariationAttribute[]>([]);
-const indexOfTypeAny = ref<number[]>([]);
+const indexOfTypeAny = computed<number[]>(() => checkForVariationTypeOfAny(product.value));
 const attrValues = ref();
 const isSimpleProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.SIMPLE);
 const isVariableProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.VARIABLE);
@@ -44,23 +44,24 @@ onMounted(async () => {
     const errorMessage = error?.gqlErrors?.[0].message;
     if (errorMessage) console.error(errorMessage);
   }
-  if (product.value?.variations) indexOfTypeAny.value.push(...checkForVariationTypeOfAny(product.value));
 });
 
 const updateSelectedVariations = (variations: VariationAttribute[]): void => {
   if (!product.value.variations) return;
 
   attrValues.value = variations.map((el) => ({ attributeName: el.name, attributeValue: el.value }));
-  const cloneArray = JSON.parse(JSON.stringify(variations));
+  const clonedVariations = JSON.parse(JSON.stringify(variations));
   const getActiveVariation = product.value.variations?.nodes.filter((variation: any) => {
     // If there is any variation of type ANY set the value to ''
     if (variation.attributes) {
-      indexOfTypeAny.value.forEach((index) => (cloneArray[index].value = ''));
-      return arraysEqual(formatArray(variation.attributes.nodes), formatArray(cloneArray));
+      // Set the value of the variation of type ANY to ''
+      indexOfTypeAny.value.forEach((index) => (clonedVariations[index].value = ''));
+
+      return arraysEqual(formatArray(variation.attributes.nodes), formatArray(clonedVariations));
     }
   });
 
-  activeVariation.value = getActiveVariation[0];
+  if (getActiveVariation[0]) activeVariation.value = getActiveVariation[0];
   selectProductInput.value.variationId = activeVariation.value?.databaseId ?? null;
   selectProductInput.value.variation = activeVariation.value ? attrValues.value : null;
   variation.value = variations;

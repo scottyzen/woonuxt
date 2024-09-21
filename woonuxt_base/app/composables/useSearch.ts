@@ -1,12 +1,11 @@
 // Example: ?search=shirt
-
 export function useSearching() {
-  const isShowingSearch = useState<boolean>('isShowingSearch', () => false);
   const route = useRoute();
   const router = useRouter();
-  const { updateProductList } = useProducts();
 
+  const isShowingSearch = useState<boolean>('isShowingSearch', () => false);
   const searchQuery = useState<string>('searchQuery', () => '');
+  const isSearchActive = computed<boolean>(() => !!searchQuery.value);
 
   searchQuery.value = route.query.search as string;
 
@@ -15,6 +14,7 @@ export function useSearching() {
   }
 
   function setSearchQuery(search: string): void {
+    const { updateProductList } = useProducts();
     searchQuery.value = search;
     router.push({ query: { ...route.query, search: search || undefined } });
     setTimeout(() => {
@@ -26,9 +26,7 @@ export function useSearching() {
     setSearchQuery('');
   }
 
-  const isSearchActive = computed<boolean>(() => !!searchQuery.value);
-
-  const toggleSearch = () => {
+  const toggleSearch = (): void => {
     isShowingSearch.value = !isShowingSearch.value;
   };
 

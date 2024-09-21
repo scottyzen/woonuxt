@@ -21,6 +21,7 @@ interface ProductAttributeInput {
   attributeName: string;
   attributeValue: string;
 }
+
 interface PaymentGateways {
   nodes: PaymentGateway[];
 }
@@ -77,6 +78,7 @@ interface WooNuxtSEOItem {
   url?: string;
   handle?: string;
 }
+
 interface WooNuxtFilter {
   slug: string;
   label?: string;

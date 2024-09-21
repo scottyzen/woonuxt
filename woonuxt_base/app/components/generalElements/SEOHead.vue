@@ -8,11 +8,18 @@ const canonical = `${frontEndUrl}${path}`;
 const siteName = process.env.SITE_TITLE ?? 'WooNuxt';
 
 const img = useImage();
-const imagePrefix = isDev ? '' : frontEndUrl;
 const imageURL = info.image?.sourceUrl ?? '/images/placeholder.jpg';
-const defaultImage = imagePrefix + img.getSizes(imageURL, { width: 1200, height: 630 }).src;
-const twitterImageSrc = imagePrefix + img.getSizes(imageURL, { width: 1600, height: 900 }).src;
-const description = info.shortDescription || info.description ? stripHtml(info.shortDescription) : stripHtml(info.description);
+const defaultImageSrc = img.getSizes(imageURL, { width: 1200, height: 630 }).src;
+const twitterImageSrc = img.getSizes(imageURL, { width: 1600, height: 900 }).src;
+
+const getFullImageURL = (url: string) => {
+  if (url.startsWith('http')) return url;
+  return `${frontEndUrl}${url}`;
+};
+
+const defaultImage = getFullImageURL(defaultImageSrc);
+const twitterImage = getFullImageURL(twitterImageSrc);
+const description = info.shortDescription || info.description ? stripHtml(info.shortDescription || '') : stripHtml(info.description || '');
 
 const facebook = wooNuxtSEO?.find((item) => item.provider === 'facebook') ?? null;
 const twitter = wooNuxtSEO?.find((item) => item.provider === 'twitter') ?? null;
@@ -33,7 +40,7 @@ const twitter = wooNuxtSEO?.find((item) => item.provider === 'twitter') ?? null;
     <Meta v-if="twitter?.handle" name="twitter:site" hid="twitter:site" :content="twitter.handle" />
     <Meta v-if="info.name" name="twitter:title" hid="twitter:title" :content="info.name" />
     <Meta v-if="description" name="twitter:description" hid="twitter:description" :content="description" />
-    <Meta name="twitter:image" hid="twitter:image" :content="twitterImageSrc" />
+    <Meta name="twitter:image" hid="twitter:image" :content="twitterImage" />
     <Meta name="twitter:url" hid="twitter:url" :content="canonical" />
     <Link rel="canonical" hid="canonical" :href="canonical" />
   </Head>
