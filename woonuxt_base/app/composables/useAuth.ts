@@ -63,7 +63,6 @@ export const useAuth = () => {
         clearAllCookies();
         viewer.value = null;
         customer.value = { billing: {}, shipping: {} };
-        router.push('/my-account');
       }
       return { success: true, error: null };
     } catch (error) {
@@ -71,6 +70,7 @@ export const useAuth = () => {
       return { success: false, error };
     } finally {
       isPending.value = false;
+      router.push('/my-account');
     }
   };
 
