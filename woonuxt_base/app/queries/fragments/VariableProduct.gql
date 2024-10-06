@@ -32,6 +32,7 @@ fragment VariableProduct on VariableProduct {
   variations(first: 100) {
     nodes {
       name
+      description
       databaseId
       price
       regularPrice
