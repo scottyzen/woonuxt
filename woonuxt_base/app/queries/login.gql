@@ -1,5 +1,8 @@
 mutation login($username: String!, $password: String!) {
-  loginWithCookies(input: { login: $username, password: $password, rememberMe: true }) {
-    status
+  login(input: { provider: PASSWORD, credentials: { username: $username, password: $password } }) {
+    authToken
+    authTokenExpiration
+    refreshToken
+    wooSessionToken
   }
 }
