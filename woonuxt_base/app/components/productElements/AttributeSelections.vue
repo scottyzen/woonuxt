@@ -2,9 +2,10 @@
 interface Props {
   attributes: any[];
   defaultAttributes?: { nodes: VariationAttribute[] };
+  variations?: any[];
 }
 
-const { attributes, defaultAttributes } = defineProps<Props>();
+const { attributes, defaultAttributes, variations } = defineProps<Props>();
 const emit = defineEmits(['attrs-changed']);
 
 const activeVariations = ref<VariationAttribute[]>([]);
@@ -12,6 +13,16 @@ const activeVariations = ref<VariationAttribute[]>([]);
 const getSelectedName = (attr: any, activeVariation: VariationAttribute) => {
   if (attr?.terms?.nodes) {
     return attr.terms.nodes.find((node: { slug: string }) => node.slug === activeVariation.value)?.name;
+  }
+
+  return activeVariation.value || '';
+};
+
+const getSelectedDescription = (activeVariation: VariationAttribute) => {
+  if (variations.length) {
+    return variations.find(node => {
+      return node.attributes?.nodes?.length && node.attributes.nodes[0].value === activeVariation.value;
+    })?.description;
   }
 
   return activeVariation.value || '';
@@ -75,6 +86,10 @@ onBeforeMount(() => {
             </label>
           </span>
         </div>
+        <div 
+          v-if="variations && activeVariations.length" 
+          class="flex gap-2 text-base text-gray-500" 
+          v-html="getSelectedDescription(activeVariations[i])" />
       </div>
 
       <!-- COLOR SWATCHES -->
@@ -102,6 +117,10 @@ onBeforeMount(() => {
             </Tooltip>
           </span>
         </div>
+        <div 
+          v-if="variations && activeVariations.length" 
+          class="flex gap-2 text-base text-gray-500" 
+          v-html="getSelectedDescription(activeVariations[i])" />
       </div>
 
       <!-- DROPDOWN -->
@@ -113,6 +132,10 @@ onBeforeMount(() => {
           <option disabled hidden>{{ $t('messages.general.choose') }} {{ decodeURIComponent(attr.label) }}</option>
           <option v-for="(term, dropdownIndex) in attr.terms.nodes" :key="dropdownIndex" :value="term.slug" v-html="term.name" :selected="dropdownIndex == 0" />
         </select>
+        <div 
+          v-if="variations && activeVariations.length" 
+          class="flex gap-2 text-base text-gray-500" 
+          v-html="getSelectedDescription(activeVariations[i])" />
       </div>
 
       <!-- CHECKBOXES -->
@@ -137,6 +160,10 @@ onBeforeMount(() => {
             </label>
           </span>
         </div>
+        <div 
+          v-if="variations && activeVariations.length" 
+          class="flex gap-2 text-base text-gray-500" 
+          v-html="getSelectedDescription(activeVariations[i])" />
       </div>
     </div>
   </div>
