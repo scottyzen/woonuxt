@@ -11,17 +11,17 @@
     "serve": "nuxi generate && npx serve .output/public -l 8080"
   },
   "dependencies": {
-    "@stripe/stripe-js": "^4.8.0",
+    "@stripe/stripe-js": "^4.9.0",
     "@vueform/slider": "^2.1.10",
-    "@vueuse/core": "^11.1.0"
+    "@vueuse/core": "^11.2.0"
   },
   "devDependencies": {
-    "@nuxt/icon": "^1.5.6",
+    "@nuxt/icon": "^1.6.1",
     "@nuxt/image": "1.8.1",
     "@nuxtjs/i18n": "^8.5.5",
     "@nuxtjs/tailwindcss": "^6.12.2",
     "@tailwindcss/typography": "^0.5.15",
-    "nuxt": "^3.13.2",
+    "nuxt": "^3.14.0",
     "nuxt-graphql-client": "^0.2.36",
     "prettier": "^3.3.3",
     "woonuxt-settings": "^1.0.61"
