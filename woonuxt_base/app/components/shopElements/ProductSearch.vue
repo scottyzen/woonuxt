@@ -16,6 +16,7 @@ watch(getSearchQuery, (value) => {
   <form class="relative items-center flex-1 -space-x-px rounded-md shadow-sm" @submit.prevent="setSearchQuery(searchQuery)">
     <Icon name="ion:search-outline" size="20" class="absolute z-10 opacity-50 pointer-events-none left-2" />
     <input
+      id="product-search-input"
       v-model="searchQuery"
       type="text"
       :placeholder="$t('messages.shop.searchProducts')"
