@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-const { logoutUser, viewer, customer, avatar, isPending } = useAuth();
+const { logoutUser, viewer, avatar, isPending } = useAuth();
 const { cart } = useCart();
 const route = useRoute();
 
 const activeTab = computed(() => route.query.tab || 'my-details');
-const showLoader = computed(() => !cart.value);
+const showLoader = computed(() => !cart.value && !viewer);
 
 useSeoMeta({
   title: `My Account`,
