@@ -89,16 +89,19 @@ export const useAuth = () => {
       if (logout) {
         await refreshCart();
         clearAllCookies();
-        viewer.value = null;
         customer.value = { billing: {}, shipping: {} };
       }
       return { success: true, error: null };
-    } catch (error) {
+    } catch (error: any) {
       logGQLError(error);
       return { success: false, error };
     } finally {
-      isPending.value = false;
-      router.push('/my-account');
+      updateViewer(null);
+      if (router.currentRoute.value.path === '/my-account' && viewer.value === null) {
+        router.push('/my-account');
+      } else {
+        router.push('/');
+      }
     }
   };
 
@@ -128,7 +131,7 @@ export const useAuth = () => {
     isPending.value = false;
   };
 
-  const updateViewer = (payload: Viewer): void => {
+  const updateViewer = (payload: Viewer | null): void => {
     viewer.value = payload;
     isPending.value = false;
   };
