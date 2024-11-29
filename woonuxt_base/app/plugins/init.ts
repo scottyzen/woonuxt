@@ -1,8 +1,8 @@
 export default defineNuxtPlugin(async (nuxtApp) => {
   if (!import.meta.env.SSR) {
     const { storeSettings } = useAppConfig();
-    const { clearAllCookies, clearAllLocalStorage } = useHelpers();
-    const sessionToken = useCookie('woocommerce-session');
+    const { clearAllCookies, clearAllLocalStorage, getDomain } = useHelpers();
+    const sessionToken = useCookie('woocommerce-session', { domain: getDomain(window.location.href) });
     if (sessionToken.value) useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken.value}` });
 
     // Wait for the user to interact with the page before refreshing the cart, this is helpful to prevent excessive requests to the server
