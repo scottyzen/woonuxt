@@ -16,7 +16,7 @@
     "@vueuse/core": "^12.0.0"
   },
   "devDependencies": {
-    "@nuxt/icon": "^1.10.0",
+    "@nuxt/icon": "^1.10.2",
     "@nuxt/image": "1.8.1",
     "@nuxtjs/i18n": "^8.5.5",
     "@nuxtjs/tailwindcss": "^6.12.2",
