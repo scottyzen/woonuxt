@@ -36,7 +36,7 @@ interface Variation {
   stockStatus?: StockStatusEnum | null;
   hasAttributes?: boolean | null;
   image?: ProductImage | null;
-  attributes?: { nodes: VariationAttribute[] } | null;
+  attributes?: { nodes?: VariationAttribute[] } | null;
   node?: SimpleProduct | VariableProduct;
 }
 
