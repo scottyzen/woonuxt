@@ -13,15 +13,15 @@
   "dependencies": {
     "@stripe/stripe-js": "^4.10.0",
     "@vueform/slider": "^2.1.10",
-    "@vueuse/core": "^12.0.0"
+    "@vueuse/core": "^12.2.0"
   },
   "devDependencies": {
-    "@nuxt/icon": "^1.10.2",
+    "@nuxt/icon": "^1.10.3",
     "@nuxt/image": "1.8.1",
     "@nuxtjs/i18n": "^8.5.5",
     "@nuxtjs/tailwindcss": "^6.12.2",
     "@tailwindcss/typography": "^0.5.15",
-    "nuxt": "^3.14.1592",
+    "nuxt": "^3.15.0",
     "nuxt-graphql-client": "^0.2.43",
     "prettier": "^3.4.2",
     "woonuxt-settings": "^1.0.61"
