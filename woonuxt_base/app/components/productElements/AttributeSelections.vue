@@ -1,7 +1,7 @@
 <script setup lang="ts">
 interface Props {
   attributes: any[];
-  defaultAttributes?: { nodes: VariationAttribute[] };
+  defaultAttributes?: { nodes: VariationAttribute[] } | null;
 }
 
 const { attributes, defaultAttributes } = defineProps<Props>();
@@ -9,12 +9,12 @@ const emit = defineEmits(['attrs-changed']);
 
 const activeVariations = ref<VariationAttribute[]>([]);
 
-const getSelectedName = (attr: any, activeVariation: VariationAttribute) => {
-  if (attr?.terms?.nodes) {
+const getSelectedName = (attr: any, activeVariation?: VariationAttribute) => {
+  if (attr?.terms?.nodes && activeVariation) {
     return attr.terms.nodes.find((node: { slug: string }) => node.slug === activeVariation.value)?.name;
   }
 
-  return activeVariation.value || '';
+  return activeVariation?.value || '';
 };
 
 const updateAttrs = () => {
