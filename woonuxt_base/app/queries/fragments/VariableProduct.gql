@@ -36,6 +36,7 @@ fragment VariableProduct on VariableProduct {
       price
       regularPrice
       salePrice
+      rawSalePrice: salePrice(format: RAW)
       slug
       stockQuantity
       stockStatus

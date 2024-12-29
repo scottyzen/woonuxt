@@ -4,7 +4,7 @@ const { FALLBACK_IMG } = useHelpers();
 const props = defineProps({
   mainImage: { type: Object, required: true },
   gallery: { type: Object, required: true },
-  node: { type: Object as PropType<Product>, required: true },
+  node: { type: Object as PropType<Product | Variation>, required: true },
   activeVariation: { type: Object, required: false },
 });
 
