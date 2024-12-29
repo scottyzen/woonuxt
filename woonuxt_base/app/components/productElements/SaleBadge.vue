@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { t } = useI18n();
 const { node } = defineProps({
-  node: { type: Object as PropType<Product>, required: true },
+  node: { type: Object, required: true },
 });
 
 const { storeSettings } = useAppConfig();
