@@ -4,7 +4,7 @@ const { cart } = useCart();
 const route = useRoute();
 
 const activeTab = computed(() => route.query.tab || 'my-details');
-const showLoader = computed(() => !cart.value && !viewer);
+const showLoader = computed(() => !cart.value && !viewer.value);
 
 useSeoMeta({
   title: `My Account`,
