@@ -1,5 +1,4 @@
-import { GqlLogin, GqlLogout, GqlRegisterCustomer, GqlResetPasswordEmail, GqlGetOrders } from '#gql';
-import type { RegisterCustomerInput, CreateAccountInput } from '#gql';
+import type { RegisterCustomerInput, CreateAccountInput, ResetPasswordKeyMutationVariables } from '#gql';
 
 export const useAuth = () => {
   const { refreshCart } = useCart();

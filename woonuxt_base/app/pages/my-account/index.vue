@@ -27,7 +27,7 @@ useSeoMeta({
               <span v-if="viewer?.email" class="text-gray-400 font-light" :title="viewer?.email">{{ viewer?.email }}</span>
             </div>
             <button class="flex text-gray-700 items-center flex-col p-2 px-4 rounded-lg hover:bg-white hover:text-red-700 lg:hidden" @click="logoutUser">
-              <LoadingIcon v-if="isPending" size="22" />
+              <LoadingIcon v-if="isPending" size="22" color="#B91C1B" />
               <Icon v-else name="ion:log-out-outline" size="22" />
               <small>{{ $t('messages.account.logout') }}</small>
             </button>
