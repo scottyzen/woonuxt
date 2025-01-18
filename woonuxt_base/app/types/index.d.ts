@@ -86,3 +86,9 @@ interface WooNuxtFilter {
   openByDefault: boolean;
   terms: Terms;
 }
+
+interface UserInfo {
+  email: string;
+  password: string;
+  username: string;
+}
