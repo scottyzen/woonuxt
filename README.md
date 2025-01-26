@@ -64,11 +64,12 @@ And here is the live demo of the customized WooNuxt site: [My Shop](https://mysh
 
 ### Required WordPress Plugins
 
-| Plugin Name                                                   | Description                              |
-| ------------------------------------------------------------- | ---------------------------------------- |
-| [WPGraphQL](https://www.wpgraphql.com/)                       | A free, open-source plugin for WordPress |
-| [WooGraphQL](https://woographql.com/)                         | GraphQL API for WooCommerce              |
-| [WPGraphQL Cors](https://github.com/funkhaus/wp-graphql-cors) | Enable CORS for WPGraphQL                |
+| Plugin Name                                                                        | Description                              |
+| ---------------------------------------------------------------------------------- | ---------------------------------------- |
+| [WPGraphQL](https://www.wpgraphql.com/)                                            | A free, open-source plugin for WordPress |
+| [WooGraphQL](https://woographql.com/)                                              | GraphQL API for WooCommerce              |
+| ~~[WPGraphQL Cors](https://github.com/funkhaus/wp-graphql-cors)~~                  | ~~Enable CORS for WPGraphQL~~            |
+| [Headless Login for WPGraphQL](https://github.com/AxeWP/wp-graphql-headless-login) | Enable headless login for WPGraphQL      |
 
 > **Note** The the [woonuxt-settings.zip](https://github.com/scottyzen/woonuxt-settings/releases) plugin will help you install all the required plugins. WooGraphQL 0.13.0 and up is required to get the list of available countries and states. You can find the latest version of WooGraphQL [here](https://github.com/wp-graphql/wp-graphql-woocommerce/releases).
 
@@ -90,15 +91,16 @@ And here is the live demo of the customized WooNuxt site: [My Shop](https://mysh
 
 #### Tested up to:
 
-| Plugin/Software | Version |
-| --------------- | ------- |
-| WordPress       | 6.6.1   |
-| WooCommerce     | 9.2.1   |
-| WPGraphQL       | 1.28.1  |
-| WooGraphQL      | 0.21.0  |
-| WPGraphQL CORS  | 2.1     |
-| Node            | 20.16.0 |
-| PHP             | 8.2     |
+| Plugin/Software              | Version |
+| ---------------------------- | ------- |
+| WordPress                    | 6.7.1   |
+| WooCommerce                  | 9.3.3   |
+| WPGraphQL                    | 1.28.1  |
+| WooGraphQL                   | 0.21.0  |
+| ~~WPGraphQL CORS~~           | ~~2.1~~ |
+| Headless Login for WPGraphQL | v0.4.0  |
+| Node                         | 20.16.0 |
+| PHP                          | 8.2     |
 
 ### Current translations
 
