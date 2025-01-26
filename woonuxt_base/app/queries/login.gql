@@ -1,5 +1,29 @@
 mutation login($username: String!, $password: String!) {
-  loginWithCookies(input: { login: $username, password: $password, rememberMe: true }) {
-    status
+  login(
+    input: {
+      provider: PASSWORD # This tells the mutation to use the WordPress username/password authentication method.
+      credentials: {
+        # This is the input required for the PASSWORD provider.
+        username: $username
+        password: $password
+      }
+    }
+  ) {
+    authToken
+    authTokenExpiration
+    refreshToken
+    refreshTokenExpiration
+    user {
+      name
+      username
+    }
+    # The following fields are available if WPGraphQL for WooCommerce is installed.
+    sessionToken
+    customer {
+      databaseId
+      username
+      firstName
+      lastName
+    }
   }
 }

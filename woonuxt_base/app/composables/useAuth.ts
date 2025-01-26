@@ -16,17 +16,10 @@ export const useAuth = () => {
     isPending.value = true;
 
     try {
-      const { loginWithCookies } = await GqlLogin(credentials);
-
-      if (loginWithCookies?.status === 'SUCCESS') {
+      const { login } = await GqlLogin(credentials);
+      if (login?.user && login?.authToken) {
+        useGqlToken(login.authToken);
         await refreshCart();
-        if (viewer === null) {
-          return {
-            success: false,
-            error:
-              'Your credentials are correct, but there was an error logging in. This is most likely due to an SSL error. Please try again later. If the problem persists, please contact support.',
-          };
-        }
       }
 
       return {
