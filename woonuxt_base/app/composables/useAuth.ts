@@ -1,4 +1,4 @@
-import type { RegisterCustomerInput, CreateAccountInput, ResetPasswordKeyMutationVariables } from '#gql';
+import type { RegisterCustomerInput, CreateAccountInput, ResetPasswordKeyMutationVariables, ResetPasswordEmailMutationVariables } from '#gql';
 
 export const useAuth = () => {
   const { refreshCart } = useCart();
@@ -62,7 +62,6 @@ export const useAuth = () => {
     }
   };
 
-  // Register the user
   const registerUser = async (userInfo: RegisterCustomerInput): Promise<{ success: boolean; error: any }> => {
     isPending.value = true;
     try {
@@ -93,10 +92,10 @@ export const useAuth = () => {
     isPending.value = false;
   };
 
-  const sendResetPasswordEmail = async (email: string): Promise<{ success: boolean; error: any }> => {
+  const sendResetPasswordEmail = async ({ username }: ResetPasswordEmailMutationVariables): Promise<{ success: boolean; error: any }> => {
     try {
       isPending.value = true;
-      const { sendPasswordResetEmail } = await GqlResetPasswordEmail({ username: email });
+      const { sendPasswordResetEmail } = await GqlResetPasswordEmail({ username });
       if (sendPasswordResetEmail?.success) {
         isPending.value = false;
         return { success: true, error: null };
@@ -110,15 +109,7 @@ export const useAuth = () => {
     }
   };
 
-  const resetPasswordWithKey = async ({
-    key,
-    login,
-    password,
-  }: {
-    key: string;
-    login: string;
-    password: string;
-  }): Promise<{ success: boolean; error: any }> => {
+  const resetPasswordWithKey = async ({ key, login, password }: ResetPasswordKeyMutationVariables): Promise<{ success: boolean; error: any }> => {
     try {
       isPending.value = true;
       const { resetUserPassword } = await GqlResetPasswordKey({ key, login, password });

@@ -119,7 +119,7 @@ const handleFormSubmit = async (userInfo: UserInfo) => {
 };
 
 const resetPassword = async (userInfo: UserInfo) => {
-  const { success, error } = await sendResetPasswordEmail(userInfo.email);
+  const { success, error } = await sendResetPasswordEmail({ username: userInfo.email });
   if (success) {
     errorMessage.value = '';
     message.value = t('messages.account.ifRegistered');
