@@ -1,55 +1,80 @@
 <script setup lang="ts">
 import { loadStripe } from '@stripe/stripe-js';
-import type { Stripe, StripeElements, CreateSourceData, StripeCardElement } from '@stripe/stripe-js';
+import type { Stripe, StripeElements } from '@stripe/stripe-js';
+import { CheckoutInlineError } from '../types/CheckoutInlineError';
 
 const { t } = useI18n();
 const { query } = useRoute();
 const { cart, isUpdatingCart, paymentGateways } = useCart();
 const { customer, viewer } = useAuth();
-const { orderInput, isProcessingOrder, proccessCheckout } = useCheckout();
+const { orderInput, isProcessingOrder, proccessCheckout, stripeCheckout, errorMessage, validateStripePaymentFromRedirect } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
-const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
 
-const buttonText = ref<string>(isProcessingOrder.value ? t('messages.general.processing') : t('messages.shop.checkoutButton'));
-const isCheckoutDisabled = computed<boolean>(() => isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod);
+const isCheckoutDisabled = computed<boolean>(
+  () =>
+    isProcessingOrder.value ||
+    isUpdatingCart.value ||
+    !orderInput.value.paymentMethod ||
+    (orderInput.value.paymentMethod.id === 'stripe' && !stripeElementsLoaded.value)
+);
 
 const isInvalidEmail = ref<boolean>(false);
-const stripe: Stripe | null = stripeKey ? await loadStripe(stripeKey) : null;
-const elements = ref();
-const isPaid = ref<boolean>(false);
+
+const stripe = ref<Stripe | null>(null);
+const elements = ref<StripeElements | null>(null);
+const stripeElementsLoaded = ref<boolean>(false);
 
 onBeforeMount(async () => {
   if (query.cancel_order) window.close();
+  await initStripe();
+  await checkSetupIntentStatusFromRedirect();
 });
 
-const payNow = async () => {
-  buttonText.value = t('messages.general.processing');
-
-  const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
-  const clientSecret = stripePaymentIntent?.clientSecret || '';
-
-  try {
-    if (orderInput.value.paymentMethod.id === 'stripe' && stripe && elements.value) {
-      const cardElement = elements.value.getElement('card') as StripeCardElement;
-      const { setupIntent } = await stripe.confirmCardSetup(clientSecret, { payment_method: { card: cardElement } });
-      const { source } = await stripe.createSource(cardElement as CreateSourceData);
-
-      if (source) orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
-      if (setupIntent) orderInput.value.metaData.push({ key: '_stripe_intent_id', value: setupIntent.id });
-
-      isPaid.value = setupIntent?.status === 'succeeded' || false;
-      orderInput.value.transactionId = source?.created?.toString() || new Date().getTime().toString();
-    }
-  } catch (error) {
-    console.error(error);
-    buttonText.value = t('messages.shop.placeOrder');
+const initStripe = async () => {
+  const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY;
+  if (stripeKey) {
+    stripe.value = await loadStripe(stripeKey);
   }
-
-  proccessCheckout(isPaid.value);
 };
 
 const handleStripeElement = (stripeElements: StripeElements): void => {
   elements.value = stripeElements;
+
+  // Wait for stripe elements to load
+  stripeElements.getElement('payment')?.on('ready', () => (stripeElementsLoaded.value = true));
+  stripeElements.getElement('card')?.on('ready', () => (stripeElementsLoaded.value = true));
+};
+
+const payNow = async () => {
+  if (isProcessingOrder.value) return;
+  errorMessage.value = null;
+
+  try {
+    isProcessingOrder.value = true;
+
+    if (orderInput.value.paymentMethod.id === 'stripe') {
+      if (!stripe.value || !elements.value || !stripeElementsLoaded) throw new Error('Stripe not ready!');
+      await stripeCheckout(stripe.value, elements.value);
+    } else {
+      await proccessCheckout(false);
+    }
+  } catch (error) {
+    console.error(error);
+    isProcessingOrder.value = false;
+
+    if (error instanceof CheckoutInlineError) {
+      errorMessage.value = error.message;
+    } else {
+      alert(error);
+    }
+  }
+};
+
+const checkSetupIntentStatusFromRedirect = async () => {
+  const clientSecret = query.payment_intent_client_secret as string;
+  const redirectStatus = query.redirect_status as string;
+  if (!stripe.value || !clientSecret || !redirectStatus) return;
+  await validateStripePaymentFromRedirect(stripe.value, clientSecret, redirectStatus);
 };
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -163,10 +188,14 @@ useSeoMeta({
         </div>
 
         <OrderSummary>
+          <Transition name="scale-y" mode="out-in">
+            <div v-if="errorMessage" class="text-red-600 my-2">{{ errorMessage }}</div>
+          </Transition>
           <button
             class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary hover:bg-primary-dark disabled:cursor-not-allowed disabled:bg-gray-400"
             :disabled="isCheckoutDisabled">
-            {{ buttonText }}<LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
+            {{ isProcessingOrder ? t('messages.general.processing') : t('messages.shop.checkoutButton') }}
+            <LoadingIcon v-if="isProcessingOrder" color="#fff" size="18" />
           </button>
         </OrderSummary>
       </form>
