@@ -84,7 +84,7 @@ const updateFormView = () => {
 };
 watch(route, updateFormView, { immediate: true });
 
-const login = async (userInfo) => {
+const login = async (userInfo: UserInfo) => {
   const { success, error } = await loginUser(userInfo);
   switch (error) {
     case 'invalid_username':
@@ -104,7 +104,7 @@ const login = async (userInfo) => {
   }
 };
 
-const handleFormSubmit = async (userInfo) => {
+const handleFormSubmit = async (userInfo: UserInfo) => {
   if (formView.value === 'register') {
     const { success, error } = await registerUser(userInfo);
     if (success) {
@@ -123,8 +123,8 @@ const handleFormSubmit = async (userInfo) => {
   }
 };
 
-const resetPassword = async (userInfo) => {
-  const { success, error } = await sendResetPasswordEmail(userInfo.email);
+const resetPassword = async (userInfo: UserInfo) => {
+  const { success, error } = await sendResetPasswordEmail({ username: userInfo.email });
   if (success) {
     errorMessage.value = '';
     message.value = t('messages.account.ifRegistered');

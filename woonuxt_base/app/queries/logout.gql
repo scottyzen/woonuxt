@@ -1,5 +1,5 @@
 mutation Logout {
-  logout(input: {}) {
+  logout(input: { clientMutationId: "" }) {
     success
   }
 }

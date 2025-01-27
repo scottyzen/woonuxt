@@ -1,5 +1,4 @@
-import { GqlLogin, GqlLogout, GqlRegisterCustomer, GqlResetPasswordEmail, GqlGetOrders,  } from '#gql';
-import type { RegisterCustomerInput, CreateAccountInput, LoginInput } from '#gql';
+import type { RegisterCustomerInput, CreateAccountInput, ResetPasswordKeyMutationVariables, ResetPasswordEmailMutationVariables } from '#gql';
 
 export const useAuth = () => {
   const { refreshCart } = useCart();
@@ -19,16 +18,9 @@ export const useAuth = () => {
 
     try {
       const { login } = await GqlLogin(credentials);
-
-      if (login?.authToken !== null) {
+      if (login?.user && login?.authToken) {
+        useGqlToken(login.authToken);
         await refreshCart();
-        if (viewer === null) {
-          return {
-            success: false,
-            error:
-              'Your credentials are correct, but there was an error logging in. This is most likely due to an SSL error. Please try again later. If the problem persists, please contact support.',
-          };
-        }
       }
 
       isPending.value = false;
@@ -105,7 +97,6 @@ export const useAuth = () => {
     }
   };
 
-  // Register the user
   const registerUser = async (userInfo: RegisterCustomerInput): Promise<{ success: boolean; error: any }> => {
     isPending.value = true;
     try {
@@ -136,10 +127,10 @@ export const useAuth = () => {
     isPending.value = false;
   };
 
-  const sendResetPasswordEmail = async (email: string): Promise<{ success: boolean; error: any }> => {
+  const sendResetPasswordEmail = async ({ username }: ResetPasswordEmailMutationVariables): Promise<{ success: boolean; error: any }> => {
     try {
       isPending.value = true;
-      const { sendPasswordResetEmail } = await GqlResetPasswordEmail({ username: email });
+      const { sendPasswordResetEmail } = await GqlResetPasswordEmail({ username });
       if (sendPasswordResetEmail?.success) {
         isPending.value = false;
         return { success: true, error: null };
@@ -153,15 +144,7 @@ export const useAuth = () => {
     }
   };
 
-  const resetPasswordWithKey = async ({
-    key,
-    login,
-    password,
-  }: {
-    key: string;
-    login: string;
-    password: string;
-  }): Promise<{ success: boolean; error: any }> => {
+  const resetPasswordWithKey = async ({ key, login, password }: ResetPasswordKeyMutationVariables): Promise<{ success: boolean; error: any }> => {
     try {
       isPending.value = true;
       const { resetUserPassword } = await GqlResetPasswordKey({ key, login, password });
