@@ -97,18 +97,14 @@ export function useCheckout() {
       // PayPal redirect
       if ((await checkout?.redirect) && isPayPal) {
         const frontEndUrl = window.location.origin;
-        console.warn('[useCheckout.ts] proccessCheckout -> frontEndUrl', frontEndUrl);
         let redirectUrl = checkout?.redirect ?? '';
-        console.warn('[useCheckout.ts] proccessCheckout -> redirectUrl', redirectUrl);
         const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}&from_paypal=true`;
-        console.warn("[useCheckout.ts] proccessCheckout -> payPalReturnUrl", payPalReturnUrl);
         const payPalCancelUrl = `${frontEndUrl}/checkout/?cancel_order=true&from_paypal=true`;
-        console.warn("[useCheckout.ts] proccessCheckout -> payPalCancelUrl", payPalCancelUrl);
 
         redirectUrl = replaceQueryParam('return', payPalReturnUrl, redirectUrl);
         redirectUrl = replaceQueryParam('cancel_return', payPalCancelUrl, redirectUrl);
         redirectUrl = replaceQueryParam('bn', 'WooNuxt_Cart', redirectUrl);
-        console.warn('[useCheckout.ts] proccessCheckout -> redirectUrl', redirectUrl);
+        
         const isPayPalWindowClosed = await openPayPalWindow(redirectUrl);
 
         if (isPayPalWindowClosed) {
