@@ -1,8 +1,8 @@
 <template>
   <div class="relative mx-auto">
     <NuxtImg
-      width="2000"
-      height="1143"
+      width="1920"
+      height="900"
       class="object-cover w-full h-[420px] lg:h-[560px] xl:h-[640px]"
       src="/images/inline-skates-canada.jpg"
       alt="ProSkaters Place Inline Skates Canada Retailer"
@@ -19,10 +19,10 @@
       <h1 class="text-3xl font-bold md:mb-4 md:text-4xl lg:text-6xl">
         ProSkatersPlace.ca
       </h1>
-      <h2 class="text-lg font-bold md:mb-4 lg:text-3xl">
+      <h2 class="text-lg font-bold max-w-md mb-6 lg:text-3xl">
         Canada's Premier Destination for Inline Skates, Roller Skates, and More!
       </h2>
-      <div class="max-w-sm mb-8 text-md font-light lg:max-w-md text-balance">
+      <div class="max-w-lg mb-8 text-md font-light lg:max-w-lg text-balance">
         <p>
           Experience the thrill of gliding on wheels or carving through snow
           with ProSkaters Place, Canada's top online retailer for all your

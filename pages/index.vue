@@ -7,7 +7,7 @@ const productCategories = data.value?.productCategories?.nodes || [];
 
 const { data: productData } = await useAsyncGql("getProducts", {
   first: 5,
-  orderby: ProductsOrderByEnum.PRICE,
+  orderby: ProductsOrderByEnum.ON_SALE_TO,
 });
 const popularProducts = productData.value.products?.nodes || [];
 
@@ -24,7 +24,7 @@ useSeoMeta({
 <template>
   <main>
     <HeroBanner />
-
+    <!-- Brands -->
     <div
       class="container flex flex-wrap items-center justify-center my-16 text-center gap-x-8 gap-y-4 brand lg:justify-between"
     >
@@ -98,7 +98,7 @@ useSeoMeta({
         />
         <div>
           <h3 class="text-xl font-semibold">Free Shipping</h3>
-          <p class="text-sm">Free shipping on order over €50</p>
+          <p class="text-sm">Free shipping on order over $99</p>
         </div>
       </div>
       <div class="flex items-center gap-8 p-8 bg-white rounded-lg">
@@ -144,9 +144,7 @@ useSeoMeta({
 
     <section class="container my-16" v-if="popularProducts">
       <div class="flex items-end justify-between">
-        <h2 class="text-lg font-semibold md:text-2xl">
-          {{ $t("messages.shop.popularProducts") }}
-        </h2>
+        <h2 class="text-lg font-semibold md:text-2xl">Sales Running Out</h2>
         <NuxtLink class="text-primary" to="/products">{{
           $t("messages.general.viewAll")
         }}</NuxtLink>

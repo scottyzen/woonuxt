@@ -4,13 +4,14 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev --host",
-    "dev:ssl": "NODE_TLS_REJECT_UNAUTHORIZED=0 nuxt dev --https --ssl-cert localhost.pem --ssl-key localhost-key.pem",
+    "dev:ssl": "nuxt dev --https --ssl-cert localhost.pem --ssl-key localhost-key.pem",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "serve": "nuxi generate && npx serve .output/public -l 8080"
   },
   "dependencies": {
+    "@nuxtjs/seo": "^2.1.1",
     "@stripe/stripe-js": "^4.10.0",
     "@vueform/slider": "^2.1.10",
     "@vueuse/core": "^12.4.0",

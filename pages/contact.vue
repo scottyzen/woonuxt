@@ -4,7 +4,7 @@
     <div class="my-8 prose">
       <p>HELLO WORLD</p>
       <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nemo voluptate
+        hoi ipsum dolor sit amet consectetur, adipisicing elit. Nemo voluptate
         neque in odio officia assumenda nulla cumque. Veniam et tenetur
         accusantium, fuga pariatur repellendus impedit. Quod sint odio quisquam!
         Sequi repellendus eum dolorum eveniet, quidem dolor necessitatibus velit
