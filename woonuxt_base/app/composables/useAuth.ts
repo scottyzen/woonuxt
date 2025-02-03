@@ -1,4 +1,4 @@
-import type { RegisterCustomerInput, CreateAccountInput, ResetPasswordKeyMutationVariables, ResetPasswordEmailMutationVariables } from '#gql';
+import type { RegisterCustomerInput, CreateAccountInput, ResetPasswordKeyMutationVariables, ResetPasswordEmailMutationVariables, LoginInput } from '#gql';
 
 export const useAuth = () => {
   const { refreshCart } = useCart();
@@ -47,8 +47,8 @@ export const useAuth = () => {
       const response = await GqlLoginWithProvider({ input });
 
       if (response.login?.authToken) {
-        const { viewer } = await refreshCart();
-        if (viewer === null) {
+        await refreshCart();
+        if (viewer.value === null) {
           return {
             success: false,
             error:
