@@ -44,6 +44,7 @@
       "confirmNewPassword": "Confirm New Password",
       "updatePassword": "Update Password",
       "forgotPassword": "Forgot password?",
+      "orContinueWithEmail": "or continue with email",
       "username": "Username",
       "emailOrUsername": "Email or Username",
       "login": "Log In",

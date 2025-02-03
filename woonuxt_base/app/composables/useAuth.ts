@@ -43,7 +43,7 @@ export const useAuth = () => {
     isPending.value = true;
 
     try {
-      const input: LoginInput = { oauthResponse: { state, code }, provider }
+      const input: LoginInput = { oauthResponse: { state, code }, provider };
       const response = await GqlLoginWithProvider({ input });
 
       if (response.login?.authToken) {
