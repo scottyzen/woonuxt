@@ -33,7 +33,7 @@ export function useCart() {
       logGQLError(error);
       clearAllCookies();
       resetInitialState();
-      throw new Error('Cart could not be refreshed');
+      return false; // Cart was not successfully refreshed
     } finally {
       isUpdatingCart.value = false;
     }
