@@ -61,12 +61,13 @@ export function useCheckout() {
     const { username, password, shipToDifferentAddress } = orderInput.value;
     const billing = customer.value?.billing;
     const shipping = shipToDifferentAddress ? customer.value?.shipping : billing;
-    const selectedMethod = cart.value?.chosenShippingMethods;
+    const shippingMethod = cart.value?.chosenShippingMethods;
+
     try {
       let checkoutPayload: CheckoutInput = {
         billing,
         shipping,
-        shippingMethod: selectedMethod,
+        shippingMethod,
         metaData: orderInput.value.metaData,
         paymentMethod: orderInput.value.paymentMethod.id,
         customerNote: orderInput.value.customerNote,
@@ -104,7 +105,7 @@ export function useCheckout() {
         redirectUrl = replaceQueryParam('return', payPalReturnUrl, redirectUrl);
         redirectUrl = replaceQueryParam('cancel_return', payPalCancelUrl, redirectUrl);
         redirectUrl = replaceQueryParam('bn', 'WooNuxt_Cart', redirectUrl);
-        
+
         const isPayPalWindowClosed = await openPayPalWindow(redirectUrl);
 
         if (isPayPalWindowClosed) {
