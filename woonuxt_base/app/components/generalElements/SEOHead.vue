@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { frontEndUrl, wooNuxtSEO, isDev, stripHtml } = useHelpers();
+const { frontEndUrl, wooNuxtSEO, stripHtml } = useHelpers();
 const { path } = useRoute();
 const { info } = defineProps({ info: { type: Object as PropType<Product>, required: true } });
 
@@ -12,7 +12,8 @@ const imageURL = info.image?.sourceUrl ?? '/images/placeholder.jpg';
 const defaultImageSrc = img.getSizes(imageURL, { width: 1200, height: 630 }).src;
 const twitterImageSrc = img.getSizes(imageURL, { width: 1600, height: 900 }).src;
 
-const getFullImageURL = (url: string) => {
+const getFullImageURL = (url?: string) => {
+  if (!url) return '';
   if (url.startsWith('http')) return url;
   return `${frontEndUrl}${url}`;
 };
