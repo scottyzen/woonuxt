@@ -67,18 +67,20 @@ export function useCheckout() {
     const { customer, loginUser } = useAuth();
     const router = useRouter();
     const { replaceQueryParam } = useHelpers();
-    const { emptyCart, refreshCart } = useCart();
+    const { cart, emptyCart, refreshCart } = useCart();
 
     isProcessingOrder.value = true;
 
     const { username, password, shipToDifferentAddress } = orderInput.value;
     const billing = customer.value?.billing;
     const shipping = shipToDifferentAddress ? customer.value?.shipping : billing;
+    const shippingMethod = cart.value?.chosenShippingMethods;
 
     try {
       let checkoutPayload: CheckoutInput = {
         billing,
         shipping,
+        shippingMethod,
         metaData: orderInput.value.metaData,
         paymentMethod: orderInput.value.paymentMethod.id,
         customerNote: orderInput.value.customerNote,
@@ -86,10 +88,12 @@ export function useCheckout() {
         transactionId: orderInput.value.transactionId,
         isPaid,
       };
-
       // Create account
       if (orderInput.value.createAccount) {
         checkoutPayload.account = { username, password } as CreateAccountInput;
+      } else {
+        // Remove account from checkoutPayload if not creating account otherwise it will create an account anyway
+        checkoutPayload.account = null;
       }
 
       const { checkout } = await GqlCheckout(checkoutPayload);
@@ -108,7 +112,6 @@ export function useCheckout() {
       if (checkout?.redirect && isPayPal) {
         const frontEndUrl = window.location.origin;
         let redirectUrl = checkout?.redirect ?? '';
-
         const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}&from_paypal=true`;
         const payPalCancelUrl = `${frontEndUrl}/checkout/?cancel_order=true&from_paypal=true`;
 

@@ -1,5 +1,4 @@
-import { GqlLogin, GqlLogout, GqlRegisterCustomer, GqlResetPasswordEmail, GqlGetOrders } from '#gql';
-import type { RegisterCustomerInput, CreateAccountInput } from '#gql';
+import type { RegisterCustomerInput, CreateAccountInput, ResetPasswordKeyMutationVariables, ResetPasswordEmailMutationVariables, LoginInput } from '#gql';
 
 export const useAuth = () => {
   const { refreshCart } = useCart();
@@ -11,6 +10,7 @@ export const useAuth = () => {
   const isPending = useState<boolean>('isPending', () => false);
   const orders = useState<Order[] | null>('orders', () => null);
   const downloads = useState<DownloadableItem[] | null>('downloads', () => null);
+  const loginClients = useState<LoginClients | null>('loginClients', () => null);
 
   onMounted(() => {
     const savedCustomer = localStorage.getItem('WooNuxtCustomer');
@@ -24,11 +24,38 @@ export const useAuth = () => {
     isPending.value = true;
 
     try {
-      const { loginWithCookies } = await GqlLogin(credentials);
-
-      if (loginWithCookies?.status === 'SUCCESS') {
+      const { login } = await GqlLogin(credentials);
+      if (login?.user && login?.authToken) {
+        useGqlToken(login.authToken);
         await refreshCart();
-        if (viewer === null) {
+      }
+
+      isPending.value = false;
+      return {
+        success: true,
+        error: null,
+      };
+    } catch (error: any) {
+      logGQLError(error);
+      isPending.value = false;
+
+      return {
+        success: false,
+        error: error?.gqlErrors?.[0]?.message,
+      };
+    }
+  };
+
+  const loginWithProvider = async (state: string, code: string, provider: any): Promise<{ success: boolean; error: any }> => {
+    isPending.value = true;
+
+    try {
+      const input: LoginInput = { oauthResponse: { state, code }, provider };
+      const response = await GqlLoginWithProvider({ input });
+
+      if (response.login?.authToken) {
+        await refreshCart();
+        if (viewer.value === null) {
           return {
             success: false,
             error:
@@ -77,7 +104,6 @@ export const useAuth = () => {
     }
   };
 
-  // Register the user
   const registerUser = async (userInfo: RegisterCustomerInput): Promise<{ success: boolean; error: any }> => {
     isPending.value = true;
     try {
@@ -108,10 +134,10 @@ export const useAuth = () => {
     isPending.value = false;
   };
 
-  const sendResetPasswordEmail = async (email: string): Promise<{ success: boolean; error: any }> => {
+  const sendResetPasswordEmail = async ({ username }: ResetPasswordEmailMutationVariables): Promise<{ success: boolean; error: any }> => {
     try {
       isPending.value = true;
-      const { sendPasswordResetEmail } = await GqlResetPasswordEmail({ username: email });
+      const { sendPasswordResetEmail } = await GqlResetPasswordEmail({ username });
       if (sendPasswordResetEmail?.success) {
         isPending.value = false;
         return { success: true, error: null };
@@ -125,15 +151,7 @@ export const useAuth = () => {
     }
   };
 
-  const resetPasswordWithKey = async ({
-    key,
-    login,
-    password,
-  }: {
-    key: string;
-    login: string;
-    password: string;
-  }): Promise<{ success: boolean; error: any }> => {
+  const resetPasswordWithKey = async ({ key, login, password }: ResetPasswordKeyMutationVariables): Promise<{ success: boolean; error: any }> => {
     try {
       isPending.value = true;
       const { resetUserPassword } = await GqlResetPasswordKey({ key, login, password });
@@ -180,6 +198,21 @@ export const useAuth = () => {
     }
   };
 
+  const getLoginClients = async () => {
+    try {
+      const response = await GqlGetLoginClients();
+      if (response.loginClients) {
+        loginClients.value = response.loginClients;
+        return { success: true, error: null };
+      }
+      return { success: false, error: 'There was an error getting your OAuth clients. Please try again later.' };
+    } catch (error: any) {
+      logGQLError(error);
+      const gqlError = error?.gqlErrors?.[0];
+      return { success: false, error: gqlError?.message };
+    }
+  };
+
   const avatar = computed(() => viewer.value?.avatar?.url ?? null);
   const wishlistLink = computed<string>(() => (viewer.value ? '/my-account?tab=wishlist' : '/wishlist'));
 
@@ -192,6 +225,8 @@ export const useAuth = () => {
     avatar,
     wishlistLink,
     loginUser,
+    loginClients,
+    loginWithProvider,
     updateCustomer,
     updateViewer,
     logoutUser,
@@ -200,5 +235,6 @@ export const useAuth = () => {
     resetPasswordWithKey,
     getOrders,
     getDownloads,
+    getLoginClients,
   };
 };

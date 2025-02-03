@@ -15,6 +15,7 @@ type Terms = import('#gql').TermsFragment;
 type VariationAttribute = import('#gql').VariationAttributeFragment;
 type Comment = import('#gql').CommentFragment;
 type ProductAttribute = import('#gql').ProductAttributeFragment;
+type LoginClients = import('#gql').GetLoginClientsQuery['loginClients'];
 
 interface ProductAttributeInput {
   attributeName: string;
@@ -85,4 +86,10 @@ interface WooNuxtFilter {
   showCount: boolean;
   openByDefault: boolean;
   terms: Terms;
+}
+
+interface UserInfo {
+  email: string;
+  password: string;
+  username: string;
 }

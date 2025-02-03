@@ -23,5 +23,6 @@ export default defineAppConfig({
     stripePaymentMethod: 'card', // 'card' || 'payment' -> ( 'card': shows CardElement, 'payment': shows payment tabs from stripe )
     initStoreOnUserActionToReduceServerLoad: true,
     saleBadge: 'percent', // 'percent', 'onSale' or 'hidden'
+    socialLoginsDisplay: 'buttons', // 'buttons' or 'icons'
   },
 });

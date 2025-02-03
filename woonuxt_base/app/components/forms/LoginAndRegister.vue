@@ -1,44 +1,27 @@
 <template>
-  <div class="max-w-lg mx-auto my-16 min-h-[600px] lg:my-24">
-    <div class="flex flex-col items-center">
-      <Logo class="mb-6 scale-125" />
+  <div class="max-w-lg mx-auto my-16 min-h-[600px] text-center">
+    <Logo />
+    <div class="flex flex-col my-2">
       <h1 class="text-xl font-semibold lg:text-3xl">{{ formTitle }}</h1>
-      <div v-if="formView === 'login'" class="my-2 text-center">
-        {{ $t('messages.account.noAccount') }}
-        <a class="font-semibold cursor-pointer text-primary" @click="navigate('register')"> {{ $t('messages.account.accountRegister') }} </a>.
-      </div>
-      <div v-if="formView === 'register'" class="my-2 text-center">
-        {{ $t('messages.account.hasAccount') }}
-        <a class="font-semibold cursor-pointer text-primary" @click="navigate('login')">
-          {{ $t('messages.general.please') }} {{ $t('messages.account.accountLogin') }}
-        </a>
-        .
-      </div>
+      <p class="text-gray-500 mt-2">Welcome back! Select method to login.</p>
     </div>
 
+    <LoginProviders class="my-8" v-if="formView === 'login' || formView === 'register'" :loginClients="loginClients" />
+
     <form class="mt-6" @submit.prevent="handleFormSubmit(userInfo)">
-      <label v-if="formView === 'register' || formView === 'forgotPassword'" for="email">
-        {{ emailLabel }}
-        <span class="text-red-500">*</span> <br />
+      <div v-if="formView === 'register' || formView === 'forgotPassword'" for="email">
         <input id="email" v-model="userInfo.email" :placeholder="inputPlaceholder.email" autocomplete="email" type="text" required />
-      </label>
+      </div>
       <p v-if="formView === 'forgotPassword'" class="text-sm text-gray-500">{{ $t('messages.account.enterEmailOrUsernameForReset') }}</p>
       <div v-if="formView !== 'forgotPassword'">
-        <label for="username">
-          {{ usernameLabel }}
-          <span class="text-red-500">*</span> <br />
-          <input id="username" v-model="userInfo.username" :placeholder="inputPlaceholder.username" autocomplete="username" type="text" required />
-        </label>
-        <label for="password">
-          {{ passwordLabel }} <span class="text-red-500">*</span> <br />
-          <PasswordInput
-            id="password"
-            className="border rounded-lg w-full p-3 px-4 bg-white"
-            v-model="userInfo.password"
-            :placeholder="inputPlaceholder.password"
-            :autocomplete="formView === 'login' ? 'current-password' : 'new-password'"
-            :required="true" />
-        </label>
+        <input class="mt-1" v-model="userInfo.username" :placeholder="inputPlaceholder.username" autocomplete="username" type="text" required />
+
+        <PasswordInput
+          className="border rounded-lg w-full p-3 px-4 bg-white mt-1"
+          v-model="userInfo.password"
+          :placeholder="passwordLabel"
+          :autocomplete="formView === 'login' ? 'current-password' : 'new-password'"
+          :required="true" />
       </div>
       <Transition name="scale-y" mode="out-in">
         <div v-if="message" class="my-4 text-sm text-green-500" v-html="message"></div>
@@ -46,14 +29,33 @@
       <Transition name="scale-y" mode="out-in">
         <div v-if="errorMessage" class="my-4 text-sm text-red-500" v-html="errorMessage"></div>
       </Transition>
-      <button class="flex items-center justify-center gap-4 mt-4 text-lg">
+
+      <div class="flex items-center justify-between mt-4">
+        <label class="flex items-center gap-2"><input v-model="userInfo.rememberMe" type="checkbox" />Remember me </label>
+        <div class="font-semibold cursor-pointer text-sm text-primary hover:text-primary" @click="navigate('forgotPassword')" v-if="formView === 'login'">
+          Forgot password?
+        </div>
+      </div>
+
+      <!-- Login button -->
+      <button class="flex items-center justify-center gap-4 my-6 text-lg">
         <LoadingIcon v-if="isPending" stroke="4" size="16" color="#fff" />
         <span>{{ buttonText }}</span>
       </button>
     </form>
-    <div class="my-8 text-center cursor-pointer" @click="navigate('forgotPassword')" v-if="formView === 'login'">
-      {{ $t('messages.account.forgotPassword') }}
+
+    <div v-if="formView === 'login'" class="my-6 text-center">
+      {{ $t('messages.account.noAccount') }}
+      <a class="font-semibold cursor-pointer text-primary" @click="navigate('register')"> {{ $t('messages.account.accountRegister') }} </a>.
     </div>
+
+    <div v-if="formView === 'register'" class="my-2 text-center justify-center">
+      {{ $t('messages.account.hasAccount') }}
+      <a class="font-semibold cursor-pointer text-primary" @click="navigate('login')">
+        {{ $t('messages.general.please') }} {{ $t('messages.account.accountLogin') }}
+      </a>
+    </div>
+
     <div class="my-8 text-center cursor-pointer" @click="navigate('login')" v-if="formView === 'forgotPassword'">{{ $t('messages.account.backToLogin') }}</div>
   </div>
 </template>
@@ -62,8 +64,11 @@
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const { loginUser, isPending, registerUser, sendResetPasswordEmail } = useAuth();
-const userInfo = ref({ email: '', password: '', username: '' });
+const { loginUser, isPending, registerUser, sendResetPasswordEmail, loginClients, getLoginClients } = useAuth();
+
+if (loginClients.value === null) getLoginClients();
+
+const userInfo = ref({ email: '', password: '', username: '', rememberMe: false });
 const formView = ref('login');
 const message = ref('');
 const errorMessage = ref('');
@@ -79,7 +84,7 @@ const updateFormView = () => {
 };
 watch(route, updateFormView, { immediate: true });
 
-const login = async (userInfo) => {
+const login = async (userInfo: UserInfo) => {
   const { success, error } = await loginUser(userInfo);
   switch (error) {
     case 'invalid_username':
@@ -99,7 +104,7 @@ const login = async (userInfo) => {
   }
 };
 
-const handleFormSubmit = async (userInfo) => {
+const handleFormSubmit = async (userInfo: UserInfo) => {
   if (formView.value === 'register') {
     const { success, error } = await registerUser(userInfo);
     if (success) {
@@ -118,8 +123,8 @@ const handleFormSubmit = async (userInfo) => {
   }
 };
 
-const resetPassword = async (userInfo) => {
-  const { success, error } = await sendResetPasswordEmail(userInfo.email);
+const resetPassword = async (userInfo: UserInfo) => {
+  const { success, error } = await sendResetPasswordEmail({ username: userInfo.email });
   if (success) {
     errorMessage.value = '';
     message.value = t('messages.account.ifRegistered');
@@ -173,7 +178,8 @@ const inputPlaceholder = computed(() => {
 </script>
 
 <style lang="postcss" scoped>
-input,
+input[type='text'],
+input[type='password'],
 button {
   @apply border rounded-lg mb-4 w-full p-3 px-4 bg-white;
 }

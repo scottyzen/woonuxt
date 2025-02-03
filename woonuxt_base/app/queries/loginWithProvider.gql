@@ -1,0 +1,7 @@
+mutation loginWithProvider($input: LoginInput!) {
+  login(input: $input) {
+    authToken
+    refreshToken
+    authTokenExpiration
+  }
+}
