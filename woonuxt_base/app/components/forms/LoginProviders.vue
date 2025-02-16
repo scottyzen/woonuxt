@@ -26,7 +26,9 @@ const providerIcons = {
 };
 
 const socialLoginsDisplay = storeSettings?.socialLoginsDisplay || 'buttons';
-const socialLoginProviders = computed(() => loginClients.value?.filter((loginClient: LoginClient) => loginClient?.provider !== 'PASSWORD') || []);
+const socialLoginProviders = computed(
+  () => loginClients.value?.filter((loginClient: LoginClient) => loginClient?.provider !== LoginProviderEnum.PASSWORD) || [],
+);
 
 const labelFallback = (provider?: LoginProviderEnum | null) => {
   if (!provider) return 'Login';
