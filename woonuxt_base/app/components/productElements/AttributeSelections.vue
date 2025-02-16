@@ -43,7 +43,7 @@ const setDefaultAttributes = () => {
 
 const className = (name: string) => `name-${name.toLowerCase()}`;
 
-onBeforeMount(() => {
+onMounted(() => {
   setDefaultAttributes();
   updateAttrs();
 });
