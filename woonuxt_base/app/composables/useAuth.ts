@@ -1,4 +1,11 @@
-import type { RegisterCustomerInput, CreateAccountInput, ResetPasswordKeyMutationVariables, ResetPasswordEmailMutationVariables, LoginInput } from '#gql';
+import type {
+  RegisterCustomerInput,
+  CreateAccountInput,
+  ResetPasswordKeyMutationVariables,
+  ResetPasswordEmailMutationVariables,
+  LoginInput,
+  LoginClientFragment,
+} from '#gql';
 
 export const useAuth = () => {
   const { refreshCart } = useCart();
@@ -10,7 +17,7 @@ export const useAuth = () => {
   const isPending = useState<boolean>('isPending', () => false);
   const orders = useState<Order[] | null>('orders', () => null);
   const downloads = useState<DownloadableItem[] | null>('downloads', () => null);
-  const loginClients = useState<LoginClients | null>('loginClients', () => null);
+  const loginClients = useState<LoginClient[] | null>('loginClients', () => null);
 
   // Log in the user
   const loginUser = async (credentials: CreateAccountInput): Promise<{ success: boolean; error: any }> => {
@@ -191,19 +198,8 @@ export const useAuth = () => {
     }
   };
 
-  const getLoginClients = async () => {
-    try {
-      const response = await GqlGetLoginClients();
-      if (response.loginClients) {
-        loginClients.value = response.loginClients;
-        return { success: true, error: null };
-      }
-      return { success: false, error: 'There was an error getting your OAuth clients. Please try again later.' };
-    } catch (error: any) {
-      logGQLError(error);
-      const gqlError = error?.gqlErrors?.[0];
-      return { success: false, error: gqlError?.message };
-    }
+  const updateLoginClients = (payload: LoginClient[]): void => {
+    loginClients.value = payload;
   };
 
   const avatar = computed(() => viewer.value?.avatar?.url ?? null);
@@ -228,6 +224,6 @@ export const useAuth = () => {
     resetPasswordWithKey,
     getOrders,
     getDownloads,
-    getLoginClients,
+    updateLoginClients,
   };
 };

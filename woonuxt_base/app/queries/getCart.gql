@@ -13,6 +13,9 @@ query getCart {
       ...PaymentGateway
     }
   }
+  loginClients {
+    ...LoginClient
+  }
 }
 
 fragment Viewer on User {
@@ -33,4 +36,11 @@ fragment PaymentGateway on PaymentGateway {
   title
   id
   description
+}
+
+fragment LoginClient on LoginClient {
+  name
+  provider
+  isEnabled
+  authorizationUrl
 }

@@ -6,7 +6,7 @@
       <p class="text-gray-500 mt-2">Welcome back! Select method to login.</p>
     </div>
 
-    <LoginProviders class="my-8" v-if="formView === 'login' || formView === 'register'" :loginClients="loginClients" />
+    <LoginProviders class="my-8" v-if="formView === 'login' || formView === 'register'" />
 
     <form class="mt-6" @submit.prevent="handleFormSubmit(userInfo)">
       <div v-if="formView === 'register' || formView === 'forgotPassword'" for="email">
@@ -64,9 +64,7 @@
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const { loginUser, isPending, registerUser, sendResetPasswordEmail, loginClients, getLoginClients } = useAuth();
-
-if (loginClients.value === null) getLoginClients();
+const { loginUser, isPending, registerUser, sendResetPasswordEmail, loginClients } = useAuth();
 
 const userInfo = ref({ email: '', password: '', username: '', rememberMe: false });
 const formView = ref('login');
