@@ -27,7 +27,7 @@ export function useCart() {
       if (customer) updateCustomer(customer);
       if (viewer) updateViewer(viewer);
       if (paymentGateways) updatePaymentGateways(paymentGateways);
-      if (loginClients) updateLoginClients(loginClients);
+      if (loginClients) updateLoginClients(loginClients.filter((client) => client !== null));
 
       return true; // Cart was successfully refreshed
     } catch (error: any) {

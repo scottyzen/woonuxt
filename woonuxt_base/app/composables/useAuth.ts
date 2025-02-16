@@ -1,4 +1,11 @@
-import type { RegisterCustomerInput, CreateAccountInput, ResetPasswordKeyMutationVariables, ResetPasswordEmailMutationVariables, LoginInput } from '#gql';
+import type {
+  RegisterCustomerInput,
+  CreateAccountInput,
+  ResetPasswordKeyMutationVariables,
+  ResetPasswordEmailMutationVariables,
+  LoginInput,
+  LoginClientFragment,
+} from '#gql';
 
 export const useAuth = () => {
   const { refreshCart } = useCart();
@@ -191,8 +198,8 @@ export const useAuth = () => {
     }
   };
 
-  const updateLoginClients = (payload?: LoginClient[]): void => {
-    loginClients.value = payload ?? null;
+  const updateLoginClients = (payload: LoginClient[]): void => {
+    loginClients.value = payload;
   };
 
   const avatar = computed(() => viewer.value?.avatar?.url ?? null);
