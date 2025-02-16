@@ -45,6 +45,7 @@ const labelFallback = (provider?: LoginProviderEnum | null) => {
           :to="loginClient?.authorizationUrl"
           class="flex items-center justify-center gap-3 p-3 bg-white rounded-lg shadow-sm hover:shadow transition duration-100 ease-in-out">
           <Icon v-if="loginClient.provider" :name="providerIcons[loginClient.provider as keyof typeof providerIcons]" size="20" />
+          <icon v-else name="ion:log-in" size="20" />
           <span v-if="socialLoginsDisplay === 'buttons'">{{ loginClient.name || labelFallback(loginClient.provider) }}</span>
         </NuxtLink>
       </div>
