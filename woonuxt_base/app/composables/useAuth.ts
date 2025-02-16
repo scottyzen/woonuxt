@@ -52,8 +52,8 @@ export const useAuth = () => {
     try {
       const input: LoginInput = { oauthResponse: { state, code }, provider };
       const response = await GqlLoginWithProvider({ input });
-
       if (response.login?.authToken) {
+        useGqlToken(response.login.authToken);
         await refreshCart();
         if (viewer.value === null) {
           return {

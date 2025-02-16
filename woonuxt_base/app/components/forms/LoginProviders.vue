@@ -54,11 +54,8 @@ const labelFallback = (provider?: any) => {
 </script>
 
 <template>
-  <div>
-    <div
-      v-if="socialLoginProviders?.length && !loading"
-      class="gap-4"
-      :class="socialLoginsDisplay === 'buttons' ? 'grid grid-cols-2 gap-4' : ' flex gap-4 flex-wrap justify-center'">
+  <div v-if="socialLoginProviders?.length && !loading">
+    <div class="gap-4" :class="socialLoginsDisplay === 'buttons' ? 'grid grid-cols-2 gap-4' : ' flex gap-4 flex-wrap justify-center'">
       <div v-for="(loginClient, index) in socialLoginProviders" :key="index">
         <NuxtLink
           v-if="loginClient && loginClient?.authorizationUrl"
