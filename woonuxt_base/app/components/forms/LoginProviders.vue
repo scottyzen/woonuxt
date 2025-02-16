@@ -41,7 +41,7 @@ const labelFallback = (provider?: LoginProviderEnum | null) => {
     <div
       class="gap-4"
       :class="
-        socialLoginsDisplay === 'buttons' ? 'grid gap-4 grid-cols-[repeat(auto-fit,minmax(150px,1fr))] justify-center' : ' flex gap-4 flex-wrap justify-center'
+        socialLoginsDisplay === 'buttons' ? 'grid gap-4 grid-cols-[repeat(auto-fit,minmax(180px,1fr))] justify-center' : ' flex gap-4 flex-wrap justify-center'
       ">
       <div v-for="(loginClient, index) in socialLoginProviders" :key="index">
         <NuxtLink
