@@ -15,7 +15,7 @@ type Terms = import('#gql').TermsFragment;
 type VariationAttribute = import('#gql').VariationAttributeFragment;
 type Comment = import('#gql').CommentFragment;
 type ProductAttribute = import('#gql').ProductAttributeFragment;
-type LoginClients = import('#gql').GetLoginClientsQuery['loginClients'];
+type LoginClient = import('#gql').LoginClientFragment;
 
 interface ProductAttributeInput {
   attributeName: string;
