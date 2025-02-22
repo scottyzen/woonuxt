@@ -7,42 +7,42 @@
         <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjMjIyIj48L3JlY3Q+CjxwYXRoIGQ9Ik0wIDVMNSAwWk02IDRMNCA2Wk0tMSAxTDEgLTFaIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMSI+PC9wYXRoPgo8L3N2Zz4=')] opacity-[0.07]"></div>
       </div>
 
-      <!-- Animated pills with better positioning -->
+      <!-- Animated medical symbols -->
       <div class="absolute inset-0 opacity-30">
-        <!-- Large pills -->
-        <div class="absolute w-12 h-5 bg-white/90 rounded-full animate-float-1 shadow-lg" style="top: 20%; left: 20%">
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-8 h-[1px] bg-gray-300"></div>
-          </div>
+        <!-- Large medical symbols -->
+        <div class="absolute w-16 h-16 bg-white/90 rounded-full animate-float-1 shadow-lg flex items-center justify-center" style="top: 20%; left: 20%">
+          <svg class="w-10 h-10 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14h-2v-4H6v-2h4V7h2v4h4v2h-4v4z"/>
+          </svg>
         </div>
-        <div class="absolute w-12 h-5 bg-white/90 rounded-full animate-float-2 shadow-lg" style="top: 70%; left: 75%">
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-8 h-[1px] bg-gray-300"></div>
-          </div>
+        <div class="absolute w-16 h-16 bg-white/90 rounded-full animate-float-2 shadow-lg flex items-center justify-center" style="top: 70%; left: 75%">
+          <svg class="w-10 h-10 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v4h4v2h-4v4h-2v-4H7v-2h4z"/>
+          </svg>
         </div>
-        <div class="absolute w-12 h-5 bg-white/90 rounded-full animate-float-3 shadow-lg" style="top: 40%; left: 85%">
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-8 h-[1px] bg-gray-300"></div>
-          </div>
-        </div>
-
-        <!-- Medium pills -->
-        <div class="absolute w-10 h-4 bg-white/90 rounded-full animate-float-2 shadow-lg" style="top: 60%; left: 30%">
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-6 h-[1px] bg-gray-300"></div>
-          </div>
-        </div>
-        <div class="absolute w-10 h-4 bg-white/90 rounded-full animate-float-1 shadow-lg" style="top: 30%; left: 60%">
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-6 h-[1px] bg-gray-300"></div>
-          </div>
+        <div class="absolute w-16 h-16 bg-white/90 rounded-full animate-float-3 shadow-lg flex items-center justify-center" style="top: 40%; left: 85%">
+          <svg class="w-10 h-10 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M21.15 3.85l-1.39-1.39L18.35 3.85l1.39 1.39 1.41-1.39zM13 5h-2V0h2v5zm6.58 2.42l-1.39-1.39-1.41 1.39 1.39 1.39 1.41-1.39zM19 13h5v-2h-5v2zM12 19c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
+          </svg>
         </div>
 
-        <!-- Small pills -->
-        <div class="absolute w-8 h-3 bg-white/90 rounded-full animate-float-3 shadow-lg" style="top: 80%; left: 45%">
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-4 h-[1px] bg-gray-300"></div>
-          </div>
+        <!-- Medium medical symbols -->
+        <div class="absolute w-12 h-12 bg-white/90 rounded-full animate-float-2 shadow-lg flex items-center justify-center" style="top: 60%; left: 30%">
+          <svg class="w-8 h-8 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 8h-1V3H6v5H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zM8 5h8v3H8V5zm8 12v2H8v-4h8v2zm4-2h-2v-2H6v2H4v-4c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v4z"/>
+          </svg>
+        </div>
+        <div class="absolute w-12 h-12 bg-white/90 rounded-full animate-float-1 shadow-lg flex items-center justify-center" style="top: 30%; left: 60%">
+          <svg class="w-8 h-8 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4-8c0 2.21-1.79 4-4 4s-4-1.79-4-4 1.79-4 4-4 4 1.79 4 4z"/>
+          </svg>
+        </div>
+
+        <!-- Small medical symbols -->
+        <div class="absolute w-10 h-10 bg-white/90 rounded-full animate-float-3 shadow-lg flex items-center justify-center" style="top: 80%; left: 45%">
+          <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+          </svg>
         </div>
       </div>
 
