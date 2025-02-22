@@ -2,13 +2,19 @@
   <div class="relative mx-auto">
     <div class="container relative h-[400px] md:h-[500px]">
       <!-- Background with gradient overlay -->
-      <div class="absolute inset-0 bg-gradient-to-r from-[#1a1a1a] to-[#2d2d2d]"></div>
-      
+      <div class="absolute inset-0">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#1a1a1a] to-[#2d2d2d]"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.05),transparent_70%)]"></div>
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjMjIyIj48L3JlY3Q+CjxwYXRoIGQ9Ik0wIDVMNSAwWk02IDRMNCA2Wk0tMSAxTDEgLTFaIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMSI+PC9wYXRoPgo8L3N2Zz4=')] opacity-[0.07]"></div>
+      </div>
+
       <!-- Animated particles background -->
       <div class="absolute inset-0 opacity-10">
         <div class="absolute w-2 h-2 bg-white rounded-full animate-float-1" style="top: 10%; left: 20%"></div>
         <div class="absolute w-2 h-2 bg-white rounded-full animate-float-2" style="top: 30%; left: 60%"></div>
         <div class="absolute w-2 h-2 bg-white rounded-full animate-float-3" style="top: 70%; left: 80%"></div>
+        <div class="absolute w-1 h-1 bg-white rounded-full animate-float-2" style="top: 45%; left: 35%"></div>
+        <div class="absolute w-1 h-1 bg-white rounded-full animate-float-3" style="top: 65%; left: 15%"></div>
       </div>
 
       <!-- Main Content Grid -->
@@ -18,7 +24,7 @@
           <h2 class="text-xl text-white/80 mb-2 font-light tracking-wider">Welcome to</h2>
           <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">ModaPrime USA</h1>
           <p class="text-white/70 mb-8 max-w-md leading-relaxed">
-            Discover premium cognitive enhancement solutions designed to elevate your mental performance and unlock your full potential.
+            Premium modafinil delivered across the USA. Fast shipping, reliable service, and competitive prices.
           </p>
           <NuxtLink 
             class="group relative inline-flex items-center justify-center px-8 py-3 font-semibold text-white transition-all duration-300 ease-in-out w-fit overflow-hidden rounded-full bg-gradient-to-r from-primary-light to-primary hover:from-primary hover:to-primary-dark"
@@ -33,73 +39,45 @@
 
         <!-- Right Section with Definition -->
         <div class="flex flex-col items-center justify-center md:items-end">
-          <div class="bg-white/10 backdrop-blur-md rounded-2xl p-8 text-white font-light max-w-md border border-white/10 shadow-2xl transform hover:scale-[1.02] transition-all duration-300 hover:border-white/20">
-            <div class="text-2xl font-medium tracking-wide mb-4 text-white/90">mo·da·prime</div>
-            <div class="leading-relaxed space-y-3">
-              <div class="text-white/60 italic mb-2">noun</div>
-              <div class="flex items-start gap-2">
-                <span class="text-primary-light">1.</span>
-                <span>A premier source of cognitive enhancement</span>
-              </div>
-              <div class="flex items-start gap-2">
-                <span class="text-primary-light">2.</span>
-                <span>The pursuit of peak mental performance</span>
-              </div>
-              <div class="flex items-start gap-2">
-                <span class="text-primary-light">3.</span>
-                <span>Where science meets wellness</span>
-              </div>
+
+
+
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Featured Categories Section -->
-    <div class="container grid grid-cols-2 md:grid-cols-4 gap-6 -mt-20 relative z-20">
-      <NuxtLink 
-        v-for="(category, index) in categories" 
-        :key="index"
-        :to="category.link" 
-        class="group bg-white/95 rounded-xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
-      >
-        <div class="flex flex-col items-center text-center">
-          <div class="text-4xl mb-3 transform group-hover:scale-110 transition-transform duration-300">{{ category.icon }}</div>
-          <h3 class="font-semibold mb-2 text-gray-800">{{ category.title }}</h3>
-          <p class="text-sm text-gray-600 leading-relaxed">{{ category.description }}</p>
+    <!-- Trust Indicators Section -->
+    <div class="container relative z-20 -mt-20 bg-white/95 rounded-xl shadow-xl p-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="flex items-center justify-center text-center">
+          <div>
+            <div class="text-3xl mb-3">🚚</div>
+            <h3 class="font-semibold text-gray-800 mb-2">Fast & Discreet Shipping</h3>
+            <p class="text-gray-600 text-sm">Quick delivery across the USA with discrete packaging</p>
+          </div>
         </div>
-      </NuxtLink>
+        <div class="flex items-center justify-center text-center">
+          <div>
+            <div class="text-3xl mb-3">🔒</div>
+            <h3 class="font-semibold text-gray-800 mb-2">Secure Transactions</h3>
+            <p class="text-gray-600 text-sm">Safe payment processing with multiple options</p>
+          </div>
+        </div>
+        <div class="flex items-center justify-center text-center">
+          <div>
+            <div class="text-3xl mb-3">💯</div>
+            <h3 class="font-semibold text-gray-800 mb-2">Quality Guaranteed</h3>
+            <p class="text-gray-600 text-sm">Premium products from trusted manufacturers</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const categories = [
-  {
-    icon: '🧠',
-    title: 'Nootropics',
-    description: 'Enhance cognitive function',
-    link: '/category/nootropics'
-  },
-  {
-    icon: '⚡',
-    title: 'Weight Loss',
-    description: 'Support your goals',
-    link: '/category/weight-loss'
-  },
-  {
-    icon: '🌙',
-    title: 'Sleep Aids',
-    description: 'Rest and recovery',
-    link: '/category/sleep-aids'
-  },
-  {
-    icon: '🌿',
-    title: 'Lifestyle',
-    description: 'General wellness',
-    link: '/category/lifestyle'
-  }
-]
 </script>
 
 <style lang="postcss" scoped>
