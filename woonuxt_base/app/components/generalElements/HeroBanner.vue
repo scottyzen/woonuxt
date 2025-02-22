@@ -82,19 +82,20 @@
                   </button>
                 </div>
               
-              <div class="w-full h-px bg-gradient-to-r from-transparent via-blue-200/20 to-transparent"></div>
+                <div class="w-full h-px bg-gradient-to-r from-transparent via-blue-200/20 to-transparent"></div>
               
-              <div class="flex flex-col sm:flex-row items-center justify-between gap-6 w-full">
-                <div class="flex items-center gap-4">
-                  <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                  <p class="text-green-400">Free shipping available</p>
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-6 w-full">
+                  <div class="flex items-center gap-4">
+                    <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                    <p class="text-green-400">Free shipping available</p>
+                  </div>
+                  <NuxtLink 
+                    to="/products"
+                    class="w-full sm:w-auto px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-full text-center transition-colors duration-300"
+                  >
+                    Shop Now
+                  </NuxtLink>
                 </div>
-                <NuxtLink 
-                  to="/products"
-                  class="w-full sm:w-auto px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-full text-center transition-colors duration-300"
-                >
-                  Shop Now
-                </NuxtLink>
               </div>
             </div>
           </Transition>
