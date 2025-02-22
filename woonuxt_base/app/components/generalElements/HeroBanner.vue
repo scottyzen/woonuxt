@@ -11,45 +11,25 @@
       <div class="absolute inset-0 opacity-30">
         <!-- Large Caduceus -->
         <div class="absolute w-24 h-24 bg-white/90 rounded-full animate-float-1 shadow-lg flex items-center justify-center" style="top: 15%; left: 25%">
-          <svg class="w-16 h-16 text-gray-600" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12,2L12,2c-0.6,0-1,0.4-1,1v1H9.5C8.1,4,7,5.1,7,6.5v11.1c0,0.5,0.2,1,0.5,1.4l3.4,3.4c0.6,0.6,1.5,0.6,2.1,0l3.4-3.4 c0.4-0.4,0.5-0.9,0.5-1.4V6.5C17,5.1,15.9,4,14.5,4H13V3C13,2.4,12.6,2,12,2z M12,16c-1.1,0-2-0.9-2-2s0.9-2,2-2s2,0.9,2,2 S13.1,16,12,16z"/>
-            <path d="M10.5,6.5c0-0.8-0.7-1.5-1.5-1.5S7.5,5.7,7.5,6.5S8.2,8,9,8S10.5,7.3,10.5,6.5z"/>
-            <path d="M15,5c-0.8,0-1.5,0.7-1.5,1.5S14.2,8,15,8s1.5-0.7,1.5-1.5S15.8,5,15,5z"/>
-          </svg>
+          ⚕️
         </div>
 
         <div class="absolute w-28 h-28 bg-white/90 rounded-full animate-float-2 shadow-lg flex items-center justify-center" style="top: 65%; left: 70%">
-          <svg class="w-20 h-20 text-gray-600" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12,2L12,2c-0.6,0-1,0.4-1,1v1H9.5C8.1,4,7,5.1,7,6.5v11.1c0,0.5,0.2,1,0.5,1.4l3.4,3.4c0.6,0.6,1.5,0.6,2.1,0l3.4-3.4 c0.4-0.4,0.5-0.9,0.5-1.4V6.5C17,5.1,15.9,4,14.5,4H13V3C13,2.4,12.6,2,12,2z M12,16c-1.1,0-2-0.9-2-2s0.9-2,2-2s2,0.9,2,2 S13.1,16,12,16z"/>
-            <path d="M10.5,6.5c0-0.8-0.7-1.5-1.5-1.5S7.5,5.7,7.5,6.5S8.2,8,9,8S10.5,7.3,10.5,6.5z"/>
-            <path d="M15,5c-0.8,0-1.5,0.7-1.5,1.5S14.2,8,15,8s1.5-0.7,1.5-1.5S15.8,5,15,5z"/>
-          </svg>
+          ⚕️
         </div>
 
         <!-- Medium Caduceus -->
         <div class="absolute w-20 h-20 bg-white/90 rounded-full animate-float-3 shadow-lg flex items-center justify-center" style="top: 35%; left: 80%">
-          <svg class="w-14 h-14 text-gray-600" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12,2L12,2c-0.6,0-1,0.4-1,1v1H9.5C8.1,4,7,5.1,7,6.5v11.1c0,0.5,0.2,1,0.5,1.4l3.4,3.4c0.6,0.6,1.5,0.6,2.1,0l3.4-3.4 c0.4-0.4,0.5-0.9,0.5-1.4V6.5C17,5.1,15.9,4,14.5,4H13V3C13,2.4,12.6,2,12,2z M12,16c-1.1,0-2-0.9-2-2s0.9-2,2-2s2,0.9,2,2 S13.1,16,12,16z"/>
-            <path d="M10.5,6.5c0-0.8-0.7-1.5-1.5-1.5S7.5,5.7,7.5,6.5S8.2,8,9,8S10.5,7.3,10.5,6.5z"/>
-            <path d="M15,5c-0.8,0-1.5,0.7-1.5,1.5S14.2,8,15,8s1.5-0.7,1.5-1.5S15.8,5,15,5z"/>
-          </svg>
+          ⚕️
         </div>
 
         <div class="absolute w-20 h-20 bg-white/90 rounded-full animate-float-1 shadow-lg flex items-center justify-center" style="top: 55%; left: 35%">
-          <svg class="w-14 h-14 text-gray-600" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12,2L12,2c-0.6,0-1,0.4-1,1v1H9.5C8.1,4,7,5.1,7,6.5v11.1c0,0.5,0.2,1,0.5,1.4l3.4,3.4c0.6,0.6,1.5,0.6,2.1,0l3.4-3.4 c0.4-0.4,0.5-0.9,0.5-1.4V6.5C17,5.1,15.9,4,14.5,4H13V3C13,2.4,12.6,2,12,2z M12,16c-1.1,0-2-0.9-2-2s0.9-2,2-2s2,0.9,2,2 S13.1,16,12,16z"/>
-            <path d="M10.5,6.5c0-0.8-0.7-1.5-1.5-1.5S7.5,5.7,7.5,6.5S8.2,8,9,8S10.5,7.3,10.5,6.5z"/>
-            <path d="M15,5c-0.8,0-1.5,0.7-1.5,1.5S14.2,8,15,8s1.5-0.7,1.5-1.5S15.8,5,15,5z"/>
-          </svg>
+          ⚕️
         </div>
 
         <!-- Small Caduceus -->
         <div class="absolute w-16 h-16 bg-white/90 rounded-full animate-float-2 shadow-lg flex items-center justify-center" style="top: 75%; left: 45%">
-          <svg class="w-10 h-10 text-gray-600" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12,2L12,2c-0.6,0-1,0.4-1,1v1H9.5C8.1,4,7,5.1,7,6.5v11.1c0,0.5,0.2,1,0.5,1.4l3.4,3.4c0.6,0.6,1.5,0.6,2.1,0l3.4-3.4 c0.4-0.4,0.5-0.9,0.5-1.4V6.5C17,5.1,15.9,4,14.5,4H13V3C13,2.4,12.6,2,12,2z M12,16c-1.1,0-2-0.9-2-2s0.9-2,2-2s2,0.9,2,2 S13.1,16,12,16z"/>
-            <path d="M10.5,6.5c0-0.8-0.7-1.5-1.5-1.5S7.5,5.7,7.5,6.5S8.2,8,9,8S10.5,7.3,10.5,6.5z"/>
-            <path d="M15,5c-0.8,0-1.5,0.7-1.5,1.5S14.2,8,15,8s1.5-0.7,1.5-1.5S15.8,5,15,5z"/>
-          </svg>
+          ⚕️
         </div>
       </div>
 
