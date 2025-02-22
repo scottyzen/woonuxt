@@ -116,7 +116,7 @@ export function useCheckout() {
         console.log('BTCPay redirect detected');
         let redirectUrl = checkout?.redirect ?? '';
         console.log('Redirecting to:', redirectUrl);
-        router.push(redirectUrl);
+        router.push(`/checkout/btcpay?order_id=${orderId}&key=${orderKey}`);
       } else {
         console.log('Standard redirect to order received');
         router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);

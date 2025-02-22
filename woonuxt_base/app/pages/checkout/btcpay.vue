@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto p-4">
     <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
-      <h1 class="text-2xl font-bold mb-4">Bitcoin Payment</h1>
+      <h1 class="text-2xl font-bold mb-4">{{ $t('messages.billing.paymentOptions') }}</h1>
       
       <div v-if="loading" class="text-center">
         <div class="animate-pulse">
@@ -37,14 +37,8 @@
 
         <!-- BTCPay Checkout Container -->
         <div class="btcpay-checkout-container">
-          <div 
-            v-if="checkoutMode === 'modal'"
-            id="btcpay-modal-checkout"
-            :data-invoice-id="invoiceId"
-            class="rounded-lg overflow-hidden shadow-lg"
-          ></div>
-          
-          <div v-else class="rounded-lg overflow-hidden shadow-lg">
+          <div v-if="checkoutMode === 'modal'" id="btcpay-modal-checkout"></div>
+          <div v-else>
             <iframe 
               :src="checkoutUrl"
               class="w-full min-h-[600px]"
@@ -68,7 +62,6 @@ const route = useRoute();
 const router = useRouter();
 const orderId = route.query.order_id;
 const orderKey = route.query.key;
-const { cart } = useCart();
 
 const loading = ref(true);
 const error = ref(null);
@@ -131,12 +124,6 @@ const reloadCheckout = async () => {
 
 const initializeCheckout = async () => {
   try {
-    // Ensure we have a cart before proceeding
-    if (!cart.value) {
-      error.value = 'No active cart found. Please return to checkout.';
-      return;
-    }
-
     const response = await fetch(
       `${process.env.GQL_HOST.replace('graphql', '')}?wc-api=BTCPay_Checkout&order_id=${orderId}&order_key=${orderKey}`
     );
@@ -177,14 +164,6 @@ onMounted(() => {
     loading.value = false;
     return;
   }
-  
-  // Check if we have an active cart
-  if (!cart.value) {
-    error.value = 'No active cart found. Please return to checkout.';
-    loading.value = false;
-    return;
-  }
-
   initializeCheckout();
 });
 
