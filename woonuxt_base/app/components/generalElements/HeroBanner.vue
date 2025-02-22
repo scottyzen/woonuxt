@@ -10,25 +10,25 @@
       <!-- Animated Caduceus Symbols -->
       <div class="absolute inset-0 opacity-30">
         <!-- Large Caduceus -->
-        <div class="absolute w-24 h-24 bg-white/90 rounded-full animate-float-1 shadow-lg flex items-center justify-center" style="top: 15%; left: 25%">
+        <div class="absolute text-[clamp(75px,10vw,120px)] text-gray-400 animate-float-1" style="top: 15%; left: 25%">
           ⚕️
         </div>
 
-        <div class="absolute w-28 h-28 bg-white/90 rounded-full animate-float-2 shadow-lg flex items-center justify-center" style="top: 65%; left: 70%">
+        <div class="absolute text-[clamp(75px,10vw,120px)] text-gray-500 animate-float-2" style="top: 65%; left: 70%">
           ⚕️
         </div>
 
         <!-- Medium Caduceus -->
-        <div class="absolute w-20 h-20 bg-white/90 rounded-full animate-float-3 shadow-lg flex items-center justify-center" style="top: 35%; left: 80%">
+        <div class="absolute text-[clamp(75px,8vw,100px)] text-gray-600 animate-float-3" style="top: 35%; left: 80%">
           ⚕️
         </div>
 
-        <div class="absolute w-20 h-20 bg-white/90 rounded-full animate-float-1 shadow-lg flex items-center justify-center" style="top: 55%; left: 35%">
+        <div class="absolute text-[clamp(75px,8vw,100px)] text-gray-400 animate-float-1" style="top: 55%; left: 35%">
           ⚕️
         </div>
 
         <!-- Small Caduceus -->
-        <div class="absolute w-16 h-16 bg-white/90 rounded-full animate-float-2 shadow-lg flex items-center justify-center" style="top: 75%; left: 45%">
+        <div class="absolute text-[clamp(75px,7vw,90px)] text-gray-500 animate-float-2" style="top: 75%; left: 45%">
           ⚕️
         </div>
       </div>
