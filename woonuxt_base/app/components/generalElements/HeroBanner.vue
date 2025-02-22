@@ -10,25 +10,25 @@
       <!-- Animated Caduceus Symbols -->
       <div class="absolute inset-0 opacity-30">
         <!-- Large Caduceus -->
-        <div class="absolute text-[clamp(75px,10vw,120px)] text-gray-400 animate-float-1" style="top: 15%; left: 25%">
+        <div class="absolute text-[clamp(105px,14vw,168px)] text-gray-400 animate-float-1" style="top: 15%; left: 25%">
           ⚕️
         </div>
 
-        <div class="absolute text-[clamp(75px,10vw,120px)] text-gray-500 animate-float-2" style="top: 65%; left: 70%">
+        <div class="absolute text-[clamp(105px,14vw,168px)] text-gray-500 animate-float-2" style="top: 65%; left: 70%">
           ⚕️
         </div>
 
         <!-- Medium Caduceus -->
-        <div class="absolute text-[clamp(75px,8vw,100px)] text-gray-600 animate-float-3" style="top: 35%; left: 80%">
+        <div class="absolute text-[clamp(105px,11.2vw,140px)] text-gray-600 animate-float-3" style="top: 35%; left: 80%">
           ⚕️
         </div>
 
-        <div class="absolute text-[clamp(75px,8vw,100px)] text-gray-400 animate-float-1" style="top: 55%; left: 35%">
+        <div class="absolute text-[clamp(105px,11.2vw,140px)] text-gray-400 animate-float-1" style="top: 55%; left: 35%">
           ⚕️
         </div>
 
         <!-- Small Caduceus -->
-        <div class="absolute text-[clamp(75px,7vw,90px)] text-gray-500 animate-float-2" style="top: 75%; left: 45%">
+        <div class="absolute text-[clamp(105px,9.8vw,126px)] text-gray-500 animate-float-2" style="top: 75%; left: 45%">
           ⚕️
         </div>
       </div>
@@ -55,25 +55,33 @@
 
         <!-- Right Announcement Section -->
         <div class="w-full lg:w-1/2 flex justify-center lg:justify-end">
-          <div v-if="!closed" class="bg-white/10 backdrop-blur-md rounded-3xl p-10 lg:p-12 max-w-2xl w-full border-2 border-blue-300/30 shadow-2xl transform hover:scale-[1.02] transition-transform duration-300">
-            <div class="flex flex-col items-start gap-8">
-              <div class="flex items-start gap-6 w-full">
-                <div class="bg-blue-500/20 rounded-2xl p-4">
-                  <svg class="w-12 h-12 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-                  </svg>
+          <Transition
+            enter-active-class="transition duration-300 ease-out"
+            enter-from-class="transform opacity-0"
+            enter-to-class="transform opacity-100"
+            leave-active-class="transition duration-200 ease-in"
+            leave-from-class="transform opacity-100"
+            leave-to-class="transform opacity-0"
+          >
+            <div v-if="!closed" class="bg-white/10 backdrop-blur-md rounded-3xl p-10 lg:p-12 max-w-2xl w-full border-2 border-blue-300/30 shadow-2xl transform hover:scale-[1.02] transition-transform duration-300">
+              <div class="flex flex-col items-start gap-8">
+                <div class="flex items-start gap-6 w-full">
+                  <div class="bg-blue-500/20 rounded-2xl p-4">
+                    <svg class="w-12 h-12 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                    </svg>
+                  </div>
+                  <div class="flex-1">
+                    <h3 class="text-3xl font-bold text-blue-200 mb-4">Free Shipping Available</h3>
+                    <p class="text-2xl text-blue-100 mb-6">Free shipping on all orders over $150 (example)</p>
+                  </div>
+                  <button @click="closed = true" class="text-gray-400 hover:text-gray-200 transition-colors">
+                    <span class="sr-only">Close</span>
+                    <svg class="w-8 h-8" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
                 </div>
-                <div class="flex-1">
-                  <h3 class="text-3xl font-bold text-blue-200 mb-4">Free Shipping Available</h3>
-                  <p class="text-2xl text-blue-100 mb-6">Free shipping on all orders over $150 (example)</p>
-                </div>
-                <button @click="closed = true" class="text-gray-400 hover:text-gray-200 transition-colors">
-                  <span class="sr-only">Close</span>
-                  <svg class="w-8 h-8" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                  </svg>
-                </button>
-              </div>
               
               <div class="w-full h-px bg-gradient-to-r from-transparent via-blue-200/20 to-transparent"></div>
               
@@ -98,6 +106,7 @@
 </template>
 
 <script setup lang="ts">
+const closed = ref(false)
 </script>
 
 <style lang="postcss" scoped>
