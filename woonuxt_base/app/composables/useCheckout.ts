@@ -106,26 +106,34 @@ export function useCheckout() {
 
         const isPayPalWindowClosed = await openPayPalWindow(redirectUrl);
 
+        console.log('Payment method:', orderInput.value.paymentMethod.id);
         if (isPayPalWindowClosed) {
+          console.log('PayPal window closed, redirecting to order received');
           router.push(`/checkout/order-received/${orderId}/?key=${orderKey}&fetch_delay=true`);
         }
       } else if ((await checkout?.redirect) && isBtcPay) {
         // BTCPay Redirect
+        console.log('BTCPay redirect detected');
         let redirectUrl = checkout?.redirect ?? '';
+        console.log('Redirecting to:', redirectUrl);
         router.push(redirectUrl);
       } else {
+        console.log('Standard redirect to order received');
         router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
       }
 
       if ((await checkout?.result) !== 'success') {
+        console.log('Checkout failed:', await checkout?.result);
         alert('There was an error processing your order. Please try again.');
         window.location.reload();
         return checkout;
       } else {
+        console.log('Checkout successful, emptying cart');
         await emptyCart();
         await refreshCart();
       }
     } catch (error: any) {
+      console.log('Checkout error:', error);
       isProcessing.value = false;
 
       const errorMessage = error?.gqlErrors?.[0].message;

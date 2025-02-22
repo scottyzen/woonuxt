@@ -68,6 +68,7 @@ const route = useRoute();
 const router = useRouter();
 const orderId = route.query.order_id;
 const orderKey = route.query.key;
+const { cart } = useCart();
 
 const loading = ref(true);
 const error = ref(null);
@@ -130,6 +131,12 @@ const reloadCheckout = async () => {
 
 const initializeCheckout = async () => {
   try {
+    // Ensure we have a cart before proceeding
+    if (!cart.value) {
+      error.value = 'No active cart found. Please return to checkout.';
+      return;
+    }
+
     const response = await fetch(
       `${process.env.GQL_HOST.replace('graphql', '')}?wc-api=BTCPay_Checkout&order_id=${orderId}&order_key=${orderKey}`
     );
@@ -170,6 +177,14 @@ onMounted(() => {
     loading.value = false;
     return;
   }
+  
+  // Check if we have an active cart
+  if (!cart.value) {
+    error.value = 'No active cart found. Please return to checkout.';
+    loading.value = false;
+    return;
+  }
+
   initializeCheckout();
 });
 
