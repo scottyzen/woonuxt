@@ -8,13 +8,28 @@
         <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjMjIyIj48L3JlY3Q+CjxwYXRoIGQ9Ik0wIDVMNSAwWk02IDRMNCA2Wk0tMSAxTDEgLTFaIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMSI+PC9wYXRoPgo8L3N2Zz4=')] opacity-[0.07]"></div>
       </div>
 
-      <!-- Animated particles background -->
+      <!-- Animated modafinil pill particles -->
       <div class="absolute inset-0 opacity-10">
-        <div class="absolute w-2 h-2 bg-white rounded-full animate-float-1" style="top: 10%; left: 20%"></div>
-        <div class="absolute w-2 h-2 bg-white rounded-full animate-float-2" style="top: 30%; left: 60%"></div>
-        <div class="absolute w-2 h-2 bg-white rounded-full animate-float-3" style="top: 70%; left: 80%"></div>
-        <div class="absolute w-1 h-1 bg-white rounded-full animate-float-2" style="top: 45%; left: 35%"></div>
-        <div class="absolute w-1 h-1 bg-white rounded-full animate-float-3" style="top: 65%; left: 15%"></div>
+        <!-- Large pills -->
+        <div class="absolute w-8 h-3 bg-white rounded-full animate-float-1 shadow-md" style="top: 10%; left: 20%"></div>
+        <div class="absolute w-8 h-3 bg-white rounded-full animate-float-2 shadow-md" style="top: 30%; left: 60%"></div>
+        <div class="absolute w-8 h-3 bg-white rounded-full animate-float-3 shadow-md" style="top: 70%; left: 80%"></div>
+        <div class="absolute w-8 h-3 bg-white rounded-full animate-float-1 shadow-md" style="top: 25%; left: 75%"></div>
+        <div class="absolute w-8 h-3 bg-white rounded-full animate-float-2 shadow-md" style="top: 85%; left: 45%"></div>
+        <div class="absolute w-8 h-3 bg-white rounded-full animate-float-3 shadow-md" style="top: 40%; left: 85%"></div>
+
+        <!-- Small pills -->
+        <div class="absolute w-6 h-2 bg-white rounded-full animate-float-2 shadow-sm" style="top: 45%; left: 35%"></div>
+        <div class="absolute w-6 h-2 bg-white rounded-full animate-float-3 shadow-sm" style="top: 65%; left: 15%"></div>
+        <div class="absolute w-6 h-2 bg-white rounded-full animate-float-1 shadow-sm" style="top: 15%; left: 90%"></div>
+        <div class="absolute w-6 h-2 bg-white rounded-full animate-float-2 shadow-sm" style="top: 55%; left: 25%"></div>
+        <div class="absolute w-6 h-2 bg-white rounded-full animate-float-3 shadow-sm" style="top: 75%; left: 55%"></div>
+        <div class="absolute w-6 h-2 bg-white rounded-full animate-float-1 shadow-sm" style="top: 35%; left: 10%"></div>
+
+        <!-- Pill markings -->
+        <div class="absolute w-8 h-3 border border-white/30 rounded-full animate-float-1" style="top: 20%; left: 40%"></div>
+        <div class="absolute w-8 h-3 border border-white/30 rounded-full animate-float-2" style="top: 50%; left: 70%"></div>
+        <div class="absolute w-8 h-3 border border-white/30 rounded-full animate-float-3" style="top: 80%; left: 30%"></div>
       </div>
 
       <!-- Main Content Grid -->
@@ -39,10 +54,11 @@
 
         <!-- Right Section with Definition -->
         <div class="flex flex-col items-center justify-center md:items-end">
-
-
-
-            </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-8 max-w-md">
+            <h3 class="text-2xl font-semibold text-white mb-4">What is Modafinil?</h3>
+            <p class="text-white/70 leading-relaxed">
+              Modafinil is a wakefulness-promoting medication used to improve focus, cognitive function and productivity. It's widely used by professionals and students for its cognitive-enhancing properties.
+            </p>
           </div>
         </div>
       </div>
