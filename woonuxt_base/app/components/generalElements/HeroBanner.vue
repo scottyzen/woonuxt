@@ -10,26 +10,25 @@
 
       <!-- Animated modafinil pill particles -->
       <div class="absolute inset-0 opacity-10">
-        <!-- Large pills -->
-        <div class="absolute w-8 h-3 bg-white rounded-full animate-float-1 shadow-md" style="top: 10%; left: 20%"></div>
-        <div class="absolute w-8 h-3 bg-white rounded-full animate-float-2 shadow-md" style="top: 30%; left: 60%"></div>
-        <div class="absolute w-8 h-3 bg-white rounded-full animate-float-3 shadow-md" style="top: 70%; left: 80%"></div>
-        <div class="absolute w-8 h-3 bg-white rounded-full animate-float-1 shadow-md" style="top: 25%; left: 75%"></div>
-        <div class="absolute w-8 h-3 bg-white rounded-full animate-float-2 shadow-md" style="top: 85%; left: 45%"></div>
-        <div class="absolute w-8 h-3 bg-white rounded-full animate-float-3 shadow-md" style="top: 40%; left: 85%"></div>
+        <!-- Center score/line -->
+        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-0.5 bg-white/50 rounded"></div>
 
-        <!-- Small pills -->
-        <div class="absolute w-6 h-2 bg-white rounded-full animate-float-2 shadow-sm" style="top: 45%; left: 35%"></div>
-        <div class="absolute w-6 h-2 bg-white rounded-full animate-float-3 shadow-sm" style="top: 65%; left: 15%"></div>
-        <div class="absolute w-6 h-2 bg-white rounded-full animate-float-1 shadow-sm" style="top: 15%; left: 90%"></div>
-        <div class="absolute w-6 h-2 bg-white rounded-full animate-float-2 shadow-sm" style="top: 55%; left: 25%"></div>
-        <div class="absolute w-6 h-2 bg-white rounded-full animate-float-3 shadow-sm" style="top: 75%; left: 55%"></div>
-        <div class="absolute w-6 h-2 bg-white rounded-full animate-float-1 shadow-sm" style="top: 35%; left: 10%"></div>
+        <!-- Pills radiating from center -->
+        <div class="absolute w-8 h-3 bg-white rounded-full animate-float-1 shadow-md" style="top: 45%; left: 35%"></div>
+        <div class="absolute w-8 h-3 bg-white rounded-full animate-float-2 shadow-md" style="top: 55%; left: 65%"></div>
+        <div class="absolute w-8 h-3 bg-white rounded-full animate-float-3 shadow-md" style="top: 35%; left: 45%"></div>
+        <div class="absolute w-8 h-3 bg-white rounded-full animate-float-1 shadow-md" style="top: 65%; left: 55%"></div>
 
-        <!-- Pill markings -->
-        <div class="absolute w-8 h-3 border border-white/30 rounded-full animate-float-1" style="top: 20%; left: 40%"></div>
-        <div class="absolute w-8 h-3 border border-white/30 rounded-full animate-float-2" style="top: 50%; left: 70%"></div>
-        <div class="absolute w-8 h-3 border border-white/30 rounded-full animate-float-3" style="top: 80%; left: 30%"></div>
+        <!-- Smaller pills -->
+        <div class="absolute w-6 h-2 bg-white rounded-full animate-float-2 shadow-sm" style="top: 40%; left: 30%"></div>
+        <div class="absolute w-6 h-2 bg-white rounded-full animate-float-3 shadow-sm" style="top: 60%; left: 70%"></div>
+        <div class="absolute w-6 h-2 bg-white rounded-full animate-float-1 shadow-sm" style="top: 30%; left: 40%"></div>
+        <div class="absolute w-6 h-2 bg-white rounded-full animate-float-2 shadow-sm" style="top: 70%; left: 60%"></div>
+
+        <!-- Pill markings radiating from center -->
+        <div class="absolute w-8 h-3 border border-white/30 rounded-full animate-float-1" style="top: 48%; left: 42%"></div>
+        <div class="absolute w-8 h-3 border border-white/30 rounded-full animate-float-2" style="top: 52%; left: 58%"></div>
+        <div class="absolute w-8 h-3 border border-white/30 rounded-full animate-float-3" style="top: 45%; left: 52%"></div>
       </div>
 
       <!-- Main Content Grid -->
@@ -52,62 +51,37 @@
           </NuxtLink>
         </div>
 
-        <!-- Right Section with Definition -->
+        <!-- Right Section with Announcements -->
         <div class="flex flex-col items-center justify-center md:items-end">
-          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-8 max-w-md">
-            <h3 class="text-2xl font-semibold text-white mb-4">mo·da·prime</h3>
-            <p class="text-white/70 leading-relaxed">
-              /ˈmōdəˌprīm/ <span class="italic">noun</span>
-              <br><br>
-              A premium modafinil vendor providing reliable nationwide delivery and professional service. Known for quality, consistency, and customer satisfaction.
-            </p>
+          <!-- Site-wide Announcement Banner -->
+          <div class="bg-primary/10 backdrop-blur-sm rounded-lg p-8 max-w-md">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                </svg>
+                <p class="text-primary font-medium">Special offer: will put the sale here</p>
+              </div>
+              <button class="text-gray-500 hover:text-gray-700">
+                <span class="sr-only">Close</span>
+                <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- Announcements Section -->
+    <!-- Definition Section -->
     <div class="container relative z-20 -mt-20">
-      <!-- Site-wide Announcement Banner -->
-      <div class="bg-primary/10 backdrop-blur-sm rounded-xl shadow-xl p-4 mb-6">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-3">
-            <span class="text-xl">📢</span>
-            <p class="text-primary font-medium">Special offer: will put the sale here</p>
-          </div>
-          <button class="text-gray-500 hover:text-gray-700">
-            <span class="sr-only">Close</span>
-            <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Trust Indicators Section -->
-      <div class="bg-white/95 rounded-xl shadow-xl p-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div class="flex items-center justify-center text-center">
-            <div>
-              <div class="text-3xl mb-3">🚚</div>
-              <h3 class="font-semibold text-gray-800 mb-2">Fast & Discreet Shipping</h3>
-              <p class="text-gray-600 text-sm">Quick delivery across the USA with discrete packaging</p>
-            </div>
-          </div>
-          <div class="flex items-center justify-center text-center">
-            <div>
-              <div class="text-3xl mb-3">🔒</div>
-              <h3 class="font-semibold text-gray-800 mb-2">Secure Transactions</h3>
-              <p class="text-gray-600 text-sm">Safe payment processing with multiple options</p>
-            </div>
-          </div>
-          <div class="flex items-center justify-center text-center">
-            <div>
-              <div class="text-3xl mb-3">💯</div>
-              <h3 class="font-semibold text-gray-800 mb-2">Quality Guaranteed</h3>
-              <p class="text-gray-600 text-sm">Premium products from trusted manufacturers</p>
-            </div>
-          </div>
-        </div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-xl p-8">
+        <h3 class="text-2xl font-semibold text-white mb-4">mo·da·prime</h3>
+        <p class="text-white/70 leading-relaxed">
+          /ˈmōdəˌprīm/ <span class="italic">noun</span>
+          <br><br>
+          A premium modafinil vendor providing reliable nationwide delivery and professional service. Known for quality, consistency, and customer satisfaction.
+        </p>
       </div>
     </div>
   </div>
