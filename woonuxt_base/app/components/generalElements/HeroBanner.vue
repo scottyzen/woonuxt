@@ -52,11 +52,10 @@
             </svg>
           </NuxtLink>
         </div>
-
         <!-- Right Announcement Section -->
         <div class="w-full lg:w-1/2 flex justify-center lg:justify-end">
           <Transition
-            enter-active-class="transition duration-300 ease-out"
+            enter-active-class="transition duration-300 ease-out" 
             enter-from-class="transform opacity-0"
             enter-to-class="transform opacity-100"
             leave-active-class="transition duration-200 ease-in"
@@ -98,7 +97,7 @@
                 </NuxtLink>
               </div>
             </div>
-          </div>
+          </Transition>
         </div>
       </div>
     </div>
