@@ -55,37 +55,57 @@
         <!-- Right Section with Definition -->
         <div class="flex flex-col items-center justify-center md:items-end">
           <div class="bg-white/10 backdrop-blur-sm rounded-lg p-8 max-w-md">
-            <h3 class="text-2xl font-semibold text-white mb-4">What is Modafinil?</h3>
+            <h3 class="text-2xl font-semibold text-white mb-4">mo·da·prime</h3>
             <p class="text-white/70 leading-relaxed">
-              Modafinil is a wakefulness-promoting medication used to improve focus, cognitive function and productivity. It's widely used by professionals and students for its cognitive-enhancing properties.
+              /ˈmōdəˌprīm/ <span class="italic">noun</span>
+              <br><br>
+              A premium modafinil vendor providing reliable nationwide delivery and professional service. Known for quality, consistency, and customer satisfaction.
             </p>
           </div>
         </div>
       </div>
     </div>
+    <!-- Announcements Section -->
+    <div class="container relative z-20 -mt-20">
+      <!-- Site-wide Announcement Banner -->
+      <div class="bg-primary/10 backdrop-blur-sm rounded-xl shadow-xl p-4 mb-6">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <span class="text-xl">📢</span>
+            <p class="text-primary font-medium">Special offer: will put the sale here</p>
+          </div>
+          <button class="text-gray-500 hover:text-gray-700">
+            <span class="sr-only">Close</span>
+            <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+      </div>
 
-    <!-- Trust Indicators Section -->
-    <div class="container relative z-20 -mt-20 bg-white/95 rounded-xl shadow-xl p-8">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="flex items-center justify-center text-center">
-          <div>
-            <div class="text-3xl mb-3">🚚</div>
-            <h3 class="font-semibold text-gray-800 mb-2">Fast & Discreet Shipping</h3>
-            <p class="text-gray-600 text-sm">Quick delivery across the USA with discrete packaging</p>
+      <!-- Trust Indicators Section -->
+      <div class="bg-white/95 rounded-xl shadow-xl p-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="flex items-center justify-center text-center">
+            <div>
+              <div class="text-3xl mb-3">🚚</div>
+              <h3 class="font-semibold text-gray-800 mb-2">Fast & Discreet Shipping</h3>
+              <p class="text-gray-600 text-sm">Quick delivery across the USA with discrete packaging</p>
+            </div>
           </div>
-        </div>
-        <div class="flex items-center justify-center text-center">
-          <div>
-            <div class="text-3xl mb-3">🔒</div>
-            <h3 class="font-semibold text-gray-800 mb-2">Secure Transactions</h3>
-            <p class="text-gray-600 text-sm">Safe payment processing with multiple options</p>
+          <div class="flex items-center justify-center text-center">
+            <div>
+              <div class="text-3xl mb-3">🔒</div>
+              <h3 class="font-semibold text-gray-800 mb-2">Secure Transactions</h3>
+              <p class="text-gray-600 text-sm">Safe payment processing with multiple options</p>
+            </div>
           </div>
-        </div>
-        <div class="flex items-center justify-center text-center">
-          <div>
-            <div class="text-3xl mb-3">💯</div>
-            <h3 class="font-semibold text-gray-800 mb-2">Quality Guaranteed</h3>
-            <p class="text-gray-600 text-sm">Premium products from trusted manufacturers</p>
+          <div class="flex items-center justify-center text-center">
+            <div>
+              <div class="text-3xl mb-3">💯</div>
+              <h3 class="font-semibold text-gray-800 mb-2">Quality Guaranteed</h3>
+              <p class="text-gray-600 text-sm">Premium products from trusted manufacturers</p>
+            </div>
           </div>
         </div>
       </div>
