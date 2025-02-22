@@ -75,7 +75,7 @@
 
         <!-- Right Announcement Section -->
         <div class="w-full lg:w-1/2 flex justify-center lg:justify-end">
-          <div class="bg-white/10 backdrop-blur-md rounded-3xl p-10 lg:p-12 max-w-2xl w-full border-2 border-blue-300/30 shadow-2xl transform hover:scale-[1.02] transition-transform duration-300">
+          <div v-if="!closed" class="bg-white/10 backdrop-blur-md rounded-3xl p-10 lg:p-12 max-w-2xl w-full border-2 border-blue-300/30 shadow-2xl transform hover:scale-[1.02] transition-transform duration-300">
             <div class="flex flex-col items-start gap-8">
               <div class="flex items-start gap-6 w-full">
                 <div class="bg-blue-500/20 rounded-2xl p-4">
@@ -84,16 +84,10 @@
                   </svg>
                 </div>
                 <div class="flex-1">
-                  <h3 class="text-3xl font-bold text-blue-200 mb-4">Limited Time Offer!</h3>
-                  <p class="text-2xl text-blue-100 mb-6">Free shipping on all orders over $150</p>
-                  <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                    <p class="text-lg text-blue-200/80">Use code: <span class="font-mono font-bold text-blue-300">FREESHIP150</span></p>
-                    <button class="px-6 py-2 bg-blue-500/20 rounded-full text-blue-200 hover:bg-blue-500/30 transition-colors duration-300">
-                      Copy Code
-                    </button>
-                  </div>
+                  <h3 class="text-3xl font-bold text-blue-200 mb-4">Free Shipping Available</h3>
+                  <p class="text-2xl text-blue-100 mb-6">Free shipping on all orders over $150 (example)</p>
                 </div>
-                <button class="text-gray-400 hover:text-gray-200 transition-colors">
+                <button @click="closed = true" class="text-gray-400 hover:text-gray-200 transition-colors">
                   <span class="sr-only">Close</span>
                   <svg class="w-8 h-8" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -106,13 +100,13 @@
               <div class="flex flex-col sm:flex-row items-center justify-between gap-6 w-full">
                 <div class="flex items-center gap-4">
                   <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                  <p class="text-green-400">Offer ends soon!</p>
+                  <p class="text-green-400">Free shipping available</p>
                 </div>
                 <NuxtLink 
                   to="/products"
                   class="w-full sm:w-auto px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-full text-center transition-colors duration-300"
                 >
-                  Shop Now & Save
+                  Shop Now
                 </NuxtLink>
               </div>
             </div>
