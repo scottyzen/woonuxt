@@ -5,21 +5,21 @@
  */
 export default defineAppConfig({
   siteName: 'WooNuxt',
-  shortDescription: 'This is an example of a WooNuxt store. It provides a modern, fast, and SEO friendly ecommerce store built with Nuxt and WooCommerce.',
-  description: `WooNuxt is unmatched when it comes to performance and scalability. Reap the benefits of having a online store that out performs all of your competitors. You can edit components to display your own information just like the one you're reading now.`,
-  baseUrl: 'https://v3.woonuxt.com',
+  shortDescription: 'ModaPrime USA - Premium modafinil with fast shipping and competitive prices across the United States.',
+  description: `ModaPrime USA is committed to providing high-quality modafinil products with exceptional customer service. We focus on customer satisfaction through competitive pricing, rapid delivery, and reliable support.`,
+  baseUrl: 'https://store.modaprimeusa.com',
   siteImage: 'https://user-images.githubusercontent.com/5116925/218879668-f4c1f9fd-bef4-44b0-bc7f-e87d994aa3a1.png',
   storeSettings: {
-    autoOpenCart: false,
-    showReviews: true,
-    showFilters: true,
+    autoOpenCart: true,
+    showReviews: false,
+    showFilters: false,
     showOrderByDropdown: true,
-    showSKU: true,
+    showSKU: false,
     showRelatedProducts: true,
-    showProductCategoriesOnSingleProduct: true,
+    showProductCategoriesOnSingleProduct: false,
     showBreadcrumbOnSingleProduct: true,
-    showMoveToWishlist: true,
-    hideBillingAddressForVirtualProducts: false,
+    showMoveToWishlist: false,
+    hideBillingAddressForVirtualProducts: true,
     initStoreOnUserActionToReduceServerLoad: true,
     saleBadge: 'percent', // 'percent', 'onSale' or 'hidden'
     socialLoginsDisplay: 'buttons', // 'buttons' or 'icons'
