@@ -1,32 +1,29 @@
 <script setup lang="ts">
 const { cart } = useCart();
-const { stripe } = defineProps(['stripe']);
+const { btcpay } = defineProps(['btcpay']);
 
-const rawCartTotal = computed(() => cart.value && parseFloat(cart.value.rawTotal as string) * 100);
+const rawCartTotal = computed(() => cart.value && parseFloat(cart.value.rawTotal as string));
 const emit = defineEmits(['updateElement']);
-let elements = null as any;
 
-const options = {
-  mode: 'payment',
-  currency: 'eur',
-  amount: rawCartTotal.value,
-  // paymentMethodCreation: 'manual',
-};
-
-const createStripeElements = async () => {
-  elements = stripe.elements(options);
-  const paymentElement = elements.create('card', { hidePostalCode: true });
-  paymentElement.mount('#card-element');
-  emit('updateElement', elements);
+const createBTCPayInvoice = async () => {
+  try {
+    const invoice = await btcpay.createInvoice({
+      price: rawCartTotal.value,
+      currency: 'EUR'
+    });
+    emit('updateElement', invoice);
+  } catch (err) {
+    console.error('Error creating BTCPay invoice:', err);
+  }
 };
 
 onMounted(() => {
-  createStripeElements();
+  createBTCPayInvoice();
 });
 </script>
 
 <template>
-  <div id="card-element">
-    <!-- Elements will create form elements here -->
+  <div id="btcpay-element">
+    <!-- BTCPay invoice will be displayed here -->
   </div>
 </template>

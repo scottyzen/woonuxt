@@ -1,104 +1,60 @@
 <template>
-  <div class="relative mx-auto w-full bg-gradient-to-r from-[#1a1a1a] to-[#2d2d2d]">
-    <div class="container relative min-h-[500px] md:min-h-[600px] lg:min-h-[700px] mx-auto">
-      <!-- Background effects -->
-      <div class="absolute inset-0">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.05),transparent_70%)]"></div>
-        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjMjIyIj48L3JlY3Q+CjxwYXRoIGQ9Ik0wIDVMNSAwWk02IDRMNCA2Wk0tMSAxTDEgLTFaIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMSI+PC9wYXRoPgo8L3N2Zz4=')] opacity-[0.07]"></div>
-      </div>
-
-      <!-- Animated Caduceus Symbols -->
-      <div class="absolute inset-0 opacity-30">
-        <!-- Large Caduceus -->
-        <div class="absolute text-[clamp(105px,14vw,168px)] text-gray-400 animate-float-1" style="top: 15%; left: 25%">
-          ⚕️
+  <div class="relative w-full bg-white h-[100vh] overflow-hidden">
+    <div class="container relative h-full mx-auto">
+      <!-- Background Caduceus Pattern -->
+      <div class="fixed inset-0 grid grid-cols-3 gap-10 opacity-20">
+        <div class="flex items-center justify-center transform translate-y-1/4 motion-safe:animate-parallax">
+          <div class="text-[60vh] text-black opacity-27 select-none mix-blend-color-burn">⚕️</div>
         </div>
-
-        <div class="absolute text-[clamp(105px,14vw,168px)] text-gray-500 animate-float-2" style="top: 65%; left: 70%">
-          ⚕️
+        <div class="flex items-center justify-center transform -translate-y-1/4 motion-safe:animate-parallax">
+          <div class="text-[60vh] text-black opacity-27 select-none mix-blend-color-burn">⚕️</div>
         </div>
-
-        <!-- Medium Caduceus -->
-        <div class="absolute text-[clamp(105px,11.2vw,140px)] text-gray-600 animate-float-3" style="top: 35%; left: 80%">
-          ⚕️
+        <div class="flex items-center justify-center transform translate-y-1/4 motion-safe:animate-parallax">
+          <div class="text-[60vh] text-black opacity-27 select-none mix-blend-color-burn">⚕️</div>
         </div>
-
-        <div class="absolute text-[clamp(105px,11.2vw,140px)] text-gray-400 animate-float-1" style="top: 55%; left: 35%">
-          ⚕️
+        <div class="flex items-center justify-center transform -translate-y-1/4 motion-safe:animate-parallax">
+          <div class="text-[60vh] text-black opacity-27 select-none mix-blend-color-burn">⚕️</div>
         </div>
-
-        <!-- Small Caduceus -->
-        <div class="absolute text-[clamp(105px,9.8vw,126px)] text-gray-500 animate-float-2" style="top: 75%; left: 45%">
-          ⚕️
+        <div class="flex items-center justify-center transform -translate-y-1/4 motion-safe:animate-parallax">
+          <div class="text-[60vh] text-black opacity-27 select-none mix-blend-color-burn">⚕️</div>
+        </div>
+        <div class="flex items-center justify-center transform translate-y-1/4 motion-safe:animate-parallax">
+          <div class="text-[60vh] text-black opacity-27 select-none mix-blend-color-burn">⚕️</div>
+        </div>
+        <div class="flex items-center justify-center transform -translate-y-1/4 motion-safe:animate-parallax">
+          <div class="text-[60vh] text-black opacity-27 select-none mix-blend-color-burn">⚕️</div>
+        </div>
+        <div class="flex items-center justify-center transform translate-y-1/4 motion-safe:animate-parallax">
+          <div class="text-[60vh] text-black opacity-27 select-none mix-blend-color-burn">⚕️</div>
         </div>
       </div>
 
       <!-- Main Content -->
-      <div class="relative z-10 h-full flex flex-col lg:flex-row items-center justify-between px-6 py-12 lg:py-20 gap-12">
-        <!-- Left Content Section -->
-        <div class="flex flex-col max-w-xl w-full lg:w-1/2">
-          <h2 class="text-2xl text-blue-200 mb-3 font-light tracking-wider animate-fade-in">Welcome to</h2>
-          <h1 class="text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-8 tracking-tight">ModaPrime USA</h1>
-          <p class="text-xl text-gray-200 mb-10 leading-relaxed">
-            Premium modafinil delivered across the USA. Fast shipping, reliable service, and competitive prices.
+      <div class="relative z-10 h-full flex flex-col justify-start px-4 pt-4 lg:pt-8 gap-8">
+        <!-- Hero Text Section -->
+        <div class="flex flex-col items-start max-w-5xl">
+          <h1 
+            class="text-[20vh] font-black tracking-tighter leading-[0.85] motion-safe:animate-slide-up notable-regular mix-blend-color-burn -mt-4 mb-4"
+            style="font-family: 'Notable', sans-serif; text-transform: uppercase; letter-spacing: -0.08em; word-wrap: break-word; color: rgba(23, 36, 69, 0.63);"
+          >
+            Moda<br/>Prime<br/>USA
+          </h1>
+          <p 
+            class="text-2xl md:text-3xl text-gray-700 mb-8 leading-relaxed max-w-3xl motion-safe:animate-slide-up pl-2"
+            style="animation-delay: 200ms;"
+          >
+            Modafinil
           </p>
           <NuxtLink 
-            class="group relative inline-flex items-center justify-center px-10 py-4 text-lg font-semibold text-white transition-all duration-300 ease-in-out w-fit overflow-hidden rounded-full bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 shadow-lg hover:shadow-blue-500/30"
+            class="group relative inline-flex items-center justify-center px-10 py-4 text-xl font-semibold text-white transition-all duration-300 ease-in-out overflow-hidden rounded-full bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 shadow-lg hover:shadow-blue-500/30 motion-safe:animate-slide-up"
             to="/products"
+            style="animation-delay: 400ms;"
           >
-            <span class="relative">Shop now</span>
-            <svg class="w-6 h-6 ml-2 -mr-1 transition-transform duration-300 ease-out transform group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span class="relative">Shop</span>
+            <svg class="w-8 h-8 ml-3 -mr-2 transition-transform duration-300 ease-out transform group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
           </NuxtLink>
-        </div>
-        <!-- Right Announcement Section -->
-        <div class="w-full lg:w-1/2 flex justify-center lg:justify-end">
-          <Transition
-            enter-active-class="transition duration-300 ease-out" 
-            enter-from-class="transform opacity-0"
-            enter-to-class="transform opacity-100"
-            leave-active-class="transition duration-200 ease-in"
-            leave-from-class="transform opacity-100"
-            leave-to-class="transform opacity-0"
-          >
-            <div v-if="!closed" class="bg-white/10 backdrop-blur-md rounded-3xl p-10 lg:p-12 max-w-2xl w-full border-2 border-blue-300/30 shadow-2xl transform hover:scale-[1.02] transition-transform duration-300">
-              <div class="flex flex-col items-start gap-8">
-                <div class="flex items-start gap-6 w-full">
-                  <div class="bg-blue-500/20 rounded-2xl p-4">
-                    <svg class="w-12 h-12 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-                    </svg>
-                  </div>
-                  <div class="flex-1">
-                    <h3 class="text-3xl font-bold text-blue-200 mb-4">Free Shipping Available</h3>
-                    <p class="text-2xl text-blue-100 mb-6">Free shipping on all orders over $150 (example)</p>
-                  </div>
-                  <button @click="closed = true" class="text-gray-400 hover:text-gray-200 transition-colors">
-                    <span class="sr-only">Close</span>
-                    <svg class="w-8 h-8" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
-                  </button>
-                </div>
-              
-                <div class="w-full h-px bg-gradient-to-r from-transparent via-blue-200/20 to-transparent"></div>
-              
-                <div class="flex flex-col sm:flex-row items-center justify-between gap-6 w-full">
-                  <div class="flex items-center gap-4">
-                    <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                    <p class="text-green-400">Free shipping available</p>
-                  </div>
-                  <NuxtLink 
-                    to="/products"
-                    class="w-full sm:w-auto px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-full text-center transition-colors duration-300"
-                  >
-                    Shop Now
-                  </NuxtLink>
-                </div>
-              </div>
-            </div>
-          </Transition>
         </div>
       </div>
     </div>
@@ -106,32 +62,5 @@
 </template>
 
 <script setup lang="ts">
-const closed = ref(false)
+// No script setup needed since this component only uses template markup
 </script>
-
-<style lang="postcss" scoped>
-.animate-float-1 {
-  animation: float 6s ease-in-out infinite;
-}
-
-.animate-float-2 {
-  animation: float 8s ease-in-out infinite;
-}
-
-.animate-float-3 {
-  animation: float 10s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
-[class*="text-[100vh]"] {
-  font-family: 'Noto Color Emoji', sans-serif;
-}
-</style> 
