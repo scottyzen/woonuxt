@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full bg-white h-[100vh] overflow-hidden">
+  <div class="relative w-full bg-gray-50 h-[100vh] overflow-hidden">
     <div class="container relative h-full mx-auto">
       <!-- Background Symbol Pattern -->
       <div class="fixed inset-0 opacity-10" style="background-image: url('/images/bgsymbol.png'); background-repeat: repeat; background-size: 400px;">
