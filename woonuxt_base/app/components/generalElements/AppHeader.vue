@@ -38,14 +38,14 @@ const closeAnnouncement = () => {
         to="/products/new-customers-10-free-modawake"
         class="block w-full bg-blue-50 hover:bg-blue-100 transition-colors"
       >
-        <div class="container py-2 px-4 flex items-center justify-between">
+        <div class="container py-2 px-4 flex items-center justify-center">
           <div class="flex items-center gap-2 text-blue-800">
             <span class="text-lg">🎉</span>
             <span class="text-sm font-medium">Special Offer: 10 Modawake - *FREE* for NEW CUSTOMERS!</span>
           </div>
           <button 
             @click.prevent="closeAnnouncement"
-            class="text-blue-600 hover:text-blue-800 p-1"
+            class="text-blue-600 hover:text-blue-800 p-1 absolute right-4"
             aria-label="Close announcement"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
