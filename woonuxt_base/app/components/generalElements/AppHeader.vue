@@ -36,7 +36,8 @@ const closeAnnouncement = () => {
       <NuxtLink 
         v-if="showAnnouncement" 
         to="/products/new-customers-10-free-modawake"
-        class="block w-full bg-blue-50 hover:bg-blue-100 transition-colors"
+        class="block w-full bg-blue-50 hover:bg-blue-100 transition-colors relative"
+        style="background: linear-gradient(to right, transparent, rgba(0,0,0,0.1) 50%, transparent), linear-gradient(to left, transparent, rgba(0,0,0,0.1) 50%, transparent); background-position: bottom; background-size: 100% 1px; background-repeat: no-repeat;"
       >
         <div class="container py-2 px-4 flex items-center justify-center">
           <div class="flex items-center gap-2 text-blue-800">

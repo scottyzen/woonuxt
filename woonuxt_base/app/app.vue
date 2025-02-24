@@ -40,8 +40,9 @@ useHead({
 
 <template>
   <NuxtLoadingIndicator />
-  <div class="flex flex-col min-h-screen">
-    <AppHeader />
+  <div class="flex flex-col min-h-screen relative">
+    <div class="absolute inset-0 bg-[url('/images/bgsymbol.png')] bg-repeat opacity-5 pointer-events-none"></div>
+    <AppHeader class="relative bg-gray-100" />
 
     <Transition name="slide-from-right">
       <LazyCart v-if="isShowingCart" />
@@ -51,13 +52,13 @@ useHead({
       <MobileMenu v-if="isShowingMobileMenu" />
     </Transition>
 
-    <NuxtPage />
+    <NuxtPage class="relative" />
 
     <Transition name="fade">
       <div v-if="isShowingCart || isShowingMobileMenu" class="bg-black opacity-25 inset-0 z-40 fixed" @click="closeCartAndMenu" />
     </Transition>
 
-    <AppFooter />
+    <AppFooter class="relative bg-gray-100" />
   </div>
 </template>
 
