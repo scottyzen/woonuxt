@@ -1,25 +1,34 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useProducts } from '../composables/useProducts';
 import { useRoute } from 'vue-router';
 import { useAppConfig } from '../composables/useAppConfig';
 import { useHelpers } from '../composables/useHelpers';
 import { useAsyncGql } from '../composables/useAsyncGql';
-import { useHead } from 'vue-head';
+import { useHead } from 'unhead';
+import { onMounted, nextTick, computed } from 'vue';
 
-const { t } = useI18n();
 const { setProducts, updateProductList, products, productsLoading, error } = useProducts();
 const route = useRoute();
 const { storeSettings } = useAppConfig();
 const { isQueryEmpty } = useHelpers();
+const { t } = useI18n();
 
 const { data } = await useAsyncGql('getProducts');
 const allProducts = (data.value?.products?.nodes || []) as Product[];
 setProducts(allProducts);
 
+// Add loading state management
+const isInitialLoad = ref(true);
+
 onMounted(() => {
   if (!isQueryEmpty.value) updateProductList();
+  // Remove initial load state after first render
+  nextTick(() => {
+    setTimeout(() => {
+      isInitialLoad.value = false;
+    }, 100);
+  });
 });
 
 watch(
@@ -30,16 +39,11 @@ watch(
   },
 );
 
-// Add safety checks for computed values
-const hasProducts = computed(() => {
-  return products.value?.nodes?.length > 0;
-});
-
-// Ensure proper error and loading states
+// Computed state with loading optimization
 const pageState = computed(() => {
+  if (isInitialLoad.value && productsLoading.value) return 'initial-loading';
   if (error.value) return 'error';
-  if (productsLoading.value) return 'loading';
-  if (!hasProducts.value) return 'empty';
+  if (!products.value?.nodes?.length) return 'empty';
   return 'ready';
 });
 
@@ -50,25 +54,17 @@ useHead({
 </script>
 
 <template>
-  <div class="container">
-    <div v-if="pageState === 'error'" class="text-center py-12">
-      <p class="text-red-500">{{ error }}</p>
-    </div>
+  <div class="container flex items-start gap-16" v-if="allProducts.length">
+    <Filters v-if="storeSettings.showFilters" />
 
-    <div v-else-if="pageState === 'loading'" class="text-center py-12">
-      <LoadingIcon />
-    </div>
-
-    <div v-else-if="pageState === 'empty'" class="text-center py-12">
-      <p>{{ t('messages.products.noProducts') }}</p>
-    </div>
-
-    <div v-else class="grid gap-8 my-8 md:grid-cols-3 lg:grid-cols-4">
-      <ProductCard 
-        v-for="product in products?.nodes" 
-        :key="product.databaseId" 
-        :product="product"
-      />
+    <div class="w-full">
+      <div class="flex items-center justify-between w-full gap-4 mt-8 md:gap-8">
+        <ProductResultCount />
+        <OrderByDropdown class="hidden md:inline-flex" v-if="storeSettings.showOrderByDropdown" />
+        <ShowFilterTrigger v-if="storeSettings.showFilters" class="md:hidden" />
+      </div>
+      <ProductGrid />
     </div>
   </div>
+  <NoProductsFound v-else>Could not fetch products from your store. Please check your configuration.</NoProductsFound>
 </template>

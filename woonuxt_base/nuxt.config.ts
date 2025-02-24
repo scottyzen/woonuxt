@@ -12,7 +12,7 @@ export default defineNuxtConfig({
       htmlAttrs: { lang: 'en' },
       link: [{ rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' }],
     },
-    pageTransition: { name: 'page', mode: 'out-in' },
+    pageTransition: { name: 'page', mode: 'default' },
   },
 
   experimental: {
@@ -68,6 +68,9 @@ export default defineNuxtConfig({
       '/checkout/order-received/**': { ssr: false },
       '/order-summary/**': { ssr: false },
     },
+    prerender: {
+      routes: ['/api/_nuxt_icon/ion.json'],
+    }
   },
 
   // Multilingual support
@@ -85,18 +88,13 @@ export default defineNuxtConfig({
     strategy: 'no_prefix',
   },
 
-  // Add proper SSR handling
-  ssr: true,
-  
-  // Add proper error handling
-  vue: {
-    config: {
-      errorHandler(err) {
-        console.error('Vue error:', err);
-      },
-      warnHandler(msg, vm, trace) {
-        console.warn('Vue warning:', msg);
-      }
-    }
-  }
+  icon: {
+    // Preload commonly used icons
+    preload: [
+      'ion:sad-outline',
+      // Add other commonly used icons
+    ],
+    // Use local fallback
+    fallback: 'ion:help-outline',
+  },
 });
