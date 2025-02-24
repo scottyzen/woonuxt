@@ -67,11 +67,7 @@ export function useCheckout() {
       let checkoutPayload: CheckoutInput = {
         billing,
         shipping,
-        metaData: [
-          ...orderInput.value.metaData,
-          { key: 'currency', value: 'USD' },
-          { key: 'currency_symbol', value: '$' }
-        ],
+        metaData: orderInput.value.metaData,
         paymentMethod: orderInput.value.paymentMethod.id,
         customerNote: orderInput.value.customerNote,
         shipToDifferentAddress,
