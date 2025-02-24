@@ -3,14 +3,15 @@ const { frontEndUrl, wooNuxtSEO, stripHtml } = useHelpers();
 const { path } = useRoute();
 const { info } = defineProps({ info: { type: Object as PropType<Product>, required: true } });
 
-const title = info.name;
+// Add safety checks for all values
+const title = info?.name ?? '';
 const canonical = `${frontEndUrl}${path}`;
 const siteName = process.env.SITE_TITLE ?? 'WooNuxt';
 
 const img = useImage();
-const imageURL = info.image?.sourceUrl ?? '/images/placeholder.jpg';
-const defaultImageSrc = img.getSizes(imageURL, { width: 1200, height: 630 }).src;
-const twitterImageSrc = img.getSizes(imageURL, { width: 1600, height: 900 }).src;
+const imageURL = info?.image?.sourceUrl ?? '/images/placeholder.jpg';
+const defaultImageSrc = img.getSizes(imageURL, { width: 1200, height: 630 })?.src ?? '';
+const twitterImageSrc = img.getSizes(imageURL, { width: 1600, height: 900 })?.src ?? '';
 
 const getFullImageURL = (url?: string) => {
   if (!url) return '';
@@ -20,10 +21,14 @@ const getFullImageURL = (url?: string) => {
 
 const defaultImage = getFullImageURL(defaultImageSrc);
 const twitterImage = getFullImageURL(twitterImageSrc);
-const description = info.shortDescription || info.description ? stripHtml(info.shortDescription || '') : stripHtml(info.description || '');
+const description = info?.shortDescription || info?.description 
+  ? stripHtml(info.shortDescription || '') 
+  : stripHtml(info.description || '');
 
-const facebook = wooNuxtSEO?.find((item) => item.provider === 'facebook') ?? null;
-const twitter = wooNuxtSEO?.find((item) => item.provider === 'twitter') ?? null;
+// Ensure wooNuxtSEO is an array before using find
+const seoData = Array.isArray(wooNuxtSEO) ? wooNuxtSEO : [];
+const facebook = seoData.find((item) => item?.provider === 'facebook') ?? null;
+const twitter = seoData.find((item) => item?.provider === 'twitter') ?? null;
 </script>
 
 <template>
