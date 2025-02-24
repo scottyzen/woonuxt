@@ -22,6 +22,10 @@ useSeoMeta({
   title: error?.statusCode ? `Error ${error.statusCode}` : 'Error',
   description: error?.message || '',
 });
+
+const handleError = () => {
+  clearError({ redirect: '/' });
+};
 </script>
 
 <template>
@@ -37,8 +41,11 @@ useSeoMeta({
     </Transition>
 
     <div class="flex flex-col items-center justify-center flex-1 gap-4 min-h-[500px]">
-      <h1 class="text-6xl font-bold">Error {{ error?.statusCode || '404' }}</h1>
-      <p v-if="error?.message" class="text-lg">{{ error.message }}</p>
+      <h1 class="text-6xl font-bold">{{ error?.statusCode === 404 ? 'Page Not Found' : 'An Error Occurred' }}</h1>
+      <div class="error-details">
+        <p v-if="error?.message" class="text-lg">{{ error.message }}</p>
+      </div>
+      <button @click="handleError">Try Again</button>
     </div>
 
     <Transition name="fade">

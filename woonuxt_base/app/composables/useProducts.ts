@@ -1,8 +1,10 @@
 let allProducts = [] as Product[];
 
 export function useProducts() {
-  // Declare the state variables and the setter functions
-  const products = useState<Product[]>('products');
+  // Initialize state variables with default values
+  const products = useState<Product[]>('products', () => []);
+  const productsLoading = useState<boolean>('productsLoading', () => false);
+  const error = useState<string | null>('productsError', () => null);
 
   /**
    * Sets the products state variable and the allProducts variable.
@@ -20,27 +22,33 @@ export function useProducts() {
     const { isFiltersActive, filterProducts } = useFiltering();
     const { isSearchActive, searchProducts } = useSearching();
 
-    // scroll to top of page
-    scrollToTop();
+    productsLoading.value = true;
+    error.value = null;
 
-    // return all products if no filters are active
-    if (!isFiltersActive.value && !isSearchActive.value && !isSortingActive.value) {
-      products.value = allProducts;
-      return;
-    }
-
-    // otherwise, apply filter, search and sorting in that order
     try {
+      // scroll to top of page
+      scrollToTop();
+
+      // return all products if no filters are active
+      if (!isFiltersActive.value && !isSearchActive.value && !isSortingActive.value) {
+        products.value = allProducts;
+        return;
+      }
+
+      // otherwise, apply filter, search and sorting in that order
       let newProducts = [...allProducts];
       if (isFiltersActive.value) newProducts = filterProducts(newProducts);
       if (isSearchActive.value) newProducts = searchProducts(newProducts);
       if (isSortingActive.value) newProducts = sortProducts(newProducts);
 
       products.value = newProducts;
-    } catch (error) {
-      console.error(error);
+    } catch (err: any) {
+      console.error('Error updating product list:', err);
+      error.value = err.message;
+    } finally {
+      productsLoading.value = false;
     }
   };
 
-  return { products, allProducts, setProducts, updateProductList };
+  return { products, allProducts, setProducts, updateProductList, productsLoading, error };
 }
