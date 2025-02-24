@@ -2,12 +2,12 @@
 import { useProducts } from "../composables/useProducts";
 import { useRoute } from "vue-router";
 import { useHelpers } from "../composables/useHelpers";
-import { useAsyncGql } from "../composables/useAsyncGql";
 import { useI18n } from "vue-i18n";
+import { useAsyncGql } from '#imports';
 
 const { setProducts, updateProductList } = useProducts();
 const route = useRoute();
-const appConfig = useAppConfig();
+const { storeSettings } = useAppConfig();
 const { isQueryEmpty } = useHelpers();
 const { t } = useI18n();
 
@@ -35,13 +35,13 @@ useHead({
 
 <template>
   <div class="container flex items-start gap-16" v-if="allProducts.length">
-    <Filters v-if="appConfig.showFilters" />
+    <Filters v-if="storeSettings.showFilters" />
 
     <div class="w-full">
       <div class="flex items-center justify-between w-full gap-4 mt-8 md:gap-8">
         <ProductResultCount />
-        <OrderByDropdown class="hidden md:inline-flex" v-if="appConfig.showOrderByDropdown" />
-        <ShowFilterTrigger v-if="appConfig.showFilters" class="md:hidden" />
+        <OrderByDropdown class="hidden md:inline-flex" v-if="storeSettings.showOrderByDropdown" />
+        <ShowFilterTrigger v-if="storeSettings.showFilters" class="md:hidden" />
       </div>
       <ProductGrid />
     </div>
