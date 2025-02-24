@@ -1,34 +1,56 @@
 <template>
   <div class="container mx-auto p-4">
     <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
-      <h1 class="text-2xl font-bold mb-4">Bitcoin Payment</h1>
+      <h1 class="text-2xl font-bold mb-4">{{ $t('messages.billing.paymentOptions') }}</h1>
       
-      <!-- Show clear loading state -->
-      <div v-if="loading" class="text-center p-4">
-        <LoadingIcon />
-        <p class="mt-2">Initializing payment...</p>
+      <div v-if="loading" class="text-center">
+        <div class="animate-pulse">
+          <div class="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
+          <div class="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
+        </div>
       </div>
 
-      <!-- Show errors prominently -->
       <div v-else-if="error" class="text-red-600 text-center p-4 bg-red-50 rounded">
         {{ error }}
-        <button 
-          @click="reloadCheckout" 
-          class="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-        >
-          Try Again
-        </button>
       </div>
 
-      <!-- Show BTCPay invoice -->
-      <div v-else class="btcpay-checkout-container">
-        <div v-if="checkoutUrl" class="border rounded-lg overflow-hidden">
-          <iframe 
-            :src="checkoutUrl"
-            class="w-full min-h-[600px]"
-            frameborder="0"
-            allowfullscreen
-          ></iframe>
+      <div v-else>
+        <!-- Payment Status -->
+        <div class="mb-6">
+          <div class="flex items-center justify-center gap-2 mb-4">
+            <div class="h-3 w-3 rounded-full" 
+                 :class="{
+                   'bg-yellow-400 animate-pulse': paymentStatus === 'pending',
+                   'bg-green-500': paymentStatus === 'completed',
+                   'bg-red-500': paymentStatus === 'expired'
+                 }">
+            </div>
+            <span class="font-medium" :class="{
+              'text-yellow-700': paymentStatus === 'pending',
+              'text-green-700': paymentStatus === 'completed',
+              'text-red-700': paymentStatus === 'expired'
+            }">
+              {{ statusMessage }}
+            </span>
+          </div>
+        </div>
+
+        <!-- BTCPay Checkout Container -->
+        <div class="btcpay-checkout-container">
+          <div v-if="checkoutMode === 'modal'" id="btcpay-modal-checkout"></div>
+          <div v-else>
+            <iframe 
+              :src="checkoutUrl"
+              class="w-full min-h-[600px]"
+              frameborder="0"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+
+        <!-- Help Text -->
+        <div class="mt-6 text-center text-sm text-gray-600">
+          <p>Having trouble? <a href="#" @click.prevent="reloadCheckout" class="text-blue-600 hover:text-blue-800">Reload payment window</a></p>
         </div>
       </div>
     </div>
@@ -36,6 +58,9 @@
 </template>
 
 <script setup>
+import { useRoute, useRouter } from 'vue-router';
+import { useCart } from '~/composables/useCart';
+
 const route = useRoute();
 const router = useRouter();
 const { emptyCart, refreshCart } = useCart();
@@ -65,41 +90,22 @@ const statusMessage = computed(() => {
   }
 });
 
-// Prevent direct access without order details
-onBeforeMount(() => {
-  if (!orderId.value || !orderKey.value) {
-    console.error('Missing order details');
-    router.push('/checkout');
-    return;
-  }
-});
-
 const checkPaymentStatus = async () => {
   try {
     const response = await fetch(
-      `${process.env.GQL_HOST.replace('graphql', '')}?wc-api=BTCPay_Check_Payment&order_id=${orderId.value}&order_key=${orderKey.value}`,
-      {
-        headers: {
-          'Accept': 'application/json',
-        }
-      }
+      `${process.env.GQL_HOST.replace('graphql', '')}?wc-api=BTCPay_Check_Payment&order_id=${orderId.value}&order_key=${orderKey.value}`
     );
+    const data = await response.json();
     
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    if (data.invoiceId) {
+      invoiceId.value = data.invoiceId;
     }
 
-    const data = await response.json();
-    console.log('Payment status:', data);
-    
     paymentStatus.value = data.status;
 
     if (data.status === 'completed') {
-      // Only empty cart and redirect after confirmed payment
-      await emptyCart();
-      await refreshCart();
       setTimeout(() => {
-        router.push(`/checkout/order-received/${orderId.value}/?key=${orderKey.value}&payment=btcpay`);
+        router.push(`/checkout/order-received/${orderId.value}`);
       }, 2000);
     } else if (data.status === 'expired') {
       error.value = 'Payment time expired. Please try again.';
@@ -108,7 +114,6 @@ const checkPaymentStatus = async () => {
     }
   } catch (e) {
     console.error('Error checking payment status:', e);
-    error.value = 'Error checking payment status. Please refresh the page.';
   }
 };
 
@@ -125,8 +130,9 @@ const reloadCheckout = async () => {
 const initializeCheckout = async () => {
   try {
     const response = await fetch(
-      `${process.env.GQL_HOST.replace('graphql', '')}?wc-api=BTCPay_Checkout&order_id=${orderId.value}&order_key=${orderKey.value}`
+      `${process.env.GQL_HOST.replace('graphql', '')}?wc-api=BTCPay_Checkout&order_id=${orderId.value}&key=${orderKey.value}`
     );
+    
     const data = await response.json();
     
     if (data.error) {
@@ -149,9 +155,8 @@ const initializeCheckout = async () => {
     }
 
     checkPaymentStatus();
-
   } catch (e) {
-    error.value = 'Failed to load payment details. Please try again or contact support.';
+    error.value = 'Failed to load payment details. Please try again.';
     console.error('BTCPay error:', e);
   } finally {
     loading.value = false;
