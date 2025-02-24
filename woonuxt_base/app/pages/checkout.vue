@@ -9,9 +9,18 @@ import { useRuntimeConfig, useSeoMeta } from '#imports';
 
 const { t } = useI18n();
 const { query } = useRoute();
-const { cart, isUpdatingCart, paymentGateways } = useCart();
-const { customer, viewer } = useAuth();
-const { orderInput, isProcessingOrder, proccessCheckout } = useCheckout();
+const { cart = ref({ isEmpty: true }), isUpdatingCart = ref(false), paymentGateways = ref({ nodes: [] }) } = useCart() || {};
+const { customer = ref({}), viewer = ref(null) } = useAuth() || {};
+const { 
+  orderInput = ref({
+    customerNote: '',
+    paymentMethod: '',
+    shipToDifferentAddress: false,
+    metaData: [{ key: 'order_via', value: 'WooNuxt' }]
+  }), 
+  isProcessingOrder = ref(false), 
+  proccessCheckout 
+} = useCheckout() || {};
 
 const buttonText = ref<string>(isProcessingOrder.value ? t('messages.general.processing') : t('messages.shop.checkoutButton'));
 const isCheckoutDisabled = computed<boolean>(() => isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod);
@@ -21,16 +30,27 @@ const isPaid = ref<boolean>(false);
 
 onBeforeMount(async () => {
   if (query.cancel_order) window.close();
-  
-  if (cart.value?.isEmpty) {
-    const router = useRouter();
-    router.push('/');
-  }
 });
 
 const payNow = async () => {
-  buttonText.value = t('messages.general.processing');
-  proccessCheckout(isPaid.value);
+  try {
+    if (!orderInput.value?.paymentMethod) {
+      console.error('No payment method selected');
+      return;
+    }
+
+    buttonText.value = t('messages.general.processing');
+    
+    if (typeof proccessCheckout === 'function') {
+      const isBtcPay = orderInput.value.paymentMethod.id === 'btcpay';
+      await proccessCheckout(isBtcPay ? false : isPaid.value);
+    } else {
+      console.error('proccessCheckout is not a function');
+    }
+  } catch (error) {
+    console.error('Error processing payment:', error);
+    buttonText.value = t('messages.shop.checkoutButton');
+  }
 };
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;

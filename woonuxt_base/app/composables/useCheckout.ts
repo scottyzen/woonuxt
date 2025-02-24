@@ -1,16 +1,18 @@
 import type { CheckoutInput, UpdateCustomerInput, CreateAccountInput } from '#gql';
 
 export function useCheckout() {
-  const orderInput = useState<any>('orderInput', () => {
-    return {
-      customerNote: '',
-      paymentMethod: '',
-      shipToDifferentAddress: false,
-      metaData: [{ key: 'order_via', value: 'WooNuxt' }],
-    };
-  });
+  const orderInput = useState<any>('orderInput', () => ({
+    customerNote: '',
+    paymentMethod: '',
+    shipToDifferentAddress: false,
+    metaData: [{ key: 'order_via', value: 'WooNuxt' }],
+    createAccount: false,
+    username: '',
+    password: '',
+    transactionId: ''
+  }));
 
-  const isProcessing = useState<boolean>('isProcessing', () => false);
+  const isProcessingOrder = useState<boolean>('isProcessingOrder', () => false);
 
   // if Country or State are changed, calculate the shipping rates again
   async function updateShippingLocation() {
@@ -57,34 +59,35 @@ export function useCheckout() {
     const { emptyCart, refreshCart } = useCart();
     const { customer } = useAuth();
 
-    isProcessing.value = true;
-
-    const { username, password, shipToDifferentAddress } = orderInput.value;
-    const billing = customer.value.billing;
-    const shipping = shipToDifferentAddress ? customer.value.shipping : billing;
-
     try {
-      let checkoutPayload: CheckoutInput = {
-        billing,
-        shipping,
+      isProcessingOrder.value = true;
+      
+      // Validate required data
+      if (!orderInput.value?.paymentMethod?.id) {
+        throw new Error('Payment method not selected');
+      }
+
+      const checkoutPayload = {
+        billing: customer.value?.billing || {},
+        shipping: orderInput.value.shipToDifferentAddress ? customer.value?.shipping : customer.value?.billing,
         metaData: orderInput.value.metaData,
         paymentMethod: orderInput.value.paymentMethod.id,
         customerNote: orderInput.value.customerNote,
-        shipToDifferentAddress,
+        shipToDifferentAddress: orderInput.value.shipToDifferentAddress,
         transactionId: orderInput.value.transactionId,
-        isPaid,
+        isPaid
       };
 
       // Create account
       if (orderInput.value.createAccount) {
-        checkoutPayload.account = { username, password } as CreateAccountInput;
+        checkoutPayload.account = { username: orderInput.value.username, password: orderInput.value.password } as CreateAccountInput;
       }
 
       const { checkout } = await GqlCheckout(checkoutPayload);
 
       // Login user if account was created during checkout
       if (orderInput.value.createAccount) {
-        await loginUser({ username, password });
+        await loginUser({ username: orderInput.value.username, password: orderInput.value.password });
       }
 
       const orderId = checkout?.order?.databaseId;
@@ -113,8 +116,7 @@ export function useCheckout() {
         }
       } else if ((await checkout?.redirect) && isBtcPay) {
         // BTCPay Redirect
-        console.log('BTCPay redirect detected');
-        let redirectUrl = checkout?.redirect ?? '';
+        console.log('Processing BTCPay checkout');
         console.log('Redirecting to:', redirectUrl);
         router.push(`/checkout/btcpay?order_id=${orderId}&key=${orderKey}`);
       } else {
@@ -133,8 +135,8 @@ export function useCheckout() {
         await refreshCart();
       }
     } catch (error: any) {
-      console.log('Checkout error:', error);
-      isProcessing.value = false;
+      console.error('Checkout error:', error);
+      isProcessingOrder.value = false;
 
       const errorMessage = error?.gqlErrors?.[0].message;
 
@@ -147,12 +149,12 @@ export function useCheckout() {
       return null;
     }
 
-    isProcessing.value = false;
+    isProcessingOrder.value = false;
   };
 
   return {
     orderInput,
-    isProcessing,
+    isProcessingOrder,
     proccessCheckout,
     updateShippingLocation,
   };

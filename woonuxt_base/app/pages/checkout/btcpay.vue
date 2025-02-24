@@ -60,8 +60,8 @@
 <script setup>
 const route = useRoute();
 const router = useRouter();
-const orderId = route.query.order_id;
-const orderKey = route.query.key;
+const orderId = computed(() => route.query.order_id);
+const orderKey = computed(() => route.query.key);
 
 const loading = ref(true);
 const error = ref(null);
@@ -88,7 +88,7 @@ const statusMessage = computed(() => {
 const checkPaymentStatus = async () => {
   try {
     const response = await fetch(
-      `${process.env.GQL_HOST.replace('graphql', '')}?wc-api=BTCPay_Check_Payment&order_id=${orderId}&order_key=${orderKey}`
+      `${process.env.GQL_HOST.replace('graphql', '')}?wc-api=BTCPay_Check_Payment&order_id=${orderId.value}&order_key=${orderKey.value}`
     );
     const data = await response.json();
     
@@ -100,7 +100,7 @@ const checkPaymentStatus = async () => {
 
     if (data.status === 'completed') {
       setTimeout(() => {
-        router.push(`/checkout/order-received/${orderId}`);
+        router.push(`/checkout/order-received/${orderId.value}`);
       }, 2000);
     } else if (data.status === 'expired') {
       error.value = 'Payment time expired. Please try again.';
@@ -125,7 +125,7 @@ const reloadCheckout = async () => {
 const initializeCheckout = async () => {
   try {
     const response = await fetch(
-      `${process.env.GQL_HOST.replace('graphql', '')}?wc-api=BTCPay_Checkout&order_id=${orderId}&order_key=${orderKey}`
+      `${process.env.GQL_HOST.replace('graphql', '')}?wc-api=BTCPay_Checkout&order_id=${orderId.value}&order_key=${orderKey.value}`
     );
     const data = await response.json();
     
@@ -158,13 +158,20 @@ const initializeCheckout = async () => {
   }
 };
 
-onMounted(() => {
-  if (!orderId || !orderKey) {
-    error.value = 'Invalid order details. Please contact support.';
+onMounted(async () => {
+  try {
+    if (!orderId.value || !orderKey.value) {
+      error.value = 'Invalid order details. Please contact support.';
+      loading.value = false;
+      return;
+    }
+
+    await initializeCheckout();
+  } catch (e) {
+    console.error('Error during BTCPay initialization:', e);
+    error.value = 'Failed to initialize payment. Please try again.';
     loading.value = false;
-    return;
   }
-  initializeCheckout();
 });
 
 onUnmounted(() => {
