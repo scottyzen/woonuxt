@@ -35,16 +35,30 @@
           </div>
         </div>
 
+        <!-- Add debug information -->
+        <div v-if="process.dev" class="mb-4 p-2 bg-gray-100 rounded">
+          <p>Order ID: {{ orderId }}</p>
+          <p>Order Key: {{ orderKey }}</p>
+          <p>Checkout URL: {{ checkoutUrl }}</p>
+          <p>Payment Status: {{ paymentStatus }}</p>
+        </div>
+
         <!-- BTCPay Checkout Container -->
         <div class="btcpay-checkout-container">
-          <div v-if="checkoutMode === 'modal'" id="btcpay-modal-checkout"></div>
-          <div v-else>
+          <div v-if="checkoutMode === 'modal'" id="btcpay-modal-checkout">
+            <!-- Add loading state -->
+            <LoadingIcon v-if="!invoiceId" />
+          </div>
+          <div v-else-if="checkoutUrl">
             <iframe 
               :src="checkoutUrl"
               class="w-full min-h-[600px]"
               frameborder="0"
               allowfullscreen
             ></iframe>
+          </div>
+          <div v-else class="text-center text-red-600">
+            Failed to load payment interface
           </div>
         </div>
 
@@ -125,13 +139,7 @@ const reloadCheckout = async () => {
 const initializeCheckout = async () => {
   try {
     const response = await fetch(
-      `${process.env.GQL_HOST.replace('graphql', '')}?wc-api=BTCPay_Checkout&order_id=${orderId}&order_key=${orderKey}&currency=USD`,
-      {
-        headers: {
-          'Accept': 'application/json',
-          'X-Currency': 'USD'
-        },
-      }
+      `${process.env.GQL_HOST.replace('graphql', '')}?wc-api=BTCPay_Checkout&order_id=${orderId}&order_key=${orderKey}`
     );
     const data = await response.json();
     

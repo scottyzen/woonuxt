@@ -9,18 +9,9 @@ import { useRuntimeConfig, useSeoMeta } from '#imports';
 
 const { t } = useI18n();
 const { query } = useRoute();
-const { cart = ref({ isEmpty: true }), isUpdatingCart = ref(false), paymentGateways = ref({ nodes: [] }) } = useCart() || {};
-const { customer = ref({}), viewer = ref(null) } = useAuth() || {};
-const { 
-  orderInput = ref({
-    customerNote: '',
-    paymentMethod: '',
-    shipToDifferentAddress: false,
-    metaData: [{ key: 'order_via', value: 'WooNuxt' }]
-  }), 
-  isProcessingOrder = ref(false), 
-  proccessCheckout 
-} = useCheckout() || {};
+const { cart, isUpdatingCart, paymentGateways } = useCart();
+const { customer, viewer } = useAuth();
+const { orderInput, isProcessingOrder, proccessCheckout } = useCheckout();
 
 const buttonText = ref<string>(isProcessingOrder.value ? t('messages.general.processing') : t('messages.shop.checkoutButton'));
 const isCheckoutDisabled = computed<boolean>(() => isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod);
@@ -33,24 +24,8 @@ onBeforeMount(async () => {
 });
 
 const payNow = async () => {
-  try {
-    if (!orderInput.value?.paymentMethod) {
-      console.error('No payment method selected');
-      return;
-    }
-
-    buttonText.value = t('messages.general.processing');
-    
-    if (typeof proccessCheckout === 'function') {
-      const isBtcPay = orderInput.value.paymentMethod.id === 'btcpay';
-      await proccessCheckout(isBtcPay ? false : isPaid.value);
-    } else {
-      console.error('proccessCheckout is not a function');
-    }
-  } catch (error) {
-    console.error('Error processing payment:', error);
-    buttonText.value = t('messages.shop.checkoutButton');
-  }
+  buttonText.value = t('messages.general.processing');
+  proccessCheckout(isPaid.value);
 };
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -65,6 +40,23 @@ const checkEmailOnInput = (email) => {
 
 useSeoMeta({
   title: t('messages.shop.checkout'),
+});
+
+// Add this to check if user has address
+const hasShippingAddress = computed(() => {
+  return Boolean(
+    customer.value?.shipping?.address1 &&
+    customer.value?.shipping?.city &&
+    customer.value?.shipping?.country
+  );
+});
+
+const hasBillingAddress = computed(() => {
+  return Boolean(
+    customer.value?.billing?.address1 &&
+    customer.value?.billing?.city &&
+    customer.value?.billing?.country
+  );
 });
 </script>
 
@@ -128,25 +120,38 @@ useSeoMeta({
             </div>
           </div>
 
-          <div>
-            <h2 class="w-full mb-3 text-2xl font-semibold">{{ $t('messages.billing.billingDetails') }}</h2>
-            <BillingDetails v-model="customer.billing" :sameAsShippingAddress="orderInput.shipToDifferentAddress" />
-          </div>
+          <div v-if="!cart?.isEmpty" class="mb-6">
+            <h2 class="text-xl font-bold mb-4">Your Information</h2>
+            
+            <!-- Show current addresses if they exist -->
+            <div v-if="hasBillingAddress" class="mb-4 p-4 bg-gray-50 rounded">
+              <h3 class="font-medium mb-2">Current Billing Address:</h3>
+              <p>{{ customer.billing.address1 }}</p>
+              <p>{{ customer.billing.city }}, {{ customer.billing.state }} {{ customer.billing.postcode }}</p>
+              <p>{{ customer.billing.country }}</p>
+            </div>
 
-          <label for="shipToDifferentAddress" class="flex items-center gap-2">
-            <span>{{ $t('messages.billing.differentAddress') }}</span>
-            <input id="shipToDifferentAddress" v-model="orderInput.shipToDifferentAddress" type="checkbox" name="shipToDifferentAddress" />
-          </label>
+            <!-- Always show the "Ship to different address" option -->
+            <div class="mb-4">
+              <label class="flex items-center gap-2">
+                <input 
+                  type="checkbox" 
+                  v-model="orderInput.shipToDifferentAddress"
+                  class="form-checkbox"
+                />
+                <span>Ship to a different address?</span>
+              </label>
+            </div>
 
-          <Transition name="scale-y" mode="out-in">
-            <div v-show="orderInput.shipToDifferentAddress">
-              <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.general.shippingDetails') }}</h2>
+            <!-- Show shipping form if checked -->
+            <div v-if="orderInput.shipToDifferentAddress">
+              <h3 class="font-medium mb-2">Shipping Address:</h3>
               <ShippingDetails 
-                v-model="customer.shipping" 
-                :is-visible="orderInput.shipToDifferentAddress"
+                v-model="customer.shipping"
+                :is-visible="true"
               />
             </div>
-          </Transition>
+          </div>
 
           <!-- Shipping methods -->
           <div v-if="cart.availableShippingMethods.length">

@@ -149,6 +149,52 @@ export function useCart() {
   // Check if the billing address is enabled
   const isBillingAddressEnabled = computed(() => (storeSettings.hideBillingAddressForVirtualProducts ? !allProductsAreVirtual.value : true));
 
+  const initializeCheckout = async () => {
+    try {
+      console.log('Initializing BTCPay checkout...', { orderId: orderId.value, orderKey: orderKey.value });
+      
+      const response = await fetch(
+        `${process.env.GQL_HOST.replace('graphql', '')}?wc-api=BTCPay_Checkout&order_id=${orderId.value}&order_key=${orderKey.value}&currency=USD`,
+        {
+          headers: {
+            'Accept': 'application/json',
+            'X-Currency': 'USD'
+          },
+        }
+      );
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('BTCPay response:', data);
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      if (!data.checkoutUrl) {
+        throw new Error('No checkout URL received from BTCPay');
+      }
+
+      checkoutUrl.value = data.checkoutUrl;
+      checkoutMode.value = data.checkoutMode;
+      invoiceId.value = data.invoiceId;
+
+      if (checkoutMode.value === 'modal') {
+        await loadBtcPayModal(data.modalScriptUrl);
+      }
+
+      checkPaymentStatus();
+    } catch (e) {
+      error.value = `Failed to load payment details: ${e.message}`;
+      console.error('BTCPay error:', e);
+    } finally {
+      loading.value = false;
+    }
+  };
+
   return {
     cart,
     isShowingCart,
@@ -166,5 +212,6 @@ export function useCart() {
     updateShippingMethod,
     applyCoupon,
     removeCoupon,
+    initializeCheckout,
   };
 }
