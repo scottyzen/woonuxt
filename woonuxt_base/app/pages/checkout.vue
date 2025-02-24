@@ -21,6 +21,11 @@ const isPaid = ref<boolean>(false);
 
 onBeforeMount(async () => {
   if (query.cancel_order) window.close();
+  
+  if (cart.value?.isEmpty) {
+    const router = useRouter();
+    router.push('/');
+  }
 });
 
 const payNow = async () => {
@@ -105,8 +110,13 @@ useSeoMeta({
 
           <div>
             <h2 class="w-full mb-3 text-2xl font-semibold">{{ $t('messages.billing.billingDetails') }}</h2>
-            <BillingDetails v-model="customer.billing" :sameAsShippingAddress="false" />
+            <BillingDetails v-model="customer.billing" :sameAsShippingAddress="orderInput.shipToDifferentAddress" />
           </div>
+
+          <label for="shipToDifferentAddress" class="flex items-center gap-2">
+            <span>{{ $t('messages.billing.differentAddress') }}</span>
+            <input id="shipToDifferentAddress" v-model="orderInput.shipToDifferentAddress" type="checkbox" name="shipToDifferentAddress" />
+          </label>
 
           <Transition name="scale-y" mode="out-in">
             <div v-show="orderInput.shipToDifferentAddress">
