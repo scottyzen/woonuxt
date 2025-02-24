@@ -58,15 +58,10 @@
 </template>
 
 <script setup>
-import { useRoute, useRouter } from 'vue-router';
-import { useCart } from '../../composables/useCart';
-
 const route = useRoute();
 const router = useRouter();
-const { emptyCart, refreshCart } = useCart();
-
-const orderId = computed(() => route.query.order_id);
-const orderKey = computed(() => route.query.key);
+const orderId = route.query.order_id;
+const orderKey = route.query.key;
 
 const loading = ref(true);
 const error = ref(null);
@@ -90,84 +85,22 @@ const statusMessage = computed(() => {
   }
 });
 
-// Add validation
-onBeforeMount(() => {
-  if (!orderId.value || !orderKey.value) {
-    router.push('/checkout');
-    return;
-  }
-});
-
-const initializeCheckout = async () => {
-  try {
-    const response = await fetch(
-      `${process.env.GQL_HOST.replace('graphql', '')}?wc-api=BTCPay_Checkout&order_id=${orderId.value}&order_key=${orderKey.value}`,
-      {
-        headers: {
-          'Accept': 'application/json',
-        },
-      }
-    );
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    
-    if (data.error) {
-      throw new Error(data.error);
-    }
-
-    checkoutUrl.value = data.checkoutUrl;
-    checkoutMode.value = data.checkoutMode;
-    invoiceId.value = data.invoiceId;
-
-    if (checkoutMode.value === 'modal') {
-      await loadBtcPayModal(data.modalScriptUrl);
-    }
-
-    checkPaymentStatus();
-  } catch (e) {
-    error.value = 'Failed to load payment details. Please try again or contact support.';
-    console.error('BTCPay error:', e);
-  } finally {
-    loading.value = false;
-  }
-};
-
-const loadBtcPayModal = async (scriptUrl) => {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = scriptUrl;
-    script.onload = () => {
-      if (window.btcpay) {
-        window.btcpay.modal(invoiceId.value);
-        resolve();
-      } else {
-        reject(new Error('BTCPay modal failed to load'));
-      }
-    };
-    script.onerror = () => reject(new Error('Failed to load BTCPay script'));
-    document.head.appendChild(script);
-  });
-};
-
-// Update payment status check to handle cart clearing
 const checkPaymentStatus = async () => {
   try {
     const response = await fetch(
-      `${process.env.GQL_HOST.replace('graphql', '')}?wc-api=BTCPay_Check_Payment&order_id=${orderId.value}&order_key=${orderKey.value}`
+      `${process.env.GQL_HOST.replace('graphql', '')}?wc-api=BTCPay_Check_Payment&order_id=${orderId}&order_key=${orderKey}`
     );
     const data = await response.json();
     
+    if (data.invoiceId) {
+      invoiceId.value = data.invoiceId;
+    }
+
     paymentStatus.value = data.status;
 
     if (data.status === 'completed') {
-      await emptyCart();
-      await refreshCart();
       setTimeout(() => {
-        router.push(`/checkout/order-received/${orderId.value}/?key=${orderKey.value}`);
+        router.push(`/checkout/order-received/${orderId}`);
       }, 2000);
     } else if (data.status === 'expired') {
       error.value = 'Payment time expired. Please try again.';
@@ -189,8 +122,50 @@ const reloadCheckout = async () => {
   }
 };
 
+const initializeCheckout = async () => {
+  try {
+    const response = await fetch(
+      `${process.env.GQL_HOST.replace('graphql', '')}?wc-api=BTCPay_Checkout&order_id=${orderId}&order_key=${orderKey}&currency=USD`,
+      {
+        headers: {
+          'Accept': 'application/json',
+          'X-Currency': 'USD'
+        },
+      }
+    );
+    const data = await response.json();
+    
+    if (data.error) {
+      throw new Error(data.error);
+    }
+
+    checkoutUrl.value = data.checkoutUrl;
+    checkoutMode.value = data.checkoutMode;
+    invoiceId.value = data.invoiceId;
+
+    if (checkoutMode.value === 'modal') {
+      const script = document.createElement('script');
+      script.src = data.modalScriptUrl;
+      document.head.appendChild(script);
+      script.onload = () => {
+          if (window.btcpay) {
+              window.btcpay.modal(invoiceId.value);
+          }
+      }
+    }
+
+    checkPaymentStatus();
+
+  } catch (e) {
+    error.value = 'Failed to load payment details. Please try again or contact support.';
+    console.error('BTCPay error:', e);
+  } finally {
+    loading.value = false;
+  }
+};
+
 onMounted(() => {
-  if (!orderId.value || !orderKey.value) {
+  if (!orderId || !orderKey) {
     error.value = 'Invalid order details. Please contact support.';
     loading.value = false;
     return;
