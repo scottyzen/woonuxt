@@ -35,7 +35,7 @@ const closeAnnouncement = () => {
     <Transition name="fade">
       <NuxtLink 
         v-if="showAnnouncement" 
-        to="/products/modawake"
+        to="/products/new-customers-10-free-modawake"
         class="block w-full bg-blue-50 hover:bg-blue-100 transition-colors"
       >
         <div class="container py-2 px-4 flex items-center justify-between">
