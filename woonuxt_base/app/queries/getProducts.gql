@@ -11,45 +11,51 @@ query getProducts(
     nodes {
       id
       databaseId
-      averageRating
-      slug
-      description
-      name
-      onSale
-      status
-      totalSales
-      reviewCount
-      shortDescription
-      purchasable
-      catalogVisibility
-      price
-      regularPrice
-      salePrice
-      stockStatus
-      stockQuantity
+      ... on Product {
+        averageRating
+        slug
+        description
+        name
+        onSale
+        status
+        totalSales
+        reviewCount
+        shortDescription
+        purchasable
+        catalogVisibility
+      }
+      ... on ProductWithPricing {
+        price
+        regularPrice
+        salePrice
+      }
+      ... on InventoriedProduct {
+        stockStatus
+        stockQuantity
+      }
       image {
-        id
-        sourceUrl(size: LARGE)
-        altText
-        title
-        databaseId
+        ...Image
       }
-      galleryImages {
-        nodes {
-          id
-          sourceUrl(size: LARGE)
-          altText
-          title
-          databaseId
+      ... on Product {
+        galleryImages {
+          nodes {
+            ...Image
+          }
         }
-      }
-      productCategories {
-        nodes {
-          id
-          slug
-          name
+        productCategories {
+          nodes {
+            id
+            slug
+            name
+          }
         }
       }
     }
   }
+}
+
+fragment Image on MediaItem {
+  id
+  sourceUrl(size: LARGE)
+  altText
 }
