@@ -38,10 +38,10 @@ export default defineNuxtConfig({
         host: process.env.GQL_HOST || 'https://modaprimeusa.com/graphql',
         corsOptions: { mode: 'cors', credentials: 'include' },
         headers: {
-          Origin: "https://store.modaprimeusa.com"
+          'Origin': process.env.APP_HOST || 'https://store.modaprimeusaa.com',
+          'X-WP-Guest-Access': 'true'
         },
-        retries: 3,
-        timeout: 30000
+        proxyCookies: false
       },
     },
   },
@@ -91,24 +91,18 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      STRIPE_ENABLED: false,
       "graphql-client": {
         clients: {
           default: {
+            host: "https://modaprimeusa.com/graphql",
             headers: {
-              Origin: "https://store.modaprimeusa.com"
+              Origin: "https://store.modaprimeusa.com",
+              "X-WP-Guest-Access": "true"
             },
-            retries: 3,
-            timeout: 30000
+            proxyCookies: false
           }
         }
       }
     }
-  },
-
-  image: {
-    domains: ['modaprimeusa.com'],
-    format: ['webp', 'jpg', 'png'],
-    quality: 80
   }
 });
