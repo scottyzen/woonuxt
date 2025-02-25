@@ -24,7 +24,8 @@ const { wishlistLink } = useAuth();
         <div class="mb-1 font-semibold">Products</div>
         <div class="text-sm">
           <NuxtLink to="/products" class="py-1.5 block">{{ $t('messages.shop.newArrivals') }}</NuxtLink>
-          <NuxtLink to="/products?filter=sale[true]" class="py-1.5 block">Popular Products</NuxtLink>
+          <NuxtLink to="/products?orderby=popularity" class="py-1.5 block">Popular Products</NuxtLink>
+          <NuxtLink to="/products?filter=sale[true]" class="py-1.5 block">Current Sales</NuxtLink>
          <!-- <NuxtLink to="/products?orderby=rating&order=ASC&filter=rating[1]" class="py-1.5 block">Top Rated</NuxtLink>
           <a href="/" class="py-1.5 block">{{ $t('messages.shop.giftCards') }}</a> -->
         </div>
