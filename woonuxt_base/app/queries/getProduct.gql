@@ -51,6 +51,22 @@ query getProduct($slug: ID!) {
         }
       }
     }
+    image {
+      id
+      sourceUrl(size: LARGE)
+      altText
+      title
+      databaseId
+    }
+    galleryImages {
+      nodes {
+        id
+        sourceUrl(size: LARGE)
+        altText
+        title
+        databaseId
+      }
+    }
   }
 }
 

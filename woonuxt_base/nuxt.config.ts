@@ -37,7 +37,11 @@ export default defineNuxtConfig({
       default: {
         host: process.env.GQL_HOST || 'https://modaprimeusa.com/graphql',
         corsOptions: { mode: 'cors', credentials: 'include' },
-        headers: { 'Origin': process.env.APP_HOST || 'https://store.modaprimeusaa.com' },
+        headers: {
+          Origin: "https://store.modaprimeusa.com"
+        },
+        retries: 3,
+        timeout: 30000
       },
     },
   },
@@ -68,9 +72,6 @@ export default defineNuxtConfig({
       '/checkout/order-received/**': { ssr: false },
       '/order-summary/**': { ssr: false },
     },
-    prerender: {
-      routes: ['/api/_nuxt_icon/ion.json'],
-    }
   },
 
   // Multilingual support
@@ -88,13 +89,26 @@ export default defineNuxtConfig({
     strategy: 'no_prefix',
   },
 
-  icon: {
-    // Preload commonly used icons
-    preload: [
-      'ion:sad-outline',
-      // Add other commonly used icons
-    ],
-    // Use local fallback
-    fallback: 'ion:help-outline',
+  runtimeConfig: {
+    public: {
+      STRIPE_ENABLED: false,
+      "graphql-client": {
+        clients: {
+          default: {
+            headers: {
+              Origin: "https://store.modaprimeusa.com"
+            },
+            retries: 3,
+            timeout: 30000
+          }
+        }
+      }
+    }
   },
+
+  image: {
+    domains: ['modaprimeusa.com'],
+    format: ['webp', 'jpg', 'png'],
+    quality: 80
+  }
 });
