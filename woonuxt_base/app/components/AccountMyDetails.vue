@@ -12,7 +12,6 @@
 .account-form input[type='tel'],
 .account-form input[type='password'],
 .account-form textarea,
-.account-form .StripeElement,
 .account-form select {
   @apply bg-white border rounded-md outline-none w-full py-2 px-4 block md:bg-gray-50;
 }

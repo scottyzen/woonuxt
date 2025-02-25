@@ -1,9 +1,0 @@
-query getStripePaymentIntent {
-  stripePaymentIntent {
-    amount
-    clientSecret
-    error
-    id
-    currency
-  }
-}
