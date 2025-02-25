@@ -1,45 +1,33 @@
-query getProducts(
-  $first: Int = 24
-  $after: String = ""
-  $where: RootQueryToProductConnectionWhereArgs = {}
-) {
-  products(first: $first, after: $after, where: $where) {
+query getProducts($after: String, $slug: [String], $first: Int = 9999, $orderby: ProductsOrderByEnum = DATE) {
+  products(
+    first: $first
+    after: $after
+    where: { categoryIn: $slug, visibility: VISIBLE, minPrice: 0, orderby: { field: $orderby, order: DESC }, status: "publish" }
+  ) {
     pageInfo {
       hasNextPage
       endCursor
     }
     nodes {
-      id
+      name
+      slug
+      type
       databaseId
-      ... on Product {
-        averageRating
-        slug
-        description
-        name
-        onSale
-        status
-        totalSales
-        reviewCount
-        shortDescription
-        purchasable
-        catalogVisibility
-      }
-      ... on ProductWithPricing {
-        price
-        regularPrice
-        salePrice
-      }
-      ... on InventoriedProduct {
-        stockStatus
-        stockQuantity
-      }
+      id
+      averageRating
+      reviewCount
+      ...Terms
+      ...ProductCategories
+      ...SimpleProduct
+      ...VariableProduct
+      ...ExternalProduct
       image {
-        ...Image
+        ...ImageFragment
       }
       ... on Product {
         galleryImages {
           nodes {
-            ...Image
+            ...ImageFragment
           }
         }
         productCategories {
@@ -52,10 +40,4 @@ query getProducts(
       }
     }
   }
-}
-
-fragment Image on MediaItem {
-  id
-  sourceUrl(size: LARGE)
-  altText
 }
