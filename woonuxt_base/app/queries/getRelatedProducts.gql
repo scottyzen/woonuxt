@@ -1,4 +1,4 @@
-query getRelatedProducts($category: String, $productId: ID) {
+query getRelatedProducts($category: String, $productId: Int) {
   products(
     first: 4
     where: { category: $category, exclude: [$productId] }
@@ -6,15 +6,28 @@ query getRelatedProducts($category: String, $productId: ID) {
     nodes {
       id
       databaseId
-      name
-      slug
-      onSale
-      price
-      regularPrice
-      salePrice
-      stockStatus
-      image {
-        ...Image
+      ... on SimpleProduct {
+        name
+        slug
+        onSale
+        price
+        regularPrice
+        salePrice
+        stockStatus
+        image {
+          ...Image
+        }
+      }
+      ... on VariableProduct {
+        name
+        slug
+        onSale
+        price
+        regularPrice
+        stockStatus
+        image {
+          ...Image
+        }
       }
     }
   }
