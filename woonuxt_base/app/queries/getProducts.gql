@@ -1,82 +1,26 @@
-#import "./fragments/ImageFragment.gql"
-
-query getProducts(
-  $first: Int = 24
-  $after: String = ""
-  $where: ProductsWhereArgs = {}
-) {
-  products(first: $first, after: $after, where: $where) {
+query getProducts($after: String, $slug: [String], $first: Int = 9999, $orderby: ProductsOrderByEnum = DATE) {
+  products(
+    first: $first
+    after: $after
+    where: { categoryIn: $slug, visibility: VISIBLE, minPrice: 0, orderby: { field: $orderby, order: DESC }, status: "publish" }
+  ) {
     pageInfo {
       hasNextPage
       endCursor
     }
     nodes {
-      id
+      name
+      slug
+      type
       databaseId
-      ... on SimpleProduct {
-        averageRating
-        slug
-        description
-        name
-        onSale
-        status
-        totalSales
-        reviewCount
-        shortDescription
-        purchasable
-        catalogVisibility
-        price
-        regularPrice
-        salePrice
-        stockStatus
-        stockQuantity
-        image {
-          ...ImageFragment
-        }
-        galleryImages {
-          nodes {
-            ...ImageFragment
-          }
-        }
-        productCategories {
-          nodes {
-            id
-            slug
-            name
-          }
-        }
-      }
-      ... on VariableProduct {
-        averageRating
-        slug
-        description
-        name
-        onSale
-        status
-        totalSales
-        reviewCount
-        shortDescription
-        purchasable
-        catalogVisibility
-        price
-        regularPrice
-        stockStatus
-        image {
-          ...ImageFragment
-        }
-        galleryImages {
-          nodes {
-            ...ImageFragment
-          }
-        }
-        productCategories {
-          nodes {
-            id
-            slug
-            name
-          }
-        }
-      }
+      id
+      averageRating
+      reviewCount
+      ...Terms
+      ...ProductCategories
+      ...SimpleProduct
+      ...VariableProduct
+      ...ExternalProduct
     }
   }
 }

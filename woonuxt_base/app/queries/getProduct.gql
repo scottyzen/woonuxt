@@ -1,94 +1,77 @@
-#import "./fragments/ImageFragment.gql"
-
-query getProduct($id: ID!) {
-  product(id: $id, idType: SLUG) {
-    id
+query getProduct($slug: ID!) {
+  product(id: $slug, idType: SLUG) {
+    name
+    type
     databaseId
-    ... on SimpleProduct {
-      averageRating
-      dateOnSaleFrom
-      dateOnSaleTo
-      description
-      name
-      onSale
-      purchasable
-      reviewCount
-      shortDescription
-      slug
-      status
-      totalSales
-      price
-      regularPrice
-      salePrice
-      stockStatus
-      stockQuantity
-      image {
-        ...ImageFragment
-      }
-      galleryImages {
-        nodes {
-          ...ImageFragment
-        }
-      }
-      productCategories {
-        nodes {
-          id
-          name
+    id
+    metaData {
+      id
+      key
+      value
+    }
+    slug
+    sku
+    description
+    rawDescription: description(format: RAW)
+    shortDescription
+    attributes {
+      nodes {
+        ...ProductAttribute
+        ... on GlobalProductAttribute {
           slug
+          terms(where: { orderby: MENU_ORDER, order: ASC }) {
+            nodes {
+              name
+              slug
+              taxonomyName
+              databaseId
+            }
+          }
         }
       }
     }
-    ... on VariableProduct {
+    ...ProductCategories
+    ...Terms
+    ...SimpleProduct
+    ...VariableProduct
+    ...ExternalProduct
+    related(first: 5) {
+      nodes {
+        ...SimpleProduct
+        ...VariableProduct
+        ...ExternalProduct
+      }
+    }
+    reviews {
       averageRating
-      dateOnSaleFrom
-      dateOnSaleTo
-      description
+      edges {
+        rating
+        node {
+          ...Comment
+        }
+      }
+    }
+  }
+}
+
+fragment ProductAttribute on ProductAttribute {
+  variation
+  name
+  id
+  options
+  label
+  scope
+}
+
+fragment Comment on Comment {
+  content
+  id
+  date
+  author {
+    node {
       name
-      onSale
-      purchasable
-      reviewCount
-      shortDescription
-      slug
-      status
-      totalSales
-      price
-      regularPrice
-      stockStatus
-      image {
-        ...ImageFragment
-      }
-      galleryImages {
-        nodes {
-          ...ImageFragment
-        }
-      }
-      productCategories {
-        nodes {
-          id
-          name
-          slug
-        }
-      }
-      variations {
-        nodes {
-          id
-          databaseId
-          name
-          price
-          regularPrice
-          salePrice
-          stockStatus
-          stockQuantity
-          attributes {
-            nodes {
-              name
-              value
-            }
-          }
-          image {
-            ...ImageFragment
-          }
-        }
+      avatar {
+        url
       }
     }
   }
