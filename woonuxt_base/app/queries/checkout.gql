@@ -67,3 +67,9 @@ mutation Checkout(
     }
   }
 }
+
+fragment Image on MediaItem {
+  id
+  sourceUrl(size: LARGE)
+  altText
+}
