@@ -1,36 +1,70 @@
 <script setup lang="ts">
-import type { PropType } from 'vue';
-import type { Product } from '~/types';
+import { computed } from 'vue';
 
-defineProps({
+// Define props with validation and default values
+const props = defineProps({
   product: {
-    type: Object as PropType<Product>,
-    required: true
+    type: Object,
+    required: true,
+    // Add default to prevent undefined errors
+    default: () => ({
+      name: 'Product',
+      slug: '',
+      price: '',
+      regularPrice: '',
+      salePrice: '',
+      onSale: false,
+      stockStatus: 'IN_STOCK',
+      image: null
+    })
   }
+});
+
+// Add defensive checks
+const productSlug = computed(() => {
+  return props.product?.slug || '';
+});
+
+const productName = computed(() => {
+  return props.product?.name || 'Product';
+});
+
+const productImage = computed(() => {
+  return props.product?.image || null;
 });
 </script>
 
 <template>
-  <NuxtLink :to="`/product/${product.slug}`" class="product-card group">
-    <div class="relative overflow-hidden rounded-lg">
-      <ProductImage 
-        :image="product.image" 
-        :width="400" 
-        :height="400" 
-        loading="lazy" 
+  <NuxtLink 
+    :to="productSlug ? `/product/${productSlug}` : '#'" 
+    class="group relative flex flex-col overflow-hidden rounded-lg border hover:border-primary"
+  >
+    <!-- Image with fallback -->
+    <div class="aspect-h-1 aspect-w-1 bg-gray-100 sm:aspect-none group-hover:opacity-75 h-48 sm:h-60">
+      <img
+        v-if="productImage && productImage.sourceUrl"
+        :src="productImage.sourceUrl"
+        :alt="productImage.altText || productName"
+        class="h-full w-full object-contain object-center sm:h-full sm:w-full"
       />
-      <SaleBadge :node="product" class="absolute top-2 right-2" />
-    </div>
-    
-    <div class="mt-3 flex flex-col">
-      <h3 class="text-sm font-medium text-gray-900 group-hover:text-primary transition-colors">
-        {{ product.name }}
-      </h3>
-      <div class="mt-1 flex items-center">
-        <ProductPrice :product="product" class="text-sm font-medium" />
+      <div v-else class="flex h-full w-full items-center justify-center bg-gray-100">
+        <span class="text-gray-400">No image</span>
       </div>
-      <div class="mt-1">
-        <ProductRating :rating="product.averageRating" :count="product.reviewCount" />
+    </div>
+
+    <!-- Product details with defensive rendering -->
+    <div class="flex flex-1 flex-col space-y-2 p-4">
+      <h3 class="text-sm font-medium text-gray-900">{{ productName }}</h3>
+      
+      <div v-if="product && product.price" class="flex-1 flex items-end">
+        <p class="text-base font-medium text-gray-900" v-html="product.price"></p>
+        <p v-if="product.onSale && product.regularPrice" class="ml-2 text-sm text-gray-500 line-through" v-html="product.regularPrice"></p>
+      </div>
+      
+      <div v-if="product && product.stockStatus" class="text-xs">
+        <span v-if="product.stockStatus === 'IN_STOCK'" class="text-green-600">In Stock</span>
+        <span v-else-if="product.stockStatus === 'OUT_OF_STOCK'" class="text-red-600">Out of Stock</span>
+        <span v-else class="text-yellow-600">{{ product.stockStatus }}</span>
       </div>
     </div>
   </NuxtLink>
