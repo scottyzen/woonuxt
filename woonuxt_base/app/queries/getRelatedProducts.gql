@@ -1,0 +1,36 @@
+#import "./fragments/ImageFragment.gql"
+
+query getRelatedProducts($category: String, $productId: ID) {
+  products(
+    first: 4
+    where: { category: $category, notIn: [$productId] }
+  ) {
+    nodes {
+      id
+      databaseId
+      ... on SimpleProduct {
+        name
+        slug
+        onSale
+        price
+        regularPrice
+        salePrice
+        stockStatus
+        image {
+          ...ImageFragment
+        }
+      }
+      ... on VariableProduct {
+        name
+        slug
+        onSale
+        price
+        regularPrice
+        stockStatus
+        image {
+          ...ImageFragment
+        }
+      }
+    }
+  }
+}                                                                                                      

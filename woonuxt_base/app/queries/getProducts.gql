@@ -3,7 +3,7 @@
 query getProducts(
   $first: Int = 24
   $after: String = ""
-  $where: RootQueryToProductConnectionWhereArgs = {}
+  $where: ProductsWhereArgs = {}
 ) {
   products(first: $first, after: $after, where: $where) {
     pageInfo {

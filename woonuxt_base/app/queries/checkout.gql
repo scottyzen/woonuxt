@@ -1,3 +1,5 @@
+#import "./fragments/ImageFragment.gql"
+
 mutation Checkout(
   $billing: CustomerAddressInput = {}
   $metaData: [MetaDataInput] = { key: "", value: "" }
@@ -25,43 +27,38 @@ mutation Checkout(
     result
     redirect
     order {
-      needsPayment
-      needsProcessing
-      status
-      databaseId
+      id
+      orderNumber
       orderKey
-      subtotal
-      total
-      subtotal
-      totalTax
-      shippingTotal
-      paymentMethodTitle
-      paymentMethod
-      date
-      subtotal
-      customer {
-        email
+      status
+      refunds {
+        nodes {
+          amount
+        }
       }
       lineItems {
         nodes {
-          quantity
-          total
           product {
             node {
+              id
               name
               image {
-                ...Image
+                ...ImageFragment
               }
             }
           }
           variation {
             node {
+              id
               name
               image {
-                ...Image
+                ...ImageFragment
               }
             }
           }
+          quantity
+          total
+          subtotal
         }
       }
     }

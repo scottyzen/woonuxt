@@ -1,0 +1,30 @@
+#import "./fragments/ImageFragment.gql"
+
+query getProductReviews($id: ID!, $first: Int = 10, $after: String = "") {
+  product(id: $id, idType: DATABASE_ID) {
+    reviews(first: $first, after: $after) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      nodes {
+        id
+        date
+        content
+        rating
+        author {
+          node {
+            name
+            email
+            ... on User {
+              id
+              avatar {
+                ...ImageFragment
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+} 
