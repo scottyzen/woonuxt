@@ -9,7 +9,6 @@ query getProductReviews($id: ID!, $first: Int = 10, $after: String = "") {
         id
         date
         content
-        rating
         author {
           node {
             name
@@ -27,4 +26,4 @@ query getProductReviews($id: ID!, $first: Int = 10, $after: String = "") {
       }
     }
   }
-}
+} 
