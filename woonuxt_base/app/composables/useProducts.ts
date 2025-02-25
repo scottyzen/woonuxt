@@ -1,10 +1,39 @@
 let allProducts = [] as Product[];
 
 export function useProducts() {
-  // Initialize state variables with default values
-  const products = useState<Product[]>('products', () => []);
-  const productsLoading = useState<boolean>('productsLoading', () => false);
-  const error = useState<string | null>('productsError', () => null);
+  const products = ref([]);
+  const productsLoading = ref(false);
+  const productsError = ref(null);
+
+  const fetchProducts = async (variables = {}) => {
+    productsLoading.value = true;
+    productsError.value = null;
+    
+    try {
+      // Add debug logging
+      console.log('Fetching products with variables:', variables);
+      
+      const { data, error } = await useAsyncQuery('getProducts', variables);
+      
+      // Log the raw response
+      console.log('GraphQL response:', data.value, error.value);
+      
+      if (error.value) {
+        productsError.value = error.value.message || 'Error loading products';
+        console.error('GraphQL error:', error.value);
+      } else if (data.value?.products?.nodes) {
+        products.value = data.value.products.nodes;
+        console.log('Products loaded:', products.value.length);
+      } else {
+        productsError.value = 'No products found';
+      }
+    } catch (err) {
+      console.error('Error in fetchProducts:', err);
+      productsError.value = err.message || 'Error loading products';
+    } finally {
+      productsLoading.value = false;
+    }
+  };
 
   /**
    * Sets the products state variable and the allProducts variable.
@@ -22,33 +51,35 @@ export function useProducts() {
     const { isFiltersActive, filterProducts } = useFiltering();
     const { isSearchActive, searchProducts } = useSearching();
 
-    productsLoading.value = true;
-    error.value = null;
+    // scroll to top of page
+    scrollToTop();
 
+    // return all products if no filters are active
+    if (!isFiltersActive.value && !isSearchActive.value && !isSortingActive.value) {
+      products.value = allProducts;
+      return;
+    }
+
+    // otherwise, apply filter, search and sorting in that order
     try {
-      // scroll to top of page
-      scrollToTop();
-
-      // return all products if no filters are active
-      if (!isFiltersActive.value && !isSearchActive.value && !isSortingActive.value) {
-        products.value = allProducts;
-        return;
-      }
-
-      // otherwise, apply filter, search and sorting in that order
       let newProducts = [...allProducts];
       if (isFiltersActive.value) newProducts = filterProducts(newProducts);
       if (isSearchActive.value) newProducts = searchProducts(newProducts);
       if (isSortingActive.value) newProducts = sortProducts(newProducts);
 
       products.value = newProducts;
-    } catch (err: any) {
-      console.error('Error updating product list:', err);
-      error.value = err.message;
-    } finally {
-      productsLoading.value = false;
+    } catch (error) {
+      console.error(error);
     }
   };
 
-  return { products, allProducts, setProducts, updateProductList, productsLoading, error };
+  return {
+    products,
+    productsLoading,
+    productsError,
+    fetchProducts,
+    allProducts,
+    setProducts,
+    updateProductList
+  };
 }
