@@ -41,7 +41,7 @@ useHead({
 <template>
   <NuxtLoadingIndicator />
   <div class="flex flex-col min-h-screen relative">
-    <div class="absolute inset-0 bg-[url('/images/bgsymbol.png')] bg-repeat opacity-5 pointer-events-none"></div>
+    <div class="absolute top-0 left-0 right-0 bg-[url('/images/bgsymbol.png')] bg-repeat opacity-5 pointer-events-none" style="height: calc(100% - 300px); z-index: 0;"></div>
     <AppHeader class="relative bg-gray-100" />
 
     <Transition name="slide-from-right">
@@ -58,7 +58,7 @@ useHead({
       <div v-if="isShowingCart || isShowingMobileMenu" class="bg-black opacity-25 inset-0 z-40 fixed" @click="closeCartAndMenu" />
     </Transition>
 
-    <AppFooter class="relative bg-gray-100" />
+    <AppFooter class="relative bg-white" />
   </div>
 </template>
 

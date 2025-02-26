@@ -4,7 +4,7 @@ const { wishlistLink } = useAuth();
 </script>
 
 <template>
-  <footer class="bg-white order-last">
+  <footer class="bg-white order-last relative z-10">
     <div class="container flex flex-wrap justify-between gap-12 my-24 md:gap-24">
       <div class="mr-auto">
         <Logo />
@@ -64,5 +64,21 @@ const { wishlistLink } = useAuth();
 <style scoped lang="postcss">
 a {
   @apply hover:underline;
+}
+
+footer {
+  position: relative;
+  background-color: white;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  z-index: -1;
 }
 </style>
