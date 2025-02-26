@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useSearching } from '~/composables/useSearch';
+
 const { toggleSearch } = useSearching();
 </script>
 

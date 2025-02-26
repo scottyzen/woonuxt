@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+import { useAuth } from '~/composables/useAuth';
+
 const { viewer, avatar, logoutUser, isPending, wishlistLink } = useAuth();
 const linkTitle = computed<string>(() => viewer.value?.username || 'Sign In');
 </script>

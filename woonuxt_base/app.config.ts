@@ -9,8 +9,8 @@ export default defineAppConfig({
   siteName: 'ModaPrime USA',
   shortDescription: 'Fast and reliable modafinil delivery across the USA.',
   description: 'ModaPrime USA provides quality modafinil with rapid shipping and professional service. Experience streamlined ordering and efficient delivery.',
-  baseUrl: 'https://modaprimeusa.com',
-  siteImage: 'https://user-images.githubusercontent.com/5116925/218879668-f4c1f9fd-bef4-44b0-bc7f-e87d994aa3a1.png',
+  baseUrl: 'https://store.modaprimeusa.com',
+  siteImage: '/link-preview.png',
   storeSettings: {
     autoOpenCart: true,
     showReviews: false,

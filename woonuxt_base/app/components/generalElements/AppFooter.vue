@@ -52,7 +52,7 @@ const { wishlistLink } = useAuth();
     <div class="container border-t border-gray-100 flex items-center justify-center mb-4">
       <div class="copywrite">
         <p class="py-4 text-xs text-center text-gray-500">
-          <a href="https://modaprimeusa.com" class="hover:text-blue-600 transition-colors duration-200">© 2024 ModaPrime USA</a>
+          <a href="https://modaprimeusa.com" class="hover:text-blue-600 transition-colors duration-200">© 2025 ModaPrime USA</a>
         </p>
       </div>
       <SocialIcons class="ml-auto" />

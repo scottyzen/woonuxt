@@ -21,7 +21,7 @@
             class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-gray-700 mt-4 leading-relaxed max-w-3xl motion-safe:animate-pulse pl-2"
             style="animation-delay: 200ms; text-shadow: 0 1px 2px rgba(0,0,0,0.05);"
           >
-            Modafinil
+            inil
           </p>
           <NuxtLink 
             class="mt-8 inline-flex items-center justify-center px-8 sm:px-10 py-4 text-xl sm:text-2xl font-semibold text-white rounded-full bg-blue-600 shadow-lg hover:bg-blue-700 hover:shadow-xl transform transition-all duration-300 hover:-translate-y-1"

@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { useRoute } from 'vue-router';
+import { useAuth } from '~/composables/useAuth';
+
 const { wishlistLink } = useAuth();
 const route = useRoute();
 
-const isActive = (path) => {
+const isActive = (path: string): boolean => {
   return route.path === path;
 };
 </script>
