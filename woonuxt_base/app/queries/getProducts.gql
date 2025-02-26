@@ -1,26 +1,37 @@
-query getProducts($after: String, $slug: [String], $first: Int = 9999, $orderby: ProductsOrderByEnum = DATE) {
-  products(
-    first: $first
-    after: $after
-    where: { categoryIn: $slug, visibility: VISIBLE, minPrice: 0, orderby: { field: $orderby, order: DESC }, status: "publish" }
-  ) {
+query getProducts(
+  $first: Int = 12, 
+  $after: String = ""
+) {
+  products(first: $first, after: $after) {
     pageInfo {
       hasNextPage
       endCursor
     }
-    nodes {
-      name
-      slug
-      type
-      databaseId
-      id
-      averageRating
-      reviewCount
-      ...Terms
-      ...ProductCategories
-      ...SimpleProduct
-      ...VariableProduct
-      ...ExternalProduct
+    edges {
+      node {
+        id
+        databaseId
+        name
+        slug
+        type
+        onSale
+        shortDescription
+        image {
+          id
+          sourceUrl
+          altText
+        }
+        ... on SimpleProduct {
+          price
+          regularPrice
+          stockStatus
+        }
+        ... on VariableProduct {
+          price
+          regularPrice
+          stockStatus
+        }
+      }
     }
   }
 }
