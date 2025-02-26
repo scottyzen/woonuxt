@@ -1,4 +1,4 @@
-<!-- pages/products.vue -->
+<!-- woonuxt_base/app/pages/products.vue -->
 <template>
   <div class="container my-8 relative">
     <h1 class="text-2xl font-bold mb-8">Products</h1>
@@ -43,8 +43,12 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import useGraphQL from '../composables/useGraphQL'
+
+// Get GraphQL utilities
+const { getProducts } = useGraphQL()
 
 // State
 const products = ref([])
@@ -54,75 +58,21 @@ const error = ref(null)
 const hasNextPage = ref(false)
 const endCursor = ref('')
 
-// Load products directly with fetch
+// Load products using our composable
 const loadProducts = async () => {
   try {
     loading.value = true
     error.value = null
     
-    const response = await fetch('https://modaprimeusa.com/graphql', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Origin': 'https://store.modaprimeusa.com',
-        'X-WP-Guest-Access': 'true'
-      },
-      body: JSON.stringify({
-        query: `
-          query GetProducts($first: Int, $after: String) {
-            products(first: $first, after: $after) {
-              pageInfo {
-                hasNextPage
-                endCursor
-              }
-              edges {
-                node {
-                  id
-                  databaseId
-                  name
-                  slug
-                  type
-                  onSale
-                  shortDescription
-                  image {
-                    id
-                    sourceUrl
-                    altText
-                  }
-                  ... on SimpleProduct {
-                    price
-                    regularPrice
-                    stockStatus
-                  }
-                  ... on VariableProduct {
-                    price
-                    regularPrice
-                    stockStatus
-                  }
-                }
-              }
-            }
-          }
-        `,
-        variables: {
-          first: 12,
-          after: null
-        }
-      }),
-      credentials: 'include'
-    })
+    // Use the composable which handles CORS and sessions
+    const productsData = await getProducts(12)
     
-    const result = await response.json()
-    
-    if (result.errors) {
-      console.error('GraphQL errors:', result.errors)
-      throw new Error(result.errors[0]?.message || 'GraphQL Error')
-    }
-    
-    if (result.data?.products) {
-      products.value = result.data.products.edges.map(edge => edge.node)
-      hasNextPage.value = result.data.products.pageInfo.hasNextPage
-      endCursor.value = result.data.products.pageInfo.endCursor
+    if (productsData?.edges) {
+      products.value = productsData.edges.map(edge => edge.node)
+      hasNextPage.value = productsData.pageInfo.hasNextPage
+      endCursor.value = productsData.pageInfo.endCursor
+    } else {
+      throw new Error('Invalid product data structure')
     }
   } catch (err) {
     console.error('Error loading products:', err)
@@ -142,70 +92,13 @@ const loadMore = async () => {
   try {
     loadingMore.value = true
     
-    const response = await fetch('https://modaprimeusa.com/graphql', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Origin': 'https://store.modaprimeusa.com',
-        'X-WP-Guest-Access': 'true'
-      },
-      body: JSON.stringify({
-        query: `
-          query GetProducts($first: Int, $after: String) {
-            products(first: $first, after: $after) {
-              pageInfo {
-                hasNextPage
-                endCursor
-              }
-              edges {
-                node {
-                  id
-                  databaseId
-                  name
-                  slug
-                  type
-                  onSale
-                  shortDescription
-                  image {
-                    id
-                    sourceUrl
-                    altText
-                  }
-                  ... on SimpleProduct {
-                    price
-                    regularPrice
-                    stockStatus
-                  }
-                  ... on VariableProduct {
-                    price
-                    regularPrice
-                    stockStatus
-                  }
-                }
-              }
-            }
-          }
-        `,
-        variables: {
-          first: 12,
-          after: endCursor.value
-        }
-      }),
-      credentials: 'include'
-    })
+    const productsData = await getProducts(12, endCursor.value)
     
-    const result = await response.json()
-    
-    if (result.errors) {
-      console.error('GraphQL errors:', result.errors)
-      throw new Error(result.errors[0]?.message || 'GraphQL Error')
-    }
-    
-    if (result.data?.products) {
-      const newProducts = result.data.products.edges.map(edge => edge.node)
+    if (productsData?.edges) {
+      const newProducts = productsData.edges.map(edge => edge.node)
       products.value = [...products.value, ...newProducts]
-      hasNextPage.value = result.data.products.pageInfo.hasNextPage
-      endCursor.value = result.data.products.pageInfo.endCursor
+      hasNextPage.value = productsData.pageInfo.hasNextPage
+      endCursor.value = productsData.pageInfo.endCursor
     }
   } catch (err) {
     console.error('Error loading more products:', err)
