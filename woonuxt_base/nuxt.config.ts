@@ -32,6 +32,24 @@ export default defineNuxtConfig({
 
   modules: ['woonuxt-settings', 'nuxt-graphql-client', '@nuxtjs/tailwindcss', '@nuxt/icon', '@nuxt/image', '@nuxtjs/i18n'],
 
+  // Disable schema introspection for nuxt-graphql-client
+  graphqlClient: {
+    codegen: {
+      skipTypesGeneration: true, // Skip the schema generation step that's failing
+    },
+    clients: {
+      default: {
+        host: 'https://modaprimeusa.com/graphql',
+        headers: {
+          'Content-Type': 'application/json',
+          'Origin': 'https://store.modaprimeusa.com',
+          'X-WP-Guest-Access': 'true'
+        },
+        retainToken: true
+      }
+    }
+  },
+
   'graphql-client': {
     clients: {
       default: {
@@ -71,7 +89,14 @@ export default defineNuxtConfig({
       '/products/**': { swr: 3600 },
       '/checkout/order-received/**': { ssr: false },
       '/order-summary/**': { ssr: false },
+      '/api/**': { cors: true }
     },
+  },
+
+  // Handle 404 and other errors gracefully
+  routeRules: {
+    '/products': { static: false },
+    '/products/**': { static: false }
   },
 
   // Multilingual support
@@ -91,6 +116,9 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
+      GRAPHQL_URL: 'https://modaprimeusa.com/graphql',
+      FRONT_END_URL: 'https://store.modaprimeusa.com',
+      PRODUCTS_PER_PAGE: 15,
       "graphql-client": {
         clients: {
           default: {
