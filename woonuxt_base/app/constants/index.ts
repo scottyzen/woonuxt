@@ -244,3 +244,13 @@ export const countries: GeoLocation[] = [
   { name: 'Zambia', code: 'ZM' },
   { name: 'Zimbabwe', code: 'ZW' },
 ];
+
+export enum ProductsOrderByEnum {
+  DATE = 'DATE',
+  PRICE = 'PRICE',
+  POPULARITY = 'POPULARITY',
+  RATING = 'RATING',
+  TITLE = 'TITLE',
+  MENU_ORDER = 'MENU_ORDER',
+  IN_STOCK = 'IN_STOCK'
+}

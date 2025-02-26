@@ -1,8 +1,9 @@
 query getProducts(
   $first: Int = 12, 
-  $after: String = ""
+  $after: String = "",
+  $orderby: ProductsOrderByEnum = DATE
 ) {
-  products(first: $first, after: $after) {
+  products(first: $first, after: $after, where: { orderby: $orderby }) {
     pageInfo {
       hasNextPage
       endCursor
