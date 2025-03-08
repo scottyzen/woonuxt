@@ -28,5 +28,8 @@
   },
   "overrides": {
     "sharp": "0.32.6"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.35.0"
   }
 }
