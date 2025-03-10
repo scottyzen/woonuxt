@@ -20,13 +20,14 @@ export function useCart() {
    */
   async function refreshCart(): Promise<boolean> {
     try {
-      const { cart, customer, viewer, paymentGateways } = await GqlGetCart();
-      const { updateCustomer, updateViewer } = useAuth();
+      const { cart, customer, viewer, paymentGateways, loginClients } = await GqlGetCart();
+      const { updateCustomer, updateViewer, updateLoginClients } = useAuth();
 
       if (cart) updateCart(cart);
       if (customer) updateCustomer(customer);
       if (viewer) updateViewer(viewer);
       if (paymentGateways) updatePaymentGateways(paymentGateways);
+      if (loginClients) updateLoginClients(loginClients.filter((client) => client !== null));
 
       return true; // Cart was successfully refreshed
     } catch (error: any) {

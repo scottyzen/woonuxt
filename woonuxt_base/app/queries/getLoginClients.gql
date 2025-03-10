@@ -1,8 +1,0 @@
-query getLoginClients {
-  loginClients {
-    name
-    provider
-    isEnabled
-    authorizationUrl
-  }
-}

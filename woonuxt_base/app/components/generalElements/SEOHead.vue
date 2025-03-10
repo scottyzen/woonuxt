@@ -22,8 +22,8 @@ const defaultImage = getFullImageURL(defaultImageSrc);
 const twitterImage = getFullImageURL(twitterImageSrc);
 const description = info.shortDescription || info.description ? stripHtml(info.shortDescription || '') : stripHtml(info.description || '');
 
-const facebook = wooNuxtSEO?.find((item) => item.provider === 'facebook') ?? null;
-const twitter = wooNuxtSEO?.find((item) => item.provider === 'twitter') ?? null;
+const facebook = wooNuxtSEO?.find((item) => item?.provider === 'facebook') ?? null;
+const twitter = wooNuxtSEO?.find((item) => item?.provider === 'twitter') ?? null;
 </script>
 
 <template>

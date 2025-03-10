@@ -2,6 +2,10 @@
 const route = useRoute();
 const router = useRouter();
 
+const { cart } = useCart();
+const { viewer } = useAuth();
+const showLoader = computed(() => !cart.value && !viewer.value);
+
 const provider = route.params.provider as string;
 
 const code = route.query.code as string;
