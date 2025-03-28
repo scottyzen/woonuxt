@@ -16,20 +16,20 @@
     "@vueuse/core": "^12.8.2"
   },
   "devDependencies": {
-    "@nuxt/icon": "^1.10.3",
-    "@nuxt/image": "1.9.0",
-    "@nuxtjs/i18n": "^9.3.0",
-    "@nuxtjs/tailwindcss": "^6.13.1",
+    "@nuxt/icon": "^1.11.0",
+    "@nuxt/image": "1.10.0",
+    "@nuxtjs/i18n": "^9.4.0",
+    "@nuxtjs/tailwindcss": "^6.13.2",
     "@tailwindcss/typography": "^0.5.16",
-    "nuxt": "^3.16.0",
+    "nuxt": "^3.16.1",
     "nuxt-graphql-client": "^0.2.43",
     "prettier": "^3.5.3",
-    "woonuxt-settings": "^1.0.67"
+    "woonuxt-settings": "^1.1.2"
   },
   "overrides": {
     "sharp": "0.32.6"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.35.0"
+    "@rollup/rollup-linux-x64-gnu": "4.37.0"
   }
 }
