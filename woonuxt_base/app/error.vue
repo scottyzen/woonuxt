@@ -33,7 +33,7 @@ useSeoMeta({
     </Transition>
 
     <Transition name="slide-from-left">
-      <MobileMenu v-if="isShowingMobileMenu" />
+      <LazyMobileMenu v-if="isShowingMobileMenu" />
     </Transition>
 
     <div class="flex flex-col items-center justify-center flex-1 gap-4 min-h-[500px]">
@@ -45,6 +45,6 @@ useSeoMeta({
       <div v-if="isShowingCart || isShowingMobileMenu" class="bg-black opacity-25 inset-0 z-40 fixed" @click="closeCartAndMenu" />
     </Transition>
 
-    <AppFooter />
+    <LazyAppFooter hydrate-on-visible />
   </div>
 </template>
