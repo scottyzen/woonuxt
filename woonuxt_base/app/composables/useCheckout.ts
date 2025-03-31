@@ -56,7 +56,7 @@ export function useCheckout() {
     });
   }
 
-  const processCheckout = async (isPaid = false): Promise<any> => {
+  const processCheckout = async (isPaid = false) => {
     const { customer, loginUser } = useAuth();
     const router = useRouter();
     const { replaceQueryParam } = useHelpers();
@@ -130,8 +130,6 @@ export function useCheckout() {
         await refreshCart();
       }
     } catch (error: any) {
-      isProcessingOrder.value = false;
-
       const errorMessage = error?.gqlErrors?.[0].message;
 
       if (errorMessage?.includes('An account is already registered with your email address')) {
@@ -141,9 +139,9 @@ export function useCheckout() {
 
       alert(errorMessage);
       return null;
-    } finally {
-      isProcessingOrder.value = false;
     }
+
+    isProcessingOrder.value = false;
   };
 
   return {
