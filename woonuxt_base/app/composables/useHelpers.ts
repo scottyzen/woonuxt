@@ -116,8 +116,8 @@ export function useHelpers() {
     for (let index = 0; index < numberOfVariation; index++) {
       const tempArray = [] as string[];
       product?.variations?.nodes?.forEach((element) => {
-        // @ts-ignore
-        if (element.attributes?.nodes[index]?.value) tempArray.push(element.attributes.nodes[index].value);
+        const value = element.attributes?.nodes[index]?.value;
+        if (typeof value === 'string') tempArray.push(value);
       });
 
       if (!tempArray.some(Boolean)) indexOfTypeAny.push(index);
