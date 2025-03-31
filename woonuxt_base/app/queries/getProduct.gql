@@ -14,17 +14,19 @@ query getProduct($slug: ID!) {
     description
     rawDescription: description(format: RAW)
     shortDescription
-    attributes {
-      nodes {
-        ...ProductAttribute
-        ... on GlobalProductAttribute {
-          slug
-          terms(where: { orderby: MENU_ORDER, order: ASC }) {
-            nodes {
-              name
-              slug
-              taxonomyName
-              databaseId
+    ... on ProductWithAttributes {
+      attributes {
+        nodes {
+          ...ProductAttribute
+          ... on GlobalProductAttribute {
+            slug
+            terms(where: { orderby: MENU_ORDER, order: ASC }) {
+              nodes {
+                name
+                slug
+                taxonomyName
+                databaseId
+              }
             }
           }
         }
