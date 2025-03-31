@@ -2,7 +2,7 @@ import { createResolver } from '@nuxt/kit';
 const { resolve } = createResolver(import.meta.url);
 
 export default defineNuxtConfig({
-  compatibilityDate: '2024-12-26',
+  compatibilityDate: '2025-03-30',
   future: {
     compatibilityVersion: 4,
   },
@@ -37,7 +37,7 @@ export default defineNuxtConfig({
       default: {
         host: process.env.GQL_HOST || 'http://localhost:4000/graphql',
         corsOptions: { mode: 'cors', credentials: 'include' },
-        headers: { 'Origin': process.env.APP_HOST || 'http://localhost:3000' },
+        headers: { Origin: process.env.APP_HOST || 'http://localhost:3000' },
       },
     },
   },

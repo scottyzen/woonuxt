@@ -178,7 +178,7 @@ const disabledAddToCart = computed(() => {
       </div>
       <div class="my-32" v-if="product.related && storeSettings.showRelatedProducts">
         <div class="mb-4 text-xl font-semibold">{{ $t('messages.shop.youMayLike') }}</div>
-        <ProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
+        <LazyProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
       </div>
     </div>
   </main>
