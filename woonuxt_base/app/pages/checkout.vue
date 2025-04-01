@@ -35,6 +35,8 @@ const initStripe = async () => {
   if (stripeKey) {
     stripe.value = await loadStripe(stripeKey);
   }
+
+  processCheckout(isPaid.value);
 };
 
 const handleStripeElement = (stripeElements: StripeElements): void => {

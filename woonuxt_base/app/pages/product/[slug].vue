@@ -61,19 +61,27 @@ const updateSelectedVariations = (variations: VariationAttribute[]): void => {
     }
   });
 
-  if (getActiveVariation[0]) activeVariation.value = getActiveVariation[0];
+  // Set variation to the selected variation if it exists
+  activeVariation.value = getActiveVariation?.[0] || null;
+
   selectProductInput.value.variationId = activeVariation.value?.databaseId ?? null;
   selectProductInput.value.variation = activeVariation.value ? attrValues.value : null;
   variation.value = variations;
 };
 
 const stockStatus = computed(() => {
-  if (isVariableProduct.value) return activeVariation.value?.stockStatus || StockStatusEnum.OUT_OF_STOCK;
+  if (isVariableProduct.value) {
+    return activeVariation.value?.stockStatus || StockStatusEnum.OUT_OF_STOCK;
+  }
   return type.value?.stockStatus || StockStatusEnum.OUT_OF_STOCK;
 });
+
 const disabledAddToCart = computed(() => {
-  if (isSimpleProduct.value) return !type.value || stockStatus.value === StockStatusEnum.OUT_OF_STOCK || isUpdatingCart.value;
-  return !type.value || stockStatus.value === StockStatusEnum.OUT_OF_STOCK || !activeVariation.value || isUpdatingCart.value;
+  const isOutOfStock = stockStatus.value === StockStatusEnum.OUT_OF_STOCK;
+  const isInvalidType = !type.value;
+  const isCartUpdating = isUpdatingCart.value;
+  const isValidActiveVariation = isVariableProduct.value ? !!activeVariation.value : true;
+  return isInvalidType || isOutOfStock || isCartUpdating || !isValidActiveVariation;
 });
 </script>
 
@@ -178,7 +186,7 @@ const disabledAddToCart = computed(() => {
       </div>
       <div class="my-32" v-if="product.related && storeSettings.showRelatedProducts">
         <div class="mb-4 text-xl font-semibold">{{ $t('messages.shop.youMayLike') }}</div>
-        <ProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
+        <LazyProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
       </div>
     </div>
   </main>

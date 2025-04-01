@@ -14,22 +14,7 @@ query getProduct($slug: ID!) {
     description
     rawDescription: description(format: RAW)
     shortDescription
-    attributes {
-      nodes {
-        ...ProductAttribute
-        ... on GlobalProductAttribute {
-          slug
-          terms(where: { orderby: MENU_ORDER, order: ASC }) {
-            nodes {
-              name
-              slug
-              taxonomyName
-              databaseId
-            }
-          }
-        }
-      }
-    }
+    ...ProductWithAttributes
     ...ProductCategories
     ...Terms
     ...SimpleProduct
@@ -54,6 +39,14 @@ query getProduct($slug: ID!) {
   }
 }
 
+fragment ProductWithAttributes on ProductWithAttributes {
+  attributes {
+    nodes {
+      ...ProductAttribute
+    }
+  }
+}
+
 fragment ProductAttribute on ProductAttribute {
   variation
   name
@@ -61,6 +54,16 @@ fragment ProductAttribute on ProductAttribute {
   options
   label
   scope
+  ... on GlobalProductAttribute {
+    terms {
+      nodes {
+        name
+        slug
+        taxonomyName
+        databaseId
+      }
+    }
+  }
 }
 
 fragment Comment on Comment {
