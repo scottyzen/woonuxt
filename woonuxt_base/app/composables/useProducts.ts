@@ -10,7 +10,7 @@ export function useProducts() {
    */
   function setProducts(newProducts: Product[]): void {
     if (!Array.isArray(newProducts)) throw new Error('Products must be an array.');
-    products.value = newProducts ?? [];
+    products.value = [...newProducts];
     allProducts = JSON.parse(JSON.stringify(newProducts));
   }
 
