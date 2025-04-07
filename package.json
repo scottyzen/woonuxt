@@ -18,7 +18,7 @@
   "devDependencies": {
     "@nuxt/icon": "^1.11.0",
     "@nuxt/image": "1.10.0",
-    "@nuxtjs/i18n": "^9.4.0",
+    "@nuxtjs/i18n": "^9.5.2",
     "@nuxtjs/tailwindcss": "^6.13.2",
     "@tailwindcss/typography": "^0.5.16",
     "nuxt": "^3.16.2",
@@ -30,6 +30,6 @@
     "sharp": "0.32.6"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.38.0"
+    "@rollup/rollup-linux-x64-gnu": "4.39.0"
   }
 }
