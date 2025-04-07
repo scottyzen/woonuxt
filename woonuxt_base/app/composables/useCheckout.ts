@@ -1,4 +1,4 @@
-import type { CheckoutInput, UpdateCustomerInput, CreateAccountInput } from '#gql';
+import type { CheckoutInput, CreateAccountInput, UpdateCustomerInput } from '#gql';
 
 export function useCheckout() {
   const orderInput = useState<any>('orderInput', () => {
@@ -32,7 +32,7 @@ export function useCheckout() {
         } as UpdateCustomerInput,
       });
 
-      if (updateCustomer) refreshCart();
+      if (updateCustomer) await refreshCart();
     } catch (error) {
       console.error('Error updating shipping location:', error);
     } finally {
@@ -40,7 +40,7 @@ export function useCheckout() {
     }
   }
 
-  function openPayPalWindow(redirectUrl: string): Promise<boolean> {
+  async function openPayPalWindow(redirectUrl: string): Promise<boolean> {
     return new Promise((resolve) => {
       const width = 750;
       const height = 750;
@@ -56,7 +56,7 @@ export function useCheckout() {
     });
   }
 
-  const processCheckout = async (isPaid = false) => {
+  const processCheckout = async (isPaid = false): Promise<any> => {
     const { customer, loginUser } = useAuth();
     const router = useRouter();
     const { replaceQueryParam } = useHelpers();
@@ -139,9 +139,9 @@ export function useCheckout() {
 
       alert(errorMessage);
       return null;
+    } finally {
+      isProcessingOrder.value = false;
     }
-
-    isProcessingOrder.value = false;
   };
 
   return {
