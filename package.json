@@ -19,10 +19,10 @@
     "@nuxt/icon": "^1.12.0",
     "@nuxt/image": "1.10.0",
     "@nuxtjs/i18n": "^9.5.2",
-    "@nuxtjs/tailwindcss": "^6.13.2",
+    "@nuxtjs/tailwindcss": "^6.14.0",
     "@tailwindcss/typography": "^0.5.16",
-    "nuxt": "^3.16.2",
-    "nuxt-graphql-client": "^0.2.45",
+    "nuxt": "^3.17.1",
+    "nuxt-graphql-client": "^0.2.46",
     "prettier": "^3.5.3",
     "woonuxt-settings": "^1.2.1"
   },
@@ -30,6 +30,6 @@
     "sharp": "0.32.6"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.40.0"
+    "@rollup/rollup-linux-x64-gnu": "4.40.1"
   }
 }
