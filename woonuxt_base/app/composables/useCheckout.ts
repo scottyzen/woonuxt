@@ -1,4 +1,4 @@
-import type { CheckoutInput, UpdateCustomerInput, CreateAccountInput } from '#gql';
+import type { CheckoutInput, CreateAccountInput, UpdateCustomerInput } from '#gql';
 import { StripePaymentMethodEnum } from '#gql/default';
 import type { CreateSourceData, Stripe, StripeCardElement, StripeElements } from '@stripe/stripe-js';
 import { CheckoutInlineError } from '../types/CheckoutInlineError';
@@ -45,7 +45,7 @@ export function useCheckout() {
         } as UpdateCustomerInput,
       });
 
-      if (updateCustomer) refreshCart();
+      if (updateCustomer) await refreshCart();
     } catch (error) {
       console.error('Error updating shipping location:', error);
     } finally {
@@ -53,7 +53,7 @@ export function useCheckout() {
     }
   }
 
-  function openPayPalWindow(redirectUrl: string): Promise<boolean> {
+  async function openPayPalWindow(redirectUrl: string): Promise<boolean> {
     return new Promise((resolve) => {
       const width = 750;
       const height = 750;
@@ -69,7 +69,7 @@ export function useCheckout() {
     });
   }
 
-  const processCheckout = async (isPaid = false) => {
+  const processCheckout = async (isPaid = false): Promise<any> => {
     const { customer, loginUser } = useAuth();
     const router = useRouter();
     const { replaceQueryParam } = useHelpers();
@@ -168,7 +168,7 @@ export function useCheckout() {
     }
 
     if (isPaid) {
-      await proccessCheckout(true);
+      await processCheckout(true);
     } else {
       throw new Error(t('messages.error.orderFailed'));
     }
@@ -242,10 +242,10 @@ export function useCheckout() {
 
       switch (paymentIntent?.status) {
         case "succeeded":
-          await proccessCheckout(true);
+          await processCheckout(true);
           break;
         case "processing":
-          await proccessCheckout(false);
+          await processCheckout(false);
           break;
         case "requires_payment_method":
           // If the payment attempt fails (for example due to a decline), 

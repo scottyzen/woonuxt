@@ -5,7 +5,7 @@ const { storeSettings } = useAppConfig();
 const { isQueryEmpty } = useHelpers();
 
 const { data } = await useAsyncGql('getProducts');
-const allProducts = (data.value?.products?.nodes || []) as Product[];
+const allProducts = data.value?.products?.nodes as Product[];
 setProducts(allProducts);
 
 onMounted(() => {
@@ -22,7 +22,7 @@ watch(
 
 useHead({
   title: `Products`,
-  meta: [{ hid: 'description', name: 'description', content: 'Products' }],
+  meta: [{ name: 'description', content: 'Discover our products' }],
 });
 </script>
 
