@@ -27,7 +27,10 @@
     "woonuxt-settings": "^1.2.1"
   },
   "overrides": {
-    "sharp": "0.32.6"
+    "sharp": "0.32.6",
+    "vite": {
+      "rollup": "npm:@rollup/wasm-node"
+    }
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.40.0"
