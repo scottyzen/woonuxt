@@ -25,14 +25,5 @@
     "nuxt-graphql-client": "^0.2.46",
     "prettier": "^3.5.3",
     "woonuxt-settings": "^1.2.1"
-  },
-  "overrides": {
-    "sharp": "0.32.6",
-    "vite": {
-      "rollup": "npm:@rollup/wasm-node"
-    }
-  },
-  "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.40.0"
   }
 }
