@@ -2,7 +2,6 @@ import { createResolver } from '@nuxt/kit';
 const { resolve } = createResolver(import.meta.url);
 
 export default defineNuxtConfig({
-  compatibilityDate: '2025-06-03',
   future: {
     compatibilityVersion: 4,
   },
@@ -13,16 +12,6 @@ export default defineNuxtConfig({
       link: [{ rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' }],
     },
     pageTransition: { name: 'page', mode: 'default' },
-  },
-
-  experimental: {
-    sharedPrerenderData: true,
-    buildCache: true,
-    defaults: {
-      nuxtLink: {
-        prefetch: true,
-      },
-    },
   },
 
   plugins: [resolve('./app/plugins/init.ts')],
