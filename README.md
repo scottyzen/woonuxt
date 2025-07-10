@@ -40,7 +40,7 @@ And here is the live demo of the customized WooNuxt site: [My Shop](https://mysh
 | Feature                                                   | Ongoing Enhancements | In the Pipeline | In Progress | Done | Next |
 | --------------------------------------------------------- | -------------------- | --------------- | ----------- | ---- | ---- |
 | Performance                                               | 🔷                   |                 |             | ✅   |      |
-| SEO                                                       | 🔷                   |                 | ✅          | ✅   |      |
+| SEO                                                       | 🔷                   |                 | ✅          |     |      |
 | Cart                                                      |                      |                 |             | ✅   |      |
 | Search                                                    |                      |                 |             | ✅   |      |
 | Shipping                                                  |                      |                 |             | ✅   |      |
