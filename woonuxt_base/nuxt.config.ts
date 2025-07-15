@@ -10,6 +10,8 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
 
+  compatibilityDate: '2025-07-15',
+
   app: {
     head: {
       htmlAttrs: { lang: 'en' },
