@@ -38,7 +38,6 @@ query getProduct($slug: ID!) {
     }
   }
 }
-
 fragment ProductWithAttributes on ProductWithAttributes {
   attributes {
     nodes {
@@ -46,7 +45,6 @@ fragment ProductWithAttributes on ProductWithAttributes {
     }
   }
 }
-
 fragment ProductAttribute on ProductAttribute {
   variation
   name
@@ -61,20 +59,6 @@ fragment ProductAttribute on ProductAttribute {
         slug
         taxonomyName
         databaseId
-      }
-    }
-  }
-}
-
-fragment Comment on Comment {
-  content
-  id
-  date
-  author {
-    node {
-      name
-      avatar {
-        url
       }
     }
   }

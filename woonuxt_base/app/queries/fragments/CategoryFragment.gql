@@ -1,0 +1,17 @@
+fragment CategoryImage on MediaItem {
+  sourceUrl(size: MEDIUM_LARGE)
+  altText
+  title
+}
+fragment ProductCategory on ProductCategory {
+  count
+  databaseId
+  id
+  name
+  slug
+  image {
+    sourceUrl(size: MEDIUM_LARGE)
+    altText
+    title
+  }
+}

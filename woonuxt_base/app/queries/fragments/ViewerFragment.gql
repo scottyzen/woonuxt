@@ -1,0 +1,13 @@
+fragment Viewer on User {
+  lastName
+  email
+  databaseId
+  id
+  firstName
+  username
+  nicename
+  wooSessionToken
+  avatar {
+    url
+  }
+}
