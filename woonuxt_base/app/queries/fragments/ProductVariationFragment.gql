@@ -1,0 +1,25 @@
+fragment ProductVariation on ProductVariation {
+  name
+  databaseId
+  price
+  regularPrice
+  salePrice
+  rawSalePrice: salePrice(format: RAW)
+  slug
+  stockQuantity
+  stockStatus
+  hasAttributes
+  image {
+    sourceUrl
+    altText
+    title
+    databaseId
+    cartSourceUrl: sourceUrl(size: THUMBNAIL)
+    producCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
+  }
+  attributes {
+    nodes {
+      ...VariationAttribute
+    }
+  }
+}

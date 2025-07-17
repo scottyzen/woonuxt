@@ -29,30 +29,7 @@ fragment OrderFragment on Order {
   }
   lineItems {
     nodes {
-      quantity
-      total
-      id
-      product {
-        node {
-          name
-          slug
-          image {
-            sourceUrl(size: THUMBNAIL)
-            altText
-            title
-          }
-        }
-      }
-      variation {
-        node {
-          name
-          image {
-            sourceUrl(size: THUMBNAIL)
-            altText
-            title
-          }
-        }
-      }
+      ...LineItem
     }
   }
   customer {

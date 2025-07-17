@@ -1,10 +1,12 @@
 import { createResolver } from '@nuxt/kit';
 const { resolve } = createResolver(import.meta.url);
 
+// Environment variables with fallbacks
+const GQL_HOST = process.env.GQL_HOST || 'http://localhost:4000/graphql';
+const APP_HOST = process.env.APP_HOST || 'http://localhost:3000';
+
 export default defineNuxtConfig({
-  future: {
-    compatibilityVersion: 4,
-  },
+  compatibilityDate: '2025-07-15',
 
   app: {
     head: {
@@ -23,9 +25,9 @@ export default defineNuxtConfig({
   'graphql-client': {
     clients: {
       default: {
-        host: process.env.GQL_HOST || 'http://localhost:4000/graphql',
+        host: GQL_HOST,
         corsOptions: { mode: 'cors', credentials: 'include' },
-        headers: { Origin: process.env.APP_HOST || 'http://localhost:3000' },
+        headers: { Origin: APP_HOST },
       },
     },
   },

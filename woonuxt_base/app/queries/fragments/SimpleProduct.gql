@@ -11,16 +11,19 @@ fragment SimpleProduct on SimpleProduct {
   stockStatus
   stockQuantity
   lowStockAmount
+  onSale
   averageRating
   weight
   length
   width
   height
   reviewCount
-  onSale
   virtual
   image {
-    ...Image
+    sourceUrl
+    altText
+    title
+    databaseId
     cartSourceUrl: sourceUrl(size: THUMBNAIL)
     producCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
   }

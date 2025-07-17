@@ -1,0 +1,6 @@
+fragment VariationAttribute on VariationAttribute {
+  name
+  attributeId
+  value
+  label
+}
