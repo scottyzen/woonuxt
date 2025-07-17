@@ -100,7 +100,7 @@ And here is the live demo of the customized WooNuxt site: [My Shop](https://mysh
 | WooGraphQL                   | 0.21.2  |
 | ~~WPGraphQL CORS~~           | ~~2.1~~ |
 | Headless Login for WPGraphQL | 0.4.2   |
-| Node                         | 20.16.0 |
+| Node                         | 22.17.1 |
 | PHP                          | 8.2     |
 
 ### Current translations
