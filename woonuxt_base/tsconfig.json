@@ -4,5 +4,6 @@
     "allowJs": true,
     "types": ["@nuxt/image", "@nuxtjs/i18n"],
     "strict": true
-  }
+  },
+  "include": ["../.nuxt/nuxt.d.ts", "../.nuxt/imports.d.ts", "./app/**/*", "./**/*.ts", "./**/*.vue"]
 }
