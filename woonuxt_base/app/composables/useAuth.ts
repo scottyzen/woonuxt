@@ -9,7 +9,7 @@ import type {
 
 export const useAuth = () => {
   const { refreshCart } = useCart();
-  const { logGQLError, clearAllCookies } = useHelpers();
+  const { clearAllCookies, getErrorMessage } = useHelpers();
   const router = useRouter();
 
   const customer = useState<Customer>('customer', () => ({ billing: {}, shipping: {} }));
@@ -35,12 +35,12 @@ export const useAuth = () => {
         success: true,
       };
     } catch (error: any) {
-      logGQLError(error);
+      const errorMsg = getErrorMessage(error);
       isPending.value = false;
 
       return {
         success: false,
-        error: error?.gqlErrors?.[0]?.message,
+        error: errorMsg,
       };
     }
   };
@@ -67,11 +67,11 @@ export const useAuth = () => {
         success: true,
       };
     } catch (error: any) {
-      logGQLError(error);
+      const errorMsg = getErrorMessage(error);
 
       return {
         success: false,
-        error: error?.gqlErrors?.[0]?.message,
+        error: errorMsg,
       };
     } finally {
       isPending.value = false;
@@ -90,8 +90,8 @@ export const useAuth = () => {
       }
       return { success: true };
     } catch (error: any) {
-      logGQLError(error);
-      return { success: false, error: error?.gqlErrors?.[0]?.message };
+      const errorMsg = getErrorMessage(error);
+      return { success: false, error: errorMsg };
     } finally {
       updateViewer(null);
       if (router.currentRoute.value.path === '/my-account' && viewer.value === null) {
@@ -108,10 +108,9 @@ export const useAuth = () => {
       await GqlRegisterCustomer({ input: userInfo });
       return { success: true };
     } catch (error: any) {
-      logGQLError(error);
-      const gqlError = error?.gqlErrors?.[0];
+      const errorMsg = getErrorMessage(error);
       isPending.value = false;
-      return { success: false, error: gqlError?.message };
+      return { success: false, error: errorMsg };
     }
   };
 
@@ -142,10 +141,9 @@ export const useAuth = () => {
       }
       return { success: false, error: 'There was an error sending the reset password email. Please try again later.' };
     } catch (error: any) {
-      logGQLError(error);
+      const errorMsg = getErrorMessage(error);
       isPending.value = false;
-      const gqlError = error?.gqlErrors?.[0];
-      return { success: false, error: gqlError?.message };
+      return { success: false, error: errorMsg };
     }
   };
 
@@ -162,7 +160,7 @@ export const useAuth = () => {
     } catch (error: any) {
       isPending.value = false;
       const gqlError = error?.gqlErrors?.[0];
-      return { success: false, error: gqlError?.message };
+      return { success: false, error: getErrorMessage(error) };
     }
   };
 
@@ -176,9 +174,8 @@ export const useAuth = () => {
       }
       return { success: false, error: 'There was an error getting your orders. Please try again later.' };
     } catch (error: any) {
-      logGQLError(error);
-      const gqlError = error?.gqlErrors?.[0];
-      return { success: false, error: gqlError?.message };
+      const errorMsg = getErrorMessage(error);
+      return { success: false, error: errorMsg };
     }
   };
 
@@ -192,9 +189,8 @@ export const useAuth = () => {
       }
       return { success: false, error: 'There was an error getting your downloads. Please try again later.' };
     } catch (error: any) {
-      logGQLError(error);
-      const gqlError = error?.gqlErrors?.[0];
-      return { success: false, error: gqlError?.message };
+      const errorMsg = getErrorMessage(error);
+      return { success: false, error: errorMsg };
     }
   };
 

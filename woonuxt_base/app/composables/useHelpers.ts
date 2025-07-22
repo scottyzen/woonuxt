@@ -182,15 +182,13 @@ export function useHelpers() {
   };
 
   /**
-   *  Logs a GraphQL error message. Only show logs in development or when the 'debug' query parameter is present.
-   * @param error - GraphQL error object with gqlErrors array
+   * Extract GraphQL error message and optionally log it
+   * @param error - GraphQL error object
+   * @returns The error message or undefined
    */
-  const logGQLError = (error: any) => {
-    if (!isDev && !route.query.debug) return;
+  const getErrorMessage = (error: any): string | undefined => {
     const errorMessage = error?.gqlErrors?.[0]?.message;
-    if (errorMessage) {
-      console.error(errorMessage);
-    }
+    return errorMessage;
   };
 
   /**
@@ -230,7 +228,7 @@ export function useHelpers() {
     scrollToTop,
     stripHtml,
     debounce,
-    logGQLError,
+    getErrorMessage,
     getDomain,
   };
 }

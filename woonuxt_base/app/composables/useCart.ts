@@ -12,7 +12,7 @@ export function useCart() {
   const isUpdatingCart = useState<boolean>('isUpdatingCart', () => false);
   const isUpdatingCoupon = useState<boolean>('isUpdatingCoupon', () => false);
   const paymentGateways = useState<PaymentGateways | null>('paymentGateways', () => null);
-  const { logGQLError, clearAllCookies } = useHelpers();
+  const { clearAllCookies, getErrorMessage } = useHelpers();
 
   /** Refesh the cart from the server
    * @returns {Promise<boolean>} - A promise that resolves
@@ -31,7 +31,8 @@ export function useCart() {
 
       return true; // Cart was successfully refreshed
     } catch (error: any) {
-      logGQLError(error);
+      const errorMsg = getErrorMessage(error);
+      console.error('Error refreshing cart:', errorMsg);
       clearAllCookies();
       resetInitialState();
       return false; // Cart was not successfully refreshed
@@ -69,7 +70,8 @@ export function useCart() {
       const { storeSettings } = useAppConfig();
       if (storeSettings.autoOpenCart && !isShowingCart.value) toggleCart(true);
     } catch (error: any) {
-      logGQLError(error);
+      const errorMsg = getErrorMessage(error);
+      console.error('Error adding to cart:', errorMsg);
     } finally {
       isUpdatingCart.value = false;
     }
@@ -82,7 +84,8 @@ export function useCart() {
       const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity: 0 });
       updateCart(updateItemQuantities?.cart);
     } catch (error: any) {
-      logGQLError(error);
+      const errorMsg = getErrorMessage(error);
+      console.error('Error removing item from cart:', errorMsg);
     } finally {
       isUpdatingCart.value = false;
     }
@@ -95,7 +98,8 @@ export function useCart() {
       const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity });
       updateCart(updateItemQuantities?.cart);
     } catch (error: any) {
-      logGQLError(error);
+      const errorMsg = getErrorMessage(error);
+      console.error('Error updating item quantity:', errorMsg);
     } finally {
       isUpdatingCart.value = false;
     }
@@ -108,7 +112,8 @@ export function useCart() {
       const { emptyCart } = await GqlEmptyCart();
       updateCart(emptyCart?.cart);
     } catch (error: any) {
-      logGQLError(error);
+      const errorMsg = getErrorMessage(error);
+      console.error('Error emptying cart:', errorMsg);
     } finally {
       isUpdatingCart.value = false;
     }
@@ -121,7 +126,8 @@ export function useCart() {
       const { updateShippingMethod } = await GqlChangeShippingMethod({ shippingMethods });
       updateCart(updateShippingMethod?.cart);
     } catch (error: any) {
-      logGQLError(error);
+      const errorMsg = getErrorMessage(error);
+      console.error('Error updating shipping method:', errorMsg);
     } finally {
       isUpdatingCart.value = false;
     }
@@ -135,8 +141,8 @@ export function useCart() {
       updateCart(applyCoupon?.cart);
       return { success: true, data: applyCoupon?.cart || null };
     } catch (error: any) {
-      logGQLError(error);
-      return { success: false, error: error?.gqlErrors?.[0]?.message };
+      const errorMsg = getErrorMessage(error);
+      return { success: false, error: errorMsg };
     } finally {
       isUpdatingCoupon.value = false;
     }
@@ -149,7 +155,8 @@ export function useCart() {
       const { removeCoupons } = await GqlRemoveCoupons({ codes: [code] });
       updateCart(removeCoupons?.cart);
     } catch (error: any) {
-      logGQLError(error);
+      const errorMsg = getErrorMessage(error);
+      console.error('Error removing coupon:', errorMsg);
     } finally {
       isUpdatingCart.value = false;
     }
