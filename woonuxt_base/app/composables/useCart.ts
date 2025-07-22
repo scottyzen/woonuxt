@@ -70,14 +70,22 @@ export function useCart() {
       if (storeSettings.autoOpenCart && !isShowingCart.value) toggleCart(true);
     } catch (error: any) {
       logGQLError(error);
+    } finally {
+      isUpdatingCart.value = false;
     }
   }
 
   // remove an item from the cart
-  async function removeItem(key: string) {
+  async function removeItem(key: string): Promise<void> {
     isUpdatingCart.value = true;
-    const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity: 0 });
-    updateCart(updateItemQuantities?.cart);
+    try {
+      const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity: 0 });
+      updateCart(updateItemQuantities?.cart);
+    } catch (error: any) {
+      logGQLError(error);
+    } finally {
+      isUpdatingCart.value = false;
+    }
   }
 
   // update the quantity of an item in the cart
@@ -88,6 +96,8 @@ export function useCart() {
       updateCart(updateItemQuantities?.cart);
     } catch (error: any) {
       logGQLError(error);
+    } finally {
+      isUpdatingCart.value = false;
     }
   }
 
@@ -99,28 +109,37 @@ export function useCart() {
       updateCart(emptyCart?.cart);
     } catch (error: any) {
       logGQLError(error);
+    } finally {
+      isUpdatingCart.value = false;
     }
   }
 
   // Update shipping method
-  async function updateShippingMethod(shippingMethods: string) {
+  async function updateShippingMethod(shippingMethods: string): Promise<void> {
     isUpdatingCart.value = true;
-    const { updateShippingMethod } = await GqlChangeShippingMethod({ shippingMethods });
-    updateCart(updateShippingMethod?.cart);
+    try {
+      const { updateShippingMethod } = await GqlChangeShippingMethod({ shippingMethods });
+      updateCart(updateShippingMethod?.cart);
+    } catch (error: any) {
+      logGQLError(error);
+    } finally {
+      isUpdatingCart.value = false;
+    }
   }
 
   // Apply coupon
-  async function applyCoupon(code: string): Promise<{ message: string | null }> {
+  async function applyCoupon(code: string): Promise<ApiResponse<Cart | null>> {
     try {
       isUpdatingCoupon.value = true;
       const { applyCoupon } = await GqlApplyCoupon({ code });
       updateCart(applyCoupon?.cart);
-      isUpdatingCoupon.value = false;
+      return { success: true, data: applyCoupon?.cart || null };
     } catch (error: any) {
-      isUpdatingCoupon.value = false;
       logGQLError(error);
+      return { success: false, error: error?.gqlErrors?.[0]?.message };
+    } finally {
+      isUpdatingCoupon.value = false;
     }
-    return { message: null };
   }
 
   // Remove coupon
@@ -129,8 +148,9 @@ export function useCart() {
       isUpdatingCart.value = true;
       const { removeCoupons } = await GqlRemoveCoupons({ codes: [code] });
       updateCart(removeCoupons?.cart);
-    } catch (error) {
+    } catch (error: any) {
       logGQLError(error);
+    } finally {
       isUpdatingCart.value = false;
     }
   }

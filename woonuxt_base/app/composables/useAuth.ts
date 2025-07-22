@@ -1,10 +1,10 @@
 import type {
-  RegisterCustomerInput,
   CreateAccountInput,
-  ResetPasswordKeyMutationVariables,
-  ResetPasswordEmailMutationVariables,
-  LoginInput,
   LoginClientFragment,
+  LoginInput,
+  RegisterCustomerInput,
+  ResetPasswordEmailMutationVariables,
+  ResetPasswordKeyMutationVariables,
 } from '#gql';
 
 export const useAuth = () => {
@@ -20,7 +20,7 @@ export const useAuth = () => {
   const loginClients = useState<LoginClient[] | null>('loginClients', () => null);
 
   // Log in the user
-  const loginUser = async (credentials: CreateAccountInput): Promise<{ success: boolean; error: any }> => {
+  const loginUser = async (credentials: CreateAccountInput): Promise<AuthResponse> => {
     isPending.value = true;
 
     try {
@@ -33,7 +33,6 @@ export const useAuth = () => {
       isPending.value = false;
       return {
         success: true,
-        error: null,
       };
     } catch (error: any) {
       logGQLError(error);
@@ -46,7 +45,7 @@ export const useAuth = () => {
     }
   };
 
-  const loginWithProvider = async (state: string, code: string, provider: any): Promise<{ success: boolean; error: any }> => {
+  const loginWithProvider = async (state: string, code: string, provider: any): Promise<AuthResponse> => {
     isPending.value = true;
 
     try {
@@ -66,7 +65,6 @@ export const useAuth = () => {
 
       return {
         success: true,
-        error: null,
       };
     } catch (error: any) {
       logGQLError(error);
@@ -81,7 +79,7 @@ export const useAuth = () => {
   };
 
   // Log out the user
-  const logoutUser = async (): Promise<{ success: boolean; error: any }> => {
+  const logoutUser = async (): Promise<AuthResponse> => {
     isPending.value = true;
     try {
       const { logout } = await GqlLogout();
@@ -90,10 +88,10 @@ export const useAuth = () => {
         clearAllCookies();
         customer.value = { billing: {}, shipping: {} };
       }
-      return { success: true, error: null };
+      return { success: true };
     } catch (error: any) {
       logGQLError(error);
-      return { success: false, error };
+      return { success: false, error: error?.gqlErrors?.[0]?.message };
     } finally {
       updateViewer(null);
       if (router.currentRoute.value.path === '/my-account' && viewer.value === null) {
@@ -104,11 +102,11 @@ export const useAuth = () => {
     }
   };
 
-  const registerUser = async (userInfo: RegisterCustomerInput): Promise<{ success: boolean; error: any }> => {
+  const registerUser = async (userInfo: RegisterCustomerInput): Promise<AuthResponse> => {
     isPending.value = true;
     try {
       await GqlRegisterCustomer({ input: userInfo });
-      return { success: true, error: null };
+      return { success: true };
     } catch (error: any) {
       logGQLError(error);
       const gqlError = error?.gqlErrors?.[0];
@@ -134,13 +132,13 @@ export const useAuth = () => {
     isPending.value = false;
   };
 
-  const sendResetPasswordEmail = async ({ username }: ResetPasswordEmailMutationVariables): Promise<{ success: boolean; error: any }> => {
+  const sendResetPasswordEmail = async ({ username }: ResetPasswordEmailMutationVariables): Promise<AuthResponse> => {
     try {
       isPending.value = true;
       const { sendPasswordResetEmail } = await GqlResetPasswordEmail({ username });
       if (sendPasswordResetEmail?.success) {
         isPending.value = false;
-        return { success: true, error: null };
+        return { success: true };
       }
       return { success: false, error: 'There was an error sending the reset password email. Please try again later.' };
     } catch (error: any) {
@@ -151,14 +149,14 @@ export const useAuth = () => {
     }
   };
 
-  const resetPasswordWithKey = async ({ key, login, password }: ResetPasswordKeyMutationVariables): Promise<{ success: boolean; error: any }> => {
+  const resetPasswordWithKey = async ({ key, login, password }: ResetPasswordKeyMutationVariables): Promise<AuthResponse> => {
     try {
       isPending.value = true;
       const { resetUserPassword } = await GqlResetPasswordKey({ key, login, password });
       const wasPasswordReset = Boolean(resetUserPassword?.user?.id);
       if (wasPasswordReset) {
         isPending.value = false;
-        return { success: true, error: null };
+        return { success: true };
       }
       return { success: false, error: 'There was an error resetting the password. Please try again later.' };
     } catch (error: any) {
@@ -168,12 +166,13 @@ export const useAuth = () => {
     }
   };
 
-  const getOrders = async (): Promise<{ success: boolean; error: any }> => {
+  const getOrders = async (): Promise<ApiResponse<Order[]>> => {
     try {
       const { customer } = await GqlGetOrders();
       if (customer) {
-        orders.value = customer.orders?.nodes ?? [];
-        return { success: true, error: null };
+        const orderNodes = customer.orders?.nodes ?? [];
+        orders.value = orderNodes;
+        return { success: true, data: orderNodes };
       }
       return { success: false, error: 'There was an error getting your orders. Please try again later.' };
     } catch (error: any) {
@@ -183,12 +182,13 @@ export const useAuth = () => {
     }
   };
 
-  const getDownloads = async (): Promise<{ success: boolean; error: any }> => {
+  const getDownloads = async (): Promise<ApiResponse<DownloadableItem[]>> => {
     try {
       const { customer } = await GqlGetDownloads();
       if (customer) {
-        downloads.value = customer.downloadableItems?.nodes ?? [];
-        return { success: true, error: null };
+        const downloadNodes = customer.downloadableItems?.nodes ?? [];
+        downloads.value = downloadNodes;
+        return { success: true, data: downloadNodes };
       }
       return { success: false, error: 'There was an error getting your downloads. Please try again later.' };
     } catch (error: any) {

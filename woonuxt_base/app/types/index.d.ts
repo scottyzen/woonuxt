@@ -94,3 +94,22 @@ interface UserInfo {
   password: string;
   username: string;
 }
+
+// API Response Types
+interface ApiResponse<T = void> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
+
+interface AuthResponse {
+  success: boolean;
+  error?: string;
+}
+
+interface GQLError {
+  message: string;
+  extensions?: any;
+  locations?: any[];
+  path?: string[];
+}
