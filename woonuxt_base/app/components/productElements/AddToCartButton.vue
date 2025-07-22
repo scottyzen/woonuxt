@@ -16,9 +16,8 @@ watch(cart, (val) => {
 <template>
   <button
     type="submit"
-    class="rounded-lg flex font-bold bg-gray-800 text-white text-center min-w-[150px] p-2.5 gap-4 items-center justify-center focus:outline-none"
-    :class="{ disabled: disabled }"
-    :disabled="disabled"
+    class="rounded-lg flex font-bold bg-gray-800 text-white text-center min-w-[150px] p-2.5 gap-4 items-center justify-center focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-400"
+    :disabled="props.disabled"
     @click="isLoading = true">
     <span>{{ addToCartButtonText }}</span>
     <LoadingIcon v-if="isLoading" stroke="4" size="12" color="#fff" />
@@ -29,9 +28,5 @@ watch(cart, (val) => {
 button {
   outline: none !important;
   transition: all 150ms ease-in;
-}
-
-button.disabled {
-  @apply cursor-not-allowed bg-gray-400;
 }
 </style>
