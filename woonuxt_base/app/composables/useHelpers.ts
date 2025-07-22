@@ -22,25 +22,27 @@ export function useHelpers() {
 
   /**
    * Formats an array of variation objects by removing spaces and hyphens from the 'name' and 'value' properties.
-   * @param {any[]} arr - The array of variation objects to format. Each object should have 'name' and 'value' properties.
-   * @returns {any[]} The formatted array of variation objects.
+   * @param {VariationAttribute[]} arr - The array of variation objects to format. Each object should have 'name' and 'value' properties.
+   * @returns {VariationAttribute[]} The formatted array of variation objects.
    */
-  const formatVariationArrays = (arr: any[]): any[] => arr.map((a) => ({ name: a.name.replace(/[-\s]/g, ''), value: a.value.replace(/[-\s]/g, '') }));
+  const formatVariationArrays = (arr: VariationAttribute[]): VariationAttribute[] =>
+    arr.map((a) => ({ ...a, name: a.name?.replace(/[-\s]/g, '') || '', value: a.value?.replace(/[-\s]/g, '') || '' }));
 
   /**
    * Determines if two arrays of variations are equal by comparing the formatted arrays.
-   * @param {any[]} a1 - The first array of variations to compare.
-   * @param {any[]} a2 - The second array of variations to compare.
+   * @param {VariationAttribute[]} a1 - The first array of variations to compare.
+   * @param {VariationAttribute[]} a2 - The second array of variations to compare.
    * @returns {boolean} True if the arrays are equal, false otherwise.
    */
-  const arraysEqual = (a1: any[], a2: any[]): boolean => JSON.stringify(formatVariationArrays(a1)) === JSON.stringify(formatVariationArrays(a2));
+  const arraysEqual = (a1: VariationAttribute[], a2: VariationAttribute[]): boolean =>
+    JSON.stringify(formatVariationArrays(a1)) === JSON.stringify(formatVariationArrays(a2));
 
   // Formats an array of variations by converting the name and value properties to lowercase.
-  const formatArray = (arr: any[]): any[] => {
+  const formatArray = (arr: VariationAttribute[]): Array<{ name: string; value: string }> => {
     return arr.map((v) => {
-      let name = v.name.toLowerCase();
+      let name = v.name?.toLowerCase() || '';
       name = name.startsWith('pa_') ? name.replace('pa_', '') : name;
-      const value = v.value.toLowerCase();
+      const value = v.value?.toLowerCase() || '';
       return { name, value };
     });
   };
@@ -180,15 +182,13 @@ export function useHelpers() {
   };
 
   /**
-   *  Logs a GraphQL error message. Only show logs in development or when the 'debug' query parameter is present.
-   * @param error
+   * Extract GraphQL error message and optionally log it
+   * @param error - GraphQL error object
+   * @returns The error message or undefined
    */
-  const logGQLError = (error: any) => {
-    if (!isDev && !route.query.debug) return;
+  const getErrorMessage = (error: any): string | undefined => {
     const errorMessage = error?.gqlErrors?.[0]?.message;
-    if (errorMessage) {
-      console.error(errorMessage);
-    }
+    return errorMessage;
   };
 
   /**
@@ -228,7 +228,7 @@ export function useHelpers() {
     scrollToTop,
     stripHtml,
     debounce,
-    logGQLError,
+    getErrorMessage,
     getDomain,
   };
 }
