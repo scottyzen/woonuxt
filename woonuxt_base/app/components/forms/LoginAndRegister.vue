@@ -1,62 +1,60 @@
 <template>
-  <div class="max-w-lg mx-auto my-16 min-h-[600px] text-center">
-    <Logo />
-    <div class="flex flex-col my-2">
+  <div class="max-w-lg mx-auto my-16 min-h-[600px] text-center align-center flex flex-col justify-center">
+    <div class="flex flex-col my-4">
       <h1 class="text-xl font-semibold lg:text-3xl">{{ formTitle }}</h1>
-      <p class="text-gray-500 mt-2">Welcome back! Select method to login.</p>
+      <p v-if="formView === FormView.LOGIN" class="text-gray-500 mt-2">
+        {{ $t('messages.account.noAccount') }}
+        <a class="font-semibold cursor-pointer text-primary" @click="navigate(FormView.REGISTER)"> {{ $t('messages.account.accountRegister') }} </a>.
+      </p>
+      <p v-else-if="formView === FormView.REGISTER" class="text-gray-500 mt-2">
+        {{ $t('messages.account.hasAccount') }}
+        <a @click="navigate(FormView.LOGIN)" class="text-primary text-semibold cursor-pointer">Sign in</a>.
+      </p>
     </div>
 
-    <LoginProviders class="my-8" v-if="formView === 'login' || formView === 'register'" />
+    <LoginProviders class="my-8" v-if="formView === FormView.LOGIN || formView === FormView.REGISTER" />
 
     <form class="mt-6" @submit.prevent="handleFormSubmit(userInfo)">
-      <div v-if="formView === 'register' || formView === 'forgotPassword'" for="email">
-        <input id="email" v-model="userInfo.email" :placeholder="inputPlaceholder.email" autocomplete="email" type="text" required />
-      </div>
-      <p v-if="formView === 'forgotPassword'" class="text-sm text-gray-500">{{ $t('messages.account.enterEmailOrUsernameForReset') }}</p>
-      <div v-if="formView !== 'forgotPassword'">
-        <input class="mt-1" v-model="userInfo.username" :placeholder="inputPlaceholder.username" autocomplete="username" type="text" required />
-
+      <p v-if="formView === FormView.FORGOT_PASSWORD" class="text-sm text-gray-500 mb-8">{{ $t('messages.account.enterEmailOrUsernameForReset') }}</p>
+      <input
+        v-if="formView === FormView.REGISTER || formView === FormView.FORGOT_PASSWORD"
+        id="email"
+        v-model="userInfo.email"
+        :placeholder="inputPlaceholder.email"
+        autocomplete="email"
+        type="text"
+        required />
+      <div v-if="formView !== FormView.FORGOT_PASSWORD">
+        <input v-model="userInfo.username" :placeholder="inputPlaceholder.username" autocomplete="username" type="text" required />
         <PasswordInput
-          className="border rounded-lg w-full p-3 px-4 bg-white mt-1"
+          className="border rounded-lg w-full p-3 px-4 bg-white "
           v-model="userInfo.password"
           :placeholder="passwordLabel"
-          :autocomplete="formView === 'login' ? 'current-password' : 'new-password'"
+          :autocomplete="formView === FormView.LOGIN ? 'current-password' : 'new-password'"
           :required="true" />
       </div>
       <Transition name="scale-y" mode="out-in">
         <div v-if="message" class="my-4 text-sm text-green-500" v-html="message"></div>
       </Transition>
-      <Transition name="scale-y" mode="out-in">
-        <div v-if="errorMessage" class="my-4 text-sm text-red-500" v-html="errorMessage"></div>
-      </Transition>
-
-      <div class="flex items-center justify-between mt-4">
-        <label class="flex items-center gap-2"><input v-model="userInfo.rememberMe" type="checkbox" />Remember me </label>
-        <div class="font-semibold cursor-pointer text-sm text-primary hover:text-primary" @click="navigate('forgotPassword')" v-if="formView === 'login'">
-          Forgot password?
-        </div>
-      </div>
 
       <!-- Login button -->
       <button class="flex items-center justify-center gap-4 my-6 text-lg">
         <LoadingIcon v-if="isPending" stroke="4" size="16" color="#fff" />
         <span>{{ buttonText }}</span>
       </button>
+
+      <div class="flex items-center justify-between mt-4" v-if="formView === FormView.LOGIN">
+        <div class="font-semibold cursor-pointer text-sm text-primary hover:text-primary" @click="navigate(FormView.FORGOT_PASSWORD)">Forgot password?</div>
+      </div>
     </form>
 
-    <div v-if="formView === 'login'" class="my-6 text-center">
-      {{ $t('messages.account.noAccount') }}
-      <a class="font-semibold cursor-pointer text-primary" @click="navigate('register')"> {{ $t('messages.account.accountRegister') }} </a>.
+    <div class="my-8 text-center cursor-pointer" @click="navigate(FormView.LOGIN)" v-if="formView === FormView.FORGOT_PASSWORD">
+      {{ $t('messages.account.backToLogin') }}
     </div>
 
-    <div v-if="formView === 'register'" class="my-2 text-center justify-center">
-      {{ $t('messages.account.hasAccount') }}
-      <a class="font-semibold cursor-pointer text-primary" @click="navigate('login')">
-        {{ $t('messages.general.please') }} {{ $t('messages.account.accountLogin') }}
-      </a>
-    </div>
-
-    <div class="my-8 text-center cursor-pointer" @click="navigate('login')" v-if="formView === 'forgotPassword'">{{ $t('messages.account.backToLogin') }}</div>
+    <Transition name="scale-y" mode="out-in">
+      <div v-if="errorMessage" class="my-4 text-sm text-red-500" v-html="errorMessage"></div>
+    </Transition>
   </div>
 </template>
 
@@ -66,18 +64,27 @@ const route = useRoute();
 const router = useRouter();
 const { loginUser, isPending, registerUser, sendResetPasswordEmail, loginClients } = useAuth();
 
-const userInfo = ref({ email: '', password: '', username: '', rememberMe: false });
-const formView = ref('login');
-const message = ref('');
-const errorMessage = ref('');
+enum FormView {
+  LOGIN = 'login',
+  REGISTER = 'register',
+  FORGOT_PASSWORD = 'forgotPassword',
+}
+
+const userInfo = ref<UserInfo>({ email: '', password: '', username: '' });
+const formView = ref<FormView>(FormView.LOGIN);
+const message = ref<string>('');
+const errorMessage = ref<string>('');
 
 const updateFormView = () => {
-  if (route.query.action === 'forgotPassword') {
-    formView.value = 'forgotPassword';
-  } else if (route.query.action === 'register') {
-    formView.value = 'register';
+  // Reset error message on view change
+  errorMessage.value = '';
+
+  if (route.query.action === FormView.FORGOT_PASSWORD) {
+    formView.value = FormView.FORGOT_PASSWORD;
+  } else if (route.query.action === FormView.REGISTER) {
+    formView.value = FormView.REGISTER;
   } else {
-    formView.value = 'login';
+    formView.value = FormView.LOGIN;
   }
 };
 watch(route, updateFormView, { immediate: true });
@@ -92,7 +99,7 @@ const login = async (userInfo: UserInfo) => {
       errorMessage.value = t('messages.error.incorrectPassword');
       break;
     default:
-      errorMessage.value = error;
+      errorMessage.value = error ?? '';
       break;
   }
 
@@ -103,7 +110,7 @@ const login = async (userInfo: UserInfo) => {
 };
 
 const handleFormSubmit = async (userInfo: UserInfo) => {
-  if (formView.value === 'register') {
+  if (formView.value === FormView.REGISTER) {
     const { success, error } = await registerUser(userInfo);
     if (success) {
       errorMessage.value = '';
@@ -112,9 +119,9 @@ const handleFormSubmit = async (userInfo: UserInfo) => {
         login(userInfo);
       }, 2000);
     } else {
-      errorMessage.value = error;
+      errorMessage.value = error ?? '';
     }
-  } else if (formView.value === 'forgotPassword') {
+  } else if (formView.value === FormView.FORGOT_PASSWORD) {
     resetPassword(userInfo);
   } else {
     login(userInfo);
@@ -127,15 +134,15 @@ const resetPassword = async (userInfo: UserInfo) => {
     errorMessage.value = '';
     message.value = t('messages.account.ifRegistered');
   } else {
-    errorMessage.value = error;
+    errorMessage.value = error ?? '';
   }
 };
 
-const navigate = (view: string) => {
+const navigate = (view: FormView) => {
   formView.value = view;
-  if (view === 'forgotPassword') {
+  if (view === FormView.FORGOT_PASSWORD) {
     router.push({ query: { action: 'forgotPassword' } });
-  } else if (view === 'register') {
+  } else if (view === FormView.REGISTER) {
     router.push({ query: { action: 'register' } });
   } else {
     router.push({ query: {} });
@@ -143,33 +150,33 @@ const navigate = (view: string) => {
 };
 
 const formTitle = computed(() => {
-  if (formView.value === 'login') {
+  if (formView.value === FormView.LOGIN) {
     return t('messages.account.loginToAccount');
-  } else if (formView.value === 'register') {
+  } else if (formView.value === FormView.REGISTER) {
     return t('messages.account.accountRegister');
-  } else if (formView.value === 'forgotPassword') {
+  } else if (formView.value === FormView.FORGOT_PASSWORD) {
     return t('messages.account.forgotPassword');
   }
 });
 
 const buttonText = computed(() => {
-  if (formView.value === 'login') {
+  if (formView.value === FormView.LOGIN) {
     return t('messages.account.login');
-  } else if (formView.value === 'register') {
+  } else if (formView.value === FormView.REGISTER) {
     return t('messages.account.register');
-  } else if (formView.value === 'forgotPassword') {
+  } else if (formView.value === FormView.FORGOT_PASSWORD) {
     return t('messages.account.sendPasswordResetEmail');
   }
 });
 
-const emailLabel = computed(() => (formView.value === 'register' ? t('messages.billing.email') : t('messages.account.emailOrUsername')));
-const usernameLabel = computed(() => (formView.value === 'login' ? t('messages.account.emailOrUsername') : t('messages.account.username')));
+const emailLabel = computed(() => (formView.value === FormView.REGISTER ? t('messages.billing.email') : t('messages.account.emailOrUsername')));
+const usernameLabel = computed(() => (formView.value === FormView.LOGIN ? t('messages.account.emailOrUsername') : t('messages.account.username')));
 const passwordLabel = computed(() => t('messages.account.password'));
 
 const inputPlaceholder = computed(() => {
   return {
     email: 'johndoe@email.com',
-    username: formView.value === 'login' ? 'johndoe@email.com' : 'johndoe',
+    username: formView.value === FormView.LOGIN ? 'johndoe@email.com' : 'johndoe',
     password: '********',
   };
 });
