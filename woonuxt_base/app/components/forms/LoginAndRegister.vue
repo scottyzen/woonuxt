@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-lg mx-auto my-16 min-h-[600px] text-center align-center flex flex-col justify-center">
-    <div class="flex flex-col my-4">
+    <div class="flex flex-col my-8">
       <h1 class="text-xl font-semibold lg:text-3xl">{{ formTitle }}</h1>
       <p v-if="formView === FormView.LOGIN" class="text-gray-500 mt-2">
         {{ $t('messages.account.noAccount') }}
@@ -12,9 +12,9 @@
       </p>
     </div>
 
-    <LoginProviders class="my-8" v-if="formView === FormView.LOGIN || formView === FormView.REGISTER" />
+    <LoginProviders class="mb-8" v-if="formView === FormView.LOGIN || formView === FormView.REGISTER" />
 
-    <form class="mt-6" @submit.prevent="handleFormSubmit(userInfo)">
+    <form @submit.prevent="handleFormSubmit(userInfo)">
       <p v-if="formView === FormView.FORGOT_PASSWORD" class="text-sm text-gray-500 mb-8">{{ $t('messages.account.enterEmailOrUsernameForReset') }}</p>
       <input
         v-if="formView === FormView.REGISTER || formView === FormView.FORGOT_PASSWORD"
