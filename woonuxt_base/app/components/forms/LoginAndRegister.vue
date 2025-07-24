@@ -62,7 +62,7 @@
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const { loginUser, isPending, registerUser, sendResetPasswordEmail, loginClients } = useAuth();
+const { loginUser, isPending, registerUser, sendResetPasswordEmail } = useAuth();
 
 enum FormView {
   LOGIN = 'login',
