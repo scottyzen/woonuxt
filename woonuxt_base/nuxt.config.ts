@@ -18,7 +18,7 @@ export default defineNuxtConfig({
   components: [{ path: resolve('./app/components'), pathPrefix: false }],
 
   modules: [
-    'woonuxt-settings',
+    resolve('./modules/woonuxt-bridge.ts'),
     [
       'nuxt-graphql-client',
       {

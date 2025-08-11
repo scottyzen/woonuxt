@@ -23,7 +23,6 @@
     "@tailwindcss/typography": "^0.5.16",
     "nuxt": "^4.0.2",
     "nuxt-graphql-client": "^0.2.46",
-    "prettier": "^3.6.2",
-    "woonuxt-settings": "^1.2.1"
+    "prettier": "^3.6.2"
   }
 }
