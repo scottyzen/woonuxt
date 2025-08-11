@@ -65,7 +65,9 @@ export default defineNuxtModule({
       });
       const stringVersion = data.woonuxtSettings?.wooCommerceSettingsVersion.replace(/\D/g, '');
       WOONUXT_SETTINGS_PLUGIN_VERSION = parseFloat(stringVersion);
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
 
     const wooNuxtSEO = WOONUXT_SETTINGS_PLUGIN_VERSION > 1043 ? 'wooNuxtSEO { provider url handle }' : '';
     const currencyCode = WOONUXT_SETTINGS_PLUGIN_VERSION > 1055 ? 'currencyCode' : '';
