@@ -63,7 +63,7 @@ export default defineNuxtModule({
         body: JSON.stringify({ query: getVersionQuery }),
         headers: { Origin: process.env.APP_HOST || 'http://localhost:3000' },
       });
-      const stringVersion = data.woonuxtSettings?.wooCommerceSettingsVersion.replace(/\D/g, '');
+      const stringVersion = data.woonuxtSettings?.wooCommerceSettingsVersion?.replace(/\D/g, '') || '0';
       WOONUXT_SETTINGS_PLUGIN_VERSION = parseFloat(stringVersion);
     } catch (error) {
       console.error(error);
