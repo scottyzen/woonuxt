@@ -1,5 +1,6 @@
+import { defineNuxtModule, useLogger } from '@nuxt/kit';
+
 import { $fetch } from 'ofetch';
-import { defineNuxtModule } from '@nuxt/kit';
 
 type EnvSpec = {
   key: string;
@@ -31,8 +32,9 @@ function validateEnvironment() {
     }
   }
   if (errs.length) {
-    console.error('\nEnvironment validation failed:\n- ' + errs.join('\n- '));
-    console.error('\nFix your .env (see .env.example) and rerun.\n');
+    const logger = useLogger('woonuxt-bridge');
+    logger.error('\nEnvironment validation failed:\n- ' + errs.join('\n- '));
+    logger.error('\nFix your .env (see .env.example) and rerun.\n');
     process.exit(1);
   }
 }
@@ -52,6 +54,8 @@ export default defineNuxtModule({
     configKey: 'woonuxtBridge',
   },
   async setup(_, nuxt) {
+    const logger = useLogger('woonuxt-bridge');
+
     // Environment variables are guaranteed to be valid at this point
     const GQL_HOST = process.env.GQL_HOST!;
     let WOONUXT_SETTINGS_PLUGIN_VERSION = 0;
@@ -63,15 +67,20 @@ export default defineNuxtModule({
         body: JSON.stringify({ query: getVersionQuery }),
         headers: { Origin: process.env.APP_HOST || 'http://localhost:3000' },
       });
-      const stringVersion = data.woonuxtSettings?.wooCommerceSettingsVersion?.replace(/\D/g, '') || '0';
-      WOONUXT_SETTINGS_PLUGIN_VERSION = parseFloat(stringVersion) || 0;
+
+      const versionString = data.woonuxtSettings?.wooCommerceSettingsVersion || '0.0.0';
+      logger.success(`WooNuxt Settings Plugin: v${versionString}`);
+
+      // Convert semantic version to comparable number (e.g., "2.2.1" -> 20201, "1.0.55" -> 10055)
+      const versionParts = versionString.split('.').map((part: string) => parseInt(part.replace(/\D/g, ''), 10) || 0);
+      WOONUXT_SETTINGS_PLUGIN_VERSION = versionParts[0] * 10000 + versionParts[1] * 100 + versionParts[2];
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
 
-    const wooNuxtSEO = WOONUXT_SETTINGS_PLUGIN_VERSION > 1043 ? 'wooNuxtSEO { provider url handle }' : '';
-    const currencyCode = WOONUXT_SETTINGS_PLUGIN_VERSION > 1055 ? 'currencyCode' : '';
-    const currencySymbol = WOONUXT_SETTINGS_PLUGIN_VERSION > 1055 ? 'currencySymbol' : '';
+    const wooNuxtSEO = WOONUXT_SETTINGS_PLUGIN_VERSION > 10043 ? 'wooNuxtSEO { provider url handle }' : '';
+    const currencyCode = WOONUXT_SETTINGS_PLUGIN_VERSION > 10055 ? 'currencyCode' : '';
+    const currencySymbol = WOONUXT_SETTINGS_PLUGIN_VERSION > 10055 ? 'currencySymbol' : '';
 
     const woonuxtSettings = `{
         primary_color
@@ -136,9 +145,9 @@ export default defineNuxtModule({
             : data.woonuxtSettings?.stripeSettings?.publishable_key;
       }
     } catch (error) {
-      console.error(error);
-      console.log(
-        '\u001B[1;35mError fetching woonuxt settings. Make sure you have the latest version woonuxt-settings plugin installed on WordPress. https://github.com/scottyzen/woonuxt-settings',
+      logger.error(error);
+      logger.warn(
+        'Error fetching woonuxt settings. Make sure you have the latest version woonuxt-settings plugin installed on WordPress. https://github.com/scottyzen/woonuxt-settings',
       );
     }
   },
