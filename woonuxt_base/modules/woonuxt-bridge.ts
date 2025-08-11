@@ -10,17 +10,11 @@ type EnvSpec = {
 const REQUIRED_ENV: EnvSpec[] = [
   {
     key: 'GQL_HOST',
-    validate: (v) => /^https?:\/\/.+\/graphql$/.test(v),
-    hint: 'must end with /graphql',
+    hint: 'Format: https://your-site.com/graphql',
   },
   {
     key: 'NUXT_IMAGE_DOMAINS',
-    validate: (v) =>
-      v
-        .split(',')
-        .map((s) => s.trim())
-        .filter(Boolean).length > 0,
-    hint: 'comma-separated domains',
+    hint: 'Format: domain.com (single domain, comma separated if multiple)',
   },
 ];
 
