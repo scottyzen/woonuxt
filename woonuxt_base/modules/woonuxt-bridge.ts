@@ -1,6 +1,48 @@
 import { $fetch } from 'ofetch';
 import { defineNuxtModule } from '@nuxt/kit';
 
+type EnvSpec = {
+  key: string;
+  validate?: (v: string) => boolean;
+  hint?: string;
+};
+
+const REQUIRED_ENV: EnvSpec[] = [
+  {
+    key: 'GQL_HOST',
+    validate: (v) => /^https?:\/\/.+\/graphql$/.test(v),
+    hint: 'must end with /graphql',
+  },
+  {
+    key: 'NUXT_IMAGE_DOMAINS',
+    validate: (v) =>
+      v
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean).length > 0,
+    hint: 'comma-separated domains',
+  },
+];
+
+function validateEnvironment() {
+  const errs: string[] = [];
+  for (const { key, validate, hint } of REQUIRED_ENV) {
+    const val = process.env[key]?.trim();
+    if (!val) {
+      errs.push(`Missing env: ${key}${hint ? ` (${hint})` : ''}`);
+      continue;
+    }
+    if (validate && !validate(val)) {
+      errs.push(`Invalid env: ${key}${hint ? ` (${hint})` : ''}`);
+    }
+  }
+  if (errs.length) {
+    console.error('\nEnvironment validation failed:\n- ' + errs.join('\n- '));
+    console.error('\nFix your .env (see .env.example) and rerun.\n');
+    process.exit(1);
+  }
+}
+
 const getVersionQuery = `query getVersion {
   woonuxtSettings {
     wooCommerceSettingsVersion
@@ -13,14 +55,12 @@ export default defineNuxtModule({
     configKey: 'woonuxtBridge',
   },
   async setup(_, nuxt) {
-    // Ensure GQL_HOST is set
-    const GQL_HOST = process.env.GQL_HOST ?? null;
-    let WOONUXT_SETTINGS_PLUGIN_VERSION = 0;
+    // Validate required environment variables
+    validateEnvironment();
 
-    if (!GQL_HOST) {
-      console.log('\u001B[1;35mGQL_HOST is missing. Make sure you have the GQL_HOST environment variable set.');
-      return;
-    }
+    // Environment variables are guaranteed to be valid at this point
+    const GQL_HOST = process.env.GQL_HOST!;
+    let WOONUXT_SETTINGS_PLUGIN_VERSION = 0;
 
     // Get the version of the woonuxt-settings plugin
     try {
