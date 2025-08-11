@@ -8,6 +8,8 @@ const { data } = await useAsyncGql('getProducts');
 const allProducts = data.value?.products?.nodes as Product[];
 setProducts(allProducts);
 
+const hasProducts = computed<boolean>(() => Array.isArray(allProducts) && allProducts.length > 0);
+
 onMounted(() => {
   if (!isQueryEmpty.value) updateProductList();
 });
@@ -27,7 +29,7 @@ useHead({
 </script>
 
 <template>
-  <div class="container flex items-start gap-16" v-if="allProducts.length">
+  <div class="container flex items-start gap-16" v-if="hasProducts">
     <Filters v-if="storeSettings.showFilters" />
 
     <div class="w-full">
@@ -39,5 +41,5 @@ useHead({
       <ProductGrid />
     </div>
   </div>
-  <NoProductsFound v-else>Could not fetch products from your store. Please check your configuration.</NoProductsFound>
+  <NoProductsFound v-else>No products found. Please try adjusting your filters or check back later.</NoProductsFound>
 </template>

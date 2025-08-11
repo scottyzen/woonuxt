@@ -9,7 +9,13 @@ export function useProducts() {
    * @param {Product[]} newProducts - The new products to set.
    */
   function setProducts(newProducts: Product[]): void {
-    if (!Array.isArray(newProducts)) throw new Error('Products must be an array.');
+    // If newProducts is not an array, reset products and allProducts
+    // to empty arrays to avoid errors in the UI.
+    if (!Array.isArray(newProducts)) {
+      products.value = [];
+      allProducts = [];
+      return;
+    }
     products.value = [...newProducts];
     allProducts = JSON.parse(JSON.stringify(newProducts));
   }
