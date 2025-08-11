@@ -49,15 +49,15 @@ const getVersionQuery = `query getVersion {
   }
 }`;
 
+// Validate environment variables before module setup
+validateEnvironment();
+
 export default defineNuxtModule({
   meta: {
     name: 'woonuxt-bridge',
     configKey: 'woonuxtBridge',
   },
   async setup(_, nuxt) {
-    // Validate required environment variables
-    validateEnvironment();
-
     // Environment variables are guaranteed to be valid at this point
     const GQL_HOST = process.env.GQL_HOST!;
     let WOONUXT_SETTINGS_PLUGIN_VERSION = 0;
