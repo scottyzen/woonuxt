@@ -6,7 +6,8 @@
 export function useFiltering() {
   const route = useRoute();
   const router = useRouter();
-  const runtimeConfig = useRuntimeConfig(); // Declare a variable for the runtime config and the filter and order functions
+  const appConfig = useAppConfig();
+  const globalAttributes = computed(() => appConfig.globalAttributes || []); // Use centralized config instead of runtime config
   const { updateProductList } = useProducts();
 
   const filterQuery = useState<string>('filter', () => '');
@@ -118,7 +119,7 @@ export function useFiltering() {
       const ratingCondition = starRating.length ? (product?.averageRating || 0) >= parseFloat(starRating[0] as string) : true;
 
       // Product attribute filters
-      const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES?.map((attribute: any) => attribute.slug) || [];
+      const globalProductAttributes = (Array.isArray(globalAttributes.value) ? globalAttributes.value : []).map((attribute: any) => attribute.slug);
       const attributeCondition = globalProductAttributes
         .map((attribute: string) => {
           const attributeValues = getFilter(attribute) || [];

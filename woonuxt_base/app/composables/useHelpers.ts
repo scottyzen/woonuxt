@@ -4,12 +4,13 @@ import pkg from '../../../woonuxt_base/package.json';
 export function useHelpers() {
   const route = useRoute();
   const runtimeConfig = useRuntimeConfig();
+  const appConfig = useAppConfig();
 
   const isShowingMobileMenu = useState<boolean>('isShowingMobileMenu', () => false);
   const wooNuxtVersionInfo: string = pkg.version || '0.0.0';
-  const productsPerPage: number = runtimeConfig.public?.PRODUCTS_PER_PAGE || 24;
-  const wooNuxtSEO = Array.isArray(runtimeConfig.public?.WOO_NUXT_SEO) ? runtimeConfig.public?.WOO_NUXT_SEO : [];
-  const frontEndUrl = runtimeConfig.public?.FRONT_END_URL?.replace(/\/$/, '') || null;
+  const productsPerPage: number = (appConfig as any).productsPerPage || 24;
+  const wooNuxtSEO = (appConfig as any).wooNuxtSEO || [];
+  const frontEndUrl = (appConfig as any).frontEndUrl?.replace(/\/$/, '') || null;
   const isDev: boolean = process.env.NODE_ENV === 'development';
   const FALLBACK_IMG = '/images/placeholder.jpg';
 
