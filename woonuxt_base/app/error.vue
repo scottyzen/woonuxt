@@ -39,6 +39,8 @@ useSeoMeta({
     <div class="flex flex-col items-center justify-center flex-1 gap-4 min-h-[500px]">
       <h1 class="text-6xl font-bold">Error {{ error?.statusCode || '404' }}</h1>
       <p v-if="error?.message" class="text-lg">{{ error.message }}</p>
+      <p v-else class="text-lg">An unexpected error occurred.</p>
+      <NuxtLink to="/" class="text-primary hover:underline">Go back to Home</NuxtLink>
     </div>
 
     <Transition name="fade">
