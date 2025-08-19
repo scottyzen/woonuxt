@@ -19,6 +19,13 @@ export const useAuth = () => {
   const downloads = useState<DownloadableItem[] | null>('downloads', () => null);
   const loginClients = useState<LoginClient[] | null>('loginClients', () => null);
 
+  onMounted(() => {
+    const savedCustomer = localStorage.getItem('WooNuxtCustomer');
+    if (savedCustomer) {
+      customer.value = JSON.parse(savedCustomer);
+    }
+  });
+
   // Log in the user
   const loginUser = async (credentials: CreateAccountInput): Promise<AuthResponse> => {
     isPending.value = true;
