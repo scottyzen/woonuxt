@@ -1,8 +1,25 @@
 <template>
   <div class="p-6 bg-white border-2 border-gray-200 rounded-lg">
-    <div class="flex items-center justify-between mb-4">
+    <div v-if="title" class="flex items-center justify-between mb-4">
       <div class="flex items-center gap-2">
         <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
+        <div v-if="hasAddress" class="flex items-center">
+          <div v-if="!isAddressComplete" class="flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-700 bg-orange-100 rounded-full">
+            <Icon name="ion:warning" class="w-3 h-3" />
+            {{ missingFields.length > 1 ? 'Needs attention' : 'Missing information' }}
+          </div>
+        </div>
+      </div>
+      <button
+        type="button"
+        @click="$emit('edit')"
+        class="px-3 py-1 text-sm font-medium text-primary bg-gray-50 border border-primary rounded-md hover:bg-primary hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+        {{ $t('messages.general.edit') }}
+      </button>
+    </div>
+
+    <div v-else class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
         <div v-if="hasAddress" class="flex items-center">
           <div v-if="!isAddressComplete" class="flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-700 bg-orange-100 rounded-full">
             <Icon name="ion:warning" class="w-3 h-3" />
@@ -67,7 +84,7 @@
 
 <script setup lang="ts">
 interface Props {
-  title: string;
+  title?: string;
   address: any;
 }
 

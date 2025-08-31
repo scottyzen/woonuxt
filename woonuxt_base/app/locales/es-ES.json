@@ -36,7 +36,8 @@
       "processing": "Procesando",
       "readOnly": "Solo lectura",
       "edit": "Editar",
-      "shippingAddress": "Dirección de Envío"
+      "shippingAddress": "Dirección de Envío",
+      "shippingAddressDescription": "Ingresa la dirección donde quieres que se entregue tu pedido."
     },
     "account": {
       "changePassword": "Cambiar contraseña",

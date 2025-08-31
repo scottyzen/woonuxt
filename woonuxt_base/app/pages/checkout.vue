@@ -181,10 +181,15 @@ useSeoMeta({
 
           <!-- Shipping Address Section -->
           <div v-if="cart?.availableShippingMethods?.length">
+            <div class="mb-6">
+              <h2 class="text-2xl font-semibold text-gray-900 mb-2">{{ $t('messages.general.shippingAddress') }}</h2>
+              <p class="text-sm text-gray-600 mb-4">{{ $t('messages.general.shippingAddressDescription') }}</p>
+            </div>
+
             <Transition name="fade" mode="out-in">
               <div v-if="!isEditingShipping" key="shipping-summary">
-                <!-- Shipping Address Summary -->
-                <AddressSummary :title="$t('messages.general.shippingAddress')" :address="customer?.shipping" @edit="editShippingAddress" />
+                <!-- Shipping Address Summary (without title) -->
+                <AddressSummary :address="customer?.shipping" @edit="editShippingAddress" />
 
                 <!-- Use Same Address for Billing Checkbox -->
                 <div class="flex items-center gap-3 mt-4">
@@ -202,17 +207,14 @@ useSeoMeta({
 
               <!-- Shipping Address Form (when editing) -->
               <div v-else key="shipping-form" class="space-y-6">
-                <div class="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                  <div>
-                    <h2 class="text-xl font-semibold text-blue-900">{{ $t('messages.general.shippingDetails') }}</h2>
-                    <p class="text-sm text-blue-700 mt-1">Please fill in your shipping address details</p>
-                  </div>
+                <div class="flex items-center justify-between">
+                  <h2 class="text-xl font-semibold text-gray-900">{{ $t('messages.general.shippingDetails') }}</h2>
                   <button
                     type="button"
                     @click="saveShippingAddress"
                     class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary transition-colors duration-200">
                     <Icon name="ion:checkmark" class="w-4 h-4 mr-1" />
-                    Save Address
+                    Save
                   </button>
                 </div>
                 <ShippingDetails v-if="customer?.shipping" v-model="customer.shipping" />
@@ -236,25 +238,27 @@ useSeoMeta({
           <!-- Billing Address Section (only show if not using same address) -->
           <Transition name="slide-down" mode="out-in">
             <div v-if="!useSameAddressForBilling" key="billing-section">
+              <div class="mb-6">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-2">{{ $t('messages.billing.billingDetails') }}</h2>
+                <p class="text-sm text-gray-600 mb-4">Enter your billing information for payment processing.</p>
+              </div>
+
               <Transition name="fade" mode="out-in">
                 <div v-if="!isEditingBilling" key="billing-summary">
-                  <!-- Billing Address Summary -->
-                  <AddressSummary :title="$t('messages.billing.billingDetails')" :address="customer?.billing" @edit="editBillingAddress" />
+                  <!-- Billing Address Summary (without title) -->
+                  <AddressSummary :address="customer?.billing" @edit="editBillingAddress" />
                 </div>
 
                 <!-- Billing Address Form (when editing) -->
                 <div v-else key="billing-form" class="space-y-6">
-                  <div class="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <div>
-                      <h2 class="text-xl font-semibold text-green-900">{{ $t('messages.billing.billingDetails') }}</h2>
-                      <p class="text-sm text-green-700 mt-1">Please fill in your billing address details</p>
-                    </div>
+                  <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-semibold text-gray-900">{{ $t('messages.billing.billingDetails') }}</h3>
                     <button
                       type="button"
                       @click="saveBillingAddress"
                       class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary transition-colors duration-200">
                       <Icon name="ion:checkmark" class="w-4 h-4 mr-1" />
-                      Save Address
+                      Save
                     </button>
                   </div>
                   <BillingDetails v-if="customer?.billing" v-model="customer.billing" />

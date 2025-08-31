@@ -36,7 +36,8 @@
       "processing": "Processing",
       "readOnly": "Readonly",
       "edit": "Edit",
-      "shippingAddress": "Shipping Address"
+      "shippingAddress": "Shipping Address",
+      "shippingAddressDescription": "Enter the address where you want your order delivered."
     },
     "account": {
       "changePassword": "Change Password",

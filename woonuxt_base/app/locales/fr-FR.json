@@ -36,7 +36,8 @@
       "processing": "En cours de traitement",
       "readOnly": "Lecture seule",
       "edit": "Modifier",
-      "shippingAddress": "Adresse de Livraison"
+      "shippingAddress": "Adresse de Livraison",
+      "shippingAddressDescription": "Saisissez l'adresse où vous souhaitez que votre commande soit livrée."
     },
     "account": {
       "changePassword": "Modifier le mot de passe",
