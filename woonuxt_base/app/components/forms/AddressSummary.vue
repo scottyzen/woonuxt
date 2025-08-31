@@ -1,5 +1,5 @@
 <template>
-  <div class="relative bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+  <div class="bg-white border rounded-md outline-none border-gray-200 shadow-sm w-full p-4">
     <!-- Header with name and edit button -->
     <div class="flex items-start justify-between mb-4">
       <div class="flex items-center gap-3">
@@ -25,29 +25,26 @@
 
     <!-- Address details -->
     <div v-if="address && hasAddress" class="space-y-2">
-      <div v-if="address.address1" class="flex items-center gap-2 text-gray-700">
-        <Icon name="ion:home" class="w-4 h-4 text-gray-400" />
-        <span class="text-sm">{{ address.address1 }}</span>
-        <span v-if="address.address2" class="text-sm text-gray-500">{{ address.address2 }}</span>
-      </div>
-
-      <div v-if="address.city || address.state || address.postcode" class="flex items-center gap-2 text-gray-700">
-        <Icon name="ion:business" class="w-4 h-4 text-gray-400" />
-        <span class="text-sm">{{ [address.city, address.state, address.postcode].filter(Boolean).join(', ') }}</span>
-      </div>
-
-      <div v-if="address.country" class="flex items-center gap-2 text-gray-700">
-        <Icon name="ion:earth" class="w-4 h-4 text-gray-400" />
-        <span class="text-sm">{{ address.country }}</span>
+      <div
+        v-if="address.address1 || address.address2 || address.city || address.state || address.postcode || address.country"
+        class="flex items-center gap-2 text-gray-700">
+        <Icon name="ion:home" class="w-4 h-4" />
+        <span class="text-sm">
+          {{
+            [address.address1, address.address2, [address.city, address.state, address.postcode].filter(Boolean).join(', '), address.country]
+              .filter(Boolean)
+              .join(' · ')
+          }}
+        </span>
       </div>
 
       <div v-if="address.phone" class="flex items-center gap-2 text-gray-700">
-        <Icon name="ion:call" class="w-4 h-4 text-gray-400" />
+        <Icon name="ion:call" class="w-4 h-4" />
         <span class="text-sm">{{ address.phone }}</span>
       </div>
 
       <div v-if="address.email" class="flex items-center gap-2 text-gray-700">
-        <Icon name="ion:mail" class="w-4 h-4 text-gray-400" />
+        <Icon name="ion:mail" class="w-4 h-4" />
         <span class="text-sm">{{ address.email }}</span>
       </div>
     </div>

@@ -192,7 +192,7 @@ useSeoMeta({
               <AddressSummary :address="customer?.shipping" @edit="editShippingAddress" />
 
               <!-- Use Same Address for Billing Checkbox -->
-              <div class="flex items-center gap-3 mt-6 p-4 bg-white border border-gray-200 rounded-lg">
+              <div class="flex items-center gap-3 mt-4">
                 <input
                   id="useSameAddress"
                   v-model="useSameAddressForBilling"
@@ -210,9 +210,6 @@ useSeoMeta({
               <div class="bg-white border border-gray-200 rounded-lg p-6">
                 <div class="flex items-center justify-between mb-6">
                   <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                      <Icon name="ion:create" class="w-4 h-4 text-primary" />
-                    </div>
                     <h3 class="text-lg font-semibold text-gray-900">Edit Shipping Details</h3>
                   </div>
                   <button
@@ -259,9 +256,6 @@ useSeoMeta({
               <div class="bg-white border border-gray-200 rounded-lg p-6">
                 <div class="flex items-center justify-between mb-6">
                   <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                      <Icon name="ion:card" class="w-4 h-4 text-primary" />
-                    </div>
                     <h3 class="text-lg font-semibold text-gray-900">Edit Billing Details</h3>
                   </div>
                   <button
@@ -333,7 +327,7 @@ useSeoMeta({
 .checkout-form textarea,
 .checkout-form select,
 .checkout-form .StripeElement {
-  @apply bg-white border rounded-md outline-none border-gray-300 shadow-sm w-full py-2 px-4;
+  @apply bg-white border rounded-md outline-none border-gray-200 shadow-sm w-full py-2 px-4;
 }
 
 .checkout-form input.has-error,
