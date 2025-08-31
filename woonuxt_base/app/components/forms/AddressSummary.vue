@@ -1,16 +1,12 @@
 <template>
-  <div class="p-6 bg-white border-2 border-gray-200 rounded-lg shadow-sm">
+  <div class="p-6 bg-white border-2 border-gray-200 rounded-lg">
     <div class="flex items-center justify-between mb-4">
       <div class="flex items-center gap-2">
         <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
         <div v-if="hasAddress" class="flex items-center">
-          <div v-if="isAddressComplete" class="flex items-center gap-1 px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
-            <Icon name="ion:checkmark-circle" class="w-3 h-3" />
-            Complete
-          </div>
-          <div v-else class="flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-700 bg-orange-100 rounded-full">
+          <div v-if="!isAddressComplete" class="flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-700 bg-orange-100 rounded-full">
             <Icon name="ion:warning" class="w-3 h-3" />
-            Missing {{ missingFields.length }} field{{ missingFields.length > 1 ? 's' : '' }}
+            {{ missingFields.length > 1 ? 'Needs attention' : 'Missing information' }}
           </div>
         </div>
       </div>

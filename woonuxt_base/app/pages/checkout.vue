@@ -136,7 +136,7 @@ useSeoMeta({
         <span class="text-gray-400 mb-4">{{ $t('messages.shop.addProductsInYourCart') }}</span>
         <NuxtLink
           to="/products"
-          class="flex items-center justify-center gap-3 p-2 px-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary hover:bg-primary-dark">
+          class="flex items-center justify-center gap-3 p-2 px-3 mt-4 font-semibold text-center text-white rounded-lg shadow-lg bg-primary hover:bg-primary-dark">
           {{ $t('messages.shop.browseOurProducts') }}
         </NuxtLink>
       </div>
@@ -187,18 +187,16 @@ useSeoMeta({
                 <AddressSummary :title="$t('messages.general.shippingAddress')" :address="customer?.shipping" @edit="editShippingAddress" />
 
                 <!-- Use Same Address for Billing Checkbox -->
-                <div class="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
-                  <div class="flex items-center gap-3">
-                    <input
-                      id="useSameAddress"
-                      v-model="useSameAddressForBilling"
-                      type="checkbox"
-                      name="useSameAddress"
-                      class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-2" />
-                    <label for="useSameAddress" class="text-sm font-medium text-gray-700">
-                      {{ $t('messages.billing.useSameAddress') }}
-                    </label>
-                  </div>
+                <div class="flex items-center gap-3 mt-4">
+                  <input
+                    id="useSameAddress"
+                    v-model="useSameAddressForBilling"
+                    type="checkbox"
+                    name="useSameAddress"
+                    class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-2" />
+                  <label for="useSameAddress" class="text-sm font-medium text-gray-700">
+                    {{ $t('messages.billing.useSameAddress') }}
+                  </label>
                 </div>
               </div>
 
