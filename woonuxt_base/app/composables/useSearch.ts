@@ -30,6 +30,15 @@ export function useSearching() {
     isShowingSearch.value = !isShowingSearch.value;
   };
 
+  // Named predicate function for product search filtering
+  function productMatchesSearch(product: Product, searchQuery: string): boolean {
+    const name = product.name?.toLowerCase();
+    const description = product.description ? product.description.toLowerCase() : null;
+    const shortDescription = product.shortDescription ? product.shortDescription.toLowerCase() : null;
+    const query = searchQuery.toLowerCase();
+    return !!(name?.includes(query) || description?.includes(query) || shortDescription?.includes(query));
+  }
+
   function searchProducts(products: Product[]): Product[] {
     const name = route.name ?? 'products';
     const search = getSearchQuery();
@@ -45,15 +54,7 @@ export function useSearching() {
       router.push({ name: 'products', query: { ...route.query, search } });
     }
 
-    return search
-      ? products.filter((product: Product) => {
-          const name = product.name?.toLowerCase();
-          const description = product.description ? product.description.toLowerCase() : null;
-          const shortDescription = product.shortDescription ? product.shortDescription.toLowerCase() : null;
-          const query = search.toLowerCase();
-          return name?.includes(query) ?? description?.includes(query) ?? shortDescription?.includes(query);
-        })
-      : products;
+    return search ? products.filter((product: Product) => productMatchesSearch(product, search)) : products;
   }
 
   return { getSearchQuery, setSearchQuery, clearSearchQuery, searchProducts, isSearchActive, isShowingSearch, toggleSearch };
