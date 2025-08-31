@@ -19,9 +19,18 @@ const elements = ref();
 const isPaid = ref<boolean>(false);
 
 // New reactive refs for the improved checkout flow
+const useSameAddressForBilling = ref<boolean>(true);
 const isEditingShipping = ref<boolean>(false);
 const isEditingBilling = ref<boolean>(false);
-const useSameAddressForBilling = ref<boolean>(true);
+
+// Functions to handle editing
+const editShippingAddress = () => {
+  isEditingShipping.value = true;
+};
+
+const editBillingAddress = () => {
+  isEditingBilling.value = true;
+};
 
 // Watch for shipping address changes to auto-copy to billing if same address is selected
 watch(useSameAddressForBilling, (newValue) => {
@@ -34,31 +43,6 @@ watch(useSameAddressForBilling, (newValue) => {
   }
 });
 
-// Function to handle editing address
-const editShippingAddress = () => {
-  isEditingShipping.value = true;
-};
-
-const editBillingAddress = () => {
-  isEditingBilling.value = true;
-};
-
-// Function to save address and return to summary view
-const saveShippingAddress = () => {
-  isEditingShipping.value = false;
-  // If using same address for billing, copy the data
-  if (useSameAddressForBilling.value && customer.value?.shipping && customer.value?.billing) {
-    Object.assign(customer.value.billing, {
-      ...customer.value.shipping,
-      email: customer.value.billing.email, // Preserve email
-    });
-  }
-};
-
-const saveBillingAddress = () => {
-  isEditingBilling.value = false;
-};
-
 onBeforeMount(async () => {
   if (query.cancel_order) window.close();
 
@@ -68,17 +52,6 @@ onBeforeMount(async () => {
     if (customer.value.billing) {
       customer.value.shipping = { ...customer.value.billing };
     }
-  }
-
-  // Set initial editing state - if no address exists, start in edit mode
-  if (cart.value?.availableShippingMethods?.length && customer.value?.shipping) {
-    const hasShippingAddress = !!(
-      customer.value.shipping.firstName ||
-      customer.value.shipping.lastName ||
-      customer.value.shipping.address1 ||
-      customer.value.shipping.city
-    );
-    isEditingShipping.value = !hasShippingAddress;
   }
 });
 
@@ -187,12 +160,12 @@ useSeoMeta({
             </div>
 
             <!-- Shipping Address Summary or Form -->
-            <div v-if="!isEditingShipping">
-              <!-- Shipping Address Summary (without title) -->
+            <div v-if="!isEditingShipping" class="space-y-6">
+              <!-- Shipping Address Summary -->
               <AddressSummary :address="customer?.shipping" @edit="editShippingAddress" />
 
               <!-- Use Same Address for Billing Checkbox -->
-              <div class="flex items-center gap-3 mt-4">
+              <div class="flex items-center gap-3">
                 <input
                   id="useSameAddress"
                   v-model="useSameAddressForBilling"
@@ -205,21 +178,9 @@ useSeoMeta({
               </div>
             </div>
 
-            <!-- Shipping Address Form (when editing) -->
+            <!-- Shipping Address Form (when editing - stays open once clicked) -->
             <div v-else class="space-y-6">
               <div class="bg-white border border-gray-200 rounded-lg p-6">
-                <div class="flex items-center justify-between mb-6">
-                  <div class="flex items-center gap-3">
-                    <h3 class="text-lg font-semibold text-gray-900">Edit Shipping Details</h3>
-                  </div>
-                  <button
-                    type="button"
-                    @click="saveShippingAddress"
-                    class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary transition-colors duration-200">
-                    <Icon name="ion:checkmark" class="w-4 h-4" />
-                    Save
-                  </button>
-                </div>
                 <ShippingDetails v-if="customer?.shipping" v-model="customer.shipping" />
               </div>
 
@@ -247,30 +208,15 @@ useSeoMeta({
 
             <!-- Billing Address Summary or Form -->
             <div v-if="!isEditingBilling">
-              <!-- Billing Address Summary (without title) -->
+              <!-- Billing Address Summary -->
               <AddressSummary :address="customer?.billing" @edit="editBillingAddress" />
             </div>
 
-            <!-- Billing Address Form (when editing) -->
-            <div v-else class="space-y-6">
-              <div class="bg-white border border-gray-200 rounded-lg p-6">
-                <div class="flex items-center justify-between mb-6">
-                  <div class="flex items-center gap-3">
-                    <h3 class="text-lg font-semibold text-gray-900">Edit Billing Details</h3>
-                  </div>
-                  <button
-                    type="button"
-                    @click="saveBillingAddress"
-                    class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary transition-colors duration-200">
-                    <Icon name="ion:checkmark" class="w-4 h-4" />
-                    Save
-                  </button>
-                </div>
-                <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
-              </div>
+            <!-- Billing Address Form (when editing - stays open once clicked) -->
+            <div v-else class="bg-white border border-gray-200 rounded-lg p-6">
+              <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
             </div>
           </div>
-
           <!-- Fallback: If no shipping methods available, show billing details -->
           <div v-if="!cart?.availableShippingMethods?.length">
             <h2 class="w-full mb-3 text-2xl font-semibold">{{ $t('messages.billing.billingDetails') }}</h2>
