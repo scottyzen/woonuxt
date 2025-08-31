@@ -216,6 +216,19 @@ useSeoMeta({
                   </button>
                 </div>
                 <ShippingDetails v-if="customer?.shipping" v-model="customer.shipping" />
+
+                <!-- Use Same Address for Billing Checkbox (also shown during editing) -->
+                <div class="flex items-center gap-3 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                  <input
+                    id="useSameAddressEdit"
+                    v-model="useSameAddressForBilling"
+                    type="checkbox"
+                    name="useSameAddressEdit"
+                    class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-2" />
+                  <label for="useSameAddressEdit" class="text-sm font-medium text-gray-700">
+                    {{ $t('messages.billing.useSameAddress') }}
+                  </label>
+                </div>
               </div>
             </Transition>
           </div>
@@ -257,7 +270,7 @@ useSeoMeta({
           </div>
 
           <!-- Shipping methods -->
-          <div v-if="cart?.availableShippingMethods?.length && !isEditingShipping">
+          <div v-if="cart?.availableShippingMethods?.length">
             <h3 class="mb-4 text-xl font-semibold">{{ $t('messages.general.shippingSelect') }}</h3>
             <ShippingOptions
               v-if="cart.availableShippingMethods[0]?.rates && cart.chosenShippingMethods?.[0]"
@@ -266,14 +279,14 @@ useSeoMeta({
           </div>
 
           <!-- Pay methods -->
-          <div v-if="paymentGateways?.nodes.length && !isEditingShipping && !isEditingBilling" class="mt-2 col-span-full">
+          <div v-if="paymentGateways?.nodes.length" class="mt-2 col-span-full">
             <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.billing.paymentOptions') }}</h2>
             <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :paymentGateways />
             <StripeElement v-if="stripe" v-show="orderInput.paymentMethod.id == 'stripe'" :stripe @updateElement="handleStripeElement" />
           </div>
 
           <!-- Order note -->
-          <div v-if="!isEditingShipping && !isEditingBilling">
+          <div>
             <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.shop.orderNote') }} ({{ $t('messages.general.optional') }})</h2>
             <textarea
               id="order-note"
@@ -285,7 +298,7 @@ useSeoMeta({
           </div>
         </div>
 
-        <OrderSummary v-if="!isEditingShipping && !isEditingBilling">
+        <OrderSummary>
           <button
             class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary hover:bg-primary-dark disabled:cursor-not-allowed disabled:bg-gray-400"
             :disabled="isCheckoutDisabled">
