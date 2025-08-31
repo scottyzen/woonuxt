@@ -58,11 +58,12 @@ onBeforeMount(async () => {
 const payNow = async () => {
   buttonText.value = t('messages.general.processing');
 
-  const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
-  const clientSecret = stripePaymentIntent?.clientSecret || '';
-
   try {
     if (orderInput.value.paymentMethod.id === 'stripe' && stripe && elements.value) {
+      // Only call Stripe API when Stripe is the selected payment method
+      const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
+      const clientSecret = stripePaymentIntent?.clientSecret || '';
+
       const cardElement = elements.value.getElement('card') as StripeCardElement;
       const { setupIntent } = await stripe.confirmCardSetup(clientSecret, { payment_method: { card: cardElement } });
       const { source } = await stripe.createSource(cardElement as CreateSourceData);
