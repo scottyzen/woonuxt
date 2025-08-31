@@ -34,7 +34,9 @@
       "newsletter": "Newsletter",
       "customerService": "Customer Service",
       "processing": "Processing",
-      "readOnly": "Readonly"
+      "readOnly": "Readonly",
+      "edit": "Edit",
+      "shippingAddress": "Shipping Address"
     },
     "account": {
       "changePassword": "Change Password",
@@ -153,7 +155,9 @@
       "paymentOptions": "Payment Options",
       "creditCard": "Credit Card",
       "cashOnDelivery": "Cash on Delivery",
-      "differentAddress": "Ship to a different address?"
+      "differentAddress": "Ship to a different address?",
+      "useSameAddress": "Use same address for billing",
+      "noAddressProvided": "No address provided yet"
     },
     "error": {
       "invalidUsername": "No account found with that username. Sign up for a new account.",

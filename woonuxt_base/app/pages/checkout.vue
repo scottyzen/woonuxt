@@ -18,8 +18,68 @@ const stripe: Stripe | null = stripeKey ? await loadStripe(stripeKey) : null;
 const elements = ref();
 const isPaid = ref<boolean>(false);
 
+// New reactive refs for the improved checkout flow
+const isEditingShipping = ref<boolean>(false);
+const isEditingBilling = ref<boolean>(false);
+const useSameAddressForBilling = ref<boolean>(true);
+
+// Watch for shipping address changes to auto-copy to billing if same address is selected
+watch(useSameAddressForBilling, (newValue) => {
+  if (newValue && customer.value?.shipping && customer.value?.billing) {
+    // Copy shipping address to billing address
+    Object.assign(customer.value.billing, {
+      ...customer.value.shipping,
+      email: customer.value.billing.email, // Preserve email
+    });
+  }
+});
+
+// Function to handle editing address
+const editShippingAddress = () => {
+  isEditingShipping.value = true;
+};
+
+const editBillingAddress = () => {
+  isEditingBilling.value = true;
+};
+
+// Function to save address and return to summary view
+const saveShippingAddress = () => {
+  isEditingShipping.value = false;
+  // If using same address for billing, copy the data
+  if (useSameAddressForBilling.value && customer.value?.shipping && customer.value?.billing) {
+    Object.assign(customer.value.billing, {
+      ...customer.value.shipping,
+      email: customer.value.billing.email, // Preserve email
+    });
+  }
+};
+
+const saveBillingAddress = () => {
+  isEditingBilling.value = false;
+};
+
 onBeforeMount(async () => {
   if (query.cancel_order) window.close();
+
+  // Initialize shipping address if it doesn't exist and we have shipping methods
+  if (cart.value?.availableShippingMethods?.length && customer.value && !customer.value.shipping) {
+    // If we have billing address but no shipping address, copy billing to shipping
+    if (customer.value.billing) {
+      customer.value.shipping = { ...customer.value.billing };
+    }
+  }
+
+  // Set initial editing state - if no address exists, start in edit mode
+  if (cart.value?.availableShippingMethods?.length && customer.value?.shipping) {
+    const hasShippingAddress = !!(
+      customer.value.shipping.firstName ||
+      customer.value.shipping.lastName ||
+      customer.value.shipping.address1 ||
+      customer.value.shipping.city
+    );
+    isEditingShipping.value = !hasShippingAddress;
+  }
 });
 
 const payNow = async () => {
@@ -84,7 +144,7 @@ useSeoMeta({
       <form v-else class="container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-20" @submit.prevent="payNow">
         <div class="grid w-full max-w-2xl gap-8 checkout-form md:flex-1">
           <!-- Customer details -->
-          <div v-if="!viewer && customer.billing">
+          <div v-if="!viewer && customer?.billing">
             <h2 class="w-full mb-2 text-2xl font-semibold leading-none">Contact Information</h2>
             <p class="mt-1 text-sm text-gray-500">Already have an account? <a href="/my-account" class="text-primary text-semibold">Log in</a>.</p>
             <div class="w-full mt-4">
@@ -119,38 +179,87 @@ useSeoMeta({
             </div>
           </div>
 
-          <div>
-            <h2 class="w-full mb-3 text-2xl font-semibold">{{ $t('messages.billing.billingDetails') }}</h2>
-            <BillingDetails v-model="customer.billing" />
+          <!-- Shipping Address Section -->
+          <div v-if="cart?.availableShippingMethods?.length">
+            <div v-if="!isEditingShipping">
+              <!-- Shipping Address Summary -->
+              <AddressSummary :title="$t('messages.general.shippingAddress')" :address="customer?.shipping" @edit="editShippingAddress" />
+
+              <!-- Use Same Address for Billing Checkbox -->
+              <div class="mt-4 flex items-center gap-2">
+                <input
+                  id="useSameAddress"
+                  v-model="useSameAddressForBilling"
+                  type="checkbox"
+                  name="useSameAddress"
+                  class="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2" />
+                <label for="useSameAddress" class="text-sm font-medium text-gray-700">
+                  {{ $t('messages.billing.useSameAddress') }}
+                </label>
+              </div>
+            </div>
+
+            <!-- Shipping Address Form (when editing) -->
+            <div v-else>
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-semibold">{{ $t('messages.general.shippingDetails') }}</h2>
+                <button
+                  type="button"
+                  @click="saveShippingAddress"
+                  class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary">
+                  Save Address
+                </button>
+              </div>
+              <ShippingDetails v-if="customer?.shipping" v-model="customer.shipping" />
+            </div>
           </div>
 
-          <label v-if="cart.availableShippingMethods.length > 0" for="shipToDifferentAddress" class="flex items-center gap-2">
-            <span>{{ $t('messages.billing.differentAddress') }}</span>
-            <input id="shipToDifferentAddress" v-model="orderInput.shipToDifferentAddress" type="checkbox" name="shipToDifferentAddress" />
-          </label>
-
-          <Transition name="scale-y" mode="out-in">
-            <div v-if="orderInput.shipToDifferentAddress">
-              <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.general.shippingDetails') }}</h2>
-              <ShippingDetails v-model="customer.shipping" />
+          <!-- Billing Address Section (only show if not using same address) -->
+          <div v-if="!useSameAddressForBilling">
+            <div v-if="!isEditingBilling">
+              <!-- Billing Address Summary -->
+              <AddressSummary :title="$t('messages.billing.billingDetails')" :address="customer?.billing" @edit="editBillingAddress" />
             </div>
-          </Transition>
+
+            <!-- Billing Address Form (when editing) -->
+            <div v-else>
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-semibold">{{ $t('messages.billing.billingDetails') }}</h2>
+                <button
+                  type="button"
+                  @click="saveBillingAddress"
+                  class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary">
+                  Save Address
+                </button>
+              </div>
+              <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
+            </div>
+          </div>
+
+          <!-- Fallback: If no shipping methods available, show billing details -->
+          <div v-if="!cart?.availableShippingMethods?.length">
+            <h2 class="w-full mb-3 text-2xl font-semibold">{{ $t('messages.billing.billingDetails') }}</h2>
+            <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
+          </div>
 
           <!-- Shipping methods -->
-          <div v-if="cart.availableShippingMethods.length">
+          <div v-if="cart?.availableShippingMethods?.length && !isEditingShipping">
             <h3 class="mb-4 text-xl font-semibold">{{ $t('messages.general.shippingSelect') }}</h3>
-            <ShippingOptions :options="cart.availableShippingMethods[0].rates" :active-option="cart.chosenShippingMethods[0]" />
+            <ShippingOptions
+              v-if="cart.availableShippingMethods[0]?.rates && cart.chosenShippingMethods?.[0]"
+              :options="cart.availableShippingMethods[0].rates"
+              :active-option="cart.chosenShippingMethods[0]" />
           </div>
 
           <!-- Pay methods -->
-          <div v-if="paymentGateways?.nodes.length" class="mt-2 col-span-full">
+          <div v-if="paymentGateways?.nodes.length && !isEditingShipping && !isEditingBilling" class="mt-2 col-span-full">
             <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.billing.paymentOptions') }}</h2>
             <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :paymentGateways />
             <StripeElement v-if="stripe" v-show="orderInput.paymentMethod.id == 'stripe'" :stripe @updateElement="handleStripeElement" />
           </div>
 
           <!-- Order note -->
-          <div>
+          <div v-if="!isEditingShipping && !isEditingBilling">
             <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.shop.orderNote') }} ({{ $t('messages.general.optional') }})</h2>
             <textarea
               id="order-note"
@@ -162,7 +271,7 @@ useSeoMeta({
           </div>
         </div>
 
-        <OrderSummary>
+        <OrderSummary v-if="!isEditingShipping && !isEditingBilling">
           <button
             class="flex items-center justify-center w-full gap-3 p-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary hover:bg-primary-dark disabled:cursor-not-allowed disabled:bg-gray-400"
             :disabled="isCheckoutDisabled">
