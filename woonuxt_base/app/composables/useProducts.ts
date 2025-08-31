@@ -39,7 +39,8 @@ export function useProducts() {
     return newProducts;
   }
 
-  const updateProductList = async (): Promise<void> => {
+  // Named async function for better performance and debugging
+  async function updateProductList(): Promise<void> {
     const { scrollToTop } = useHelpers();
     const { isSortingActive } = useSorting();
     const { isFiltersActive } = useFiltering();
@@ -60,7 +61,7 @@ export function useProducts() {
     } catch (error) {
       handleUpdateError(error);
     }
-  };
+  }
 
   return { products, allProducts, setProducts, updateProductList };
 }

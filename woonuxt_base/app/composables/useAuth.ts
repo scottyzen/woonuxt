@@ -79,7 +79,7 @@ export const useAuth = () => {
   };
 
   // Log out the user
-  const logoutUser = async (): Promise<AuthResponse> => {
+  async function logoutUser(): Promise<AuthResponse> {
     isPending.value = true;
     try {
       const { logout } = await GqlLogout();
@@ -100,9 +100,9 @@ export const useAuth = () => {
         router.push('/');
       }
     }
-  };
+  }
 
-  const registerUser = async (userInfo: RegisterCustomerInput): Promise<AuthResponse> => {
+  async function registerUser(userInfo: RegisterCustomerInput): Promise<AuthResponse> {
     isPending.value = true;
     try {
       await GqlRegisterCustomer({ input: userInfo });
@@ -112,7 +112,7 @@ export const useAuth = () => {
       isPending.value = false;
       return { success: false, error: errorMsg };
     }
-  };
+  }
 
   // Update the user state
   const updateCustomer = (payload: Customer): void => {
