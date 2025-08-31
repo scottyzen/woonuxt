@@ -20,11 +20,30 @@ export function useProducts() {
     allProducts = JSON.parse(JSON.stringify(newProducts));
   }
 
-  const updateProductList = async (): Promise<void> => {
-    const { scrollToTop } = useHelpers();
+  // Named function for error handling
+  function handleUpdateError(error: unknown): void {
+    console.error(error);
+  }
+
+  // Named function for product filtering pipeline
+  function applyProductFilters(products: Product[]): Product[] {
     const { isSortingActive, sortProducts } = useSorting();
     const { isFiltersActive, filterProducts } = useFiltering();
     const { isSearchActive, searchProducts } = useSearching();
+
+    let newProducts = [...products];
+    if (isFiltersActive.value) newProducts = filterProducts(newProducts);
+    if (isSearchActive.value) newProducts = searchProducts(newProducts);
+    if (isSortingActive.value) newProducts = sortProducts(newProducts);
+
+    return newProducts;
+  }
+
+  const updateProductList = async (): Promise<void> => {
+    const { scrollToTop } = useHelpers();
+    const { isSortingActive } = useSorting();
+    const { isFiltersActive } = useFiltering();
+    const { isSearchActive } = useSearching();
 
     // scroll to top of page
     scrollToTop();
@@ -37,14 +56,9 @@ export function useProducts() {
 
     // otherwise, apply filter, search and sorting in that order
     try {
-      let newProducts = [...allProducts];
-      if (isFiltersActive.value) newProducts = filterProducts(newProducts);
-      if (isSearchActive.value) newProducts = searchProducts(newProducts);
-      if (isSortingActive.value) newProducts = sortProducts(newProducts);
-
-      products.value = newProducts;
+      products.value = applyProductFilters(allProducts);
     } catch (error) {
-      console.error(error);
+      handleUpdateError(error);
     }
   };
 
