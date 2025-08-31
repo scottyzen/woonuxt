@@ -33,27 +33,21 @@ export function useSorting() {
     const orderby: string = orderQuery.orderBy || 'date';
     const order: string = orderQuery.order || 'DESC';
 
-    // Named function for max price calculation (reused multiple times)
-    function getMaxPrice(priceString: string): number {
-      return parseFloat([...priceString.split(',')].reduce(maxPriceReducer));
-    }
-
-    // Named reducer function for maximum price calculation
-    function maxPriceReducer(a: string, b: string): string {
-      return String(Math.max(Number(a), Number(b)));
-    }
-
     // Named sort comparison function
     function productComparator(a: Product, b: Product): number {
       // Format values for sorting
       const aDate: any = a.date ? new Date(a.date).getTime() : 0;
       const bDate: any = b.date ? new Date(b.date).getTime() : 0;
-      const aPrice = a.rawPrice ? getMaxPrice(a.rawPrice) : 0;
-      const bPrice = b.rawPrice ? getMaxPrice(b.rawPrice) : 0;
-      const aSalePrice: number = a.rawSalePrice ? getMaxPrice(a.rawSalePrice) : 0;
-      const aRegularPrice: number = a.rawRegularPrice ? getMaxPrice(a.rawRegularPrice) : 0;
-      const bSalePrice: number = b.rawSalePrice ? getMaxPrice(b.rawSalePrice) : 0;
-      const bRegularPrice: number = b.rawRegularPrice ? getMaxPrice(b.rawRegularPrice) : 0;
+      const aPrice = a.rawPrice ? parseFloat([...a.rawPrice.split(',')].reduce((a, b) => String(Math.max(Number(a), Number(b))))) : 0;
+      const bPrice = b.rawPrice ? parseFloat([...b.rawPrice.split(',')].reduce((a, b) => String(Math.max(Number(a), Number(b))))) : 0;
+      const aSalePrice: number = a.rawSalePrice ? parseFloat([...a.rawSalePrice.split(',')].reduce((a, b) => String(Math.max(Number(a), Number(b))))) : 0;
+      const aRegularPrice: number = a.rawRegularPrice
+        ? parseFloat([...a.rawRegularPrice.split(',')].reduce((a, b) => String(Math.max(Number(a), Number(b)))))
+        : 0;
+      const bSalePrice: number = b.rawSalePrice ? parseFloat([...b.rawSalePrice.split(',')].reduce((a, b) => String(Math.max(Number(a), Number(b))))) : 0;
+      const bRegularPrice: number = b.rawRegularPrice
+        ? parseFloat([...b.rawRegularPrice.split(',')].reduce((a, b) => String(Math.max(Number(a), Number(b)))))
+        : 0;
       const aDiscount: number = a.onSale ? Math.round(((aSalePrice - aRegularPrice) / aRegularPrice) * 100) : 0;
       const bDiscount: number = b.onSale ? Math.round(((bSalePrice - bRegularPrice) / bRegularPrice) * 100) : 0;
       const aName: string = a.name || '';
