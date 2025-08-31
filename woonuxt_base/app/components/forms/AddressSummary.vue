@@ -1,87 +1,63 @@
 <template>
-  <div class="p-6 bg-white border-2 border-gray-200 rounded-lg">
-    <div v-if="title" class="flex items-center justify-between mb-4">
-      <div class="flex items-center gap-2">
-        <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
-        <div v-if="hasAddress" class="flex items-center">
-          <div v-if="!isAddressComplete" class="flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-700 bg-orange-100 rounded-full">
-            <Icon name="ion:warning" class="w-3 h-3" />
-            {{ missingFields.length > 1 ? 'Needs attention' : 'Missing information' }}
+  <div class="relative bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+    <!-- Header with name and edit button -->
+    <div class="flex items-start justify-between mb-4">
+      <div class="flex items-center gap-3">
+        <div>
+          <h3 v-if="address?.firstName || address?.lastName" class="text-lg font-semibold text-gray-900">
+            {{ [address.firstName, address.lastName].filter(Boolean).join(' ') }}
+          </h3>
+          <h3 v-else class="text-lg font-medium text-gray-500">No address provided</h3>
+          <div v-if="hasAddress && !isAddressComplete" class="flex items-center gap-1 mt-1">
+            <Icon name="ion:warning" class="w-3 h-3 text-orange-500" />
+            <span class="text-xs text-orange-600 font-medium">
+              {{ missingFields.length > 1 ? 'Needs attention' : 'Missing information' }}
+            </span>
           </div>
         </div>
       </div>
-      <button
-        type="button"
-        @click="$emit('edit')"
-        class="px-3 py-1 text-sm font-medium text-primary bg-gray-50 border border-primary rounded-md hover:bg-primary hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
-        {{ $t('messages.general.edit') }}
+
+      <button type="button" @click="$emit('edit')" class="flex items-center gap-2 text-sm font-medium text-primary">
+        <Icon name="ion:pencil" class="w-4 h-4" />
+        Edit
       </button>
     </div>
 
-    <div v-else class="flex items-center justify-between mb-4">
-      <div class="flex items-center gap-2">
-        <div v-if="hasAddress" class="flex items-center">
-          <div v-if="!isAddressComplete" class="flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-700 bg-orange-100 rounded-full">
-            <Icon name="ion:warning" class="w-3 h-3" />
-            {{ missingFields.length > 1 ? 'Needs attention' : 'Missing information' }}
-          </div>
-        </div>
-      </div>
-      <button
-        type="button"
-        @click="$emit('edit')"
-        class="px-3 py-1 text-sm font-medium text-primary bg-gray-50 border border-primary rounded-md hover:bg-primary hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
-        {{ $t('messages.general.edit') }}
-      </button>
-    </div>
-
-    <div v-if="address && hasAddress" class="grid grid-cols-1 gap-3 text-sm">
-      <div v-if="address.firstName || address.lastName" class="flex flex-wrap justify-between">
-        <span class="font-medium text-gray-600 text-xs uppercase tracking-wide mb-1"
-          >{{ $t('messages.billing.firstName') }} / {{ $t('messages.billing.lastName') }}</span
-        >
-        <span class="text-gray-900">{{ [address.firstName, address.lastName].filter(Boolean).join(' ') }}</span>
+    <!-- Address details -->
+    <div v-if="address && hasAddress" class="space-y-2">
+      <div v-if="address.address1" class="flex items-center gap-2 text-gray-700">
+        <Icon name="ion:home" class="w-4 h-4 text-gray-400" />
+        <span class="text-sm">{{ address.address1 }}</span>
+        <span v-if="address.address2" class="text-sm text-gray-500">{{ address.address2 }}</span>
       </div>
 
-      <div v-if="address.address1" class="flex flex-wrap justify-between">
-        <span class="font-medium text-gray-600 text-xs uppercase tracking-wide mb-1">{{ $t('messages.billing.address1') }}</span>
-        <span class="text-gray-900">{{ address.address1 }}</span>
+      <div v-if="address.city || address.state || address.postcode" class="flex items-center gap-2 text-gray-700">
+        <Icon name="ion:business" class="w-4 h-4 text-gray-400" />
+        <span class="text-sm">{{ [address.city, address.state, address.postcode].filter(Boolean).join(', ') }}</span>
       </div>
 
-      <div v-if="address.address2" class="flex flex-wrap justify-between">
-        <span class="font-medium text-gray-600 text-xs uppercase tracking-wide mb-1">{{ $t('messages.billing.address2') }}</span>
-        <span class="text-gray-900">{{ address.address2 }}</span>
+      <div v-if="address.country" class="flex items-center gap-2 text-gray-700">
+        <Icon name="ion:earth" class="w-4 h-4 text-gray-400" />
+        <span class="text-sm">{{ address.country }}</span>
       </div>
 
-      <div v-if="address.city || address.state || address.postcode" class="flex flex-wrap justify-between">
-        <span class="font-medium text-gray-600 text-xs uppercase tracking-wide mb-1"
-          >{{ $t('messages.billing.city') }} / {{ $t('messages.billing.state') }} / {{ $t('messages.billing.zip') }}</span
-        >
-        <span class="text-gray-900">{{ [address.city, address.state, address.postcode].filter(Boolean).join(', ') }}</span>
+      <div v-if="address.phone" class="flex items-center gap-2 text-gray-700">
+        <Icon name="ion:call" class="w-4 h-4 text-gray-400" />
+        <span class="text-sm">{{ address.phone }}</span>
       </div>
 
-      <div v-if="address.country" class="flex flex-wrap justify-between">
-        <span class="font-medium text-gray-600 text-xs uppercase tracking-wide mb-1">{{ $t('messages.billing.country') }}</span>
-        <span class="text-gray-900">{{ address.country }}</span>
-      </div>
-
-      <div v-if="address.phone" class="flex flex-wrap justify-between">
-        <span class="font-medium text-gray-600 text-xs uppercase tracking-wide mb-1">{{ $t('messages.billing.phone') }}</span>
-        <span class="text-gray-900">{{ address.phone }}</span>
-      </div>
-
-      <div v-if="address.email" class="flex flex-wrap justify-between">
-        <span class="font-medium text-gray-600 text-xs uppercase tracking-wide mb-1">{{ $t('messages.billing.email') }}</span>
-        <span class="text-gray-900">{{ address.email }}</span>
+      <div v-if="address.email" class="flex items-center gap-2 text-gray-700">
+        <Icon name="ion:mail" class="w-4 h-4 text-gray-400" />
+        <span class="text-sm">{{ address.email }}</span>
       </div>
     </div>
 
-    <div v-else class="text-sm text-gray-500 italic text-center py-4">
-      {{ $t('messages.billing.noAddressProvided') }}
+    <div v-else class="flex items-center gap-2 text-gray-500 italic">
+      <Icon name="ion:add-circle-outline" class="w-4 h-4" />
+      <span class="text-sm">Click edit to add address details</span>
     </div>
   </div>
 </template>
-
 <script setup lang="ts">
 interface Props {
   title?: string;

@@ -186,86 +186,96 @@ useSeoMeta({
               <p class="text-sm text-gray-600 mb-4">{{ $t('messages.general.shippingAddressDescription') }}</p>
             </div>
 
-            <Transition name="fade" mode="out-in">
-              <div v-if="!isEditingShipping" key="shipping-summary">
-                <!-- Shipping Address Summary (without title) -->
-                <AddressSummary :address="customer?.shipping" @edit="editShippingAddress" />
+            <!-- Shipping Address Summary or Form -->
+            <div v-if="!isEditingShipping">
+              <!-- Shipping Address Summary (without title) -->
+              <AddressSummary :address="customer?.shipping" @edit="editShippingAddress" />
 
-                <!-- Use Same Address for Billing Checkbox -->
-                <div class="flex items-center gap-3 mt-4">
-                  <input
-                    id="useSameAddress"
-                    v-model="useSameAddressForBilling"
-                    type="checkbox"
-                    name="useSameAddress"
-                    class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-2" />
-                  <label for="useSameAddress" class="text-sm font-medium text-gray-700">
-                    {{ $t('messages.billing.useSameAddress') }}
-                  </label>
-                </div>
+              <!-- Use Same Address for Billing Checkbox -->
+              <div class="flex items-center gap-3 mt-6 p-4 bg-white border border-gray-200 rounded-lg">
+                <input
+                  id="useSameAddress"
+                  v-model="useSameAddressForBilling"
+                  type="checkbox"
+                  name="useSameAddress"
+                  class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-2" />
+                <label for="useSameAddress" class="text-sm font-medium text-gray-700">
+                  {{ $t('messages.billing.useSameAddress') }}
+                </label>
               </div>
+            </div>
 
-              <!-- Shipping Address Form (when editing) -->
-              <div v-else key="shipping-form" class="space-y-6">
-                <div class="flex items-center justify-between">
-                  <h2 class="text-xl font-semibold text-gray-900">{{ $t('messages.general.shippingDetails') }}</h2>
+            <!-- Shipping Address Form (when editing) -->
+            <div v-else class="space-y-6">
+              <div class="bg-white border border-gray-200 rounded-lg p-6">
+                <div class="flex items-center justify-between mb-6">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                      <Icon name="ion:create" class="w-4 h-4 text-primary" />
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900">Edit Shipping Details</h3>
+                  </div>
                   <button
                     type="button"
                     @click="saveShippingAddress"
-                    class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary transition-colors duration-200">
-                    <Icon name="ion:checkmark" class="w-4 h-4 mr-1" />
+                    class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary transition-colors duration-200">
+                    <Icon name="ion:checkmark" class="w-4 h-4" />
                     Save
                   </button>
                 </div>
                 <ShippingDetails v-if="customer?.shipping" v-model="customer.shipping" />
-
-                <!-- Use Same Address for Billing Checkbox (also shown during editing) -->
-                <div class="flex items-center gap-3 p-4 bg-gray-50 border border-gray-200 rounded-lg">
-                  <input
-                    id="useSameAddressEdit"
-                    v-model="useSameAddressForBilling"
-                    type="checkbox"
-                    name="useSameAddressEdit"
-                    class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-2" />
-                  <label for="useSameAddressEdit" class="text-sm font-medium text-gray-700">
-                    {{ $t('messages.billing.useSameAddress') }}
-                  </label>
-                </div>
               </div>
-            </Transition>
+
+              <!-- Use Same Address for Billing Checkbox (also shown during editing) -->
+              <div class="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-lg">
+                <input
+                  id="useSameAddressEdit"
+                  v-model="useSameAddressForBilling"
+                  type="checkbox"
+                  name="useSameAddressEdit"
+                  class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-2" />
+                <label for="useSameAddressEdit" class="text-sm font-medium text-gray-700">
+                  {{ $t('messages.billing.useSameAddress') }}
+                </label>
+              </div>
+            </div>
           </div>
 
           <!-- Billing Address Section (only show if not using same address) -->
-          <Transition name="slide-down" mode="out-in">
-            <div v-if="!useSameAddressForBilling" key="billing-section">
-              <div class="mb-6">
-                <h2 class="text-2xl font-semibold text-gray-900 mb-2">{{ $t('messages.billing.billingDetails') }}</h2>
-                <p class="text-sm text-gray-600 mb-4">Enter your billing information for payment processing.</p>
-              </div>
-
-              <Transition name="fade" mode="out-in">
-                <div v-if="!isEditingBilling" key="billing-summary">
-                  <!-- Billing Address Summary (without title) -->
-                  <AddressSummary :address="customer?.billing" @edit="editBillingAddress" />
-                </div>
-
-                <!-- Billing Address Form (when editing) -->
-                <div v-else key="billing-form" class="space-y-6">
-                  <div class="flex items-center justify-between">
-                    <h3 class="text-xl font-semibold text-gray-900">{{ $t('messages.billing.billingDetails') }}</h3>
-                    <button
-                      type="button"
-                      @click="saveBillingAddress"
-                      class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary transition-colors duration-200">
-                      <Icon name="ion:checkmark" class="w-4 h-4 mr-1" />
-                      Save
-                    </button>
-                  </div>
-                  <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
-                </div>
-              </Transition>
+          <div v-if="!useSameAddressForBilling">
+            <div class="mb-6">
+              <h2 class="text-2xl font-semibold text-gray-900 mb-2">{{ $t('messages.billing.billingDetails') }}</h2>
+              <p class="text-sm text-gray-600 mb-4">Enter your billing information for payment processing.</p>
             </div>
-          </Transition>
+
+            <!-- Billing Address Summary or Form -->
+            <div v-if="!isEditingBilling">
+              <!-- Billing Address Summary (without title) -->
+              <AddressSummary :address="customer?.billing" @edit="editBillingAddress" />
+            </div>
+
+            <!-- Billing Address Form (when editing) -->
+            <div v-else class="space-y-6">
+              <div class="bg-white border border-gray-200 rounded-lg p-6">
+                <div class="flex items-center justify-between mb-6">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                      <Icon name="ion:card" class="w-4 h-4 text-primary" />
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900">Edit Billing Details</h3>
+                  </div>
+                  <button
+                    type="button"
+                    @click="saveBillingAddress"
+                    class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary transition-colors duration-200">
+                    <Icon name="ion:checkmark" class="w-4 h-4" />
+                    Save
+                  </button>
+                </div>
+                <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
+              </div>
+            </div>
+          </div>
 
           <!-- Fallback: If no shipping methods available, show billing details -->
           <div v-if="!cart?.availableShippingMethods?.length">
@@ -339,37 +349,7 @@ useSeoMeta({
   padding: 1rem 0.75rem;
 }
 
-/* Smooth transitions for address editing */
-.fade-enter-active,
-.fade-leave-active {
-  transition:
-    opacity 0.3s ease-in-out,
-    transform 0.3s ease-in-out;
-}
-
-.fade-enter-from {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-.slide-down-enter-active,
-.slide-down-leave-active {
-  transition: all 0.4s ease-in-out;
-  max-height: 1000px;
-}
-
-.slide-down-enter-from,
-.slide-down-leave-to {
-  opacity: 0;
-  max-height: 0;
-  transform: translateY(-20px);
-}
-
+/* Keep only the scale-y transition for email validation */
 .scale-y-enter-active,
 .scale-y-leave-active {
   transition: all 0.2s ease-in-out;
