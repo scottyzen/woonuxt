@@ -20,11 +20,6 @@ export function useProducts() {
     allProducts = JSON.parse(JSON.stringify(newProducts));
   }
 
-  // Named function for error handling
-  function handleUpdateError(error: unknown): void {
-    console.error(error);
-  }
-
   // Named function for product filtering pipeline
   function applyProductFilters(products: Product[]): Product[] {
     const { isSortingActive, sortProducts } = useSorting();
@@ -59,7 +54,7 @@ export function useProducts() {
     try {
       products.value = applyProductFilters(allProducts);
     } catch (error) {
-      handleUpdateError(error);
+      console.error(error);
     }
   }
 
