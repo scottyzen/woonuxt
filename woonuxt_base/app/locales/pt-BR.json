@@ -34,7 +34,9 @@
       "newsletter": "Newsletter",
       "customerService": "Atendimento ao Cliente",
       "processing": "Processando",
-      "readOnly": "Somente leitura"
+      "readOnly": "Somente leitura",
+      "edit": "Editar",
+      "shippingAddress": "Endereço de Entrega"
     },
     "account": {
       "changePassword": "Alterar Senha",
@@ -152,7 +154,9 @@
       "paymentOptions": "Opções de Pagamento",
       "creditCard": "Cartão de Crédito",
       "cashOnDelivery": "Pagamento na Entrega",
-      "differentAddress": "Enviar para um endereço diferente?"
+      "differentAddress": "Enviar para um endereço diferente?",
+      "useSameAddress": "Usar o mesmo endereço para cobrança",
+      "noAddressProvided": "Nenhum endereço fornecido ainda"
     },
     "error": {
       "invalidUsername": "Nenhuma conta encontrada com esse nome de usuário. Inscreva-se para uma nova conta.",

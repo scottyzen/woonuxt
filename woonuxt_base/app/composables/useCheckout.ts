@@ -130,14 +130,8 @@ export function useCheckout() {
         await refreshCart();
       }
     } catch (error: any) {
-      const errorMessage = error?.gqlErrors?.[0].message;
-
-      if (errorMessage?.includes('An account is already registered with your email address')) {
-        alert('An account is already registered with your email address');
-        return null;
-      }
-
-      alert(errorMessage);
+      console.error('Checkout error:', error);
+      if (error.message) alert(error.message);
       return null;
     } finally {
       isProcessingOrder.value = false;

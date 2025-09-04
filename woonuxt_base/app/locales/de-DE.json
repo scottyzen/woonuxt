@@ -34,7 +34,10 @@
       "newsletter": "Newsletter",
       "customerService": "Kundenservice",
       "processing": "Wird verarbeitet",
-      "readOnly": "Nur-Lesen"
+      "readOnly": "Nur-Lesen",
+      "edit": "Bearbeiten",
+      "shippingAddress": "Versandadresse",
+      "shippingAddressDescription": "Geben Sie die Adresse ein, an die Ihre Bestellung geliefert werden soll."
     },
     "account": {
       "changePassword": "Passwort ändern",
@@ -152,7 +155,9 @@
       "paymentOptions": "Zahlungsoptionen",
       "creditCard": "Kreditkarte",
       "cashOnDelivery": "Nachname",
-      "differentAddress": "Abweichende Lieferadresse?"
+      "differentAddress": "Abweichende Lieferadresse?",
+      "useSameAddress": "Dieselbe Adresse für die Abrechnung verwenden",
+      "noAddressProvided": "Noch keine Adresse angegeben"
     },
     "error": {
       "invalidUsername": "Ungültiger Benutzername. Bitte registrieren Sie sich.",

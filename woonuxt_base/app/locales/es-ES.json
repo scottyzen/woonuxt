@@ -34,7 +34,10 @@
       "newsletter": "Boletín",
       "customerService": "Servicio al cliente",
       "processing": "Procesando",
-      "readOnly": "Solo lectura"
+      "readOnly": "Solo lectura",
+      "edit": "Editar",
+      "shippingAddress": "Dirección de Envío",
+      "shippingAddressDescription": "Ingresa la dirección donde quieres que se entregue tu pedido."
     },
     "account": {
       "changePassword": "Cambiar contraseña",
@@ -152,7 +155,9 @@
       "paymentOptions": "Opciones de pago",
       "creditCard": "Tarjeta de crédito",
       "cashOnDelivery": "Contra reembolso",
-      "differentAddress": "¿Dirección de envío diferente?"
+      "differentAddress": "¿Dirección de envío diferente?",
+      "useSameAddress": "Usar la misma dirección para facturación",
+      "noAddressProvided": "Aún no se ha proporcionado dirección"
     },
     "error": {
       "invalidUsername": "Nombre de usuario inválido. Por favor, regístrate.",

@@ -18,18 +18,52 @@ const stripe: Stripe | null = stripeKey ? await loadStripe(stripeKey) : null;
 const elements = ref();
 const isPaid = ref<boolean>(false);
 
+// New reactive refs for the improved checkout flow
+const useSameAddressForBilling = ref<boolean>(true);
+const isEditingShipping = ref<boolean>(false);
+const isEditingBilling = ref<boolean>(false);
+
+// Functions to handle editing
+const editShippingAddress = () => {
+  isEditingShipping.value = true;
+};
+
+const editBillingAddress = () => {
+  isEditingBilling.value = true;
+};
+
+// Watch for shipping address changes to auto-copy to billing if same address is selected
+watch(useSameAddressForBilling, (newValue) => {
+  if (newValue && customer.value?.shipping && customer.value?.billing) {
+    // Copy shipping address to billing address
+    Object.assign(customer.value.billing, {
+      ...customer.value.shipping,
+      email: customer.value.billing.email, // Preserve email
+    });
+  }
+});
+
 onBeforeMount(async () => {
   if (query.cancel_order) window.close();
+
+  // Initialize shipping address if it doesn't exist and we have shipping methods
+  if (cart.value?.availableShippingMethods?.length && customer.value && !customer.value.shipping) {
+    // If we have billing address but no shipping address, copy billing to shipping
+    if (customer.value.billing) {
+      customer.value.shipping = { ...customer.value.billing };
+    }
+  }
 });
 
 const payNow = async () => {
   buttonText.value = t('messages.general.processing');
 
-  const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
-  const clientSecret = stripePaymentIntent?.clientSecret || '';
-
   try {
     if (orderInput.value.paymentMethod.id === 'stripe' && stripe && elements.value) {
+      // Only call Stripe API when Stripe is the selected payment method
+      const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
+      const clientSecret = stripePaymentIntent?.clientSecret || '';
+
       const cardElement = elements.value.getElement('card') as StripeCardElement;
       const { setupIntent } = await stripe.confirmCardSetup(clientSecret, { payment_method: { card: cardElement } });
       const { source } = await stripe.createSource(cardElement as CreateSourceData);
@@ -76,7 +110,7 @@ useSeoMeta({
         <span class="text-gray-400 mb-4">{{ $t('messages.shop.addProductsInYourCart') }}</span>
         <NuxtLink
           to="/products"
-          class="flex items-center justify-center gap-3 p-2 px-3 mt-4 font-semibold text-center text-white rounded-lg shadow-md bg-primary hover:bg-primary-dark">
+          class="flex items-center justify-center gap-3 p-2 px-3 mt-4 font-semibold text-center text-white rounded-lg shadow-lg bg-primary hover:bg-primary-dark">
           {{ $t('messages.shop.browseOurProducts') }}
         </NuxtLink>
       </div>
@@ -84,7 +118,7 @@ useSeoMeta({
       <form v-else class="container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-20" @submit.prevent="payNow">
         <div class="grid w-full max-w-2xl gap-8 checkout-form md:flex-1">
           <!-- Customer details -->
-          <div v-if="!viewer && customer.billing">
+          <div v-if="!viewer && customer?.billing">
             <h2 class="w-full mb-2 text-2xl font-semibold leading-none">Contact Information</h2>
             <p class="mt-1 text-sm text-gray-500">Already have an account? <a href="/my-account" class="text-primary text-semibold">Log in</a>.</p>
             <div class="w-full mt-4">
@@ -119,27 +153,84 @@ useSeoMeta({
             </div>
           </div>
 
-          <div>
-            <h2 class="w-full mb-3 text-2xl font-semibold">{{ $t('messages.billing.billingDetails') }}</h2>
-            <BillingDetails v-model="customer.billing" />
+          <!-- Shipping Address Section -->
+          <div v-if="cart?.availableShippingMethods?.length">
+            <div class="mb-6">
+              <h2 class="text-2xl font-semibold text-gray-900 mb-2">{{ $t('messages.general.shippingAddress') }}</h2>
+              <p class="text-sm text-gray-600 mb-4">{{ $t('messages.general.shippingAddressDescription') }}</p>
+            </div>
+
+            <!-- Shipping Address Summary or Form -->
+            <div v-if="!isEditingShipping" class="space-y-6">
+              <!-- Shipping Address Summary -->
+              <AddressSummary :address="customer?.shipping" @edit="editShippingAddress" />
+
+              <!-- Use Same Address for Billing Checkbox -->
+              <div class="flex items-center gap-3">
+                <input
+                  id="useSameAddress"
+                  v-model="useSameAddressForBilling"
+                  type="checkbox"
+                  name="useSameAddress"
+                  class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-2" />
+                <label for="useSameAddress" class="text-sm font-medium text-gray-700">
+                  {{ $t('messages.billing.useSameAddress') }}
+                </label>
+              </div>
+            </div>
+
+            <!-- Shipping Address Form (when editing - stays open once clicked) -->
+            <div v-else class="space-y-6">
+              <div class="bg-white border border-gray-200 rounded-lg p-6">
+                <ShippingDetails v-if="customer?.shipping" v-model="customer.shipping" />
+              </div>
+
+              <!-- Use Same Address for Billing Checkbox (also shown during editing) -->
+              <div class="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-lg">
+                <input
+                  id="useSameAddressEdit"
+                  v-model="useSameAddressForBilling"
+                  type="checkbox"
+                  name="useSameAddressEdit"
+                  class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-2" />
+                <label for="useSameAddressEdit" class="text-sm font-medium text-gray-700">
+                  {{ $t('messages.billing.useSameAddress') }}
+                </label>
+              </div>
+            </div>
           </div>
 
-          <label v-if="cart.availableShippingMethods.length > 0" for="shipToDifferentAddress" class="flex items-center gap-2">
-            <span>{{ $t('messages.billing.differentAddress') }}</span>
-            <input id="shipToDifferentAddress" v-model="orderInput.shipToDifferentAddress" type="checkbox" name="shipToDifferentAddress" />
-          </label>
-
-          <Transition name="scale-y" mode="out-in">
-            <div v-if="orderInput.shipToDifferentAddress">
-              <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.general.shippingDetails') }}</h2>
-              <ShippingDetails v-model="customer.shipping" />
+          <!-- Billing Address Section (only show if not using same address) -->
+          <div v-if="!useSameAddressForBilling">
+            <div class="mb-6">
+              <h2 class="text-2xl font-semibold text-gray-900 mb-2">{{ $t('messages.billing.billingDetails') }}</h2>
+              <p class="text-sm text-gray-600 mb-4">Enter your billing information for payment processing.</p>
             </div>
-          </Transition>
+
+            <!-- Billing Address Summary or Form -->
+            <div v-if="!isEditingBilling">
+              <!-- Billing Address Summary -->
+              <AddressSummary :address="customer?.billing" @edit="editBillingAddress" />
+            </div>
+
+            <!-- Billing Address Form (when editing - stays open once clicked) -->
+            <div v-else class="bg-white border border-gray-200 rounded-lg p-6">
+              <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
+            </div>
+          </div>
+          <!-- Fallback: If no shipping methods available, show billing details -->
+          <div v-if="!cart?.availableShippingMethods?.length">
+            <h2 class="w-full mb-3 text-2xl font-semibold">{{ $t('messages.billing.billingDetails') }}</h2>
+            <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
+          </div>
 
           <!-- Shipping methods -->
-          <div v-if="cart.availableShippingMethods.length">
+          <div v-if="cart?.availableShippingMethods?.length">
             <h3 class="mb-4 text-xl font-semibold">{{ $t('messages.general.shippingSelect') }}</h3>
-            <ShippingOptions :options="cart.availableShippingMethods[0].rates" :active-option="cart.chosenShippingMethods[0]" />
+            <ShippingOptions
+              v-if="cart.availableShippingMethods[0]?.rates && cart.chosenShippingMethods?.[0]"
+              :options="cart.availableShippingMethods[0].rates"
+              :active-option="cart.chosenShippingMethods[0]" />
           </div>
 
           <!-- Pay methods -->
@@ -183,7 +274,7 @@ useSeoMeta({
 .checkout-form textarea,
 .checkout-form select,
 .checkout-form .StripeElement {
-  @apply bg-white border rounded-md outline-none border-gray-300 shadow-sm w-full py-2 px-4;
+  @apply bg-white border rounded-md outline-none border-gray-200 shadow-sm w-full py-2 px-4;
 }
 
 .checkout-form input.has-error,
@@ -197,5 +288,18 @@ useSeoMeta({
 
 .checkout-form .StripeElement {
   padding: 1rem 0.75rem;
+}
+
+/* Keep only the scale-y transition for email validation */
+.scale-y-enter-active,
+.scale-y-leave-active {
+  transition: all 0.2s ease-in-out;
+}
+
+.scale-y-enter-from,
+.scale-y-leave-to {
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: top;
 }
 </style>

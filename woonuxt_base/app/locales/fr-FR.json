@@ -34,7 +34,10 @@
       "newsletter": "Newsletter",
       "customerService": "Service Client",
       "processing": "En cours de traitement",
-      "readOnly": "Lecture seule"
+      "readOnly": "Lecture seule",
+      "edit": "Modifier",
+      "shippingAddress": "Adresse de Livraison",
+      "shippingAddressDescription": "Saisissez l'adresse où vous souhaitez que votre commande soit livrée."
     },
     "account": {
       "changePassword": "Modifier le mot de passe",
@@ -152,7 +155,9 @@
       "paymentOptions": "Options de paiement",
       "creditCard": "Carte de crédit",
       "cashOnDelivery": "Paiement à la livraison",
-      "differentAddress": "Expédier à une autre adresse ?"
+      "differentAddress": "Expédier à une autre adresse ?",
+      "useSameAddress": "Utiliser la même adresse pour la facturation",
+      "noAddressProvided": "Aucune adresse fournie pour le moment"
     },
     "error": {
       "invalidUsername": "Aucun compte n'a été trouvé avec ce nom d'utilisateur. Veuillez vous inscrire.",
