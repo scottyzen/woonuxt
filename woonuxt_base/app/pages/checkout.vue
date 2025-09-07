@@ -284,9 +284,12 @@ useSeoMeta({
 .checkout-form input[type='tel'],
 .checkout-form input[type='password'],
 .checkout-form textarea,
-.checkout-form select,
 .checkout-form .StripeElement {
-  @apply bg-white border rounded-md outline-none border-gray-200 shadow-sm w-full py-2 px-4;
+  @apply bg-white border rounded-md outline-none border-gray-300 shadow-inner w-full py-2 px-4;
+}
+
+.checkout-form select {
+  @apply bg-white border rounded-md outline-none border-gray-300 shadow-sm w-full py-2 px-4;
 }
 
 .checkout-form input.has-error,

@@ -155,6 +155,6 @@ async function addComment() {
 }
 .writeReview input,
 .writeReview textarea {
-  @apply bg-white border rounded-md outline-none border-gray-300 shadow-sm w-full py-2 px-4;
+  @apply bg-white border rounded-md outline-none border-gray-300 shadow-inner w-full py-2 px-4;
 }
 </style>
