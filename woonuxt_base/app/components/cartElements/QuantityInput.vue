@@ -14,15 +14,16 @@ const decrementQuantity = () => quantity.value--;
 watch(
   quantity,
   debounce(() => {
-    if (quantity.value !== "") {
+    if (quantity.value !== '') {
       updateItemQuantity(item.key, quantity.value);
     }
   }, 250),
 );
 
 const onFocusOut = () => {
-  if (quantity.value === "") { // If the quantity is empty, set it to the cart item quantity
-    const cartItem = cart.value?.contents?.nodes?.find(node => node.key === item.key);
+  if (quantity.value === '') {
+    // If the quantity is empty, set it to the cart item quantity
+    const cartItem = cart.value?.contents?.nodes?.find((node) => node.key === item.key);
     if (cartItem) {
       quantity.value = cartItem.quantity;
     }
@@ -48,7 +49,7 @@ const onFocusOut = () => {
       :max="productType.stockQuantity"
       aria-label="Quantity"
       @focusout="onFocusOut"
-      class="flex items-center justify-center w-8 px-2 text-right text-xs focus:outline-none border-y border-gray-300" />
+      class="flex items-center justify-center w-8 px-2 text-xs focus:outline-none border-y border-gray-300 text-center" />
     <button
       title="Increase Quantity"
       aria-label="Increase Quantity"
