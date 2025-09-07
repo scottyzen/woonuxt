@@ -167,13 +167,10 @@ useSeoMeta({
 
           <!-- Shipping Address Section -->
           <div v-if="cart?.availableShippingMethods?.length">
-            <div class="mb-6">
-              <h2 class="text-2xl font-semibold text-gray-900 mb-2">{{ $t('messages.general.shippingAddress') }}</h2>
-              <p class="text-sm text-gray-600 mb-4">{{ $t('messages.general.shippingAddressDescription') }}</p>
-            </div>
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4 leading-none">Billing</h2>
 
             <!-- Shipping Address Summary or Form -->
-            <div v-if="!isEditingShipping" class="space-y-6">
+            <div v-if="!isEditingShipping" class="space-y-4">
               <!-- Shipping Address Summary -->
               <AddressSummary :address="customer?.shipping" :show-validation-warnings="!!viewer" @edit="editShippingAddress" />
 
@@ -212,11 +209,9 @@ useSeoMeta({
             </div>
           </div>
 
-          <!-- Billing Address Section (only show if shipping to different address) -->
           <div v-if="shipToDifferentAddress">
             <div class="mb-6">
-              <h2 class="text-2xl font-semibold text-gray-900 mb-2">{{ $t('messages.billing.billingDetails') }}</h2>
-              <p class="text-sm text-gray-600 mb-4">Enter your billing information for payment processing.</p>
+              <h2 class="text-2xl font-semibold text-gray-900 mb-2 leading-none">Shipping Address</h2>
             </div>
             <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
           </div>
@@ -226,25 +221,31 @@ useSeoMeta({
             <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
           </div>
 
+          <hr />
+
           <!-- Shipping methods -->
           <div v-if="cart?.availableShippingMethods?.length">
-            <h3 class="mb-4 text-xl font-semibold">{{ $t('messages.general.shippingSelect') }}</h3>
+            <h3 class="mb-4 text-xl font-semibold leading-none">{{ $t('messages.general.shippingSelect') }}</h3>
             <ShippingOptions
               v-if="cart.availableShippingMethods[0]?.rates && cart.chosenShippingMethods?.[0]"
               :options="cart.availableShippingMethods[0].rates"
               :active-option="cart.chosenShippingMethods[0]" />
           </div>
 
+          <hr />
+
           <!-- Pay methods -->
           <div v-if="paymentGateways?.nodes.length" class="mt-2 col-span-full">
-            <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.billing.paymentOptions') }}</h2>
+            <h2 class="mb-4 text-xl font-semibold leading-none">{{ $t('messages.billing.paymentOptions') }}</h2>
             <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :paymentGateways />
             <StripeElement v-if="stripe" v-show="orderInput.paymentMethod.id == 'stripe'" :stripe @updateElement="handleStripeElement" />
           </div>
 
+          <hr />
+
           <!-- Order note -->
           <div>
-            <h2 class="mb-4 text-xl font-semibold">{{ $t('messages.shop.orderNote') }} ({{ $t('messages.general.optional') }})</h2>
+            <h2 class="mb-4 text-xl font-semibold leading-none">{{ $t('messages.shop.orderNote') }} ({{ $t('messages.general.optional') }})</h2>
             <textarea
               id="order-note"
               v-model="orderInput.customerNote"
@@ -285,10 +286,6 @@ useSeoMeta({
 .checkout-form input.has-error,
 .checkout-form textarea.has-error {
   @apply border-red-500;
-}
-
-.checkout-form label {
-  @apply my-1.5 text-xs text-gray-600 uppercase;
 }
 
 .checkout-form .StripeElement {
