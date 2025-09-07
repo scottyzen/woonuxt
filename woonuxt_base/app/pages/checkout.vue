@@ -53,6 +53,18 @@ onBeforeMount(async () => {
       customer.value.shipping = { ...customer.value.billing };
     }
   }
+
+  // For guest users, automatically open shipping form if no address is provided
+  if (!viewer.value && customer.value?.shipping && !hasAnyShippingInfo.value) {
+    isEditingShipping.value = true;
+  }
+});
+
+// Helper to check if user has any shipping information
+const hasAnyShippingInfo = computed(() => {
+  const shipping = customer.value?.shipping;
+  if (!shipping) return false;
+  return !!(shipping.firstName || shipping.lastName || shipping.address1 || shipping.city || shipping.country);
 });
 
 const payNow = async () => {
@@ -163,7 +175,7 @@ useSeoMeta({
             <!-- Shipping Address Summary or Form -->
             <div v-if="!isEditingShipping" class="space-y-6">
               <!-- Shipping Address Summary -->
-              <AddressSummary :address="customer?.shipping" @edit="editShippingAddress" />
+              <AddressSummary :address="customer?.shipping" :show-validation-warnings="!!viewer" @edit="editShippingAddress" />
 
               <!-- Use Same Address for Billing Checkbox -->
               <div class="flex items-center gap-3">
@@ -181,12 +193,12 @@ useSeoMeta({
 
             <!-- Shipping Address Form (when editing - stays open once clicked) -->
             <div v-else class="space-y-6">
-              <div class="bg-white border border-gray-200 rounded-lg p-6">
+              <div>
                 <ShippingDetails v-if="customer?.shipping" v-model="customer.shipping" />
               </div>
 
               <!-- Use Same Address for Billing Checkbox (also shown during editing) -->
-              <div class="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-lg">
+              <div class="flex items-center gap-3">
                 <input
                   id="useSameAddressEdit"
                   v-model="useSameAddressForBilling"
@@ -210,11 +222,11 @@ useSeoMeta({
             <!-- Billing Address Summary or Form -->
             <div v-if="!isEditingBilling">
               <!-- Billing Address Summary -->
-              <AddressSummary :address="customer?.billing" @edit="editBillingAddress" />
+              <AddressSummary :address="customer?.billing" :show-validation-warnings="!!viewer" @edit="editBillingAddress" />
             </div>
 
             <!-- Billing Address Form (when editing - stays open once clicked) -->
-            <div v-else class="bg-white border border-gray-200 rounded-lg p-6">
+            <div v-else>
               <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
             </div>
           </div>

@@ -8,7 +8,7 @@
             {{ [address.firstName, address.lastName].filter(Boolean).join(' ') }}
           </h3>
           <h3 v-else class="text-lg font-medium text-gray-500">No address provided</h3>
-          <div v-if="hasAddress && !isAddressComplete" class="flex items-center gap-1 mt-1">
+          <div v-if="shouldShowValidationWarning" class="flex items-center gap-1 mt-1">
             <Icon name="ion:warning" class="w-3 h-3 text-orange-500" />
             <span class="text-xs text-orange-600 font-medium">
               {{ missingFields.length > 1 ? 'Needs attention' : 'Missing information' }}
@@ -59,9 +59,12 @@
 interface Props {
   title?: string;
   address: any;
+  showValidationWarnings?: boolean; // New prop to control when to show validation warnings
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  showValidationWarnings: true, // Default to true to maintain existing behavior
+});
 
 defineEmits<{
   edit: [];
@@ -84,5 +87,10 @@ const missingFields = computed(() => {
 
   const required = ['firstName', 'lastName', 'address1', 'city', 'country'];
   return required.filter((field) => !props.address[field]);
+});
+
+// Only show validation warnings if explicitly enabled and there are issues
+const shouldShowValidationWarning = computed(() => {
+  return props.showValidationWarnings && hasAddress.value && !isAddressComplete.value;
 });
 </script>
