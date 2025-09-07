@@ -17,9 +17,9 @@
         </div>
       </div>
 
-      <button type="button" @click="$emit('edit')" class="flex items-center gap-2 text-sm font-medium text-primary">
-        <Icon name="ion:pencil" class="w-4 h-4" />
-        Edit
+      <button type="button" @click="$emit('edit')" title="Edit Address" class="flex leading-none items-center gap-2 text-sm font-medium text-primary">
+        <Icon name="ion:pencil" />
+        {{ $t('messages.general.edit') }}
       </button>
     </div>
 
@@ -28,7 +28,7 @@
       <div
         v-if="address.address1 || address.address2 || address.city || address.state || address.postcode || address.country"
         class="flex items-center gap-2 text-gray-700">
-        <Icon name="ion:home" class="w-4 h-4" />
+        <Icon name="ion:home" />
         <span class="text-sm">
           {{
             [address.address1, address.address2, [address.city, address.state, address.postcode].filter(Boolean).join(', '), address.country]
@@ -39,18 +39,18 @@
       </div>
 
       <div v-if="address.phone" class="flex items-center gap-2 text-gray-700">
-        <Icon name="ion:call" class="w-4 h-4" />
+        <Icon name="ion:call" />
         <span class="text-sm">{{ address.phone }}</span>
       </div>
 
       <div v-if="address.email" class="flex items-center gap-2 text-gray-700">
-        <Icon name="ion:mail" class="w-4 h-4" />
+        <Icon name="ion:mail" />
         <span class="text-sm">{{ address.email }}</span>
       </div>
     </div>
 
     <div v-else class="flex items-center gap-2 text-gray-500 italic">
-      <Icon name="ion:add-circle-outline" class="w-4 h-4" />
+      <Icon name="ion:add-circle-outline" />
       <span class="text-sm">Click edit to add address details</span>
     </div>
   </div>
