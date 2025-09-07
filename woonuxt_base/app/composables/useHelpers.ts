@@ -188,6 +188,16 @@ export function useHelpers() {
    */
   const getErrorMessage = (error: any): string | undefined => {
     const errorMessage = error?.gqlErrors?.[0]?.message;
+
+    // Check for server errors that require clearing cookies and reloading
+    const serverErrors = ['The iss do not match with this server', 'Invalid session token', 'expired token'];
+    const shouldClearAndReload = serverErrors.some((serverError) => errorMessage?.toLowerCase().includes(serverError.toLowerCase()));
+
+    if (shouldClearAndReload) {
+      clearAllCookies();
+      window.location.reload();
+    }
+
     return errorMessage;
   };
 
