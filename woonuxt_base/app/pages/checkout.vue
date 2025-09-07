@@ -19,7 +19,7 @@ const elements = ref();
 const isPaid = ref<boolean>(false);
 
 // New reactive refs for the improved checkout flow
-const useSameAddressForBilling = ref<boolean>(false);
+const shipToDifferentAddress = ref<boolean>(false);
 const isEditingShipping = ref<boolean>(false);
 const isEditingBilling = ref<boolean>(false);
 
@@ -32,10 +32,10 @@ const editBillingAddress = () => {
   isEditingBilling.value = true;
 };
 
-// Watch for shipping address changes to auto-copy to billing if same address is selected
-watch(useSameAddressForBilling, (newValue) => {
+// Watch for address preference changes to auto-copy shipping to billing when using same address
+watch(shipToDifferentAddress, (newValue) => {
   if (newValue && customer.value?.shipping && customer.value?.billing) {
-    // Copy shipping address to billing address
+    // Copy shipping address to billing address when shipping to different address is selected
     Object.assign(customer.value.billing, {
       ...customer.value.shipping,
       email: customer.value.billing.email, // Preserve email
@@ -177,11 +177,11 @@ useSeoMeta({
               <!-- Shipping Address Summary -->
               <AddressSummary :address="customer?.shipping" :show-validation-warnings="!!viewer" @edit="editShippingAddress" />
 
-              <!-- Use Same Address for Billing Checkbox -->
+              <!-- Ship to Different Address Checkbox -->
               <div class="flex items-center gap-3">
                 <input
                   id="useSameAddress"
-                  v-model="useSameAddressForBilling"
+                  v-model="shipToDifferentAddress"
                   type="checkbox"
                   name="useSameAddress"
                   class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-2" />
@@ -197,11 +197,11 @@ useSeoMeta({
                 <ShippingDetails v-if="customer?.shipping" v-model="customer.shipping" />
               </div>
 
-              <!-- Use Same Address for Billing Checkbox (also shown during editing) -->
+              <!-- Ship to Different Address Checkbox (also shown during editing) -->
               <div class="flex items-center gap-3">
                 <input
                   id="useSameAddressEdit"
-                  v-model="useSameAddressForBilling"
+                  v-model="shipToDifferentAddress"
                   type="checkbox"
                   name="useSameAddressEdit"
                   class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-2" />
@@ -212,8 +212,8 @@ useSeoMeta({
             </div>
           </div>
 
-          <!-- Billing Address Section (only show if not using same address) -->
-          <div v-if="useSameAddressForBilling">
+          <!-- Billing Address Section (only show if shipping to different address) -->
+          <div v-if="shipToDifferentAddress">
             <div class="mb-6">
               <h2 class="text-2xl font-semibold text-gray-900 mb-2">{{ $t('messages.billing.billingDetails') }}</h2>
               <p class="text-sm text-gray-600 mb-4">Enter your billing information for payment processing.</p>
