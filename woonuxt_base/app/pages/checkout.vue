@@ -19,7 +19,7 @@ const elements = ref();
 const isPaid = ref<boolean>(false);
 
 // New reactive refs for the improved checkout flow
-const useSameAddressForBilling = ref<boolean>(true);
+const useSameAddressForBilling = ref<boolean>(false);
 const isEditingShipping = ref<boolean>(false);
 const isEditingBilling = ref<boolean>(false);
 
@@ -186,7 +186,7 @@ useSeoMeta({
                   name="useSameAddress"
                   class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-2" />
                 <label for="useSameAddress" class="text-sm font-medium text-gray-700">
-                  {{ $t('messages.billing.useSameAddress') }}
+                  {{ $t('messages.billing.differentAddress') }}
                 </label>
               </div>
             </div>
@@ -206,29 +206,19 @@ useSeoMeta({
                   name="useSameAddressEdit"
                   class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-2" />
                 <label for="useSameAddressEdit" class="text-sm font-medium text-gray-700">
-                  {{ $t('messages.billing.useSameAddress') }}
+                  {{ $t('messages.billing.differentAddress') }}
                 </label>
               </div>
             </div>
           </div>
 
           <!-- Billing Address Section (only show if not using same address) -->
-          <div v-if="!useSameAddressForBilling">
+          <div v-if="useSameAddressForBilling">
             <div class="mb-6">
               <h2 class="text-2xl font-semibold text-gray-900 mb-2">{{ $t('messages.billing.billingDetails') }}</h2>
               <p class="text-sm text-gray-600 mb-4">Enter your billing information for payment processing.</p>
             </div>
-
-            <!-- Billing Address Summary or Form -->
-            <div v-if="!isEditingBilling">
-              <!-- Billing Address Summary -->
-              <AddressSummary :address="customer?.billing" :show-validation-warnings="!!viewer" @edit="editBillingAddress" />
-            </div>
-
-            <!-- Billing Address Form (when editing - stays open once clicked) -->
-            <div v-else>
-              <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
-            </div>
+            <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
           </div>
           <!-- Fallback: If no shipping methods available, show billing details -->
           <div v-if="!cart?.availableShippingMethods?.length">
