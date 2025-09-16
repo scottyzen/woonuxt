@@ -18,6 +18,43 @@ export const useAuth = () => {
   const orders = useState<Order[] | null>('orders', () => null);
   const downloads = useState<DownloadableItem[] | null>('downloads', () => null);
   const loginClients = useState<LoginClient[] | null>('loginClients', () => null);
+  const returnUrl = useState<string | null>('loginReturnUrl', () => null);
+
+  // Store the URL to redirect to after login
+  const setReturnUrl = (url: string) => {
+    returnUrl.value = url;
+  };
+
+  const getReturnUrl = (): string | null => {
+    return returnUrl.value;
+  };
+
+  const clearReturnUrl = () => {
+    returnUrl.value = null;
+  };
+
+  // High-level function to handle navigation to login page
+  const navigateToLogin = (currentRoute?: string) => {
+    const route = currentRoute || (typeof window !== 'undefined' ? window.location.pathname + window.location.search : '');
+
+    // Only store return URL if it's not already the login page
+    if (route && route !== '/my-account') {
+      setReturnUrl(route);
+    }
+
+    // Navigate to login page
+    return navigateTo('/my-account');
+  };
+
+  // High-level function to handle post-login redirect
+  const handlePostLoginRedirect = () => {
+    const returnUrl = getReturnUrl();
+    if (returnUrl && returnUrl !== '/my-account') {
+      clearReturnUrl();
+      return navigateTo(returnUrl);
+    }
+    return null;
+  };
 
   // Log in the user
   const loginUser = async (credentials: CreateAccountInput): Promise<AuthResponse> => {
@@ -87,6 +124,7 @@ export const useAuth = () => {
         await refreshCart();
         clearAllCookies();
         customer.value = { billing: {}, shipping: {} };
+        clearReturnUrl(); // Clear any stored return URL on logout
       }
       return { success: true };
     } catch (error: any) {
@@ -221,5 +259,7 @@ export const useAuth = () => {
     getOrders,
     getDownloads,
     updateLoginClients,
+    navigateToLogin,
+    handlePostLoginRedirect,
   };
 };
