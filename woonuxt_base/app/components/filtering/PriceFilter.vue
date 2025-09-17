@@ -25,7 +25,7 @@ watch(isFiltersActive, () => {
 
 <template>
   <div>
-    <div class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center" @click="isOpen = !isOpen">
+    <div class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center text-gray-900" @click="isOpen = !isOpen">
       <span>{{ $t('messages.shop.price') }}</span>
       <Icon name="ion:chevron-down-outline" class="transform" :class="isOpen ? 'rotate-180' : ''" />
     </div>

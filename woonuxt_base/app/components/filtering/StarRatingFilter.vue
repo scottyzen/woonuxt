@@ -23,7 +23,7 @@ const radioClicked = (rating: string): void => {
 
 <template>
   <div>
-    <div class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center" @click="isOpen = !isOpen">
+    <div class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center text-gray-900" @click="isOpen = !isOpen">
       <span>{{ $t('messages.shop.rating') }}</span>
       <Icon v-show="isOpen" name="ion:chevron-up-outline" />
       <Icon v-show="!isOpen" name="ion:chevron-down-outline" />
