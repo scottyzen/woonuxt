@@ -11,12 +11,14 @@ const runtimeConfig = useRuntimeConfig();
 const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
 
 const buttonText = ref<string>(isProcessingOrder.value ? t('messages.general.processing') : t('messages.shop.checkoutButton'));
+const isStripeElementReady = ref<boolean>(false);
+
 const isCheckoutDisabled = computed<boolean>(() => {
   if (isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod) return true;
 
-  // If Stripe is selected, check for StripeElement--empty class in DOM
-  if (orderInput.value.paymentMethod.id === 'stripe') {
-    if (document.querySelector('.StripeElement.StripeElement--empty')) return true;
+  // Check if Stripe is selected and element is not ready
+  if (orderInput.value.paymentMethod?.id === 'stripe') {
+    return !isStripeElementReady.value;
   }
 
   return false;
@@ -105,6 +107,18 @@ const payNow = async () => {
 
 const handleStripeElement = (stripeElements: StripeElements): void => {
   elements.value = stripeElements;
+
+  // Get the card element and listen for changes
+  const cardElement = stripeElements.getElement('card');
+  if (cardElement) {
+    cardElement.on('change', (event) => {
+      // Update reactivity based on element state
+      isStripeElementReady.value = event.complete && !event.error;
+    });
+
+    // Initial state - assume not ready until user interacts
+    isStripeElementReady.value = false;
+  }
 };
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
