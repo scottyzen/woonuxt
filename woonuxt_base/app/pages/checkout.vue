@@ -11,7 +11,16 @@ const runtimeConfig = useRuntimeConfig();
 const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
 
 const buttonText = ref<string>(isProcessingOrder.value ? t('messages.general.processing') : t('messages.shop.checkoutButton'));
-const isCheckoutDisabled = computed<boolean>(() => isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod);
+const isCheckoutDisabled = computed<boolean>(() => {
+  if (isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod) return true;
+
+  // If Stripe is selected, check for StripeElement--empty class in DOM
+  if (orderInput.value.paymentMethod.id === 'stripe') {
+    if (document.querySelector('.StripeElement.StripeElement--empty')) return true;
+  }
+
+  return false;
+});
 
 const isInvalidEmail = ref<boolean>(false);
 const stripe: Stripe | null = stripeKey ? await loadStripe(stripeKey) : null;
