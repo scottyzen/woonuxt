@@ -8,6 +8,7 @@ const { cart, isUpdatingCart, paymentGateways } = useCart();
 const { customer, viewer, navigateToLogin } = useAuth();
 const { orderInput, isProcessingOrder, processCheckout } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
+const appConfig = useAppConfig();
 const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
 
 const buttonText = ref<string>(isProcessingOrder.value ? t('messages.general.processing') : t('messages.shop.checkoutButton'));
@@ -87,15 +88,41 @@ const payNow = async () => {
       const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
       const clientSecret = stripePaymentIntent?.clientSecret || '';
 
-      const cardElement = elements.value.getElement('card') as StripeCardElement;
-      const { setupIntent } = await stripe.confirmCardSetup(clientSecret, { payment_method: { card: cardElement } });
-      const { source } = await stripe.createSource(cardElement as CreateSourceData);
+      // Handle different element types based on config
+      const paymentMethodType = appConfig.stripePaymentMethod || 'card';
 
-      if (source) orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
-      if (setupIntent) orderInput.value.metaData.push({ key: '_stripe_intent_id', value: setupIntent.id });
+      if (paymentMethodType === 'payment') {
+        // Modern Payment Element - use confirmPayment
+        const { error, paymentIntent } = await stripe.confirmPayment({
+          elements: elements.value,
+          confirmParams: {
+            return_url: `${window.location.origin}/checkout/order-received`,
+          },
+          redirect: 'if_required',
+        });
 
-      isPaid.value = setupIntent?.status === 'succeeded' || false;
-      orderInput.value.transactionId = source?.created?.toString() || new Date().getTime().toString();
+        if (error) {
+          console.error('Payment failed:', error);
+          throw new Error(error.message);
+        }
+
+        if (paymentIntent) {
+          orderInput.value.metaData.push({ key: '_stripe_payment_intent_id', value: paymentIntent.id });
+          isPaid.value = paymentIntent.status === 'succeeded';
+          orderInput.value.transactionId = paymentIntent.id;
+        }
+      } else {
+        // Traditional Card Element - use legacy approach
+        const cardElement = elements.value.getElement('card') as StripeCardElement;
+        const { setupIntent } = await stripe.confirmCardSetup(clientSecret, { payment_method: { card: cardElement } });
+        const { source } = await stripe.createSource(cardElement as CreateSourceData);
+
+        if (source) orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
+        if (setupIntent) orderInput.value.metaData.push({ key: '_stripe_intent_id', value: setupIntent.id });
+
+        isPaid.value = setupIntent?.status === 'succeeded' || false;
+        orderInput.value.transactionId = source?.created?.toString() || new Date().getTime().toString();
+      }
     }
   } catch (error) {
     console.error(error);
@@ -108,16 +135,28 @@ const payNow = async () => {
 const handleStripeElement = (stripeElements: StripeElements): void => {
   elements.value = stripeElements;
 
-  // Get the card element and listen for changes
-  const cardElement = stripeElements.getElement('card');
-  if (cardElement) {
-    cardElement.on('change', (event) => {
-      // Update reactivity based on element state
-      isStripeElementReady.value = event.complete && !event.error;
-    });
+  // Get the payment method type from config
+  const paymentMethodType = appConfig.stripePaymentMethod || 'card';
 
-    // Initial state - assume not ready until user interacts
-    isStripeElementReady.value = false;
+  if (paymentMethodType === 'payment') {
+    // Modern Payment Element - listen for changes
+    const paymentElement = stripeElements.getElement('payment');
+    if (paymentElement) {
+      paymentElement.on('change', (event) => {
+        // Payment Element change event has different structure
+        isStripeElementReady.value = event.complete;
+      });
+      isStripeElementReady.value = false;
+    }
+  } else {
+    // Card Element
+    const cardElement = stripeElements.getElement('card');
+    if (cardElement) {
+      cardElement.on('change', (event) => {
+        isStripeElementReady.value = event.complete && !event.error;
+      });
+      isStripeElementReady.value = false;
+    }
   }
 };
 
@@ -299,8 +338,7 @@ useSeoMeta({
 .checkout-form input[type='email'],
 .checkout-form input[type='tel'],
 .checkout-form input[type='password'],
-.checkout-form textarea,
-.checkout-form .StripeElement {
+.checkout-form textarea {
   @apply bg-white border rounded-md outline-none border-gray-300 shadow-inner w-full py-2 px-4;
 }
 
@@ -311,10 +349,6 @@ useSeoMeta({
 .checkout-form input.has-error,
 .checkout-form textarea.has-error {
   @apply border-red-500;
-}
-
-.checkout-form .StripeElement {
-  padding: 1rem 0.75rem;
 }
 
 /* Keep only the scale-y transition for email validation */
