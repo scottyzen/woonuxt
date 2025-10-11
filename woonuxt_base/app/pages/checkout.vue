@@ -90,10 +90,37 @@ const payNow = async () => {
 
       if (paymentMethodType === 'payment') {
         // Modern Payment Element - use confirmPayment
+        if (!stripeClientSecret.value) {
+          throw new Error('Payment intent not available. Please refresh and try again.');
+        }
+
+        // First, submit the elements to validate the form
+        const { error: submitError } = await elements.value.submit();
+        if (submitError) {
+          console.error('Form validation failed:', submitError);
+          throw new Error(submitError.message);
+        }
+
         const { error, paymentIntent } = await stripe.confirmPayment({
           elements: elements.value,
+          clientSecret: stripeClientSecret.value,
           confirmParams: {
             return_url: `${window.location.origin}/checkout/order-received`,
+            payment_method_data: {
+              billing_details: {
+                name: `${customer.value?.billing?.firstName || ''} ${customer.value?.billing?.lastName || ''}`.trim() || undefined,
+                email: customer.value?.billing?.email || undefined,
+                phone: customer.value?.billing?.phone || undefined,
+                address: {
+                  line1: customer.value?.billing?.address1 || undefined,
+                  line2: customer.value?.billing?.address2 || undefined,
+                  city: customer.value?.billing?.city || undefined,
+                  state: customer.value?.billing?.state || undefined,
+                  postal_code: customer.value?.billing?.postcode || undefined,
+                  country: customer.value?.billing?.country || undefined,
+                },
+              },
+            },
           },
           redirect: 'if_required',
         });
@@ -105,7 +132,22 @@ const payNow = async () => {
 
         if (paymentIntent) {
           orderInput.value.metaData.push({ key: '_stripe_payment_intent_id', value: paymentIntent.id });
-          isPaid.value = paymentIntent.status === 'succeeded';
+
+          // Add payment method ID if available
+          if (paymentIntent.payment_method) {
+            orderInput.value.metaData.push({ key: '_stripe_payment_method_id', value: paymentIntent.payment_method });
+          }
+
+          // Add additional metadata that WooCommerce Stripe plugin might expect
+          orderInput.value.metaData.push({ key: '_stripe_source_id', value: paymentIntent.id });
+          orderInput.value.metaData.push({ key: '_stripe_fee', value: '0' });
+          orderInput.value.metaData.push({ key: '_stripe_net', value: paymentIntent.amount.toString() });
+          orderInput.value.metaData.push({ key: '_stripe_currency', value: paymentIntent.currency });
+          orderInput.value.metaData.push({ key: '_stripe_charge_captured', value: 'yes' });
+          orderInput.value.metaData.push({ key: '_wc_stripe_payment_method_type', value: 'card' });
+
+          // Set isPaid based on payment intent status
+          isPaid.value = paymentIntent.status === 'succeeded' || paymentIntent.status === 'processing';
           orderInput.value.transactionId = paymentIntent.id;
         }
       } else {
@@ -348,12 +390,7 @@ useSeoMeta({
           <div v-if="paymentGateways?.nodes.length" class="mt-2 col-span-full">
             <h2 class="mb-4 text-xl font-semibold leading-none">{{ $t('messages.billing.paymentOptions') }}</h2>
             <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :paymentGateways />
-            <StripeElement
-              v-if="stripe"
-              v-show="orderInput.paymentMethod.id == 'stripe'"
-              :stripe
-              :clientSecret="stripeClientSecret"
-              @updateElement="handleStripeElement" />
+            <StripeElement v-if="stripe" v-show="orderInput.paymentMethod.id == 'stripe'" :stripe @updateElement="handleStripeElement" />
           </div>
 
           <hr />

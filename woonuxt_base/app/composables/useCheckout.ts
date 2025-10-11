@@ -1,6 +1,9 @@
 import type { CheckoutInput, CreateAccountInput, UpdateCustomerInput } from '#gql';
 
 export function useCheckout() {
+  const { customer, loginUser, viewer } = useAuth();
+  const { cart, emptyCart, refreshCart, isUpdatingCart } = useCart();
+
   const orderInput = useState<any>('orderInput', () => {
     return {
       customerNote: '',
@@ -14,9 +17,6 @@ export function useCheckout() {
 
   // Helper function to build checkout payload
   const buildCheckoutPayload = (isPaid = false): CheckoutInput => {
-    const { customer } = useAuth();
-    const { cart } = useCart();
-
     const { username, password, shipToDifferentAddress } = orderInput.value;
     const billing = customer.value?.billing;
     const shipping = shipToDifferentAddress ? customer.value?.shipping : billing;
@@ -74,7 +74,6 @@ export function useCheckout() {
   // Helper function to handle post-checkout account creation
   const handleAccountCreation = async (): Promise<void> => {
     if (orderInput.value.createAccount) {
-      const { loginUser } = useAuth();
       const { username, password } = orderInput.value;
       await loginUser({ username, password });
     }
@@ -82,8 +81,6 @@ export function useCheckout() {
 
   // Helper function to finalize checkout
   const finalizeCheckout = async (checkout: any): Promise<void> => {
-    const { emptyCart, refreshCart } = useCart();
-
     if (checkout?.result !== 'success') {
       alert('There was an error processing your order. Please try again.');
       window.location.reload();
@@ -96,9 +93,6 @@ export function useCheckout() {
 
   // if Country or State are changed, calculate the shipping rates again
   async function updateShippingLocation() {
-    const { customer, viewer } = useAuth();
-    const { isUpdatingCart, refreshCart } = useCart();
-
     isUpdatingCart.value = true;
 
     try {
