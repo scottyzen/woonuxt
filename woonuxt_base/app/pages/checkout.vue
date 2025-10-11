@@ -13,6 +13,7 @@ const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
 
 const buttonText = ref<string>(isProcessingOrder.value ? t('messages.general.processing') : t('messages.shop.checkoutButton'));
 const isStripeElementReady = ref<boolean>(false);
+const stripeClientSecret = ref<string>('');
 
 const isCheckoutDisabled = computed<boolean>(() => {
   if (isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod) return true;
@@ -85,33 +86,8 @@ const payNow = async () => {
   try {
     if (orderInput.value.paymentMethod.id === 'stripe' && stripe && elements.value) {
       // Only call Stripe API when Stripe is the selected payment method
-      let clientSecret = '';
-
-      // Handle different element types based on config
       const paymentMethodType = appConfig.stripePaymentMethod || 'card';
 
-      try {
-        // Determine the correct Stripe payment method parameter
-        // PAYMENT: for modern Payment Element (handles payment directly)
-        // SETUP: for traditional Card Element (requires setup intent)
-        const stripePaymentMethodParam = paymentMethodType === 'payment' ? 'PAYMENT' : 'SETUP';
-
-        console.log(`Using Stripe payment method: ${paymentMethodType} -> ${stripePaymentMethodParam}`);
-
-        const { stripePaymentIntent } = await GqlGetStripePaymentIntent({
-          stripePaymentMethod: stripePaymentMethodParam as any,
-        });
-        clientSecret = stripePaymentIntent?.clientSecret || '';
-
-        console.log('Stripe payment intent received:', {
-          id: stripePaymentIntent?.id,
-          hasClientSecret: !!clientSecret,
-        });
-      } catch (stripeError) {
-        console.error('Error getting Stripe payment intent:', stripeError);
-        // For payment methods that don't require setup intent, continue without client secret
-        console.warn('Continuing without payment intent - some payment methods may not work');
-      }
       if (paymentMethodType === 'payment') {
         // Modern Payment Element - use confirmPayment
         const { error, paymentIntent } = await stripe.confirmPayment({
@@ -134,6 +110,17 @@ const payNow = async () => {
         }
       } else {
         // Traditional Card Element - use legacy approach
+        let clientSecret = '';
+
+        try {
+          const { stripePaymentIntent } = await GqlGetStripePaymentIntent({
+            stripePaymentMethod: 'SETUP' as any,
+          });
+          clientSecret = stripePaymentIntent?.clientSecret || '';
+        } catch (stripeError) {
+          console.error('Error getting Stripe setup intent:', stripeError);
+        }
+
         const cardElement = elements.value.getElement('card') as StripeCardElement;
 
         if (clientSecret) {
@@ -205,8 +192,29 @@ const checkEmailOnBlur = (email?: string | null): void => {
 };
 
 const checkEmailOnInput = (email?: string | null): void => {
-  if (email && isInvalidEmail.value) isInvalidEmail.value = !emailRegex.test(email);
+  if (email && isInvalidEmail.value) isInvalidEmail.value = false;
 };
+
+// Watch for Stripe payment method selection to get client secret for Payment Element
+watch(
+  () => orderInput.value.paymentMethod?.id,
+  async (paymentMethodId) => {
+    if (paymentMethodId === 'stripe' && appConfig.stripePaymentMethod === 'payment') {
+      try {
+        const { stripePaymentIntent } = await GqlGetStripePaymentIntent({
+          stripePaymentMethod: 'PAYMENT' as any,
+        });
+        stripeClientSecret.value = stripePaymentIntent?.clientSecret || '';
+      } catch (error) {
+        console.error('Failed to get client secret for Payment Element:', error);
+        stripeClientSecret.value = '';
+      }
+    } else {
+      stripeClientSecret.value = '';
+    }
+  },
+  { immediate: true },
+);
 
 useSeoMeta({
   title: t('messages.shop.checkout'),
@@ -340,7 +348,12 @@ useSeoMeta({
           <div v-if="paymentGateways?.nodes.length" class="mt-2 col-span-full">
             <h2 class="mb-4 text-xl font-semibold leading-none">{{ $t('messages.billing.paymentOptions') }}</h2>
             <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :paymentGateways />
-            <StripeElement v-if="stripe" v-show="orderInput.paymentMethod.id == 'stripe'" :stripe @updateElement="handleStripeElement" />
+            <StripeElement
+              v-if="stripe"
+              v-show="orderInput.paymentMethod.id == 'stripe'"
+              :stripe
+              :clientSecret="stripeClientSecret"
+              @updateElement="handleStripeElement" />
           </div>
 
           <hr />

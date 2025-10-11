@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { cart } = useCart();
-const { stripe } = defineProps(['stripe']);
+const { stripe, clientSecret } = defineProps(['stripe', 'clientSecret']);
 const appConfig = useAppConfig();
 
 const rawCartTotal = computed(() => cart.value && parseFloat(cart.value.rawTotal as string) * 100);
@@ -11,15 +11,27 @@ let paymentElement = null as any;
 // Get the payment method type from config
 const paymentMethodType = computed(() => appConfig.stripePaymentMethod || 'card');
 
-const options = {
-  mode: 'payment' as const,
-  currency: 'eur',
-  amount: rawCartTotal.value || 100, // Ensure amount is always provided and never 0
-  // paymentMethodCreation: 'manual',
-};
+const options = computed(() => {
+  const baseOptions = {
+    mode: 'payment' as const,
+    currency: 'eur',
+    amount: rawCartTotal.value || 100, // Ensure amount is always provided and never 0
+    // paymentMethodCreation: 'manual',
+  };
+
+  // Add clientSecret for Payment Element if available
+  if (paymentMethodType.value === 'payment' && clientSecret) {
+    return {
+      ...baseOptions,
+      clientSecret: clientSecret,
+    };
+  }
+
+  return baseOptions;
+});
 
 const createStripeElements = async () => {
-  elements = stripe.elements(options);
+  elements = stripe.elements(options.value);
 
   // Create different element types based on config
   switch (paymentMethodType.value) {
@@ -66,18 +78,14 @@ const createStripeElements = async () => {
   emit('updateElement', elements);
 };
 
-// Recreate elements when cart total changes
-watch(
-  () => rawCartTotal.value,
-  (newAmount) => {
-    if (newAmount && elements) {
-      // Update the options with new amount
-      options.amount = newAmount;
-      // Note: In v8.0.0, you would need to recreate elements for amount changes
-      // For now, we'll keep the existing element since amount changes are less critical for card setup
-    }
-  },
-);
+// Recreate elements when cart total changes or client secret changes
+watch([() => rawCartTotal.value, () => clientSecret], ([newAmount, newClientSecret]) => {
+  if ((newAmount || newClientSecret) && elements && paymentElement) {
+    // Unmount current element before creating new one
+    paymentElement.unmount();
+    createStripeElements();
+  }
+});
 
 // Watch for payment method type changes and recreate elements
 watch(
