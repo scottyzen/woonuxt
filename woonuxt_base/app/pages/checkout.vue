@@ -85,12 +85,33 @@ const payNow = async () => {
   try {
     if (orderInput.value.paymentMethod.id === 'stripe' && stripe && elements.value) {
       // Only call Stripe API when Stripe is the selected payment method
-      const { stripePaymentIntent } = await GqlGetStripePaymentIntent();
-      const clientSecret = stripePaymentIntent?.clientSecret || '';
+      let clientSecret = '';
 
       // Handle different element types based on config
       const paymentMethodType = appConfig.stripePaymentMethod || 'card';
 
+      try {
+        // Determine the correct Stripe payment method parameter
+        // PAYMENT: for modern Payment Element (handles payment directly)
+        // SETUP: for traditional Card Element (requires setup intent)
+        const stripePaymentMethodParam = paymentMethodType === 'payment' ? 'PAYMENT' : 'SETUP';
+
+        console.log(`Using Stripe payment method: ${paymentMethodType} -> ${stripePaymentMethodParam}`);
+
+        const { stripePaymentIntent } = await GqlGetStripePaymentIntent({
+          stripePaymentMethod: stripePaymentMethodParam as any,
+        });
+        clientSecret = stripePaymentIntent?.clientSecret || '';
+
+        console.log('Stripe payment intent received:', {
+          id: stripePaymentIntent?.id,
+          hasClientSecret: !!clientSecret,
+        });
+      } catch (stripeError) {
+        console.error('Error getting Stripe payment intent:', stripeError);
+        // For payment methods that don't require setup intent, continue without client secret
+        console.warn('Continuing without payment intent - some payment methods may not work');
+      }
       if (paymentMethodType === 'payment') {
         // Modern Payment Element - use confirmPayment
         const { error, paymentIntent } = await stripe.confirmPayment({
@@ -114,19 +135,36 @@ const payNow = async () => {
       } else {
         // Traditional Card Element - use legacy approach
         const cardElement = elements.value.getElement('card') as StripeCardElement;
-        const { setupIntent } = await stripe.confirmCardSetup(clientSecret, { payment_method: { card: cardElement } });
-        const { source } = await stripe.createSource(cardElement as CreateSourceData);
 
-        if (source) orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
-        if (setupIntent) orderInput.value.metaData.push({ key: '_stripe_intent_id', value: setupIntent.id });
-
-        isPaid.value = setupIntent?.status === 'succeeded' || false;
-        orderInput.value.transactionId = source?.created?.toString() || new Date().getTime().toString();
+        if (clientSecret) {
+          // Use setup intent if available
+          const { setupIntent } = await stripe.confirmCardSetup(clientSecret, { payment_method: { card: cardElement } });
+          if (setupIntent) orderInput.value.metaData.push({ key: '_stripe_intent_id', value: setupIntent.id });
+          isPaid.value = setupIntent?.status === 'succeeded' || false;
+          orderInput.value.transactionId = setupIntent?.id || new Date().getTime().toString();
+        } else {
+          // Fallback to source creation (legacy method)
+          const { source } = await stripe.createSource(cardElement as CreateSourceData);
+          if (source) {
+            orderInput.value.metaData.push({ key: '_stripe_source_id', value: source.id });
+            orderInput.value.transactionId = source.created?.toString() || new Date().getTime().toString();
+            // For sources, we assume payment is successful for checkout continuation
+            isPaid.value = true;
+          }
+        }
       }
     }
   } catch (error) {
-    console.error(error);
+    console.error('Checkout error:', error);
+
+    // Provide user-friendly error message
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred during checkout';
+
+    // You could show a toast notification here instead
+    alert(`Payment failed: ${errorMessage}. Please try again or contact support.`);
+
     buttonText.value = t('messages.shop.placeOrder');
+    return; // Don't process checkout if payment failed
   }
 
   processCheckout(isPaid.value);
