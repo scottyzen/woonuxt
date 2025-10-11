@@ -109,7 +109,7 @@ onMounted(() => {
         <div class="text-sm">
           {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400">{{ getSelectedName(attr, activeVariations[i]) }}</span>
         </div>
-        <select :id="attr.name" :ref="attr.name" :name="attr.name" required class="border-white shadow" @change="updateAttrs">
+        <select :id="attr.name" :ref="attr.name" :name="attr.name" required class="border-white shadow-sm" @change="updateAttrs">
           <option disabled hidden>{{ $t('messages.general.choose') }} {{ decodeURIComponent(attr.label) }}</option>
           <option v-for="(term, dropdownIndex) in attr.terms.nodes" :key="dropdownIndex" :value="term.slug" v-html="term.name" :selected="dropdownIndex == 0" />
         </select>

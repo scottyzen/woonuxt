@@ -1,10 +1,37 @@
 <script lang="ts" setup>
-const { logoutUser, viewer, avatar, isPending } = useAuth();
+const { logoutUser, viewer, avatar, isPending, handlePostLoginRedirect } = useAuth();
 const { cart } = useCart();
 const route = useRoute();
 
 const activeTab = computed(() => route.query.tab || 'my-details');
 const showLoader = computed(() => !cart.value && !viewer.value);
+
+// Check if user should be redirected and prevent dashboard from showing
+const isRedirecting = ref(false);
+
+// Helper function to handle redirect logic
+const handleRedirect = () => {
+  if (isRedirecting.value) return; // Prevent multiple redirects
+
+  const redirectResult = handlePostLoginRedirect();
+  if (redirectResult) {
+    isRedirecting.value = true;
+  }
+};
+
+// Handle redirect if user is already authenticated when page loads (e.g., OAuth flow)
+onMounted(() => {
+  if (viewer.value) {
+    handleRedirect();
+  }
+});
+
+// Watch for authentication changes during login process
+watch(viewer, (newViewer) => {
+  if (newViewer) {
+    handleRedirect();
+  }
+});
 
 useSeoMeta({
   title: `My Account`,
@@ -13,7 +40,7 @@ useSeoMeta({
 
 <template>
   <div class="container min-h-[600px]">
-    <div v-if="showLoader" class="flex flex-col min-h-[500px]">
+    <div v-if="showLoader || isRedirecting" class="flex flex-col min-h-[500px]">
       <LoadingIcon class="m-auto" />
     </div>
     <template v-else>

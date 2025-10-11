@@ -12,6 +12,88 @@ export function useCheckout() {
 
   const isProcessingOrder = useState<boolean>('isProcessingOrder', () => false);
 
+  // Helper function to build checkout payload
+  const buildCheckoutPayload = (isPaid = false): CheckoutInput => {
+    const { customer } = useAuth();
+    const { cart } = useCart();
+
+    const { username, password, shipToDifferentAddress } = orderInput.value;
+    const billing = customer.value?.billing;
+    const shipping = shipToDifferentAddress ? customer.value?.shipping : billing;
+
+    const payload: CheckoutInput = {
+      billing,
+      shipping,
+      shippingMethod: cart.value?.chosenShippingMethods,
+      metaData: orderInput.value.metaData,
+      paymentMethod: orderInput.value.paymentMethod.id,
+      customerNote: orderInput.value.customerNote,
+      shipToDifferentAddress,
+      transactionId: orderInput.value.transactionId,
+      isPaid,
+    };
+
+    // Handle account creation
+    if (orderInput.value.createAccount) {
+      payload.account = { username, password } as CreateAccountInput;
+    } else {
+      payload.account = null;
+    }
+
+    return payload;
+  };
+
+  // Helper function to check if payment method is PayPal
+  const isPayPalPayment = (): boolean => {
+    const paymentId = orderInput.value.paymentMethod.id;
+    return paymentId === 'paypal' || paymentId === 'ppcp-gateway';
+  };
+
+  // Helper function to handle PayPal redirect
+  const handlePayPalRedirect = async (checkout: any, orderId: string, orderKey: string): Promise<void> => {
+    const { replaceQueryParam } = useHelpers();
+    const router = useRouter();
+
+    const frontEndUrl = window.location.origin;
+    let redirectUrl = checkout?.redirect ?? '';
+
+    const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}&from_paypal=true`;
+    const payPalCancelUrl = `${frontEndUrl}/checkout/?cancel_order=true&from_paypal=true`;
+
+    redirectUrl = replaceQueryParam('return', payPalReturnUrl, redirectUrl);
+    redirectUrl = replaceQueryParam('cancel_return', payPalCancelUrl, redirectUrl);
+    redirectUrl = replaceQueryParam('bn', 'WooNuxt_Cart', redirectUrl);
+
+    const isPayPalWindowClosed = await openPayPalWindow(redirectUrl);
+
+    if (isPayPalWindowClosed) {
+      router.push(`/checkout/order-received/${orderId}/?key=${orderKey}&fetch_delay=true`);
+    }
+  };
+
+  // Helper function to handle post-checkout account creation
+  const handleAccountCreation = async (): Promise<void> => {
+    if (orderInput.value.createAccount) {
+      const { loginUser } = useAuth();
+      const { username, password } = orderInput.value;
+      await loginUser({ username, password });
+    }
+  };
+
+  // Helper function to finalize checkout
+  const finalizeCheckout = async (checkout: any): Promise<void> => {
+    const { emptyCart, refreshCart } = useCart();
+
+    if (checkout?.result !== 'success') {
+      alert('There was an error processing your order. Please try again.');
+      window.location.reload();
+      return;
+    }
+
+    await emptyCart();
+    await refreshCart();
+  };
+
   // if Country or State are changed, calculate the shipping rates again
   async function updateShippingLocation() {
     const { customer, viewer } = useAuth();
@@ -57,87 +139,43 @@ export function useCheckout() {
   }
 
   const processCheckout = async (isPaid = false): Promise<any> => {
-    const { customer, loginUser } = useAuth();
     const router = useRouter();
-    const { replaceQueryParam } = useHelpers();
-    const { cart, emptyCart, refreshCart } = useCart();
 
     isProcessingOrder.value = true;
 
-    const { username, password, shipToDifferentAddress } = orderInput.value;
-    const billing = customer.value?.billing;
-    const shipping = shipToDifferentAddress ? customer.value?.shipping : billing;
-    const shippingMethod = cart.value?.chosenShippingMethods;
-
     try {
-      let checkoutPayload: CheckoutInput = {
-        billing,
-        shipping,
-        shippingMethod,
-        metaData: orderInput.value.metaData,
-        paymentMethod: orderInput.value.paymentMethod.id,
-        customerNote: orderInput.value.customerNote,
-        shipToDifferentAddress,
-        transactionId: orderInput.value.transactionId,
-        isPaid,
-      };
-      // Create account
-      if (orderInput.value.createAccount) {
-        checkoutPayload.account = { username, password } as CreateAccountInput;
-      } else {
-        // Remove account from checkoutPayload if not creating account otherwise it will create an account anyway
-        checkoutPayload.account = null;
-      }
+      // Build checkout payload
+      const checkoutPayload = buildCheckoutPayload(isPaid);
 
+      // Process the checkout
       const { checkout } = await GqlCheckout(checkoutPayload);
 
-      // Login user if account was created during checkout
-      if (orderInput.value.createAccount) {
-        await loginUser({ username, password });
-      }
+      // Handle account creation if requested
+      await handleAccountCreation();
 
       const orderId = checkout?.order?.databaseId;
       const orderKey = checkout?.order?.orderKey;
-      const orderInputPaymentId = orderInput.value.paymentMethod.id;
-      const isPayPal = orderInputPaymentId === 'paypal' || orderInputPaymentId === 'ppcp-gateway';
 
-      // PayPal redirect
-      if ((await checkout?.redirect) && isPayPal) {
-        const frontEndUrl = window.location.origin;
-        let redirectUrl = checkout?.redirect ?? '';
-        const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}&from_paypal=true`;
-        const payPalCancelUrl = `${frontEndUrl}/checkout/?cancel_order=true&from_paypal=true`;
+      // Ensure we have required order details
+      if (!orderId || !orderKey) {
+        throw new Error('Order ID or order key is missing from checkout response');
+      }
 
-        redirectUrl = replaceQueryParam('return', payPalReturnUrl, redirectUrl);
-        redirectUrl = replaceQueryParam('cancel_return', payPalCancelUrl, redirectUrl);
-        redirectUrl = replaceQueryParam('bn', 'WooNuxt_Cart', redirectUrl);
-
-        const isPayPalWindowClosed = await openPayPalWindow(redirectUrl);
-
-        if (isPayPalWindowClosed) {
-          router.push(`/checkout/order-received/${orderId}/?key=${orderKey}&fetch_delay=true`);
-        }
+      // Handle PayPal redirect if needed
+      if (checkout?.redirect && isPayPalPayment()) {
+        await handlePayPalRedirect(checkout, String(orderId), orderKey);
       } else {
+        // Standard redirect to order received page
         router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
       }
 
-      if ((await checkout?.result) !== 'success') {
-        alert('There was an error processing your order. Please try again.');
-        window.location.reload();
-        return checkout;
-      } else {
-        await emptyCart();
-        await refreshCart();
-      }
+      // Finalize the checkout
+      await finalizeCheckout(checkout);
+
+      return checkout;
     } catch (error: any) {
-      const errorMessage = error?.gqlErrors?.[0].message;
-
-      if (errorMessage?.includes('An account is already registered with your email address')) {
-        alert('An account is already registered with your email address');
-        return null;
-      }
-
-      alert(errorMessage);
+      console.error('Checkout error:', error);
+      if (error.message) alert(error.message);
       return null;
     } finally {
       isProcessingOrder.value = false;

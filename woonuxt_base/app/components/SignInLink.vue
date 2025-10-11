@@ -1,10 +1,12 @@
 <script setup lang="ts">
-const { viewer, avatar, logoutUser, isPending, wishlistLink } = useAuth();
+const { viewer, avatar, logoutUser, isPending, wishlistLink, navigateToLogin } = useAuth();
+const route = useRoute();
+
 const linkTitle = computed<string>(() => viewer.value?.username || 'Sign In');
 </script>
 
 <template>
-  <NuxtLink to="/my-account" :title="linkTitle" class="hidden sm:inline-flex aspect-square items-center">
+  <NuxtLink to="/my-account" :title="linkTitle" @click="navigateToLogin(route.fullPath)" class="hidden sm:inline-flex aspect-square items-center">
     <Transition name="pop-in" mode="out-in">
       <span v-if="avatar" class="relative avatar">
         <img
