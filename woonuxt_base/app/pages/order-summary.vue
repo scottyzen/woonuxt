@@ -5,6 +5,7 @@ const { query, params, name } = useRoute();
 const { customer } = useAuth();
 const { formatDate, formatPrice } = useHelpers();
 const { t } = useI18n();
+const { cart, emptyCart, refreshCart } = useCart();
 
 const order = ref<Order | null>(null);
 const fetchDelay = ref<boolean>(query.fetch_delay === 'true');
@@ -29,6 +30,15 @@ onBeforeMount(() => {
 
 onMounted(async () => {
   await getOrder();
+
+  // Clear the cart once the order is confirmed to be loaded
+  // This prevents the cart flash on the checkout page during navigation
+  // Only clear if cart has items to avoid "Cart is empty" errors
+  if (order.value && isCheckoutPage.value && cart.value?.contents?.nodes?.length) {
+    await emptyCart();
+    await refreshCart();
+  }
+
   /**
    * WooCommerce sometimes takes a while to update the order status.
    * This is a workaround to fetch the order again after a delay.

@@ -1,6 +1,9 @@
 import type { CheckoutInput, CreateAccountInput, UpdateCustomerInput } from '#gql';
 
 export function useCheckout() {
+  const { customer, loginUser, viewer } = useAuth();
+  const { cart, emptyCart, refreshCart, isUpdatingCart } = useCart();
+
   const orderInput = useState<any>('orderInput', () => {
     return {
       customerNote: '',
@@ -14,9 +17,6 @@ export function useCheckout() {
 
   // Helper function to build checkout payload
   const buildCheckoutPayload = (isPaid = false): CheckoutInput => {
-    const { customer } = useAuth();
-    const { cart } = useCart();
-
     const { username, password, shipToDifferentAddress } = orderInput.value;
     const billing = customer.value?.billing;
     const shipping = shipToDifferentAddress ? customer.value?.shipping : billing;
@@ -74,7 +74,6 @@ export function useCheckout() {
   // Helper function to handle post-checkout account creation
   const handleAccountCreation = async (): Promise<void> => {
     if (orderInput.value.createAccount) {
-      const { loginUser } = useAuth();
       const { username, password } = orderInput.value;
       await loginUser({ username, password });
     }
@@ -82,23 +81,24 @@ export function useCheckout() {
 
   // Helper function to finalize checkout
   const finalizeCheckout = async (checkout: any): Promise<void> => {
-    const { emptyCart, refreshCart } = useCart();
-
-    if (checkout?.result !== 'success') {
-      alert('There was an error processing your order. Please try again.');
-      window.location.reload();
+    // For PayPal payments, clear the cart here since they handle redirect differently
+    // Only clear if cart has items to avoid "Cart is empty" errors
+    if (isPayPalPayment() && cart.value?.contents?.nodes?.length) {
+      await emptyCart();
+      await refreshCart();
       return;
     }
 
-    await emptyCart();
-    await refreshCart();
+    // For other payment methods, don't clear cart here to avoid flash
+    // Cart will be cleared on the order-received page
+    if (checkout?.result !== 'success' && !checkout?.order?.databaseId) {
+      alert('There was an error processing your order. Please try again.');
+      window.location.reload();
+    }
   };
 
   // if Country or State are changed, calculate the shipping rates again
   async function updateShippingLocation() {
-    const { customer, viewer } = useAuth();
-    const { isUpdatingCart, refreshCart } = useCart();
-
     isUpdatingCart.value = true;
 
     try {
@@ -169,7 +169,7 @@ export function useCheckout() {
         router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
       }
 
-      // Finalize the checkout
+      // Finalize the checkout (this will also clear cart for PayPal)
       await finalizeCheckout(checkout);
 
       return checkout;

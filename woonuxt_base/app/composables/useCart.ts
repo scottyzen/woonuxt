@@ -113,7 +113,10 @@ export function useCart() {
       updateCart(emptyCart?.cart);
     } catch (error: any) {
       const errorMsg = getErrorMessage(error);
-      console.error('Error emptying cart:', errorMsg);
+      // Don't log error if cart is already empty
+      if (errorMsg && !errorMsg.toLowerCase().includes('cart is empty')) {
+        console.error('Error emptying cart:', errorMsg);
+      }
     } finally {
       isUpdatingCart.value = false;
     }
