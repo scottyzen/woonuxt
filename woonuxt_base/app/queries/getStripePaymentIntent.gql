@@ -1,5 +1,5 @@
-query getStripePaymentIntent {
-  stripePaymentIntent {
+query getStripePaymentIntent($stripePaymentMethod: StripePaymentMethodEnum!) {
+  stripePaymentIntent(stripePaymentMethod: $stripePaymentMethod) {
     amount
     clientSecret
     error
