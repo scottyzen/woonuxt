@@ -81,14 +81,19 @@ export function useCheckout() {
 
   // Helper function to finalize checkout
   const finalizeCheckout = async (checkout: any): Promise<void> => {
-    if (checkout?.result !== 'success') {
-      alert('There was an error processing your order. Please try again.');
-      window.location.reload();
+    // For PayPal payments, clear the cart here since they handle redirect differently
+    if (isPayPalPayment()) {
+      await emptyCart();
+      await refreshCart();
       return;
     }
 
-    await emptyCart();
-    await refreshCart();
+    // For other payment methods, don't clear cart here to avoid flash
+    // Cart will be cleared on the order-received page
+    if (checkout?.result !== 'success' && !checkout?.order?.databaseId) {
+      alert('There was an error processing your order. Please try again.');
+      window.location.reload();
+    }
   };
 
   // if Country or State are changed, calculate the shipping rates again
@@ -163,7 +168,7 @@ export function useCheckout() {
         router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
       }
 
-      // Finalize the checkout
+      // Finalize the checkout (this will also clear cart for PayPal)
       await finalizeCheckout(checkout);
 
       return checkout;

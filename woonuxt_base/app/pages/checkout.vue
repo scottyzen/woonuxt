@@ -4,7 +4,7 @@ import type { Stripe, StripeElements, CreateSourceData, StripeCardElement } from
 
 const { t } = useI18n();
 const { query } = useRoute();
-const { cart, isUpdatingCart, paymentGateways } = useCart();
+const { cart, isUpdatingCart, paymentGateways, emptyCart, refreshCart } = useCart();
 const { customer, viewer, navigateToLogin } = useAuth();
 const { orderInput, isProcessingOrder, processCheckout } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
@@ -196,7 +196,14 @@ const payNow = async () => {
     return; // Don't process checkout if payment failed
   }
 
-  processCheckout(isPaid.value);
+  // Process the checkout
+  const result = await processCheckout(isPaid.value);
+
+  // If checkout was successful and we had a successful payment, ensure cart is cleared
+  if (isPaid.value && result) {
+    await emptyCart();
+    await refreshCart();
+  }
 };
 
 const handleStripeElement = (stripeElements: StripeElements): void => {
