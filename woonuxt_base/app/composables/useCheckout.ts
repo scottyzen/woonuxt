@@ -82,7 +82,8 @@ export function useCheckout() {
   // Helper function to finalize checkout
   const finalizeCheckout = async (checkout: any): Promise<void> => {
     // For PayPal payments, clear the cart here since they handle redirect differently
-    if (isPayPalPayment()) {
+    // Only clear if cart has items to avoid "Cart is empty" errors
+    if (isPayPalPayment() && cart.value?.contents?.nodes?.length) {
       await emptyCart();
       await refreshCart();
       return;

@@ -5,7 +5,7 @@ const { query, params, name } = useRoute();
 const { customer } = useAuth();
 const { formatDate, formatPrice } = useHelpers();
 const { t } = useI18n();
-const { emptyCart, refreshCart } = useCart();
+const { cart, emptyCart, refreshCart } = useCart();
 
 const order = ref<Order | null>(null);
 const fetchDelay = ref<boolean>(query.fetch_delay === 'true');
@@ -33,7 +33,8 @@ onMounted(async () => {
 
   // Clear the cart once the order is confirmed to be loaded
   // This prevents the cart flash on the checkout page during navigation
-  if (order.value && isCheckoutPage.value) {
+  // Only clear if cart has items to avoid "Cart is empty" errors
+  if (order.value && isCheckoutPage.value && cart.value?.contents?.nodes?.length) {
     await emptyCart();
     await refreshCart();
   }
