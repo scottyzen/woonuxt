@@ -86,7 +86,7 @@ const payNow = async () => {
   try {
     if (orderInput.value.paymentMethod.id === 'stripe' && stripe && elements.value) {
       // Only call Stripe API when Stripe is the selected payment method
-      const paymentMethodType = appConfig.stripePaymentMethod || 'card';
+      const paymentMethodType = appConfig.stripePaymentMethod || 'payment';
 
       if (paymentMethodType === 'payment') {
         // Modern Payment Element - use confirmPayment
@@ -210,7 +210,7 @@ const handleStripeElement = (stripeElements: StripeElements): void => {
   elements.value = stripeElements;
 
   // Get the payment method type from config
-  const paymentMethodType = appConfig.stripePaymentMethod || 'card';
+  const paymentMethodType = appConfig.stripePaymentMethod || 'payment';
 
   if (paymentMethodType === 'payment') {
     // Modern Payment Element - listen for changes
