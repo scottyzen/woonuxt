@@ -23,7 +23,7 @@ const { wishlistLink } = useAuth();
         </div>
       </div>
       <div class="w-3/7 lg:w-auto">
-        <div class="mb-1 font-semibold">Products</div>
+        <div class="mb-1 font-semibold">{{ $t('messages.general.products') }}</div>
         <div class="text-sm">
           <ClientOnly>
             <NuxtLink to="/products" class="py-1.5 block">{{ $t('messages.shop.newArrivals') }}</NuxtLink>
