@@ -12,13 +12,13 @@ const { wishlistLink } = useAuth();
         <LangSwitcher class="mt-8" />
       </div>
       <div class="w-3/7 lg:w-auto">
-        <div class="mb-1 font-semibold">Information</div>
+        <div class="mb-1 font-semibold">{{ $t('messages.general.information') }}</div>
         <div class="text-sm">
-          <a class="py-1.5 block" href="https://github.com/scottyzen/woonuxt?tab=readme-ov-file#next-generation-front-end-for-woocommerce" target="_blank"
-            >About</a
-          >
-          <a href="/" class="py-1.5 block">Careers</a>
-          <a href="/" class="py-1.5 block">Press</a>
+          <a class="py-1.5 block" href="https://github.com/scottyzen/woonuxt?tab=readme-ov-file#next-generation-front-end-for-woocommerce" target="_blank">{{
+            $t('messages.general.about')
+          }}</a>
+          <a href="/" class="py-1.5 block">{{ $t('messages.general.careers') }}</a>
+          <a href="/" class="py-1.5 block">{{ $t('messages.general.press') }}</a>
           <a href="https://woonuxt.com/faq" class="py-1.5 block" rel="noreferrer" target="_blank">FAQ's</a>
         </div>
       </div>
@@ -32,15 +32,15 @@ const { wishlistLink } = useAuth();
             </template>
           </ClientOnly>
           <ClientOnly>
-            <NuxtLink to="/products?filter=sale[true]" class="py-1.5 block">On sale</NuxtLink>
+            <NuxtLink to="/products?filter=sale[true]" class="py-1.5 block">{{ $t('messages.shop.onSale') }}</NuxtLink>
             <template #fallback>
-              <a href="/products?filter=sale[true]" class="py-1.5 block">On sale</a>
+              <a href="/products?filter=sale[true]" class="py-1.5 block">{{ $t('messages.shop.onSale') }}</a>
             </template>
           </ClientOnly>
           <ClientOnly>
-            <NuxtLink to="/products?orderby=rating&order=ASC&filter=rating[1]" class="py-1.5 block">Top rated</NuxtLink>
+            <NuxtLink to="/products?orderby=rating&order=ASC&filter=rating[1]" class="py-1.5 block">{{ $t('messages.shop.topRated') }}</NuxtLink>
             <template #fallback>
-              <a href="/products?orderby=rating&order=ASC&filter=rating[1]" class="py-1.5 block">Top rated</a>
+              <a href="/products?orderby=rating&order=ASC&filter=rating[1]" class="py-1.5 block">{{ $t('messages.shop.topRated') }}</a>
             </template>
           </ClientOnly>
           <a href="/" class="py-1.5 block">{{ $t('messages.shop.giftCards') }}</a>
@@ -50,14 +50,14 @@ const { wishlistLink } = useAuth();
         <div class="mb-1 font-semibold">{{ $t('messages.general.customerService') }}</div>
         <div class="text-sm">
           <ClientOnly>
-            <NuxtLink to="/contact" class="py-1.5 block">Contact Us</NuxtLink>
+            <NuxtLink to="/contact" class="py-1.5 block">{{ $t('messages.general.contactUs') }}</NuxtLink>
             <template #fallback>
-              <a href="/contact" class="py-1.5 block">Contact Us</a>
+              <a href="/contact" class="py-1.5 block">{{ $t('messages.general.contactUs') }}</a>
             </template>
           </ClientOnly>
-          <a href="/" class="py-1.5 block">Shipping & Returns</a>
-          <a href="/" class="py-1.5 block">Privacy Policy</a>
-          <a href="/" class="py-1.5 block">Terms & Conditions</a>
+          <a href="/" class="py-1.5 block">{{ $t('messages.general.shippingReturns') }}</a>
+          <a href="/" class="py-1.5 block">{{ $t('messages.general.privacyPolicy') }}</a>
+          <a href="/" class="py-1.5 block">{{ $t('messages.general.termsConditions') }}</a>
         </div>
       </div>
       <div class="w-3/7 lg:w-auto">

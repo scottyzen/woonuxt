@@ -37,7 +37,15 @@
       "readOnly": "Nur-Lesen",
       "edit": "Bearbeiten",
       "shippingAddress": "Versandadresse",
-      "shippingAddressDescription": "Geben Sie die Adresse ein, an die Ihre Bestellung geliefert werden soll."
+      "shippingAddressDescription": "Geben Sie die Adresse ein, an die Ihre Bestellung geliefert werden soll.",
+      "information": "Informationen",
+      "about": "Über uns",
+      "careers": "Karriere",
+      "press": "Presse",
+      "contactUs": "Kontaktieren Sie uns",
+      "shippingReturns": "Versand & Rücksendungen",
+      "privacyPolicy": "Datenschutzerklärung",
+      "termsConditions": "Allgemeine Geschäftsbedingungen"
     },
     "account": {
       "changePassword": "Passwort ändern",
@@ -94,6 +102,7 @@
       "productBestSellers": "Bestseller",
       "newArrivals": "Neuheiten",
       "onSale": "Im Angebot",
+      "topRated": "Am besten bewertet",
       "reviews": "Bewertungen",
       "customerReviews": "Kundenbewertungen",
       "noReviews": "Noch keine Bewertungen",

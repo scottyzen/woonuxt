@@ -36,7 +36,15 @@
       "processing": "Processando",
       "readOnly": "Somente leitura",
       "edit": "Editar",
-      "shippingAddress": "Endereço de Entrega"
+      "shippingAddress": "Endereço de Entrega",
+      "information": "Informações",
+      "about": "Sobre",
+      "careers": "Carreiras",
+      "press": "Imprensa",
+      "contactUs": "Entre em Contato",
+      "shippingReturns": "Envio e Devoluções",
+      "privacyPolicy": "Política de Privacidade",
+      "termsConditions": "Termos e Condições"
     },
     "account": {
       "changePassword": "Alterar Senha",
@@ -92,7 +100,8 @@
       "productImage": "Imagem do Produto",
       "productBestSellers": "Mais Vendidos",
       "newArrivals": "Novidades",
-      "onSale": "Em Promoção",
+      "onSale": "Em promoção",
+      "topRated": "Mais bem avaliados",
       "reviews": "Avaliações",
       "customerReviews": "Avaliações de Clientes",
       "noReviews": "Sem avaliações ainda.",

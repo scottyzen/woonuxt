@@ -37,7 +37,15 @@
       "readOnly": "Readonly",
       "edit": "Edit",
       "shippingAddress": "Shipping Address",
-      "shippingAddressDescription": "Enter the address where you want your order delivered."
+      "shippingAddressDescription": "Enter the address where you want your order delivered.",
+      "information": "Information",
+      "about": "About",
+      "careers": "Careers",
+      "press": "Press",
+      "contactUs": "Contact Us",
+      "shippingReturns": "Shipping & Returns",
+      "privacyPolicy": "Privacy Policy",
+      "termsConditions": "Terms & Conditions"
     },
     "account": {
       "changePassword": "Change Password",
@@ -95,6 +103,7 @@
       "productBestSellers": "Best Sellers",
       "newArrivals": "New Arrivals",
       "onSale": "On Sale",
+      "topRated": "Top rated",
       "reviews": "Reviews",
       "customerReviews": "Customer Reviews",
       "noReviews": "No reviews yet.",
