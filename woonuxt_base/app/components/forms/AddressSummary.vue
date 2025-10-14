@@ -19,7 +19,7 @@
 
       <button type="button" @click="$emit('edit')" title="Edit Address" class="flex leading-none items-center gap-2 text-sm font-medium text-primary">
         <Icon name="ion:pencil" />
-        {{ $t('messages.general.edit') }}
+        {{ $t('general.edit') }}
       </button>
     </div>
 

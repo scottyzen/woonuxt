@@ -12,6 +12,6 @@ const toggleWishlist = () => (isWishlisted.value && product.databaseId ? removeF
   <button type="button" class="cursor-pointer flex mt-4 text-sm text-gray-400 gap-2 items-center" @click="toggleWishlist">
     <Icon v-if="isWishlisted" name="ion:heart" size="18" class="text-red-400" />
     <Icon v-else name="ion:heart-outline" size="18" />
-    <span>{{ isWishlisted ? $t('messages.shop.wishlistRemove') : $t('messages.shop.wishlistAdd') }}</span>
+    <span>{{ isWishlisted ? $t('shop.wishlistRemove') : $t('shop.wishlistAdd') }}</span>
   </button>
 </template>

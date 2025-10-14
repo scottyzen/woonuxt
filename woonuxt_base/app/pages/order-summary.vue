@@ -93,12 +93,12 @@ useSeoMeta({
               aria-label="Back to orders">
               <Icon name="ion:chevron-back-outline" />
             </NuxtLink>
-            <h1 class="text-xl font-semibold">{{ $t('messages.shop.orderSummary') }}</h1>
+            <h1 class="text-xl font-semibold">{{ $t('shop.orderSummary') }}</h1>
           </div>
         </template>
         <template v-else-if="isCheckoutPage">
           <div class="flex items-center justify-between w-full mb-2">
-            <h1 class="text-xl font-semibold">{{ $t('messages.shop.orderReceived') }}</h1>
+            <h1 class="text-xl font-semibold">{{ $t('shop.orderReceived') }}</h1>
             <button
               v-if="orderIsNotCompleted"
               type="button"
@@ -109,26 +109,26 @@ useSeoMeta({
               <Icon name="ion:refresh-outline" />
             </button>
           </div>
-          <p>{{ $t('messages.shop.orderThanks') }}</p>
+          <p>{{ $t('shop.orderThanks') }}</p>
         </template>
         <hr class="my-8" />
       </div>
       <div v-if="order && !isGuest" class="flex-1 w-full">
         <div class="flex items-start justify-between">
           <div class="w-[21%]">
-            <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.shop.order') }}</div>
+            <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('shop.order') }}</div>
             <div class="leading-none">#{{ order.databaseId! }}</div>
           </div>
           <div class="w-[21%]">
-            <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.date') }}</div>
+            <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('general.date') }}</div>
             <div class="leading-none">{{ formatDate(order.date) }}</div>
           </div>
           <div class="w-[21%]">
-            <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.status') }}</div>
+            <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('general.status') }}</div>
             <OrderStatusLabel v-if="order.status" :order="order" />
           </div>
           <div class="w-[21%]">
-            <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('messages.general.paymentMethod') }}</div>
+            <div class="mb-2 text-xs text-gray-400 uppercase">{{ $t('general.paymentMethod') }}</div>
             <div class="leading-none">{{ order.paymentMethodTitle }}</div>
           </div>
         </div>
@@ -166,24 +166,24 @@ useSeoMeta({
 
         <div>
           <div class="flex justify-between">
-            <span>{{ $t('messages.shop.subtotal') }}</span>
+            <span>{{ $t('shop.subtotal') }}</span>
             <span v-html="order.subtotal"></span>
           </div>
           <div class="flex justify-between">
-            <span>{{ $t('messages.general.tax') }}</span>
+            <span>{{ $t('general.tax') }}</span>
             <span v-html="order.totalTax"></span>
           </div>
           <div class="flex justify-between">
-            <span>{{ $t('messages.general.shipping') }}</span>
+            <span>{{ $t('general.shipping') }}</span>
             <span v-html="order.shippingTotal"></span>
           </div>
           <div v-if="hasDiscount" class="flex justify-between text-primary">
-            <span>{{ $t('messages.shop.discount') }}</span>
+            <span>{{ $t('shop.discount') }}</span>
             <span>- <span v-html="order.discountTotal"></span></span>
           </div>
           <hr class="my-8" />
           <div class="flex justify-between">
-            <span class>{{ $t('messages.shop.total') }}</span>
+            <span class>{{ $t('shop.total') }}</span>
             <span class="font-semibold" v-html="order.total"></span>
           </div>
         </div>

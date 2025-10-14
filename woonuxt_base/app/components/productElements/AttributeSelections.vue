@@ -80,7 +80,7 @@ onMounted(() => {
       <!-- COLOR SWATCHES -->
       <div v-else-if="attr.name == 'pa_color' || attr.name == 'color'" class="grid gap-2">
         <div class="text-sm">
-          {{ $t('messages.general.color') }}
+          {{ $t('general.color') }}
           <span v-if="activeVariations.length" class="text-gray-400">{{ getSelectedName(attr, activeVariations[i]) }}</span>
         </div>
         <div class="flex gap-2">
@@ -110,7 +110,7 @@ onMounted(() => {
           {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400">{{ getSelectedName(attr, activeVariations[i]) }}</span>
         </div>
         <select :id="attr.name" :ref="attr.name" :name="attr.name" required class="border-white shadow-sm" @change="updateAttrs">
-          <option disabled hidden>{{ $t('messages.general.choose') }} {{ decodeURIComponent(attr.label) }}</option>
+          <option disabled hidden>{{ $t('general.choose') }} {{ decodeURIComponent(attr.label) }}</option>
           <option v-for="(term, dropdownIndex) in attr.terms.nodes" :key="dropdownIndex" :value="term.slug" v-html="term.name" :selected="dropdownIndex == 0" />
         </select>
       </div>

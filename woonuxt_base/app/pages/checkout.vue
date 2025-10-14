@@ -275,12 +275,12 @@ useSeoMeta({
     <template v-if="cart && customer">
       <div v-if="cart.isEmpty" class="flex flex-col items-center justify-center flex-1 mb-12">
         <Icon name="ion:cart-outline" size="156" class="opacity-25 mb-5" />
-        <h2 class="text-2xl font-bold mb-2">{{ $t('messages.shop.cartEmpty') }}</h2>
-        <span class="text-gray-400 mb-4">{{ $t('messages.shop.addProductsInYourCart') }}</span>
+        <h2 class="text-2xl font-bold mb-2">{{ $t('shop.cartEmpty') }}</h2>
+        <span class="text-gray-400 mb-4">{{ $t('shop.addProductsInYourCart') }}</span>
         <NuxtLink
           to="/products"
           class="flex items-center justify-center gap-3 p-2 px-3 mt-4 font-semibold text-center text-white rounded-lg shadow-lg bg-primary hover:bg-primary-dark">
-          {{ $t('messages.shop.browseOurProducts') }}
+          {{ $t('shop.browseOurProducts') }}
         </NuxtLink>
       </div>
 
@@ -293,7 +293,7 @@ useSeoMeta({
               Already have an account? <NuxtLink to="/my-account" @click="navigateToLogin('/checkout')" class="text-primary text-semibold">Log in</NuxtLink>.
             </p>
             <div class="w-full mt-4">
-              <label for="email">{{ $t('messages.billing.email') }}</label>
+              <label for="email">{{ $t('billing.email') }}</label>
               <input
                 v-model="customer.billing.email"
                 placeholder="johndoe@email.com"
@@ -310,11 +310,11 @@ useSeoMeta({
             </div>
             <template v-if="orderInput.createAccount">
               <div class="w-full mt-4">
-                <label for="username">{{ $t('messages.account.username') }}</label>
+                <label for="username">{{ $t('account.username') }}</label>
                 <input v-model="orderInput.username" placeholder="johndoe" autocomplete="username" type="text" name="username" required />
               </div>
               <div class="w-full my-2" v-if="orderInput.createAccount">
-                <label for="email">{{ $t('messages.account.password') }}</label>
+                <label for="email">{{ $t('account.password') }}</label>
                 <PasswordInput id="password" class="my-2" v-model="orderInput.password" placeholder="••••••••••" :required="true" />
               </div>
             </template>
@@ -342,7 +342,7 @@ useSeoMeta({
                   name="useSameAddress"
                   class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-2" />
                 <label for="useSameAddress" class="text-sm font-medium text-gray-700">
-                  {{ $t('messages.billing.differentAddress') }}
+                  {{ $t('billing.differentAddress') }}
                 </label>
               </div>
             </div>
@@ -362,7 +362,7 @@ useSeoMeta({
                   name="useSameAddressEdit"
                   class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-2" />
                 <label for="useSameAddressEdit" class="text-sm font-medium text-gray-700">
-                  {{ $t('messages.billing.differentAddress') }}
+                  {{ $t('billing.differentAddress') }}
                 </label>
               </div>
             </div>
@@ -376,7 +376,7 @@ useSeoMeta({
           </div>
           <!-- Fallback: If no shipping methods available, show billing details -->
           <div v-if="!cart?.availableShippingMethods?.length">
-            <h2 class="w-full mb-3 text-2xl font-semibold">{{ $t('messages.billing.billingDetails') }}</h2>
+            <h2 class="w-full mb-3 text-2xl font-semibold">{{ $t('billing.billingDetails') }}</h2>
             <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
           </div>
 
@@ -384,7 +384,7 @@ useSeoMeta({
 
           <!-- Shipping methods -->
           <div v-if="cart?.availableShippingMethods?.length">
-            <h3 class="mb-4 text-xl font-semibold leading-none">{{ $t('messages.general.shippingSelect') }}</h3>
+            <h3 class="mb-4 text-xl font-semibold leading-none">{{ $t('general.shippingSelect') }}</h3>
             <ShippingOptions
               v-if="cart.availableShippingMethods[0]?.rates && cart.chosenShippingMethods?.[0]"
               :options="cart.availableShippingMethods[0].rates"
@@ -395,7 +395,7 @@ useSeoMeta({
 
           <!-- Pay methods -->
           <div v-if="paymentGateways?.nodes.length" class="mt-2 col-span-full">
-            <h2 class="mb-4 text-xl font-semibold leading-none">{{ $t('messages.billing.paymentOptions') }}</h2>
+            <h2 class="mb-4 text-xl font-semibold leading-none">{{ $t('billing.paymentOptions') }}</h2>
             <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :paymentGateways />
             <StripeElement v-if="stripe" v-show="orderInput.paymentMethod.id == 'stripe'" :stripe @updateElement="handleStripeElement" />
           </div>
@@ -404,14 +404,14 @@ useSeoMeta({
 
           <!-- Order note -->
           <div>
-            <h2 class="mb-4 text-xl font-semibold leading-none">{{ $t('messages.shop.orderNote') }} ({{ $t('messages.general.optional') }})</h2>
+            <h2 class="mb-4 text-xl font-semibold leading-none">{{ $t('shop.orderNote') }} ({{ $t('general.optional') }})</h2>
             <textarea
               id="order-note"
               v-model="orderInput.customerNote"
               name="order-note"
               class="w-full min-h-[100px]"
               rows="4"
-              :placeholder="$t('messages.shop.orderNotePlaceholder')"></textarea>
+              :placeholder="$t('shop.orderNotePlaceholder')"></textarea>
           </div>
         </div>
 

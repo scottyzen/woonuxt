@@ -3,11 +3,11 @@
     <div class="flex flex-col my-8">
       <h1 class="text-xl font-semibold lg:text-3xl">{{ formTitle }}</h1>
       <p v-if="formView === FormView.LOGIN" class="text-gray-500 mt-2">
-        {{ $t('messages.account.noAccount') }}
-        <a class="font-semibold cursor-pointer text-primary" @click="navigate(FormView.REGISTER)"> {{ $t('messages.account.accountRegister') }} </a>.
+        {{ $t('account.noAccount') }}
+        <a class="font-semibold cursor-pointer text-primary" @click="navigate(FormView.REGISTER)"> {{ $t('account.accountRegister') }} </a>.
       </p>
       <p v-else-if="formView === FormView.REGISTER" class="text-gray-500 mt-2">
-        {{ $t('messages.account.hasAccount') }}
+        {{ $t('account.hasAccount') }}
         <a @click="navigate(FormView.LOGIN)" class="text-primary text-semibold cursor-pointer">Sign in</a>.
       </p>
     </div>
@@ -15,7 +15,7 @@
     <LoginProviders class="mb-8" v-if="formView === FormView.LOGIN || formView === FormView.REGISTER" />
 
     <form @submit.prevent="handleFormSubmit(userInfo)">
-      <p v-if="formView === FormView.FORGOT_PASSWORD" class="text-sm text-gray-500 mb-8">{{ $t('messages.account.enterEmailOrUsernameForReset') }}</p>
+      <p v-if="formView === FormView.FORGOT_PASSWORD" class="text-sm text-gray-500 mb-8">{{ $t('account.enterEmailOrUsernameForReset') }}</p>
       <input
         v-if="formView === FormView.REGISTER || formView === FormView.FORGOT_PASSWORD"
         id="email"
@@ -49,7 +49,7 @@
     </form>
 
     <div class="my-8 text-center cursor-pointer" @click="navigate(FormView.LOGIN)" v-if="formView === FormView.FORGOT_PASSWORD">
-      {{ $t('messages.account.backToLogin') }}
+      {{ $t('account.backToLogin') }}
     </div>
 
     <Transition name="scale-y" mode="out-in">

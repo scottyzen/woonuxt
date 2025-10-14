@@ -56,22 +56,22 @@ useSeoMeta({
             <button class="flex text-gray-700 items-center flex-col p-2 px-4 rounded-lg hover:bg-white hover:text-red-700 lg:hidden" @click="logoutUser">
               <LoadingIcon v-if="isPending" size="22" color="#B91C1B" />
               <Icon v-else name="ion:log-out-outline" size="22" />
-              <small>{{ $t('messages.account.logout') }}</small>
+              <small>{{ $t('account.logout') }}</small>
             </button>
           </section>
           <hr class="my-8" />
           <nav class="flex text-gray-700 lg:grid flex-wrap w-full gap-1.5 my-8 min-w-[240px] lg:w-auto items-start">
             <NuxtLink to="/my-account?tab=my-details" class="flex items-center gap-4 p-2 px-4" :class="{ active: activeTab == 'my-details' }">
               <Icon name="ion:information-circle-outline" size="22" />
-              {{ $t('messages.general.myDetails') }}
+              {{ $t('general.myDetails') }}
             </NuxtLink>
             <NuxtLink to="/my-account?tab=orders" class="flex items-center gap-4 p-2 px-4" :class="{ active: activeTab == 'orders' }">
               <Icon name="ion:bag-check-outline" size="22" />
-              {{ $t('messages.shop.order', 2) }}
+              {{ $t('shop.order', 2) }}
             </NuxtLink>
             <NuxtLink to="/my-account?tab=downloads" class="flex items-center gap-4 p-2 px-4" :class="{ active: activeTab == 'downloads' }">
               <Icon name="ion:cloud-download-outline" size="22" />
-              {{ $t('messages.general.downloads') }}
+              {{ $t('general.downloads') }}
             </NuxtLink>
             <NuxtLink to="/my-account?tab=wishlist" class="flex items-center gap-4 p-2 px-4" :class="{ active: activeTab == 'wishlist' }">
               <Icon name="ion:heart-outline" size="22" />
@@ -83,7 +83,7 @@ useSeoMeta({
             <button class="flex text-gray-700 items-center gap-4 p-2 px-4 w-full rounded-lg hover:bg-white hover:text-red-700" @click="logoutUser">
               <LoadingIcon v-if="isPending" size="22" />
               <Icon v-else name="ion:log-out-outline" size="22" />
-              {{ $t('messages.account.logout') }}
+              {{ $t('account.logout') }}
             </button>
           </template>
         </div>
