@@ -73,6 +73,5 @@ export default defineNuxtConfig({
     langDir: 'locales',
     defaultLocale: 'en_US',
     strategy: 'no_prefix',
-    restructureDir: false,
   },
 });
