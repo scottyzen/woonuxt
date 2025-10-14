@@ -18,7 +18,7 @@
   "devDependencies": {
     "@nuxt/icon": "^2.0.0",
     "@nuxt/image": "1.11.0",
-    "@nuxtjs/i18n": "^9.5.2",
+    "@nuxtjs/i18n": "^10.1.1",
     "@nuxtjs/tailwindcss": "^6.14.0",
     "@tailwindcss/typography": "^0.5.16",
     "nuxt": "^4.1.3",
