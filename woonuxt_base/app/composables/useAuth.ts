@@ -73,12 +73,13 @@ export const useAuth = () => {
       };
     } catch (error: any) {
       const errorMsg = getErrorMessage(error);
-      isPending.value = false;
 
       return {
         success: false,
-        error: errorMsg,
+        error: errorMsg || 'There was an error logging in. Please try again.',
       };
+    } finally {
+      isPending.value = false;
     }
   };
 
