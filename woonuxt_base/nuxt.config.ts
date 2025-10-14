@@ -24,12 +24,19 @@ export default defineNuxtConfig({
 
   modules: [resolve('./modules/woonuxt-bridge.ts'), 'nuxt-graphql-client', '@nuxtjs/tailwindcss', '@nuxt/icon', '@nuxt/image', '@nuxtjs/i18n'],
 
-  'graphql-client': {
-    clients: {
-      default: {
-        host: GQL_HOST,
-        corsOptions: { mode: 'cors', credentials: 'include' },
-        headers: { Origin: APP_HOST },
+  runtimeConfig: {
+    public: {
+      'graphql-client': {
+        clients: {
+          default: {
+            host: GQL_HOST,
+            headers: { Origin: APP_HOST },
+            fetchOptions: {
+              mode: 'cors',
+              credentials: 'include',
+            },
+          },
+        },
       },
     },
   },
@@ -61,6 +68,7 @@ export default defineNuxtConfig({
   },
 
   // Multilingual support
+  // @ts-ignore - i18n types not recognized
   i18n: {
     locales: [
       { code: 'en_US', file: 'en-US.json', name: 'English 🇺🇸' },
