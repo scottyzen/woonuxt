@@ -12,76 +12,76 @@ const { wishlistLink } = useAuth();
         <LangSwitcher class="mt-8" />
       </div>
       <div class="w-3/7 lg:w-auto">
-        <div class="mb-1 font-semibold">Information</div>
+        <div class="mb-1 font-semibold">{{ $t('general.information') }}</div>
         <div class="text-sm">
-          <a class="py-1.5 block" href="https://github.com/scottyzen/woonuxt?tab=readme-ov-file#next-generation-front-end-for-woocommerce" target="_blank"
-            >About</a
-          >
-          <a href="/" class="py-1.5 block">Careers</a>
-          <a href="/" class="py-1.5 block">Press</a>
+          <a class="py-1.5 block" href="https://github.com/scottyzen/woonuxt?tab=readme-ov-file#next-generation-front-end-for-woocommerce" target="_blank">{{
+            $t('general.about')
+          }}</a>
+          <a href="/" class="py-1.5 block">{{ $t('general.careers') }}</a>
+          <a href="/" class="py-1.5 block">{{ $t('general.press') }}</a>
           <a href="https://woonuxt.com/faq" class="py-1.5 block" rel="noreferrer" target="_blank">FAQ's</a>
         </div>
       </div>
       <div class="w-3/7 lg:w-auto">
-        <div class="mb-1 font-semibold">Products</div>
+        <div class="mb-1 font-semibold">{{ $t('general.products') }}</div>
         <div class="text-sm">
           <ClientOnly>
-            <NuxtLink to="/products" class="py-1.5 block">{{ $t('messages.shop.newArrivals') }}</NuxtLink>
+            <NuxtLink to="/products" class="py-1.5 block">{{ $t('shop.newArrivals') }}</NuxtLink>
             <template #fallback>
-              <a href="/products" class="py-1.5 block">{{ $t('messages.shop.newArrivals') }}</a>
+              <a href="/products" class="py-1.5 block">{{ $t('shop.newArrivals') }}</a>
             </template>
           </ClientOnly>
           <ClientOnly>
-            <NuxtLink to="/products?filter=sale[true]" class="py-1.5 block">On sale</NuxtLink>
+            <NuxtLink to="/products?filter=sale[true]" class="py-1.5 block">{{ $t('shop.onSale') }}</NuxtLink>
             <template #fallback>
-              <a href="/products?filter=sale[true]" class="py-1.5 block">On sale</a>
+              <a href="/products?filter=sale[true]" class="py-1.5 block">{{ $t('shop.onSale') }}</a>
             </template>
           </ClientOnly>
           <ClientOnly>
-            <NuxtLink to="/products?orderby=rating&order=ASC&filter=rating[1]" class="py-1.5 block">Top rated</NuxtLink>
+            <NuxtLink to="/products?orderby=rating&order=ASC&filter=rating[1]" class="py-1.5 block">{{ $t('shop.topRated') }}</NuxtLink>
             <template #fallback>
-              <a href="/products?orderby=rating&order=ASC&filter=rating[1]" class="py-1.5 block">Top rated</a>
+              <a href="/products?orderby=rating&order=ASC&filter=rating[1]" class="py-1.5 block">{{ $t('shop.topRated') }}</a>
             </template>
           </ClientOnly>
-          <a href="/" class="py-1.5 block">{{ $t('messages.shop.giftCards') }}</a>
+          <a href="/" class="py-1.5 block">{{ $t('shop.giftCards') }}</a>
         </div>
       </div>
       <div class="w-3/7 lg:w-auto">
-        <div class="mb-1 font-semibold">{{ $t('messages.general.customerService') }}</div>
+        <div class="mb-1 font-semibold">{{ $t('general.customerService') }}</div>
         <div class="text-sm">
           <ClientOnly>
-            <NuxtLink to="/contact" class="py-1.5 block">Contact Us</NuxtLink>
+            <NuxtLink to="/contact" class="py-1.5 block">{{ $t('general.contactUs') }}</NuxtLink>
             <template #fallback>
-              <a href="/contact" class="py-1.5 block">Contact Us</a>
+              <a href="/contact" class="py-1.5 block">{{ $t('general.contactUs') }}</a>
             </template>
           </ClientOnly>
-          <a href="/" class="py-1.5 block">Shipping & Returns</a>
-          <a href="/" class="py-1.5 block">Privacy Policy</a>
-          <a href="/" class="py-1.5 block">Terms & Conditions</a>
+          <a href="/" class="py-1.5 block">{{ $t('general.shippingReturns') }}</a>
+          <a href="/" class="py-1.5 block">{{ $t('general.privacyPolicy') }}</a>
+          <a href="/" class="py-1.5 block">{{ $t('general.termsConditions') }}</a>
         </div>
       </div>
       <div class="w-3/7 lg:w-auto">
-        <div class="mb-1 font-semibold">{{ $t('messages.account.myAccount') }}</div>
+        <div class="mb-1 font-semibold">{{ $t('account.myAccount') }}</div>
         <div class="text-sm">
           <ClientOnly>
-            <NuxtLink to="/my-account/" class="py-1.5 block">{{ $t('messages.account.myAccount') }}</NuxtLink>
+            <NuxtLink to="/my-account/" class="py-1.5 block">{{ $t('account.myAccount') }}</NuxtLink>
             <template #fallback>
-              <a href="/my-account/" class="py-1.5 block">{{ $t('messages.account.myAccount') }}</a>
+              <a href="/my-account/" class="py-1.5 block">{{ $t('account.myAccount') }}</a>
             </template>
           </ClientOnly>
           <ClientOnly>
-            <NuxtLink to="/my-account/?tab=orders" class="py-1.5 block">{{ $t('messages.shop.orderHistory') }}</NuxtLink>
+            <NuxtLink to="/my-account/?tab=orders" class="py-1.5 block">{{ $t('shop.orderHistory') }}</NuxtLink>
             <template #fallback>
-              <a href="/my-account/?tab=orders" class="py-1.5 block">{{ $t('messages.shop.orderHistory') }}</a>
+              <a href="/my-account/?tab=orders" class="py-1.5 block">{{ $t('shop.orderHistory') }}</a>
             </template>
           </ClientOnly>
           <ClientOnly>
-            <NuxtLink :to="wishlistLink" class="py-1.5 block">{{ $t('messages.shop.wishlist') }}</NuxtLink>
+            <NuxtLink :to="wishlistLink" class="py-1.5 block">{{ $t('shop.wishlist') }}</NuxtLink>
             <template #fallback>
-              <a href="/wishlist" class="py-1.5 block">{{ $t('messages.shop.wishlist') }}</a>
+              <a href="/wishlist" class="py-1.5 block">{{ $t('shop.wishlist') }}</a>
             </template>
           </ClientOnly>
-          <a href="/" class="py-1.5 block">{{ $t('messages.general.newsletter') }}</a>
+          <a href="/" class="py-1.5 block">{{ $t('general.newsletter') }}</a>
         </div>
       </div>
     </div>

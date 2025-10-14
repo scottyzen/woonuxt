@@ -58,7 +58,7 @@ const labelFallback = (provider?: LoginProviderEnum | null) => {
     <!-- or continue with email -->
     <div class="flex items-center justify-center gap-4 mt-8 leading-none">
       <div class="border-b w-1/3 flex-1"></div>
-      <div class="text-gray-400">{{ $t('messages.account.orContinueWithEmail') }}</div>
+      <div class="text-gray-400">{{ $t('account.orContinueWithEmail') }}</div>
       <div class="border-b w-1/3 flex-1"></div>
     </div>
   </div>

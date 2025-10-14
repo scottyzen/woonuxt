@@ -10,10 +10,10 @@ const props = defineProps({
   <table class="w-full text-left table-auto" aria-label="Download List">
     <thead>
       <tr>
-        <th>{{ $t('messages.general.product') }}</th>
-        <th>{{ $t('messages.shop.downloadsRemaining') }}</th>
-        <th>{{ $t('messages.shop.expires') }}</th>
-        <th>{{ $t('messages.general.download') }}</th>
+        <th>{{ $t('general.product') }}</th>
+        <th>{{ $t('shop.downloadsRemaining') }}</th>
+        <th>{{ $t('shop.expires') }}</th>
+        <th>{{ $t('general.download') }}</th>
       </tr>
     </thead>
     <tbody>

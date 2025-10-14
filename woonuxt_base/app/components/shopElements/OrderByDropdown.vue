@@ -20,11 +20,11 @@ watch([orderby, order], () => {
       <Icon name="ion:filter-outline" size="18" :class="order === 'ASC' ? 'rotate-180' : ''" class="transition-transform transform transform-origin-center" />
     </button>
     <select id="orderby-dropdown" v-model="orderby" class="bg-white rounded-l-none" aria-label="Order by">
-      <option value="date">{{ $t('messages.general.latest') }}</option>
-      <option value="alphabetically">{{ $t('messages.general.alphabetically') }}</option>
-      <option value="price">{{ $t('messages.shop.price') }}</option>
-      <option v-if="storeSettings.showReviews" value="rating">{{ $t('messages.shop.rating') }}</option>
-      <option value="discount">{{ $t('messages.shop.discount') }}</option>
+      <option value="date">{{ $t('general.latest') }}</option>
+      <option value="alphabetically">{{ $t('general.alphabetically') }}</option>
+      <option value="price">{{ $t('shop.price') }}</option>
+      <option v-if="storeSettings.showReviews" value="rating">{{ $t('shop.rating') }}</option>
+      <option value="discount">{{ $t('shop.discount') }}</option>
     </select>
   </div>
 </template>

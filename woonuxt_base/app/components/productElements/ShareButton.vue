@@ -23,9 +23,15 @@ const showShare = () => {
         <circle cx="128" cy="256" r="48" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
         <circle cx="384" cy="112" r="48" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
         <circle cx="384" cy="400" r="48" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
-        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M169.83 279.53l172.34 96.94M342.17 135.53l-172.34 96.94" />
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="32"
+          d="M169.83 279.53l172.34 96.94M342.17 135.53l-172.34 96.94" />
       </svg>
-      <span>{{ $t('messages.general.share') }}</span>
+      <span>{{ $t('general.share') }}</span>
     </button>
     <div v-else class="flex items-center gap-2 mt-4 text-sm text-gray-400 cursor-pointer">
       <!-- Twitter -->

@@ -22,10 +22,10 @@ const goToOrder = (orderNumber: string): void => {
       <table class="w-full text-left table-auto" aria-label="Order List">
         <thead>
           <tr>
-            <th>{{ $t('messages.shop.order') }}</th>
-            <th>{{ $t('messages.general.date') }}</th>
-            <th>{{ $t('messages.general.status') }}</th>
-            <th class="text-right">{{ $t('messages.shop.total') }}</th>
+            <th>{{ $t('shop.order') }}</th>
+            <th>{{ $t('general.date') }}</th>
+            <th>{{ $t('general.status') }}</th>
+            <th class="text-right">{{ $t('shop.total') }}</th>
           </tr>
         </thead>
         <tbody>

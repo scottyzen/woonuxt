@@ -115,11 +115,11 @@ const disabledAddToCart = computed(() => {
 
           <div class="grid gap-2 my-8 text-sm empty:hidden">
             <div v-if="!isExternalProduct" class="flex items-center gap-2">
-              <span class="text-gray-400">{{ $t('messages.shop.availability') }}: </span>
+              <span class="text-gray-400">{{ $t('shop.availability') }}: </span>
               <StockStatus :stockStatus @updated="mergeLiveStockStatus" />
             </div>
             <div class="flex items-center gap-2" v-if="storeSettings.showSKU && product.sku">
-              <span class="text-gray-400">{{ $t('messages.shop.sku') }}: </span>
+              <span class="text-gray-400">{{ $t('shop.sku') }}: </span>
               <span>{{ product.sku || 'N/A' }}</span>
             </div>
           </div>
@@ -159,7 +159,7 @@ const disabledAddToCart = computed(() => {
           <div v-if="storeSettings.showProductCategoriesOnSingleProduct && product.productCategories">
             <div class="grid gap-2 my-8 text-sm">
               <div class="flex items-center gap-2">
-                <span class="text-gray-400">{{ $t('messages.shop.category', 2) }}:</span>
+                <span class="text-gray-400">{{ $t('shop.category', 2) }}:</span>
                 <div class="product-categories">
                   <NuxtLink
                     v-for="category in product.productCategories.nodes"
@@ -185,7 +185,7 @@ const disabledAddToCart = computed(() => {
         <ProductTabs :product />
       </div>
       <div class="my-32" v-if="product.related && storeSettings.showRelatedProducts">
-        <div class="mb-4 text-xl font-semibold">{{ $t('messages.shop.youMayLike') }}</div>
+        <div class="mb-4 text-xl font-semibold">{{ $t('shop.youMayLike') }}</div>
         <LazyProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
       </div>
     </div>

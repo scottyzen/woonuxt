@@ -1,17 +1,17 @@
 <template>
   <form class="bg-white rounded-lg shadow mt-4" @submit.prevent="updatePassword">
     <div class="grid p-8 gap-6 md:grid-cols-2">
-      <h3 class="font-semibold text-xl col-span-full">{{ $t('messages.account.changePassword') }}</h3>
+      <h3 class="font-semibold text-xl col-span-full">{{ $t('account.changePassword') }}</h3>
 
-      <input type="text" v-model="viewer.username" name="username" autocomplete="username" style="display: none;"/>
+      <input type="text" v-model="viewer.username" name="username" autocomplete="username" style="display: none" />
 
       <div class="w-full">
-        <label for="new-password">{{ $t('messages.account.newPassword') }}</label>
+        <label for="new-password">{{ $t('account.newPassword') }}</label>
         <PasswordInput id="new-password" v-model="password.new" placeholder="••••••••••" type="text" required />
       </div>
 
       <div class="w-full">
-        <label for="new-password-confirm">{{ $t('messages.account.confirmNewPassword') }}</label>
+        <label for="new-password-confirm">{{ $t('account.confirmNewPassword') }}</label>
         <PasswordInput id="new-password-confirm" v-model="password.confirm" placeholder="••••••••••" type="text" required />
       </div>
 

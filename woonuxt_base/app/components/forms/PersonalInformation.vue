@@ -1,25 +1,25 @@
 <template>
   <form v-if="customer" class="bg-white rounded-lg shadow" @submit.prevent="saveChanges">
     <div class="grid gap-6 p-8 md:grid-cols-2">
-      <h3 class="text-xl font-semibold col-span-full">{{ $t('messages.account.personalInfo') }}</h3>
+      <h3 class="text-xl font-semibold col-span-full">{{ $t('account.personalInfo') }}</h3>
 
       <div class="w-full">
-        <label for="first-name">{{ $t('messages.billing.firstName') }}</label>
+        <label for="first-name">{{ $t('billing.firstName') }}</label>
         <input id="first-name" v-model="customer.firstName" placeholder="John" autocomplete="given-name" type="text" />
       </div>
 
       <div class="w-full">
-        <label for="last-name">{{ $t('messages.billing.lastName') }}</label>
+        <label for="last-name">{{ $t('billing.lastName') }}</label>
         <input id="last-name" v-model="customer.lastName" placeholder="Doe" autocomplete="family-name" type="text" />
       </div>
 
       <div class="w-full">
-        <label for="username">{{ $t('messages.account.username') }} ({{ $t('messages.general.readOnly') }})</label>
-        <input id="username" v-model="customer.username" placeholder="johndoe" autocomplete="username" type="text" readonly  />
+        <label for="username">{{ $t('account.username') }} ({{ $t('general.readOnly') }})</label>
+        <input id="username" v-model="customer.username" placeholder="johndoe" autocomplete="username" type="text" readonly />
       </div>
 
       <div class="w-full">
-        <label for="email">{{ $t('messages.billing.email') }}</label>
+        <label for="email">{{ $t('billing.email') }}</label>
         <input id="email" v-model="customer.email" placeholder="johndoe@email.com" autocomplete="email" type="email" />
       </div>
     </div>
