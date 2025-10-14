@@ -73,7 +73,7 @@ const refreshOrder = async () => {
 
 useSeoMeta({
   title() {
-    return isSummaryPage.value ? t('messages.shop.orderSummary') : t('messages.shop.orderReceived');
+    return isSummaryPage.value ? t('shop.orderSummary') : t('shop.orderReceived');
   },
 });
 </script>

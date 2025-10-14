@@ -93,10 +93,10 @@ const login = async (userInfo: UserInfo) => {
   const { success, error } = await loginUser(userInfo);
   switch (error) {
     case 'invalid_username':
-      errorMessage.value = t('messages.error.invalidUsername');
+      errorMessage.value = t('error.invalidUsername');
       break;
     case 'incorrect_password':
-      errorMessage.value = t('messages.error.incorrectPassword');
+      errorMessage.value = t('error.incorrectPassword');
       break;
     default:
       errorMessage.value = error ?? '';
@@ -105,7 +105,7 @@ const login = async (userInfo: UserInfo) => {
 
   if (success) {
     errorMessage.value = '';
-    message.value = t('messages.account.loggingIn');
+    message.value = t('account.loggingIn');
   }
 };
 
@@ -114,7 +114,7 @@ const handleFormSubmit = async (userInfo: UserInfo) => {
     const { success, error } = await registerUser(userInfo);
     if (success) {
       errorMessage.value = '';
-      message.value = t('messages.account.accountCreated') + ' ' + t('messages.account.loggingIn');
+      message.value = t('account.accountCreated') + ' ' + t('account.loggingIn');
       setTimeout(() => {
         login(userInfo);
       }, 2000);
@@ -132,7 +132,7 @@ const resetPassword = async (userInfo: UserInfo) => {
   const { success, error } = await sendResetPasswordEmail({ username: userInfo.email });
   if (success) {
     errorMessage.value = '';
-    message.value = t('messages.account.ifRegistered');
+    message.value = t('account.ifRegistered');
   } else {
     errorMessage.value = error ?? '';
   }
@@ -151,27 +151,27 @@ const navigate = (view: FormView) => {
 
 const formTitle = computed(() => {
   if (formView.value === FormView.LOGIN) {
-    return t('messages.account.loginToAccount');
+    return t('account.loginToAccount');
   } else if (formView.value === FormView.REGISTER) {
-    return t('messages.account.accountRegister');
+    return t('account.accountRegister');
   } else if (formView.value === FormView.FORGOT_PASSWORD) {
-    return t('messages.account.forgotPassword');
+    return t('account.forgotPassword');
   }
 });
 
 const buttonText = computed(() => {
   if (formView.value === FormView.LOGIN) {
-    return t('messages.account.login');
+    return t('account.login');
   } else if (formView.value === FormView.REGISTER) {
-    return t('messages.account.register');
+    return t('account.register');
   } else if (formView.value === FormView.FORGOT_PASSWORD) {
-    return t('messages.account.sendPasswordResetEmail');
+    return t('account.sendPasswordResetEmail');
   }
 });
 
-const emailLabel = computed(() => (formView.value === FormView.REGISTER ? t('messages.billing.email') : t('messages.account.emailOrUsername')));
-const usernameLabel = computed(() => (formView.value === FormView.LOGIN ? t('messages.account.emailOrUsername') : t('messages.account.username')));
-const passwordLabel = computed(() => t('messages.account.password'));
+const emailLabel = computed(() => (formView.value === FormView.REGISTER ? t('billing.email') : t('account.emailOrUsername')));
+const usernameLabel = computed(() => (formView.value === FormView.LOGIN ? t('account.emailOrUsername') : t('account.username')));
+const passwordLabel = computed(() => t('account.password'));
 
 const inputPlaceholder = computed(() => {
   return {

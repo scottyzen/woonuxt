@@ -40,24 +40,24 @@ const { viewer, customer } = useAuth();
 const { t } = useI18n();
 
 const loading = ref<boolean>(false);
-const button = ref<{ text: string; color: string }>({ text: t('messages.account.updateDetails'), color: 'bg-primary hover:bg-primary-dark' });
+const button = ref<{ text: string; color: string }>({ text: t('account.updateDetails'), color: 'bg-primary hover:bg-primary-dark' });
 
 async function saveChanges() {
   loading.value = true;
-  button.value.text = t('messages.account.updating');
+  button.value.text = t('account.updating');
   const firstName = customer.value.firstName;
   const lastName = customer.value.lastName;
   try {
     const { updateCustomer } = await GqlUpdateCustomer({ input: { id: viewer.value.id, firstName, lastName } });
-    if (updateCustomer) button.value = { text: t('messages.account.updateSuccess'), color: 'bg-green-500' };
+    if (updateCustomer) button.value = { text: t('account.updateSuccess'), color: 'bg-green-500' };
   } catch (error) {
-    button.value = { text: t('messages.account.failed'), color: 'bg-red-500' };
+    button.value = { text: t('account.failed'), color: 'bg-red-500' };
   }
 
   loading.value = false;
 
   setTimeout(() => {
-    button.value = { text: t('messages.account.updateDetails'), color: 'bg-primary hover:bg-primary-dark' };
+    button.value = { text: t('account.updateDetails'), color: 'bg-primary hover:bg-primary-dark' };
   }, 2000);
 }
 </script>

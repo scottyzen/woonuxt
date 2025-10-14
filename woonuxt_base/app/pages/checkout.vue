@@ -11,7 +11,7 @@ const runtimeConfig = useRuntimeConfig();
 const appConfig = useAppConfig();
 const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
 
-const buttonText = ref<string>(isProcessingOrder.value ? t('messages.general.processing') : t('messages.shop.checkoutButton'));
+const buttonText = ref<string>(isProcessingOrder.value ? t('general.processing') : t('shop.checkoutButton'));
 const isStripeElementReady = ref<boolean>(false);
 const stripeClientSecret = ref<string>('');
 
@@ -81,7 +81,7 @@ const hasAnyShippingInfo = computed(() => {
 });
 
 const payNow = async () => {
-  buttonText.value = t('messages.general.processing');
+  buttonText.value = t('general.processing');
 
   try {
     if (orderInput.value.paymentMethod.id === 'stripe' && stripe && elements.value) {
@@ -192,7 +192,7 @@ const payNow = async () => {
     // You could show a toast notification here instead
     alert(`Payment failed: ${errorMessage}. Please try again or contact support.`);
 
-    buttonText.value = t('messages.shop.placeOrder');
+    buttonText.value = t('shop.placeOrder');
     return; // Don't process checkout if payment failed
   }
 
@@ -266,7 +266,7 @@ watch(
 );
 
 useSeoMeta({
-  title: t('messages.shop.checkout'),
+  title: t('shop.checkout'),
 });
 </script>
 

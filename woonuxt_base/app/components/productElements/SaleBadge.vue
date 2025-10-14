@@ -17,7 +17,7 @@ const showSaleBadge = computed(() => node.rawSalePrice && storeSettings.saleBadg
 
 const textToDisplay = computed(() => {
   if (storeSettings?.saleBadge === 'percent') return salePercentage.value;
-  return t('messages.shop.onSale') ? t('messages.shop.onSale') : 'Sale';
+  return t('shop.onSale') ? t('shop.onSale') : 'Sale';
 });
 </script>
 

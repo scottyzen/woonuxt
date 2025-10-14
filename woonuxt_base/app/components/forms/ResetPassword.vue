@@ -21,7 +21,7 @@ const handlePasswordReset = async () => {
     isPending.value = true;
 
     if (password.value !== confirmPassword.value) {
-      throw new Error(t('messages.error.passwordMismatch'));
+      throw new Error(t('error.passwordMismatch'));
     }
 
     const userInfo = {
@@ -32,7 +32,7 @@ const handlePasswordReset = async () => {
 
     if (!userInfo.key || !userInfo.login) {
       isInvalidLink.value = true;
-      throw new Error(t('messages.error.invalidPasswordResetLink'));
+      throw new Error(t('error.invalidPasswordResetLink'));
     }
 
     const resetResult = await resetPasswordWithKey(userInfo);
@@ -50,14 +50,14 @@ const handlePasswordReset = async () => {
 
     router.push('/my-account');
   } catch (error: any) {
-    errorMessage.value = error.message || t('messages.error.general');
+    errorMessage.value = error.message || t('error.general');
   } finally {
     isPending.value = false;
   }
 };
 
 useHead({
-  title: t('messages.account.resetPassword'),
+  title: t('account.resetPassword'),
 });
 </script>
 

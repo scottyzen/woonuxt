@@ -38,13 +38,13 @@ const { t } = useI18n();
 
 const password = ref<{ new: string; confirm: string }>({ new: '', confirm: '' });
 const loading = ref<boolean>(false);
-const button = ref<{ text: string; color: string }>({ text: t('messages.account.updatePassword'), color: 'bg-primary hover:bg-primary-dark' });
+const button = ref<{ text: string; color: string }>({ text: t('account.updatePassword'), color: 'bg-primary hover:bg-primary-dark' });
 const errorMessage = ref<string>('');
 
 const updatePassword = async () => {
   errorMessage.value = '';
   if (password.value.new !== password.value.confirm) {
-    errorMessage.value = t('messages.error.passwordMismatch');
+    errorMessage.value = t('error.passwordMismatch');
     return;
   }
 
@@ -52,11 +52,11 @@ const updatePassword = async () => {
     loading.value = true;
     const { updateCustomer } = await GqlUpdateCustomer({ input: { id: viewer.value.id, password: password.value.new } });
     if (updateCustomer) {
-      button.value = { text: t('messages.account.updateSuccess'), color: 'bg-green-500' };
+      button.value = { text: t('account.updateSuccess'), color: 'bg-green-500' };
       const { success, error } = await loginUser({ username: viewer.value.username, password: password.value.new });
       if (error) {
         errorMessage.value = error;
-        button.value = { text: t('messages.account.failed'), color: 'bg-red-500' };
+        button.value = { text: t('account.failed'), color: 'bg-red-500' };
       }
       if (success) {
         password.value = { new: '', confirm: '' };
@@ -66,13 +66,13 @@ const updatePassword = async () => {
     console.error(error);
     const gqlError = error?.gqlErrors?.[0]?.message;
     errorMessage.value = gqlError || 'An error occurred. Please try again.';
-    button.value = { text: t('messages.account.failed'), color: 'bg-red-500' };
+    button.value = { text: t('account.failed'), color: 'bg-red-500' };
   }
 
   loading.value = false;
 
   setTimeout(() => {
-    button.value = { text: t('messages.account.updatePassword'), color: 'bg-primary hover:bg-primary-dark' };
+    button.value = { text: t('account.updatePassword'), color: 'bg-primary hover:bg-primary-dark' };
   }, 2000);
 };
 </script>

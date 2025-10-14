@@ -10,7 +10,7 @@ const slug = route.params.slug as string;
 
 const { data } = await useAsyncGql('getProduct', { slug });
 if (!data.value?.product) {
-  throw showError({ statusCode: 404, statusMessage: t('messages.shop.productNotFound') });
+  throw showError({ statusCode: 404, statusMessage: t('shop.productNotFound') });
 }
 
 const product = ref<Product>(data?.value?.product);
