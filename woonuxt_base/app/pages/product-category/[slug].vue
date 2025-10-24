@@ -14,7 +14,7 @@ setProducts(productsInCategory);
 // ⬇️ Haal categorie info uit eerste product
 const category = data.value?.products?.nodes?.[0]?.categories?.nodes?.[0] || {
   name: 'Categorie',
-  description: '',
+  description: 'Description',
 };
 
   console.log('🧪 CATEGORY:', category);
