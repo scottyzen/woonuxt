@@ -1,27 +1,28 @@
 // nuxt.config.ts
 export default defineNuxtConfig({
-  // Erft alles uit je base theme
   extends: ['./woonuxt_base'],
-
-  // Auto-import eigen componenten
   components: [{ path: './components', pathPrefix: false }],
 
-  // Modules
   modules: ['@nuxt/image'],
 
-  // Afbeeldingen: GEEN Netlify CDN, gebruik directe URLs
+  // Geen Netlify Image CDN: directe URLs
   image: {
-    provider: 'static', // <-- zet op 'ipx' als je Nuxt-optimalisatie wilt zonder Netlify
-    // Bij 'static' zijn domains/providers niet nodig
+    provider: 'static'
   },
 
-  // Build / prerender instellingen
+  // Zorg dat je WP/GraphQL host beschikbaar is voor de app
+  runtimeConfig: {
+    public: {
+      // Zet dit óók als env var in Netlify; dit is de fallback
+      GQL_HOST: process.env.GQL_HOST || 'https://wp.kledingzoeken.nl'
+      // Als jouw endpoint '/graphql' vereist, zet dan de volle URL hier:
+      // GQL_HOST: process.env.GQL_HOST || 'https://wp.kledingzoeken.nl/graphql'
+    }
+  },
+
   nitro: {
-    prerender: {
-      concurrency: 10,
-      interval: 1000,
-      failOnError: false
-    },
+    prerender: { concurrency: 10, interval: 1000, failOnError: false },
     minify: true
   }
 })
+
