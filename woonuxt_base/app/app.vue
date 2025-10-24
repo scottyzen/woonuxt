@@ -41,6 +41,9 @@ provide('productSlideOver', productSlideOver)
       <MobileMenu v-if="isShowingMobileMenu" />
     </Transition>
 
+    <!--ProductSlideOver toegevoegd -->
+    <ProductSlideOver ref="productSlideOver" />
+
     <NuxtPage />
 
     <Transition name="fade">
@@ -50,6 +53,7 @@ provide('productSlideOver', productSlideOver)
     <LazyAppFooter hydrate-on-visible />
   </div>
 </template>
+
 
 <style lang="postcss">
 html,
