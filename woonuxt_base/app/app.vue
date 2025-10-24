@@ -21,6 +21,11 @@ watch(
 useHead({
   titleTemplate: `%s - ${siteName}`,
 });
+
+// 🆕 Product SlideOver setup
+import ProductSlideOver from '~/components/overlays/ProductSlideOver.vue'
+const productSlideOver = ref()
+provide('productSlideOver', productSlideOver)
 </script>
 
 <template>
