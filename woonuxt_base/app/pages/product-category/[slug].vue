@@ -27,14 +27,13 @@ useHead({
 });
 </script>
 <template>
-  <div class="container my-8">
-    <h1 class="mb-8 text-3xl font-semibold text-primary">Contact Page</h1>
-    <div class="my-8 prose">
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat facilis, commodi illum repellat accusamus praesentium quaerat ut ducimus ipsam deserunt, a voluptate id
-        similique ullam, provident tenetur molestiae ad. Ea aperiam esse eaque aut, beatae consectetur nam velit unde! Et excepturi quam eos labore, nulla impedit recusandae
-        quaerat maxime expedita.
-      </p>
+
+
+  <div class="container flex items-start gap-16" v-if="productsInCategory.length">
+    <Filters v-if="storeSettings.showFilters" :hide-categories="true" />
+
+    <div class="w-full">
+
       <p>
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nemo voluptate neque in odio officia assumenda nulla cumque. Veniam et tenetur accusantium, fuga pariatur
         repellendus impedit. Quod sint odio quisquam! Sequi repellendus eum dolorum eveniet, quidem dolor necessitatibus velit sunt esse maiores. Eum odit dolorum mollitia?
@@ -43,13 +42,8 @@ useHead({
         inventore. Maxime officiis tempore voluptatum ipsa, ab possimus atque corporis repellendus obcaecati, numquam fuga ullam doloremque ea reprehenderit earum quam culpa neque
         dolor sint voluptates qui rem? Ipsam reiciendis non illum?
       </p>
-    </div>
-  </div>
 
-  <div class="container flex items-start gap-16" v-if="productsInCategory.length">
-    <Filters v-if="storeSettings.showFilters" :hide-categories="true" />
-
-    <div class="w-full">
+      
       <div class="flex items-center justify-between w-full gap-4 mt-8 md:gap-8">
         <ProductResultCount />
         <OrderByDropdown class="hidden md:inline-flex" v-if="storeSettings.showOrderByDropdown" />
