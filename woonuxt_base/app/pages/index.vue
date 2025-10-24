@@ -21,7 +21,7 @@ useSeoMeta({
 <template>
   <main>
     <HeroBanner />
-
+<!--
     <div class="container flex flex-wrap items-center justify-center my-16 text-center gap-x-8 gap-y-4 brand lg:justify-between">
       <img src="/images/logoipsum-211.svg" alt="Brand 1" width="132" height="35" />
       <img src="/images/logoipsum-221.svg" alt="Brand 2" width="119" height="30" />
@@ -30,7 +30,7 @@ useSeoMeta({
       <img src="/images/logoipsum-284.svg" alt="Brand 5" width="70" height="44" />
       <img src="/images/logoipsum-215.svg" alt="Brand 6" width="132" height="40" />
     </div>
-
+-->
     <section class="container my-16">
       <div class="flex items-end justify-between">
         <h2 class="text-lg font-semibold md:text-2xl">{{ $t('shop.shopByCategory') }}</h2>
@@ -40,7 +40,7 @@ useSeoMeta({
         <CategoryCard v-for="(category, i) in productCategories" :key="i" class="w-full" :node="category" />
       </div>
     </section>
-
+<!--
     <section class="container grid gap-4 my-24 md:grid-cols-2 lg:grid-cols-4">
       <div class="flex items-center gap-8 p-8 bg-white rounded-lg">
         <img src="/icons/box.svg" width="60" height="60" alt="Free Shipping" loading="lazy" />
@@ -71,7 +71,7 @@ useSeoMeta({
         </div>
       </div>
     </section>
-
+-->
     <section class="container my-16" v-if="popularProducts">
       <div class="flex items-end justify-between">
         <h2 class="text-lg font-semibold md:text-2xl">{{ $t('shop.popularProducts') }}</h2>
