@@ -22,7 +22,7 @@ watch(
 );
 
 useHead({
-  title: category,
+  title: (category, i),
   meta: [{ hid: 'description', name: 'description', content: 'Products' }],
 });
 </script>
