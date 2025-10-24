@@ -5,5 +5,6 @@
 [build]
   command = "nuxt generate"
 
+
 [images]
-  remote_images = ["https://secure.woonuxt.com/.*"]
+  remote_images = ["^https://wp.kledingzoeken.nl/.*"]
