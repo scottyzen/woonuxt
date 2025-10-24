@@ -1,0 +1,14 @@
+query getProducts($slug: ID!) {
+  products(where: { categorySlug: $slug }) {
+    nodes {
+      id
+      name
+      categories {
+        nodes {
+          name
+          description
+        }
+      }
+    }
+  }
+}
