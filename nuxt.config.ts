@@ -3,14 +3,6 @@ export default defineNuxtConfig({
 
   components: [{ path: './components', pathPrefix: false }],
 
-  image: {
-    provider: 'static',
-    screens: {},
-    providers: {
-      static: {}
-    }
-  },
-
   nitro: {
     prerender: {
       concurrency: 10,
@@ -18,5 +10,5 @@ export default defineNuxtConfig({
       failOnError: false,
     },
     minify: true
-  },
+  }
 });
