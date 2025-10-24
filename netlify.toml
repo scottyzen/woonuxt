@@ -1,9 +1,31 @@
-[template.environment]
-  GQL_HOST = "WordPress URL http://example.com"
-  NUXT_IMAGE_DOMAINS = "Comma separated list of domains. example.com,example2.com"
+# netlify.toml (root van je project)
+
+# 1) Gebruik [build.environment] i.p.v. [template.environment]
+[build.environment]
+  # Zet hier je echte waarden neer (zonder http/https in NUXT_IMAGE_DOMAINS)
+  GQL_HOST = "https://wp.kledingzoeken.nl"
+  NUXT_IMAGE_DOMAINS = "wp.kledingzoeken.nl"
 
 [build]
-  command = "nuxt generate"
+  # Voor Nuxt 3 is 'nuxi generate' aan te raden (werkt meestal ook met 'nuxt generate')
+  command = "npx nuxi generate"
 
+# 2) Sta je WordPress-domein toe voor Netlify Image Transformations
 [images]
-  remote_images = ["https://secure.woonuxt.com/.*"]
+  remote_images = [
+    "https://wp.kledingzoeken.nl/.*"
+    # laat desnoods ook deze staan als je die nog gebruikt:
+    # "https://secure.woonuxt.com/.*"
+  ]
+
+# 3) Zorg dat je SPA fallback NIET /.netlify onderschept
+[[redirects]]
+from = "/.netlify/*"
+to = "/.netlify/:splat"
+status = 200
+force = false
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
