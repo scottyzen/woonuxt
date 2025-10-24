@@ -22,7 +22,7 @@ watch(
 );
 
 useHead({
-  title: 'Bekijk',
+  title: category,
   meta: [{ hid: 'description', name: 'description', content: 'Products' }],
 });
 </script>
