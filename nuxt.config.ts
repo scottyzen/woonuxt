@@ -1,19 +1,22 @@
 export default defineNuxtConfig({
-  modules: [
-    // haal de image module weg als je die niet meer wilt gebruiken
-    // '@nuxt/image',
-  ],
+  extends: ['./woonuxt_base'],
+
+  components: [{ path: './components', pathPrefix: false }],
 
   image: {
-    // forceer dat de image module géén externe optimalisatie doet
     provider: 'static',
-    // optioneel: leeg de screens/configs
     screens: {},
-    // of: zet alle provider settings uit
     providers: {
-      static: {
-        // geen baseURL instellen
-      }
+      static: {}
     }
-  }
+  },
+
+  nitro: {
+    prerender: {
+      concurrency: 10,
+      interval: 1000,
+      failOnError: false,
+    },
+    minify: true
+  },
 });
