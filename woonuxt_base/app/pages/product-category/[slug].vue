@@ -45,8 +45,7 @@ useHead({
       </p>
     </div>
   </div>
-</template>
-<template>
+
   <div class="container flex items-start gap-16" v-if="productsInCategory.length">
     <Filters v-if="storeSettings.showFilters" :hide-categories="true" />
 
