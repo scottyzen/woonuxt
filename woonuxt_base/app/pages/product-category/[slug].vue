@@ -5,13 +5,13 @@ const { storeSettings } = useAppConfig();
 const route = useRoute();
 const slug = route.params.slug;
 
+// ⬇️ Haal producten + categorie info op via GraphQL
 const { data } = await useAsyncGql('getProducts', { slug });
 
-// ✅ Haal producten op
 const productsInCategory = (data.value?.products?.nodes || []) as Product[];
 setProducts(productsInCategory);
 
-// ✅ Haal categorienaam op van eerste product
+// ⬇️ Haal categorie info uit eerste product
 const category = data.value?.products?.nodes?.[0]?.categories?.nodes?.[0] || {
   name: 'Categorie',
   description: '',
@@ -36,12 +36,17 @@ useHead({
 
 <template>
   <div>
-    <!-- ✅ Toon categorienaam -->
-    <div class="container py-8">
-      <h1 class="text-3xl font-bold">{{ category.name }}</h1>
+    <!-- ✅ Toon categorienaam en beschrijving -->
+    <div class="container py-12">
+      <h1 class="text-3xl font-bold mb-2">{{ category.name }}</h1>
+      <div
+        class="prose prose-sm max-w-none"
+        v-if="category.description"
+        v-html="category.description"
+      />
     </div>
 
-    <!-- WooNuxt standaard layout -->
+    <!-- ✅ WooNuxt standaard grid -->
     <div class="container flex items-start gap-16" v-if="productsInCategory.length">
       <Filters v-if="storeSettings.showFilters" :hide-categories="true" />
       <div class="w-full">
