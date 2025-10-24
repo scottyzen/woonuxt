@@ -17,6 +17,8 @@ const category = data.value?.products?.nodes?.[0]?.categories?.nodes?.[0] || {
   description: '',
 };
 
+  console.log('🧪 CATEGORY:', category);
+
 onMounted(() => {
   if (!isQueryEmpty.value) updateProductList();
 });
