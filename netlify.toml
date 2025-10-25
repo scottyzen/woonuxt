@@ -1,10 +1,9 @@
+[template.environment]
+  GQL_HOST = "WordPress URL http://example.com"
+  NUXT_IMAGE_DOMAINS = "Comma separated list of domains. example.com,example2.com"
+
 [build]
-  command = "npm run build"
-  publish = ".output/public"
+  command = "nuxt generate"
 
-[functions]
-  directory = ".netlify/functions"
-
-[dev]
-  command = "nuxt dev"
-  targetPort = 3000
+[images]
+  remote_images = ["https://secure.woonuxt.com/.*"]
