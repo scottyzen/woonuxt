@@ -50,25 +50,29 @@ async function open(productId: number) {
 }
 
 // ✅ Nieuw: open op basis van slug
+// Nieuw: ophalen via slug i.p.v. ID
 async function openBySlug(slug: string) {
   visible.value = true
   loading.value = true
 
   try {
-    const data = await $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products?slug=${slug}`, {
+    const response = await $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products`, {
       headers: {
         Authorization: authHeader,
       },
+      params: {
+        slug, // zoeken op slug
+      },
     })
 
-    if (data?.length) {
-      product.value = data[0]
+    if (Array.isArray(response) && response.length > 0) {
+      product.value = response[0]
     } else {
-      console.warn('⚠️ Geen product gevonden met slug:', slug)
+      console.error('❌ Geen product gevonden voor slug:', slug)
       close()
     }
   } catch (error) {
-    console.error('❌ Fout bij ophalen product (slug):', error)
+    console.error('❌ Fout bij ophalen product via slug:', error)
     close()
   } finally {
     loading.value = false
