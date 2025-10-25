@@ -58,9 +58,6 @@ hooks: {
       pages.push({ name, path, file: resolve(`./app/pages/${file}`) });
     };
 
-    // ➕ Handmatige route voor slideover via slug
-    addPage('product-slideover', '/p/:slug', 'product/[slug].vue');
-
     // ✅ Bestaande routes
     addPage('product-page-pager', '/products/page/:pageNumber', 'products.vue');
     addPage('product-category-page', '/product-category/:categorySlug', 'product-category/[slug].vue');
@@ -69,6 +66,7 @@ hooks: {
     addPage('order-summary', '/order-summary/:orderId', 'order-summary.vue');
   },
 },
+
 
   nitro: {
     routeRules: {
