@@ -8,6 +8,12 @@ const GQL_HOST = process.env.GQL_HOST || 'http://localhost:4000/graphql';
 const APP_HOST = process.env.APP_HOST || 'http://localhost:3000';
 
 export default defineNuxtConfig({
+
+  image: {
+    provider: 'ipx',
+    domains: ['jouwdomein.nl'], // ← vervang met je echte WordPress domein
+  },
+  
   compatibilityDate: '2025-08-10',
 
   app: {
