@@ -84,9 +84,3 @@ export default defineNuxtConfig({
   },
 });
 
-export default defineNuxtConfig({
-  image: {
-    provider: 'static',
-    domains: ['wp.kledingzoeken.nl'], // ← vervang met je echte WP domein
-  },
-})
