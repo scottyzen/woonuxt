@@ -29,22 +29,27 @@
           <div v-else-if="product" class="p-4 space-y-4">
             <!-- Afbeeldingen -->
 <!-- Afbeeldingen -->
+<!-- Afbeeldingen -->
+<div>
+  <template v-if="Array.isArray(product?.images) && product.images.length > 0">
+    <ProductImageGallery
+      :main-image="{ src: product.images[0].src, alt: product.images[0].alt }"
+      :gallery="product.images.map(img => ({ src: img.src, alt: img.alt }))"
+      :node="product"
+    />
+  </template>
+
+  <template v-else>
+    <img
+      src="/images/placeholder.jpg"
+      alt="Geen afbeelding"
+      class="w-full rounded-lg"
+    />
+  </template>
+</div>
 
   <!-- Afbeeldingen -->
-<div>
-  <ProductImageGallery
-    v-if="Array.isArray(product.images) && product.images.length"
-    :main-image="{ src: product.images[0].src, alt: product.images[0].alt }"
-    :gallery="Array.isArray(product.images) ? product.images.map(img => ({ src: img.src, alt: img.alt })) : []"
-    :node="product"
-  />
-  <img
-    v-else
-    src="/images/placeholder.jpg"
-    alt="Geen afbeelding"
-    class="w-full rounded-lg"
-  />
-</div>
+
 
 
 
