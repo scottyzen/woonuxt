@@ -1,78 +1,74 @@
 <template>
   <ClientOnly>
-    <Transition name="slide-from-right">
+    <div v-if="visible" class="fixed inset-0 z-50 flex justify-end">
+      <!-- Zelfde overlay als cart -->
       <div
-        v-if="visible"
-        class="fixed inset-0 z-50 flex justify-end bg-black/50"
+        class="fixed inset-0 bg-black opacity-50"
         @click.self="close"
+      />
+
+      <!-- Modal -->
+      <div
+        class="relative bg-white w-full sm:max-w-md h-full overflow-auto shadow-xl"
       >
-        <div class="w-full sm:max-w-md bg-white h-full overflow-auto p-6 relative">
-          <!-- Sluitknop -->
-          <button
-            class="absolute top-4 right-4 text-gray-500 hover:text-black z-10"
-            @click="close"
-            aria-label="Sluiten"
-          >
-            ✕
-          </button>
+        <!-- Sluitknop zelfde als cart -->
+        <div class="flex items-center justify-between p-4 border-b">
+          <button class="text-2xl font-light" @click="close">×</button>
+          <span class="text-lg font-semibold">Product</span>
+          <span class="w-6" /> <!-- Voor alignment -->
+        </div>
 
-          <!-- Loader -->
-          <div v-if="loading" class="flex justify-center items-center h-full">
-            <div class="animate-spin h-8 w-8 border-t-2 border-primary mx-auto rounded-full"></div>
-          </div>
+        <!-- Loader -->
+        <div v-if="loading" class="flex justify-center items-center h-full">
+          <div class="animate-spin h-8 w-8 border-t-2 border-primary mx-auto rounded-full" />
+        </div>
 
-          <!-- Productgegevens -->
-          <div v-else-if="product">
-            <div class="space-y-4">
-              <!-- Afbeeldingen -->
-              <ProductImageGallery
-                v-if="product.image"
-                :main-image="product.image"
-                :gallery="product.gallery_images"
-                :node="product"
-              />
-              <img
-                v-else
-                src="/images/placeholder.jpg"
-                alt="Geen afbeelding"
-                class="w-full rounded-lg"
-              />
+        <!-- Inhoud -->
+        <div v-else-if="product" class="p-4 space-y-4">
+          <!-- Afbeelding -->
+          <ProductImageGallery
+            v-if="product.image"
+            :main-image="product.image"
+            :gallery="product.gallery_images"
+            :node="product"
+          />
+          <img
+            v-else
+            src="/images/placeholder.jpg"
+            alt="Geen afbeelding"
+            class="w-full rounded-lg"
+          />
 
-              <!-- Titel en sterren -->
-              <div>
-                <h1 class="text-xl font-bold mb-2">{{ product.name }}</h1>
-                <StarRating
-                  :rating="Number(product.average_rating)"
-                  :count="product.rating_count"
-                />
-              </div>
+          <!-- Naam -->
+          <h1 class="text-lg font-bold">{{ product.name }}</h1>
 
-              <!-- Prijs -->
-              <ProductPrice
-                :regular-price="product.regular_price"
-                :sale-price="product.sale_price"
-              />
+          <!-- Sterren -->
+          <StarRating
+            :rating="Number(product.average_rating)"
+            :count="product.rating_count"
+          />
 
-              <!-- Omschrijving -->
-              <div v-html="product.short_description || product.description" class="prose" />
+          <!-- Prijs -->
+          <ProductPrice
+            :regular-price="product.regular_price"
+            :sale-price="product.sale_price"
+          />
 
-              <!-- Toevoegen aan winkelwagen -->
-              <div class="flex flex-col gap-4">
-                <AddToCartButton
-                  :product-id="product.id"
-                  class="w-full"
-                />
-              </div>
-            </div>
-          </div>
+          <!-- Omschrijving -->
+          <div
+            v-html="product.short_description || product.description"
+            class="text-sm text-gray-700"
+          />
 
-          <!-- Geen product gevonden -->
-          <div v-else class="text-center text-gray-500 mt-20">
-            Product niet gevonden.
-          </div>
+          <!-- Add to cart -->
+          <AddToCartButton :product-id="product.id" class="w-full" />
+        </div>
+
+        <div v-else class="p-4 text-center text-gray-500">
+          Product niet gevonden.
         </div>
       </div>
-    </Transition>
+    </div>
   </ClientOnly>
 </template>
 
@@ -88,18 +84,14 @@ const router = useRouter()
 let lastPathBeforeModal = ''
 
 function open(productId: number) {
-  if (process.client) {
-    lastPathBeforeModal = window.location.pathname
-  }
+  if (process.client) lastPathBeforeModal = window.location.pathname
 
   visible.value = true
   loading.value = true
   product.value = null
 
   $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products/${productId}`, {
-    headers: {
-      Authorization: authHeader,
-    },
+    headers: { Authorization: authHeader },
   })
     .then((data) => {
       product.value = data
@@ -114,9 +106,7 @@ function open(productId: number) {
 }
 
 async function openBySlug(slug: string) {
-  if (process.client) {
-    lastPathBeforeModal = window.location.pathname
-  }
+  if (process.client) lastPathBeforeModal = window.location.pathname
 
   visible.value = true
   loading.value = true
@@ -148,7 +138,6 @@ function close() {
   visible.value = false
   product.value = null
 
-  // ✅ Ga terug naar vorige route als we via slug kwamen
   if (process.client && lastPathBeforeModal && router.currentRoute.value.path.startsWith('/p/')) {
     router.push(lastPathBeforeModal)
   }
