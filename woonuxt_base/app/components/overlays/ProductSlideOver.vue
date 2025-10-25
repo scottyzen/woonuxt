@@ -29,7 +29,8 @@ const visible = ref(false)
 const loading = ref(false)
 const product = ref<any>(null)
 
-// ✅ async toegevoegd, zodat we await mogen gebruiken
+const router = useRouter()
+
 async function open(productId: number) {
   visible.value = true
   loading.value = true
@@ -48,16 +49,41 @@ async function open(productId: number) {
   }
 }
 
+// ✅ Nieuw: open op basis van slug
+async function openBySlug(slug: string) {
+  visible.value = true
+  loading.value = true
+
+  try {
+    const data = await $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products?slug=${slug}`, {
+      headers: {
+        Authorization: authHeader,
+      },
+    })
+
+    if (data?.length) {
+      product.value = data[0]
+    } else {
+      console.warn('⚠️ Geen product gevonden met slug:', slug)
+      close()
+    }
+  } catch (error) {
+    console.error('❌ Fout bij ophalen product (slug):', error)
+    close()
+  } finally {
+    loading.value = false
+  }
+}
+
 function close() {
   visible.value = false
   product.value = null
-  const router = useRouter()
-router.push('/', undefined, { shallow: true })
-
+  router.push('/', undefined, { shallow: true })
 }
 
-defineExpose({ open, close })
+defineExpose({ open, close, openBySlug })
 </script>
+
 
 <style scoped>
 .slide-enter-active,
