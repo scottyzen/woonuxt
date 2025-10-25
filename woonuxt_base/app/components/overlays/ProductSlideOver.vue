@@ -1,25 +1,28 @@
 <template>
   <ClientOnly>
-    <Transition name="slide">
+    <Transition name="slide-from-right">
       <div
-        v-if="visible && product"
+        v-if="visible"
         class="fixed inset-0 z-50 flex justify-end bg-black/50"
         @click.self="close"
       >
-        <div class="w-full sm:max-w-xl bg-white h-full overflow-auto p-6">
-          <button class="text-gray-500 hover:text-black" @click="close">✕</button>
+        <div class="w-full sm:max-w-md bg-white h-full overflow-auto p-6">
+          <button class="text-gray-500 hover:text-black mb-4" @click="close">✕</button>
 
-          <div v-if="loading" class="mt-4 text-center">Laden...</div>
+          <div v-if="loading" class="mt-4 text-center">
+            <div class="animate-spin h-8 w-8 border-t-2 border-primary mx-auto rounded-full"></div>
+          </div>
 
           <div v-else-if="product">
             <h1 class="text-xl font-bold mb-2">{{ product.name }}</h1>
-            <div v-html="product.description" class="prose"></div>
+            <div v-html="product.description" class="prose" />
           </div>
         </div>
       </div>
     </Transition>
   </ClientOnly>
 </template>
+
 
 <script setup lang="ts">
 const config = useRuntimeConfig()
