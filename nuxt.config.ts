@@ -28,14 +28,5 @@ export default defineNuxtConfig({
     minify: true,
   },
 
-  // ➕ Extra route toevoegen voor slide-over modal via /p/:slug
-  hooks: {
-    'pages:extend'(pages) {
-      pages.push({
-        name: 'product-slideover',
-        path: '/p/:slug',
-        file: resolve('./app/pages/p/[slug].vue'), // Zorg dat dit bestand bestaat
-      })
-    },
-  },
+
 })
