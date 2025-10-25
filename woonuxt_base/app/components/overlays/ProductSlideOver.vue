@@ -24,7 +24,7 @@
           <div v-if="loading" class="flex justify-center items-center flex-1">
             <div class="animate-spin h-8 w-8 border-t-2 border-primary mx-auto rounded-full" />
           </div>
-<p class="text-xs text-gray-500">Aantal afbeeldingen: {{ product.images?.length }}</p>
+
           <!-- Inhoud -->
           <div v-else-if="product" class="p-4 space-y-4">
             <!-- Afbeeldingen -->
