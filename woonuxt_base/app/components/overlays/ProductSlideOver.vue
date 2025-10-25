@@ -28,18 +28,22 @@
           <!-- Inhoud -->
           <div v-else-if="product" class="p-4 space-y-4">
             <!-- Afbeeldingen -->
-            <ProductImageGallery
-              v-if="Array.isArray(product.images) && product.images.length"
-              :main-image="product.images[0]"
-              :gallery="product.images"
-              :node="product"
-            />
-            <img
-              v-else
-              src="/images/placeholder.jpg"
-              alt="Geen afbeelding"
-              class="w-full rounded-lg"
-            />
+<!-- Afbeeldingen -->
+
+  <ProductImageGallery
+    v-if="product.images && product.images.length"
+    :main-image="{ src: product.images[0].src, alt: product.images[0].alt }"
+    :gallery="product.images.map(img => ({ src: img.src, alt: img.alt }))"
+    :node="product"
+  />
+  <img
+    v-else
+    src="/images/placeholder.jpg"
+    alt="Geen afbeelding"
+    class="w-full rounded-lg"
+  />
+
+
 
             <!-- Titel & prijs -->
             <h1 class="text-lg font-bold">{{ product.name }}</h1>
