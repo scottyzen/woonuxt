@@ -1,11 +1,12 @@
 export default defineNuxtConfig({
   extends: ['./woonuxt_base'],
 
-   runtimeConfig: {
+  runtimeConfig: {
     public: {
       wcKey: process.env.WC_KEY,
       wcSecret: process.env.WC_SECRET,
     },
+  },
 
   components: [{ path: './components', pathPrefix: false }],
 
@@ -15,6 +16,6 @@ export default defineNuxtConfig({
       interval: 1000,
       failOnError: false,
     },
-    minify: true
-  }
-});
+    minify: true,
+  },
+})
