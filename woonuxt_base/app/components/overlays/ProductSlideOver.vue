@@ -85,7 +85,7 @@ async function openBySlug(slug: string) {
 function close() {
   visible.value = false
   product.value = null
-  router.push('/', undefined, { shallow: true })
+ 
 }
 
 defineExpose({ open, close, openBySlug })
