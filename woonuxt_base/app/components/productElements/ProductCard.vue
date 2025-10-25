@@ -1,7 +1,5 @@
 <script setup lang="ts">
-    onMounted(() => {
-  console.log('PRODUCT NODE:', props.node)
-})
+
   
 const route = useRoute();
 const { storeSettings } = useAppConfig();
@@ -18,6 +16,7 @@ const imgHeight = Math.round(imgWidth * 1.125);
 const productSlideOver = inject('productSlideOver')
 
 function openProduct(id: number) {
+  console.log('🔍 Open product with ID:', id)
   productSlideOver?.open(id)
 }
 //overlay product jp end
@@ -54,7 +53,7 @@ const imagetoDisplay = computed<string>(() => {
 
 <template>
   <div class="relative group">
-    <a href="#" @click.prevent="openProduct(node.id)" :title="node.name">
+   <a href="#" @click.prevent="openProduct(node.databaseId)" :title="node.name">
 
 
       <SaleBadge :node class="absolute top-2 right-2" />
