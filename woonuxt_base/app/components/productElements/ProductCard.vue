@@ -1,4 +1,8 @@
 <script setup lang="ts">
+    onMounted(() => {
+  console.log('PRODUCT NODE:', props.node)
+})
+  
 const route = useRoute();
 const { storeSettings } = useAppConfig();
 const props = defineProps({
@@ -44,10 +48,7 @@ const imagetoDisplay = computed<string>(() => {
   return mainImage.value;
 });
 
-  onMounted(() => {
-  console.log('PRODUCT NODE:', props.node)
-})
-  
+
 </script>
 
 
