@@ -13,11 +13,12 @@ const imgHeight = Math.round(imgWidth * 1.125);
 
 
 //overlay product jp
-const productSlideOver = inject('productSlideOver')
+  const productSlideOver = inject('productSlideOver') as Ref<any>
+
 
 function openProduct(id: number) {
   console.log('🔍 Open product with ID:', id)
-  productSlideOver?.open(id)
+  productSlideOver?.value?.open(id)
 }
 //overlay product jp end
 
