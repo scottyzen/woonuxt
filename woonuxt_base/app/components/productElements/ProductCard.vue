@@ -48,7 +48,7 @@ const imagetoDisplay = computed<string>(() => {
 
 <template>
   <div class="relative group">
-    <a href="#" @click.prevent="productSlideOver?.open(product.id)" title="node.name" >
+    <a href="#" @click.prevent="openProduct(node.databaseId)" :title="node.name">
       <SaleBadge :node class="absolute top-2 right-2" />
       <NuxtImg
         v-if="imagetoDisplay"
