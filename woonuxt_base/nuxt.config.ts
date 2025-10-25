@@ -11,7 +11,7 @@ export default defineNuxtConfig({
 
   image: {
     provider: 'ipx',
-    domains: ['jouwdomein.nl'], // ← vervang met je echte WordPress domein
+    domains: ['wp.kledingzoeken.nl'], // ← vervang met je echte WordPress domein
   },
   
   compatibilityDate: '2025-08-10',
@@ -52,19 +52,23 @@ export default defineNuxtConfig({
     '#woo': '../.nuxt/gql/default',
   },
 
-  hooks: {
-    'pages:extend'(pages) {
-      const addPage = (name: string, path: string, file: string) => {
-        pages.push({ name, path, file: resolve(`./app/pages/${file}`) });
-      };
+hooks: {
+  'pages:extend'(pages) {
+    const addPage = (name: string, path: string, file: string) => {
+      pages.push({ name, path, file: resolve(`./app/pages/${file}`) });
+    };
 
-      addPage('product-page-pager', '/products/page/:pageNumber', 'products.vue');
-      addPage('product-category-page', '/product-category/:categorySlug', 'product-category/[slug].vue');
-      addPage('product-category-page-pager', '/product-category/:categorySlug/page/:pageNumber', 'product-category/[slug].vue');
-      addPage('order-received', '/checkout/order-received/:orderId', 'order-summary.vue');
-      addPage('order-summary', '/order-summary/:orderId', 'order-summary.vue');
-    },
+    // ➕ Handmatige route voor slideover via slug
+    addPage('product-slideover', '/p/:slug', 'product/[slug].vue');
+
+    // ✅ Bestaande routes
+    addPage('product-page-pager', '/products/page/:pageNumber', 'products.vue');
+    addPage('product-category-page', '/product-category/:categorySlug', 'product-category/[slug].vue');
+    addPage('product-category-page-pager', '/product-category/:categorySlug/page/:pageNumber', 'product-category/[slug].vue');
+    addPage('order-received', '/checkout/order-received/:orderId', 'order-summary.vue');
+    addPage('order-summary', '/order-summary/:orderId', 'order-summary.vue');
   },
+},
 
   nitro: {
     routeRules: {
