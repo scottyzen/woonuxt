@@ -21,6 +21,11 @@
   </ClientOnly>
 </template>
 <script setup lang="ts">
+
+const config = useRuntimeConfig()
+const authHeader = 'Basic ' + btoa(`${config.public.wcKey}:${config.public.wcSecret}`)
+
+  
 const visible = ref(false)
 const loading = ref(false)
 const product = ref<any>(null)
@@ -29,12 +34,15 @@ function open(productId: number) {
   visible.value = true
   loading.value = true
 
+  
+
   // Client-side fetch direct naar WooCommerce API
-  $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products/${productId}`, {
-    headers: {
-      Authorization: 'Basic ' + btoa('CK_JOUW_PUBLIC_KEY:CS_JOUW_SECRET_KEY'),
-    },
-  })
+await $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products/${productId}`, {
+  headers: {
+    Authorization: authHeader,
+  },
+})
+
     .then((data) => {
       product.value = data
     })
