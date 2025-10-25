@@ -97,6 +97,7 @@ function open(productId: number) {
 
   $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products/${productId}`, {
     headers: { Authorization: authHeader },
+    
   })
     .then((data) => {
       product.value = data
@@ -121,8 +122,9 @@ async function openBySlug(slug: string) {
     const response = await $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products`, {
       headers: { Authorization: authHeader },
       params: { slug },
+     
     })
-
+ console.log('Product response:', data)
     if (Array.isArray(response) && response.length > 0) {
       product.value = response[0]
     } else {
