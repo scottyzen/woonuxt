@@ -30,10 +30,12 @@
             <!-- Afbeeldingen -->
 <!-- Afbeeldingen -->
 
+  <!-- Afbeeldingen -->
+<div>
   <ProductImageGallery
-    v-if="product.images && product.images.length"
+    v-if="Array.isArray(product.images) && product.images.length"
     :main-image="{ src: product.images[0].src, alt: product.images[0].alt }"
-    :gallery="product.images.map(img => ({ src: img.src, alt: img.alt }))"
+    :gallery="Array.isArray(product.images) ? product.images.map(img => ({ src: img.src, alt: img.alt })) : []"
     :node="product"
   />
   <img
@@ -42,6 +44,8 @@
     alt="Geen afbeelding"
     class="w-full rounded-lg"
   />
+</div>
+
 
 
 
