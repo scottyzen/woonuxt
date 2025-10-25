@@ -19,8 +19,6 @@ const imgHeight = Math.round(imgWidth * 1.125);
     router.push({ path: `/p/${slug}` }, undefined, { shallow: true })
     productSlideOver?.value?.open(id)
   }
-
-}
 //overlay product jp end
 
 // example: ?filter=pa_color[green,blue],pa_size[large]
