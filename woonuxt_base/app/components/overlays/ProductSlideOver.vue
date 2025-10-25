@@ -6,7 +6,7 @@
       @click.self="close"
     >
       <!-- Slide-in wit paneel -->
-      <Transition name="slide">
+      <Transition name="slide-panel">
         <div
           v-show="visible"
           class="relative bg-white w-full sm:max-w-md h-full overflow-auto shadow-xl pointer-events-auto flex flex-col"
@@ -27,8 +27,9 @@
 
           <!-- Inhoud -->
           <div v-else-if="product" class="p-4 space-y-4">
+            <!-- Afbeeldingen -->
             <ProductImageGallery
-              v-if="product.images?.length"
+              v-if="Array.isArray(product.images) && product.images.length"
               :main-image="product.images[0]"
               :gallery="product.images"
               :node="product"
@@ -40,6 +41,7 @@
               class="w-full rounded-lg"
             />
 
+            <!-- Titel & prijs -->
             <h1 class="text-lg font-bold">{{ product.name }}</h1>
 
             <ProductPrice
@@ -47,16 +49,19 @@
               :sale-price="product.sale_price"
             />
 
+            <!-- Beschrijving -->
             <div
               v-html="product.short_description || product.description"
               class="text-sm text-gray-700"
             />
 
+            <!-- Wishlist & Share -->
             <div class="flex flex-wrap gap-3">
               <WishlistButton :product="product" />
               <ShareButton :product="product" />
             </div>
 
+            <!-- Externe knop -->
             <a
               v-if="product.external_url"
               :href="product.external_url"
@@ -68,6 +73,7 @@
             </a>
           </div>
 
+          <!-- Fallback -->
           <div v-else class="p-4 text-center text-gray-500">
             Product niet gevonden.
           </div>
@@ -151,12 +157,12 @@ defineExpose({ open, close, openBySlug })
 
 <style scoped>
 /* Alleen witte paneel animeren */
-.slide-enter-active,
-.slide-leave-active {
+.slide-panel-enter-active,
+.slide-panel-leave-active {
   transition: transform 0.3s ease;
 }
-.slide-enter-from,
-.slide-leave-to {
+.slide-panel-enter-from,
+.slide-panel-leave-to {
   transform: translateX(100%);
 }
 </style>
