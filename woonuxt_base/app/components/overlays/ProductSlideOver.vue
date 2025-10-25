@@ -20,17 +20,21 @@
     </Transition>
   </ClientOnly>
 </template>
-
 <script setup lang="ts">
 const visible = ref(false)
-const product = ref<any>(null)
 const loading = ref(false)
+const product = ref<any>(null)
 
 function open(productId: number) {
-  loading.value = true
   visible.value = true
+  loading.value = true
 
-  $fetch(`/api/product/${productId}`)
+  // Client-side fetch direct naar WooCommerce API
+  $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products/${productId}`, {
+    headers: {
+      Authorization: 'Basic ' + btoa('CK_JOUW_PUBLIC_KEY:CS_JOUW_SECRET_KEY'),
+    },
+  })
     .then((data) => {
       product.value = data
     })
@@ -46,6 +50,7 @@ function close() {
 
 defineExpose({ open, close })
 </script>
+
 
 <style scoped>
 .slide-enter-active, .slide-leave-active {
