@@ -1,6 +1,11 @@
+import { defineNuxtConfig } from 'nuxt/config'
+import { resolve } from 'pathe'
+
 export default defineNuxtConfig({
+  // Base theme
   extends: ['./woonuxt_base'],
 
+  // API keys & public config
   runtimeConfig: {
     public: {
       wcKey: process.env.WC_KEY,
@@ -8,8 +13,12 @@ export default defineNuxtConfig({
     },
   },
 
-  components: [{ path: './components', pathPrefix: false }],
+  // Componentenmap (voorkomt dubbele importen)
+  components: [
+    { path: './components', pathPrefix: false },
+  ],
 
+  // Nitro build settings (voor Netlify etc.)
   nitro: {
     prerender: {
       concurrency: 10,
@@ -17,5 +26,16 @@ export default defineNuxtConfig({
       failOnError: false,
     },
     minify: true,
+  },
+
+  // ➕ Extra route toevoegen voor slide-over modal via /p/:slug
+  hooks: {
+    'pages:extend'(pages) {
+      pages.push({
+        name: 'product-slideover',
+        path: '/p/:slug',
+        file: resolve('./app/pages/p/[slug].vue'), // Zorg dat dit bestand bestaat
+      })
+    },
   },
 })
