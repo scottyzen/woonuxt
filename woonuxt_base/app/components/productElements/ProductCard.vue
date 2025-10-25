@@ -15,10 +15,9 @@ const imgHeight = Math.round(imgWidth * 1.125);
 //overlay product jp
   const productSlideOver = inject('productSlideOver') as Ref<any>
   const router = useRouter()
-  function openProduct(id: number, slug: string) {
-    router.push({ path: `/p/${slug}` }, undefined, { shallow: true })
-    productSlideOver?.value?.open(id)
-  }
+function openProduct(id: number, _slug: string) {
+  productSlideOver?.value?.open(id)
+}
 //overlay product jp end
 
 // example: ?filter=pa_color[green,blue],pa_size[large]
