@@ -28,9 +28,9 @@
           <!-- Inhoud -->
           <div v-else-if="product" class="p-4 space-y-4">
             <ProductImageGallery
-              v-if="product.image"
-              :main-image="product.image"
-              :gallery="product.gallery_images"
+              v-if="product.images?.length"
+              :main-image="product.images[0]"
+              :gallery="product.images"
               :node="product"
             />
             <img
@@ -97,7 +97,6 @@ function open(productId: number) {
 
   $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products/${productId}`, {
     headers: { Authorization: authHeader },
-    
   })
     .then((data) => {
       product.value = data
@@ -122,9 +121,8 @@ async function openBySlug(slug: string) {
     const response = await $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products`, {
       headers: { Authorization: authHeader },
       params: { slug },
-     
     })
- console.log('Product response:', data)
+
     if (Array.isArray(response) && response.length > 0) {
       product.value = response[0]
     } else {
