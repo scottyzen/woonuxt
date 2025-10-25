@@ -51,6 +51,9 @@ async function open(productId: number) {
 function close() {
   visible.value = false
   product.value = null
+  const router = useRouter()
+router.push('/', undefined, { shallow: true })
+
 }
 
 defineExpose({ open, close })
