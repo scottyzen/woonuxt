@@ -20,35 +20,32 @@
     </Transition>
   </ClientOnly>
 </template>
-<script setup lang="ts">
 
+<script setup lang="ts">
 const config = useRuntimeConfig()
 const authHeader = 'Basic ' + btoa(`${config.public.wcKey}:${config.public.wcSecret}`)
 
-  
 const visible = ref(false)
 const loading = ref(false)
 const product = ref<any>(null)
 
-function open(productId: number) {
+// ✅ async toegevoegd, zodat we await mogen gebruiken
+async function open(productId: number) {
   visible.value = true
   loading.value = true
 
-  
-
-  // Client-side fetch direct naar WooCommerce API
-await $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products/${productId}`, {
-  headers: {
-    Authorization: authHeader,
-  },
-})
-
-    .then((data) => {
-      product.value = data
+  try {
+    const data = await $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products/${productId}`, {
+      headers: {
+        Authorization: authHeader,
+      },
     })
-    .finally(() => {
-      loading.value = false
-    })
+    product.value = data
+  } catch (error) {
+    console.error('❌ Fout bij ophalen product:', error)
+  } finally {
+    loading.value = false
+  }
 }
 
 function close() {
@@ -59,12 +56,13 @@ function close() {
 defineExpose({ open, close })
 </script>
 
-
 <style scoped>
-.slide-enter-active, .slide-leave-active {
+.slide-enter-active,
+.slide-leave-active {
   transition: transform 0.3s ease;
 }
-.slide-enter-from, .slide-leave-to {
+.slide-enter-from,
+.slide-leave-to {
   transform: translateX(100%);
 }
 </style>
