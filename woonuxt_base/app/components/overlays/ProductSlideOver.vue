@@ -28,45 +28,7 @@
           <!-- Inhoud -->
           <div v-else-if="product" class="p-4 space-y-4">
             <!-- Afbeeldingen -->
-<!-- Afbeeldingen -->
-<!-- Afbeeldingen -->
-<div>
-  <template v-if="Array.isArray(product?.images) && product.images.length > 0">
-    
-<div v-if="Array.isArray(product.images) && product.images.length">
-  <p class="text-sm text-gray-500">🖼️ Afbeeldingen gevonden: {{ product.images.length }}</p>
-
-  <div class="grid grid-cols-1 gap-4">
-    <img
-      v-for="(img, index) in product.images"
-      :key="index"
-      :src="img.src"
-      :alt="img.alt || `Afbeelding ${index + 1}`"
-      class="w-full rounded-lg border"
-    />
-  </div>
-</div>
-
-<div v-else>
-  <img src="/images/placeholder.jpg" alt="Geen afbeelding" class="w-full rounded-lg" />
-</div>
-
-  </template>
-
-  <template v-else>
-    <img
-      src="/images/placeholder.jpg"
-      alt="Geen afbeelding"
-      class="w-full rounded-lg"
-    />
-  </template>
-</div>
-
-  <!-- Afbeeldingen -->
-
-
-
-
+            <ImageGallery :gallery="product.images" />
 
             <!-- Titel & prijs -->
             <h1 class="text-lg font-bold">{{ product.name }}</h1>
@@ -111,6 +73,8 @@
 </template>
 
 <script setup lang="ts">
+import ImageGallery from '~/components/ImageGallery.vue'  // ✅ Hier is de import toegevoegd
+
 const config = useRuntimeConfig()
 const authHeader = 'Basic ' + btoa(`${config.public.wcKey}:${config.public.wcSecret}`)
 
