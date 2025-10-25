@@ -1,21 +1,16 @@
 <template>
   <ClientOnly>
     <div v-if="visible" class="fixed inset-0 z-50 flex justify-end">
-      <!-- Zelfde overlay als cart -->
-      <div
-        class="fixed inset-0 bg-black opacity-50"
-        @click.self="close"
-      />
+      <!-- Overlay -->
+      <div class="fixed inset-0 bg-black opacity-50" @click.self="close" />
 
-      <!-- Modal -->
-      <div
-        class="relative bg-white w-full sm:max-w-md h-full overflow-auto shadow-xl"
-      >
-        <!-- Sluitknop zelfde als cart -->
+      <!-- Slide-over -->
+      <div class="relative bg-white w-full sm:max-w-md h-full overflow-auto shadow-xl">
+        <!-- Header -->
         <div class="flex items-center justify-between p-4 border-b">
           <button class="text-2xl font-light" @click="close">×</button>
           <span class="text-lg font-semibold">Product</span>
-          <span class="w-6" /> <!-- Voor alignment -->
+          <span class="w-6" />
         </div>
 
         <!-- Loader -->
@@ -42,28 +37,37 @@
           <!-- Naam -->
           <h1 class="text-lg font-bold">{{ product.name }}</h1>
 
-          <!-- Sterren -->
-          <StarRating
-            :rating="Number(product.average_rating)"
-            :count="product.rating_count"
-          />
-
           <!-- Prijs -->
           <ProductPrice
             :regular-price="product.regular_price"
             :sale-price="product.sale_price"
           />
 
-          <!-- Omschrijving -->
+          <!-- Beschrijving -->
           <div
             v-html="product.short_description || product.description"
             class="text-sm text-gray-700"
           />
 
-          <!-- Add to cart -->
-          <AddToCartButton :product-id="product.id" class="w-full" />
+          <!-- Wishlist + Delen -->
+          <div class="flex flex-wrap gap-3">
+            <WishlistButton :product="product" />
+            <ShareButton :product="product" />
+          </div>
+
+          <!-- Externe knop -->
+          <a
+            v-if="product.external_url"
+            :href="product.external_url"
+            target="_blank"
+            rel="noopener"
+            class="block w-full mt-6 text-center bg-primary text-white font-bold py-3 rounded hover:bg-primary-dark transition"
+          >
+            {{ product.button_text || 'Bekijk product' }}
+          </a>
         </div>
 
+        <!-- Fallback -->
         <div v-else class="p-4 text-center text-gray-500">
           Product niet gevonden.
         </div>
@@ -114,9 +118,7 @@ async function openBySlug(slug: string) {
 
   try {
     const response = await $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products`, {
-      headers: {
-        Authorization: authHeader,
-      },
+      headers: { Authorization: authHeader },
       params: { slug },
     })
 
