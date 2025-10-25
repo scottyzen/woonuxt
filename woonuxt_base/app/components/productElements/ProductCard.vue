@@ -9,6 +9,15 @@ const props = defineProps({
 const imgWidth = 280;
 const imgHeight = Math.round(imgWidth * 1.125);
 
+
+//overlay product jp
+const productSlideOver = inject('productSlideOver')
+
+function openProduct(id: number) {
+  productSlideOver?.open(id)
+}
+//overlay product jp end
+
 // example: ?filter=pa_color[green,blue],pa_size[large]
 const filterQuery = ref(route.query?.filter as string);
 const paColor = ref(filterQuery.value?.split('pa_color[')[1]?.split(']')[0]?.split(',') || []);
@@ -38,7 +47,12 @@ const imagetoDisplay = computed<string>(() => {
 
 <template>
   <div class="relative group">
-    <NuxtLink v-if="node.slug" :to="`/product/${decodeURIComponent(node.slug)}`" :title="node.name">
+    <a
+      v-if="node.slug"
+      href="#"
+      :title="node.name"
+      @click.prevent="openProduct(node.id)"
+    >
       <SaleBadge :node class="absolute top-2 right-2" />
       <NuxtImg
         v-if="imagetoDisplay"
@@ -51,14 +65,34 @@ const imagetoDisplay = computed<string>(() => {
         :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
         class="rounded-lg object-top object-cover w-full aspect-9/8"
         placeholder
-        placeholder-class="blur-xl" />
-    </NuxtLink>
+        placeholder-class="blur-xl"
+      />
+    </a>
+
     <div class="p-2">
-      <StarRating v-if="storeSettings.showReviews" :rating="node.averageRating" :count="node.reviewCount" />
-      <NuxtLink v-if="node.slug" :to="`/product/${decodeURIComponent(node.slug)}`" :title="node.name">
-        <h2 class="mb-2 font-light leading-tight group-hover:text-primary">{{ node.name }}</h2>
-      </NuxtLink>
-      <ProductPrice class="text-sm" :sale-price="node.salePrice" :regular-price="node.regularPrice" />
+      <StarRating
+        v-if="storeSettings.showReviews"
+        :rating="node.averageRating"
+        :count="node.reviewCount"
+      />
+
+      <a
+        v-if="node.slug"
+        href="#"
+        :title="node.name"
+        @click.prevent="openProduct(node.id)"
+      >
+        <h2 class="mb-2 font-light leading-tight group-hover:text-primary">
+          {{ node.name }}
+        </h2>
+      </a>
+
+      <ProductPrice
+        class="text-sm"
+        :sale-price="node.salePrice"
+        :regular-price="node.regularPrice"
+      />
     </div>
   </div>
 </template>
+
