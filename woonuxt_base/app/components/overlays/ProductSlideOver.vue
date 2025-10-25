@@ -94,49 +94,30 @@ const product = ref<any | null>(null)
 const router = useRouter()
 let lastPathBeforeModal = ''
 
-function open(productId: number) {
-  if (process.client) lastPathBeforeModal = window.location.pathname
-
-  visible.value = true
-  loading.value = true
-  product.value = null
-
-  $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products/${productId}`, {
-    headers: { Authorization: authHeader },
-  })
-    .then((data) => {
-      product.value = data
-    })
-    .catch((error) => {
-      console.error('❌ Fout bij ophalen product:', error)
-      product.value = null
-    })
-    .finally(() => {
-      loading.value = false
-    })
-}
-
-async function openBySlug(slug: string) {
-  if (process.client) lastPathBeforeModal = window.location.pathname
+async function open(productId: number) {
+  if (process.client) {
+    lastPathBeforeModal = window.location.pathname
+    document.body.style.overflow = 'hidden'
+  }
 
   visible.value = true
   loading.value = true
   product.value = null
 
   try {
-    const response = await $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products`, {
+    const data = await $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products/${productId}`, {
       headers: { Authorization: authHeader },
-      params: { slug },
     })
 
-    if (Array.isArray(response) && response.length > 0) {
-      product.value = response[0]
-    } else {
-      console.warn('❌ Geen product gevonden voor slug:', slug)
-      product.value = null
+    product.value = data
+    console.log('🖼️ Product geladen:', data)
+
+    // Extra check als afbeeldingen ontbreken
+    if (!Array.isArray(data.images) || data.images.length === 0) {
+      console.warn('⚠️ Geen afbeeldingen gevonden voor product:', data)
     }
   } catch (error) {
-    console.error('❌ Fout bij ophalen product via slug:', error)
+    console.error('❌ Fout bij ophalen product:', error)
     product.value = null
   } finally {
     loading.value = false
@@ -147,12 +128,15 @@ function close() {
   visible.value = false
   product.value = null
 
-  if (process.client && lastPathBeforeModal && router.currentRoute.value.path.startsWith('/p/')) {
-    router.push(lastPathBeforeModal)
+  if (process.client) {
+    document.body.style.overflow = ''
+    if (lastPathBeforeModal && router.currentRoute.value.path.startsWith('/p/')) {
+      router.push(lastPathBeforeModal)
+    }
   }
 }
 
-defineExpose({ open, close, openBySlug })
+defineExpose({ open, close })
 </script>
 
 <style scoped>
