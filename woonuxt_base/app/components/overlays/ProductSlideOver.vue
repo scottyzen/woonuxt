@@ -32,11 +32,25 @@
 <!-- Afbeeldingen -->
 <div>
   <template v-if="Array.isArray(product?.images) && product.images.length > 0">
-    <ProductImageGallery
-      :main-image="{ src: product.images[0].src, alt: product.images[0].alt }"
-      :gallery="product.images.map(img => ({ src: img.src, alt: img.alt }))"
-      :node="product"
+    
+<div v-if="Array.isArray(product.images) && product.images.length">
+  <p class="text-sm text-gray-500">🖼️ Afbeeldingen gevonden: {{ product.images.length }}</p>
+
+  <div class="grid grid-cols-1 gap-4">
+    <img
+      v-for="(img, index) in product.images"
+      :key="index"
+      :src="img.src"
+      :alt="img.alt || `Afbeelding ${index + 1}`"
+      class="w-full rounded-lg border"
     />
+  </div>
+</div>
+
+<div v-else>
+  <img src="/images/placeholder.jpg" alt="Geen afbeelding" class="w-full rounded-lg" />
+</div>
+
   </template>
 
   <template v-else>
