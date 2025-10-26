@@ -15,7 +15,7 @@
           <div class="flex items-center justify-between p-4 border-b">
             <button class="text-2xl font-light" @click="close">×</button>
             <span class="text-base font-semibold truncate max-w-[60%]">
-              {{ product?.name || 'Product' }}
+              {{ product?.name || 'Laden...' }}
             </span>
             <span class="w-6" />
           </div>
@@ -27,6 +27,7 @@
 
           <!-- Inhoud -->
           <div v-else-if="product" class="p-4 space-y-4">
+            <p class="text-xs text-gray-500">Aantal afbeeldingen: {{ product.images?.length }}</p>
             <!-- Afbeeldingen -->
             <ImageGallery :gallery="product.images" />
 
