@@ -47,18 +47,19 @@
 
 
             <!-- Externe knop -->
-            <div class="h-20" />
-            <a
-              v-if="product.external_url"
-              :href="product.external_url"
-              target="_blank"
-              rel="noopener nofollow"
-              class="sticky bottom-0 w-full mt-6 text-center bg-primary text-white font-bold py-3 rounded-lg hover:bg-primary-dark transition z-10 px-4"
+            <!-- Sticky knop-container -->
+            <div class="sticky bottom-0 bg-white p-4 z-10 border-t border-gray-200">
+              <a
+                v-if="product.external_url"
+                :href="product.external_url"
+                target="_blank"
+                rel="noopener"
+                class="block w-full text-center bg-primary text-white font-bold py-3 rounded hover:bg-primary-dark transition"
+              >
+                {{ product.button_text || 'Bekijk product' }}
+              </a>
+            </div>
 
-            >
-              {{ product.button_text || 'Bekijk product' }}
-            </a>
-          </div>
 
           <!-- Fallback -->
           <div v-else class="p-4 text-center text-gray-500">
