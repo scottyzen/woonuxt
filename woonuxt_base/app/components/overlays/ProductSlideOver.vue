@@ -47,9 +47,25 @@
 
             <!-- Wishlist & Share -->
             <div class="flex flex-wrap gap-3">
-              <WishlistButton :product="product" />
-              <ShareButton :product="product" />
-            </div>
+              <!-- Wishlist knop -->
+              <button
+                @click="toggleWishlist"
+                class="flex items-center gap-1 px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 transition"
+              >
+                <span v-if="isInWishlist">❤️</span>
+                <span v-else>🤍</span>
+                Bewaar
+              </button>
+            
+              <!-- Share knop -->
+              <button
+                @click="shareProduct"
+                class="flex items-center gap-1 px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 transition"
+              >
+                🔗 Delen
+              </button>
+</div>
+
 
             <!-- Externe knop -->
             <a
@@ -131,6 +147,57 @@ function close() {
   }
 }
 
+// jp share button
+  // Wishlist state (client-side via localStorage)
+const isInWishlist = ref(false)
+
+// Controleer of product op wishlist staat
+function checkWishlist() {
+  if (!process.client || !product.value) return
+
+  const stored = JSON.parse(localStorage.getItem('wishlist') || '[]')
+  isInWishlist.value = stored.includes(product.value.id)
+}
+
+// Wishlist toggle functie
+function toggleWishlist() {
+  if (!product.value || !process.client) return
+
+  const stored = JSON.parse(localStorage.getItem('wishlist') || '[]')
+  const index = stored.indexOf(product.value.id)
+
+  if (index > -1) {
+    stored.splice(index, 1)
+    isInWishlist.value = false
+  } else {
+    stored.push(product.value.id)
+    isInWishlist.value = true
+  }
+
+  localStorage.setItem('wishlist', JSON.stringify(stored))
+}
+
+// Share knop logica
+function shareProduct() {
+  const url = product.value?.permalink || window.location.href
+  const title = product.value?.name || 'Bekijk dit product'
+
+  if (navigator.share) {
+    navigator.share({ title, url }).catch((error) => {
+      console.error('❌ Delen mislukt:', error)
+    })
+  } else {
+    navigator.clipboard.writeText(url).then(() => {
+      alert('🔗 Link gekopieerd naar klembord!')
+    }).catch((err) => {
+      console.error('❌ Kon link niet kopiëren:', err)
+    })
+  }
+}
+
+  // end
+
+  
 defineExpose({ open, close })
 </script>
 
