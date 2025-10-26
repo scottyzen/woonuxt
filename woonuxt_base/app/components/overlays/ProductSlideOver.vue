@@ -47,12 +47,13 @@
 
 
             <!-- Externe knop -->
+            <div class="h-20" />
             <a
               v-if="product.external_url"
               :href="product.external_url"
               target="_blank"
               rel="noopener nofollow"
-              class="sticky bottom-0 w-full text-center bg-primary text-white font-bold py-3 rounded-none hover:bg-primary-dark transition z-10"
+              class="sticky bottom-0 w-full mt-6 text-center bg-primary text-white font-bold py-3 rounded-lg hover:bg-primary-dark transition z-10 px-4"
 
             >
               {{ product.button_text || 'Bekijk product' }}
