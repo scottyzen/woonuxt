@@ -27,7 +27,6 @@
 
           <!-- Inhoud -->
           <div v-else-if="product" class="p-4 space-y-4">
-          
             <!-- Afbeeldingen -->
             <ImageGallery :gallery="product.images" />
 
@@ -45,8 +44,6 @@
               class="text-sm text-gray-700"
             />
 
-
-            <!-- Externe knop -->
             <!-- Sticky knop-container -->
             <div class="sticky bottom-0 bg-white p-4 z-10 border-t border-gray-200">
               <a
@@ -59,7 +56,7 @@
                 {{ product.button_text || 'Bekijk product' }}
               </a>
             </div>
-
+          </div>
 
           <!-- Fallback -->
           <div v-else class="p-4 text-center text-gray-500">
@@ -71,10 +68,10 @@
   </ClientOnly>
 </template>
 
+
 <script setup lang="ts">
 import ImageGallery from '~/components/ImageGallery.vue'  // ✅ Hier is de import toegevoegd
-import WishlistButton from '~/components/productElements/WishlistButton.vue' 
-import ShareButton from '~/components/productElements/ShareButton.vue'
+
 
   
 const config = useRuntimeConfig()
