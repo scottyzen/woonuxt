@@ -75,8 +75,9 @@
 
 <script setup lang="ts">
 import ImageGallery from '~/components/ImageGallery.vue'  // ✅ Hier is de import toegevoegd
-import WishlistButton from '~/components/WishlistButton.vue'
-import ShareButton from '~/components/ShareButton.vue'
+import WishlistButton from '~/components/productElements/WishlistButton.vue' 
+import ShareButton from '~/components/productElements/ShareButton.vue'
+
   
 const config = useRuntimeConfig()
 const authHeader = 'Basic ' + btoa(`${config.public.wcKey}:${config.public.wcSecret}`)
