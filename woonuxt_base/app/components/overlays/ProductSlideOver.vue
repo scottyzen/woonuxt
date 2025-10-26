@@ -9,7 +9,7 @@
       <Transition name="slide-panel">
         <div
           v-show="visible"
-          class="relative bg-white w-full sm:max-w-md h-full overflow-auto shadow-xl pointer-events-auto flex flex-col"
+          class="relative bg-white w-[90%] sm:max-w-md h-full overflow-auto shadow-xl pointer-events-auto flex flex-col"
         >
           <!-- Header -->
           <div class="flex items-center justify-between p-4 border-b">
@@ -51,8 +51,9 @@
               v-if="product.external_url"
               :href="product.external_url"
               target="_blank"
-              rel="noopener"
-              class="block w-full mt-6 text-center bg-primary text-white font-bold py-3 rounded hover:bg-primary-dark transition"
+              rel="noopener nofollow"
+              class="sticky bottom-0 w-full text-center bg-primary text-white font-bold py-3 rounded-none hover:bg-primary-dark transition z-10"
+
             >
               {{ product.button_text || 'Bekijk product' }}
             </a>
