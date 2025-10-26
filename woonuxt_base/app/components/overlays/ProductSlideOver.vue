@@ -27,7 +27,7 @@
 
           <!-- Inhoud -->
           <div v-else-if="product" class="p-4 space-y-4">
-            <p class="text-xs text-gray-500">Aantal afbeeldingen: {{ product.images?.length }}</p>
+          
             <!-- Afbeeldingen -->
             <ImageGallery :gallery="product.images" />
 
@@ -44,8 +44,6 @@
               v-html="product.short_description || product.description"
               class="text-sm text-gray-700"
             />
-
-</div>
 
 
             <!-- Externe knop -->
