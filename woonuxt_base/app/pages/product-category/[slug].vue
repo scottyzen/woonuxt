@@ -1,10 +1,9 @@
-// woonuxt_base/app/pages/product-category/[slug].vue
+<template>
+  <WProductArchive />
+</template>
+
 <script setup lang="ts">
-defineNuxtRouteMiddleware((to) => {
-  return navigateTo('/' + to.params.slug, { replace: true })
+definePageMeta({
+  layout: 'default',
 })
 </script>
-
-<template>
-  <div />
-</template>
