@@ -28,21 +28,23 @@
           <!-- Inhoud -->
           <div v-else-if="product" class="p-4 space-y-4">
             <!-- Toon galerij als die bestaat -->
-            <ImageGallery
-              :gallery="product.galleryImages?.nodes"
-              :image="product.image"
-              :featured-image="product.featuredImage?.node"
-              :external-product="product"
-            />
+           <!-- Product afbeelding of galerij -->
+<template v-if="product">
+  <ImageGallery
+    v-if="product?.galleryImages?.nodes?.length"
+    :gallery="product.galleryImages?.nodes"
+    :image="product.image"
+    :featured-image="product.featuredImage?.node"
+    :external-product="product"
+  />
+  <NuxtImg
+    v-else
+    :src="product?.image?.sourceUrl || product?.featuredImage?.node?.sourceUrl || '/images/placeholder.jpg'"
+    :alt="product?.image?.altText || product?.name || 'Product afbeelding'"
+    class="rounded-lg object-contain w-full aspect-square"
+  />
+</template>
 
-            
-            <!-- Toon fallback afbeelding -->
-            <NuxtImg
-              v-else
-              :src="product?.image?.sourceUrl || product?.featuredImage?.node?.sourceUrl || '/images/placeholder.jpg'"
-              :alt="product?.image?.altText || product?.name || 'Product afbeelding'"
-              class="rounded-lg object-contain w-full aspect-square"
-            />
 
 
             <!-- 🏷️ Titel & prijs -->
