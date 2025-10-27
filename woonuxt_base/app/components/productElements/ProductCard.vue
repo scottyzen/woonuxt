@@ -4,9 +4,6 @@ import { ref, watch, computed } from 'vue'
 import type { PropType } from 'vue'
 import type { Product } from '~/types/product'
 
-// 🧱 Store voor overlay
-import { useProductSlideOverStore } from '~/woonuxt_base/app/stores/useProductSlideOverStore'
-
 // 🌍 App config
 const { storeSettings } = useAppConfig()
 
@@ -66,19 +63,21 @@ const imagetoDisplay = computed<string>(() => {
   return mainImage.value
 })
 
-// 🧩 Overlay openen via store
-const slideOverStore = useProductSlideOverStore()
-
+/**
+ * 🧩 Overlay openen (zonder Pinia)
+ * Zet globale state die door ProductSlideOver wordt gelezen
+ */
 function openProductSlideOver() {
-  // product instellen en overlay tonen
-  slideOverStore.setProduct(props.node)
-  slideOverStore.open = true
+  const visible = useState('slideOverVisible', () => false)
+  const slug = useState<string | null>('slideOverSlug', () => null)
+  slug.value = props.node.slug
+  visible.value = true
 }
 </script>
 
 <template>
   <div class="relative group cursor-pointer" @click="openProductSlideOver">
-    <SaleBadge :node class="absolute top-2 right-2 z-10" />
+    <SaleBadge :node="node" class="absolute top-2 right-2 z-10" />
 
     <NuxtImg
       v-if="imagetoDisplay"
