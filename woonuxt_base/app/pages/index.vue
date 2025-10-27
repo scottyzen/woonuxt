@@ -55,7 +55,13 @@ useSeoMeta({
         <NuxtLink class="text-primary" to="/categories">{{ $t('general.viewAll') }}</NuxtLink>
       </div>
       <div class="grid justify-center grid-cols-2 gap-4 mt-8 md:grid-cols-3 lg:grid-cols-5">
-        <CategoryCard v-for="(category, i) in productCategories" :key="i" class="w-full" :node="category" />
+        <!--CategoryCard v-for="(category, i) in productCategories" :key="i" class="w-full" :node="category" /-->
+        <CategoryCard
+  v-for="category in orderedCategories"
+  :key="category.id"
+  :category="category"
+/>
+
       </div>
     </section>
 <!--
