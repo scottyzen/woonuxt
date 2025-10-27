@@ -3,17 +3,24 @@ import { ProductsOrderByEnum } from '#woo';
 const { siteName, description, shortDescription, siteImage } = useAppConfig();
 
 // Homepagina categorie selectie
-const includeIds = [34, 35, 36, 37, 38] // <-- WP databaseId’s
+const includeIds = [34, 35, 36, 37, 38] // <-- jouw gewenste volgorde (WordPress databaseId’s)
 
-const { data } = await useAsyncGql('getProductCategories', { include })
+// Haal alleen deze categorieën op
+const { data, error } = await useAsyncGql('getProductCategories', { include: includeIds })
+
+if (error.value) {
+  console.warn('⚠️ Kon categorieën niet laden:', error.value)
+}
+
 const categories = data.value?.productCategories?.nodes || []
 
-// 🔹 Sorteer volgens jouw volgorde in include[]
+// 🔹 Sorteer volgens jouw gewenste volgorde
 const orderedCategories = computed(() =>
-  include.map(id => categories.find(cat => Number(cat.databaseId) === id)).filter(Boolean)
+  includeIds
+    .map((id) => categories.find((cat) => Number(cat.databaseId) === id))
+    .filter(Boolean)
 )
 
-// const productCategories = data.value?.productCategories?.nodes || []
 
 
 const { data: productData } = await useAsyncGql('getProducts', { first: 5, orderby: ProductsOrderByEnum.POPULARITY });
