@@ -35,25 +35,34 @@
 
 <script setup lang="ts">
 /**
- * ✅ WooNuxt-compatibele ImageGallery
- * Werkt met: galleryImages, image, featuredImage
- * Fix voor ExternalProduct (die vaak alleen product.image heeft)
+ * ImageGallery.vue — WooNuxt / WooCommerce compatible
+ * ✅ Ondersteunt ook ExternalProduct (product.image.mediaItemUrl)
  */
 const props = defineProps<{
   gallery?: Array<{
     src?: string
     sourceUrl?: string
+    mediaItemUrl?: string
     thumbnail?: string
     alt?: string
     altText?: string
   }> | null
   image?: {
     sourceUrl?: string
+    mediaItemUrl?: string
     altText?: string
   } | null
   featuredImage?: {
     sourceUrl?: string
+    mediaItemUrl?: string
     altText?: string
+  } | null
+  externalProduct?: {
+    image?: {
+      sourceUrl?: string
+      mediaItemUrl?: string
+      altText?: string
+    }
   } | null
 }>()
 
@@ -65,22 +74,28 @@ const images = computed(() => {
       src:
         img.src ||
         img.sourceUrl ||
+        img.mediaItemUrl ||
         img.thumbnail ||
         '/images/placeholder.jpg',
-      thumbnail: img.thumbnail || img.sourceUrl || img.src,
+      thumbnail: img.thumbnail || img.sourceUrl || img.mediaItemUrl || img.src,
       alt: img.alt || img.altText || 'Product afbeelding',
     }))
 
-  // 🔸 Fallback: ExternalProduct of producten zonder gallery
+  // 🔸 Fallbacks (ook voor external products)
   if (!gallery.length) {
     const fallbackSrc =
       props.image?.sourceUrl ||
+      props.image?.mediaItemUrl ||
       props.featuredImage?.sourceUrl ||
+      props.featuredImage?.mediaItemUrl ||
+      props.externalProduct?.image?.sourceUrl ||
+      props.externalProduct?.image?.mediaItemUrl ||
       '/images/placeholder.jpg'
 
     const fallbackAlt =
       props.image?.altText ||
       props.featuredImage?.altText ||
+      props.externalProduct?.image?.altText ||
       'Product afbeelding'
 
     gallery.push({
