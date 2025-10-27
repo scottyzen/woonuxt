@@ -5,6 +5,7 @@
       class="fixed inset-0 z-50 flex justify-end bg-black/50"
       @click.self="close"
     >
+      <!-- Slide-in wit paneel -->
       <Transition name="slide-panel">
         <div
           v-show="visible"
@@ -21,40 +22,38 @@
 
           <!-- Loader -->
           <div v-if="loading" class="flex justify-center items-center flex-1">
-            <LoadingIcon size="lg" color="primary" />
+            <div class="animate-spin h-8 w-8 border-t-2 border-primary mx-auto rounded-full" />
           </div>
 
           <!-- Inhoud -->
           <div v-else-if="product" class="p-4 space-y-4">
             <!-- Afbeeldingen -->
-            <ImageGallery :gallery="gallery" />
+            <ImageGallery :gallery="product.images" />
 
             <!-- Titel & prijs -->
             <h1 class="text-lg font-bold">{{ product.name }}</h1>
 
             <ProductPrice
-              :regular-price="product?.regularPrice"
-              :sale-price="product?.salePrice"
+              :regular-price="product.regular_price"
+              :sale-price="product.sale_price"
             />
 
             <!-- Beschrijving -->
             <div
-              v-html="product?.shortDescription || product?.description"
+              v-html="product.short_description || product.description"
               class="text-sm text-gray-700"
             />
 
             <!-- Sticky knop-container -->
-            <div
-              class="sticky bottom-0 bg-white p-4 z-10 border-t border-gray-200"
-            >
+            <div class="sticky bottom-0 bg-white p-4 z-10 border-t border-gray-200">
               <a
-                v-if="product?.externalUrl"
-                :href="product.externalUrl"
+                v-if="product.external_url"
+                :href="product.external_url"
                 target="_blank"
                 rel="noopener"
                 class="block w-full text-center bg-primary text-white font-bold py-3 rounded hover:bg-primary-dark transition"
               >
-                {{ product?.buttonText || 'Bekijk product' }}
+                {{ product.button_text || 'Bekijk product' }}
               </a>
             </div>
           </div>
@@ -69,37 +68,23 @@
   </ClientOnly>
 </template>
 
-<script setup lang="ts">
-import { gql } from 'graphql-tag'
-import { useAsyncQuery } from '#imports'
-import ImageGallery from '~/components/ImageGallery.vue'
-import ProductPrice from '~/components/productElements/ProductPrice.vue'
-import LoadingIcon from '~/components/generalElements/LoadingIcon.vue'
-import getProductBySlug from '~/graphql/queries/getProductBySlug.gql'
 
-const visible = useState('slideOverVisible', () => false)
-const slug = useState<string | null>('slideOverSlug', () => null)
+<script setup lang="ts">
+import ImageGallery from '~/components/ImageGallery.vue'  // ✅ Hier is de import toegevoegd
+
+
+  
+const config = useRuntimeConfig()
+const authHeader = 'Basic ' + btoa(`${config.public.wcKey}:${config.public.wcSecret}`)
+
+const visible = ref(false)
 const loading = ref(false)
 const product = ref<any | null>(null)
+
 const router = useRouter()
 let lastPathBeforeModal = ''
 
-// Map voor ImageGallery
-const gallery = computed(() => {
-  const nodes = product.value?.galleryImages?.nodes ?? []
-  return nodes.map((n: any) => ({
-    sourceUrl: n?.sourceUrl,
-    altText: n?.altText,
-  }))
-})
-
-// Watch: als slug wijzigt → laad product
-watch(slug, async (newSlug) => {
-  if (!newSlug) return
-  await open(newSlug)
-})
-
-async function open(productSlug: string) {
+async function open(productId: number) {
   if (process.client) {
     lastPathBeforeModal = window.location.pathname
     document.body.style.overflow = 'hidden'
@@ -110,11 +95,20 @@ async function open(productSlug: string) {
   product.value = null
 
   try {
-    const { data, error } = await useAsyncQuery(getProductBySlug, { slug: productSlug })
-    if (error.value) throw error.value
-    product.value = data.value?.product || null
-  } catch (err) {
-    console.error('❌ GraphQL fout:', err)
+    const data = await $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products/${productId}`, {
+      headers: { Authorization: authHeader },
+    })
+
+    product.value = data
+    console.log('🖼️ Product geladen:', data)
+
+    // Extra check als afbeeldingen ontbreken
+    if (!Array.isArray(data.images) || data.images.length === 0) {
+      console.warn('⚠️ Geen afbeeldingen gevonden voor product:', data)
+    }
+  } catch (error) {
+    console.error('❌ Fout bij ophalen product:', error)
+    product.value = null
   } finally {
     loading.value = false
   }
@@ -122,7 +116,6 @@ async function open(productSlug: string) {
 
 function close() {
   visible.value = false
-  slug.value = null
   product.value = null
 
   if (process.client) {
@@ -132,9 +125,15 @@ function close() {
     }
   }
 }
+
+
+
+  
+defineExpose({ open, close })
 </script>
 
 <style scoped>
+/* Alleen witte paneel animeren */
 .slide-panel-enter-active,
 .slide-panel-leave-active {
   transition: transform 0.3s ease;
