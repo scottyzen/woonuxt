@@ -29,9 +29,11 @@
           <div v-else-if="product" class="p-4 space-y-4">
             <!-- 🖼️ Afbeeldingen -->
             <ImageGallery
-              v-if="product?.galleryImages?.nodes?.length"
-              :gallery="product.galleryImages.nodes"
-            />
+  :gallery="product.galleryImages?.nodes"
+  :image="product.image"
+  :featured-image="product.featuredImage?.node"
+  :external-product="product"
+ />
             <NuxtImg
               v-else-if="product?.image?.sourceUrl"
               :src="product.image.sourceUrl"
