@@ -1,0 +1,12 @@
+fragment ProductCategory on ProductCategory {
+  id
+  databaseId
+  name
+  slug
+  parentDatabaseId
+  image {
+    id
+    sourceUrl
+    altText
+  }
+}
