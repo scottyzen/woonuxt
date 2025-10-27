@@ -1,14 +1,5 @@
 <script setup lang="ts">
-import { useProducts } from '~/composables/useProducts'
-import { useHelpers } from '~/composables/useHelpers'
-import { useAppConfig } from '#imports'
-
-  import getCategoryBySlug from '~/woonuxt_base/app/queries/getCategoryBySlug.gql'
-import Filters from '~/components/filters/Filters.vue'
-import ProductGrid from '~/components/productElements/ProductGrid.vue'
-import ProductResultCount from '~/components/productElements/ProductResultCount.vue'
-import OrderByDropdown from '~/components/productElements/OrderByDropdown.vue'
-import ShowFilterTrigger from '~/components/filters/ShowFilterTrigger.vue'
+import type { Product } from '~/types/product'
 
 const { setProducts, updateProductList } = useProducts()
 const { isQueryEmpty } = useHelpers()
@@ -16,16 +7,18 @@ const { storeSettings } = useAppConfig()
 const route = useRoute()
 const slug = route.params.categorySlug as string
 
-// 🧩 GraphQL categorie + producten ophalen
-const { data } = await useAsyncGql('getCategoryBySlug', { slug })
-const category = computed(() => data.value?.productCategory)
-const productsInCategory = computed(() => category.value?.products?.nodes || [])
+// 🔹 Ophalen producten + categorie via de standaard Woonuxt query
+const { data, pending, error } = await useAsyncGql('getProducts', { slug })
 
+const productsInCategory = computed(
+  () => (data.value?.products?.nodes || []) as Product[]
+)
+const category = computed(() => data.value?.productCategories?.nodes?.[0])
 
-// 🧠 Products beschikbaar maken in globale Woonuxt state
+// 🔹 Products in de store zetten
 setProducts(productsInCategory.value)
 
-// 🔁 Filters reageren op queryveranderingen
+// 🔹 Filters opnieuw laden bij query-verandering
 onMounted(() => {
   if (!isQueryEmpty.value) updateProductList()
 })
@@ -33,68 +26,90 @@ onMounted(() => {
 watch(
   () => route.query,
   () => {
+    if (route.name !== '[categorySlug]') return
     updateProductList()
   }
 )
 
-// 🧭 SEO meta
-useHead({
-  title: category.value?.name
-    ? `${category.value.name} | Kledingzoeken.nl`
-    : 'Categorie | Kledingzoeken.nl',
+// 🔹 SEO metadata
+useHead(() => ({
+  title: category.value?.name || 'Categorie',
   meta: [
     {
       hid: 'description',
       name: 'description',
       content:
-        category.value?.description?.replace(/<[^>]+>/g, '').substring(0, 155) ||
-        `Bekijk de nieuwste producten in de categorie ${category.value?.name}.`,
+        category.value?.description
+          ?.replace(/<[^>]+>/g, '')
+          .substring(0, 155) || '',
     },
   ],
-})
+}))
 </script>
 
 <template>
   <div class="container">
-    <div class="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-16 mt-8">
+    <!-- Loader -->
+    <div v-if="pending" class="flex justify-center items-center min-h-[50vh]">
+      <Loader />
+    </div>
+
+    <!-- Foutmelding -->
+    <div v-else-if="error" class="text-center text-red-600 p-8">
+      Er is een fout opgetreden bij het laden van deze categorie.
+    </div>
+
+    <!-- Categorie content -->
+    <div
+      v-else
+      class="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-16 mt-8"
+    >
       <!-- Sidebar -->
       <aside class="order-2 md:order-1">
         <Filters v-if="storeSettings.showFilters" :hide-categories="true" />
       </aside>
 
-      <!-- Main Content -->
+      <!-- Main content -->
       <section class="order-1 md:order-2 w-full">
         <!-- Breadcrumb -->
         <nav class="text-sm text-gray-500 mb-2">
           <NuxtLink to="/" class="hover:underline">Home</NuxtLink>
-          <template v-for="(ancestor, index) in category?.ancestors?.nodes" :key="ancestor.id">
+
+          <!-- Dynamische ancestors -->
+          <template v-for="ancestor in category?.ancestors?.nodes" :key="ancestor.id">
             <span class="mx-2">/</span>
-            <NuxtLink :to="`/${ancestor.slug}`" class="hover:underline">
+            <NuxtLink
+              :to="`/${ancestor.slug}`"
+              class="hover:underline capitalize"
+            >
               {{ ancestor.name }}
             </NuxtLink>
           </template>
+
           <span class="mx-2">/</span>
           <span class="text-gray-700 font-medium">{{ category?.name }}</span>
         </nav>
 
-        <!-- Title -->
+        <!-- Titel -->
         <h1 class="text-2xl font-semibold text-gray-900 mb-2">
-          {{ category?.name || 'Categorie laden...' }}
+          {{ category?.name }}
         </h1>
 
-        <!-- Description -->
+        <!-- Beschrijving -->
         <div
           v-if="category?.description"
-          class="text-sm text-gray-700 leading-relaxed mb-6"
           v-html="category.description"
+          class="text-sm text-gray-700 leading-relaxed mb-6"
         />
 
-        <!-- Controls -->
-        <div class="flex items-center justify-between w-full gap-4 mb-6 md:gap-8">
+        <!-- Controls (sorteren, filters, etc.) -->
+        <div
+          class="flex items-center justify-between w-full gap-4 mb-6 md:gap-8"
+        >
           <ProductResultCount />
           <OrderByDropdown
-            class="hidden md:inline-flex"
             v-if="storeSettings.showOrderByDropdown"
+            class="hidden md:inline-flex"
           />
           <ShowFilterTrigger
             v-if="storeSettings.showFilters"
@@ -102,11 +117,8 @@ useHead({
           />
         </div>
 
-        <!-- Product Grid -->
-        <div v-if="error" class="text-red-500 text-center my-10">
-          Er is een fout opgetreden bij het laden van de categorie.
-        </div>
-        <ProductGrid v-else />
+        <!-- Producten -->
+        <ProductGrid />
       </section>
     </div>
   </div>
