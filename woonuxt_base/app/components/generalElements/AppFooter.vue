@@ -9,14 +9,14 @@ const { wishlistLink } = useAuth();
       <div class="mr-auto">
         <Logo />
         <WebsiteShortDescription />
-        <LangSwitcher class="mt-8" />
+        <!--LangSwitcher class="mt-8" /-->
       </div>
       <div class="w-3/7 lg:w-auto">
         <div class="mb-1 font-semibold">{{ $t('general.information') }}</div>
         <div class="text-sm">
           <a href="/" class="py-1.5 block">{{ $t('general.careers') }}</a>
           <a href="/" class="py-1.5 block">{{ $t('general.press') }}</a>
-          <a href="https://woonuxt.com/faq" class="py-1.5 block" rel="noreferrer" target="_blank">FAQ's</a>
+          <a href="/faq" class="py-1.5 block" rel="noreferrer" target="_blank">FAQ's</a>
         </div>
       </div>
       <div class="w-3/7 lg:w-auto">
