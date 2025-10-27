@@ -1,28 +1,26 @@
 <template>
-  <div v-if="images.length" class="flex gap-3 items-start">
+  <div v-if="images.length" class="flex flex-col sm:flex-row gap-3 items-start">
     <!-- Hoofdafbeelding -->
-    <div class="flex-1">
+    <div class="flex-1 flex justify-center">
       <img
         :src="activeImage.src"
         :alt="activeImage.alt || 'Product afbeelding'"
-        class="w-full max-h-80 object-cover rounded-lg border"
+        class="w-full max-w-md max-h-80 rounded-lg border bg-white object-contain"
       />
     </div>
 
     <!-- Thumbnails rechts -->
     <div
       v-if="images.length > 1"
-      class="flex flex-col gap-2 overflow-y-auto max-h-80 w-20 shrink-0"
+      class="flex sm:flex-col gap-2 sm:overflow-y-auto overflow-x-auto max-h-80 w-full sm:w-20 shrink-0"
     >
       <img
         v-for="(img, index) in images"
         :key="index"
         :src="img.thumbnail || img.src"
         :alt="img.alt || 'Product afbeelding'"
-        class="w-full aspect-square object-cover rounded-md border cursor-pointer hover:opacity-80 transition"
-        :class="{
-          'border-blue-500 ring-1 ring-blue-300': activeIndex === index,
-        }"
+        class="w-20 h-20 object-contain rounded-md border cursor-pointer hover:opacity-80 transition"
+        :class="{ 'border-blue-500 ring-1 ring-blue-300': activeIndex === index }"
         @click="activeIndex = index"
       />
     </div>
@@ -37,10 +35,9 @@
 
 <script setup lang="ts">
 /**
- * Compacte ImageGallery.vue
- * ✅ Ondersteunt externe producten
- * ✅ Toont thumbnails rechts
- * ✅ Compatibel met WooNuxt GraphQL structuur
+ * ✅ WooNuxt-compatibele ImageGallery
+ * Werkt met: galleryImages, image, featuredImage
+ * Fix voor ExternalProduct (die vaak alleen product.image heeft)
  */
 const props = defineProps<{
   gallery?: Array<{
@@ -50,17 +47,17 @@ const props = defineProps<{
     alt?: string
     altText?: string
   }> | null
-  featuredImage?: {
-    sourceUrl?: string
-    altText?: string
-  }
   image?: {
     sourceUrl?: string
     altText?: string
-  }
+  } | null
+  featuredImage?: {
+    sourceUrl?: string
+    altText?: string
+  } | null
 }>()
 
-// Combineer gallery, featuredImage en image in 1 lijst
+// 🔹 Verzamel afbeeldingen uit alle mogelijke bronnen
 const images = computed(() => {
   const gallery = (props.gallery || [])
     .filter(Boolean)
@@ -74,21 +71,23 @@ const images = computed(() => {
       alt: img.alt || img.altText || 'Product afbeelding',
     }))
 
-  // ✅ Fallbacks voor externe producten
+  // 🔸 Fallback: ExternalProduct of producten zonder gallery
   if (!gallery.length) {
-    if (props.image?.sourceUrl) {
-      gallery.push({
-        src: props.image.sourceUrl,
-        thumbnail: props.image.sourceUrl,
-        alt: props.image.altText || 'Product afbeelding',
-      })
-    } else if (props.featuredImage?.sourceUrl) {
-      gallery.push({
-        src: props.featuredImage.sourceUrl,
-        thumbnail: props.featuredImage.sourceUrl,
-        alt: props.featuredImage.altText || 'Product afbeelding',
-      })
-    }
+    const fallbackSrc =
+      props.image?.sourceUrl ||
+      props.featuredImage?.sourceUrl ||
+      '/images/placeholder.jpg'
+
+    const fallbackAlt =
+      props.image?.altText ||
+      props.featuredImage?.altText ||
+      'Product afbeelding'
+
+    gallery.push({
+      src: fallbackSrc,
+      thumbnail: fallbackSrc,
+      alt: fallbackAlt,
+    })
   }
 
   return gallery
@@ -100,6 +99,6 @@ const activeImage = computed(() => images.value[activeIndex.value] || {})
 
 <style scoped>
 img {
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
 }
 </style>
