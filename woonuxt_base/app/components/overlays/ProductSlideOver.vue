@@ -73,19 +73,17 @@
 
 <script setup lang="ts">
 import ImageGallery from '~/components/ImageGallery.vue'
-//import GetProductBySlug from '~/graphql/queries/getProductBySlug.gql'
 
-
-
+// WooNuxt GraphQL query
+// let op: dit moet staan in woonuxt_base/app/queries/getProduct.gql
+// (en niet in /graphql/queries)
 const visible = ref(false)
 const loading = ref(false)
 const product = ref<any | null>(null)
 
-const { client } = useApollo() // Woonuxt/Apollo GraphQL client
 const router = useRouter()
 let lastPathBeforeModal = ''
 
-// ⬇️ Slug gebruiken i.p.v. id
 async function open(_id: number, slug: string) {
   if (process.client) {
     lastPathBeforeModal = window.location.pathname
@@ -97,16 +95,18 @@ async function open(_id: number, slug: string) {
   product.value = null
 
   try {
-    const { data } = await client.query({
-      query: GetProductBySlug,
-      variables: { slug },
-      fetchPolicy: 'no-cache',
-    })
+    // Gebruik WooNuxt’s ingebouwde useAsyncGql
+    const { data, error } = await useAsyncGql('getProduct', { slug })
 
-    product.value = data?.product
-    console.log('🧩 Product geladen via slug:', slug, product.value)
-  } catch (error) {
-    console.error('❌ Fout bij ophalen product:', error)
+    if (error.value) {
+      console.error('❌ Fout bij ophalen product:', error.value)
+      product.value = null
+    } else {
+      product.value = data.value?.product
+      console.log('🧩 Product geladen via slug:', slug, product.value)
+    }
+  } catch (err) {
+    console.error('❌ Onverwachte fout:', err)
     product.value = null
   } finally {
     loading.value = false
@@ -127,7 +127,6 @@ function close() {
 
 defineExpose({ open, close })
 </script>
-
 
 <style scoped>
 /* Alleen witte paneel animeren */
