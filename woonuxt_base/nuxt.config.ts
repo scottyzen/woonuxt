@@ -10,7 +10,7 @@ const APP_HOST = process.env.APP_HOST || 'http://localhost:3000';
 export default defineNuxtConfig({
 
   image: {
-    provider: 'ipx',
+    provider: 'none',
     domains: ['wp.kledingzoeken.nl'], // ← vervang met je echte WordPress domein
   },
   
