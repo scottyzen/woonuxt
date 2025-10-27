@@ -13,7 +13,7 @@
   "dependencies": {
     "@stripe/stripe-js": "^8.1.0",
     "@vueform/slider": "^2.1.10",
-    "@vueuse/core": "^13.9.0"
+    "@vueuse/core": "^13.9.0",
     "@rollup/plugin-graphql": "^2.0.5"
   },
   "devDependencies": {
