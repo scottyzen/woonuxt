@@ -3,7 +3,7 @@
     <NuxtImg
       width="1400"
       height="600"
-      class="object-cover w-full h-[300px] md:h-[360px] lg:h-[420px]"
+      class="object-cover w-full h-[300px] md:h-[360px] lg:h-[400px]"
       src="/images/hero-4.jpg"
       alt="Hero image"
       loading="eager"
@@ -15,7 +15,7 @@
     />
     <div class="container absolute inset-0 flex flex-col items-start justify-center bg-gradient-to-l from-white/70 via-white/40 to-transparent md:bg-none px-4">
       <h1 class="text-2xl font-bold md:text-3xl lg:text-4xl text-gray-900">
-        Welkom bij Kledingzoeken.nl
+        Kledingzoeken.nl
       </h1>
       <h2 class="text-md md:text-lg lg:text-2xl text-gray-700 mb-4">
         Jouw slimme startpunt voor kleding & mode.
