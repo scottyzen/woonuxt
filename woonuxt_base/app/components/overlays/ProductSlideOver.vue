@@ -22,15 +22,13 @@
 
           <!-- Loader -->
           <div v-if="loading" class="flex justify-center items-center flex-1">
-            <div class="animate-spin h-8 w-8 border-t-2 border-primary mx-auto rounded-full" />
+            <LoadingIcon size="lg" color="primary" />
           </div>
 
           <!-- Inhoud -->
           <div v-else-if="product" class="p-4 space-y-4">
-            <!-- Afbeeldingen -->
             <ImageGallery :gallery="product?.galleryImages?.nodes" />
 
-            <!-- Titel & prijs -->
             <h1 class="text-lg font-bold">{{ product.name }}</h1>
 
             <ProductPrice
@@ -38,13 +36,11 @@
               :sale-price="product?.salePrice"
             />
 
-            <!-- Beschrijving -->
             <div
               v-html="product?.shortDescription || product?.description"
               class="text-sm text-gray-700"
             />
 
-            <!-- Sticky knop-container -->
             <div class="sticky bottom-0 bg-white p-4 z-10 border-t border-gray-200">
               <a
                 v-if="product?.externalUrl"
@@ -58,7 +54,6 @@
             </div>
           </div>
 
-          <!-- Fallback -->
           <div v-else class="p-4 text-center text-gray-500">
             Product niet gevonden.
           </div>
@@ -70,19 +65,15 @@
 
 <script setup lang="ts">
 import ImageGallery from '~/components/ImageGallery.vue'
-import getProduct from '~/app/queries/getProduct.gql'
+import LoadingIcon from '~/components/generalElements/LoadingIcon.vue'
+import getProduct from '../../queries/getProduct.gql' // ✅ correct pad
 
 const visible = ref(false)
 const loading = ref(false)
 const product = ref<any | null>(null)
-
 const router = useRouter()
 let lastPathBeforeModal = ''
 
-/**
- * Open product overlay
- * @param {string} productSlug - De slug van het product (bv. "heren-tshirt-blauw")
- */
 async function open(productSlug: string) {
   if (process.client) {
     lastPathBeforeModal = window.location.pathname
@@ -106,10 +97,6 @@ async function open(productSlug: string) {
     }
 
     product.value = data.value?.product || null
-
-    if (!product.value) {
-      console.warn('⚠️ Geen product gevonden voor slug:', productSlug)
-    }
   } catch (err) {
     console.error('❌ Fout bij ophalen product:', err)
     product.value = null
@@ -118,7 +105,6 @@ async function open(productSlug: string) {
   }
 }
 
-/** Sluit de overlay en herstel vorige route */
 function close() {
   visible.value = false
   product.value = null
@@ -135,7 +121,6 @@ defineExpose({ open, close })
 </script>
 
 <style scoped>
-/* Alleen witte paneel animeren */
 .slide-panel-enter-active,
 .slide-panel-leave-active {
   transition: transform 0.3s ease;
