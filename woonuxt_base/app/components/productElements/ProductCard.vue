@@ -18,8 +18,8 @@ const imgHeight = Math.round(imgWidth * 1.125)
 // 🪟 Overlay (Woonuxt provide/inject)
 const productSlideOver = inject('productSlideOver') as Ref<any>
 const router = useRouter()
-function openProduct(id: number, _slug: string) {
-  productSlideOver?.value?.open(id)
+function openProduct(id: number, slug: string) {
+  productSlideOver?.value?.open(id, slug)
 }
 
 // 🎨 Filters (kleurvariaties)
