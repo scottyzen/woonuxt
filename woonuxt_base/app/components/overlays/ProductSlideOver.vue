@@ -28,14 +28,17 @@
           <!-- Inhoud -->
           <div v-else-if="product" class="p-4 space-y-4">
             <!-- Afbeeldingen -->
-            <ImageGallery :gallery="product.images" />
+            <ImageGallery :gallery="product.galleryImages?.nodes || []" />
+
+
+
 
             <!-- Titel & prijs -->
             <h1 class="text-lg font-bold">{{ product.name }}</h1>
 
             <ProductPrice
-              :regular-price="product.regular_price"
-              :sale-price="product.sale_price"
+              :regular-price="product.regularPrice"
+              :sale-price="product.salePrice"
             />
 
             <!-- Beschrijving -->
