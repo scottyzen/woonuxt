@@ -1,28 +1,41 @@
 <script setup lang="ts">
-const { t } = useI18n();
+const { t } = useI18n()
 const { node } = defineProps({
   node: { type: Object, required: true },
-});
+})
+const { storeSettings } = useAppConfig()
 
-const { storeSettings } = useAppConfig();
+// 🔢 Gebruik juiste prijsvelden (met fallback)
+const salePrice = computed(() =>
+  parseFloat(node?.rawSalePrice || node?.salePrice || 0)
+)
+const regularPrice = computed(() =>
+  parseFloat(node?.rawRegularPrice || node?.regularPrice || 0)
+)
 
+// 📊 Bereken korting in procenten
 const salePercentage = computed((): string => {
-  if (!node?.rawSalePrice || !node?.rawRegularPrice) return '';
-  const salePrice = parseFloat(node?.rawSalePrice);
-  const regularPrice = parseFloat(node?.rawRegularPrice);
-  return Math.round(((salePrice - regularPrice) / regularPrice) * 100) + ` %`;
-});
+  if (!salePrice.value || !regularPrice.value || regularPrice.value === 0) return ''
+  const percent = Math.round(((regularPrice.value - salePrice.value) / regularPrice.value) * 100)
+  return `-${percent}%`
+})
 
-const showSaleBadge = computed(() => node.rawSalePrice && storeSettings.saleBadge !== 'hidden');
+// 👁️ Bepaal of badge getoond moet worden
+const showSaleBadge = computed(
+  () => (salePrice.value && regularPrice.value && storeSettings.saleBadge !== 'hidden')
+)
 
+// 🏷️ Tekst (percent of vertaling)
 const textToDisplay = computed(() => {
-  if (storeSettings?.saleBadge === 'percent') return salePercentage.value;
-  return t('shop.onSale') ? t('shop.onSale') : 'Sale';
-});
+  if (storeSettings?.saleBadge === 'percent' && salePercentage.value) return salePercentage.value
+  return t('shop.onSale') || 'Sale'
+})
 </script>
 
 <template>
-  <span v-if="showSaleBadge" class="red-badge">{{ textToDisplay }}</span>
+  <span v-if="showSaleBadge" class="red-badge">
+    {{ textToDisplay }}
+  </span>
 </template>
 
 <style lang="postcss" scoped>
