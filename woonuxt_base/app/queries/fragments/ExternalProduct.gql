@@ -1,36 +1,67 @@
-fragment ExternalProduct on ExternalProduct {
-  id
-  databaseId
-  name
-  slug
-  type
-  price
-  regularPrice
-  salePrice
-  externalUrl
-  buttonText
-
-  image {
+query getProduct($slug: ID!) {
+  product(id: $slug, idType: SLUG) {
+    name
+    type
+    databaseId
     id
-    sourceUrl
-    altText
-    title
-  }
-
-  featuredImage {
-    node {
+    metaData {
       id
-      sourceUrl
-      altText
-      title
+      key
+      value
+    }
+    slug
+    sku
+    description
+    rawDescription: description(format: RAW)
+    shortDescription
+    ...ProductWithAttributes
+    ...ProductCategories
+    ...Terms
+    ...SimpleProduct
+    ...VariableProduct
+    ...ExternalProduct
+    related(first: 5) {
+      nodes {
+        ...SimpleProduct
+        ...VariableProduct
+        ...ExternalProduct
+      }
+    }
+    reviews {
+      averageRating
+      edges {
+        rating
+        node {
+          ...Comment
+        }
+      }
     }
   }
+}
 
-  galleryImages {
+fragment ProductWithAttributes on ProductWithAttributes {
+  attributes {
     nodes {
-      id
-      sourceUrl
-      altText
+      ...ProductAttribute
+    }
+  }
+}
+
+fragment ProductAttribute on ProductAttribute {
+  variation
+  name
+  id
+  options
+  label
+  scope
+  ... on GlobalProductAttribute {
+    terms(where: { orderby: MENU_ORDER, order: ASC }) {
+      nodes {
+        name
+        slug
+        taxonomyName
+        databaseId
+      }
     }
   }
 }
