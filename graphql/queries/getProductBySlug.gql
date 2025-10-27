@@ -5,15 +5,31 @@ query GetProductBySlug($slug: ID!) {
     name
     description
     shortDescription
-    price
-    regularPrice
-    salePrice
-    externalUrl
-    buttonText
+
+    # Pricing (voor alle WooCommerce producttypes)
+    ... on SimpleProduct {
+      price
+      regularPrice
+      salePrice
+    }
+    ... on VariableProduct {
+      price
+      regularPrice
+      salePrice
+    }
+    ... on ExternalProduct {
+      price
+      regularPrice
+      salePrice
+      externalUrl
+      buttonText
+    }
+
     image {
       sourceUrl
       altText
     }
+
     galleryImages {
       nodes {
         id
