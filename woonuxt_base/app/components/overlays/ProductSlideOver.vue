@@ -60,7 +60,7 @@
 
           <!-- Fallback -->
           <div v-else class="p-4 text-center text-gray-500">
-            Product niet gevonden.
+            Product niet gevonden..
           </div>
         </div>
       </Transition>
