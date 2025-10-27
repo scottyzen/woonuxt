@@ -35,21 +35,31 @@ query getProducts(
     }
   }
 
- productCategories(where: { slug: $slug }) {
-  nodes {
-    id
-    name
-    description
-    slug
-    uri
-    parent {
-      node {
-        id
-        name
-        slug
+  productCategories(where: { slug: $slug }) {
+    nodes {
+      id
+      name
+      description
+      slug
+      uri
+
+      # 🔹 Nieuw: haal volledige ancestor chain op
+      ancestors {
+        nodes {
+          id
+          name
+          slug
+        }
+      }
+
+      # Huidige directe parent (optioneel behouden)
+      parent {
+        node {
+          id
+          name
+          slug
+        }
       }
     }
   }
-}
-
 }
