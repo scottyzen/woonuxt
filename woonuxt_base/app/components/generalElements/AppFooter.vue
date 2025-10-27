@@ -14,12 +14,12 @@ const { wishlistLink } = useAuth();
       <div class="w-3/7 lg:w-auto">
         <div class="mb-1 font-semibold">{{ $t('general.information') }}</div>
         <div class="text-sm">
-          <a class="py-1.5 block" href="https://github.com/scottyzen/woonuxt?tab=readme-ov-file#next-generation-front-end-for-woocommerce" target="_blank">{{
-            $t('general.about')
+          {{
+           $t('general.about')
           }}</a>
           <a href="/" class="py-1.5 block">{{ $t('general.careers') }}</a>
           <a href="/" class="py-1.5 block">{{ $t('general.press') }}</a>
-          <a href="https://woonuxt.com/faq" class="py-1.5 block" rel="noreferrer" target="_blank">FAQ's</a>
+          <a href="/faq" class="py-1.5 block" rel="noreferrer" target="_blank">FAQ's</a>
         </div>
       </div>
       <div class="w-3/7 lg:w-auto">
@@ -88,8 +88,8 @@ const { wishlistLink } = useAuth();
     <div class="container border-t flex items-center justify-center mb-4">
       <div class="copywrite">
         <p class="py-4 text-xs text-center">
-          <a href="https://woonuxt.com" :title="`WooNuxt v${wooNuxtVersionInfo}`">{{ `WooNuxt v${wooNuxtVersionInfo}` }}</a> - by
-          <a href="https://scottyzen.com" title="Scott Kennedy - Web Developer" target="_blank">Scott Kennedy</a>
+          Kledingzoeken.nl - 2025
+          
         </p>
       </div>
       <SocialIcons class="ml-auto" />
