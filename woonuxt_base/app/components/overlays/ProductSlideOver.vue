@@ -68,23 +68,20 @@
   </ClientOnly>
 </template>
 
-
 <script setup lang="ts">
-import ImageGallery from '~/components/ImageGallery.vue'  // ✅ Hier is de import toegevoegd
-
-
-  
-const config = useRuntimeConfig()
-const authHeader = 'Basic ' + btoa(`${config.public.wcKey}:${config.public.wcSecret}`)
+import ImageGallery from '~/components/ImageGallery.vue'
+import GetProductBySlug from '~/graphql/queries/getProductBySlug.gql'
 
 const visible = ref(false)
 const loading = ref(false)
 const product = ref<any | null>(null)
 
+const { client } = useApollo() // Woonuxt/Apollo GraphQL client
 const router = useRouter()
 let lastPathBeforeModal = ''
 
-async function open(productId: number) {
+// ⬇️ Slug gebruiken i.p.v. id
+async function open(_id: number, slug: string) {
   if (process.client) {
     lastPathBeforeModal = window.location.pathname
     document.body.style.overflow = 'hidden'
@@ -95,17 +92,14 @@ async function open(productId: number) {
   product.value = null
 
   try {
-    const data = await $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products/${productId}`, {
-      headers: { Authorization: authHeader },
+    const { data } = await client.query({
+      query: GetProductBySlug,
+      variables: { slug },
+      fetchPolicy: 'no-cache',
     })
 
-    product.value = data
-    console.log('🖼️ Product geladen:', data)
-
-    // Extra check als afbeeldingen ontbreken
-    if (!Array.isArray(data.images) || data.images.length === 0) {
-      console.warn('⚠️ Geen afbeeldingen gevonden voor product:', data)
-    }
+    product.value = data?.product
+    console.log('🧩 Product geladen via slug:', slug, product.value)
   } catch (error) {
     console.error('❌ Fout bij ophalen product:', error)
     product.value = null
@@ -126,11 +120,9 @@ function close() {
   }
 }
 
-
-
-  
 defineExpose({ open, close })
 </script>
+
 
 <style scoped>
 /* Alleen witte paneel animeren */
