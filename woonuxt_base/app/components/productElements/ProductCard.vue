@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router'
-import { inject, ref, watch, computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { ref, watch, computed } from 'vue'
 import type { PropType } from 'vue'
 import type { Product } from '~/types/product'
 
+// 🧱 Store voor overlay
+import { useProductSlideOverStore } from '~/woonuxt_base/app/stores/useProductSlideOverStore'
+
 // 🌍 App config
-const route = useRoute()
-const router = useRouter()
 const { storeSettings } = useAppConfig()
 
 // 🧩 Props
@@ -15,14 +16,12 @@ const props = defineProps({
   index: { type: Number, default: 1 },
 })
 
-// 📦 Emits
-const emit = defineEmits<{ (e: 'open', slug: string): void }>()
-
-// 📸 Afbeeldingsmaten
+// 🖼️ Afbeeldingsmaten
 const imgWidth = 280
 const imgHeight = Math.round(imgWidth * 1.125)
 
 // 🎨 Filters (kleurvariaties)
+const route = useRoute()
 const filterQuery = ref(route.query?.filter as string)
 const paColor = ref(
   filterQuery.value?.split('pa_color[')[1]?.split(']')[0]?.split(',') || []
@@ -67,38 +66,33 @@ const imagetoDisplay = computed<string>(() => {
   return mainImage.value
 })
 
-// 🧩 Overlay integratie
-// (oude inject openProduct behouden voor backwards compat)
-const productSlideOver = inject('productSlideOver') as Ref<any> | undefined
-function openProduct(id: number, _slug: string) {
-  productSlideOver?.value?.open(id)
-}
+// 🧩 Overlay openen via store
+const slideOverStore = useProductSlideOverStore()
 
-// 🔔 Nieuw event gebaseerd overlay trigger
-function openOverlay() {
-  emit('open', props.node.slug)
+function openProductSlideOver() {
+  // product instellen en overlay tonen
+  slideOverStore.setProduct(props.node)
+  slideOverStore.open = true
 }
 </script>
 
 <template>
-  <div class="relative group">
-    <!-- Klik opent overlay via emit -->
-    <a href="#" @click.prevent="openOverlay" :title="node.name">
-      <SaleBadge :node class="absolute top-2 right-2" />
-      <NuxtImg
-        v-if="imagetoDisplay"
-        :width="imgWidth"
-        :height="imgHeight"
-        :src="imagetoDisplay"
-        :alt="node.image?.altText || node.name || 'Product image'"
-        :title="node.image?.title || node.name"
-        :loading="index <= 3 ? 'eager' : 'lazy'"
-        :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
-        class="rounded-lg object-top object-cover w-full aspect-9/8"
-        placeholder
-        placeholder-class="blur-xl"
-      />
-    </a>
+  <div class="relative group cursor-pointer" @click="openProductSlideOver">
+    <SaleBadge :node class="absolute top-2 right-2 z-10" />
+
+    <NuxtImg
+      v-if="imagetoDisplay"
+      :width="imgWidth"
+      :height="imgHeight"
+      :src="imagetoDisplay"
+      :alt="node.image?.altText || node.name || 'Product image'"
+      :title="node.image?.title || node.name"
+      :loading="index <= 3 ? 'eager' : 'lazy'"
+      :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
+      class="rounded-lg object-top object-cover w-full aspect-9/8 transition-transform duration-200 group-hover:scale-[1.03]"
+      placeholder
+      placeholder-class="blur-xl"
+    />
 
     <div class="p-2">
       <StarRating
@@ -107,15 +101,9 @@ function openOverlay() {
         :count="node.reviewCount"
       />
 
-      <NuxtLink
-        v-if="node.slug"
-        :to="`/product/${decodeURIComponent(node.slug)}`"
-        :title="node.name"
-      >
-        <h2 class="mb-2 font-light leading-tight group-hover:text-primary">
-          {{ node.name }}
-        </h2>
-      </NuxtLink>
+      <h2 class="mb-2 font-light leading-tight group-hover:text-primary">
+        {{ node.name }}
+      </h2>
 
       <ProductPrice
         class="text-sm"
