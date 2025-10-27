@@ -39,7 +39,6 @@ query getProduct($slug: ID!) {
   }
 }
 
-
 fragment ProductWithAttributes on ProductWithAttributes {
   attributes {
     nodes {
@@ -47,6 +46,27 @@ fragment ProductWithAttributes on ProductWithAttributes {
     }
   }
 }
+
+fragment ProductAttribute on ProductAttribute {
+  variation
+  name
+  id
+  options
+  label
+  scope
+  ... on GlobalProductAttribute {
+    terms(where: { orderby: MENU_ORDER, order: ASC }) {
+      nodes {
+        name
+        slug
+        taxonomyName
+        databaseId
+      }
+    }
+  }
+}
+
+# 🔹 Voeg dit fragment toe — dit haalt de afbeelding en URL op voor externe producten
 fragment ExternalProduct on ExternalProduct {
   id
   databaseId
@@ -77,25 +97,6 @@ fragment ExternalProduct on ExternalProduct {
       id
       sourceUrl
       altText
-    }
-  }
-}
-
-fragment ProductAttribute on ProductAttribute {
-  variation
-  name
-  id
-  options
-  label
-  scope
-  ... on GlobalProductAttribute {
-    terms(where: { orderby: MENU_ORDER, order: ASC }) {
-      nodes {
-        name
-        slug
-        taxonomyName
-        databaseId
-      }
     }
   }
 }
