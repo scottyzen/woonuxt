@@ -15,7 +15,7 @@ const props = defineProps({
 const imgWidth = 280
 const imgHeight = Math.round(imgWidth * 1.125)
 
-// 🪟 Overlay store
+// 🪟 Overlay (Woonuxt provide/inject)
 const productSlideOver = inject('productSlideOver') as Ref<any>
 const router = useRouter()
 function openProduct(id: number, _slug: string) {
@@ -28,7 +28,7 @@ const paColor = ref(
   filterQuery.value?.split('pa_color[')[1]?.split(']')[0]?.split(',') || []
 )
 
-// 🔁 Watch filter query veranderingen
+// 🔁 Reageer op query-veranderingen
 watch(
   () => route.query,
   () => {
@@ -68,65 +68,37 @@ const imagetoDisplay = computed<string>(() => {
 })
 
 // 🧠 Debug (optioneel)
-onMounted(() => {
-  if (props.node?.__typename === 'ExternalProduct') {
-    console.log('💡 External product:', props.node)
-  }
-})
+// onMounted(() => {
+//   if (props.node?.__typename === 'ExternalProduct') {
+//     console.log('External product:', props.node)
+//   }
+// })
 </script>
 
 <template>
   <div class="relative group">
-    <!-- 🔗 Externe producten openen direct naar affiliate link -->
-    <template v-if="node.externalUrl">
-      <a
-        :href="node.externalUrl"
-        target="_blank"
-        rel="sponsored noopener noreferrer"
-        :title="node.name"
-      >
-        <SaleBadge :node class="absolute top-2 right-2" />
+    <!-- Altijd slide-over openen (ook bij ExternalProduct) -->
+    <a
+      href="#"
+      @click.prevent="openProduct(node.databaseId, node.slug)"
+      :title="node.name"
+    >
+      <SaleBadge :node class="absolute top-2 right-2" />
 
-        <NuxtImg
-          v-if="imagetoDisplay"
-          :width="imgWidth"
-          :height="imgHeight"
-          :src="imagetoDisplay"
-          :alt="node.image?.altText || node.name || 'Product image'"
-          :title="node.image?.title || node.name"
-          :loading="index <= 3 ? 'eager' : 'lazy'"
-          :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
-          class="rounded-lg object-top object-cover w-full aspect-9/8 transition-transform duration-200 group-hover:scale-[1.03]"
-          placeholder
-          placeholder-class="blur-xl"
-        />
-      </a>
-    </template>
-
-    <!-- 🪟 Niet-externe producten openen in overlay -->
-    <template v-else>
-      <a
-        href="#"
-        @click.prevent="openProduct(node.databaseId, node.slug)"
-        :title="node.name"
-      >
-        <SaleBadge :node class="absolute top-2 right-2" />
-
-        <NuxtImg
-          v-if="imagetoDisplay"
-          :width="imgWidth"
-          :height="imgHeight"
-          :src="imagetoDisplay"
-          :alt="node.image?.altText || node.name || 'Product image'"
-          :title="node.image?.title || node.name"
-          :loading="index <= 3 ? 'eager' : 'lazy'"
-          :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
-          class="rounded-lg object-top object-cover w-full aspect-9/8 transition-transform duration-200 group-hover:scale-[1.03]"
-          placeholder
-          placeholder-class="blur-xl"
-        />
-      </a>
-    </template>
+      <NuxtImg
+        v-if="imagetoDisplay"
+        :width="imgWidth"
+        :height="imgHeight"
+        :src="imagetoDisplay"
+        :alt="node.image?.altText || node.name || 'Product image'"
+        :title="node.image?.title || node.name"
+        :loading="index <= 3 ? 'eager' : 'lazy'"
+        :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
+        class="rounded-lg object-top object-cover w-full aspect-9/8 transition-transform duration-200 group-hover:scale-[1.03]"
+        placeholder
+        placeholder-class="blur-xl"
+      />
+    </a>
 
     <div class="p-2">
       <NuxtLink
@@ -139,7 +111,7 @@ onMounted(() => {
         </h2>
       </NuxtLink>
 
-      <!-- ✅ Fallback toegevoegd voor externe producten -->
+      <!-- Prijs met fallback voor ExternalProduct -->
       <ProductPrice
         class="text-sm"
         :sale-price="node.salePrice || node.price"
