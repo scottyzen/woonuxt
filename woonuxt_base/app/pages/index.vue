@@ -5,12 +5,15 @@ const { siteName, description, shortDescription, siteImage } = useAppConfig();
 // Homepagina categorie selectie
 const includeIds = [34, 35, 36, 37, 38] // <-- WP databaseId’s
 
-const { data } = await useAsyncGql('getProductCategories', {
-  first: 5,
-  include: includeIds
-})
+const { data } = await useAsyncGql('getProductCategories', { include })
+const categories = data.value?.productCategories?.nodes || []
 
-const productCategories = data.value?.productCategories?.nodes || []
+// 🔹 Sorteer volgens jouw volgorde in include[]
+const orderedCategories = computed(() =>
+  include.map(id => categories.find(cat => Number(cat.databaseId) === id)).filter(Boolean)
+)
+
+// const productCategories = data.value?.productCategories?.nodes || []
 
 
 const { data: productData } = await useAsyncGql('getProducts', { first: 5, orderby: ProductsOrderByEnum.POPULARITY });
