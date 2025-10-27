@@ -1,8 +1,19 @@
-query getProducts($after: String, $slug: [String], $first: Int = 9999, $orderby: ProductsOrderByEnum = DATE) {
+query getProducts(
+  $after: String
+  $slug: [String]
+  $first: Int = 9999
+  $orderby: ProductsOrderByEnum = DATE
+) {
   products(
     first: $first
     after: $after
-    where: { categoryIn: $slug, visibility: VISIBLE, minPrice: 0, orderby: { field: $orderby, order: DESC }, status: "publish" }
+    where: {
+      categoryIn: $slug
+      visibility: VISIBLE
+      minPrice: 0
+      orderby: { field: $orderby, order: DESC }
+      status: "publish"
+    }
   ) {
     pageInfo {
       hasNextPage
@@ -21,6 +32,16 @@ query getProducts($after: String, $slug: [String], $first: Int = 9999, $orderby:
       ...SimpleProduct
       ...VariableProduct
       ...ExternalProduct
+    }
+  }
+
+  productCategories(where: { slug: $slug }) {
+    nodes {
+      id
+      name
+      description
+      slug
+      uri
     }
   }
 }
