@@ -20,9 +20,9 @@
             <span class="w-6" />
           </div>
 
-          <!-- Loader -->
+          <!-- Loader (originele WooNuxt loader) -->
           <div v-if="loading" class="flex justify-center items-center flex-1">
-            <div class="animate-spin h-8 w-8 border-t-2 border-primary mx-auto rounded-full" />
+            <LoadingIcon class="w-10 h-10 text-primary" />
           </div>
 
           <!-- Inhoud -->
@@ -68,12 +68,10 @@
   </ClientOnly>
 </template>
 
-
 <script setup lang="ts">
-import ImageGallery from '~/components/ImageGallery.vue'  // ✅ Hier is de import toegevoegd
+import ImageGallery from '~/components/ImageGallery.vue'
+import LoadingIcon from 'woonuxt_base/app/components/generalElements/LoadingIcon.vue'
 
-
-  
 const config = useRuntimeConfig()
 const authHeader = 'Basic ' + btoa(`${config.public.wcKey}:${config.public.wcSecret}`)
 
@@ -126,9 +124,6 @@ function close() {
   }
 }
 
-
-
-  
 defineExpose({ open, close })
 </script>
 
