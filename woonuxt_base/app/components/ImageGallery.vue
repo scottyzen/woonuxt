@@ -35,8 +35,9 @@
 
 <script setup lang="ts">
 /**
- * ImageGallery.vue — WooNuxt / WooCommerce compatible
- * ✅ Ondersteunt ook ExternalProduct (product.image.mediaItemUrl)
+ * 🔹 Universele WooNuxt ImageGallery
+ * - Werkt met alle WooCommerce producttypes, incl. ExternalProduct
+ * - Gebruikt exact dezelfde fallbacklogica als ProductCard.vue
  */
 const props = defineProps<{
   gallery?: Array<{
@@ -50,24 +51,21 @@ const props = defineProps<{
   image?: {
     sourceUrl?: string
     mediaItemUrl?: string
+    producCardSourceUrl?: string
     altText?: string
+    title?: string
   } | null
   featuredImage?: {
     sourceUrl?: string
     mediaItemUrl?: string
     altText?: string
   } | null
-  externalProduct?: {
-    image?: {
-      sourceUrl?: string
-      mediaItemUrl?: string
-      altText?: string
-    }
-  } | null
+  externalProduct?: any
 }>()
 
 // 🔹 Verzamel afbeeldingen uit alle mogelijke bronnen
 const images = computed(() => {
+  // gallery (variabele producten, etc.)
   const gallery = (props.gallery || [])
     .filter(Boolean)
     .map((img) => ({
@@ -81,9 +79,10 @@ const images = computed(() => {
       alt: img.alt || img.altText || 'Product afbeelding',
     }))
 
-  // 🔸 Fallbacks (ook voor external products)
+  // 🔸 Fallback (zelfde als ProductCard.vue)
   if (!gallery.length) {
     const fallbackSrc =
+      props.image?.producCardSourceUrl ||
       props.image?.sourceUrl ||
       props.image?.mediaItemUrl ||
       props.featuredImage?.sourceUrl ||
