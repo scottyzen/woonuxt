@@ -2,14 +2,22 @@
 import { ProductsOrderByEnum } from '#woo';
 const { siteName, description, shortDescription, siteImage } = useAppConfig();
 
-const { data } = await useAsyncGql('getProductCategories', { first: 6 });
-const productCategories = data.value?.productCategories?.nodes || [];
+// Homepagina categorie selectie
+const includeIds = [34, 35, 36, 37, 38] // <-- WP databaseId’s
+
+const { data } = await useAsyncGql('getProductCategories', {
+  first: 5,
+  include: includeIds
+})
+
+const productCategories = data.value?.productCategories?.nodes || []
+
 
 const { data: productData } = await useAsyncGql('getProducts', { first: 5, orderby: ProductsOrderByEnum.POPULARITY });
 const popularProducts = productData.value.products?.nodes || [];
 
 useSeoMeta({
-  title: `Home`,
+  title: `Kleding Zoeken: Jouw slimme startpunt voor kleding & mode.`,
   ogTitle: siteName,
   description: description,
   ogDescription: shortDescription,
