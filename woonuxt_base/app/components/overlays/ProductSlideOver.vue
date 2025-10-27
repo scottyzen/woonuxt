@@ -73,7 +73,8 @@
 
 <script setup lang="ts">
 import ImageGallery from '~/components/ImageGallery.vue'
-import GetProductBySlug from '~/graphql/queries/getProductBySlug.gql'
+import GetProductBySlug from '~/woonuxt_base/app/queries/getProductBySlug.gql'
+
 
 const visible = ref(false)
 const loading = ref(false)
