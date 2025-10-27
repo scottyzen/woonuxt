@@ -71,7 +71,7 @@
 import { ref, computed } from 'vue'
 import { useQuery, gql } from '@urql/vue'
 import ImageGallery from '~/components/ImageGallery.vue'
-import LoadingIcon from 'woonuxt_base/app/components/generalElements/LoadingIcon.vue'
+import LoadingIcon from '~/components/generalElements/LoadingIcon.vue'
 
 const visible = ref(false)
 const slug = ref<string | null>(null)
