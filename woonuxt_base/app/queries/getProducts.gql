@@ -35,13 +35,21 @@ query getProducts(
     }
   }
 
-  productCategories(where: { slug: $slug }) {
-    nodes {
-      id
-      name
-      description
-      slug
-      uri
+ productCategories(where: { slug: $slug }) {
+  nodes {
+    id
+    name
+    description
+    slug
+    uri
+    parent {
+      node {
+        id
+        name
+        slug
+      }
     }
   }
+}
+
 }
