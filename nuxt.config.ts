@@ -28,5 +28,8 @@ export default defineNuxtConfig({
     minify: true,
   },
 
-
+  // ✅ Vite plugin om .gql-bestanden te kunnen importeren
+  vite: {
+    plugins: [require('@rollup/plugin-graphql')()],
+  },
 })
