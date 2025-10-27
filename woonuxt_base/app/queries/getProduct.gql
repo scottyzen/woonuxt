@@ -38,22 +38,7 @@ query getProduct($slug: ID!) {
     }
   }
 }
-fragment ExternalProduct on ExternalProduct {
-  id
-  databaseId
-  name
-  slug
-  type
-  price
-  regularPrice
-  salePrice
-  externalUrl
-  buttonText
-  image {
-    sourceUrl
-    altText
-  }
-}
+
 
 fragment ProductWithAttributes on ProductWithAttributes {
   attributes {
