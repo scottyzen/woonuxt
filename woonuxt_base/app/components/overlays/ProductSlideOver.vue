@@ -29,12 +29,12 @@
           <div v-else-if="product" class="p-4 space-y-4">
             <!-- Toon galerij als die bestaat -->
             <ImageGallery
-              v-if="product?.galleryImages?.nodes?.length"
               :gallery="product.galleryImages?.nodes"
               :image="product.image"
               :featured-image="product.featuredImage?.node"
               :external-product="product"
             />
+
             
             <!-- Toon fallback afbeelding -->
             <NuxtImg
