@@ -2,7 +2,8 @@
 import { useProducts } from '~/composables/useProducts'
 import { useHelpers } from '~/composables/useHelpers'
 import { useAppConfig } from '#imports'
-import getCategoryBySlug from '~/graphql/queries/getCategoryBySlug.gql'
+
+  import getCategoryBySlug from '~/woonuxt_base/app/queries/getCategoryBySlug.gql'
 import Filters from '~/components/filters/Filters.vue'
 import ProductGrid from '~/components/productElements/ProductGrid.vue'
 import ProductResultCount from '~/components/productElements/ProductResultCount.vue'
