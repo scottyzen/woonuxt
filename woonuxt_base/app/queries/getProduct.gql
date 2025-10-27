@@ -47,6 +47,40 @@ fragment ProductWithAttributes on ProductWithAttributes {
     }
   }
 }
+fragment ExternalProduct on ExternalProduct {
+  id
+  databaseId
+  type
+  name
+  slug
+  price
+  regularPrice
+  salePrice
+  externalUrl
+  buttonText
+  image {
+    id
+    sourceUrl
+    altText
+    title
+  }
+  featuredImage {
+    node {
+      id
+      sourceUrl
+      altText
+      title
+    }
+  }
+  galleryImages {
+    nodes {
+      id
+      sourceUrl
+      altText
+    }
+  }
+}
+
 fragment ProductAttribute on ProductAttribute {
   variation
   name
