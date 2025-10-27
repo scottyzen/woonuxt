@@ -20,67 +20,78 @@
             <span class="w-6" />
           </div>
 
-          <!-- Loader -->
-          <div v-if="loading" class="flex justify-center items-center flex-1">
-            <div class="animate-spin h-8 w-8 border-t-2 border-primary mx-auto rounded-full" />
-          </div>
-
-          <!-- Inhoud -->
-          <div v-else-if="product" class="p-4 space-y-4">
-            <!-- Toon galerij als die bestaat -->
-           <!-- Product afbeelding of galerij -->
-<template v-if="product">
-  <ImageGallery
-    v-if="product?.galleryImages?.nodes?.length"
-    :gallery="product.galleryImages?.nodes"
-    :image="product.image"
-    :featured-image="product.featuredImage?.node"
-    :external-product="product"
-  />
-  <NuxtImg
-    v-else
-    :src="product?.image?.sourceUrl || product?.featuredImage?.node?.sourceUrl || '/images/placeholder.jpg'"
-    :alt="product?.image?.altText || product?.name || 'Product afbeelding'"
-    class="rounded-lg object-contain w-full aspect-square"
-  />
-</template>
-
-
-
-            <!-- 🏷️ Titel & prijs -->
-            <h1 class="text-lg font-bold">{{ product.name }}</h1>
-
-            <ProductPrice
-              :regular-price="product.regularPrice"
-              :sale-price="product.salePrice"
-            />
-
-            <!-- 🧾 Beschrijving -->
+          <!-- 🔄 Loader (WooNuxt-stijl) -->
+          <transition name="fade" mode="out-in">
             <div
-              v-html="product.shortDescription || product.description"
-              class="text-sm text-gray-700"
-            />
-
-            <!-- 🔗 Knop voor externe producten -->
-            <div
-              class="sticky bottom-0 bg-white p-4 z-10 border-t border-gray-200"
-              v-if="product.externalUrl"
+              v-if="showLoader"
+              key="loader"
+              class="flex justify-center items-center flex-1 min-h-[300px]"
             >
-              <a
-                :href="product.externalUrl"
-                target="_blank"
-                rel="sponsored noopener noreferrer"
-                class="block w-full text-center bg-primary text-white font-bold py-3 rounded hover:bg-primary-dark transition"
-              >
-                {{ product.buttonText || 'Bekijk product' }}
-              </a>
+              <LoadingIcon class="animate-spin h-8 w-8 text-primary" />
             </div>
-          </div>
 
-          <!-- Fallback -->
-          <div v-else class="p-4 text-center text-gray-500">
-            Product niet gevonden...
-          </div>
+            <!-- 🧩 Inhoud -->
+            <div
+              v-else-if="product"
+              key="content"
+              class="p-4 space-y-4 animate-fadeIn"
+            >
+              <!-- Afbeelding of galerij -->
+              <template v-if="product">
+                <ImageGallery
+                  v-if="product?.galleryImages?.nodes?.length"
+                  :gallery="product.galleryImages?.nodes"
+                  :image="product.image"
+                  :featured-image="product.featuredImage?.node"
+                  :external-product="product"
+                />
+                <img
+                  v-else
+                  :src="
+                    product?.image?.sourceUrl ||
+                    product?.featuredImage?.node?.sourceUrl ||
+                    '/images/placeholder.jpg'
+                  "
+                  :alt="product?.image?.altText || product?.name || 'Product afbeelding'"
+                  class="rounded-lg object-contain w-full aspect-square"
+                />
+              </template>
+
+              <!-- Titel & prijs -->
+              <h1 class="text-lg font-bold">{{ product.name }}</h1>
+
+              <ProductPrice
+                :regular-price="product.regularPrice"
+                :sale-price="product.salePrice"
+              />
+
+              <!-- Beschrijving -->
+              <div
+                v-html="product.shortDescription || product.description"
+                class="text-sm text-gray-700"
+              />
+
+              <!-- Knop voor externe producten -->
+              <div
+                class="sticky bottom-0 bg-white p-4 z-10 border-t border-gray-200"
+                v-if="product.externalUrl"
+              >
+                <a
+                  :href="product.externalUrl"
+                  target="_blank"
+                  rel="sponsored noopener noreferrer"
+                  class="block w-full text-center bg-primary text-white font-bold py-3 rounded hover:bg-primary-dark transition"
+                >
+                  {{ product.buttonText || 'Bekijk product' }}
+                </a>
+              </div>
+            </div>
+
+            <!-- ❌ Fallback -->
+            <div v-else key="fallback" class="p-4 text-center text-gray-500">
+              Product niet gevonden...
+            </div>
+          </transition>
         </div>
       </Transition>
     </div>
@@ -90,13 +101,18 @@
 <script setup lang="ts">
 import ImageGallery from '~/components/ImageGallery.vue'
 
+// 🔹 Refs
 const visible = ref(false)
 const loading = ref(false)
 const product = ref<any | null>(null)
 
+// 🔹 Computed loader-state (zoals bij My Account)
+const showLoader = computed(() => loading.value || !product.value)
+
 const router = useRouter()
 let lastPathBeforeModal = ''
 
+// 🔹 Open modal & laad product
 async function open(_id: number, slug: string) {
   if (process.client) {
     lastPathBeforeModal = window.location.pathname
@@ -109,7 +125,6 @@ async function open(_id: number, slug: string) {
 
   try {
     const { data, error } = await useAsyncGql('getProduct', { slug })
-
     if (error.value) {
       console.error('❌ Fout bij ophalen product:', error.value)
       product.value = null
@@ -125,6 +140,7 @@ async function open(_id: number, slug: string) {
   }
 }
 
+// 🔹 Sluit modal
 function close() {
   visible.value = false
   product.value = null
@@ -148,5 +164,29 @@ defineExpose({ open, close })
 .slide-panel-enter-from,
 .slide-panel-leave-to {
   transform: translateX(100%);
+}
+
+/* Fade in/out voor loader */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
 }
 </style>
