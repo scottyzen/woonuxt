@@ -1,4 +1,16 @@
 fragment ExternalProduct on ExternalProduct {
+  id
+  databaseId
+  name
+  slug
+  type
+  price
+  regularPrice
+  salePrice
   externalUrl
   buttonText
+  image {
+    sourceUrl
+    altText
+  }
 }
