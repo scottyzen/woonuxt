@@ -59,7 +59,7 @@ useHead({
 
         <!-- Description -->
         <div
-          class="text-sm text-gray-700 leading-relaxed mb-6 max-w-3xl"
+          class="text-sm text-gray-700 leading-relaxed mb-6"
           v-html="category?.description"
         />
 
