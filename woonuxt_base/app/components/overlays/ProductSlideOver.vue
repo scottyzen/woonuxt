@@ -28,32 +28,32 @@
           <!-- Inhoud -->
           <div v-else-if="product" class="p-4 space-y-4">
             <!-- Afbeeldingen -->
-            <ImageGallery :gallery="product.images" />
+            <ImageGallery :gallery="product?.galleryImages?.nodes" />
 
             <!-- Titel & prijs -->
             <h1 class="text-lg font-bold">{{ product.name }}</h1>
 
             <ProductPrice
-              :regular-price="product.regular_price"
-              :sale-price="product.sale_price"
+              :regular-price="product?.regularPrice"
+              :sale-price="product?.salePrice"
             />
 
             <!-- Beschrijving -->
             <div
-              v-html="product.short_description || product.description"
+              v-html="product?.shortDescription || product?.description"
               class="text-sm text-gray-700"
             />
 
             <!-- Sticky knop-container -->
             <div class="sticky bottom-0 bg-white p-4 z-10 border-t border-gray-200">
               <a
-                v-if="product.external_url"
-                :href="product.external_url"
+                v-if="product?.externalUrl"
+                :href="product.externalUrl"
                 target="_blank"
                 rel="noopener"
                 class="block w-full text-center bg-primary text-white font-bold py-3 rounded hover:bg-primary-dark transition"
               >
-                {{ product.button_text || 'Bekijk product' }}
+                {{ product?.buttonText || 'Bekijk product' }}
               </a>
             </div>
           </div>
@@ -68,14 +68,9 @@
   </ClientOnly>
 </template>
 
-
 <script setup lang="ts">
-import ImageGallery from '~/components/ImageGallery.vue'  // ✅ Hier is de import toegevoegd
-
-
-  
-const config = useRuntimeConfig()
-const authHeader = 'Basic ' + btoa(`${config.public.wcKey}:${config.public.wcSecret}`)
+import ImageGallery from '~/components/ImageGallery.vue'
+import getProduct from '~/app/queries/getProduct.gql'
 
 const visible = ref(false)
 const loading = ref(false)
@@ -84,7 +79,11 @@ const product = ref<any | null>(null)
 const router = useRouter()
 let lastPathBeforeModal = ''
 
-async function open(productId: number) {
+/**
+ * Open product overlay
+ * @param {string} productSlug - De slug van het product (bv. "heren-tshirt-blauw")
+ */
+async function open(productSlug: string) {
   if (process.client) {
     lastPathBeforeModal = window.location.pathname
     document.body.style.overflow = 'hidden'
@@ -95,25 +94,31 @@ async function open(productId: number) {
   product.value = null
 
   try {
-    const data = await $fetch(`https://wp.kledingzoeken.nl/wp-json/wc/v3/products/${productId}`, {
-      headers: { Authorization: authHeader },
+    const { data, error } = await useAsyncQuery(getProduct, { slug: productSlug }, {
+      cache: true,
+      ssr: true,
+      staleWhileRevalidate: 30,
     })
 
-    product.value = data
-    console.log('🖼️ Product geladen:', data)
-
-    // Extra check als afbeeldingen ontbreken
-    if (!Array.isArray(data.images) || data.images.length === 0) {
-      console.warn('⚠️ Geen afbeeldingen gevonden voor product:', data)
+    if (error.value) {
+      console.error('❌ GraphQL fout:', error.value)
+      throw error.value
     }
-  } catch (error) {
-    console.error('❌ Fout bij ophalen product:', error)
+
+    product.value = data.value?.product || null
+
+    if (!product.value) {
+      console.warn('⚠️ Geen product gevonden voor slug:', productSlug)
+    }
+  } catch (err) {
+    console.error('❌ Fout bij ophalen product:', err)
     product.value = null
   } finally {
     loading.value = false
   }
 }
 
+/** Sluit de overlay en herstel vorige route */
 function close() {
   visible.value = false
   product.value = null
@@ -126,9 +131,6 @@ function close() {
   }
 }
 
-
-
-  
 defineExpose({ open, close })
 </script>
 
