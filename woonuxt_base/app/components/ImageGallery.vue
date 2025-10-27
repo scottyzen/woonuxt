@@ -1,28 +1,35 @@
 <template>
-  <div v-if="images.length">
-    <!-- Grote afbeelding -->
-    <img
-      :src="activeImage.src"
-      :alt="activeImage.alt || 'Product afbeelding'"
-      class="w-full rounded mb-4 object-cover"
-    />
+  <div v-if="images.length" class="flex gap-3 items-start">
+    <!-- Hoofdafbeelding -->
+    <div class="flex-1">
+      <img
+        :src="activeImage.src"
+        :alt="activeImage.alt || 'Product afbeelding'"
+        class="w-full max-h-80 object-cover rounded-lg border"
+      />
+    </div>
 
-    <!-- Thumbnail galerij -->
-    <div class="flex gap-2 overflow-x-auto">
+    <!-- Thumbnails rechts -->
+    <div
+      v-if="images.length > 1"
+      class="flex flex-col gap-2 overflow-y-auto max-h-80 w-20 shrink-0"
+    >
       <img
         v-for="(img, index) in images"
         :key="index"
         :src="img.thumbnail || img.src"
         :alt="img.alt || 'Product afbeelding'"
-        class="w-20 h-20 object-cover rounded border cursor-pointer hover:opacity-80 transition"
-        :class="{ 'border-blue-500': activeIndex === index }"
+        class="w-full aspect-square object-cover rounded-md border cursor-pointer hover:opacity-80 transition"
+        :class="{
+          'border-blue-500 ring-1 ring-blue-300': activeIndex === index,
+        }"
         @click="activeIndex = index"
       />
     </div>
   </div>
 
   <div v-else>
-    <p class="text-sm text-gray-400 text-center">
+    <p class="text-sm text-gray-400 text-center py-8">
       Geen afbeeldingen beschikbaar
     </p>
   </div>
@@ -30,22 +37,19 @@
 
 <script setup lang="ts">
 /**
- * ImageGallery.vue
- * Compatibel met WooNuxt/WooCommerce GraphQL structuur:
- * - galleryImages.nodes[].sourceUrl / altText
- * - image.sourceUrl
- * - featuredImage.node.sourceUrl
+ * Compacte ImageGallery.vue
+ * ✅ Ondersteunt externe producten
+ * ✅ Toont thumbnails rechts
+ * ✅ Compatibel met WooNuxt GraphQL structuur
  */
 const props = defineProps<{
-  gallery?:
-    | Array<{
-        src?: string
-        sourceUrl?: string
-        thumbnail?: string
-        alt?: string
-        altText?: string
-      }>
-    | null
+  gallery?: Array<{
+    src?: string
+    sourceUrl?: string
+    thumbnail?: string
+    alt?: string
+    altText?: string
+  }> | null
   featuredImage?: {
     sourceUrl?: string
     altText?: string
@@ -56,26 +60,35 @@ const props = defineProps<{
   }
 }>()
 
-/**
- * Combineer alle mogelijke bronnen in één uniforme lijst met:
- * { src, thumbnail, alt }
- */
+// Combineer gallery, featuredImage en image in 1 lijst
 const images = computed(() => {
   const gallery = (props.gallery || [])
     .filter(Boolean)
     .map((img) => ({
-      src: img.src || img.sourceUrl || img.thumbnail || '/images/placeholder.jpg',
+      src:
+        img.src ||
+        img.sourceUrl ||
+        img.thumbnail ||
+        '/images/placeholder.jpg',
       thumbnail: img.thumbnail || img.sourceUrl || img.src,
       alt: img.alt || img.altText || 'Product afbeelding',
     }))
 
-  // ✅ Fallback op featuredImage of image als gallery leeg is
-  if (!gallery.length && (props.featuredImage?.sourceUrl || props.image?.sourceUrl)) {
-    gallery.push({
-      src: props.featuredImage?.sourceUrl || props.image?.sourceUrl,
-      thumbnail: props.featuredImage?.sourceUrl || props.image?.sourceUrl,
-      alt: props.featuredImage?.altText || props.image?.altText || 'Product afbeelding',
-    })
+  // ✅ Fallbacks voor externe producten
+  if (!gallery.length) {
+    if (props.image?.sourceUrl) {
+      gallery.push({
+        src: props.image.sourceUrl,
+        thumbnail: props.image.sourceUrl,
+        alt: props.image.altText || 'Product afbeelding',
+      })
+    } else if (props.featuredImage?.sourceUrl) {
+      gallery.push({
+        src: props.featuredImage.sourceUrl,
+        thumbnail: props.featuredImage.sourceUrl,
+        alt: props.featuredImage.altText || 'Product afbeelding',
+      })
+    }
   }
 
   return gallery
