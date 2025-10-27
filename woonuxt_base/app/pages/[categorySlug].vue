@@ -2,7 +2,6 @@
 import { useProducts } from '~/composables/useProducts'
 import { useHelpers } from '~/composables/useHelpers'
 import { useAppConfig } from '#imports'
-import { useAsyncQuery } from '#imports'
 import getCategoryBySlug from '~/graphql/queries/getCategoryBySlug.gql'
 import Filters from '~/components/filters/Filters.vue'
 import ProductGrid from '~/components/productElements/ProductGrid.vue'
@@ -17,9 +16,10 @@ const route = useRoute()
 const slug = route.params.categorySlug as string
 
 // 🧩 GraphQL categorie + producten ophalen
-const { data, error } = await useAsyncQuery(getCategoryBySlug, { slug })
+const { data } = await useAsyncGql('getCategoryBySlug', { slug })
 const category = computed(() => data.value?.productCategory)
 const productsInCategory = computed(() => category.value?.products?.nodes || [])
+
 
 // 🧠 Products beschikbaar maken in globale Woonuxt state
 setProducts(productsInCategory.value)
