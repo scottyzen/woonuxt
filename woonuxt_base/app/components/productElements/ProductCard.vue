@@ -1,62 +1,89 @@
 <script setup lang="ts">
+import { useRoute, useRouter } from 'vue-router'
+import { inject, ref, watch, computed } from 'vue'
+import type { PropType } from 'vue'
+import type { Product } from '~/types/product'
 
-  
-const route = useRoute();
-const { storeSettings } = useAppConfig();
+// 🌍 App config
+const route = useRoute()
+const router = useRouter()
+const { storeSettings } = useAppConfig()
+
+// 🧩 Props
 const props = defineProps({
   node: { type: Object as PropType<Product>, required: true },
   index: { type: Number, default: 1 },
-});
+})
 
-const imgWidth = 280;
-const imgHeight = Math.round(imgWidth * 1.125);
+// 📦 Emits
+const emit = defineEmits<{ (e: 'open', slug: string): void }>()
 
+// 📸 Afbeeldingsmaten
+const imgWidth = 280
+const imgHeight = Math.round(imgWidth * 1.125)
 
-//overlay product jp
-  const productSlideOver = inject('productSlideOver') as Ref<any>
-  const router = useRouter()
-function openProduct(id: number, _slug: string) {
-  productSlideOver?.value?.open(id)
-}
-//overlay product jp end
+// 🎨 Filters (kleurvariaties)
+const filterQuery = ref(route.query?.filter as string)
+const paColor = ref(
+  filterQuery.value?.split('pa_color[')[1]?.split(']')[0]?.split(',') || []
+)
 
-// example: ?filter=pa_color[green,blue],pa_size[large]
-const filterQuery = ref(route.query?.filter as string);
-const paColor = ref(filterQuery.value?.split('pa_color[')[1]?.split(']')[0]?.split(',') || []);
-
-// watch filterQuery
+// 🔁 Watch filter query veranderingen
 watch(
   () => route.query,
   () => {
-    filterQuery.value = route.query.filter as string;
-    paColor.value = filterQuery.value?.split('pa_color[')[1]?.split(']')[0]?.split(',') || [];
-  },
-);
+    filterQuery.value = route.query.filter as string
+    paColor.value =
+      filterQuery.value?.split('pa_color[')[1]?.split(']')[0]?.split(',') || []
+  }
+)
 
-const mainImage = computed<string>(() => props.node?.image?.producCardSourceUrl || props.node?.image?.sourceUrl || '/images/placeholder.jpg');
+// 🖼️ Afbeelding bepalen o.b.v. actieve kleur
+const mainImage = computed<string>(
+  () =>
+    props.node?.image?.producCardSourceUrl ||
+    props.node?.image?.sourceUrl ||
+    '/images/placeholder.jpg'
+)
+
 const imagetoDisplay = computed<string>(() => {
   if (paColor.value.length) {
     const activeColorImage = props.node?.variations?.nodes.filter((variation) => {
-      const hasMatchingAttributes = variation.attributes?.nodes.some((attribute) => paColor.value.some((color) => attribute?.value?.includes(color)));
-      const hasMatchingSlug = paColor.value.some((color) => variation.slug?.includes(color));
-      return hasMatchingAttributes || hasMatchingSlug;
-    });
-    if (activeColorImage?.length) return activeColorImage[0]?.image?.producCardSourceUrl || activeColorImage[0]?.image?.sourceUrl || mainImage.value;
+      const hasMatchingAttributes = variation.attributes?.nodes.some((attribute) =>
+        paColor.value.some((color) => attribute?.value?.includes(color))
+      )
+      const hasMatchingSlug = paColor.value.some((color) =>
+        variation.slug?.includes(color)
+      )
+      return hasMatchingAttributes || hasMatchingSlug
+    })
+    if (activeColorImage?.length)
+      return (
+        activeColorImage[0]?.image?.producCardSourceUrl ||
+        activeColorImage[0]?.image?.sourceUrl ||
+        mainImage.value
+      )
   }
-  return mainImage.value;
-});
+  return mainImage.value
+})
 
+// 🧩 Overlay integratie
+// (oude inject openProduct behouden voor backwards compat)
+const productSlideOver = inject('productSlideOver') as Ref<any> | undefined
+function openProduct(id: number, _slug: string) {
+  productSlideOver?.value?.open(id)
+}
 
+// 🔔 Nieuw event gebaseerd overlay trigger
+function openOverlay() {
+  emit('open', props.node.slug)
+}
 </script>
-
 
 <template>
   <div class="relative group">
-    <a
-      href="#"
-      @click.prevent="$emit('open', node.slug)"
-      :title="node.name"
-    >
+    <!-- Klik opent overlay via emit -->
+    <a href="#" @click.prevent="openOverlay" :title="node.name">
       <SaleBadge :node class="absolute top-2 right-2" />
       <NuxtImg
         v-if="imagetoDisplay"
@@ -98,10 +125,3 @@ const imagetoDisplay = computed<string>(() => {
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-defineProps<{ node: any; imgWidth?: number; imgHeight?: number; index?: number }>()
-defineEmits<{ (e: 'open', slug: string): void }>()
-</script>
-
-
