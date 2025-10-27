@@ -9,8 +9,28 @@ fragment ExternalProduct on ExternalProduct {
   salePrice
   externalUrl
   buttonText
+
   image {
+    id
     sourceUrl
     altText
+    title
+  }
+
+  featuredImage {
+    node {
+      id
+      sourceUrl
+      altText
+      title
+    }
+  }
+
+  galleryImages {
+    nodes {
+      id
+      sourceUrl
+      altText
+    }
   }
 }
