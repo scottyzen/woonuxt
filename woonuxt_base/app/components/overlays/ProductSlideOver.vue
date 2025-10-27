@@ -27,13 +27,19 @@
 
           <!-- Inhoud -->
           <div v-else-if="product" class="p-4 space-y-4">
-            <!-- Afbeeldingen -->
-            <ImageGallery :gallery="product.galleryImages?.nodes || []" />
+            <!-- 🖼️ Afbeeldingen -->
+            <ImageGallery
+              v-if="product?.galleryImages?.nodes?.length"
+              :gallery="product.galleryImages.nodes"
+            />
+            <NuxtImg
+              v-else-if="product?.image?.sourceUrl"
+              :src="product.image.sourceUrl"
+              :alt="product.image?.altText || product.name"
+              class="rounded-lg object-cover w-full aspect-square"
+            />
 
-
-
-
-            <!-- Titel & prijs -->
+            <!-- 🏷️ Titel & prijs -->
             <h1 class="text-lg font-bold">{{ product.name }}</h1>
 
             <ProductPrice
@@ -41,29 +47,31 @@
               :sale-price="product.salePrice"
             />
 
-            <!-- Beschrijving -->
+            <!-- 🧾 Beschrijving -->
             <div
-              v-html="product.short_description || product.description"
+              v-html="product.shortDescription || product.description"
               class="text-sm text-gray-700"
             />
 
-            <!-- Sticky knop-container -->
-            <div class="sticky bottom-0 bg-white p-4 z-10 border-t border-gray-200">
+            <!-- 🔗 Knop voor externe producten -->
+            <div
+              class="sticky bottom-0 bg-white p-4 z-10 border-t border-gray-200"
+              v-if="product.externalUrl"
+            >
               <a
-                v-if="product.external_url"
-                :href="product.external_url"
+                :href="product.externalUrl"
                 target="_blank"
-                rel="noopener"
+                rel="sponsored noopener noreferrer"
                 class="block w-full text-center bg-primary text-white font-bold py-3 rounded hover:bg-primary-dark transition"
               >
-                {{ product.button_text || 'Bekijk product' }}
+                {{ product.buttonText || 'Bekijk product' }}
               </a>
             </div>
           </div>
 
           <!-- Fallback -->
           <div v-else class="p-4 text-center text-gray-500">
-            Product niet gevonden..
+            Product niet gevonden...
           </div>
         </div>
       </Transition>
@@ -74,9 +82,6 @@
 <script setup lang="ts">
 import ImageGallery from '~/components/ImageGallery.vue'
 
-// WooNuxt GraphQL query
-// let op: dit moet staan in woonuxt_base/app/queries/getProduct.gql
-// (en niet in /graphql/queries)
 const visible = ref(false)
 const loading = ref(false)
 const product = ref<any | null>(null)
@@ -95,7 +100,6 @@ async function open(_id: number, slug: string) {
   product.value = null
 
   try {
-    // Gebruik WooNuxt’s ingebouwde useAsyncGql
     const { data, error } = await useAsyncGql('getProduct', { slug })
 
     if (error.value) {
@@ -129,7 +133,6 @@ defineExpose({ open, close })
 </script>
 
 <style scoped>
-/* Alleen witte paneel animeren */
 .slide-panel-enter-active,
 .slide-panel-leave-active {
   transition: transform 0.3s ease;
