@@ -52,9 +52,11 @@ const imagetoDisplay = computed<string>(() => {
 
 <template>
   <div class="relative group">
-   <a href="#" @click.prevent="openProduct(node.databaseId, node.slug)" :title="node.name">
-
-
+    <a
+      href="#"
+      @click.prevent="$emit('open', node.slug)"
+      :title="node.name"
+    >
       <SaleBadge :node class="absolute top-2 right-2" />
       <NuxtImg
         v-if="imagetoDisplay"
@@ -67,15 +69,39 @@ const imagetoDisplay = computed<string>(() => {
         :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
         class="rounded-lg object-top object-cover w-full aspect-9/8"
         placeholder
-        placeholder-class="blur-xl" />
+        placeholder-class="blur-xl"
+      />
     </a>
+
     <div class="p-2">
-      <StarRating v-if="storeSettings.showReviews" :rating="node.averageRating" :count="node.reviewCount" />
-      <NuxtLink v-if="node.slug" :to="`/product/${decodeURIComponent(node.slug)}`" :title="node.name">
-        <h2 class="mb-2 font-light leading-tight group-hover:text-primary">{{ node.name }}</h2>
+      <StarRating
+        v-if="storeSettings.showReviews"
+        :rating="node.averageRating"
+        :count="node.reviewCount"
+      />
+
+      <NuxtLink
+        v-if="node.slug"
+        :to="`/product/${decodeURIComponent(node.slug)}`"
+        :title="node.name"
+      >
+        <h2 class="mb-2 font-light leading-tight group-hover:text-primary">
+          {{ node.name }}
+        </h2>
       </NuxtLink>
-      <ProductPrice class="text-sm" :sale-price="node.salePrice" :regular-price="node.regularPrice" />
+
+      <ProductPrice
+        class="text-sm"
+        :sale-price="node.salePrice"
+        :regular-price="node.regularPrice"
+      />
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+defineProps<{ node: any; imgWidth?: number; imgHeight?: number; index?: number }>()
+defineEmits<{ (e: 'open', slug: string): void }>()
+</script>
+
 
