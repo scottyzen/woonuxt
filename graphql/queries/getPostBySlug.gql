@@ -1,8 +1,10 @@
 query GetPostBySlug($slug: ID!) {
   post(id: $slug, idType: SLUG) {
     id
+    slug
     title
     date
+    excerpt
     content
     featuredImage {
       node {
@@ -11,6 +13,7 @@ query GetPostBySlug($slug: ID!) {
     }
     categories {
       nodes {
+        id
         name
         slug
       }
