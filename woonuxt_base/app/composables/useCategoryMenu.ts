@@ -2,6 +2,7 @@ import GetCategoryTree from '~/graphql/queries/getCategoryTree.gql'
 
 export type CategoryNode = {
   databaseId: number
+  parentDatabaseId?: number
   name: string
   uri: string
   children?: { nodes: CategoryNode[] }
@@ -20,15 +21,16 @@ export type MenuItem = {
   columns: MenuColumn[]
 }
 
-const TOP_IDS = [34, 35, 36, 37, 38] // Dames, Heren, Jongens, Meisjes, Baby’s
+// ✅ geef include als string-IDs door
+const TOP_IDS = ['34', '35', '36', '37', '38'] as const
 
 export async function useCategoryMenu() {
   const { data } = await useAsyncQuery<{ productCategories: { nodes: CategoryNode[] } }>(
     GetCategoryTree,
-    { include: TOP_IDS },
+    { include: TOP_IDS }, // ← strings, matcht [ID]
     {
       fetchPolicy: 'cache-first',
-      context: { fetchOptions: { next: { revalidate: 1800 } } } // 30 min cache
+      context: { fetchOptions: { next: { revalidate: 1800 } } }
     }
   )
 
@@ -54,9 +56,10 @@ export async function useCategoryMenu() {
 
   const topMenu = computed<MenuItem[]>(() =>
     raw.value
-      .sort(
-        (a, b) =>
-          TOP_IDS.indexOf(a.databaseId) - TOP_IDS.indexOf(b.databaseId)
+      // sorteer op basis van databaseId → string index in TOP_IDS
+      .sort((a, b) =>
+        TOP_IDS.indexOf(String(a.databaseId) as typeof TOP_IDS[number]) -
+        TOP_IDS.indexOf(String(b.databaseId) as typeof TOP_IDS[number])
       )
       .map(toMenuItem)
   )
