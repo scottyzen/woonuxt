@@ -62,10 +62,11 @@ const activeItem = computed(() =>
       </div>
     </transition>
 
-    <!-- Skeleton -->
-    <ul v-else-if="!topMenu?.length" class="flex items-center gap-6">
+      <!-- Skeleton -->
+    <ul v-else class="flex items-center gap-6">
       <li v-for="i in 5" :key="i" class="h-5 w-16 rounded bg-gray-100 animate-pulse"></li>
     </ul>
+
   </div>
 </template>
 
