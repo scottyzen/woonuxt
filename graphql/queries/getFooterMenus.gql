@@ -1,23 +1,17 @@
 query GetFooterMenus {
-  footer1: menuItems(where: { slug: "footer-1" }) {
+  menus {
     nodes {
       id
-      label
-      url
-    }
-  }
-  footer2: menuItems(where: { slug: "footer-2" }) {
-    nodes {
-      id
-      label
-      url
-    }
-  }
-  footer3: menuItems(where: { slug: "footer-3" }) {
-    nodes {
-      id
-      label
-      url
+      databaseId
+      name
+      slug
+      menuItems {
+        nodes {
+          id
+          label
+          url
+        }
+      }
     }
   }
 }
