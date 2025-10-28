@@ -1,94 +1,89 @@
 <script setup lang="ts">
-const { wooNuxtVersionInfo } = useHelpers();
-const { wishlistLink } = useAuth();
+import GetFooterMenus from '~/graphql/queries/getFooterMenus.gql'
+
+// WooNuxt helpers (blijven staan)
+const { wooNuxtVersionInfo } = useHelpers()
+const { wishlistLink } = useAuth()
+
+// 🔹 Haal de drie WordPress-menu’s op
+const { data, pending, error } = await useAsyncGql(GetFooterMenus)
+
+const menus = computed(() => ({
+  footer1: data.value?.footer1?.nodes || [],
+  footer2: data.value?.footer2?.nodes || [],
+  footer3: data.value?.footer3?.nodes || [],
+}))
+
+// Optionele vaste titels per kolom
+const titles = {
+  footer1: 'Informatie',
+  footer2: 'Klantenservice',
+  footer3: 'Over ons',
+}
 </script>
 
 <template>
   <footer class="bg-white order-last">
     <div class="container flex flex-wrap justify-between gap-12 my-24 md:gap-24">
+      <!-- 🔸 Logo + korte beschrijving -->
       <div class="mr-auto">
         <Logo />
         <WebsiteShortDescription />
-        <!--LangSwitcher class="mt-8" /-->
       </div>
-      <div class="w-3/7 lg:w-auto">
-        <div class="mb-1 font-semibold">{{ $t('general.information') }}</div>
-        <div class="text-sm">
-          <a href="/" class="py-1.5 block">{{ $t('general.careers') }}</a>
-          <a href="/" class="py-1.5 block">{{ $t('general.press') }}</a>
-          <a href="/faq" class="py-1.5 block" rel="noreferrer" target="_blank">FAQ's</a>
+
+      <!-- 🔸 Dynamische footer menu’s uit WordPress -->
+      <div
+        v-for="(menuItems, key) in menus"
+        :key="key"
+        class="w-3/7 lg:w-auto"
+      >
+        <div class="mb-1 font-semibold">
+          {{ titles[key] }}
         </div>
-      </div>
-      <div class="w-3/7 lg:w-auto">
-        <div class="mb-1 font-semibold">{{ $t('general.products') }}</div>
+
         <div class="text-sm">
-          <ClientOnly>
-            <NuxtLink to="/products" class="py-1.5 block">{{ $t('shop.newArrivals') }}</NuxtLink>
-            <template #fallback>
-              <a href="/products" class="py-1.5 block">{{ $t('shop.newArrivals') }}</a>
-            </template>
-          </ClientOnly>
-          <ClientOnly>
-            <NuxtLink to="/products?filter=sale[true]" class="py-1.5 block">{{ $t('shop.onSale') }}</NuxtLink>
-            <template #fallback>
-              <a href="/products?filter=sale[true]" class="py-1.5 block">{{ $t('shop.onSale') }}</a>
-            </template>
-          </ClientOnly>
-          <ClientOnly>
-            <NuxtLink to="/products?orderby=rating&order=ASC&filter=rating[1]" class="py-1.5 block">{{ $t('shop.topRated') }}</NuxtLink>
-            <template #fallback>
-              <a href="/products?orderby=rating&order=ASC&filter=rating[1]" class="py-1.5 block">{{ $t('shop.topRated') }}</a>
-            </template>
-          </ClientOnly>
-          <a href="/" class="py-1.5 block">{{ $t('shop.giftCards') }}</a>
-        </div>
-      </div>
-      <div class="w-3/7 lg:w-auto">
-        <div class="mb-1 font-semibold">{{ $t('general.customerService') }}</div>
-        <div class="text-sm">
-          <ClientOnly>
-            <NuxtLink to="/contact" class="py-1.5 block">{{ $t('general.contactUs') }}</NuxtLink>
-            <template #fallback>
-              <a href="/contact" class="py-1.5 block">{{ $t('general.contactUs') }}</a>
-            </template>
-          </ClientOnly>
-          <a href="/" class="py-1.5 block">{{ $t('general.shippingReturns') }}</a>
-          <a href="/" class="py-1.5 block">{{ $t('general.privacyPolicy') }}</a>
-          <a href="/" class="py-1.5 block">{{ $t('general.termsConditions') }}</a>
-        </div>
-      </div>
-      <div class="w-3/7 lg:w-auto">
-        <div class="mb-1 font-semibold">{{ $t('account.myAccount') }}</div>
-        <div class="text-sm">
-          <ClientOnly>
-            <NuxtLink to="/my-account/" class="py-1.5 block">{{ $t('account.myAccount') }}</NuxtLink>
-            <template #fallback>
-              <a href="/my-account/" class="py-1.5 block">{{ $t('account.myAccount') }}</a>
-            </template>
-          </ClientOnly>
-          <ClientOnly>
-            <NuxtLink to="/my-account/?tab=orders" class="py-1.5 block">{{ $t('shop.orderHistory') }}</NuxtLink>
-            <template #fallback>
-              <a href="/my-account/?tab=orders" class="py-1.5 block">{{ $t('shop.orderHistory') }}</a>
-            </template>
-          </ClientOnly>
-          <ClientOnly>
-            <NuxtLink :to="wishlistLink" class="py-1.5 block">{{ $t('shop.wishlist') }}</NuxtLink>
-            <template #fallback>
-              <a href="/wishlist" class="py-1.5 block">{{ $t('shop.wishlist') }}</a>
-            </template>
-          </ClientOnly>
-          <a href="/" class="py-1.5 block">{{ $t('general.newsletter') }}</a>
+          <template v-if="menuItems.length">
+            <ClientOnly>
+              <NuxtLink
+                v-for="item in menuItems"
+                :key="item.id"
+                :to="item.url"
+                class="py-1.5 block hover:underline"
+              >
+                {{ item.label }}
+              </NuxtLink>
+              <template #fallback>
+                <a
+                  v-for="item in menuItems"
+                  :key="item.id"
+                  :href="item.url"
+                  class="py-1.5 block hover:underline"
+                >
+                  {{ item.label }}
+                </a>
+              </template>
+            </ClientOnly>
+          </template>
+          <div v-else class="text-gray-400 text-xs italic">Nog geen items</div>
         </div>
       </div>
     </div>
+
+    <!-- 🔸 Onderbalk -->
     <div class="container border-t flex items-center justify-center mb-4">
-      <!--div class="copywrite">
+      <!-- Eventuele versie-info behouden -->
+      <!--
+      <div class="copywrite">
         <p class="py-4 text-xs text-center">
-          <a href="https://woonuxt.com" :title="`WooNuxt v${wooNuxtVersionInfo}`">{{ `WooNuxt v${wooNuxtVersionInfo}` }}</a> - by
-          <a href="https://scottyzen.com" title="Scott Kennedy - Web Developer" target="_blank">Scott Kennedy</a>
+          <a
+            href="https://woonuxt.com"
+            :title="`WooNuxt v${wooNuxtVersionInfo}`"
+          >
+            {{ `WooNuxt v${wooNuxtVersionInfo}` }}
+          </a>
         </p>
-      </div-->
+      </div>
+      -->
       <SocialIcons class="ml-auto" />
     </div>
   </footer>
