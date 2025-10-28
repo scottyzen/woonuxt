@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { navigateTo } from '#app'               // ✅ ADD THIS
 import { useCategoryMenu, type MenuItem } from '~/composables/useCategoryMenu'
 
 const props = defineProps<{ open: boolean }>()
