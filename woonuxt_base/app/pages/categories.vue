@@ -1,84 +1,103 @@
 <script setup lang="ts">
-import type { ProductCategory } from '~/types/product'
+import CategoryCard from '~/components/CategoryCard.vue'
 
-// 🔹 De hoofdcategorieën (ID’s van 34 t/m 38)
-const includeIds = [34, 35, 36, 37, 38]
+// 🔹 Bepaal de hoofdcategorieën die als tabs moeten worden weergegeven
+const topCategoryIds = [34, 35, 36, 37, 38]
 
-// 🔹 Haal alle hoofdcategorieën op
-const { data, pending, error } = await useAsyncGql('getProductCategories', { include: includeIds })
-const categories = computed(() => data.value?.productCategories?.nodes || [])
+// Haal de hoofdcategorieën op
+const { data: parentData } = await useAsyncGql('getProductCategories', { include: topCategoryIds })
+const parentCategories = computed(() => parentData.value?.productCategories?.nodes || [])
 
-// 🔹 Actieve tab (eerste categorie standaard)
-const activeCategoryId = ref(includeIds[0])
+// Actieve tab (eerste categorie standaard)
+const activeCategory = ref(parentCategories.value?.[0] || null)
 
-// 🔹 Haal de subcategorieën op van de actieve categorie
-const { data: subData, refresh: refreshSub } = await useAsyncGql('getProductCategories', {
-  first: 50,
-})
-const allCategories = computed(() => subData.value?.productCategories?.nodes || [])
+// Haal alle categorieën op (nodig om subcategorieën te filteren)
+const { data: allData, refresh } = await useAsyncGql('getProductCategories', { first: 100 })
+const allCategories = computed(() => allData.value?.productCategories?.nodes || [])
 
-// 🔹 Filter alleen de subcategorieën van de actieve categorie
+// Filter alleen subcategorieën van de actieve categorie (één level diep)
 const subCategories = computed(() =>
-  allCategories.value.filter(cat => cat.parentDatabaseId === activeCategoryId.value)
+  allCategories.value.filter(cat => cat.parentDatabaseId === activeCategory.value?.databaseId)
 )
 
-// 🔹 Wanneer tab verandert → refresh query
-watch(activeCategoryId, async () => {
-  await refreshSub()
-})
+// Toon loader bij het laden of wisselen van categorie
+const isLoading = ref(false)
 
-// 🔹 Meta / SEO
+async function selectCategory(cat) {
+  if (cat.databaseId === activeCategory.value?.databaseId) return
+  isLoading.value = true
+  activeCategory.value = cat
+  // Simuleer lichte vertraging voor fade effect (zoals WooNuxt loaders doen)
+  await new Promise(r => setTimeout(r, 250))
+  isLoading.value = false
+}
+
+// SEO meta
 useHead({
   title: 'Categorieën',
-  meta: [{ name: 'description', content: 'Bekijk alle productcategorieën' }],
+  meta: [{ name: 'description', content: 'Ontdek alle kledingcategorieën van KledingZoeken.' }],
 })
 </script>
 
 <template>
   <main class="container py-8">
-    <!-- 🧭 Tabs -->
-    <div class="flex justify-center gap-2 md:gap-4 mb-8 border-b border-gray-200 overflow-x-auto">
-      <button
-        v-for="catId in includeIds"
-        :key="catId"
-        @click="activeCategoryId = catId"
-        class="px-4 py-2 text-sm font-medium whitespace-nowrap border-b-2 transition-colors duration-200"
-        :class="{
-          'border-primary text-primary': activeCategoryId === catId,
-          'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300': activeCategoryId !== catId,
-        }"
-      >
-        {{ categories.find(c => c.databaseId === catId)?.name || '...' }}
-      </button>
+    <!-- 🧭 Tabs gecentreerd bovenaan -->
+    <div class="flex justify-center mb-8 border-b border-gray-200">
+      <div class="flex gap-6 flex-wrap justify-center">
+        <button
+          v-for="cat in parentCategories"
+          :key="cat.id"
+          class="pb-2 text-base font-medium border-b-2 transition-colors duration-200"
+          :class="{
+            'border-primary text-primary': activeCategory?.databaseId === cat.databaseId,
+            'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300': activeCategory?.databaseId !== cat.databaseId
+          }"
+          @click="selectCategory(cat)"
+        >
+          {{ cat.name }}
+        </button>
+      </div>
     </div>
 
-    <!-- 🌀 Loader -->
-    <div v-if="pending" class="flex justify-center items-center min-h-[40vh]">
-      <div class="animate-spin h-8 w-8 border-t-2 border-primary rounded-full" />
+    <!-- 🌀 Loader (in WooNuxt-stijl) -->
+    <div v-if="!parentCategories.length || isLoading" class="flex justify-center items-center min-h-[40vh]">
+      <LoadingIcon class="m-auto" />
     </div>
 
-    <!-- ⚠️ Foutmelding -->
-    <div v-else-if="error" class="text-center text-red-600 p-6">
-      Er is een fout opgetreden bij het laden van categorieën.
-    </div>
-
-    <!-- 🧩 Subcategorieën -->
-    <div v-else>
+    <!-- 🧩 Subcategorieën grid met fade animatie -->
+    <Transition name="fade" mode="out-in">
       <div
-        v-if="subCategories.length"
+        v-if="subCategories.length && !isLoading"
+        key="subcats"
         class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
       >
         <CategoryCard
-          v-for="(category, i) in subCategories"
-          :key="category.id"
-          :node="category"
+          v-for="(subcategory, i) in subCategories"
+          :key="subcategory.id"
+          :node="subcategory"
           :image-loading="i <= 2 ? 'eager' : 'lazy'"
         />
       </div>
 
-      <div v-else class="text-center text-gray-500 py-12">
-        Geen subcategorieën gevonden voor deze categorie.
+      <div
+        v-else-if="!isLoading && activeCategory"
+        key="empty"
+        class="text-center text-gray-500 py-12"
+      >
+        Geen subcategorieën gevonden voor <strong>{{ activeCategory?.name }}</strong>.
       </div>
-    </div>
+    </Transition>
   </main>
 </template>
+
+<style scoped>
+/* Fade-animatie in WooNuxt-stijl */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
