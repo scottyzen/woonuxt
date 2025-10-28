@@ -13,6 +13,7 @@ query GetPosts($first: Int = 12) {
       }
       categories {
         nodes {
+          id
           name
           slug
         }
