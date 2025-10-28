@@ -1,4 +1,4 @@
-query GetCategoryTree($include: [Int!]!) {
+query GetCategoryTree($include: [ID]) {
   productCategories(where: { include: $include, hideEmpty: false }) {
     nodes {
       databaseId
