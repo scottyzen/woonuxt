@@ -94,12 +94,13 @@ useHead({
               <NuxtLink
                 v-if="firstLevelSubs.find(cat => cat.databaseId === Number(parentId))?.slug"
                 :to="`/${decodeURIComponent(firstLevelSubs.find(cat => cat.databaseId === Number(parentId))?.slug || '')}`"
+                :title="`Bekijk alle ${firstLevelSubs.find(cat => cat.databaseId === Number(parentId))?.name?.toLowerCase()} in ${activeCategory?.name}`"
                 class="text-sm text-gray-400 hover:text-gray-600 transition"
               >
                 Bekijk alle {{ firstLevelSubs.find(cat => cat.databaseId === Number(parentId))?.name?.toLowerCase() }}
                 <Icon name="ion:arrow-forward-outline" class="inline-block align-middle ml-1" size="14" />
               </NuxtLink>
-            </div>
+
 
 
           <!-- Tweede-level subcategorieën -->
