@@ -11,21 +11,26 @@ onMounted(() => {
   if (header) headerOffset.value = header.offsetHeight
 })
 
-// Open & sluiten met vertraging (voorkomt flikkeren)
 function openMenu(i: number) {
   if (closeTimer) clearTimeout(closeTimer)
   openIndex.value = i
 }
+
 function scheduleClose() {
   closeTimer = setTimeout(() => {
     openIndex.value = null
   }, 180)
 }
 
-// Helper: corrigeer URIs (strip /product-category/)
+// 🔧 Slug-correctie
 function cleanUri(uri: string): string {
   if (!uri) return '/'
-  return uri.replace('/product-category', '').replace(/\/$/, '')
+  // verwijder trailing slash + /product-category
+  let clean = uri.replace('/product-category', '').replace(/\/$/, '')
+  // neem laatste slug uit pad
+  const parts = clean.split('/').filter(Boolean)
+  const last = parts.pop() || ''
+  return '/' + last
 }
 
 const activeItem = computed(() =>
@@ -56,7 +61,7 @@ const activeItem = computed(() =>
       </li>
     </ul>
 
-    <!-- Overlay (zonder blur) -->
+    <!-- Overlay -->
     <transition name="fade">
       <div
         v-if="activeItem"
