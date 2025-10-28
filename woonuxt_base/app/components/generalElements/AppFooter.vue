@@ -18,7 +18,7 @@ const footerMenus = computed(() => {
 watchEffect(() => {
   console.log('📦 GQL Footer data:', data.value?.menus?.nodes)
 })
-</script>
+</script> 
 
 
 <template>
