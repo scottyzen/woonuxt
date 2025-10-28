@@ -1,5 +1,5 @@
 query getCategoryChildren($slug: ID!) {
-  category(id: $slug, idType: SLUG) {
+  productCategory(id: $slug, idType: SLUG) {
     id
     name
     slug
