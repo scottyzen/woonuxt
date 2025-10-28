@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import GetFooterMenus from '~/graphql/queries/getFooterMenus.gql'
 
-// WooNuxt helpers
 const { wooNuxtVersionInfo } = useHelpers()
 const { wishlistLink } = useAuth()
 
-// 🔹 Gebruik WooNuxt’s eigen GraphQL client (sneller dan useAsyncGql)
-const gql = useGql()
-const { data, error } = await gql(GetFooterMenus)
+// ✅ Veilig via WooNuxt GraphQL helper
+const { data, error, pending } = await useAsyncGql(GetFooterMenus, {}, { revalidate: 3600 })
 
-// 🔹 Combineer menu’s (alleen als ze bestaan)
 const footerMenus = computed(() => {
   const f1 = data.value?.footer1
   const f2 = data.value?.footer2
@@ -17,14 +14,14 @@ const footerMenus = computed(() => {
   return [f1, f2, f3].filter(Boolean)
 })
 
-// 🔹 Debug (alleen lokaal)
 if (import.meta.dev) {
   watchEffect(() => {
-    console.log('📦 Footer menu data:', data.value)
-    if (error.value) console.error('❌ Footer GraphQL fout:', error.value)
+    console.log('📦 Footer menus:', data.value)
+    if (error.value) console.error('❌ GraphQL fout:', error.value)
   })
 }
 </script>
+
 
 <template>
   <footer class="bg-white order-last">
