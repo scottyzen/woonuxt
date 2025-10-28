@@ -1,131 +1,102 @@
 <script setup lang="ts">
-  import { navigateTo } from '#app'               // ✅ ADD THIS
-import { useCategoryMenu, type MenuItem } from '~/composables/useCategoryMenu'
+import { useCategoryMenu } from '~/composables/useCategoryMenu'
 
-const props = defineProps<{ open: boolean }>()
-const emit = defineEmits<{ (e: 'update:open', v: boolean): void }>()
-
+defineProps<{ open: boolean }>()
+const emit = defineEmits(['update:open'])
 const { topMenu } = await useCategoryMenu()
 
-const isOpen = computed({
-  get: () => props.open,
-  set: (v: boolean) => emit('update:open', v)
-})
-
-interface LayerCtx {
-  title?: string
-  items: any[]
-}
-const history = ref<LayerCtx[]>([])
-const current = ref<LayerCtx>({ title: 'Menu', items: topMenu.value })
-const direction = ref<'forward' | 'back'>('forward')
-
-function openSubmenu(item: any) {
-  const children =
-    item.columns ||
-    item.children?.nodes?.map((c: any) => ({
-      label: c.name,
-      uri: c.uri,
-      children: c.children?.nodes
-    })) ||
-    []
-  if (!children.length) return navigate(item.uri)
-
-  direction.value = 'forward'
-  history.value.push(current.value)
-  current.value = { title: item.label || item.name, items: children }
-}
-
-function goBack() {
-  if (!history.value.length) return close()
-  direction.value = 'back'
-  const prev = history.value.pop()!
-  current.value = prev
-}
-
-function navigate(uri: string) {
-  isOpen.value = false
-  navigateTo(uri)
-}
+const active = ref<number | null>(null)
 
 function close() {
-  isOpen.value = false
-  history.value = []
-  current.value = { title: 'Menu', items: topMenu.value }
+  emit('update:open', false)
+  active.value = null
 }
 </script>
 
 <template>
-  <transition name="fade">
-    <div v-if="isOpen" class="fixed inset-0 z-50">
-      <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" @click="close" />
-      <div
-        class="absolute right-0 top-0 h-full w-4/5 max-w-sm bg-white shadow-2xl flex flex-col rounded-l-2xl border border-gray-100"
-      >
-        <div class="flex items-center gap-2 h-14 px-4 border-b border-gray-100">
-          <button
-            v-if="history.length"
-            @click="goBack"
-            class="p-2 rounded hover:bg-gray-100"
-          >
-            ←
-          </button>
-          <div class="font-semibold text-gray-900">{{ current.title }}</div>
-          <button
-            class="ml-auto p-2 rounded hover:bg-gray-100"
-            @click="close"
-          >
-            ✕
-          </button>
-        </div>
+  <!-- overlay -->
+  <div
+    v-if="open"
+    class="fixed inset-0 bg-black/30 z-40"
+    @click="close"
+  ></div>
 
-        <div class="relative flex-1 overflow-hidden">
-          <transition
-            :name="direction === 'forward' ? 'slide-left' : 'slide-right'"
-            mode="out-in"
+  <!-- drawer -->
+  <Transition name="slide">
+    <aside
+      v-if="open"
+      class="fixed top-0 left-0 w-[80%] h-full bg-white z-50 overflow-y-auto"
+    >
+      <header class="flex items-center justify-between p-4 border-b border-gray-100">
+        <span class="font-semibold text-gray-800">Menu</span>
+        <button @click="close" class="text-gray-500">✕</button>
+      </header>
+
+      <nav class="p-4">
+        <ul v-if="!active">
+          <li
+            v-for="(item, i) in topMenu"
+            :key="item.id"
+            class="border-b border-gray-100"
           >
-            <ul
-              :key="history.length"
-              class="absolute inset-0 overflow-y-auto divide-y divide-gray-100"
+            <button
+              @click="active = i"
+              class="w-full text-left py-3 text-gray-700 font-medium"
             >
+              {{ item.label }}
+            </button>
+          </li>
+        </ul>
+
+        <!-- subniveau -->
+        <div v-else>
+          <button
+            class="text-sm text-gray-500 mb-4"
+            @click="active = null"
+          >
+            ← Terug
+          </button>
+
+          <div v-if="topMenu[active]">
+            <ul class="space-y-4">
               <li
-                v-for="item in current.items"
-                :key="item.uri"
-                class="flex justify-between items-center px-4 py-3"
+                v-for="col in topMenu[active].columns"
+                :key="col.title"
               >
                 <NuxtLink
-                  :to="item.uri"
-                  class="text-gray-900 hover:text-primary transition"
-                  @click.native="!item.columns && !item.children && (isOpen=false)"
+                  :to="col.uri"
+                  class="block font-semibold text-gray-900 mb-1"
+                  @click="close"
                 >
-                  {{ item.label || item.name }}
+                  {{ col.title }}
                 </NuxtLink>
-                <button
-                  v-if="item.columns?.length || item.children?.length"
-                  @click="openSubmenu(item)"
-                  class="text-gray-400 hover:text-gray-600"
-                >
-                  ›
-                </button>
+                <ul class="pl-3 space-y-1">
+                  <li v-for="sub in col.items" :key="sub.uri">
+                    <NuxtLink
+                      :to="sub.uri"
+                      class="block text-sm text-gray-600 hover:text-primary"
+                      @click="close"
+                    >
+                      {{ sub.label }}
+                    </NuxtLink>
+                  </li>
+                </ul>
               </li>
             </ul>
-          </transition>
+          </div>
         </div>
-      </div>
-    </div>
-  </transition>
+      </nav>
+    </aside>
+  </Transition>
 </template>
 
 <style scoped>
-.fade-enter-active,.fade-leave-active { transition: opacity .15s ease }
-.fade-enter-from,.fade-leave-to { opacity: 0 }
-
-.slide-left-enter-active,.slide-left-leave-active,
-.slide-right-enter-active,.slide-right-leave-active {
-  transition: transform .25s ease, opacity .25s ease;
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.slide-left-enter-from { transform: translateX(100%); opacity: 0.5; }
-.slide-left-leave-to { transform: translateX(-20%); opacity: 0; }
-.slide-right-enter-from { transform: translateX(-20%); opacity: 0.5; }
-.slide-right-leave-to { transform: translateX(100%); opacity: 0; }
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(-100%);
+}
 </style>
