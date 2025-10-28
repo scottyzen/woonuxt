@@ -1,0 +1,21 @@
+query getCategoryChildren($slug: ID!) {
+  category(id: $slug, idType: SLUG) {
+    id
+    name
+    slug
+    children {
+      nodes {
+        id
+        name
+        slug
+        children {
+          nodes {
+            id
+            name
+            slug
+          }
+        }
+      }
+    }
+  }
+}
