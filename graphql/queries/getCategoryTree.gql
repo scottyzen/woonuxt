@@ -2,18 +2,21 @@ query GetCategoryTree($include: [Int!]!) {
   productCategories(where: { include: $include, hideEmpty: false }) {
     nodes {
       databaseId
+      parentDatabaseId
       name
       slug
       uri
       children(first: 100) {
         nodes {
           databaseId
+          parentDatabaseId
           name
           slug
           uri
           children(first: 100) {
             nodes {
               databaseId
+              parentDatabaseId
               name
               slug
               uri
