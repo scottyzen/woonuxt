@@ -5,7 +5,9 @@ const isMenuOpen = ref(false)
 </script>
 
 <template>
-  <header class="sticky top-0 z-40 bg-white shadow-sm shadow-light-500">
+
+    <header class="sticky top-0 z-40 bg-white shadow-sm shadow-light-500 overflow-visible">
+
     <div class="container flex items-center justify-between py-4">
       <div class="flex items-center">
         <!-- Mobile menu trigger -->
