@@ -107,18 +107,19 @@ const activeItem = computed(() =>
   transform: translateY(6px);
 }
 
-/* --- Fix hover gap tussen header en dropdown --- */
+/* --- Hover-buffer zonder clicks te blokkeren --- */
 li.relative::before {
   content: "";
   position: absolute;
-  top: -0.75rem; /* iets boven header */
+  top: -0.75rem;
   left: 0;
   right: 0;
-  bottom: -0.75rem; /* maakt een overlap naar het dropdown menu */
+  bottom: -0.75rem;
+  pointer-events: none; /* 👈 laat clicks door naar de link */
   z-index: 10;
 }
 
-/* Optioneel: voor consistente clickzones */
+/* optioneel voor nette align */
 li.relative {
   position: relative;
   display: flex;
@@ -126,5 +127,6 @@ li.relative {
   height: 100%;
 }
 </style>
+
 
 
