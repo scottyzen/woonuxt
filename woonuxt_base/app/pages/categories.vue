@@ -87,9 +87,20 @@ useHead({
           class="space-y-6"
         >
           <!-- Titel van eerste-level subcategorie -->
-          <h2 class="text-xl font-semibold border-b pb-2">
-            {{ firstLevelSubs.find(cat => cat.databaseId === Number(parentId))?.name }}
-          </h2>
+            <div class="flex items-center justify-between border-b pb-2">
+              <h2 class="text-xl font-semibold">
+                {{ firstLevelSubs.find(cat => cat.databaseId === Number(parentId))?.name }}
+              </h2>
+              <NuxtLink
+                v-if="firstLevelSubs.find(cat => cat.databaseId === Number(parentId))?.slug"
+                :to="`/product-category/${decodeURIComponent(firstLevelSubs.find(cat => cat.databaseId === Number(parentId))?.slug || '')}`"
+                class="text-sm text-gray-400 hover:text-gray-600 transition"
+              >
+                Bekijk alle {{ firstLevelSubs.find(cat => cat.databaseId === Number(parentId))?.name?.toLowerCase() }}
+                <Icon name="ion:arrow-forward-outline" class="inline-block align-middle ml-1" size="14" />
+              </NuxtLink>
+            </div>
+
 
           <!-- Tweede-level subcategorieën -->
           <div
