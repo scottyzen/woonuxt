@@ -101,7 +101,7 @@ useHead({
                 <Icon name="ion:arrow-forward-outline" class="inline-block align-middle ml-1" size="14" />
               </NuxtLink>
 
-
+</div>
 
           <!-- Tweede-level subcategorieën -->
           <div
