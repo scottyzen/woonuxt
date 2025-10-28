@@ -1,4 +1,7 @@
+// NEW: explicit import so SSR/runtime always knows this composable
+import { useAsyncQuery } from '#imports'
 import GetCategoryTree from '~/graphql/queries/getCategoryTree.gql'
+
 
 export type CategoryNode = {
   databaseId: number
