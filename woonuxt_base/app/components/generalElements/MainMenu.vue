@@ -11,16 +11,21 @@ onMounted(() => {
   if (header) headerOffset.value = header.offsetHeight
 })
 
+// Open & sluiten met vertraging (voorkomt flikkeren)
 function openMenu(i: number) {
   if (closeTimer) clearTimeout(closeTimer)
   openIndex.value = i
 }
-
 function scheduleClose() {
-  // lichte vertraging om flikkeren te voorkomen
   closeTimer = setTimeout(() => {
     openIndex.value = null
   }, 180)
+}
+
+// Helper: corrigeer URIs (strip /product-category/)
+function cleanUri(uri: string): string {
+  if (!uri) return '/'
+  return uri.replace('/product-category', '').replace(/\/$/, '')
 }
 
 const activeItem = computed(() =>
@@ -43,7 +48,7 @@ const activeItem = computed(() =>
         @mouseenter="openMenu(i)"
       >
         <NuxtLink
-          :to="item.uri"
+          :to="cleanUri(item.uri)"
           class="py-3 px-2 text-gray-800 font-medium hover:text-primary transition"
         >
           {{ item.label }}
@@ -51,11 +56,11 @@ const activeItem = computed(() =>
       </li>
     </ul>
 
-    <!-- Overlay -->
+    <!-- Overlay (zonder blur) -->
     <transition name="fade">
       <div
         v-if="activeItem"
-        class="fixed inset-0 bg-light-500/40 backdrop-blur-sm z-40"
+        class="fixed inset-0 bg-light-500/40 z-40"
         @click="openIndex = null"
       ></div>
     </transition>
@@ -74,7 +79,7 @@ const activeItem = computed(() =>
             class="text-gray-800"
           >
             <NuxtLink
-              :to="col.uri"
+              :to="cleanUri(col.uri)"
               class="block font-semibold mb-3 hover:text-primary"
             >
               {{ col.title }}
@@ -83,7 +88,7 @@ const activeItem = computed(() =>
             <ul class="space-y-2">
               <li v-for="sub in col.items" :key="sub.uri">
                 <NuxtLink
-                  :to="sub.uri"
+                  :to="cleanUri(sub.uri)"
                   class="block text-sm text-gray-600 hover:text-primary transition"
                 >
                   {{ sub.label }}
