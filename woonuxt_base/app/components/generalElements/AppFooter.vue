@@ -4,17 +4,22 @@ import GetFooterMenus from '~/graphql/queries/getFooterMenus.gql'
 const { wooNuxtVersionInfo } = useHelpers()
 const { wishlistLink } = useAuth()
 
-// 🔹 Haal alle menu's op via WPGraphQL
+// 🔹 Data ophalen via WooNuxt helper
 const { data, pending, error } = await useAsyncGql(GetFooterMenus)
 
+// ✅ Menu's filteren op slug in plaats van naam
 const footerMenus = computed(() => {
   if (!data.value?.menus?.nodes) return []
+  const wanted = ['footer-1', 'footer-2', 'footer-3']
+  return data.value.menus.nodes.filter(menu => wanted.includes(menu.slug))
+})
 
-  // Filter enkel onze 3 footermenu's
-  const wanted = ['Footer 1', 'Footer 2', 'Footer 3']
-  return data.value.menus.nodes.filter(menu => wanted.includes(menu.name))
+// 🔹 Debug (tijdelijk)
+watchEffect(() => {
+  console.log('📦 GQL Footer data:', data.value?.menus?.nodes)
 })
 </script>
+
 
 <template>
   <footer class="bg-white order-last">
