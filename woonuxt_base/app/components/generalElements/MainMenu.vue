@@ -98,8 +98,23 @@ const activeItem = computed(() =>
     </transition>
   </div>
 </template>
-
 <style scoped>
-.fade-enter-active, .fade-leave-active { transition: opacity .25s ease, transform .2s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; transform: translateY(6px); }
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .25s ease, transform .2s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+/* 👇 Hover-buffer voor hoofdmenu-items */
+li.relative::before {
+  content: "";
+  position: absolute;
+  top: -1rem; /* iets boven de header */
+  left: 0;
+  right: 0;
+  bottom: -1rem; /* iets eronder */
+}
 </style>
+
