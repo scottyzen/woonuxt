@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import GetFooterMenus from '~/graphql/queries/getFooterMenus.gql'
 
+// WooNuxt helpers
 const { wooNuxtVersionInfo } = useHelpers()
 const { wishlistLink } = useAuth()
 
-// 🔹 Gebruik WooNuxt’s eigen GraphQL client (stabieler dan useAsyncGql)
+// 🔹 Gebruik WooNuxt’s eigen GraphQL client (sneller dan useAsyncGql)
 const gql = useGql()
 const { data, error } = await gql(GetFooterMenus)
 
-// 🔹 Combineer menu’s, alleen als ze bestaan
+// 🔹 Combineer menu’s (alleen als ze bestaan)
 const footerMenus = computed(() => {
   const f1 = data.value?.footer1
   const f2 = data.value?.footer2
@@ -16,11 +17,11 @@ const footerMenus = computed(() => {
   return [f1, f2, f3].filter(Boolean)
 })
 
-// 🔹 Debug lokaal
+// 🔹 Debug (alleen lokaal)
 if (import.meta.dev) {
   watchEffect(() => {
-    console.log('📦 GraphQL footer data:', data.value)
-    if (error.value) console.error('❌ GraphQL fout in Footer:', error.value)
+    console.log('📦 Footer menu data:', data.value)
+    if (error.value) console.error('❌ Footer GraphQL fout:', error.value)
   })
 }
 </script>
@@ -34,14 +35,13 @@ if (import.meta.dev) {
         <WebsiteShortDescription />
       </div>
 
-      <!-- Dynamische menu's -->
+      <!-- Dynamische WordPress menu's -->
       <div
         v-for="menu in footerMenus"
         :key="menu.slug"
         class="w-3/7 lg:w-auto"
       >
         <div class="mb-1 font-semibold">{{ menu.name }}</div>
-
         <div class="text-sm">
           <template v-if="menu.menuItems?.nodes?.length">
             <NuxtLink
@@ -53,7 +53,6 @@ if (import.meta.dev) {
               {{ item.label }}
             </NuxtLink>
           </template>
-
           <div v-else class="text-gray-400 text-xs italic">Nog geen items</div>
         </div>
       </div>
