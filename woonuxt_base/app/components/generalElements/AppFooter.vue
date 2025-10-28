@@ -4,15 +4,16 @@ import GetFooterMenus from '~/graphql/queries/getFooterMenus.gql'
 const { wooNuxtVersionInfo } = useHelpers()
 const { wishlistLink } = useAuth()
 
-// 🔹 Haal alle drie footer-menu's op vanuit WordPress
+// 🔹 Haal alle menu's op via WPGraphQL
 const { data, pending, error } = await useAsyncGql(GetFooterMenus)
 
-// Reactieve structuur voor herbruikbaarheid
-const menus = computed(() => ({
-  footer1: data.value?.footer1?.nodes || [],
-  footer2: data.value?.footer2?.nodes || [],
-  footer3: data.value?.footer3?.nodes || [],
-}))
+const footerMenus = computed(() => {
+  if (!data.value?.menus?.nodes) return []
+
+  // Filter enkel onze 3 footermenu's
+  const wanted = ['Footer 1', 'Footer 2', 'Footer 3']
+  return data.value.menus.nodes.filter(menu => wanted.includes(menu.name))
+})
 </script>
 
 <template>
@@ -24,20 +25,17 @@ const menus = computed(() => ({
         <WebsiteShortDescription />
       </div>
 
-      <!-- Dynamische menu's -->
+      <!-- Dynamische footer menu's -->
       <div
-        v-for="(menuItems, key) in menus"
-        :key="key"
+        v-for="menu in footerMenus"
+        :key="menu.id"
         class="w-3/7 lg:w-auto"
       >
-        <div class="mb-1 font-semibold capitalize">
-          {{ key.replace('footer', 'Menu ') }}
-        </div>
-
+        <div class="mb-1 font-semibold">{{ menu.name }}</div>
         <div class="text-sm">
-          <template v-if="menuItems.length">
+          <template v-if="menu.menuItems?.nodes?.length">
             <NuxtLink
-              v-for="item in menuItems"
+              v-for="item in menu.menuItems.nodes"
               :key="item.id"
               :to="item.url"
               class="py-1.5 block hover:underline"
@@ -45,14 +43,11 @@ const menus = computed(() => ({
               {{ item.label }}
             </NuxtLink>
           </template>
-          <div v-else class="text-gray-400 text-xs italic">
-            Nog geen items
-          </div>
+          <div v-else class="text-gray-400 text-xs italic">Nog geen items</div>
         </div>
       </div>
     </div>
 
-    <!-- Onderrand -->
     <div class="container border-t flex items-center justify-center mb-4">
       <SocialIcons class="ml-auto" />
     </div>
