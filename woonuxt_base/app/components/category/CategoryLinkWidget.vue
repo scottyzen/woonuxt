@@ -1,4 +1,7 @@
 <script setup lang="ts">
+  watch(children, (val) => {
+  console.log('👀 Children ontvangen in widget:', val)
+})
 import { useCategoryChildren } from '~/composables/useCategoryChildren'
 
 const { category, children } = await useCategoryChildren()
