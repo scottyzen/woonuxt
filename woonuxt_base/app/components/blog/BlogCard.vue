@@ -21,14 +21,8 @@
     </div>
 
     <div class="p-4">
-      <h3
-        class="text-lg font-semibold mb-2 line-clamp-2 text-gray-900"
-        v-html="post.title"
-      />
-      <p
-        class="text-sm text-gray-600 line-clamp-3"
-        v-html="post.excerpt"
-      />
+      <h3 class="text-lg font-semibold mb-2 line-clamp-2 text-gray-900" v-html="post.title" />
+      <p class="text-sm text-gray-600 line-clamp-3" v-html="post.excerpt" />
       <span class="text-xs text-gray-400 mt-3 block">
         {{ new Date(post.date).toLocaleDateString('nl-NL', { day: '2-digit', month: 'long', year: 'numeric' }) }}
       </span>
@@ -38,9 +32,6 @@
 
 <script setup lang="ts">
 defineProps({
-  post: {
-    type: Object,
-    required: true,
-  },
+  post: { type: Object, required: true },
 })
 </script>
