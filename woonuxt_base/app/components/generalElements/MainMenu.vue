@@ -7,7 +7,10 @@ const openIndex = ref<number | null>(null)
 function onEnter(i: number) {
   openIndex.value = i
 }
-function onLeave() {
+function onLeave(e: MouseEvent) {
+  // voorkom per ongeluk sluiten bij muis over submenu
+  const target = e.relatedTarget as HTMLElement | null
+  if (target && target.closest('.mega-menu-panel')) return
   openIndex.value = null
 }
 
@@ -36,15 +39,15 @@ const activeItem = computed(() =>
       </li>
     </ul>
 
-    <!-- Mega Menu -->
+    <!-- Full-width Mega Menu Panel -->
     <transition name="fade">
       <div
         v-if="activeItem && activeItem.columns?.length"
-        class="absolute left-0 top-full w-screen bg-white border-t border-gray-200 shadow-lg z-40"
+        class="mega-menu-panel fixed left-0 top-[calc(100%+1px)] w-screen bg-white border-t border-gray-200 shadow-lg z-50"
         @mouseenter="null"
         @mouseleave="onLeave"
       >
-        <div class="max-w-[1400px] mx-auto px-10 py-8 grid grid-cols-4 gap-10">
+        <div class="max-w-[1600px] mx-auto px-12 py-10 grid grid-cols-4 gap-12">
           <div
             v-for="col in activeItem.columns"
             :key="col.title"
