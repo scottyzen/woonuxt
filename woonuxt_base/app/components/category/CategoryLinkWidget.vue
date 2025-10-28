@@ -4,7 +4,8 @@
 })
 import { useCategoryChildren } from '~/composables/useCategoryChildren'
 
-const { category, children } = await useCategoryChildren()
+  export async function useCategoryChildren() { ... }
+
 
 function cleanUri(uri: string | undefined): string {
   if (!uri) return '/'
