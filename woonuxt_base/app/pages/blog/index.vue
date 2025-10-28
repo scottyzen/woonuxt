@@ -2,8 +2,11 @@
 import GetPosts from '~/graphql/queries/getPosts.gql'
 import BlogCard from '~/components/blog/BlogCard.vue'
 
-// 🔹 Data ophalen via Woonuxt helper
 const { data, pending, error } = await useAsyncGql(GetPosts, { first: 12 })
+
+if (error.value) {
+  console.error('GraphQL fout bij GetPosts:', error.value)
+}
 
 useHead({
   title: 'Blog - Kledingzoeken.nl',
@@ -12,6 +15,7 @@ useHead({
   ],
 })
 </script>
+
 
 <template>
   <section class="container mx-auto py-10 px-4">
