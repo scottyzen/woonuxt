@@ -4,11 +4,18 @@ import { useCategoryMenu } from '~/composables/useCategoryMenu'
 const { topMenu } = await useCategoryMenu()
 const openIndex = ref<number | null>(null)
 
+// hoogte van de header (wordt berekend in mounted)
+const headerOffset = ref(64)
+
+onMounted(() => {
+  const header = document.querySelector('header')
+  if (header) headerOffset.value = header.offsetHeight
+})
+
 function onEnter(i: number) {
   openIndex.value = i
 }
 function onLeave(e: MouseEvent) {
-  // voorkom per ongeluk sluiten bij muis over submenu
   const target = e.relatedTarget as HTMLElement | null
   if (target && target.closest('.mega-menu-panel')) return
   openIndex.value = null
@@ -43,7 +50,8 @@ const activeItem = computed(() =>
     <transition name="fade">
       <div
         v-if="activeItem && activeItem.columns?.length"
-        class="mega-menu-panel fixed left-0 top-[calc(100%+1px)] w-screen bg-white border-t border-gray-200 shadow-lg z-50"
+        class="mega-menu-panel fixed left-0 w-screen bg-white border-t border-gray-200 shadow-lg z-50"
+        :style="{ top: headerOffset + 'px' }"
         @mouseenter="null"
         @mouseleave="onLeave"
       >
