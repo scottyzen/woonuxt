@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import CategoryCard from '~/components/CategoryCard.vue'
 
-// 👶 Gewenste volgorde van hoofdcategorieën
-const topCategoryIds = [38, 37, 36, 35, 34] 
-// Baby’s, Meisjes, Jongens, Heren, Dames (omgekeerde volgorde)
+// 💄 Gewenste volgorde van hoofdcategorieën
+// Dames → Heren → Jongens → Meisjes → Baby’s
+const topCategoryIds = [34, 35, 36, 37, 38]
 
+// 🔹 Haal de hoofdcategorieën op in die volgorde
 const { data: parentData } = await useAsyncGql('getProductCategories', { include: topCategoryIds })
 const parentCategories = computed(() =>
   parentData.value?.productCategories?.nodes?.sort(
     (a, b) => topCategoryIds.indexOf(a.databaseId) - topCategoryIds.indexOf(b.databaseId)
   ) || []
 )
+
 
 // Actieve tab
 const activeCategory = ref(parentCategories.value?.[0] || null)
