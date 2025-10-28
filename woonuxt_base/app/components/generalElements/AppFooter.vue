@@ -1,4 +1,7 @@
 <script setup lang="ts">
+  watchEffect(() => {
+  console.log('FOOTER DEBUG DATA:', data.value)
+})
 import GetFooterMenus from '~/graphql/queries/getFooterMenus.gql'
 
 const { wooNuxtVersionInfo } = useHelpers()
