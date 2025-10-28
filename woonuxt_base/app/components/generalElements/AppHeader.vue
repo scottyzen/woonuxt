@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MobileMenu from '~/components/generalElements/MobileMenu.vue'
+
 const { isShowingSearch } = useSearching()
 const isMenuOpen = ref(false)
 </script>
