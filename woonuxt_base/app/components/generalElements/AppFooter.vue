@@ -4,25 +4,22 @@ import GetFooterMenus from '~/graphql/queries/getFooterMenus.gql'
 const { wooNuxtVersionInfo } = useHelpers()
 const { wishlistLink } = useAuth()
 
-// 🔹 Data ophalen via WooNuxt helper
-const { data, pending, error } = await useAsyncGql(GetFooterMenus)
+// 🔹 Haal de drie footermenu’s op via WPGraphQL
+const { data, pending, error } = await useAsyncGql(GetFooterMenus, {}, { revalidate: 3600 })
 
-// ✅ Menu's filteren op slug in plaats van naam
+// 🔹 Combineer alle menu’s in één array
 const footerMenus = computed(() => {
-  if (!data.value?.menus?.nodes) return []
-  const wanted = ['footer-1', 'footer-2', 'footer-3']
-  return data.value.menus.nodes.filter(menu => wanted.includes(menu.slug))
+  return [
+    data.value?.footer1,
+    data.value?.footer2,
+    data.value?.footer3
+  ].filter(Boolean)
 })
-
-// 🔹 Debug (tijdelijk)
-watchEffect(() => {
-  console.log('📦 GQL Footer data:', data.value?.menus?.nodes)
-})
-</script> 
-
+</script>
 
 <template>
   <footer class="bg-white order-last">
+    <!-- Bovenste gedeelte met logo en menu’s -->
     <div class="container flex flex-wrap justify-between gap-12 my-24 md:gap-24">
       <!-- Logo + beschrijving -->
       <div class="mr-auto">
@@ -30,10 +27,10 @@ watchEffect(() => {
         <WebsiteShortDescription />
       </div>
 
-      <!-- Dynamische footer menu's -->
+      <!-- Dynamische footer menu’s -->
       <div
         v-for="menu in footerMenus"
-        :key="menu.id"
+        :key="menu.slug"
         class="w-3/7 lg:w-auto"
       >
         <div class="mb-1 font-semibold">{{ menu.name }}</div>
@@ -42,7 +39,7 @@ watchEffect(() => {
             <NuxtLink
               v-for="item in menu.menuItems.nodes"
               :key="item.id"
-              :to="item.url"
+              :to="item.url.replace('https://wp.kledingzoeken.nl', '')"
               class="py-1.5 block hover:underline"
             >
               {{ item.label }}
@@ -53,8 +50,10 @@ watchEffect(() => {
       </div>
     </div>
 
-    <div class="container border-t flex items-center justify-center mb-4">
-      <SocialIcons class="ml-auto" />
+    <!-- Onderste gedeelte -->
+    <div class="container border-t pt-4 pb-6 flex flex-col items-center justify-center text-sm text-gray-500">
+      <p class="mb-2">&copy; {{ new Date().getFullYear() }} Kledingzoeken.nl - 2025</p>
+      <SocialIcons />
     </div>
   </footer>
 </template>
