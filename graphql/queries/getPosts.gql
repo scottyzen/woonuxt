@@ -1,0 +1,22 @@
+query GetPosts($first: Int = 12) {
+  posts(first: $first) {
+    nodes {
+      id
+      slug
+      title
+      date
+      excerpt
+      featuredImage {
+        node {
+          sourceUrl
+        }
+      }
+      categories {
+        nodes {
+          name
+          slug
+        }
+      }
+    }
+  }
+}
