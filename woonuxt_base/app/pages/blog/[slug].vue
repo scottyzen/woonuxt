@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import GetPostBySlug from '~/graphql/queries/getPostBySlug.gql'
 import BlogContent from '~/components/blog/BlogContent.vue'
 
-// 🔹 route ophalen
 const route = useRoute()
 
-// 🔹 Data ophalen via WooNuxt helper
-const { data, pending, error } = await useAsyncGql(GetPostBySlug, {
+// 🔹 Data ophalen via Woonuxt helper
+const { data, pending, error } = await useAsyncGql('GetPostBySlug', {
   slug: route.params.slug,
 })
 
-// 🔹 Reactieve post-data
+if (error.value) {
+  console.error('GraphQL fout bij GetPostBySlug:', error.value)
+}
+
 const post = computed(() => data.value?.post || null)
 
-// 🔹 SEO meta opbouwen
 useHead(() => ({
   title: post.value?.title || 'Artikel - Kledingzoeken.nl',
   meta: [
