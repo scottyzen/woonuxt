@@ -1,9 +1,7 @@
 <script setup lang="ts">
-  watchEffect(() => {
-  console.log('FOOTER DEBUG DATA:', data.value)
-})
 import GetFooterMenus from '~/graphql/queries/getFooterMenus.gql'
 
+// WooNuxt helpers (niet weghalen)
 const { wooNuxtVersionInfo } = useHelpers()
 const { wishlistLink } = useAuth()
 
@@ -18,10 +16,11 @@ const footerMenus = computed(() => {
   return [f1, f2, f3].filter(Boolean)
 })
 
-// 🔹 Debug: laat zien wat er binnenkomt
+// 🔹 Debug: laat zien wat er binnenkomt (alleen lokaal)
 if (import.meta.dev) {
   watchEffect(() => {
     console.log('📦 Footer menus:', data.value)
+    if (error.value) console.error('❌ GraphQL fout in Footer:', error.value)
   })
 }
 </script>
@@ -62,7 +61,7 @@ if (import.meta.dev) {
 
     <!-- Onderste gedeelte -->
     <div class="container border-t pt-4 pb-6 flex flex-col items-center justify-center text-sm text-gray-500">
-      <p class="mb-2">&copy; {{ new Date().getFullYear() }} Kledingzoeken.nl</p>
+      <p class="mb-2">&copy; {{ new Date().getFullYear() }} Kledingzoeken.nl - 2025</p>
       <SocialIcons />
     </div>
   </footer>
