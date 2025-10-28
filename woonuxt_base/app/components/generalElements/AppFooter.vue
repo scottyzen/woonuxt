@@ -4,29 +4,28 @@ import GetFooterMenus from '~/graphql/queries/getFooterMenus.gql'
 const { wooNuxtVersionInfo } = useHelpers()
 const { wishlistLink } = useAuth()
 
-// ✅ Veilig via WooNuxt GraphQL helper
+// 🔹 Haal menu's op via WooNuxt GraphQL helper
+// revalidate = 3600 = cache 1 uur
 const { data, error, pending } = await useAsyncGql(GetFooterMenus, {}, { revalidate: 3600 })
 
+// 🔹 Zet de data om in een bruikbare array
 const footerMenus = computed(() => {
-  const f1 = data.value?.footer1
-  const f2 = data.value?.footer2
-  const f3 = data.value?.footer3
-  return [f1, f2, f3].filter(Boolean)
+  return [data.value?.footer1, data.value?.footer2, data.value?.footer3].filter(Boolean)
 })
 
+// 🔹 Debug (alleen tijdens lokale development)
 if (import.meta.dev) {
   watchEffect(() => {
-    console.log('📦 Footer menus:', data.value)
-    if (error.value) console.error('❌ GraphQL fout:', error.value)
+    console.log('📦 Footer menus data:', data.value)
+    if (error.value) console.error('❌ GraphQL fout in footer:', error.value)
   })
 }
 </script>
 
-
 <template>
   <footer class="bg-white order-last">
     <div class="container flex flex-wrap justify-between gap-12 my-24 md:gap-24">
-      <!-- Logo + beschrijving -->
+      <!-- Logo en beschrijving -->
       <div class="mr-auto">
         <Logo />
         <WebsiteShortDescription />
@@ -38,7 +37,8 @@ if (import.meta.dev) {
         :key="menu.slug"
         class="w-3/7 lg:w-auto"
       >
-        <div class="mb-1 font-semibold">{{ menu.name }}</div>
+        <div class="mb-1 font-semibold capitalize">{{ menu.name }}</div>
+
         <div class="text-sm">
           <template v-if="menu.menuItems?.nodes?.length">
             <NuxtLink
@@ -50,14 +50,19 @@ if (import.meta.dev) {
               {{ item.label }}
             </NuxtLink>
           </template>
-          <div v-else class="text-gray-400 text-xs italic">Nog geen items</div>
+
+          <div v-else class="text-gray-400 text-xs italic">
+            Nog geen menu-items gevonden.
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Onderste gedeelte -->
+    <!-- Onderaan -->
     <div class="container border-t pt-4 pb-6 flex flex-col items-center justify-center text-sm text-gray-500">
-      <p class="mb-2">&copy; {{ new Date().getFullYear() }} Kledingzoeken.nl - 2025</p>
+      <p class="mb-2">
+        &copy; {{ new Date().getFullYear() }} Kledingzoeken.nl - 2025
+      </p>
       <SocialIcons />
     </div>
   </footer>
