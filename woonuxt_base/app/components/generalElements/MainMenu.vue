@@ -60,7 +60,7 @@ const activeItem = computed(() =>
       <div
         v-if="activeItem"
         class="fixed left-0 right-0 bottom-0 bg-light-500/40 z-40"
-        :style="{ top: headerOffset + 'px' }"
+        :style="{ top: `calc(${headerOffset}px - 4px)` }"
         @click="openIndex = null"
       />
     </transition>
