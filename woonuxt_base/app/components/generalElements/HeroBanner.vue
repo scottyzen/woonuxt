@@ -26,12 +26,7 @@
           Vergelijk prijzen, ontdek nieuwe trends, en vind de beste deal — allemaal via één platform.
         </p>
       </div>
-      <NuxtLink
-        to="/products"
-        class="px-5 py-2.5 font-semibold text-white bg-primary rounded-xl hover:bg-primary-dark transition"
-      >
-        Bekijk alle producten
-      </NuxtLink>
+     
     </div>
   </div>
 </template>
