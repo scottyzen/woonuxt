@@ -1,7 +1,4 @@
-// NEW: explicit import so SSR/runtime always knows this composable
-import { useAsyncQuery } from '#imports'
-import GetCategoryTree from '~/graphql/queries/getCategoryTree.gql'
-
+import { useAsyncGql } from '#imports'
 
 export type CategoryNode = {
   databaseId: number
@@ -24,18 +21,14 @@ export type MenuItem = {
   columns: MenuColumn[]
 }
 
-// ✅ geef include als string-IDs door
+// include moet [ID] zijn → strings!
 const TOP_IDS = ['34', '35', '36', '37', '38'] as const
 
 export async function useCategoryMenu() {
-  const { data } = await useAsyncQuery<{ productCategories: { nodes: CategoryNode[] } }>(
-    GetCategoryTree,
-    { include: TOP_IDS }, // ← strings, matcht [ID]
-    {
-      fetchPolicy: 'cache-first',
-      context: { fetchOptions: { next: { revalidate: 1800 } } }
-    }
-  )
+  const { data } = await useAsyncGql<{ productCategories: { nodes: CategoryNode[] } }>({
+    operation: 'GetCategoryTree',
+    variables: { include: TOP_IDS },
+  })
 
   const raw = computed(() => data.value?.productCategories?.nodes ?? [])
 
@@ -59,10 +52,10 @@ export async function useCategoryMenu() {
 
   const topMenu = computed<MenuItem[]>(() =>
     raw.value
-      // sorteer op basis van databaseId → string index in TOP_IDS
-      .sort((a, b) =>
-        TOP_IDS.indexOf(String(a.databaseId) as typeof TOP_IDS[number]) -
-        TOP_IDS.indexOf(String(b.databaseId) as typeof TOP_IDS[number])
+      .sort(
+        (a, b) =>
+          TOP_IDS.indexOf(String(a.databaseId) as typeof TOP_IDS[number]) -
+          TOP_IDS.indexOf(String(b.databaseId) as typeof TOP_IDS[number])
       )
       .map(toMenuItem)
   )
