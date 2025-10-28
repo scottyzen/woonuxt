@@ -17,7 +17,10 @@ function onEnter(i: number) {
 }
 function onLeave(e: MouseEvent) {
   const target = e.relatedTarget as HTMLElement | null
-  if (target && target.closest('.mega-menu-panel')) return
+
+  // voorkom sluiten als je van hoofdmenu naar mega-menu of overlay beweegt
+  if (target && (target.closest('.mega-menu-panel') || target.closest('.fixed'))) return
+
   openIndex.value = null
 }
 
@@ -47,15 +50,15 @@ const activeItem = computed(() =>
     </ul>
 
 
-     <!-- Overlay (Woonuxt-style) -->
-    <transition name="fade">
-      <div
-        v-if="activeItem"
-        class="fixed inset-0 bg-light-500/40 backdrop-blur-sm z-40"
-        @mouseenter="null"
-        @mouseleave="onLeave"
-      ></div>
-    </transition>
+<!-- Overlay (Woonuxt-style) -->
+<transition name="fade">
+  <div
+    v-if="activeItem"
+    class="fixed inset-0 bg-light-500/40 backdrop-blur-sm z-40"
+    @click="openIndex = null"  <!-- sluit bij klik -->
+  ></div>
+</transition>
+
     
 
     <!-- Full-width Mega Menu Panel -->
