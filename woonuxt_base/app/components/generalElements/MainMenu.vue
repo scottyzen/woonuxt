@@ -46,6 +46,18 @@ const activeItem = computed(() =>
       </li>
     </ul>
 
+
+     <!-- Overlay (Woonuxt-style) -->
+    <transition name="fade">
+      <div
+        v-if="activeItem"
+        class="fixed inset-0 bg-light-500/40 backdrop-blur-sm z-40"
+        @mouseenter="null"
+        @mouseleave="onLeave"
+      ></div>
+    </transition>
+    
+
     <!-- Full-width Mega Menu Panel -->
     <transition name="fade">
       <div
