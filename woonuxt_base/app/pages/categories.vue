@@ -93,7 +93,7 @@ useHead({
               </h2>
               <NuxtLink
                 v-if="firstLevelSubs.find(cat => cat.databaseId === Number(parentId))?.slug"
-                :to="`/product-category/${decodeURIComponent(firstLevelSubs.find(cat => cat.databaseId === Number(parentId))?.slug || '')}`"
+                :to="`/${decodeURIComponent(firstLevelSubs.find(cat => cat.databaseId === Number(parentId))?.slug || '')}`"
                 class="text-sm text-gray-400 hover:text-gray-600 transition"
               >
                 Bekijk alle {{ firstLevelSubs.find(cat => cat.databaseId === Number(parentId))?.name?.toLowerCase() }}
