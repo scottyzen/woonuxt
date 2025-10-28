@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
 import { useCategoryChildren } from '~/composables/useCategoryChildren'
 
-const { category, children } = useCategoryChildren()
-
+const { category, children } = await useCategoryChildren()
 
 function cleanUri(uri: string | undefined): string {
   if (!uri) return '/'
