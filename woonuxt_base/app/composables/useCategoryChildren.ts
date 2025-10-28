@@ -1,29 +1,27 @@
 import { useRoute } from 'vue-router'
 import getCategoryChildren from '~/graphql/queries/getCategoryChildren.gql'
 
-export function useCategoryChildren() {
+/**
+ * Fetches subcategories (and their children) of the current WooCommerce category.
+ * Automatically detects the category slug from the route.
+ * Works with SSR and Woonuxt GraphQL client.
+ */
+export async function useCategoryChildren() {
   const route = useRoute()
 
-  const slug = computed(() => {
-    // probeer meerdere namen, afhankelijk van je routebestand
-    return route.params.slug || route.params.name || ''
-  })
+  // Detect slug from route params
+  const slug = computed(() => route.params.slug || route.params.name || '')
 
-  const { data, error, execute } = useAsyncGql({
-    query: getCategoryChildren,
-    variables: { slug: slug.value },
-    immediate: false, // nog niet direct uitvoeren
-  })
-
-  // Run de query zodra slug beschikbaar is
-  watchEffect(() => {
-    if (slug.value) execute({ slug: slug.value })
+  // Perform GraphQL request
+  const { data, error } = await useAsyncGql(getCategoryChildren, {
+    slug: slug.value
   })
 
   if (error.value) {
     console.error('Error fetching category children:', error.value)
   }
 
+  // Extract and expose data
   const category = computed(() => data.value?.category)
   const children = computed(() => category.value?.children?.nodes || [])
 
