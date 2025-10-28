@@ -13,45 +13,47 @@ const activeItem = computed(() =>
 </script>
 
 <template>
-  <!-- Wrapper is relative zodat het paneel over de volle breedte kan positioneren -->
   <div class="relative">
-    <!-- Bovenste rij links -->
-    <ul v-if="topMenu?.length" class="flex items-center gap-6">
-      <li
-        v-for="(item, i) in topMenu"
-        :key="item.id"
-        @mouseenter="onEnter(i)"
-        @mouseleave="onLeave"
-      >
-        <NuxtLink
-          :to="item.uri"
-          class="py-2 px-2 text-gray-700 hover:text-gray-900 transition"
+    <!-- === MENU ITEMS === -->
+    <template v-if="topMenu?.length">
+      <ul class="flex items-center gap-6">
+        <li
+          v-for="(item, i) in topMenu"
+          :key="item.id"
+          @mouseenter="onEnter(i)"
+          @mouseleave="onLeave"
         >
-          {{ item.label }}
-        </NuxtLink>
-      </li>
-    </ul>
+          <NuxtLink
+            :to="item.uri"
+            class="py-2 px-2 text-gray-700 hover:text-gray-900 transition"
+          >
+            {{ item.label }}
+          </NuxtLink>
+        </li>
+      </ul>
 
-    <!-- Eén mega panel voor de hele nav, inhoud wisselt met activeItem -->
-    <transition name="mega-panel">
-      <div
-        v-if="activeItem && activeItem.columns?.length"
-        class="absolute left-0 top-[calc(100%+1px)] w-screen bg-white border-t border-gray-100 shadow-lg z-50"
-        @mouseenter="/* paneel open houden bij hover */ null"
-        @mouseleave="onLeave"
-      >
-        <!-- inhoud in site-breedte centreren; pas max-w aan jouw containerbreedte -->
-        <div class="max-w-[1400px] mx-auto px-6 py-6">
-          <div class="grid grid-cols-4 gap-8">
+      <!-- Mega menu paneel -->
+      <transition name="mega-panel">
+        <div
+          v-if="activeItem && activeItem.columns?.length"
+          class="absolute left-0 top-[calc(100%+1px)] w-screen bg-white border-t border-gray-100 shadow-lg z-50"
+          @mouseenter="null"
+          @mouseleave="onLeave"
+        >
+          <div class="max-w-[1400px] mx-auto px-6 py-6 grid grid-cols-4 gap-8">
             <div v-for="col in activeItem.columns" :key="col.title">
-              <!-- level 1 titel -->
-              <NuxtLink :to="col.uri" class="block font-semibold text-gray-900 mb-2">
+              <NuxtLink
+                :to="col.uri"
+                class="block font-semibold text-gray-900 mb-2"
+              >
                 {{ col.title }}
               </NuxtLink>
-              <!-- level 2 items -->
               <ul class="space-y-1">
                 <li v-for="sub in col.items" :key="sub.uri">
-                  <NuxtLink :to="sub.uri" class="text-sm text-gray-700 hover:text-gray-900">
+                  <NuxtLink
+                    :to="sub.uri"
+                    class="text-sm text-gray-700 hover:text-gray-900"
+                  >
                     {{ sub.label }}
                   </NuxtLink>
                 </li>
@@ -59,16 +61,22 @@ const activeItem = computed(() =>
             </div>
           </div>
         </div>
-      </div>
-    </transition>
+      </transition>
+    </template>
 
-      <!-- Skeleton -->
-    <ul v-else class="flex items-center gap-6">
-      <li v-for="i in 5" :key="i" class="h-5 w-16 rounded bg-gray-100 animate-pulse"></li>
-    </ul>
-
+    <!-- === SKELETON FALLBACK === -->
+    <template v-else>
+      <ul class="flex items-center gap-6">
+        <li
+          v-for="i in 5"
+          :key="i"
+          class="h-5 w-16 rounded bg-gray-100 animate-pulse"
+        ></li>
+      </ul>
+    </template>
   </div>
 </template>
+
 
 <style scoped>
 .mega-panel-enter-active,
