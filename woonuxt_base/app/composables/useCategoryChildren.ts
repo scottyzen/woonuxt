@@ -5,21 +5,27 @@ export async function useCategoryChildren() {
   const route = useRoute()
   const slug = computed(() => route.params.slug || route.params.name || '')
 
+  console.log('🔍 Route params:', route.params)
+  console.log('🧭 Op te halen categorie-slug:', slug.value)
+
   if (!slug.value) {
-    console.warn('⚠️ Geen category slug gevonden in route params')
-  } else {
-    console.log('🧭 Ophalen subcategorieën voor:', slug.value)
+    console.warn('⚠️ Geen slug gevonden, stoppen')
+    return { category: ref(null), children: ref([]) }
   }
 
   const { data, error } = await useAsyncGql(getCategoryChildren, {
     slug: slug.value
   })
 
-  if (error.value) {
-    console.error('GraphQL error in useCategoryChildren:', error.value)
-  }
+  watchEffect(() => {
+    if (error.value) {
+      console.error('❌ GraphQL error:', error.value)
+    }
+    if (data.value) {
+      console.log('✅ GraphQL data ontvangen:', data.value)
+    }
+  })
 
-  // ✅ Gebruik productCategory i.p.v. category
   const category = computed(() => data.value?.productCategory)
   const children = computed(() => category.value?.children?.nodes || [])
 
