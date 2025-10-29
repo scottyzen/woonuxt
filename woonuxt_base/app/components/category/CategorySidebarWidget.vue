@@ -40,5 +40,6 @@ import { useRelatedCategories } from '~/composables/useRelatedCategories'
 const route = useRoute()
 const slug = route.params.slug as string
 
+console.log('Current route slug:', slug) // 👈 tijdelijk toevoegen
 const { parent, siblings, children } = await useRelatedCategories(slug)
 </script>
