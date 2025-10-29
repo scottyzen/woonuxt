@@ -1,5 +1,5 @@
 query getCategoryChildren($slug: String!) {
-  productCategories(where: { slugIn: [$slug] }) {
+  productCategories(where: { slug: $slug }) {
     nodes {
       id
       name
