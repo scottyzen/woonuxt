@@ -3,14 +3,13 @@ import { useGraphqlClient } from '~/composables/useGraphqlClient'
 
 export const useRelatedCategories = async () => {
   const route = useRoute()
-
+  const pathParts = route.path.split('/').filter(Boolean)
   const slug =
     (route.params.categorySlug as string) ||
-    (route.params.category as string) ||
-    (route.params.slug as string) ||
-    route.path.split('/').filter(Boolean).pop()
+    pathParts[pathParts.length - 1]
 
   console.log('✅ Detected slug:', slug)
+  console.log('✅ Route path parts:', pathParts)
 
   if (!slug) {
     console.warn('⚠️ Geen slug gedetecteerd voor categoriepagina')
@@ -19,8 +18,10 @@ export const useRelatedCategories = async () => {
 
   const { query } = useGraphqlClient()
 
-  // ✅ Bouw de volledige WordPress URI (inclusief base path)
-  const uri = `/product-category/${slug}/`
+  // 👉 Bouw het volledige WP-pad: /product-category/[alle delen]/
+  // voorbeeld: /broeken → /product-category/dames/dames-kleding/broeken/
+  // je kunt hieronder je vaste hiërarchie aanpassen als dat altijd via "dames" loopt
+  const uri = `/product-category/dames/dames-kleding/${slug}/`
   console.log('🌐 WPGraphQL query met URI:', uri)
 
   const { data } = await useAsyncData(`related-categories-${slug}`, async () => {
@@ -28,7 +29,6 @@ export const useRelatedCategories = async () => {
     return res
   }, { revalidate: 60 })
 
-  // ✅ Data verwerken
   const current = data.value?.productCategory
   const all = data.value?.productCategories?.nodes || []
 
