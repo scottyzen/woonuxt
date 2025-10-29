@@ -11,6 +11,8 @@
 
 # ✅ SPA fallback zodat /broeken en andere categorieën nooit 404 geven
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+from = "/*"
+to = "/index.html"
+status = 200
+force = true
+
