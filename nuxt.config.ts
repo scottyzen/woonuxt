@@ -1,10 +1,11 @@
 import { defineNuxtConfig } from 'nuxt/config'
+import { resolve } from 'pathe'
 
 export default defineNuxtConfig({
-  // 🌐 Basisthema van Woonuxt
+  // Base theme
   extends: ['./woonuxt_base'],
 
-  // 🔑 Publieke keys (WooCommerce API)
+  // API keys & public config
   runtimeConfig: {
     public: {
       wcKey: process.env.WC_KEY,
@@ -12,33 +13,23 @@ export default defineNuxtConfig({
     },
   },
 
-  // ⚙️ Componentmap
-  components: [{ path: './components', pathPrefix: false }],
+  // Componentenmap (voorkomt dubbele importen)
+  components: [
+    { path: './components', pathPrefix: false },
+  ],
 
-  // ⚡️ Volledige SPA-modus voor Netlify (geen SSR)
-  ssr: false,
-
-  // 🏗️ Nitro build instellingen voor Netlify
+  // Nitro build settings (voor Netlify etc.)
   nitro: {
-    preset: 'netlify-static', // ✅ bouwt correct voor Netlify hosting
-    minify: true,
     prerender: {
-      routes: ['/'],      // alleen homepage genereren
-      crawlLinks: false,  // voorkom crawling van WP routes
-      failOnError: false, // build stopt niet bij dynamische fouten
+      concurrency: 10,
+      interval: 1000,
+      failOnError: false,
     },
+    minify: true,
   },
 
-  // ⚡️ Vite plugin voor .gql import
+  // ✅ Vite plugin om .gql-bestanden te kunnen importeren
   vite: {
     plugins: [require('@rollup/plugin-graphql')()],
-  },
-
-  // 🧠 App instellingen (optioneel, maar netjes)
-  app: {
-    head: {
-      meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }],
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
-    },
   },
 })
