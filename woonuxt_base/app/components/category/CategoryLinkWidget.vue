@@ -1,48 +1,38 @@
 <script setup lang="ts">
 import { useCategoryChildren } from '~/composables/useCategoryChildren'
 
-const { category, children, error } = useCategoryChildren()
+const { category, children, siblings } = useCategoryChildren()
 
-// Debug-log, handig bij testen
-watch(children, (val) => {
-  console.log('👀 Children ontvangen in widget:', val)
-})
-
-// Kleine helper om nette URL's te maken
-function cleanUri(slug: string | undefined): string {
-  if (!slug) return '/'
-  return `/${slug}`
+function cleanUri(slug: string) {
+  return '/' + slug
 }
 </script>
 
 <template>
-  <div
-    v-if="children && children.length > 0"
-    class="bg-white rounded-lg p-6 shadow-sm border border-gray-100"
-  >
+  <div v-if="siblings.length" class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
     <h2 class="text-lg font-semibold text-gray-900 mb-4">
-      Gerelateerde categorieën
+      {{ category?.parent?.node?.name || 'Categorieën' }}
     </h2>
 
-    <div class="space-y-6">
-      <div v-for="(cat, i) in children" :key="i">
-        <h3 class="font-semibold text-gray-900 mb-2">
-          <NuxtLink :to="cleanUri(cat.slug)" class="hover:underline">
-            {{ cat.name }}
-          </NuxtLink>
-        </h3>
+    <ul class="space-y-1">
+      <li v-for="sibling in siblings" :key="sibling.id">
+        <NuxtLink
+          :to="cleanUri(sibling.slug)"
+          class="block hover:underline"
+          :class="{ 'font-bold underline': sibling.slug === category?.slug }"
+        >
+          {{ sibling.name }}
+        </NuxtLink>
 
-        <ul v-if="cat.children?.nodes?.length" class="space-y-1">
-          <li v-for="(sub, j) in cat.children.nodes" :key="j">
-            <NuxtLink
-              :to="cleanUri(sub.slug)"
-              class="block text-gray-700 hover:underline ml-4"
-            >
+        <!-- Alleen bij actieve categorie: toon subcategorieën -->
+        <ul v-if="sibling.slug === category?.slug && children.length" class="ml-4 mt-1 space-y-1">
+          <li v-for="sub in children" :key="sub.id">
+            <NuxtLink :to="cleanUri(sub.slug)" class="text-gray-700 hover:underline">
               {{ sub.name }}
             </NuxtLink>
           </li>
         </ul>
-      </div>
-    </div>
+      </li>
+    </ul>
   </div>
 </template>
