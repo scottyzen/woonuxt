@@ -1,70 +1,37 @@
 import { useRoute } from 'vue-router'
 import { ref, watchEffect } from 'vue'
-import { useAsyncQuery } from '#gql'
+import { useGqlQuery } from '#gql'
 import getCategoryByUri from '~/graphql/queries/getCategoryByUri.gql'
-
-type CatNode = {
-  id: string
-  name: string
-  slug: string
-  uri: string
-  parent?: { node?: CatNode | null } | null
-  children?: { nodes?: CatNode[] } | null
-}
 
 export function useCategoryChildren() {
   const route = useRoute()
-  const category = ref<CatNode | null>(null)
-  const children = ref<CatNode[]>([])
-  const siblings = ref<CatNode[]>([])
-  const loading = ref(false)
-  const error = ref<unknown>(null)
-
-  const categoryUri = computed(() => {
-    // Bouw volledige URI op basis van route
-    // Bijvoorbeeld /broeken → /product-category/broeken
-    // of /dames-kleding/broeken → /product-category/dames-kleding/broeken
-    let path = route.fullPath.replace(/^\/|\/$/g, '').split('?')[0]
-    if (!path.startsWith('product-category')) {
-      path = `product-category/${path}`
-    }
-    return `/${path}/`
-  })
+  const category = ref(null)
+  const children = ref([])
+  const error = ref(null)
 
   watchEffect(async () => {
-    category.value = null
-    children.value = []
-    siblings.value = []
-    error.value = null
-
-    const uri = categoryUri.value
-    if (!uri) return
-
+    const uri = `/product-category/${route.params.categorySlug}/`
     console.log('🧭 Categorie-URI (widget):', uri)
 
-    loading.value = true
     try {
-      
-const { data, error } = await useAsyncQuery(getCategoryByUri, { uri })
+      // ✅ Belangrijk: gebruik useGqlQuery in plaats van useAsyncQuery
+      const { data, error: gqlError } = await useGqlQuery(getCategoryByUri, { uri })
+      if (gqlError?.value) throw gqlError.value
 
-
-      const cat = data?.productCategory
+      const cat = data?.value?.productCategory
       if (!cat) {
-        console.warn('⚠️ Geen productCategory gevonden voor URI:', uri)
+        console.warn(`⚠️ Geen productCategory gevonden voor URI: ${uri}`)
         return
       }
 
       category.value = cat
       children.value = cat.children?.nodes || []
-      siblings.value =
-        cat.parent?.node?.children?.nodes?.filter(s => s.id !== cat.id) || []
-    } catch (e) {
-      console.error('❌ GraphQL fout in useCategoryChildren:', e)
-      error.value = e
-    } finally {
-      loading.value = false
+      console.log('✅ Subcategorieën opgehaald:', children.value)
+    } catch (err) {
+      console.error('❌ GraphQL fout in useCategoryChildren:', err)
+      error.value = err
     }
   })
 
-  return { loading, error, category, children, siblings }
+  return { category, children, error }
 }
