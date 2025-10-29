@@ -5,6 +5,7 @@ export const useRelatedCategories = async () => {
   const route = useRoute()
   const { query } = useGraphqlClient()
 
+  // 1️⃣ Slug bepalen
   const slug =
     (route.params.categorySlug as string) ||
     (route.params.category as string) ||
@@ -13,39 +14,32 @@ export const useRelatedCategories = async () => {
 
   console.log('✅ Detected slug:', slug)
 
-  if (!slug) return { parent: null, siblings: [], children: [] }
-
-  // 1️⃣ Eerst alle categorieën ophalen
-  const { data: allData } = await useAsyncData('all-categories', async () => {
-    return await query(GetRelatedCategories) // zelfde query, haalt ook alle nodes op
-  })
-
-  const all = allData.value?.productCategories?.nodes || []
+  // 2️⃣ Haal eerst ALLE categorieën op, om juiste URI te vinden
+  const allCategories = await query(GetRelatedCategories, { id: "/", idType: "URI" })
+  const all = allCategories?.productCategories?.nodes || []
   console.log('📦 Alle categorieën geladen:', all.length)
 
-  // 2️⃣ Zoek de juiste categorie op basis van slug
-  const matched = all.find((cat: any) => cat.slug === slug)
-  if (!matched) {
+  // 3️⃣ Vind de juiste categorie obv slug
+  const current = all.find((cat: any) => cat.slug === slug)
+  if (!current) {
     console.warn('⚠️ Geen categorie gevonden met slug:', slug)
     return { parent: null, siblings: [], children: [] }
   }
 
-  console.log('🌐 WPGraphQL URI gevonden:', matched.uri)
+  console.log('🌐 WPGraphQL URI gevonden:', current.uri)
 
-  // 3️⃣ Nu queryen met URI
+  // 4️⃣ Query uitvoeren op basis van URI
   const { data } = await useAsyncData(`related-categories-${slug}`, async () => {
-    return await query(GetRelatedCategories, { id: matched.uri, idType: 'URI' })
+    return await query(GetRelatedCategories, { id: current.uri, idType: 'URI' })
   }, { revalidate: 60 })
 
-  // 4️⃣ Verwerk de data
-  const current = data.value?.productCategory
-  const parentId = current?.parentId || current?.parent?.node?.id
+  const cat = data.value?.productCategory
   const siblings = all.filter(
-    (cat: any) => cat.parentId === parentId && cat.slug !== current?.slug
+    (c: any) => c.parentId === cat?.parentId && c.slug !== cat?.slug
   )
 
-  const parent = current?.parent?.node || null
-  const children = current?.children?.nodes || []
+  const parent = cat?.parent?.node || null
+  const children = cat?.children?.nodes || []
 
   return { parent, siblings, children }
 }
