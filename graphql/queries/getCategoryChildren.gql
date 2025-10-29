@@ -1,4 +1,4 @@
-query getCategoryChildren($slug: String!) {
+query getCategoryChildren($slug: [String]) {
   productCategories(where: { slug: $slug }) {
     nodes {
       id
