@@ -1,4 +1,4 @@
-query GetRelatedCategories($id: ID!, $idType: ProductCategoryIdTypeEnum = URI) {
+query GetRelatedCategories($id: ID!, $idType: ProductCategoryIdType = URI) {
   productCategory(id: $id, idType: $idType) {
     id
     name
