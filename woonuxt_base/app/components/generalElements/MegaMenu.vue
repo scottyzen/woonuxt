@@ -3,10 +3,23 @@ import { useCategoryMenu } from '~/composables/useCategoryMenu'
 
 const { topMenu } = await useCategoryMenu()
 const openIndex = ref<number | null>(null)
+let hoverTimer: ReturnType<typeof setTimeout> | null = null
 
-function onEnter(i: number) { openIndex.value = i }
-function onLeave() { openIndex.value = null }
+function onEnter(i: number) {
+  if (hoverTimer) clearTimeout(hoverTimer)
+  hoverTimer = setTimeout(() => {
+    openIndex.value = i
+  }, 100) // kleine vertraging voorkomt 'clearTimeout' race
+}
+
+function onLeave() {
+  if (hoverTimer) clearTimeout(hoverTimer)
+  hoverTimer = setTimeout(() => {
+    openIndex.value = null
+  }, 150)
+}
 </script>
+
 
 <template>
   <ul class="flex items-center gap-6">
