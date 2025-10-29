@@ -7,3 +7,8 @@
 
 [images]
   remote_images = ["https://secure.woonuxt.com/.*"]
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
