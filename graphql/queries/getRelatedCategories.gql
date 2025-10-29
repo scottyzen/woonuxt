@@ -1,0 +1,31 @@
+query GetRelatedCategories($slug: ID!) {
+  productCategory(id: $slug, idType: SLUG) {
+    id
+    name
+    slug
+    parent {
+      node {
+        id
+        name
+        slug
+      }
+    }
+    children {
+      nodes {
+        id
+        name
+        slug
+      }
+    }
+    # Zelfde niveau categorieën (siblings)
+    parentId
+  }
+  productCategories(first: 50) {
+    nodes {
+      id
+      name
+      slug
+      parentId
+    }
+  }
+}
