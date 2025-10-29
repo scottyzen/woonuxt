@@ -38,7 +38,9 @@ import { useRoute } from 'vue-router'
 import { useRelatedCategories } from '~/composables/useRelatedCategories'
 
 const route = useRoute()
-const slug = route.params.slug as string
+const slug = route.params.category as string // ✅ juiste param voor /[category]/index.vue
+console.log('Current route slug:', slug)
+
 
 console.log('Current route slug:', slug) // 👈 tijdelijk toevoegen
 const { parent, siblings, children } = await useRelatedCategories(slug)
