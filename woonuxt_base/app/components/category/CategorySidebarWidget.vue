@@ -2,7 +2,7 @@
   <aside class="p-4 bg-gray-50 rounded-2xl shadow-sm">
     <div v-if="parent" class="mb-4">
       <h3 class="font-semibold text-lg mb-2">Hoofdcategorie</h3>
-      <NuxtLink :to="`/shop/${parent.slug}`" class="text-blue-600 hover:underline">
+      <NuxtLink :to="`/${parent.slug}`" class="text-blue-600 hover:underline">
         {{ parent.name }}
       </NuxtLink>
     </div>
@@ -11,7 +11,7 @@
       <h3 class="font-semibold text-lg mb-2">Gerelateerde categorieën</h3>
       <ul class="space-y-1">
         <li v-for="cat in siblings" :key="cat.id">
-          <NuxtLink :to="`/shop/${cat.slug}`" class="hover:underline text-gray-700">
+          <NuxtLink :to="`/${cat.slug}`" class="hover:underline text-gray-700">
             {{ cat.name }}
           </NuxtLink>
         </li>
@@ -22,7 +22,7 @@
       <h3 class="font-semibold text-lg mb-2">Subcategorieën</h3>
       <ul class="space-y-1">
         <li v-for="cat in children" :key="cat.id">
-          <NuxtLink :to="`/shop/${cat.slug}`" class="hover:underline text-gray-700">
+          <NuxtLink :to="`/${cat.slug}`" class="hover:underline text-gray-700">
             {{ cat.name }}
           </NuxtLink>
         </li>
