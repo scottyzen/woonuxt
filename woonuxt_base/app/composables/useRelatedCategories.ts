@@ -18,16 +18,24 @@ export const useRelatedCategories = async () => {
     return { parent: null, siblings: [], children: [] }
   }
 
-  // 2️⃣ Gebruik de Woonuxt GraphQL client
   const { query } = useGraphqlClient()
 
-  const { data } = await useAsyncData(`related-categories-${slug}`, async () => {
-  const id = `/product-category/${slug}/` // ✅ WPGraphQL expects full path
-  const res = await query(GetRelatedCategories, { id })
-  return res
-}, { revalidate: 60 })
+  // 2️⃣ Eerst ophalen via slug → om URI te vinden
+  const { data: firstData } = await useAsyncData(`related-categories-initial-${slug}`, async () => {
+    const res = await query(GetRelatedCategories, { slug })
+    return res
+  }, { revalidate: 60 })
 
-  // 3️⃣ Verwerk de data
+  const uri = firstData.value?.productCategory?.uri
+  console.log('🧩 WPGraphQL URI gevonden:', uri)
+
+  // 3️⃣ Als er een URI is, gebruik die om opnieuw de juiste data te laden
+  const { data } = await useAsyncData(`related-categories-${slug}`, async () => {
+    const res = await query(GetRelatedCategories, { slug: uri || slug })
+    return res
+  }, { revalidate: 60 })
+
+  // 4️⃣ Verwerk de data
   const current = data.value?.productCategory
   const all = data.value?.productCategories?.nodes || []
 
@@ -36,7 +44,9 @@ export const useRelatedCategories = async () => {
   console.log('All categories count:', all.length)
 
   const siblings = all.filter(
-    (cat: any) => String(cat.parentId).trim() === String(parentId).trim() && cat.slug !== current?.slug
+    (cat: any) =>
+      String(cat.parentId).trim() === String(parentId).trim() &&
+      cat.slug !== current?.slug
   )
 
   const parent = current?.parent?.node || null
