@@ -1,3 +1,4 @@
+import { useAsyncQuery } from '#imports'
 import { useRoute } from 'vue-router'
 import { ref, computed, watchEffect } from 'vue'
 import getCategoryByUri from '~/graphql/queries/getCategoryByUri.gql'
