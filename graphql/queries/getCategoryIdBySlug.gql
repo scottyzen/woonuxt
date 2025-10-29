@@ -1,0 +1,12 @@
+query getCategoryIdBySlug($slugs: [String]) {
+  productCategories(where: { slug: $slugs }) {
+    nodes {
+      id
+      name
+      slug
+      parent {
+        node { id slug name }
+      }
+    }
+  }
+}
