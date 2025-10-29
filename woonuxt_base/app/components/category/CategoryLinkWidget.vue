@@ -10,6 +10,8 @@
 </template>
 
 <script setup lang="ts">
-import { useCategoryChildren } from '~/app/composables/useCategoryChildren'
+
+import { useCategoryChildren } from '~/woonuxt_base/app/composables/useCategoryChildren'
+
 const { category, children, loading, error } = useCategoryChildren()
 </script>
