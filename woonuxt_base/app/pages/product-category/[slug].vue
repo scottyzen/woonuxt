@@ -23,7 +23,7 @@ watch(
 
 useHead({
   title: 'Products',
-  meta: [{ hid: 'description', name: 'description', content: 'Products' }],
+  meta: [{ name: 'description', content: 'Products' }],
 });
 </script>
 

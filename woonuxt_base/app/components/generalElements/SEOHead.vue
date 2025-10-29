@@ -29,20 +29,20 @@ const twitter = wooNuxtSEO?.find((item) => item?.provider === 'twitter') ?? null
 <template>
   <Head>
     <Title>{{ title }}</Title>
-    <Meta v-if="description" name="description" hid="description" :content="description" />
-    <Meta name="image" hid="image" :content="defaultImage" />
-    <Meta property="og:site_name" hid="og:site_name" :content="siteName" />
-    <Meta property="og:url" hid="og:url" :content="canonical" />
-    <Meta v-if="info.name" property="og:title" hid="og:title" :content="info.name" />
-    <Meta v-if="description" property="og:description" hid="og:description" :content="description" />
-    <Meta property="og:image" hid="og:image" :content="defaultImage" />
-    <Meta v-if="facebook?.url" property="article:publisher" hid="article:publisher" :content="facebook.url" />
-    <Meta name="twitter:card" hid="twitter:card" content="summary_large_image" />
-    <Meta v-if="twitter?.handle" name="twitter:site" hid="twitter:site" :content="twitter.handle" />
-    <Meta v-if="info.name" name="twitter:title" hid="twitter:title" :content="info.name" />
-    <Meta v-if="description" name="twitter:description" hid="twitter:description" :content="description" />
-    <Meta name="twitter:image" hid="twitter:image" :content="twitterImage" />
-    <Meta name="twitter:url" hid="twitter:url" :content="canonical" />
-    <Link rel="canonical" hid="canonical" :href="canonical" />
+    <Meta v-if="description" name="description" :content="description" />
+    <Meta name="image":content="defaultImage" />
+    <Meta property="og:site_name" :content="siteName" />
+    <Meta property="og:url" :content="canonical" />
+    <Meta v-if="info.name" property="og:title" :content="info.name" />
+    <Meta v-if="description" property="og:description" :content="description" />
+    <Meta property="og:image" :content="defaultImage" />
+    <Meta v-if="facebook?.url" property="article:publisher" :content="facebook.url" />
+    <Meta name="twitter:card" content="summary_large_image" />
+    <Meta v-if="twitter?.handle" name="twitter:site" :content="twitter.handle" />
+    <Meta v-if="info.name" name="twitter:title" :content="info.name" />
+    <Meta v-if="description" name="twitter:description" :content="description" />
+    <Meta name="twitter:image" :content="twitterImage" />
+    <Meta name="twitter:url" :content="canonical" />
+    <Link rel="canonical" :href="canonical" />
   </Head>
 </template>
