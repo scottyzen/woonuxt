@@ -43,10 +43,9 @@ export function useCategoryChildren() {
 
     loading.value = true
     try {
-      const { data } = await useGql<{ productCategory: CatNode }>({
-        query: getCategoryByUri,
-        variables: { uri },
-      })
+      
+const { data, error } = await useAsyncQuery(getCategoryByUri, { uri })
+
 
       const cat = data?.productCategory
       if (!cat) {
