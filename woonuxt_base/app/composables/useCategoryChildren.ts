@@ -1,7 +1,6 @@
 import { useRoute } from 'vue-router'
 import { ref, watchEffect } from 'vue'
-import { useGql } from '#imports'
-import getCategoryByUri from '~/graphql/queries/getCategoryByUri.gql'
+import { useGetCategoryByUriQuery } from '#gql'
 
 export function useCategoryChildren() {
   const route = useRoute()
@@ -14,10 +13,8 @@ export function useCategoryChildren() {
     console.log('🧭 Categorie-URI (widget):', uri)
 
     try {
-      const gql = useGql()
-      const { data, error: gqlError } = await gql.query({
-        query: getCategoryByUri,
-        variables: { uri },
+      const { data, error: gqlError } = await useGetCategoryByUriQuery({
+        uri
       })
 
       if (gqlError?.value) throw gqlError.value
