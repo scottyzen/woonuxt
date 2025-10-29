@@ -4,14 +4,17 @@ import getCategoryChildren from '~/graphql/queries/getCategoryChildren.gql'
 export function useCategoryChildren() {
   const route = useRoute()
 
-  // WooNuxt gebruikt vaak nested slugs, dus hier afvangen
+  // WooNuxt gebruikt de param "categorySlug" in de categoriepagina
   const slug = computed(() => {
     const p = route.params
-    if (Array.isArray(p.slug)) return p.slug[p.slug.length - 1] // laatste deel van array
-    return p.slug || p.category || p.name || ''
+    return p.categorySlug || ''
   })
 
-  console.log('🧭 Huidige categorie-slug (widget):', slug.value)
+  if (!slug.value) {
+    console.warn('⚠️ Geen categorySlug gevonden in route params', route.params)
+  } else {
+    console.log('🧭 Categorie-slug (widget):', slug.value)
+  }
 
   const { data, error } = useAsyncGql(getCategoryChildren, { slug })
 
