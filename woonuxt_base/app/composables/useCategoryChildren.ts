@@ -1,11 +1,10 @@
 import { ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { useNuxtApp } from '#app'
-import getCategoryByUri from '~/graphql/queries/getCategoryByUri.gql'
 
 /**
- * Haalt de huidige categorie en subcategorieën op uit WooCommerce GraphQL
- * op basis van de URI (bijv. /product-category/dames/dames-kleding/broeken/).
+ * Haalt een categorie + subcategorieën op via de GraphQL API
+ * op basis van de URI van de huidige route.
  */
 export function useCategoryChildren() {
   const route = useRoute()
@@ -17,16 +16,44 @@ export function useCategoryChildren() {
   const fetchCategory = async (uri: string) => {
     const { $graphql } = useNuxtApp()
 
+    // ✅ Let op: productCategory (niet productCategoryBy)
+    const query = `
+      query GetCategoryByUri($uri: ID!) {
+        productCategory(id: $uri, idType: URI) {
+          id
+          name
+          slug
+          uri
+          parent {
+            node {
+              id
+              name
+              slug
+              uri
+            }
+          }
+          children(first: 100) {
+            nodes {
+              id
+              name
+              slug
+              uri
+            }
+          }
+        }
+      }
+    `
+
     try {
       loading.value = true
       error.value = null
 
-      const { data } = await $graphql.request(getCategoryByUri, { uri })
+      const data = await $graphql.request(query, { uri })
 
       if (data?.productCategory) {
         category.value = data.productCategory
         children.value = data.productCategory.children?.nodes || []
-        console.log(`✅ Categorie geladen: ${category.value.name}`)
+        console.log('✅ useCategoryChildren: categorie geladen:', category.value.name)
       } else {
         console.warn(`⚠️ Geen categorie gevonden voor URI: ${uri}`)
         category.value = null
@@ -40,6 +67,7 @@ export function useCategoryChildren() {
     }
   }
 
+  // 📡 Automatisch herladen bij routewijziging
   watchEffect(() => {
     const slug = route.params.categorySlug as string
     if (!slug) return
@@ -49,10 +77,5 @@ export function useCategoryChildren() {
     fetchCategory(uri)
   })
 
-  return {
-    category,
-    children,
-    loading,
-    error
-  }
+  return { category, children, loading, error }
 }
