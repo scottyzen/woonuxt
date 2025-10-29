@@ -22,9 +22,10 @@ export const useRelatedCategories = async () => {
   const { query } = useGraphqlClient()
 
   const { data } = await useAsyncData(`related-categories-${slug}`, async () => {
-    const result = await query(GetRelatedCategories, { slug })
-    return result
-  }, { server: true, revalidate: 60 })
+  const id = `/product-category/${slug}/` // ✅ WPGraphQL expects full path
+  const res = await query(GetRelatedCategories, { id })
+  return res
+}, { revalidate: 60 })
 
   // 3️⃣ Verwerk de data
   const current = data.value?.productCategory
