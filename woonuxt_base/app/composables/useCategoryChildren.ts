@@ -7,7 +7,6 @@ export function useCategoryChildren() {
   const category = ref(null)
   const error = ref(null)
 
-  // WooNuxt gebruikt meestal /categorie/:categorySlug
   const slug = computed(() => String(route.params.categorySlug || ''))
 
   watchEffect(async () => {
@@ -19,8 +18,7 @@ export function useCategoryChildren() {
     console.log('🧭 Huidige categorie-slug (widget):', slug.value)
 
     try {
-      const gql = useGql()
-      const { data } = await gql.query({
+      const { data } = await useGql({
         query: getCategoryChildren,
         variables: { slug: slug.value },
       })
