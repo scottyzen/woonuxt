@@ -41,6 +41,8 @@ const route = useRoute()
 const slug = route.params.category as string // ✅ juiste param voor /[category]/index.vue
 console.log('Current route slug:', slug)
 
+console.log('Current route:', route.fullPath)
+console.log('Route params:', route.params)
 
 console.log('Current route slug:', slug) // 👈 tijdelijk toevoegen
 const { parent, siblings, children } = await useRelatedCategories(slug)
