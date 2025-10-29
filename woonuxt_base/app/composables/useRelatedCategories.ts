@@ -3,7 +3,16 @@ import { useGraphqlClient } from '~/composables/useGraphqlClient'
 
 export const useRelatedCategories = async () => {
   const route = useRoute()
-  const { query } = useGraphqlClient()
+  const nuxtApp = useNuxtApp()
+const graphql = nuxtApp.$graphql || null
+
+if (!graphql) {
+  console.warn('⚠️ GraphQL client niet beschikbaar, waarschijnlijk fallback render.')
+  return { parent: null, siblings: [], children: [] }
+}
+
+const query = graphql.query
+
 
   // 1️⃣ Slug bepalen
   const slug =
