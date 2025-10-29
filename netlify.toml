@@ -1,18 +1,9 @@
 [template.environment]
-  GQL_HOST = "https://wp.kledingzoeken.nl"
-  NUXT_IMAGE_DOMAINS = "wp.kledingzoeken.nl,kledingzoeken.nl"
+  GQL_HOST = "WordPress URL http://example.com"
+  NUXT_IMAGE_DOMAINS = "Comma separated list of domains. example.com,example2.com"
 
 [build]
   command = "nuxt generate"
-  publish = "dist"
 
 [images]
   remote_images = ["https://secure.woonuxt.com/.*"]
-
-# ✅ SPA fallback zodat /broeken en andere categorieën nooit 404 geven
-[[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200
-force = true
-
