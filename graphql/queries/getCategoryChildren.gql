@@ -1,21 +1,28 @@
 query getCategoryChildren($slug: String!) {
-  productCategories(where: { slug: [$slug] }) {
+  productCategories(where: { slugIn: [$slug] }) {
     nodes {
       id
       name
       slug
-      children(first: 50) {
-        nodes {
+      parent {
+        node {
           id
           name
           slug
-          children(first: 50) {
+          children(first: 100) {
             nodes {
               id
               name
               slug
             }
           }
+        }
+      }
+      children(first: 100) {
+        nodes {
+          id
+          name
+          slug
         }
       }
     }
