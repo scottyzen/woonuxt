@@ -28,6 +28,8 @@
         </li>
       </ul>
     </div>
+       <!-- 👇 Debug: laat de data tijdelijk zien -->
+    <pre class="mt-4 text-xs text-gray-500">{{ siblings }}</pre>
   </aside>
 </template>
 
