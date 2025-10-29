@@ -1,6 +1,6 @@
 import { useRoute } from 'vue-router'
 import { ref, watchEffect } from 'vue'
-import { useAsyncQuery } from '#imports'
+import { useAsyncQuery } from '#gql'
 import getCategoryByUri from '~/graphql/queries/getCategoryByUri.gql'
 
 type CatNode = {
