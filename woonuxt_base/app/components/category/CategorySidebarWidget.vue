@@ -38,7 +38,14 @@ import { useRoute } from 'vue-router'
 import { useRelatedCategories } from '~/composables/useRelatedCategories'
 
 const route = useRoute()
-const slug = route.params.category as string // ✅ juiste param voor /[category]/index.vue
+const slug =
+  (route.params.categorySlug as string) ||
+  (route.params.category as string) ||
+  (route.params.slug as string) ||
+  route.path.split('/').filter(Boolean).pop()
+
+console.log('✅ Detected slug:', slug)
+
 console.log('Current route slug:', slug)
 
 console.log('Current route:', route.fullPath)
