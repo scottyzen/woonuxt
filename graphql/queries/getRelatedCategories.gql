@@ -3,6 +3,7 @@ query GetRelatedCategories($slug: ID!) {
     id
     name
     slug
+    uri
     parent {
       node {
         id
@@ -17,15 +18,15 @@ query GetRelatedCategories($slug: ID!) {
         slug
       }
     }
-    # Zelfde niveau categorieën (siblings)
     parentId
   }
-  productCategories(first: 50) {
+  productCategories(first: 100) {
     nodes {
       id
       name
       slug
       parentId
+      uri
     }
   }
 }
