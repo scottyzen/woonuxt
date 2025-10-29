@@ -1,44 +1,35 @@
-import { useRoute } from 'vue-router'
+import { useCategory } from '#woo' // belangrijk: Woonuxt helper
 import getCategoryChildren from '~/graphql/queries/getCategoryChildren.gql'
 
 export function useCategoryChildren() {
-  const route = useRoute()
-
-  // WooNuxt gebruikt /[categorySlug].vue
-  const slug = computed(() => String(route.params.categorySlug || ''))
-
-  const category = ref(null)
+  const { category } = useCategory() // haalt de echte categorie op via WP
   const children = ref([])
   const error = ref(null)
 
   watchEffect(async () => {
-    if (!slug.value) {
-      console.warn('⚠️ Geen categorySlug gevonden in route params', route.params)
+    if (!category.value?.slug) {
+      console.warn('⚠️ Geen category gevonden of geen slug beschikbaar', category.value)
       return
     }
 
-    console.log('🧭 Categorie-slug (widget):', slug.value)
+    const slug = category.value.slug
+    console.log('🧭 Echte WP categorie-slug (widget):', slug)
 
     try {
-      // ✅ WooNuxt/GQL manier: gebruik $gql direct binnen useAsyncData
-      const { data } = await useAsyncData(`category-children-${slug.value}`, async () => {
-        const gql = useGql()
-        const response = await gql.query({
-          query: getCategoryChildren,
-          variables: { slug: slug.value },
-        })
-        return response
+      const gql = useGql()
+      const { data } = await gql.query({
+        query: getCategoryChildren,
+        variables: { slug }
       })
 
-      if (data.value?.productCategory) {
-        console.log('✅ GraphQL data ontvangen:', data.value)
-        category.value = data.value.productCategory
-        children.value = data.value.productCategory.children?.nodes || []
+      if (data?.productCategory) {
+        console.log('✅ GraphQL data ontvangen:', data)
+        children.value = data.productCategory.children?.nodes || []
       } else {
-        console.warn('⚠️ Geen productCategory gevonden voor', slug.value)
+        console.warn('⚠️ Geen productCategory gevonden voor', slug)
       }
     } catch (err) {
-      console.error('❌ GraphQL-fout in useCategoryChildren:', err)
+      console.error('❌ GraphQL fout in useCategoryChildren:', err)
       error.value = err
     }
   })
