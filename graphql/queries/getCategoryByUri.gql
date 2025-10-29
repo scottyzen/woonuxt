@@ -1,5 +1,5 @@
-query getCategoryByUri($uri: ID!) {
-  productCategory(id: $uri, idType: URI) {
+query GetCategoryByUri($uri: String!) {
+  productCategoryBy(uri: $uri) {
     id
     name
     slug
