@@ -66,7 +66,6 @@ useHead(() => ({
     >
       <!-- Sidebar -->
       <aside class="order-2 md:order-1">
-        <CategorySidebarWidget class="mt-8 pt-6 border-t border-gray-100" />
         <Filters v-if="storeSettings.showFilters" :hide-categories="true" />
       </aside>
 
