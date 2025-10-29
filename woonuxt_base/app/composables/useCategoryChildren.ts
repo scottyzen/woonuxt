@@ -1,62 +1,40 @@
 import { ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
-import { useAsyncData, useNuxtApp } from '#app'
+import { useNuxtApp } from '#app'
+import getCategoryByUri from '~/graphql/queries/getCategoryByUri.gql'
 
 /**
  * Haalt de huidige categorie en eventuele subcategorieën op
  * op basis van de huidige route (URI).
  * 
- * Compatibel met WooGraphQL (productCategoryBy(uri: "...")).
+ * Werkt met WPGraphQL WooCommerce (`productCategory(idType: URI)`).
  */
 export function useCategoryChildren() {
   const route = useRoute()
-  const category = ref(null)
-  const children = ref([])
+  const category = ref<any>(null)
+  const children = ref<any[]>([])
   const loading = ref(false)
-  const error = ref(null)
+  const error = ref<any>(null)
 
   const fetchCategory = async (uri: string) => {
+    const { $graphql } = useNuxtApp()
+
     try {
       loading.value = true
       error.value = null
 
-      const { $graphql } = useNuxtApp()
+      const { data } = await $graphql.default.request(getCategoryByUri, { uri })
 
-      // GraphQL query inline gedefinieerd om typeproblemen te voorkomen
-      const query = `
-        query GetCategoryByUri($uri: String!) {
-          productCategoryBy(uri: $uri) {
-            id
-            name
-            uri
-            slug
-            parent {
-              node {
-                id
-                name
-                uri
-              }
-            }
-            children(first: 100) {
-              nodes {
-                id
-                name
-                uri
-                slug
-              }
-            }
-          }
-        }
-      `
+      if (data?.productCategory) {
+        const cat = data.productCategory
+        category.value = cat
+        children.value = cat.children?.nodes || []
 
-      const { data } = await $graphql.default.request(query, { uri })
-
-      if (data?.productCategoryBy) {
-        category.value = data.productCategoryBy
-        children.value = data.productCategoryBy.children?.nodes || []
-        console.log('✅ useCategoryChildren: categorie geladen', category.value.name)
+        console.log(`✅ useCategoryChildren: categorie geladen → ${cat.name}`)
       } else {
-        console.warn(`⚠️ Geen productCategory gevonden voor uri: ${uri}`)
+        console.warn(`⚠️ Geen categorie gevonden voor URI: ${uri}`)
+        category.value = null
+        children.value = []
       }
     } catch (err: any) {
       console.error('❌ GraphQL fout in useCategoryChildren:', err)
@@ -66,15 +44,20 @@ export function useCategoryChildren() {
     }
   }
 
-  // Houd route in de gaten → automatisch opnieuw laden bij navigatie
   watchEffect(() => {
     const slug = route.params.categorySlug as string
     if (!slug) return
 
     const uri = `/product-category/${slug}/`
     console.log('🧭 Categorie-URI (widget):', uri)
+
     fetchCategory(uri)
   })
 
-  return { category, children, loading, error }
+  return {
+    category,
+    children,
+    loading,
+    error
+  }
 }
