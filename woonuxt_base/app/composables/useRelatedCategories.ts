@@ -1,9 +1,10 @@
 import GetRelatedCategories from '~/graphql/queries/getRelatedCategories.gql'
+import { useGraphqlClient } from '~/composables/useGraphqlClient'
 
 export const useRelatedCategories = async () => {
   const route = useRoute()
 
-  // ✅ 1. Bepaal de slug dynamisch
+  // 1️⃣ Detecteer slug
   const slug =
     (route.params.categorySlug as string) ||
     (route.params.category as string) ||
@@ -17,15 +18,15 @@ export const useRelatedCategories = async () => {
     return { parent: null, siblings: [], children: [] }
   }
 
-  const { $graphql } = useNuxtApp()
+  // 2️⃣ Gebruik de Woonuxt GraphQL client
+  const { query } = useGraphqlClient()
 
-  // ✅ 2. Haal data op via GraphQL
   const { data } = await useAsyncData(`related-categories-${slug}`, async () => {
-    const res = await $graphql.default.request(GetRelatedCategories, { slug })
-    return res
-  }, { revalidate: 60 })
+    const result = await query(GetRelatedCategories, { slug })
+    return result
+  }, { server: true, revalidate: 60 })
 
-  // ✅ 3. Verwerk data
+  // 3️⃣ Verwerk de data
   const current = data.value?.productCategory
   const all = data.value?.productCategories?.nodes || []
 
