@@ -1,18 +1,25 @@
 <script setup lang="ts">
 import { useCategoryChildren } from '~/composables/useCategoryChildren'
 
-const { category, children } = await useCategoryChildren()
+const { category, children, error } = useCategoryChildren()
 
-function cleanUri(uri: string | undefined): string {
-  if (!uri) return '/'
-  const noPc = uri.replace('/product-category', '').replace(/\/$/, '')
-  const parts = noPc.split('/').filter(Boolean)
-  return '/' + (parts.pop() || '')
+// Debug-log, handig bij testen
+watch(children, (val) => {
+  console.log('👀 Children ontvangen in widget:', val)
+})
+
+// Kleine helper om nette URL's te maken
+function cleanUri(slug: string | undefined): string {
+  if (!slug) return '/'
+  return `/${slug}`
 }
 </script>
 
 <template>
-  <div v-if="children.length" class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+  <div
+    v-if="children && children.length > 0"
+    class="bg-white rounded-lg p-6 shadow-sm border border-gray-100"
+  >
     <h2 class="text-lg font-semibold text-gray-900 mb-4">
       Gerelateerde categorieën
     </h2>
