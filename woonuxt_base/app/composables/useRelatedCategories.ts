@@ -8,17 +8,22 @@ export const useRelatedCategories = async (slug: string) => {
     return res
   }, { revalidate: 60 })
 
-  const current = data.value?.productCategory
-  const all = data.value?.productCategories?.nodes || []
+ const current = data.value?.productCategory
+const all = data.value?.productCategories?.nodes || []
 
-  // 👇 fix: gebruik parent.node.id ipv parentId
-  const parentId = current?.parent?.node?.id
+// ✅ Gebruik fallback op parentId (want dat veld is betrouwbaar)
+const parentId = current?.parentId || current?.parent?.node?.id
 
-  const siblings = all.filter(
-    (cat: any) => cat.parentId === parentId && cat.slug !== current.slug
-  )
-  const parent = current?.parent?.node || null
-  const children = current?.children?.nodes || []
+// ✅ Debug: log de waarden even in console (mag je later verwijderen)
+console.log('Current parentId:', parentId)
+console.log('All categories count:', all.length)
 
-  return { parent, siblings, children }
+const siblings = all.filter(
+  (cat: any) => cat.parentId === parentId && cat.slug !== current.slug
+)
+
+const parent = current?.parent?.node || null
+const children = current?.children?.nodes || []
+
+return { parent, siblings, children }
 }
