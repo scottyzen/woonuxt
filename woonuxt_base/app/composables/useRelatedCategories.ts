@@ -22,9 +22,10 @@ export const useRelatedCategories = async () => {
   console.log('🌐 Querying WPGraphQL with URI:', uri)
 
   // 3️⃣ Query uitvoeren
-  const { data } = await useAsyncData(`related-categories-${slug}`, async () => {
-    return await query(GetRelatedCategories, { id: uri, idType: 'URI' })
-  }, { revalidate: 60 })
+const { data } = await useAsyncData(`related-categories-${slug}`, async () => {
+  return await query(GetRelatedCategories, { id: slug, idType: 'SLUG' })
+}, { revalidate: 60 })
+
 
   const current = data.value?.productCategory
   const all = data.value?.productCategories?.nodes || []
