@@ -1,14 +1,16 @@
-query GetRelatedCategories($slug: ID!) {
-  productCategory(id: $slug, idType: SLUG) {
+query GetRelatedCategories($id: ID!, $idType: ProductCategoryIdTypeEnum = URI) {
+  productCategory(id: $id, idType: $idType) {
     id
     name
     slug
     uri
+    parentId
     parent {
       node {
         id
         name
         slug
+        uri
       }
     }
     children {
@@ -16,17 +18,19 @@ query GetRelatedCategories($slug: ID!) {
         id
         name
         slug
+        uri
       }
     }
-    parentId
   }
+
+  # optioneel: alle categorieën (voor siblings)
   productCategories(first: 100) {
     nodes {
       id
       name
       slug
-      parentId
       uri
+      parentId
     }
   }
 }
