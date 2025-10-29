@@ -4,7 +4,6 @@ import { useGraphqlClient } from '~/composables/useGraphqlClient'
 export const useRelatedCategories = async () => {
   const route = useRoute()
 
-  // 1️⃣ Detecteer slug
   const slug =
     (route.params.categorySlug as string) ||
     (route.params.category as string) ||
@@ -20,22 +19,16 @@ export const useRelatedCategories = async () => {
 
   const { query } = useGraphqlClient()
 
-  // 2️⃣ Eerst ophalen via slug → om URI te vinden
-  const { data: firstData } = await useAsyncData(`related-categories-initial-${slug}`, async () => {
-    const res = await query(GetRelatedCategories, { slug })
-    return res
-  }, { revalidate: 60 })
+  // ✅ Bouw de volledige WordPress URI (inclusief base path)
+  const uri = `/product-category/${slug}/`
+  console.log('🌐 WPGraphQL query met URI:', uri)
 
-  const uri = firstData.value?.productCategory?.uri
-  console.log('🧩 WPGraphQL URI gevonden:', uri)
-
-  // 3️⃣ Als er een URI is, gebruik die om opnieuw de juiste data te laden
   const { data } = await useAsyncData(`related-categories-${slug}`, async () => {
-    const res = await query(GetRelatedCategories, { slug: uri || slug })
+    const res = await query(GetRelatedCategories, { id: uri })
     return res
   }, { revalidate: 60 })
 
-  // 4️⃣ Verwerk de data
+  // ✅ Data verwerken
   const current = data.value?.productCategory
   const all = data.value?.productCategories?.nodes || []
 
