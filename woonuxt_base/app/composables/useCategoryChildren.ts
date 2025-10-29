@@ -1,32 +1,36 @@
-import { useCategory } from '#woo' // belangrijk: Woonuxt helper
+import { useRoute } from 'vue-router'
 import getCategoryChildren from '~/graphql/queries/getCategoryChildren.gql'
 
 export function useCategoryChildren() {
-  const { category } = useCategory() // haalt de echte categorie op via WP
+  const route = useRoute()
   const children = ref([])
+  const category = ref(null)
   const error = ref(null)
 
+  // WooNuxt gebruikt meestal /categorie/:categorySlug
+  const slug = computed(() => String(route.params.categorySlug || ''))
+
   watchEffect(async () => {
-    if (!category.value?.slug) {
-      console.warn('⚠️ Geen category gevonden of geen slug beschikbaar', category.value)
+    if (!slug.value) {
+      console.warn('⚠️ Geen categorySlug gevonden in route params', route.params)
       return
     }
 
-    const slug = category.value.slug
-    console.log('🧭 Echte WP categorie-slug (widget):', slug)
+    console.log('🧭 Huidige categorie-slug (widget):', slug.value)
 
     try {
       const gql = useGql()
       const { data } = await gql.query({
         query: getCategoryChildren,
-        variables: { slug }
+        variables: { slug: slug.value },
       })
 
       if (data?.productCategory) {
         console.log('✅ GraphQL data ontvangen:', data)
+        category.value = data.productCategory
         children.value = data.productCategory.children?.nodes || []
       } else {
-        console.warn('⚠️ Geen productCategory gevonden voor', slug)
+        console.warn('⚠️ Geen productCategory gevonden voor', slug.value)
       }
     } catch (err) {
       console.error('❌ GraphQL fout in useCategoryChildren:', err)
