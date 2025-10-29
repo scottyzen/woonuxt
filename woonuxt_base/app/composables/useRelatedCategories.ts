@@ -5,7 +5,7 @@ export const useRelatedCategories = async () => {
   const route = useRoute()
   const { query } = useGraphqlClient()
 
-  // 1️⃣ Slug bepalen
+  // 1️⃣ Slug bepalen — werkt voor /broeken/, /jurken/, etc.
   const slug =
     (route.params.categorySlug as string) ||
     (route.params.category as string) ||
@@ -14,19 +14,17 @@ export const useRelatedCategories = async () => {
 
   console.log('✅ Detected slug:', slug)
 
-  // 2️⃣ Bouw de volledige WPGraphQL URI
-  //   Let op: jouw structuur is altijd /product-category/dames/dames-kleding/[slug]/
-  //   De basis "dames/dames-kleding" kun je eventueel dynamisch maken later
-  const uri = `/product-category/dames/dames-kleding/${slug}/`
+  if (!slug) {
+    console.warn('⚠️ Geen slug gedetecteerd.')
+    return { parent: null, siblings: [], children: [] }
+  }
 
-  console.log('🌐 Querying WPGraphQL with URI:', uri)
+  // 2️⃣ GraphQL query uitvoeren met idType: SLUG
+  const { data } = await useAsyncData(`related-categories-${slug}`, async () => {
+    return await query(GetRelatedCategories, { id: slug, idType: 'SLUG' })
+  }, { revalidate: 60 })
 
-  // 3️⃣ Query uitvoeren
-const { data } = await useAsyncData(`related-categories-${slug}`, async () => {
-  return await query(GetRelatedCategories, { id: slug, idType: 'SLUG' })
-}, { revalidate: 60 })
-
-
+  // 3️⃣ Data verwerken
   const current = data.value?.productCategory
   const all = data.value?.productCategories?.nodes || []
 
