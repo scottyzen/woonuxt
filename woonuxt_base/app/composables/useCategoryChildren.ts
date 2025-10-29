@@ -23,10 +23,11 @@ export function useCategoryChildren() {
         variables: { slug: slug.value },
       })
 
-      if (data?.productCategory) {
-        console.log('✅ GraphQL data ontvangen:', data)
-        category.value = data.productCategory
-        children.value = data.productCategory.children?.nodes || []
+      const cat = data?.productCategories?.nodes?.[0]
+      if (cat) {
+        console.log('✅ GraphQL data ontvangen:', cat)
+        category.value = cat
+        children.value = cat.children?.nodes || []
       } else {
         console.warn('⚠️ Geen productCategory gevonden voor', slug.value)
       }
