@@ -5,12 +5,12 @@ const { node } = defineProps({
 })
 const { storeSettings } = useAppConfig()
 
-// 🔢 Gebruik juiste prijsvelden (met fallback)
+// 🔢 Gebruik bestaande prijsvelden
 const salePrice = computed(() =>
-  parseFloat(node?.rawSalePrice || node?.salePrice || 0)
+  parseFloat(node?.salePrice || 0)
 )
 const regularPrice = computed(() =>
-  parseFloat(node?.rawRegularPrice || node?.regularPrice || 0)
+  parseFloat(node?.regularPrice || 0)
 )
 
 // 📊 Bereken korting in procenten
@@ -21,8 +21,11 @@ const salePercentage = computed((): string => {
 })
 
 // 👁️ Bepaal of badge getoond moet worden
-const showSaleBadge = computed(
-  () => (salePrice.value && regularPrice.value && storeSettings.saleBadge !== 'hidden')
+const showSaleBadge = computed(() =>
+  salePrice.value &&
+  regularPrice.value &&
+  salePrice.value < regularPrice.value &&
+  storeSettings.saleBadge !== 'hidden'
 )
 
 // 🏷️ Tekst (percent of vertaling)
@@ -38,9 +41,8 @@ const textToDisplay = computed(() => {
   </span>
 </template>
 
-<style lang="postcss" scoped>
+<style scoped lang="postcss">
 .red-badge {
-  @apply rounded-md bg-red-400 text-xs text-white tracking-tight px-1.5 leading-6 z-10;
-  background: #000 linear-gradient(0deg, #f87171, #f87171);
+  @apply rounded-md bg-red-500 text-[11px] text-white px-1.5 py-0.5 font-medium shadow-sm;
 }
 </style>
