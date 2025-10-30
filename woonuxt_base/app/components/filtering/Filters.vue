@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import { TaxonomyEnum } from '#woo'
-import { ref, computed } from 'vue'
+import { ref, computed, defineComponent } from 'vue'
 import { motion } from 'framer-motion'
 
-// composables
 const { isFiltersActive } = useFiltering()
 const { removeBodyClass } = useHelpers()
 const runtimeConfig = useRuntimeConfig()
 const { storeSettings } = useAppConfig()
 const route = useRoute()
 
-// props
 const { hideCategories } = defineProps({ hideCategories: { type: Boolean, default: false } })
 const currentSlug = route.params.categorySlug as string
 
@@ -42,13 +40,10 @@ function buildTree(terms, parentId = null, visited = new Set(), depth = 0) {
 }
 
 const categoryTree = computed(() => buildTree(productCategoryTerms))
-
-// 🧭 Huidige categorie
 const currentCategory = computed(() =>
   productCategoryTerms.find((t) => t.slug === currentSlug)
 )
 
-// 🪜 Rootcategorie (zoals “Dames”)
 function findRootCategory(cat, depth = 0, visited = new Set()) {
   if (!cat || depth > 20 || visited.has(cat.databaseId)) return cat
   visited.add(cat.databaseId)
@@ -58,7 +53,6 @@ function findRootCategory(cat, depth = 0, visited = new Set()) {
 }
 const rootCategory = computed(() => findRootCategory(currentCategory.value))
 
-// 🌳 Subtree van de rootcategorie
 function getSubtree(rootId, depth = 0, visited = new Set()) {
   if (!rootId || depth > 20) return []
   return productCategoryTerms
@@ -81,14 +75,12 @@ const filteredTree = computed(() => {
   ]
 })
 
-// 🧭 Parent & subs
 const parentCategory = computed(() => {
   if (!currentCategory.value?.parentId) return null
   return productCategoryTerms.find(
     (t) => t.databaseId === currentCategory.value?.parentId
   )
 })
-
 const subCategories = computed(() => {
   if (!currentCategory.value) return []
   return productCategoryTerms.filter(
@@ -96,7 +88,6 @@ const subCategories = computed(() => {
   )
 })
 
-// 🎨 Filter attributen
 const attributesWithTerms = globalProductAttributes.map((attr) => ({
   ...attr,
   terms: terms.filter((term) => term.taxonomyName === attr.slug),
@@ -104,74 +95,13 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
 
 // 🧭 Accordeon state
 const openIds = ref<Set<number>>(new Set())
-
 function toggleCategory(id: number) {
-  if (openIds.value.has(id)) {
-    openIds.value.delete(id)
-  } else {
-    openIds.value.add(id)
-  }
+  if (openIds.value.has(id)) openIds.value.delete(id)
+  else openIds.value.add(id)
 }
-</script>
 
-<template>
-  <aside id="filters">
-    <OrderByDropdown class="block w-full md:hidden" />
-
-    <div class="relative z-30 grid mb-12 space-y-8 divide-y">
-      <!-- 📂 Categorieën -->
-      <div v-if="!hideCategories && filteredTree?.length" class="pt-4">
-        <h3 class="font-semibold text-gray-900 mb-3">
-          Categorieën<span v-if="rootCategory"> — {{ rootCategory.name }}</span>
-        </h3>
-
-        <div v-if="parentCategory" class="mb-2">
-          <NuxtLink
-            :to="`/${parentCategory.slug}`"
-            class="block text-sm text-gray-500 hover:text-primary-600 transition-colors"
-          >
-            ← Terug naar {{ parentCategory.name }}
-          </NuxtLink>
-        </div>
-
-        <!-- 🌲 Categorieboom -->
-        <template v-for="cat in filteredTree" :key="cat.id">
-          <CategoryAccordion
-            :category="cat"
-            :current-slug="currentSlug"
-            :open-ids="openIds"
-            @toggle="toggleCategory"
-          />
-        </template>
-      </div>
-
-      <PriceFilter />
-
-      <div v-for="attribute in attributesWithTerms" :key="attribute.slug">
-        <ColorFilter
-          v-if="attribute.slug == 'pa_color' || attribute.slug == 'pa_colour'"
-          :attribute
-        />
-        <GlobalFilter v-else :attribute />
-      </div>
-
-      <OnSaleFilter />
-      <LazyStarRatingFilter v-if="storeSettings.showReviews" />
-      <LazyResetFiltersButton v-if="isFiltersActive" />
-    </div>
-  </aside>
-
-  <div
-    class="fixed inset-0 z-50 hidden bg-black opacity-25 filter-overlay"
-    @click="removeBodyClass('show-filters')"
-  ></div>
-</template>
-
-<!-- ✅ Subcomponent voor accordeon -->
-<script>
-import { motion } from 'framer-motion'
-
-export default {
+// ✅ Subcomponent definieerbaar in hetzelfde <script setup>
+const CategoryAccordion = defineComponent({
   name: 'CategoryAccordion',
   props: {
     category: { type: Object, required: true },
@@ -199,28 +129,11 @@ export default {
           {{ category.name }}
         </NuxtLink>
 
-        <span
-          v-if="category.children?.length"
-          class="text-xs text-gray-400 ml-2"
-        >
-          <svg
-            v-if="!isOpen"
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-3 h-3 inline-block"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
+        <span v-if="category.children?.length" class="text-xs text-gray-400 ml-2">
+          <svg v-if="!isOpen" xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
-          <svg
-            v-else
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-3 h-3 inline-block transform rotate-90 transition-transform"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
+          <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 inline-block transform rotate-90 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
         </span>
@@ -244,8 +157,56 @@ export default {
       </motion.ul>
     </div>
   `,
-}
+})
 </script>
+
+<template>
+  <aside id="filters">
+    <OrderByDropdown class="block w-full md:hidden" />
+    <div class="relative z-30 grid mb-12 space-y-8 divide-y">
+      <!-- 📂 Categorieën -->
+      <div v-if="!hideCategories && filteredTree?.length" class="pt-4">
+        <h3 class="font-semibold text-gray-900 mb-3">
+          Categorieën<span v-if="rootCategory"> — {{ rootCategory.name }}</span>
+        </h3>
+
+        <div v-if="parentCategory" class="mb-2">
+          <NuxtLink
+            :to="`/${parentCategory.slug}`"
+            class="block text-sm text-gray-500 hover:text-primary-600 transition-colors"
+          >
+            ← Terug naar {{ parentCategory.name }}
+          </NuxtLink>
+        </div>
+
+        <template v-for="cat in filteredTree" :key="cat.id">
+          <CategoryAccordion
+            :category="cat"
+            :current-slug="currentSlug"
+            :open-ids="openIds"
+            @toggle="toggleCategory"
+          />
+        </template>
+      </div>
+
+      <PriceFilter />
+      <div v-for="attribute in attributesWithTerms" :key="attribute.slug">
+        <ColorFilter
+          v-if="attribute.slug == 'pa_color' || attribute.slug == 'pa_colour'"
+          :attribute
+        />
+        <GlobalFilter v-else :attribute />
+      </div>
+      <OnSaleFilter />
+      <LazyStarRatingFilter v-if="storeSettings.showReviews" />
+      <LazyResetFiltersButton v-if="isFiltersActive" />
+    </div>
+  </aside>
+  <div
+    class="fixed inset-0 z-50 hidden bg-black opacity-25 filter-overlay"
+    @click="removeBodyClass('show-filters')"
+  ></div>
+</template>
 
 <style scoped lang="postcss">
 #filters {
