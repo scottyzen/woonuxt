@@ -20,12 +20,18 @@ export function useProductListing() {
     isCategoryPage.value ? { slug: String(route.params.categorySlug) } : { first: 24 }
   );
 
-  // Fetch via Woonuxt helper
-  const { data } = useAsyncGql(queryKey.value, variables.value, {
-    // SSR + cache hints (pas aan naar je beleid)
-    cache: 'force-cache',
-    revalidate: 60,
-  });
+// Fetch via Woonuxt helper
+const { data } = useAsyncGql(queryKey.value, variables.value, {
+  // SSR + cache hints (pas aan naar je beleid)
+  cache: 'force-cache',
+  revalidate: 60,
+});
+
+// 🔍 Debug: laat zien wat GraphQL oplevert
+watchEffect(() => {
+  console.log('🧩 Category query data:', data.value);
+});
+
 
   // Normalize products from either query
   const allProducts = computed(() => {
