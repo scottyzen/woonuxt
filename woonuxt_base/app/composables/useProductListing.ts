@@ -19,7 +19,8 @@ export function useProductListing() {
   const variables = computed(() =>
     isCategoryPage.value ? { slug: String(route.params.categorySlug) } : { first: 24 }
   );
-
+console.log('🔧 queryKey:', queryKey.value);
+console.log('🔧 variables:', variables.value);
 // Fetch via Woonuxt helper
 const { data } = useAsyncGql(queryKey.value, variables.value, {
   // SSR + cache hints (pas aan naar je beleid)
