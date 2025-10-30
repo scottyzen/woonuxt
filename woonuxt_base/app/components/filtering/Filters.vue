@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { TaxonomyEnum } from '#woo'
+import { ref, computed } from 'vue'
+import { motion } from 'framer-motion'
 
+// composables
 const { isFiltersActive } = useFiltering()
 const { removeBodyClass } = useHelpers()
 const runtimeConfig = useRuntimeConfig()
@@ -9,32 +12,31 @@ const route = useRoute()
 
 // props
 const { hideCategories } = defineProps({ hideCategories: { type: Boolean, default: false } })
-
 const currentSlug = route.params.categorySlug as string
 
-// 🔹 Globale attributen (kleur, maat, etc.)
+// 🧩 WooNuxt globale attributen (kleur, maat, etc.)
 const globalProductAttributes =
   (runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES as WooNuxtFilter[]) || []
 const taxonomies = globalProductAttributes.map((attr) =>
   attr?.slug?.toUpperCase().replace(/_/g, '')
 ) as TaxonomyEnum[]
 
-// 🔹 Alle termen ophalen
+// 🧩 GraphQL data ophalen
 const { data } = await useAsyncGql('getAllTerms', {
   taxonomies: [...taxonomies, TaxonomyEnum.PRODUCTCATEGORY],
 })
 const terms = data.value?.terms?.nodes || []
 const productCategoryTerms = terms.filter((t) => t.taxonomyName === 'product_cat')
 
-// ✅ veilige tree builder
-function buildTree(terms: any[], parentId: number | null = null, visited = new Set()) {
-  if (!Array.isArray(terms)) return []
+// ✅ veilige tree-builder (voorkomt recursielus)
+function buildTree(terms, parentId = null, visited = new Set(), depth = 0) {
+  if (!Array.isArray(terms) || depth > 20) return []
   return terms
     .filter((t) => (!t.parentId && parentId === null) || t.parentId === parentId)
     .map((term) => {
       if (visited.has(term.databaseId)) return term
       visited.add(term.databaseId)
-      const children = buildTree(terms, term.databaseId, visited)
+      const children = buildTree(terms, term.databaseId, visited, depth + 1)
       return { ...term, children }
     })
 }
@@ -46,28 +48,27 @@ const currentCategory = computed(() =>
   productCategoryTerms.find((t) => t.slug === currentSlug)
 )
 
-// 🪜 Vind hoogste parent (rootcategorie, bv. "Dames")
-function findRootCategory(cat) {
-  if (!cat) return null
-  let parent = productCategoryTerms.find((t) => t.databaseId === cat.parentId)
-  while (parent && parent.parentId) {
-    parent = productCategoryTerms.find((t) => t.databaseId === parent.parentId)
-  }
-  return parent || cat
+// 🪜 Rootcategorie (zoals “Dames”)
+function findRootCategory(cat, depth = 0, visited = new Set()) {
+  if (!cat || depth > 20 || visited.has(cat.databaseId)) return cat
+  visited.add(cat.databaseId)
+  const parent = productCategoryTerms.find((t) => t.databaseId === cat.parentId)
+  if (!parent) return cat
+  return findRootCategory(parent, depth + 1, visited)
 }
-
 const rootCategory = computed(() => findRootCategory(currentCategory.value))
 
-// 🔹 Subtree: toon alleen categorieën onder root (zoals alleen “Dames”-categorieën)
-function getSubtree(rootId) {
-  const build = (parentId) =>
-    productCategoryTerms
-      .filter((t) => t.parentId === parentId)
-      .map((term) => ({
-        ...term,
-        children: build(term.databaseId),
-      }))
-  return build(rootId)
+// 🌳 Subtree van de rootcategorie
+function getSubtree(rootId, depth = 0, visited = new Set()) {
+  if (!rootId || depth > 20) return []
+  return productCategoryTerms
+    .filter((t) => t.parentId === rootId)
+    .map((term) => {
+      if (visited.has(term.databaseId)) return term
+      visited.add(term.databaseId)
+      const children = getSubtree(term.databaseId, depth + 1, visited)
+      return { ...term, children }
+    })
 }
 
 const filteredTree = computed(() => {
@@ -80,7 +81,7 @@ const filteredTree = computed(() => {
   ]
 })
 
-// 🔹 Parent van de huidige categorie (voor "terug" link)
+// 🧭 Parent & subs
 const parentCategory = computed(() => {
   if (!currentCategory.value?.parentId) return null
   return productCategoryTerms.find(
@@ -88,7 +89,6 @@ const parentCategory = computed(() => {
   )
 })
 
-// 🔹 Directe subcategorieën van huidige categorie
 const subCategories = computed(() => {
   if (!currentCategory.value) return []
   return productCategoryTerms.filter(
@@ -96,11 +96,22 @@ const subCategories = computed(() => {
   )
 })
 
-// 🔹 Filter attributen (kleur, maat, etc.)
+// 🎨 Filter attributen
 const attributesWithTerms = globalProductAttributes.map((attr) => ({
   ...attr,
   terms: terms.filter((term) => term.taxonomyName === attr.slug),
 }))
+
+// 🧭 Accordeon state
+const openIds = ref<Set<number>>(new Set())
+
+function toggleCategory(id: number) {
+  if (openIds.value.has(id)) {
+    openIds.value.delete(id)
+  } else {
+    openIds.value.add(id)
+  }
+}
 </script>
 
 <template>
@@ -108,14 +119,12 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
     <OrderByDropdown class="block w-full md:hidden" />
 
     <div class="relative z-30 grid mb-12 space-y-8 divide-y">
-
-      <!-- 📂 Dynamische categorieboom -->
+      <!-- 📂 Categorieën -->
       <div v-if="!hideCategories && filteredTree?.length" class="pt-4">
         <h3 class="font-semibold text-gray-900 mb-3">
           Categorieën<span v-if="rootCategory"> — {{ rootCategory.name }}</span>
         </h3>
 
-        <!-- 🔙 Link naar bovenliggende categorie -->
         <div v-if="parentCategory" class="mb-2">
           <NuxtLink
             :to="`/${parentCategory.slug}`"
@@ -125,51 +134,19 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
           </NuxtLink>
         </div>
 
-        <!-- 🔹 Subcategorieën van huidige categorie -->
-        <ul v-if="subCategories?.length" class="space-y-2 ml-2 border-l border-gray-200 pl-3">
-          <li v-for="sub in subCategories" :key="sub.id">
-            <NuxtLink
-              :to="`/${sub.slug}`"
-              class="block text-gray-700 hover:text-primary-600 transition-colors"
-              :class="{ 'underline text-primary-600 font-medium': sub.slug === currentSlug }"
-            >
-              {{ sub.name }}
-            </NuxtLink>
-          </li>
-        </ul>
-
-        <!-- 🔹 Anders toon de volledige boom van de root -->
-        <template v-else>
-          <ul v-for="cat in filteredTree" :key="cat.id" class="space-y-2">
-            <li>
-              <NuxtLink
-                :to="`/${cat.slug}`"
-                class="block text-gray-800 font-medium hover:text-primary-600 transition-colors"
-                :class="{ 'underline text-primary-600': cat.slug === currentSlug }"
-              >
-                {{ cat.name }}
-              </NuxtLink>
-
-              <ul v-if="cat.children?.length" class="mt-2 space-y-1 border-l border-gray-100 pl-3">
-                <li v-for="child in cat.children" :key="child.id">
-                  <NuxtLink
-                    :to="`/${child.slug}`"
-                    class="block text-gray-700 hover:text-primary-600"
-                    :class="{ 'underline text-primary-600': child.slug === currentSlug }"
-                  >
-                    {{ child.name }}
-                  </NuxtLink>
-                </li>
-              </ul>
-            </li>
-          </ul>
+        <!-- 🌲 Categorieboom -->
+        <template v-for="cat in filteredTree" :key="cat.id">
+          <CategoryAccordion
+            :category="cat"
+            :current-slug="currentSlug"
+            :open-ids="openIds"
+            @toggle="toggleCategory"
+          />
         </template>
       </div>
 
-      <!-- 💰 Prijsfilter -->
       <PriceFilter />
 
-      <!-- 🎨 Overige filters -->
       <div v-for="attribute in attributesWithTerms" :key="attribute.slug">
         <ColorFilter
           v-if="attribute.slug == 'pa_color' || attribute.slug == 'pa_colour'"
@@ -190,19 +167,92 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
   ></div>
 </template>
 
+<!-- ✅ Subcomponent voor accordeon -->
+<script>
+import { motion } from 'framer-motion'
+
+export default {
+  name: 'CategoryAccordion',
+  props: {
+    category: { type: Object, required: true },
+    currentSlug: { type: String, required: true },
+    openIds: { type: Object, required: true },
+  },
+  emits: ['toggle'],
+  setup(props, { emit }) {
+    const isOpen = computed(() => props.openIds.has(props.category.databaseId))
+    const toggle = () => emit('toggle', props.category.databaseId)
+    return { isOpen, toggle }
+  },
+  components: { motion },
+  template: `
+    <div class="category-item mb-1">
+      <div
+        class="flex items-center justify-between cursor-pointer select-none py-1"
+        @click="toggle"
+      >
+        <NuxtLink
+          :to="'/' + category.slug"
+          class="text-gray-800 hover:text-primary-600 transition-colors"
+          :class="{ 'font-medium underline text-primary-600': category.slug === currentSlug }"
+        >
+          {{ category.name }}
+        </NuxtLink>
+
+        <span
+          v-if="category.children?.length"
+          class="text-xs text-gray-400 ml-2"
+        >
+          <svg
+            v-if="!isOpen"
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-3 h-3 inline-block"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+          <svg
+            v-else
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-3 h-3 inline-block transform rotate-90 transition-transform"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </span>
+      </div>
+
+      <motion.ul
+        v-if="category.children?.length"
+        :initial="{ height: 0, opacity: 0 }"
+        :animate="isOpen ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }"
+        transition="{ duration: 0.25 }"
+        class="overflow-hidden border-l border-gray-100 ml-3 pl-3"
+      >
+        <li v-for="child in category.children" :key="child.id" class="py-0.5">
+          <CategoryAccordion
+            :category="child"
+            :current-slug="currentSlug"
+            :open-ids="openIds"
+            @toggle="toggle"
+          />
+        </li>
+      </motion.ul>
+    </div>
+  `,
+}
+</script>
+
 <style scoped lang="postcss">
 #filters {
   @apply w-[280px];
 }
 ul {
   @apply list-none pl-0;
-}
-ul ul {
-  @apply ml-4 border-l border-gray-100 pl-3;
-}
-a.underline {
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 2px;
 }
 .show-filters .filter-overlay {
   @apply block;
