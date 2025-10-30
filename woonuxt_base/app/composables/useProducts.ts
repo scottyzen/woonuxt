@@ -45,4 +45,45 @@ export function useProducts() {
     }
 
     // Daarna pas dynamische filters, zoeken en sorteren
-    if (isFiltersActive.value) newProducts = filterProducts(newPr
+    if (isFiltersActive.value) newProducts = filterProducts(newProducts);
+    if (isSearchActive.value) newProducts = searchProducts(newProducts);
+    if (isSortingActive.value) newProducts = sortProducts(newProducts);
+
+    return newProducts;
+  }
+
+  // Named async function for better performance and debugging
+  async function updateProductList(): Promise<void> {
+    const { scrollToTop } = useHelpers();
+    const { isSortingActive } = useSorting();
+    const { isFiltersActive } = useFiltering();
+    const { isSearchActive } = useSearching();
+
+    // scroll to top of page
+    scrollToTop();
+
+    // return all products if no filters are active
+    if (!isFiltersActive.value && !isSearchActive.value && !isSortingActive.value) {
+      // 🆕 zelfs zonder actieve filters willen we nog steeds de baseFilter toepassen
+      if (baseFilter.value.categorySlug) {
+        products.value = allProducts.filter((p) =>
+          p.productCategories?.nodes?.some((c) => c.slug === baseFilter.value.categorySlug)
+        );
+        return;
+      }
+
+      products.value = allProducts;
+      return;
+    }
+
+    // otherwise, apply filter, search and sorting in that order
+    try {
+      products.value = applyProductFilters(allProducts);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // ✅ Sluit het exportobject af
+  return { products, allProducts, setProducts, updateProductList, setBaseFilter, baseFilter };
+}
