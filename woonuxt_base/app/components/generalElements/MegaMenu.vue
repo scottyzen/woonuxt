@@ -37,43 +37,44 @@ function onLeave() {
         {{ item.label }}
       </NuxtLink>
 
-     <ClientOnly>
-  <transition name="fade">
-    <div
-      v-if="openIndex === i && item.columns.length"
-      class="absolute left-0 top-full w-screen max-w-6xl bg-white border border-gray-100 shadow-lg shadow-gray-200 rounded-2xl mt-2"
-    >
-      <div class="grid grid-cols-4 gap-8 p-6">
-        <div
-          v-for="col in item.columns"
-          :key="col.title"
-          class="min-w-[180px]"
-        >
-          <NuxtLink
-            :to="col.uri"
-            class="block font-semibold text-gray-900 hover:text-primary mb-2"
+      <!-- ✅ Voeg ClientOnly toe rond het transitionblok -->
+      <ClientOnly>
+        <transition name="fade">
+          <div
+            v-if="openIndex === i && item.columns.length"
+            class="absolute left-0 top-full w-screen max-w-6xl bg-white border border-gray-100 shadow-lg shadow-gray-200 rounded-2xl mt-2"
           >
-            {{ col.title }}
-          </NuxtLink>
-          <ul class="space-y-1">
-            <li v-for="sub in col.items" :key="sub.uri">
-              <NuxtLink
-                :to="sub.uri"
-                class="text-sm text-gray-600 hover:text-gray-900"
+            <div class="grid grid-cols-4 gap-8 p-6">
+              <div
+                v-for="col in item.columns"
+                :key="col.title"
+                class="min-w-[180px]"
               >
-                {{ sub.label }}
-              </NuxtLink>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </transition>
-</ClientOnly>
-
+                <NuxtLink
+                  :to="col.uri"
+                  class="block font-semibold text-gray-900 hover:text-primary mb-2"
+                >
+                  {{ col.title }}
+                </NuxtLink>
+                <ul class="space-y-1">
+                  <li v-for="sub in col.items" :key="sub.uri">
+                    <NuxtLink
+                      :to="sub.uri"
+                      class="text-sm text-gray-600 hover:text-gray-900"
+                    >
+                      {{ sub.label }}
+                    </NuxtLink>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </transition>
+      </ClientOnly>
     </li>
   </ul>
 </template>
+
 
 <style scoped>
 .fade-enter-active,.fade-leave-active { transition: opacity .15s ease }
