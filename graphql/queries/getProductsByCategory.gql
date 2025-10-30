@@ -5,13 +5,7 @@ query GetProductsByCategory($slug: ID!, $first: Int = 24) {
     slug
     description
 
-    # ✅ Voeg hier de categorie afbeelding toe (werkt met WooCommerce + WPGraphQL)
-    image {
-      sourceUrl
-      altText
-    }
-
-    # ✅ Dynamische breadcrumbs via ancestors
+    # 🧭 Breadcrumbs (van boven naar beneden)
     ancestors {
       nodes {
         id
@@ -20,17 +14,36 @@ query GetProductsByCategory($slug: ID!, $first: Int = 24) {
       }
     }
 
-    # ✅ Ophalen van de directe subcategorieën (optioneel, voor filters of navigatie)
+    # 🧩 Parent (voor siblings / bovenliggende categorie)
+    parent {
+      node {
+        id
+        name
+        slug
+      }
+    }
+
+    # 🧱 Subcategorieën (directe children, met nested children)
     children {
       nodes {
         id
         name
         slug
         count
+
+        # 🔹 1 niveau dieper voor sub-subcategorieën
+        children {
+          nodes {
+            id
+            name
+            slug
+            count
+          }
+        }
       }
     }
 
-    # ✅ Producten binnen deze categorie
+    # 🛒 Producten binnen deze categorie
     products(first: $first) {
       nodes {
         id
@@ -51,7 +64,7 @@ query GetProductsByCategory($slug: ID!, $first: Int = 24) {
           }
         }
 
-        # ✅ Inline fragment voor prijs en voorraad
+        # 💰 Prijs + voorraad
         ... on SimpleProduct {
           price
           regularPrice
@@ -59,7 +72,7 @@ query GetProductsByCategory($slug: ID!, $first: Int = 24) {
           stockStatus
         }
 
-        # ✅ Inline fragment voor attributen (kleur, maat, etc.)
+        # 🎨 Attributen
         ... on ProductWithAttributes {
           attributes {
             nodes {
