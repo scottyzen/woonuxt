@@ -87,7 +87,7 @@ useHead(() => ({
         />
 
         <!--subcats-->
-        <!-- Subcategorieën -->
+        <!-- 
 <div v-if="category?.children?.nodes?.length" class="mb-10">
   <h2 class="text-xl font-semibold text-gray-800 mb-4">
     Shop ook in:
@@ -106,7 +106,7 @@ useHead(() => ({
     </NuxtLink>
   </div>
 </div>
-
+-->
 
         <!-- Controls -->
         <div class="flex items-center justify-between w-full gap-4 mb-6 md:gap-8 border-b border-gray-100 pb-4">
