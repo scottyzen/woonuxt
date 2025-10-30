@@ -10,7 +10,7 @@ const route = useRoute()
 const { hideCategories } = defineProps({ hideCategories: { type: Boolean, default: false } })
 const currentSlug = route.params.categorySlug as string
 
-// 🧩 Globale attributen (kleur, maat, etc.)
+// 🧩 Globale attributen
 const globalProductAttributes =
   (runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES as WooNuxtFilter[]) || []
 const taxonomies = globalProductAttributes.map((attr) =>
@@ -24,7 +24,7 @@ const { data } = await useAsyncGql('getAllTerms', {
 const terms = data.value?.terms?.nodes || []
 const productCategoryTerms = terms.filter((t) => t.taxonomyName === 'product_cat')
 
-// 🧱 Tree builder (veilig)
+// 🧱 Tree builder
 function buildTree(terms, parentId = null, visited = new Set(), depth = 0) {
   if (!Array.isArray(terms) || depth > 15) return []
   return terms
@@ -39,14 +39,19 @@ function buildTree(terms, parentId = null, visited = new Set(), depth = 0) {
 
 const categoryTree = computed(() => buildTree(productCategoryTerms))
 
-// 🧭 🔍 Huidige categorie vinden (robust)
+// 🧭 Bepaal huidige categorie op basis van slug-delen
 const currentCategory = computed(() => {
   if (!currentSlug) return null
-  // zoek op slug of slug-deel (soms nested URL)
-  return (
-    productCategoryTerms.find((t) => t.slug === currentSlug) ||
-    productCategoryTerms.find((t) => currentSlug.includes(t.slug))
-  )
+
+  // split bij '-' en '/'
+  const parts = currentSlug.split(/[-/]/).filter(Boolean).reverse()
+
+  // probeer van meest specifieke naar algemene term te matchen
+  for (const part of parts) {
+    const match = productCategoryTerms.find((t) => t.slug === part)
+    if (match) return match
+  }
+  return null
 })
 
 // 🧭 Rootcategorie bepalen
