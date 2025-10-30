@@ -23,16 +23,6 @@ watch(
   },
 );
 
-useHead({
-  title: category?.name || 'Categorie',
-  meta: [
-    {
-      hid: 'description',
-      name: 'description',
-      content: category?.description?.replace(/<[^>]+>/g, '').substring(0, 155) || '',
-    },
-  ],
-});
 </script>
 <template>
   <div class="container">
