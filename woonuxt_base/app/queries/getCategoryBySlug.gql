@@ -1,0 +1,29 @@
+query getCategoryBySlug($slug: ID!) {
+  productCategory(id: $slug, idType: SLUG) {
+    id
+    name
+    slug
+    description
+    ancestors {
+      nodes {
+        id
+        name
+        slug
+      }
+    }
+    products(first: 24) {
+      nodes {
+        id
+        name
+        slug
+        ...SimpleProduct
+        ...VariableProduct
+        ...ExternalProduct
+        image {
+          sourceUrl
+          altText
+        }
+      }
+    }
+  }
+}

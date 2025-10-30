@@ -38,6 +38,7 @@ query getProduct($slug: ID!) {
     }
   }
 }
+
 fragment ProductWithAttributes on ProductWithAttributes {
   attributes {
     nodes {
@@ -45,6 +46,7 @@ fragment ProductWithAttributes on ProductWithAttributes {
     }
   }
 }
+
 fragment ProductAttribute on ProductAttribute {
   variation
   name
@@ -60,6 +62,41 @@ fragment ProductAttribute on ProductAttribute {
         taxonomyName
         databaseId
       }
+    }
+  }
+}
+
+# 🔹 Voeg dit fragment toe — dit haalt de afbeelding en URL op voor externe producten
+fragment ExternalProduct on ExternalProduct {
+  id
+  databaseId
+  type
+  name
+  slug
+  price
+  regularPrice
+  salePrice
+  externalUrl
+  buttonText
+  image {
+    id
+    sourceUrl
+    altText
+    title
+  }
+  featuredImage {
+    node {
+      id
+      sourceUrl
+      altText
+      title
+    }
+  }
+  galleryImages {
+    nodes {
+      id
+      sourceUrl
+      altText
     }
   }
 }

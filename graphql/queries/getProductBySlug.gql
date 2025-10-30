@@ -1,0 +1,41 @@
+query GetProductBySlug($slug: ID!) {
+  product(id: $slug, idType: SLUG) {
+    id
+    databaseId
+    name
+    description
+    shortDescription
+
+    # Pricing (voor alle WooCommerce producttypes)
+    ... on SimpleProduct {
+      price
+      regularPrice
+      salePrice
+    }
+    ... on VariableProduct {
+      price
+      regularPrice
+      salePrice
+    }
+    ... on ExternalProduct {
+      price
+      regularPrice
+      salePrice
+      externalUrl
+      buttonText
+    }
+
+    image {
+      sourceUrl
+      altText
+    }
+
+    galleryImages {
+      nodes {
+        id
+        sourceUrl
+        altText
+      }
+    }
+  }
+}

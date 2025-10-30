@@ -41,5 +41,5 @@ useHead({
       <ProductGrid />
     </div>
   </div>
-  <NoProductsFound v-else>No products found. Please try adjusting your filters or check back later.</NoProductsFound>
+  <NoProductsFound v-else>Geen producten gevonden. Pas je filters aan om meer producten te vinden.</NoProductsFound>
 </template>

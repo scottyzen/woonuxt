@@ -17,10 +17,45 @@ watch(
   () => route.path,
   () => closeCartAndMenu(),
 );
+const router = useRouter()
+
+watch(
+  () => route.fullPath,
+  async (path) => {
+    if (path.startsWith('/p/')) {
+      const slug = path.split('/p/')[1]
+      const config = useRuntimeConfig()
+      const authHeader = 'Basic ' + btoa(`${config.public.wcKey}:${config.public.wcSecret}`)
+
+      try {
+        const products = await $fetch('https://wp.kledingzoeken.nl/wp-json/wc/v3/products', {
+          headers: { Authorization: authHeader },
+          query: { slug },
+        })
+
+        if (products?.length) {
+          const product = products[0]
+          productSlideOver.value?.open(product.id)
+        } else {
+          // Geen product gevonden → optioneel fallback
+          console.warn('⚠️ Geen product gevonden voor slug:', slug)
+        }
+      } catch (e) {
+        console.error('❌ Fout bij ophalen product:', e)
+      }
+    }
+  },
+  { immediate: true }
+)
 
 useHead({
   titleTemplate: `%s - ${siteName}`,
 });
+
+// 🆕 Product SlideOver setup
+import ProductSlideOver from '~/components/overlays/ProductSlideOver.vue'
+const productSlideOver = ref()
+provide('productSlideOver', productSlideOver)
 </script>
 
 <template>
@@ -36,6 +71,9 @@ useHead({
       <MobileMenu v-if="isShowingMobileMenu" />
     </Transition>
 
+    <!--ProductSlideOver toegevoegd -->
+    <ProductSlideOver ref="productSlideOver" />
+
     <NuxtPage />
 
     <Transition name="fade">
@@ -45,6 +83,7 @@ useHead({
     <LazyAppFooter hydrate-on-visible />
   </div>
 </template>
+
 
 <style lang="postcss">
 html,

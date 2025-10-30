@@ -1,0 +1,33 @@
+query getCategoryTreeBySlug($slug: ID!) {
+  productCategory(id: $slug, idType: SLUG) {
+    id
+    name
+    slug
+    description
+
+    parent {
+      node {
+        id
+        name
+        slug
+      }
+    }
+
+    ancestors {
+      nodes {
+        id
+        name
+        slug
+      }
+    }
+
+    children {
+      nodes {
+        id
+        name
+        slug
+        count
+      }
+    }
+  }
+}

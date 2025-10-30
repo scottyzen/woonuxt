@@ -1,24 +1,63 @@
-export default defineNuxtConfig({
+import { defineNuxtConfig } from 'nuxt/config'
 
-  // Get all the pages, components, composables and plugins from the parent theme
+export default defineNuxtConfig({
   extends: ['./woonuxt_base'],
+
+  runtimeConfig: {
+    public: {
+      wcKey: process.env.WC_KEY,
+      wcSecret: process.env.WC_SECRET,
+    },
+  },
 
   components: [{ path: './components', pathPrefix: false }],
 
-  /**
-   * Depending on your servers capabilities, you may need to adjust the following settings.
-   * It will affect the build time but also increase the reliability of the build process.
-   * If you have a server with a lot of memory and CPU, you can remove the following settings.
-   * @property {number} concurrency - How many pages to prerender at once
-   * @property {number} interval - How long to wait between prerendering pages
-   * @property {boolean} failOnError - This stops the build from failing but the page will not be statically generated
-   */
   nitro: {
     prerender: {
       concurrency: 10,
       interval: 1000,
       failOnError: false,
+      routes: [],
     },
-    minify: true
+    minify: true,
+    preset: 'netlify', // ⬅️ belangrijk voor Netlify
   },
-});
+
+  vite: {
+    plugins: [require('@rollup/plugin-graphql')()],
+  },
+
+  generate: {
+    fallback: true, // ⬅️ zorgt dat client routes zoals /broeken werken
+  },
+
+  hooks: {
+    async 'nitro:config'(nitroConfig) {
+      try {
+        const res = await fetch('https://wp.kledingzoeken.nl/graphql', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            query: `
+              {
+                productCategories(first: 100) {
+                  nodes {
+                    slug
+                  }
+                }
+              }
+            `,
+          }),
+        })
+        const json = await res.json()
+        const slugs = json?.data?.productCategories?.nodes?.map((n: any) => n.slug) || []
+
+        console.log('✅ [Prerender Hook] Categorieën gevonden:', slugs.length)
+        nitroConfig.prerender.routes.push(...slugs.map((slug: string) => `/${slug}`))
+      } catch (err) {
+        console.warn('⚠️ [Prerender Hook] Kon categorieën niet ophalen:', err)
+      }
+    },
+  },
+})
+

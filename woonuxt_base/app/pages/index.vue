@@ -2,14 +2,32 @@
 import { ProductsOrderByEnum } from '#woo';
 const { siteName, description, shortDescription, siteImage } = useAppConfig();
 
-const { data } = await useAsyncGql('getProductCategories', { first: 6 });
-const productCategories = data.value?.productCategories?.nodes || [];
+// Homepagina categorie selectie
+const includeIds = [34, 35, 36, 37, 38] // <-- jouw gewenste volgorde (WordPress databaseId’s)
+
+// Haal alleen deze categorieën op
+const { data, error } = await useAsyncGql('getProductCategories', { include: includeIds })
+
+if (error.value) {
+  console.warn('⚠️ Kon categorieën niet laden:', error.value)
+}
+
+const categories = data.value?.productCategories?.nodes || []
+
+// 🔹 Sorteer volgens jouw gewenste volgorde
+const orderedCategories = computed(() =>
+  includeIds
+    .map((id) => categories.find((cat) => Number(cat.databaseId) === id))
+    .filter(Boolean)
+)
+
+
 
 const { data: productData } = await useAsyncGql('getProducts', { first: 5, orderby: ProductsOrderByEnum.POPULARITY });
 const popularProducts = productData.value.products?.nodes || [];
 
 useSeoMeta({
-  title: `Home`,
+  title: `Kleding Zoeken: Jouw slimme startpunt voor kleding & mode.`,
   ogTitle: siteName,
   description: description,
   ogDescription: shortDescription,
@@ -21,7 +39,7 @@ useSeoMeta({
 <template>
   <main>
     <HeroBanner />
-
+<!--
     <div class="container flex flex-wrap items-center justify-center my-16 text-center gap-x-8 gap-y-4 brand lg:justify-between">
       <img src="/images/logoipsum-211.svg" alt="Brand 1" width="132" height="35" />
       <img src="/images/logoipsum-221.svg" alt="Brand 2" width="119" height="30" />
@@ -30,17 +48,23 @@ useSeoMeta({
       <img src="/images/logoipsum-284.svg" alt="Brand 5" width="70" height="44" />
       <img src="/images/logoipsum-215.svg" alt="Brand 6" width="132" height="40" />
     </div>
-
+-->
     <section class="container my-16">
       <div class="flex items-end justify-between">
         <h2 class="text-lg font-semibold md:text-2xl">{{ $t('shop.shopByCategory') }}</h2>
         <NuxtLink class="text-primary" to="/categories">{{ $t('general.viewAll') }}</NuxtLink>
       </div>
-      <div class="grid justify-center grid-cols-2 gap-4 mt-8 md:grid-cols-3 lg:grid-cols-6">
-        <CategoryCard v-for="(category, i) in productCategories" :key="i" class="w-full" :node="category" />
+      <div class="grid justify-center grid-cols-2 gap-4 mt-8 md:grid-cols-3 lg:grid-cols-5">
+<CategoryCard
+  v-for="category in orderedCategories"
+  :key="category.id"
+  class="w-full"
+  :node="category"
+/>
+
       </div>
     </section>
-
+<!--
     <section class="container grid gap-4 my-24 md:grid-cols-2 lg:grid-cols-4">
       <div class="flex items-center gap-8 p-8 bg-white rounded-lg">
         <img src="/icons/box.svg" width="60" height="60" alt="Free Shipping" loading="lazy" />
@@ -71,7 +95,7 @@ useSeoMeta({
         </div>
       </div>
     </section>
-
+-->
     <section class="container my-16" v-if="popularProducts">
       <div class="flex items-end justify-between">
         <h2 class="text-lg font-semibold md:text-2xl">{{ $t('shop.popularProducts') }}</h2>

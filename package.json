@@ -2,7 +2,7 @@
   "name": "woonuxt",
   "private": true,
   "scripts": {
-    "build": "nuxt build",
+ "build": "nuxt generate",
     "dev": "nuxt dev --host",
     "dev:ssl": "NODE_TLS_REJECT_UNAUTHORIZED=0 nuxt dev --https --ssl-cert localhost.pem --ssl-key localhost-key.pem",
     "generate": "nuxt generate",
@@ -13,7 +13,8 @@
   "dependencies": {
     "@stripe/stripe-js": "^8.1.0",
     "@vueform/slider": "^2.1.10",
-    "@vueuse/core": "^13.9.0"
+    "@vueuse/core": "^13.9.0",
+    "@rollup/plugin-graphql": "^2.0.5"
   },
   "devDependencies": {
     "@nuxt/icon": "^2.0.0",
