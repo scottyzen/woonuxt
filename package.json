@@ -21,7 +21,7 @@
     "@nuxtjs/i18n": "^10.1.1",
     "@nuxtjs/tailwindcss": "^6.14.0",
     "@tailwindcss/typography": "^0.5.19",
-    "nuxt": "^4.1.3",
+    "nuxt": "^4.2.0",
     "nuxt-graphql-client": "^0.2.46",
     "prettier": "^3.6.2"
   }
