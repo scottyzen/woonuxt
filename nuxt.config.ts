@@ -10,25 +10,27 @@ export default defineNuxtConfig({
     },
   },
 
-  components: [
-    { path: './components', pathPrefix: false },
-  ],
+  components: [{ path: './components', pathPrefix: false }],
 
   nitro: {
     prerender: {
       concurrency: 10,
       interval: 1000,
       failOnError: false,
-      routes: [], // <-- verplicht leeg array als startwaarde
+      routes: [],
     },
     minify: true,
+    preset: 'netlify', // ⬅️ belangrijk voor Netlify
   },
 
   vite: {
     plugins: [require('@rollup/plugin-graphql')()],
   },
 
-  // ✅ Gebruik de nieuwe Nuxt 4 hook om dynamische prerenders toe te voegen
+  generate: {
+    fallback: true, // ⬅️ zorgt dat client routes zoals /broeken werken
+  },
+
   hooks: {
     async 'nitro:config'(nitroConfig) {
       try {
@@ -47,13 +49,10 @@ export default defineNuxtConfig({
             `,
           }),
         })
-
         const json = await res.json()
         const slugs = json?.data?.productCategories?.nodes?.map((n: any) => n.slug) || []
 
         console.log('✅ [Prerender Hook] Categorieën gevonden:', slugs.length)
-
-        // Voeg dynamische categorie-routes toe
         nitroConfig.prerender.routes.push(...slugs.map((slug: string) => `/${slug}`))
       } catch (err) {
         console.warn('⚠️ [Prerender Hook] Kon categorieën niet ophalen:', err)
@@ -61,3 +60,4 @@ export default defineNuxtConfig({
     },
   },
 })
+
