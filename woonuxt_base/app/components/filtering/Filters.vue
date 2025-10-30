@@ -24,9 +24,9 @@ const { data } = await useAsyncGql('getAllTerms', {
 const terms = data.value?.terms?.nodes || []
 const productCategoryTerms = terms.filter((t) => t.taxonomyName === 'product_cat')
 
-// 🧱 Safe tree builder met bescherming
+// 🧱 Safe tree builder met depth bescherming
 function buildTree(terms, parentId = null, visited = new Set(), depth = 0) {
-  if (!Array.isArray(terms) || depth > 20) return [] // hard limit
+  if (!Array.isArray(terms) || depth > 15) return []
   return terms
     .filter((t) => (!t.parentId && parentId === null) || t.parentId === parentId)
     .map((term) => {
@@ -39,24 +39,23 @@ function buildTree(terms, parentId = null, visited = new Set(), depth = 0) {
 
 const categoryTree = computed(() => buildTree(productCategoryTerms))
 
-// 🧭 Vind huidige categorie
+// 🧭 Huidige categorie + rootcategorie vinden
 const currentCategory = computed(() =>
   productCategoryTerms.find((t) => t.slug === currentSlug)
 )
 
-// 🪜 Vind rootcategorie met veiligheidscheck
 function findRootCategory(cat, depth = 0, visited = new Set()) {
-  if (!cat || depth > 20 || visited.has(cat.databaseId)) return cat
+  if (!cat || depth > 15 || visited.has(cat.databaseId)) return cat
   visited.add(cat.databaseId)
   const parent = productCategoryTerms.find((t) => t.databaseId === cat.parentId)
-  if (!parent) return cat
-  return findRootCategory(parent, depth + 1, visited)
+  return parent ? findRootCategory(parent, depth + 1, visited) : cat
 }
+
 const rootCategory = computed(() => findRootCategory(currentCategory.value))
 
-// 🧭 Subtree (alleen categorieën binnen root)
+// 🧭 Subcategorieën van de root ophalen
 function getSubtree(rootId, depth = 0, visited = new Set()) {
-  if (!rootId || depth > 20) return []
+  if (!rootId || depth > 15) return []
   return productCategoryTerms
     .filter((t) => t.parentId === rootId)
     .map((term) => {
@@ -85,14 +84,6 @@ const parentCategory = computed(() => {
   )
 })
 
-// 📂 Directe subcategorieën
-const subCategories = computed(() => {
-  if (!currentCategory.value) return []
-  return productCategoryTerms.filter(
-    (t) => t.parentId === currentCategory.value.databaseId
-  )
-})
-
 // 🎨 Attributenfilters
 const attributesWithTerms = globalProductAttributes.map((attr) => ({
   ...attr,
@@ -108,66 +99,68 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
       <!-- 📂 Categorieën -->
       <div v-if="!hideCategories && filteredTree?.length" class="pt-4">
         <h3 class="font-semibold text-gray-900 mb-3">
-          Categorieën<span v-if="rootCategory"> — {{ rootCategory.name }}</span>
+          Categorieën
+          <span v-if="rootCategory"> — {{ rootCategory.name }}</span>
         </h3>
 
-        <!-- 🔙 Link naar bovenliggende categorie -->
-        <div v-if="parentCategory" class="mb-2">
+        <!-- 🔙 Terug naar bovenliggende categorie -->
+        <div v-if="parentCategory" class="mb-3">
           <NuxtLink
             :to="`/${parentCategory.slug}`"
-            class="block text-sm text-gray-500 hover:text-primary-600 transition-colors"
+            class="text-sm text-gray-500 hover:text-primary-600 transition"
           >
             ← Terug naar {{ parentCategory.name }}
           </NuxtLink>
         </div>
 
-        <!-- 🔹 Subcategorieën -->
-        <ul
-          v-if="subCategories?.length"
-          class="space-y-2 ml-2 border-l border-gray-200 pl-3"
-        >
-          <li v-for="sub in subCategories" :key="sub.id">
+        <!-- 🌿 Subcategorieboom van root -->
+        <ul v-for="cat in filteredTree" :key="cat.id" class="space-y-2">
+          <li>
+            <!-- Root -->
             <NuxtLink
-              :to="`/${sub.slug}`"
-              class="block text-gray-700 hover:text-primary-600 transition-colors"
-              :class="{ 'underline text-primary-600 font-medium': sub.slug === currentSlug }"
+              :to="`/${cat.slug}`"
+              class="block text-gray-800 font-medium hover:text-primary-600"
+              :class="{ 'underline text-primary-600': cat.slug === currentSlug }"
             >
-              {{ sub.name }}
+              {{ cat.name }}
             </NuxtLink>
+
+            <!-- Children -->
+            <ul
+              v-if="cat.children?.length"
+              class="mt-1 space-y-1 border-l border-gray-200 pl-3"
+            >
+              <li v-for="child in cat.children" :key="child.id">
+                <NuxtLink
+                  :to="`/${child.slug}`"
+                  class="block text-gray-700 hover:text-primary-600 transition"
+                  :class="{ 'underline text-primary-600 font-medium': child.slug === currentSlug }"
+                >
+                  {{ child.name }}
+                </NuxtLink>
+
+                <!-- Sub-subcategorieën -->
+                <ul
+                  v-if="child.children?.length"
+                  class="mt-1 ml-3 space-y-1 border-l border-gray-100 pl-3"
+                >
+                  <li v-for="sub in child.children" :key="sub.id">
+                    <NuxtLink
+                      :to="`/${sub.slug}`"
+                      class="block text-gray-600 hover:text-primary-600"
+                      :class="{ 'underline text-primary-600': sub.slug === currentSlug }"
+                    >
+                      {{ sub.name }}
+                    </NuxtLink>
+                  </li>
+                </ul>
+              </li>
+            </ul>
           </li>
         </ul>
-
-        <!-- 🔸 Anders toon subtree van root -->
-        <template v-else>
-          <ul v-for="cat in filteredTree" :key="cat.id" class="space-y-2">
-            <li>
-              <NuxtLink
-                :to="`/${cat.slug}`"
-                class="block text-gray-800 font-medium hover:text-primary-600 transition-colors"
-                :class="{ 'underline text-primary-600': cat.slug === currentSlug }"
-              >
-                {{ cat.name }}
-              </NuxtLink>
-
-              <ul
-                v-if="cat.children?.length"
-                class="mt-2 space-y-1 border-l border-gray-100 pl-3"
-              >
-                <li v-for="child in cat.children" :key="child.id">
-                  <NuxtLink
-                    :to="`/${child.slug}`"
-                    class="block text-gray-700 hover:text-primary-600"
-                    :class="{ 'underline text-primary-600': child.slug === currentSlug }"
-                  >
-                    {{ child.name }}
-                  </NuxtLink>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </template>
       </div>
 
+      <!-- 💰 Filters -->
       <PriceFilter />
 
       <div v-for="attribute in attributesWithTerms" :key="attribute.slug">
