@@ -3,11 +3,16 @@ query getCategoryTreeBySlug($slug: ID!) {
     id
     name
     slug
+    description
+
     parent {
-      id
-      name
-      slug
+      node {
+        id
+        name
+        slug
+      }
     }
+
     ancestors {
       nodes {
         id
@@ -15,11 +20,13 @@ query getCategoryTreeBySlug($slug: ID!) {
         slug
       }
     }
+
     children {
       nodes {
         id
         name
         slug
+        count
       }
     }
   }
