@@ -85,7 +85,6 @@ query GetProductsByCategory($slug: ID!, $first: Int = 24) {
           regularPrice
           salePrice
           onSale
-          stockStatus
           externalUrl
           buttonText
         }
