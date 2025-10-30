@@ -30,7 +30,6 @@ query GetProductsByCategory($slug: ID!, $first: Int = 24) {
         name
         slug
         count
-
         children {
           nodes {
             id
@@ -64,7 +63,7 @@ query GetProductsByCategory($slug: ID!, $first: Int = 24) {
           }
         }
 
-        # 💰 Prijsinformatie (voor alle producttypen)
+        # 💰 Prijsinformatie
         ... on SimpleProduct {
           price
           regularPrice
@@ -79,6 +78,16 @@ query GetProductsByCategory($slug: ID!, $first: Int = 24) {
           salePrice
           onSale
           stockStatus
+        }
+
+        ... on ExternalProduct {
+          price
+          regularPrice
+          salePrice
+          onSale
+          stockStatus
+          externalUrl
+          buttonText
         }
 
         # 🎨 Attributen (kleur, maat, etc.)
