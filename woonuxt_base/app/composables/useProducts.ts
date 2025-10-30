@@ -1,9 +1,10 @@
 let allProducts = [] as Product[];
 
 export function useProducts() {
-  const products = useState<Product[]>('products');
+  // ✅ altijd een lege array als startwaarde
+  const products = useState<Product[]>('products', () => []);
 
-  // 🆕 1. Base filter ref (voor categorie-lock)
+  // ✅ baseFilter blijft zoals eerder
   const baseFilter = useState<{ categorySlug?: string }>('baseFilter', () => ({}));
 
   /**
