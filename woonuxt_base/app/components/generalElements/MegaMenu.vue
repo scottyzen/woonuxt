@@ -9,17 +9,16 @@ function onEnter(i: number) {
   if (hoverTimer) clearTimeout(hoverTimer)
   hoverTimer = setTimeout(() => {
     openIndex.value = i
-  }, 100) // kleine vertraging voorkomt 'clearTimeout' race
+  }, 120)
 }
 
 function onLeave() {
   if (hoverTimer) clearTimeout(hoverTimer)
   hoverTimer = setTimeout(() => {
     openIndex.value = null
-  }, 150)
+  }, 160)
 }
 </script>
-
 
 <template>
   <ul class="flex items-center gap-6">
@@ -37,46 +36,46 @@ function onLeave() {
         {{ item.label }}
       </NuxtLink>
 
-      <!-- ✅ Voeg ClientOnly toe rond het transitionblok -->
+      <!-- ⚡ GEEN Vue transition meer, enkel CSS -->
       <ClientOnly>
-        <transition name="fade">
-          <div
-            v-if="openIndex === i && item.columns.length"
-            class="absolute left-0 top-full w-screen max-w-6xl bg-white border border-gray-100 shadow-lg shadow-gray-200 rounded-2xl mt-2"
-          >
-            <div class="grid grid-cols-4 gap-8 p-6">
-              <div
-                v-for="col in item.columns"
-                :key="col.title"
-                class="min-w-[180px]"
+        <div
+          v-show="openIndex === i && item.columns.length"
+          class="absolute left-0 top-full w-screen max-w-6xl bg-white border border-gray-100 shadow-lg shadow-gray-200 rounded-2xl mt-2 opacity-0 pointer-events-none transition-all duration-200 ease-in-out"
+          :class="{ 'opacity-100 pointer-events-auto': openIndex === i }"
+        >
+          <div class="grid grid-cols-4 gap-8 p-6">
+            <div
+              v-for="col in item.columns"
+              :key="col.title"
+              class="min-w-[180px]"
+            >
+              <NuxtLink
+                :to="col.uri"
+                class="block font-semibold text-gray-900 hover:text-primary mb-2"
               >
-                <NuxtLink
-                  :to="col.uri"
-                  class="block font-semibold text-gray-900 hover:text-primary mb-2"
-                >
-                  {{ col.title }}
-                </NuxtLink>
-                <ul class="space-y-1">
-                  <li v-for="sub in col.items" :key="sub.uri">
-                    <NuxtLink
-                      :to="sub.uri"
-                      class="text-sm text-gray-600 hover:text-gray-900"
-                    >
-                      {{ sub.label }}
-                    </NuxtLink>
-                  </li>
-                </ul>
-              </div>
+                {{ col.title }}
+              </NuxtLink>
+              <ul class="space-y-1">
+                <li v-for="sub in col.items" :key="sub.uri">
+                  <NuxtLink
+                    :to="sub.uri"
+                    class="text-sm text-gray-600 hover:text-gray-900"
+                  >
+                    {{ sub.label }}
+                  </NuxtLink>
+                </li>
+              </ul>
             </div>
           </div>
-        </transition>
+        </div>
       </ClientOnly>
     </li>
   </ul>
 </template>
 
-
 <style scoped>
-.fade-enter-active,.fade-leave-active { transition: opacity .15s ease }
-.fade-enter-from,.fade-leave-to { opacity: 0 }
+/* optionele fallback fade */
+[style*="opacity-100"] {
+  transition-property: opacity, transform;
+}
 </style>
