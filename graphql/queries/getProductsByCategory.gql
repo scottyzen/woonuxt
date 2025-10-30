@@ -5,7 +5,7 @@ query GetProductsByCategory($slug: ID!, $first: Int = 24) {
     slug
     description
 
-    # 🧭 Breadcrumbs (van boven naar beneden)
+    # 🧭 Breadcrumbs (ancestors van boven → beneden)
     ancestors {
       nodes {
         id
@@ -14,7 +14,7 @@ query GetProductsByCategory($slug: ID!, $first: Int = 24) {
       }
     }
 
-    # 🧩 Parent (voor siblings / bovenliggende categorie)
+    # 🔙 Parentcategorie (voor teruglink)
     parent {
       node {
         id
@@ -23,7 +23,7 @@ query GetProductsByCategory($slug: ID!, $first: Int = 24) {
       }
     }
 
-    # 🧱 Subcategorieën (directe children, met nested children)
+    # 🧱 Subcategorieën (1 niveau diep, incl. sub-subcategorieën)
     children {
       nodes {
         id
@@ -31,7 +31,6 @@ query GetProductsByCategory($slug: ID!, $first: Int = 24) {
         slug
         count
 
-        # 🔹 1 niveau dieper voor sub-subcategorieën
         children {
           nodes {
             id
@@ -50,6 +49,7 @@ query GetProductsByCategory($slug: ID!, $first: Int = 24) {
         databaseId
         slug
         name
+        type
 
         image {
           sourceUrl
@@ -64,15 +64,24 @@ query GetProductsByCategory($slug: ID!, $first: Int = 24) {
           }
         }
 
-        # 💰 Prijs + voorraad
+        # 💰 Prijsinformatie (voor alle producttypen)
         ... on SimpleProduct {
           price
           regularPrice
           salePrice
+          onSale
           stockStatus
         }
 
-        # 🎨 Attributen
+        ... on VariableProduct {
+          price
+          regularPrice
+          salePrice
+          onSale
+          stockStatus
+        }
+
+        # 🎨 Attributen (kleur, maat, etc.)
         ... on ProductWithAttributes {
           attributes {
             nodes {
