@@ -61,7 +61,7 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
         <div v-if="parentCategory" class="mb-3">
           <NuxtLink
             :to="`/${parentCategory.slug}`"
-            class="text-sm text-gray-500 hover:text-primary-600 transition"
+            class="text-sm text-gray-500 hover:text-primary transition"
           >
             ← Terug naar {{ parentCategory.name }}
           </NuxtLink>
@@ -77,7 +77,7 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
           >
             <NuxtLink
               :to="`/${anc.slug}`"
-              class="block font-medium text-gray-700 hover:text-primary-600 transition"
+              class="block font-medium text-gray-700 hover:text-primary transition"
             >
               {{ anc.name }}
             </NuxtLink>
@@ -101,8 +101,8 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
               <li v-for="sub in subCategories" :key="sub.id">
                 <NuxtLink
                   :to="`/${sub.slug}`"
-                  class="block text-gray-700 hover:text-primary-600 transition"
-                  :class="{ 'underline text-primary-600 font-medium': sub.slug === currentSlug }"
+                  class="block text-gray-700 hover:text-primary transition"
+                  :class="{ 'underline text-primary font-medium': sub.slug === currentSlug }"
                 >
                   {{ sub.name }}
                 </NuxtLink>
@@ -141,28 +141,36 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
 #filters {
   @apply w-[280px];
 }
+
 ul {
   @apply list-none pl-0;
 }
+
 ul ul {
   @apply ml-4 border-l border-gray-100 pl-3;
 }
+
 a {
   @apply text-base text-gray-700;
 }
+
 a.underline {
   text-decoration-thickness: 1.5px;
   text-underline-offset: 2px;
 }
+
 a:hover {
-  @apply text-primary-600;
+  @apply text-primary;
 }
+
 span.font-semibold {
   @apply text-base;
 }
+
 .show-filters .filter-overlay {
   @apply block;
 }
+
 .show-filters {
   overflow: hidden;
 }
