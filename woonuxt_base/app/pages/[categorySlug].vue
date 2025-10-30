@@ -86,6 +86,28 @@ useHead(() => ({
           class="text-gray-700 leading-relaxed prose max-w-none mb-6"
         />
 
+        <!--subcats-->
+        <!-- Subcategorieën -->
+<div v-if="category?.children?.nodes?.length" class="mb-10">
+  <h2 class="text-xl font-semibold text-gray-800 mb-4">
+    Shop ook in:
+  </h2>
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+    <NuxtLink
+      v-for="child in category.children.nodes"
+      :key="child.id"
+      :to="`/${child.slug}`"
+      class="p-4 border rounded-xl hover:bg-gray-50 transition group"
+    >
+      <span class="block font-medium text-gray-900 group-hover:text-primary-600">
+        {{ child.name }}
+      </span>
+      <span class="text-sm text-gray-500">{{ child.count }} producten</span>
+    </NuxtLink>
+  </div>
+</div>
+
+
         <!-- Controls -->
         <div class="flex items-center justify-between w-full gap-4 mb-6 md:gap-8 border-b border-gray-100 pb-4">
           <ProductResultCount />
