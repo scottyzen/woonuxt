@@ -1,16 +1,24 @@
 let allProducts = [] as Product[];
 
 export function useProducts() {
-  // Declare the state variables and the setter functions
   const products = useState<Product[]>('products');
+
+  // 🆕 1. Base filter ref (voor categorie-lock)
+  const baseFilter = useState<{ categorySlug?: string }>('baseFilter', () => ({}));
+
+  /**
+   * Zet vaste filterwaarden die altijd gelden (zoals categorie)
+   * @param {Object} payload - bijvoorbeeld { categorySlug: 'dames' }
+   */
+  function setBaseFilter(payload: { categorySlug?: string }) {
+    baseFilter.value = { ...baseFilter.value, ...payload };
+  }
 
   /**
    * Sets the products state variable and the allProducts variable.
    * @param {Product[]} newProducts - The new products to set.
    */
   function setProducts(newProducts: Product[]): void {
-    // If newProducts is not an array, reset products and allProducts
-    // to empty arrays to avoid errors in the UI.
     if (!Array.isArray(newProducts)) {
       products.value = [];
       allProducts = [];
@@ -27,36 +35,14 @@ export function useProducts() {
     const { isSearchActive, searchProducts } = useSearching();
 
     let newProducts = [...products];
-    if (isFiltersActive.value) newProducts = filterProducts(newProducts);
-    if (isSearchActive.value) newProducts = searchProducts(newProducts);
-    if (isSortingActive.value) newProducts = sortProducts(newProducts);
 
-    return newProducts;
-  }
-
-  // Named async function for better performance and debugging
-  async function updateProductList(): Promise<void> {
-    const { scrollToTop } = useHelpers();
-    const { isSortingActive } = useSorting();
-    const { isFiltersActive } = useFiltering();
-    const { isSearchActive } = useSearching();
-
-    // scroll to top of page
-    scrollToTop();
-
-    // return all products if no filters are active
-    if (!isFiltersActive.value && !isSearchActive.value && !isSortingActive.value) {
-      products.value = allProducts;
-      return;
+    // 🆕 2. Altijd eerst de baseFilter toepassen (bv. categorie)
+    if (baseFilter.value.categorySlug) {
+      newProducts = newProducts.filter((p) => {
+        const cats = p.productCategories?.nodes || [];
+        return cats.some((c) => c.slug === baseFilter.value.categorySlug);
+      });
     }
 
-    // otherwise, apply filter, search and sorting in that order
-    try {
-      products.value = applyProductFilters(allProducts);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  return { products, allProducts, setProducts, updateProductList };
-}
+    // Daarna pas dynamische filters, zoeken en sorteren
+    if (isFiltersActive.value) newProducts = filterProducts(newPr
