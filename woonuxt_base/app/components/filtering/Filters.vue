@@ -12,30 +12,37 @@ const { hideCategories } = defineProps({
 })
 const currentSlug = route.params.categorySlug as string
 
-// 🧩 Attributenfilters blijven hetzelfde
+// 🧩 Attributenfilters
 const globalProductAttributes =
   (runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES as WooNuxtFilter[]) || []
 const taxonomies = globalProductAttributes.map((attr) =>
   attr?.slug?.toUpperCase().replace(/_/g, '')
 ) as TaxonomyEnum[]
 
-// 🎯 Huidige categorie ophalen met hiërarchie
+// 🎯 Huidige categorie ophalen
 const { data: categoryData } = await useAsyncGql('getCategoryTreeBySlug', { slug: currentSlug })
 const category = computed(() => categoryData.value?.productCategory)
 
-// 🧭 Rootcategorie = hoogste ancestor (of zichzelf)
-const rootCategory = computed(() => {
-  const ancestors = category.value?.ancestors?.nodes || []
-  return ancestors.length ? ancestors[ancestors.length - 1] : category.value
+// ✅ Ancestors in juiste volgorde: root → parent → current
+const orderedAncestors = computed(() => {
+  const list = category.value?.ancestors?.nodes || []
+  return [...list].reverse()
 })
 
-// 📂 Subcategorieën = directe kinderen
+// 🧭 Rootcategorie
+const rootCategory = computed(() => {
+  return orderedAncestors.value.length
+    ? orderedAncestors.value[0]
+    : category.value
+})
+
+// 📂 Subcategorieën
 const subCategories = computed(() => category.value?.children?.nodes || [])
 
-// 🔙 Parentcategorie = directe parent (nu via node)
+// 🔙 Parentcategorie
 const parentCategory = computed(() => category.value?.parent?.node)
 
-// 🎨 Attributenfilters via getAllTerms (blijft werken)
+// 🎨 Attributenfilters
 const { data: termData } = await useAsyncGql('getAllTerms', {
   taxonomies: [...taxonomies, TaxonomyEnum.PRODUCTCATEGORY],
 })
@@ -47,131 +54,61 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
 </script>
 
 <template>
-  <aside id="filters">
-    <OrderByDropdown class="block w-full md:hidden" />
+  <!-- 🧭 Dynamische categorieboom -->
+  <div v-if="!hideCategories && category" class="pt-4">
+    <h3 class="font-semibold text-gray-900 mb-3">
+      Categorieën<span v-if="rootCategory"> — {{ rootCategory.name }}</span>
+    </h3>
 
-    <div class="relative z-30 grid mb-12 space-y-8 divide-y">
-      <!-- 📂 Dynamische categorieboom -->
-      <div v-if="!hideCategories && category" class="pt-4">
-        <h3 class="font-semibold text-gray-900 mb-3">
-          Categorieën<span v-if="rootCategory"> — {{ rootCategory.name }}</span>
-        </h3>
+    <div v-if="parentCategory" class="mb-3">
+      <NuxtLink
+        :to="`/${parentCategory.slug}`"
+        class="text-sm text-gray-500 hover:text-primary transition"
+      >
+        ← Terug naar {{ parentCategory.name }}
+      </NuxtLink>
+    </div>
 
-        <!-- 🔙 Link naar bovenliggende categorie -->
-        <div v-if="parentCategory" class="mb-3">
-          <NuxtLink
-            :to="`/${parentCategory.slug}`"
-            class="text-sm text-gray-500 hover:text-primary transition"
-          >
-            ← Terug naar {{ parentCategory.name }}
-          </NuxtLink>
-        </div>
+    <ul class="space-y-1">
+      <!-- ✅ Gebruik de correct geordende ancestors -->
+      <li
+        v-for="(anc, index) in orderedAncestors"
+        :key="anc.id"
+        :style="{ marginLeft: `${index * 10}px` }"
+      >
+        <NuxtLink
+          :to="`/${anc.slug}`"
+          class="block font-medium text-gray-700 hover:text-primary transition"
+        >
+          {{ anc.name }}
+        </NuxtLink>
+      </li>
 
-        <!-- 🌿 Toon hiërarchie van root → ancestors → huidige categorie → subcategorieën -->
-        <ul class="space-y-1">
-          <!-- Root en ancestors -->
-          <li
-            v-for="(anc, index) in category.ancestors?.nodes"
-            :key="anc.id"
-            :style="{ marginLeft: `${index * 10}px` }"
-          >
+      <!-- Huidige categorie -->
+      <li
+        :style="{
+          marginLeft: `${(orderedAncestors?.length || 0) * 10}px`,
+        }"
+      >
+        <span class="block font-semibold text-gray-900">
+          {{ category.name }}
+        </span>
+
+        <ul
+          v-if="subCategories?.length"
+          class="space-y-1 mt-1 border-l border-gray-200 pl-3"
+        >
+          <li v-for="sub in subCategories" :key="sub.id">
             <NuxtLink
-              :to="`/${anc.slug}`"
-              class="block font-medium text-gray-700 hover:text-primary transition"
+              :to="`/${sub.slug}`"
+              class="block text-gray-700 hover:text-primary transition"
+              :class="{ 'underline text-primary font-medium': sub.slug === currentSlug }"
             >
-              {{ anc.name }}
+              {{ sub.name }}
             </NuxtLink>
           </li>
-
-          <!-- Huidige categorie -->
-          <li
-            :style="{
-              marginLeft: `${(category.ancestors?.nodes?.length || 0) * 10}px`,
-            }"
-          >
-            <span class="block font-semibold text-gray-900">
-              {{ category.name }}
-            </span>
-
-            <!-- Subcategorieën -->
-            <ul
-              v-if="subCategories?.length"
-              class="space-y-1 mt-1 border-l border-gray-200 pl-3"
-            >
-              <li v-for="sub in subCategories" :key="sub.id">
-                <NuxtLink
-                  :to="`/${sub.slug}`"
-                  class="block text-gray-700 hover:text-primary transition"
-                  :class="{ 'underline text-primary font-medium': sub.slug === currentSlug }"
-                >
-                  {{ sub.name }}
-                </NuxtLink>
-              </li>
-            </ul>
-          </li>
         </ul>
-      </div>
-
-      <!-- 💰 Prijsfilter -->
-      <PriceFilter />
-
-      <!-- 🎨 Attributenfilters -->
-      <div v-for="attribute in attributesWithTerms" :key="attribute.slug">
-        <ColorFilter
-          v-if="attribute.slug == 'pa_color' || attribute.slug == 'pa_colour'"
-          :attribute
-        />
-        <GlobalFilter v-else :attribute />
-      </div>
-
-      <OnSaleFilter />
-      <LazyStarRatingFilter v-if="storeSettings.showReviews" />
-      <LazyResetFiltersButton v-if="isFiltersActive" />
-    </div>
-  </aside>
-
-  <!-- Overlay -->
-  <div
-    class="fixed inset-0 z-50 hidden bg-black opacity-25 filter-overlay"
-    @click="removeBodyClass('show-filters')"
-  ></div>
+      </li>
+    </ul>
+  </div>
 </template>
-
-<style scoped lang="postcss">
-#filters {
-  @apply w-[280px];
-}
-
-ul {
-  @apply list-none pl-0;
-}
-
-ul ul {
-  @apply ml-4 border-l border-gray-100 pl-3;
-}
-
-a {
-  @apply text-base text-gray-700;
-}
-
-a.underline {
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 2px;
-}
-
-a:hover {
-  @apply text-primary;
-}
-
-span.font-semibold {
-  @apply text-base;
-}
-
-.show-filters .filter-overlay {
-  @apply block;
-}
-
-.show-filters {
-  overflow: hidden;
-}
-</style>
