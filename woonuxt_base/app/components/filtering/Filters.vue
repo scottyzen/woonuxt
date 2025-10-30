@@ -24,7 +24,7 @@ const { data } = await useAsyncGql('getAllTerms', {
 const terms = data.value?.terms?.nodes || []
 const productCategoryTerms = terms.filter((t) => t.taxonomyName === 'product_cat')
 
-// 🧱 Safe tree builder met depth bescherming
+// 🧱 Tree builder (veilig)
 function buildTree(terms, parentId = null, visited = new Set(), depth = 0) {
   if (!Array.isArray(terms) || depth > 15) return []
   return terms
@@ -39,21 +39,26 @@ function buildTree(terms, parentId = null, visited = new Set(), depth = 0) {
 
 const categoryTree = computed(() => buildTree(productCategoryTerms))
 
-// 🧭 Huidige categorie + rootcategorie vinden
-const currentCategory = computed(() =>
-  productCategoryTerms.find((t) => t.slug === currentSlug)
-)
+// 🧭 🔍 Huidige categorie vinden (robust)
+const currentCategory = computed(() => {
+  if (!currentSlug) return null
+  // zoek op slug of slug-deel (soms nested URL)
+  return (
+    productCategoryTerms.find((t) => t.slug === currentSlug) ||
+    productCategoryTerms.find((t) => currentSlug.includes(t.slug))
+  )
+})
 
+// 🧭 Rootcategorie bepalen
 function findRootCategory(cat, depth = 0, visited = new Set()) {
   if (!cat || depth > 15 || visited.has(cat.databaseId)) return cat
   visited.add(cat.databaseId)
   const parent = productCategoryTerms.find((t) => t.databaseId === cat.parentId)
   return parent ? findRootCategory(parent, depth + 1, visited) : cat
 }
-
 const rootCategory = computed(() => findRootCategory(currentCategory.value))
 
-// 🧭 Subcategorieën van de root ophalen
+// 🧭 Subcategorieën onder de root
 function getSubtree(rootId, depth = 0, visited = new Set()) {
   if (!rootId || depth > 15) return []
   return productCategoryTerms
@@ -113,10 +118,9 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
           </NuxtLink>
         </div>
 
-        <!-- 🌿 Subcategorieboom van root -->
+        <!-- 🌿 Dynamische categorieboom -->
         <ul v-for="cat in filteredTree" :key="cat.id" class="space-y-2">
           <li>
-            <!-- Root -->
             <NuxtLink
               :to="`/${cat.slug}`"
               class="block text-gray-800 font-medium hover:text-primary-600"
@@ -160,7 +164,6 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
         </ul>
       </div>
 
-      <!-- 💰 Filters -->
       <PriceFilter />
 
       <div v-for="attribute in attributesWithTerms" :key="attribute.slug">
