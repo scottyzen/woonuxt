@@ -1,4 +1,4 @@
-import { computed, onMounted, watch, watchEffect, nextTick } from 'vue';
+import { computed, onMounted, watch, nextTick } from 'vue';
 import { useRoute } from '#imports';
 
 export function useProductListing() {
@@ -7,35 +7,28 @@ export function useProductListing() {
   const { storeSettings } = useAppConfig();
   const { isQueryEmpty } = useHelpers();
 
-  // ✅ Detecteer of dit een categoriepagina is
+  // ✅ Detecteer of we op een categoriepagina zitten
   const isCategoryPage = computed(() => !!route.params?.categorySlug);
 
-  // ✅ Kies de juiste querynaam (exacte match met jouw .gql)
+  // ✅ Kies de juiste querynaam (exact zoals in je .gql)
   const queryKey = computed(() =>
     isCategoryPage.value ? 'GetProductsByCategory' : 'getProducts'
   );
 
-  // ✅ Stel de juiste GraphQL-variabelen in
+  // ✅ Stel de GraphQL-variabelen in
   const variables = computed(() =>
     isCategoryPage.value
       ? { slug: String(route.params.categorySlug), first: 24 }
       : { first: 24 }
   );
 
-  // ✅ Ophalen via useAsyncGql
+  // ✅ Ophalen via Woonuxt GraphQL helper
   const { data, pending, error } = useAsyncGql(queryKey.value, variables.value, {
     cache: 'force-cache',
     revalidate: 60,
   });
 
-  // ✅ Debug (mag je later verwijderen)
-  watchEffect(() => {
-    if (data.value) {
-      console.log('🧩 GraphQL response:', data.value);
-    }
-  });
-
-  // ✅ Normaliseer producten afhankelijk van de query
+  // ✅ Normaliseer de producten uit de query
   const allProducts = computed(() => {
     if (isCategoryPage.value) {
       return data.value?.productCategory?.products?.nodes ?? [];
@@ -52,15 +45,16 @@ export function useProductListing() {
       setBaseFilter({ categorySlug: slug });
     }
 
-    if (allProducts.value?.length) {
+    if (Array.isArray(allProducts.value) && allProducts.value.length > 0) {
       setProducts(allProducts.value);
     }
   };
 
-  // ✅ Bereken of er producten zijn
-  const hasProducts = computed<boolean>(
-    () => Array.isArray(allProducts.value) && allProducts.value.length > 0
-  );
+  // ✅ Controleer of er producten zijn (veilig)
+  const hasProducts = computed<boolean>(() => {
+    const list = allProducts.value || [];
+    return Array.isArray(list) && list.length > 0;
+  });
 
   // ✅ Init bij laden
   onMounted(() => {
@@ -71,7 +65,7 @@ export function useProductListing() {
     }
   });
 
-  // ✅ Herbereken bij filterquery-verandering (facetfilters, sort, etc.)
+  // ✅ Herbereken bij filters (prijs, sortering, etc.)
   watch(
     () => route.query,
     () => {
