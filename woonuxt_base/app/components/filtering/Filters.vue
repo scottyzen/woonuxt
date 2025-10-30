@@ -7,7 +7,7 @@ const runtimeConfig = useRuntimeConfig()
 const { storeSettings } = useAppConfig()
 const route = useRoute()
 
-// prop om categorie-filter te verbergen
+// hide-categories prop is used to hide the category filter on the product category page
 const { hideCategories } = defineProps({ hideCategories: { type: Boolean, default: false } })
 
 const currentSlug = route.params.categorySlug as string
@@ -46,12 +46,20 @@ function buildTree(terms: any[], parentId: number | null = null, visited = new S
 
 const categoryTree = computed(() => buildTree(productCategoryTerms))
 
-// 🔹 Zoek huidige categorie
+// 🔹 Huidige categorie ophalen
 const currentCategory = computed(() =>
   productCategoryTerms.find((t) => t.slug === currentSlug)
 )
 
-// 🔹 Bepaal de directe subcategorieën van de huidige categorie
+// 🔹 Parentcategorie (voor navigatie omhoog)
+const parentCategory = computed(() => {
+  if (!currentCategory.value?.parentId) return null
+  return productCategoryTerms.find(
+    (t) => t.databaseId === currentCategory.value?.parentId
+  )
+})
+
+// 🔹 Directe subcategorieën van de huidige categorie
 const subCategories = computed(() => {
   if (!currentCategory.value) return []
   const currentId = currentCategory.value.databaseId
@@ -70,40 +78,51 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
     <OrderByDropdown class="block w-full md:hidden" />
 
     <div class="relative z-30 grid mb-12 space-y-8 divide-y">
+
       <!-- 📂 Categorieën -->
       <div v-if="!hideCategories" class="pt-4">
         <h3 class="font-semibold text-gray-900 mb-3">Categorieën</h3>
 
-        <!-- Hoofdcategorie (actieve categorie bovenaan) -->
+        <!-- 🔝 Parentcategorie (navigatie omhoog) -->
+        <div v-if="parentCategory" class="mb-2">
+          <NuxtLink
+            :to="`/${parentCategory.slug}`"
+            class="block text-sm text-gray-500 hover:text-primary-600 transition-colors"
+          >
+            ← Terug naar {{ parentCategory.name }}
+          </NuxtLink>
+        </div>
+
+        <!-- 🔸 Huidige categorie -->
         <div v-if="currentCategory" class="mb-3">
           <NuxtLink
             :to="`/${currentCategory.slug}`"
-            class="block font-medium text-primary-600 underline"
+            class="block font-medium text-primary-600 underline decoration-2"
           >
             {{ currentCategory.name }}
           </NuxtLink>
         </div>
 
-        <!-- Directe subcategorieën -->
-        <ul v-if="subCategories?.length" class="space-y-2 ml-2">
+        <!-- 🔹 Subcategorieën -->
+        <ul v-if="subCategories?.length" class="space-y-2 ml-2 border-l border-gray-200 pl-3">
           <li v-for="sub in subCategories" :key="sub.id">
             <NuxtLink
               :to="`/${sub.slug}`"
-              class="block text-gray-700 hover:text-primary-600"
-              :class="{ 'underline text-primary-600': sub.slug === currentSlug }"
+              class="block text-gray-700 hover:text-primary-600 transition-colors"
+              :class="{ 'underline text-primary-600 font-medium': sub.slug === currentSlug }"
             >
               {{ sub.name }}
             </NuxtLink>
           </li>
         </ul>
 
-        <!-- Als er geen subcategorieën zijn, toon top-level lijst -->
+        <!-- 🔸 Als er geen subcategorieën zijn, toon top-level -->
         <ul v-else class="space-y-2">
           <li v-for="cat in categoryTree" :key="cat.id">
             <NuxtLink
               :to="`/${cat.slug}`"
-              class="block text-gray-700 hover:text-primary-600"
-              :class="{ 'underline text-primary-600': cat.slug === currentSlug }"
+              class="block text-gray-700 hover:text-primary-600 transition-colors"
+              :class="{ 'underline text-primary-600 font-medium': cat.slug === currentSlug }"
             >
               {{ cat.name }}
             </NuxtLink>
@@ -155,8 +174,13 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
   }
 }
 
+/* 🔹 UX: betere hiërarchie */
 ul {
   @apply list-none pl-0;
+}
+
+ul ul {
+  @apply ml-4 border-l border-gray-100 pl-3;
 }
 
 a.underline {
