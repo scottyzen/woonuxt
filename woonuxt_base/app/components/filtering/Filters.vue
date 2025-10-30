@@ -7,35 +7,30 @@ const runtimeConfig = useRuntimeConfig()
 const { storeSettings } = useAppConfig()
 const route = useRoute()
 
-// hide-categories prop is used to hide the category filter on the product category page
+// props
 const { hideCategories } = defineProps({ hideCategories: { type: Boolean, default: false } })
 
 const currentSlug = route.params.categorySlug as string
 
-// 🔹 Globale WooNuxt attributen (kleur, maat, etc.)
+// 🔹 Globale attributen (kleur, maat, etc.)
 const globalProductAttributes =
   (runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES as WooNuxtFilter[]) || []
 const taxonomies = globalProductAttributes.map((attr) =>
   attr?.slug?.toUpperCase().replace(/_/g, '')
 ) as TaxonomyEnum[]
 
-// 🔹 Ophalen van alle termen inclusief categorieën
+// 🔹 Alle termen ophalen
 const { data } = await useAsyncGql('getAllTerms', {
   taxonomies: [...taxonomies, TaxonomyEnum.PRODUCTCATEGORY],
 })
 const terms = data.value?.terms?.nodes || []
-
-// 🔹 Alle productcategorieën ophalen
 const productCategoryTerms = terms.filter((t) => t.taxonomyName === 'product_cat')
 
-// ✅ Veilige functie om boom te bouwen (voorkomt recursielus)
+// ✅ veilige tree builder
 function buildTree(terms: any[], parentId: number | null = null, visited = new Set()) {
   if (!Array.isArray(terms)) return []
   return terms
-    .filter((t) => {
-      if (!t.parentId && parentId === null) return true
-      return t.parentId === parentId
-    })
+    .filter((t) => (!t.parentId && parentId === null) || t.parentId === parentId)
     .map((term) => {
       if (visited.has(term.databaseId)) return term
       visited.add(term.databaseId)
@@ -46,12 +41,46 @@ function buildTree(terms: any[], parentId: number | null = null, visited = new S
 
 const categoryTree = computed(() => buildTree(productCategoryTerms))
 
-// 🔹 Huidige categorie ophalen
+// 🧭 Huidige categorie
 const currentCategory = computed(() =>
   productCategoryTerms.find((t) => t.slug === currentSlug)
 )
 
-// 🔹 Parentcategorie (voor navigatie omhoog)
+// 🪜 Vind hoogste parent (rootcategorie, bv. "Dames")
+function findRootCategory(cat) {
+  if (!cat) return null
+  let parent = productCategoryTerms.find((t) => t.databaseId === cat.parentId)
+  while (parent && parent.parentId) {
+    parent = productCategoryTerms.find((t) => t.databaseId === parent.parentId)
+  }
+  return parent || cat
+}
+
+const rootCategory = computed(() => findRootCategory(currentCategory.value))
+
+// 🔹 Subtree: toon alleen categorieën onder root (zoals alleen “Dames”-categorieën)
+function getSubtree(rootId) {
+  const build = (parentId) =>
+    productCategoryTerms
+      .filter((t) => t.parentId === parentId)
+      .map((term) => ({
+        ...term,
+        children: build(term.databaseId),
+      }))
+  return build(rootId)
+}
+
+const filteredTree = computed(() => {
+  if (!rootCategory.value) return categoryTree.value
+  return [
+    {
+      ...rootCategory.value,
+      children: getSubtree(rootCategory.value.databaseId),
+    },
+  ]
+})
+
+// 🔹 Parent van de huidige categorie (voor "terug" link)
 const parentCategory = computed(() => {
   if (!currentCategory.value?.parentId) return null
   return productCategoryTerms.find(
@@ -59,11 +88,12 @@ const parentCategory = computed(() => {
   )
 })
 
-// 🔹 Directe subcategorieën van de huidige categorie
+// 🔹 Directe subcategorieën van huidige categorie
 const subCategories = computed(() => {
   if (!currentCategory.value) return []
-  const currentId = currentCategory.value.databaseId
-  return productCategoryTerms.filter((t) => t.parentId === currentId)
+  return productCategoryTerms.filter(
+    (t) => t.parentId === currentCategory.value.databaseId
+  )
 })
 
 // 🔹 Filter attributen (kleur, maat, etc.)
@@ -79,11 +109,13 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
 
     <div class="relative z-30 grid mb-12 space-y-8 divide-y">
 
-      <!-- 📂 Categorieën -->
-      <div v-if="!hideCategories" class="pt-4">
-        <h3 class="font-semibold text-gray-900 mb-3">Categorieën</h3>
+      <!-- 📂 Dynamische categorieboom -->
+      <div v-if="!hideCategories && filteredTree?.length" class="pt-4">
+        <h3 class="font-semibold text-gray-900 mb-3">
+          Categorieën<span v-if="rootCategory"> — {{ rootCategory.name }}</span>
+        </h3>
 
-        <!-- 🔝 Parentcategorie (navigatie omhoog) -->
+        <!-- 🔙 Link naar bovenliggende categorie -->
         <div v-if="parentCategory" class="mb-2">
           <NuxtLink
             :to="`/${parentCategory.slug}`"
@@ -93,17 +125,7 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
           </NuxtLink>
         </div>
 
-        <!-- 🔸 Huidige categorie -->
-        <div v-if="currentCategory" class="mb-3">
-          <NuxtLink
-            :to="`/${currentCategory.slug}`"
-            class="block font-medium text-primary-600 underline decoration-2"
-          >
-            {{ currentCategory.name }}
-          </NuxtLink>
-        </div>
-
-        <!-- 🔹 Subcategorieën -->
+        <!-- 🔹 Subcategorieën van huidige categorie -->
         <ul v-if="subCategories?.length" class="space-y-2 ml-2 border-l border-gray-200 pl-3">
           <li v-for="sub in subCategories" :key="sub.id">
             <NuxtLink
@@ -116,18 +138,32 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
           </li>
         </ul>
 
-        <!-- 🔸 Als er geen subcategorieën zijn, toon top-level -->
-        <ul v-else class="space-y-2">
-          <li v-for="cat in categoryTree" :key="cat.id">
-            <NuxtLink
-              :to="`/${cat.slug}`"
-              class="block text-gray-700 hover:text-primary-600 transition-colors"
-              :class="{ 'underline text-primary-600 font-medium': cat.slug === currentSlug }"
-            >
-              {{ cat.name }}
-            </NuxtLink>
-          </li>
-        </ul>
+        <!-- 🔹 Anders toon de volledige boom van de root -->
+        <template v-else>
+          <ul v-for="cat in filteredTree" :key="cat.id" class="space-y-2">
+            <li>
+              <NuxtLink
+                :to="`/${cat.slug}`"
+                class="block text-gray-800 font-medium hover:text-primary-600 transition-colors"
+                :class="{ 'underline text-primary-600': cat.slug === currentSlug }"
+              >
+                {{ cat.name }}
+              </NuxtLink>
+
+              <ul v-if="cat.children?.length" class="mt-2 space-y-1 border-l border-gray-100 pl-3">
+                <li v-for="child in cat.children" :key="child.id">
+                  <NuxtLink
+                    :to="`/${child.slug}`"
+                    class="block text-gray-700 hover:text-primary-600"
+                    :class="{ 'underline text-primary-600': child.slug === currentSlug }"
+                  >
+                    {{ child.name }}
+                  </NuxtLink>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </template>
       </div>
 
       <!-- 💰 Prijsfilter -->
@@ -155,60 +191,23 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({
 </template>
 
 <style scoped lang="postcss">
+#filters {
+  @apply w-[280px];
+}
+ul {
+  @apply list-none pl-0;
+}
+ul ul {
+  @apply ml-4 border-l border-gray-100 pl-3;
+}
+a.underline {
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+}
 .show-filters .filter-overlay {
   @apply block;
 }
 .show-filters {
   overflow: hidden;
-}
-
-#filters {
-  @apply w-[280px];
-
-  & .slider-connect {
-    @apply bg-primary;
-  }
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-/* 🔹 UX: betere hiërarchie */
-ul {
-  @apply list-none pl-0;
-}
-
-ul ul {
-  @apply ml-4 border-l border-gray-100 pl-3;
-}
-
-a.underline {
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 2px;
-}
-
-.price-input {
-  @apply border rounded-xl outline-none leading-tight w-full p-2 transition-all;
-
-  &.active {
-    @apply border-gray-400 pl-6;
-  }
-}
-
-@media (max-width: 768px) {
-  #filters {
-    @apply bg-white h-full p-8 transform pl-2 transition-all ease-in-out bottom-0 left-4 -translate-x-[110vw] duration-300 overflow-auto fixed;
-
-    box-shadow:
-      -100px 0 0 white,
-      -200px 0 0 white,
-      -300px 0 0 white;
-    z-index: 60;
-  }
-
-  .show-filters #filters {
-    @apply transform-none;
-  }
 }
 </style>
