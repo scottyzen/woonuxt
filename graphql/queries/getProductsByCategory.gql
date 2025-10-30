@@ -1,8 +1,36 @@
 query GetProductsByCategory($slug: ID!, $first: Int = 24) {
   productCategory(id: $slug, idType: SLUG) {
+    id
     name
     slug
     description
+
+    # ✅ Voeg hier de categorie afbeelding toe (werkt met WooCommerce + WPGraphQL)
+    image {
+      sourceUrl
+      altText
+    }
+
+    # ✅ Dynamische breadcrumbs via ancestors
+    ancestors {
+      nodes {
+        id
+        name
+        slug
+      }
+    }
+
+    # ✅ Ophalen van de directe subcategorieën (optioneel, voor filters of navigatie)
+    children {
+      nodes {
+        id
+        name
+        slug
+        count
+      }
+    }
+
+    # ✅ Producten binnen deze categorie
     products(first: $first) {
       nodes {
         id
