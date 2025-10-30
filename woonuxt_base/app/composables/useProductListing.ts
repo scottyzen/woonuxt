@@ -1,40 +1,41 @@
-import { computed, onMounted, watch } from 'vue';
-import { useRoute, useRouter } from '#imports';
+import { computed, onMounted, watch, watchEffect, nextTick } from 'vue';
+import { useRoute } from '#imports';
 
 export function useProductListing() {
   const route = useRoute();
-  const router = useRouter();
-  const { setProducts, updateProductList, setBaseFilter } = useProducts(); 
-  // ⬆️ We gaan zo stap 3 doen: kleine uitbreiding in useProducts.ts met setBaseFilter(...)
+  const { setProducts, updateProductList, setBaseFilter } = useProducts();
   const { storeSettings } = useAppConfig();
   const { isQueryEmpty } = useHelpers();
 
-  const isCategoryPage = computed(() => route.name === 'categorySlug' || route.params?.categorySlug);
+  // ✅ Detecteer of dit een categoriepagina is
+  const isCategoryPage = computed(() => !!route.params?.categorySlug);
 
-  // build variables & query key
+  // ✅ Kies de juiste querynaam (exacte match met jouw .gql)
   const queryKey = computed(() =>
-    isCategoryPage.value ? 'getProductsByCategory' : 'getProducts'
+    isCategoryPage.value ? 'GetProductsByCategory' : 'getProducts'
   );
 
+  // ✅ Stel de juiste GraphQL-variabelen in
   const variables = computed(() =>
-    isCategoryPage.value ? { slug: String(route.params.categorySlug) } : { first: 24 }
+    isCategoryPage.value
+      ? { slug: String(route.params.categorySlug), first: 24 }
+      : { first: 24 }
   );
-console.log('🔧 queryKey:', queryKey.value);
-console.log('🔧 variables:', variables.value);
-// Fetch via Woonuxt helper
-const { data } = useAsyncGql(queryKey.value, variables.value, {
-  // SSR + cache hints (pas aan naar je beleid)
-  cache: 'force-cache',
-  revalidate: 60,
-});
 
-// 🔍 Debug: laat zien wat GraphQL oplevert
-watchEffect(() => {
-  console.log('🧩 Category query data:', data.value);
-});
+  // ✅ Ophalen via useAsyncGql
+  const { data, pending, error } = useAsyncGql(queryKey.value, variables.value, {
+    cache: 'force-cache',
+    revalidate: 60,
+  });
 
+  // ✅ Debug (mag je later verwijderen)
+  watchEffect(() => {
+    if (data.value) {
+      console.log('🧩 GraphQL response:', data.value);
+    }
+  });
 
-  // Normalize products from either query
+  // ✅ Normaliseer producten afhankelijk van de query
   const allProducts = computed(() => {
     if (isCategoryPage.value) {
       return data.value?.productCategory?.products?.nodes ?? [];
@@ -42,28 +43,35 @@ watchEffect(() => {
     return data.value?.products?.nodes ?? [];
   });
 
-  // Set initial products in the shared store
-  // and lock category as a base filter if we're on a category page
-  const lockCategory = () => {
-    if (!isCategoryPage.value) return;
-    const slug = String(route.params.categorySlug);
-    // 1) Zet een 'baseFilter' die altijd wordt toegepast in updateProductList()
-    setBaseFilter({ categorySlug: slug });
-    // 2) (optioneel) Zorg dat 'category' niet uitzetbaar is in UI (zie stap 4)
+  // ✅ Zet producten in de store + lock categorie-filter
+  const initProducts = async () => {
+    await nextTick();
+
+    if (isCategoryPage.value) {
+      const slug = String(route.params.categorySlug);
+      setBaseFilter({ categorySlug: slug });
+    }
+
+    if (allProducts.value?.length) {
+      setProducts(allProducts.value);
+    }
   };
 
-  // initialize
-  if (allProducts.value?.length) setProducts(allProducts.value);
-  lockCategory();
+  // ✅ Bereken of er producten zijn
+  const hasProducts = computed<boolean>(
+    () => Array.isArray(allProducts.value) && allProducts.value.length > 0
+  );
 
-  const hasProducts = computed<boolean>(() => Array.isArray(allProducts.value) && allProducts.value.length > 0);
-
+  // ✅ Init bij laden
   onMounted(() => {
-    // Trigger client-side filtering once the dataset lives in the store
-    if (!isQueryEmpty.value) updateProductList();
+    initProducts();
+
+    if (!isQueryEmpty.value) {
+      updateProductList();
+    }
   });
 
-  // Re-run filters on query change (facet filters, sort, prijs, etc.)
+  // ✅ Herbereken bij filterquery-verandering (facetfilters, sort, etc.)
   watch(
     () => route.query,
     () => {
@@ -71,14 +79,13 @@ watchEffect(() => {
     }
   );
 
-  // Re-fetch when category slug changes
+  // ✅ Herladen als slug verandert (nieuwe categorie)
   watch(
     () => route.params.categorySlug,
     async (newSlug, oldSlug) => {
-      if (newSlug !== oldSlug) {
-        // update base filter
+      if (newSlug && newSlug !== oldSlug) {
         setBaseFilter({ categorySlug: String(newSlug) });
-        // (optioneel) kun je hier een nieuwe fetch doen indien je data niet server-side revalidate
+        await initProducts();
         updateProductList();
       }
     }
@@ -89,5 +96,7 @@ watchEffect(() => {
     hasProducts,
     storeSettings,
     isCategoryPage,
+    pending,
+    error,
   };
 }
