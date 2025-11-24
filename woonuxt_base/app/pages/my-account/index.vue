@@ -9,27 +9,16 @@ const showLoader = computed(() => !cart.value && !viewer.value);
 // Check if user should be redirected and prevent dashboard from showing
 const isRedirecting = ref(false);
 
-// Helper function to handle redirect logic
-const handleRedirect = () => {
-  if (isRedirecting.value) return; // Prevent multiple redirects
-
-  const redirectResult = handlePostLoginRedirect();
-  if (redirectResult) {
-    isRedirecting.value = true;
-  }
-};
-
-// Handle redirect if user is already authenticated when page loads (e.g., OAuth flow)
-onMounted(() => {
-  if (viewer.value) {
-    handleRedirect();
-  }
-});
-
-// Watch for authentication changes during login process
-watch(viewer, (newViewer) => {
-  if (newViewer) {
-    handleRedirect();
+// Handle redirect only after successful login (when returnUrl is set)
+// This prevents redirecting users who are already logged in and navigating to my-account directly
+watch(viewer, (newViewer, oldViewer) => {
+  // Only redirect if user just logged in (viewer changed from null to a user)
+  // and there's a stored return URL
+  if (newViewer && !oldViewer && !isRedirecting.value) {
+    const redirectResult = handlePostLoginRedirect();
+    if (redirectResult) {
+      isRedirecting.value = true;
+    }
   }
 });
 
