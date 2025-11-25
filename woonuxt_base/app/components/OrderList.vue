@@ -17,7 +17,7 @@ const goToOrder = (orderNumber: string): void => {
 </script>
 
 <template>
-  <div class="bg-white rounded-lg flex shadow min-h-[250px] p-4 md:p-12 justify-center items-center">
+  <div class="bg-white rounded-lg flex shadow-sm border border-gray-100 min-h-[250px] p-4 md:p-8 justify-center items-center">
     <div v-if="orders && orders.length" class="w-full">
       <table class="w-full text-left table-auto" aria-label="Order List">
         <thead>

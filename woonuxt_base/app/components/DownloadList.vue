@@ -12,7 +12,7 @@ const refresh = () => {
 </script>
 
 <template>
-  <div class="bg-white rounded-lg flex shadow min-h-[250px] p-4 md:p-12 justify-center items-center">
+  <div class="bg-white rounded-lg flex shadow-sm border border-gray-100 min-h-[250px] p-4 md:p-8 justify-center items-center">
     <div v-if="downloads && downloads.length" class="w-full">
       <DownloadableItems :downloadableItems="downloads" />
       <div class="text-center flex justify-center w-full mt-8">
