@@ -25,30 +25,30 @@ watch(isFiltersActive, () => {
 
 <template>
   <div>
-    <div class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center text-gray-900" @click="isOpen = !isOpen">
+    <div class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center text-gray-900 dark:text-white" @click="isOpen = !isOpen">
       <span>{{ $t('shop.price') }}</span>
-      <Icon name="ion:chevron-down-outline" class="transform" :class="isOpen ? 'rotate-180' : ''" />
+      <Icon name="ion:chevron-down-outline" class="transform text-gray-600 dark:text-gray-400" :class="isOpen ? 'rotate-180' : ''" />
     </div>
     <div v-show="isOpen" class="mt-3 grid gap-4 grid-cols-2">
       <div class="flex relative items-center">
         <input
           id="price-from"
           v-model="price[0]"
-          class="bg-white border rounded-lg max-w-full border-gray-200 leading-none w-auto p-2 pl-6 md:text-sm"
+          class="bg-white dark:bg-gray-700 border rounded-lg max-w-full border-gray-200 dark:border-gray-600 leading-none w-auto p-2 pl-6 md:text-sm text-gray-900 dark:text-white"
           type="number"
           placeholder="From"
           min="0" />
-        <label for="price-from" class="leading-none px-2 text-gray-400 absolute" v-html="currencySymbol" />
+        <label for="price-from" class="leading-none px-2 text-gray-400 dark:text-gray-500 absolute" v-html="currencySymbol" />
       </div>
       <div class="flex relative items-center">
         <input
           id="price-to"
           v-model="price[1]"
-          class="bg-white border rounded-lg max-w-full border-gray-200 leading-none w-auto p-2 pl-6 md:text-sm"
+          class="bg-white dark:bg-gray-700 border rounded-lg max-w-full border-gray-200 dark:border-gray-600 leading-none w-auto p-2 pl-6 md:text-sm text-gray-900 dark:text-white"
           type="number"
           placeholder="Up to"
           min="1" />
-        <label for="price-to" class="leading-none px-2 text-gray-400 absolute" v-html="currencySymbol" />
+        <label for="price-to" class="leading-none px-2 text-gray-400 dark:text-gray-500 absolute" v-html="currencySymbol" />
       </div>
       <div class="mx-1 mt-1 col-span-full">
         <Slider v-model="price" :tooltips="false" :min="0" :max="maxPrice" ariaLabelledby="price-from price-to" @update="applyPrice" />
