@@ -41,7 +41,8 @@ const moveToWishList = () => {
       </NuxtLink>
       <div class="flex-1">
         <div class="flex gap-x-2 gap-y-1 flex-wrap items-center">
-          <NuxtLink class="leading-tight" :to="productSlug">{{ productType.name }}</NuxtLink>
+          <!-- 2025-6-4：line-clamp-2 is used to prevent product names that are too long from displaying incorrectly—on desktop in the checkout page and on mobile in the shopping cart. -->
+          <NuxtLink class="leading-tight line-clamp-2" :to="productSlug" :title="productType.name">{{ productType.name }}</NuxtLink>
           <span v-if="productType.salePrice" class="text-[10px] border-green-200 leading-none bg-green-100 inline-block p-0.5 rounded text-green-600 border">
             Save {{ salePercentage }}
           </span>
