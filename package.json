@@ -12,9 +12,9 @@
   },
   "dependencies": {
     "@nuxtjs/color-mode": "^4.0.0",
-    "@stripe/stripe-js": "^8.5.2",
+    "@stripe/stripe-js": "^8.5.3",
     "@vueform/slider": "^2.1.10",
-    "@vueuse/core": "^14.0.0"
+    "@vueuse/core": "^14.1.0"
   },
   "devDependencies": {
     "@nuxt/icon": "^2.1.0",
@@ -24,6 +24,6 @@
     "@tailwindcss/typography": "^0.5.19",
     "nuxt": "^4.2.1",
     "nuxt-graphql-client": "^0.2.46",
-    "prettier": "^3.6.2"
+    "prettier": "^3.7.3"
   }
 }
