@@ -58,3 +58,17 @@ watch(isFiltersActive, () => {
 </template>
 
 <style src="@vueform/slider/themes/default.css"></style>
+
+<style scoped>
+:deep(.slider-base) {
+  @apply dark:bg-gray-600;
+}
+
+:deep(.slider-handle) {
+  @apply dark:bg-white dark:border-gray-500;
+}
+
+:deep(.slider-tooltip) {
+  @apply dark:bg-gray-700 dark:text-white;
+}
+</style>

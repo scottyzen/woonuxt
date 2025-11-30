@@ -38,8 +38,8 @@ const imagetoDisplay = computed<string>(() => {
 
 <template>
   <div class="relative group">
-    <NuxtLink v-if="node.slug" :to="`/product/${decodeURIComponent(node.slug)}`" :title="node.name">
-      <SaleBadge :node class="absolute top-2 right-2" />
+    <NuxtLink v-if="node.slug" :to="`/product/${decodeURIComponent(node.slug)}`" :title="node.name" class="block relative">
+      <SaleBadge :node class="absolute top-2 right-2 z-10" />
       <NuxtImg
         v-if="imagetoDisplay"
         :width="imgWidth"
@@ -49,14 +49,14 @@ const imagetoDisplay = computed<string>(() => {
         :title="node.image?.title || node.name"
         :loading="index <= 3 ? 'eager' : 'lazy'"
         :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
-        class="rounded-lg object-top object-cover w-full aspect-9/8"
+        class="rounded-lg object-top object-cover w-full aspect-9/8 dark:brightness-90 dark:contrast-95"
         placeholder
         placeholder-class="blur-xl" />
     </NuxtLink>
     <div class="p-2">
       <StarRating v-if="storeSettings.showReviews" :rating="node.averageRating" :count="node.reviewCount" />
       <NuxtLink v-if="node.slug" :to="`/product/${decodeURIComponent(node.slug)}`" :title="node.name">
-        <h2 class="mb-2 font-light leading-tight text-gray-900 dark:text-gray-100 group-hover:text-primary">{{ node.name }}</h2>
+        <h2 class="mb-2 font-light leading-tight text-gray-900 dark:text-gray-200 group-hover:text-primary">{{ node.name }}</h2>
       </NuxtLink>
       <ProductPrice class="text-sm" :sale-price="node.salePrice" :regular-price="node.regularPrice" />
     </div>

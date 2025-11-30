@@ -16,7 +16,7 @@ watch(cart, (val) => {
 <template>
   <button
     type="submit"
-    class="rounded-lg flex font-bold bg-gray-800 text-white text-center min-w-[150px] p-2.5 gap-4 items-center justify-center focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-400"
+    class="rounded-lg flex font-bold bg-gray-800 dark:bg-gray-700 text-white text-center min-w-[150px] p-2.5 gap-4 items-center justify-center focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-400 dark:disabled:bg-gray-600 hover:bg-gray-700 dark:hover:bg-gray-600"
     :disabled="props.disabled"
     @click="isLoading = true">
     <span>{{ addToCartButtonText }}</span>

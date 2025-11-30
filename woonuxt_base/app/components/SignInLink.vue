@@ -43,11 +43,23 @@ const linkTitle = computed<string>(() => viewer.value?.username || 'Sign In');
 
 .avatar {
   .account-dropdown {
-    @apply absolute gap-2 top-6 -right-2  z-50 p-2 bg-white border border-gray-200 rounded-lg shadow-lg text-sm text-gray-700 hidden;
+    @apply absolute gap-2 top-6 -right-2 z-50 p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg dark:shadow-gray-900/50 text-sm text-gray-700 dark:text-gray-300 hidden;
 
     a,
     button {
       @apply flex gap-2 items-center p-2 rounded whitespace-nowrap min-w-[200px];
+    }
+
+    a:hover {
+      @apply bg-gray-100 dark:bg-gray-700;
+    }
+
+    button {
+      @apply text-red-600 dark:text-red-400;
+    }
+
+    button:hover {
+      @apply bg-red-50 dark:bg-red-900/20;
     }
   }
 
