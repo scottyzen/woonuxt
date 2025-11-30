@@ -2,18 +2,18 @@
   <div>
     <!-- Page Header -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Billing & Payments</h1>
+      <h1 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Billing & Shipping</h1>
       <p class="text-gray-600 dark:text-gray-400">Manage your billing and shipping addresses for orders and deliveries</p>
     </div>
 
     <form class="space-y-6" @submit.prevent="saveChanges">
       <!-- Billing Address Card -->
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
-        <div class="p-6 md:px-8 pb-4 border-b border-gray-100 dark:border-gray-700">
+      <div class="bg-white border border-gray-100 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <div class="p-6 pb-4 border-b border-gray-100 md:px-8 dark:border-gray-700">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Billing Address</h3>
         </div>
         <!-- Billing Fields -->
-        <div class="grid p-6 md:p-8 gap-6 md:grid-cols-2" v-if="customer.billing">
+        <div class="grid gap-6 p-6 md:p-8 md:grid-cols-2" v-if="customer.billing">
           <div class="w-full space-y-2">
             <label for="billing-first-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('billing.firstName') }}</label>
             <input
@@ -23,7 +23,7 @@
               autocomplete="given-name"
               type="text"
               required
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
@@ -35,7 +35,7 @@
               autocomplete="family-name"
               type="text"
               required
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
@@ -48,12 +48,12 @@
               placeholder="+1 234 567 8901"
               autocomplete="tel"
               type="tel"
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
             <label for="billing-company" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >Company <span class="text-gray-400 dark:text-gray-500 font-normal">({{ $t('general.optional') }})</span></label
+              >Company <span class="font-normal text-gray-400 dark:text-gray-500">({{ $t('general.optional') }})</span></label
             >
             <input
               id="billing-company"
@@ -61,7 +61,7 @@
               placeholder="Company Name"
               autocomplete="organization"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
@@ -72,12 +72,12 @@
               placeholder="123 Main St"
               autocomplete="address-line1"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
             <label for="billing-address-2" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >{{ $t('billing.address2') }} <span class="text-gray-400 dark:text-gray-500 font-normal">({{ $t('general.optional') }})</span></label
+              >{{ $t('billing.address2') }} <span class="font-normal text-gray-400 dark:text-gray-500">({{ $t('general.optional') }})</span></label
             >
             <input
               id="billing-address-2"
@@ -85,7 +85,7 @@
               placeholder="Apartment, studio, or floor"
               autocomplete="address-line2"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
@@ -96,12 +96,12 @@
               placeholder="New York"
               autocomplete="address-level2"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2" v-if="customer.billing.state && customer.billing.country">
             <label for="billing-state" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >{{ $t('billing.state') }} <span class="text-gray-400 dark:text-gray-500 font-normal">({{ $t('general.optional') }})</span></label
+              >{{ $t('billing.state') }} <span class="font-normal text-gray-400 dark:text-gray-500">({{ $t('general.optional') }})</span></label
             >
             <StateSelect id="billing-state" v-model="customer.billing.state" :default-value="customer.billing.state" :country-code="customer.billing.country" />
           </div>
@@ -119,10 +119,10 @@
               placeholder="10001"
               autocomplete="postal-code"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
           </div>
 
-          <div class="w-full col-span-full space-y-2">
+          <div class="w-full space-y-2 col-span-full">
             <label for="billing-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
               {{ $t('billing.email') }}
             </label>
@@ -133,18 +133,18 @@
               autocomplete="email"
               type="email"
               required
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
           </div>
         </div>
       </div>
 
       <!-- Shipping Address Card -->
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
-        <div class="p-6 md:px-8 pb-4 border-b border-gray-100 dark:border-gray-700">
+      <div class="bg-white border border-gray-100 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <div class="p-6 pb-4 border-b border-gray-100 md:px-8 dark:border-gray-700">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Shipping Address</h3>
         </div>
         <!-- Shipping Fields -->
-        <div class="grid p-6 md:p-8 gap-6 md:grid-cols-2" v-if="customer.shipping">
+        <div class="grid gap-6 p-6 md:p-8 md:grid-cols-2" v-if="customer.shipping">
           <div class="w-full space-y-2">
             <label for="shipping-first-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('billing.firstName') }}</label>
             <input
@@ -154,7 +154,7 @@
               autocomplete="given-name"
               type="text"
               required
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
@@ -166,7 +166,7 @@
               autocomplete="family-name"
               type="text"
               required
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
@@ -179,12 +179,12 @@
               placeholder="+1 234 567 8901"
               autocomplete="tel"
               type="tel"
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
             <label for="shipping-company" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >Company <span class="text-gray-400 dark:text-gray-500 font-normal">({{ $t('general.optional') }})</span></label
+              >Company <span class="font-normal text-gray-400 dark:text-gray-500">({{ $t('general.optional') }})</span></label
             >
             <input
               id="shipping-company"
@@ -192,7 +192,7 @@
               placeholder="Company Name"
               autocomplete="organization"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
@@ -203,12 +203,12 @@
               placeholder="O'Connell Street 47"
               autocomplete="address-line1"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
             <label for="shipping-address-2" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >{{ $t('billing.address2') }} <span class="text-gray-400 dark:text-gray-500 font-normal">({{ $t('general.optional') }})</span></label
+              >{{ $t('billing.address2') }} <span class="font-normal text-gray-400 dark:text-gray-500">({{ $t('general.optional') }})</span></label
             >
             <input
               id="shipping-address-2"
@@ -216,7 +216,7 @@
               placeholder="Apartment, studio, or floor"
               autocomplete="address-line2"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
@@ -227,12 +227,12 @@
               placeholder="New York"
               autocomplete="address-level2"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2" v-if="customer.shipping.state && customer.shipping.country">
             <label for="shipping-state" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >{{ $t('billing.state') }} <span class="text-gray-400 dark:text-gray-500 font-normal">({{ $t('general.optional') }})</span></label
+              >{{ $t('billing.state') }} <span class="font-normal text-gray-400 dark:text-gray-500">({{ $t('general.optional') }})</span></label
             >
             <StateSelect
               id="shipping-state"
@@ -254,14 +254,14 @@
               placeholder="10001"
               autocomplete="postal-code"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
           </div>
         </div>
 
         <!-- Submit Button -->
-        <div class="p-6 pt-4 bg-gray-50 dark:bg-gray-800 rounded-b-lg border-t border-gray-100 dark:border-gray-700">
+        <div class="p-6 pt-4 border-t border-gray-100 rounded-b-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
           <button
-            class="ml-auto flex items-center justify-center gap-3 px-6 py-2 text-white rounded-lg font-semibold transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+            class="flex items-center justify-center gap-3 px-6 py-2 ml-auto font-semibold text-white transition-colors rounded-lg disabled:bg-gray-400 disabled:cursor-not-allowed"
             :class="button.color"
             :disabled="loading">
             <LoadingIcon v-if="loading" color="#fff" size="18" />
