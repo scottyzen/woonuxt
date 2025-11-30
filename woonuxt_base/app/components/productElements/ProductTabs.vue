@@ -14,8 +14,11 @@ const show = ref(initialTab);
       <button v-if="product.description" type="button" :class="show === 0 ? 'active' : ''" @click.prevent="show = 0">
         {{ $t('shop.productDescription') }}
       </button>
-      <button v-if="storeSettings.showReviews" type="button" :class="show === 1 ? 'active' : ''" @click.prevent="show = 1">
-        {{ $t('shop.reviews') }} ({{ product.reviewCount }})
+      <button v-if="storeSettings.showReviews" type="button" class="flex items-center gap-2" :class="show === 1 ? 'active' : ''" @click.prevent="show = 1">
+        {{ $t('shop.reviews') }}
+        <span class="bg-primary rounded-full text-white leading-none min-w-[18px] p-[3px] text-[12px] inline-flex justify-center items-center">{{
+          product.reviewCount
+        }}</span>
       </button>
     </nav>
     <div class="tab-contents">
