@@ -2,20 +2,20 @@
   <div>
     <!-- Page Header -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900 mb-2">Billing & Payments</h1>
-      <p class="text-gray-600">Manage your billing and shipping addresses for orders and deliveries</p>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Billing & Payments</h1>
+      <p class="text-gray-600 dark:text-gray-400">Manage your billing and shipping addresses for orders and deliveries</p>
     </div>
 
     <form class="space-y-6" @submit.prevent="saveChanges">
       <!-- Billing Address Card -->
-      <div class="bg-white rounded-lg shadow-sm border border-gray-100">
-        <div class="p-6 md:px-8 pb-4 border-b border-gray-100">
-          <h3 class="text-lg font-semibold text-gray-900">Billing Address</h3>
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+        <div class="p-6 md:px-8 pb-4 border-b border-gray-100 dark:border-gray-700">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Billing Address</h3>
         </div>
         <!-- Billing Fields -->
         <div class="grid p-6 md:p-8 gap-6 md:grid-cols-2" v-if="customer.billing">
           <div class="w-full space-y-2">
-            <label for="billing-first-name" class="block text-sm font-medium text-gray-700">{{ $t('billing.firstName') }}</label>
+            <label for="billing-first-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('billing.firstName') }}</label>
             <input
               id="billing-first-name"
               v-model="customer.billing.firstName"
@@ -23,11 +23,11 @@
               autocomplete="given-name"
               type="text"
               required
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 focus:bg-white" />
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
-            <label for="billing-last-name" class="block text-sm font-medium text-gray-700">{{ $t('billing.lastName') }}</label>
+            <label for="billing-last-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('billing.lastName') }}</label>
             <input
               id="billing-last-name"
               v-model="customer.billing.lastName"
@@ -35,11 +35,11 @@
               autocomplete="family-name"
               type="text"
               required
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 focus:bg-white" />
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
-            <label for="billing-phone" class="block text-sm font-medium text-gray-700">
+            <label for="billing-phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
               {{ $t('billing.phone') }}
             </label>
             <input
@@ -48,12 +48,12 @@
               placeholder="+1 234 567 8901"
               autocomplete="tel"
               type="tel"
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 focus:bg-white" />
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
-            <label for="billing-company" class="block text-sm font-medium text-gray-700"
-              >Company <span class="text-gray-400 font-normal">({{ $t('general.optional') }})</span></label
+            <label for="billing-company" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >Company <span class="text-gray-400 dark:text-gray-500 font-normal">({{ $t('general.optional') }})</span></label
             >
             <input
               id="billing-company"
@@ -61,23 +61,23 @@
               placeholder="Company Name"
               autocomplete="organization"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 focus:bg-white" />
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
-            <label for="billing-address" class="block text-sm font-medium text-gray-700">{{ $t('billing.address1') }}</label>
+            <label for="billing-address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('billing.address1') }}</label>
             <input
               id="billing-address"
               v-model="customer.billing.address1"
               placeholder="123 Main St"
               autocomplete="address-line1"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 focus:bg-white" />
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
-            <label for="billing-address-2" class="block text-sm font-medium text-gray-700"
-              >{{ $t('billing.address2') }} <span class="text-gray-400 font-normal">({{ $t('general.optional') }})</span></label
+            <label for="billing-address-2" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >{{ $t('billing.address2') }} <span class="text-gray-400 dark:text-gray-500 font-normal">({{ $t('general.optional') }})</span></label
             >
             <input
               id="billing-address-2"
@@ -85,45 +85,45 @@
               placeholder="Apartment, studio, or floor"
               autocomplete="address-line2"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 focus:bg-white" />
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
-            <label for="billing-city" class="block text-sm font-medium text-gray-700">{{ $t('billing.city') }}</label>
+            <label for="billing-city" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('billing.city') }}</label>
             <input
               id="billing-city"
               v-model="customer.billing.city"
               placeholder="New York"
               autocomplete="address-level2"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 focus:bg-white" />
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2" v-if="customer.billing.state && customer.billing.country">
-            <label for="billing-state" class="block text-sm font-medium text-gray-700"
-              >{{ $t('billing.state') }} <span class="text-gray-400 font-normal">({{ $t('general.optional') }})</span></label
+            <label for="billing-state" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >{{ $t('billing.state') }} <span class="text-gray-400 dark:text-gray-500 font-normal">({{ $t('general.optional') }})</span></label
             >
             <StateSelect id="billing-state" v-model="customer.billing.state" :default-value="customer.billing.state" :country-code="customer.billing.country" />
           </div>
 
           <div class="w-full space-y-2" v-if="customer.billing.country">
-            <label for="billing-country" class="block text-sm font-medium text-gray-700">{{ $t('billing.country') }}</label>
+            <label for="billing-country" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('billing.country') }}</label>
             <CountrySelect id="billing-country" v-model="customer.billing.country" :default-value="customer.billing.country" />
           </div>
 
           <div class="w-full space-y-2">
-            <label for="billing-zip" class="block text-sm font-medium text-gray-700">{{ $t('billing.zip') }}</label>
+            <label for="billing-zip" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('billing.zip') }}</label>
             <input
               id="billing-zip"
               v-model="customer.billing.postcode"
               placeholder="10001"
               autocomplete="postal-code"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 focus:bg-white" />
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
           </div>
 
           <div class="w-full col-span-full space-y-2">
-            <label for="billing-email" class="block text-sm font-medium text-gray-700">
+            <label for="billing-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
               {{ $t('billing.email') }}
             </label>
             <input
@@ -133,20 +133,20 @@
               autocomplete="email"
               type="email"
               required
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 focus:bg-white" />
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
           </div>
         </div>
       </div>
 
       <!-- Shipping Address Card -->
-      <div class="bg-white rounded-lg shadow-sm border border-gray-100">
-        <div class="p-6 md:px-8 pb-4 border-b border-gray-100">
-          <h3 class="text-lg font-semibold text-gray-900">Shipping Address</h3>
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+        <div class="p-6 md:px-8 pb-4 border-b border-gray-100 dark:border-gray-700">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Shipping Address</h3>
         </div>
         <!-- Shipping Fields -->
         <div class="grid p-6 md:p-8 gap-6 md:grid-cols-2" v-if="customer.shipping">
           <div class="w-full space-y-2">
-            <label for="shipping-first-name" class="block text-sm font-medium text-gray-700">{{ $t('billing.firstName') }}</label>
+            <label for="shipping-first-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('billing.firstName') }}</label>
             <input
               id="shipping-first-name"
               v-model="customer.shipping.firstName"
@@ -154,11 +154,11 @@
               autocomplete="given-name"
               type="text"
               required
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 focus:bg-white" />
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
-            <label for="shipping-last-name" class="block text-sm font-medium text-gray-700">{{ $t('billing.lastName') }}</label>
+            <label for="shipping-last-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('billing.lastName') }}</label>
             <input
               id="shipping-last-name"
               v-model="customer.shipping.lastName"
@@ -166,11 +166,11 @@
               autocomplete="family-name"
               type="text"
               required
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 focus:bg-white" />
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
-            <label for="shipping-phone" class="block text-sm font-medium text-gray-700">
+            <label for="shipping-phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
               {{ $t('billing.phone') }}
             </label>
             <input
@@ -179,12 +179,12 @@
               placeholder="+1 234 567 8901"
               autocomplete="tel"
               type="tel"
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 focus:bg-white" />
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
-            <label for="shipping-company" class="block text-sm font-medium text-gray-700"
-              >Company <span class="text-gray-400 font-normal">({{ $t('general.optional') }})</span></label
+            <label for="shipping-company" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >Company <span class="text-gray-400 dark:text-gray-500 font-normal">({{ $t('general.optional') }})</span></label
             >
             <input
               id="shipping-company"
@@ -192,23 +192,23 @@
               placeholder="Company Name"
               autocomplete="organization"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 focus:bg-white" />
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
-            <label for="shipping-address" class="block text-sm font-medium text-gray-700">{{ $t('billing.address1') }}</label>
+            <label for="shipping-address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('billing.address1') }}</label>
             <input
               id="shipping-address"
               v-model="customer.shipping.address1"
               placeholder="O'Connell Street 47"
               autocomplete="address-line1"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 focus:bg-white" />
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
-            <label for="shipping-address-2" class="block text-sm font-medium text-gray-700"
-              >{{ $t('billing.address2') }} <span class="text-gray-400 font-normal">({{ $t('general.optional') }})</span></label
+            <label for="shipping-address-2" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >{{ $t('billing.address2') }} <span class="text-gray-400 dark:text-gray-500 font-normal">({{ $t('general.optional') }})</span></label
             >
             <input
               id="shipping-address-2"
@@ -216,23 +216,23 @@
               placeholder="Apartment, studio, or floor"
               autocomplete="address-line2"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 focus:bg-white" />
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2">
-            <label for="shipping-city" class="block text-sm font-medium text-gray-700">{{ $t('billing.city') }}</label>
+            <label for="shipping-city" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('billing.city') }}</label>
             <input
               id="shipping-city"
               v-model="customer.shipping.city"
               placeholder="New York"
               autocomplete="address-level2"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 focus:bg-white" />
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
           </div>
 
           <div class="w-full space-y-2" v-if="customer.shipping.state && customer.shipping.country">
-            <label for="shipping-state" class="block text-sm font-medium text-gray-700"
-              >{{ $t('billing.state') }} <span class="text-gray-400 font-normal">({{ $t('general.optional') }})</span></label
+            <label for="shipping-state" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >{{ $t('billing.state') }} <span class="text-gray-400 dark:text-gray-500 font-normal">({{ $t('general.optional') }})</span></label
             >
             <StateSelect
               id="shipping-state"
@@ -242,24 +242,24 @@
           </div>
 
           <div class="w-full space-y-2" v-if="customer.shipping.country">
-            <label for="shipping-country" class="block text-sm font-medium text-gray-700">{{ $t('billing.country') }}</label>
+            <label for="shipping-country" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('billing.country') }}</label>
             <CountrySelect id="shipping-country" v-model="customer.shipping.country" :default-value="customer.shipping?.country" />
           </div>
 
           <div class="w-full space-y-2">
-            <label for="shipping-zip" class="block text-sm font-medium text-gray-700">{{ $t('billing.zip') }}</label>
+            <label for="shipping-zip" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('billing.zip') }}</label>
             <input
               id="shipping-zip"
               v-model="customer.shipping.postcode"
               placeholder="10001"
               autocomplete="postal-code"
               type="text"
-              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 focus:bg-white" />
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
           </div>
         </div>
 
         <!-- Submit Button -->
-        <div class="p-6 pt-4 bg-gray-50 rounded-b-lg border-t border-gray-100">
+        <div class="p-6 pt-4 bg-gray-50 dark:bg-gray-800 rounded-b-lg border-t border-gray-100 dark:border-gray-700">
           <button
             class="ml-auto flex items-center justify-center gap-3 px-6 py-2 text-white rounded-lg font-semibold transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
             :class="button.color"

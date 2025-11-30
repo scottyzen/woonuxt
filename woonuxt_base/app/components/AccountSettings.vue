@@ -1,16 +1,11 @@
 <script setup lang="ts">
 const { locale, locales, setLocale } = useI18n();
-
-// Initialize theme from localStorage or default
-const savedTheme = ref('light');
-if (process.client) {
-  savedTheme.value = localStorage.getItem('nuxt-color-mode') || 'light';
-}
+const { colorMode } = useUserPreferences();
 
 // Settings data - preferences are real, others are mock
 const settings = ref({
   preferences: {
-    theme: savedTheme.value,
+    theme: colorMode.preference,
     language: locale.value,
   },
   notifications: {
@@ -52,19 +47,7 @@ const successMessage = ref(false);
 watch(
   () => settings.value.preferences.theme,
   (newTheme) => {
-    if (process.client) {
-      localStorage.setItem('nuxt-color-mode', newTheme);
-      // Update the HTML class
-      const html = document.documentElement;
-      html.classList.remove('light', 'dark');
-      if (newTheme !== 'system') {
-        html.classList.add(newTheme);
-      } else {
-        // Handle system preference
-        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        html.classList.add(isDark ? 'dark' : 'light');
-      }
-    }
+    colorMode.preference = newTheme;
   },
 );
 
@@ -81,18 +64,8 @@ watch(
 const saveSettings = async () => {
   saving.value = true;
 
-  // Apply theme
-  if (process.client) {
-    localStorage.setItem('nuxt-color-mode', settings.value.preferences.theme);
-    const html = document.documentElement;
-    html.classList.remove('light', 'dark');
-    if (settings.value.preferences.theme !== 'system') {
-      html.classList.add(settings.value.preferences.theme);
-    } else {
-      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      html.classList.add(isDark ? 'dark' : 'light');
-    }
-  }
+  // Apply theme - colorMode module handles localStorage and DOM automatically
+  colorMode.preference = settings.value.preferences.theme;
 
   // Apply language
   if (settings.value.preferences.language !== locale.value) {

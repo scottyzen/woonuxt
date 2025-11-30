@@ -117,28 +117,32 @@ const getRelativeTime = (timestamp: string) => {
   <div>
     <!-- Page Header -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900 mb-2">Account Activity</h1>
-      <p class="text-gray-600">Track your account activity, logins, and important events</p>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Account Activity</h1>
+      <p class="text-gray-600 dark:text-gray-400">Track your account activity, logins, and important events</p>
     </div>
 
     <!-- Filters -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 mb-6">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6">
       <div class="flex flex-wrap gap-2">
         <button
           v-for="filter in filters"
           :key="filter.value"
           @click="selectedFilter = filter.value"
           class="px-4 py-2 rounded-lg text-sm font-medium transition-all"
-          :class="selectedFilter === filter.value ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'">
+          :class="
+            selectedFilter === filter.value
+              ? 'bg-primary text-white'
+              : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+          ">
           {{ filter.label }}
         </button>
       </div>
     </div>
 
     <!-- Activity Timeline -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-100">
-      <div class="p-6 md:px-8 pb-4 border-b border-gray-100">
-        <h3 class="text-lg font-semibold text-gray-900">Recent Activity</h3>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+      <div class="p-6 md:px-8 pb-4 border-b border-gray-100 dark:border-gray-700">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Recent Activity</h3>
       </div>
 
       <div class="p-6 md:p-8">
@@ -147,7 +151,7 @@ const getRelativeTime = (timestamp: string) => {
             <!-- Timeline Line -->
             <div
               v-if="index !== filteredActivities.length - 1"
-              class="absolute left-5 top-12 w-0.5 h-full bg-gray-200"
+              class="absolute left-5 top-12 w-0.5 h-full bg-gray-200 dark:bg-gray-600"
               style="transform: translateX(-50%)"></div>
 
             <!-- Icon -->
@@ -160,20 +164,20 @@ const getRelativeTime = (timestamp: string) => {
             <!-- Content -->
             <div class="flex-1 min-w-0 pt-0.5">
               <div class="flex items-start justify-between gap-4 mb-1">
-                <h4 class="font-semibold text-gray-900">{{ activity.title }}</h4>
-                <time class="text-sm text-gray-500 shrink-0">{{ getRelativeTime(activity.timestamp) }}</time>
+                <h4 class="font-semibold text-gray-900 dark:text-white">{{ activity.title }}</h4>
+                <time class="text-sm text-gray-500 dark:text-gray-400 shrink-0">{{ getRelativeTime(activity.timestamp) }}</time>
               </div>
-              <p class="text-sm text-gray-600">{{ activity.description }}</p>
+              <p class="text-sm text-gray-600 dark:text-gray-400">{{ activity.description }}</p>
             </div>
           </div>
         </div>
 
-        <div v-else class="text-center py-12 text-gray-500">No activity found for this filter</div>
+        <div v-else class="text-center py-12 text-gray-500 dark:text-gray-400">No activity found for this filter</div>
       </div>
 
       <!-- Footer with export option -->
-      <div class="p-6 pt-4 bg-gray-50 rounded-b-lg border-t border-gray-100">
-        <button class="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-2 transition-colors">
+      <div class="p-6 pt-4 bg-gray-50 dark:bg-gray-800 rounded-b-lg border-t border-gray-100 dark:border-gray-700">
+        <button class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 flex items-center gap-2 transition-colors">
           <Icon name="ion:download-outline" size="18" />
           <span>Export activity log</span>
         </button>

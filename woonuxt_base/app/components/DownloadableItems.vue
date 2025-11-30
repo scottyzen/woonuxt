@@ -33,7 +33,7 @@ const props = defineProps({
 
 <style lang="postcss" scoped>
 tbody tr:nth-child(odd) {
-  background-color: #fafafa;
+  @apply bg-gray-50 dark:bg-gray-700/50;
 }
 
 thead tr {
@@ -41,11 +41,11 @@ thead tr {
 }
 
 tbody tr {
-  @apply text-xs sm:text-sm text-gray-500;
+  @apply text-xs sm:text-sm text-gray-500 dark:text-gray-400;
 }
 
 td,
 th {
-  @apply py-2 px-3;
+  @apply py-2 px-3 dark:text-gray-300;
 }
 </style>

@@ -17,7 +17,8 @@ const goToOrder = (orderNumber: string): void => {
 </script>
 
 <template>
-  <div class="bg-white rounded-lg flex shadow-sm border border-gray-100 min-h-[250px] p-4 md:p-8 justify-center items-center">
+  <div
+    class="bg-white dark:bg-gray-800 rounded-lg flex shadow-sm border border-gray-100 dark:border-gray-700 min-h-[250px] p-4 md:p-8 justify-center items-center">
     <div v-if="orders && orders.length" class="w-full">
       <table class="w-full text-left table-auto" aria-label="Order List">
         <thead>
@@ -38,28 +39,33 @@ const goToOrder = (orderNumber: string): void => {
         </tbody>
       </table>
       <div class="text-center flex justify-center w-full mt-8">
-        <button type="button" @click="refresh" class="flex items-center gap-1 text-sm leading-none hover:bg-gray-50 p-2 rounded">
+        <button
+          type="button"
+          @click="refresh"
+          class="flex items-center gap-1 text-sm leading-none text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded transition-colors">
           <span>Reresh list</span>
           <Icon name="ion:refresh-outline" />
         </button>
       </div>
     </div>
-    <div v-else-if="orders && orders.length === 0" class="min-h-[250px] flex items-center justify-center text-gray-500 text-lg">No orders found.</div>
+    <div v-else-if="orders && orders.length === 0" class="min-h-[250px] flex items-center justify-center text-gray-500 dark:text-gray-400 text-lg">
+      No orders found.
+    </div>
     <LoadingIcon v-else size="24" stroke="2" />
   </div>
 </template>
 
 <style lang="postcss" scoped>
 tbody tr:nth-child(odd) {
-  background-color: #fafafa;
+  @apply bg-gray-50 dark:bg-gray-700/50;
 }
 
 tbody tr {
-  @apply text-sm text-gray-500 hover:text-gray-800;
+  @apply text-sm text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200;
 }
 
 td,
 th {
-  @apply py-2 px-3;
+  @apply py-2 px-3 dark:text-gray-300;
 }
 </style>
