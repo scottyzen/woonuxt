@@ -11,7 +11,8 @@ const refresh = () => {
   getOrders();
 };
 
-const goToOrder = (orderNumber: string): void => {
+const goToOrder = (orderNumber?: string): void => {
+  if (!orderNumber) return;
   router.push(`/order-summary/${orderNumber}`);
 };
 </script>
@@ -30,7 +31,7 @@ const goToOrder = (orderNumber: string): void => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="order in orders" :key="order.orderNumber" class="cursor-pointer hover:underline" @click="goToOrder(order.orderNumber)">
+          <tr v-for="order in orders" :key="order.orderNumber || ''" class="cursor-pointer hover:underline" @click="goToOrder(order.orderNumber)">
             <td class="rounded-l-lg">{{ order.orderNumber }}</td>
             <td>{{ formatDate(order.date) }}</td>
             <td><OrderStatusLabel v-if="order.status" :order="order" /></td>
@@ -38,11 +39,11 @@ const goToOrder = (orderNumber: string): void => {
           </tr>
         </tbody>
       </table>
-      <div class="text-center flex justify-center w-full mt-8">
+      <div class="flex justify-center w-full mt-8 text-center">
         <button
           type="button"
           @click="refresh"
-          class="flex items-center gap-1 text-sm leading-none text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded transition-colors">
+          class="flex items-center gap-1 p-2 text-sm leading-none text-gray-700 transition-colors rounded dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
           <span>Reresh list</span>
           <Icon name="ion:refresh-outline" />
         </button>
