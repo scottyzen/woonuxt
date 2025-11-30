@@ -10,7 +10,7 @@ const show = ref(initialTab);
 
 <template>
   <div>
-    <nav class="border-b flex gap-8 tabs">
+    <nav class="flex gap-8 border-b tabs">
       <button v-if="product.description" type="button" :class="show === 0 ? 'active' : ''" @click.prevent="show = 0">
         {{ $t('shop.productDescription') }}
       </button>
@@ -22,15 +22,19 @@ const show = ref(initialTab);
       </button>
     </nav>
     <div class="tab-contents">
-      <div v-if="show === 0 && product.description" class="font-light mt-8 prose" v-html="product.description" />
+      <div v-if="show === 0 && product.description" class="mt-8 font-light prose dark:prose-invert" v-html="product.description" />
       <ProductReviews v-if="show === 1" :product="product" />
     </div>
   </div>
 </template>
 
 <style lang="postcss" scoped>
+.tabs {
+  @apply dark:border-gray-700;
+}
+
 .tabs button {
-  @apply border-transparent border-b-2 text-lg pb-8 text-gray-600 dark:text-gray-400;
+  @apply border-transparent border-b-2 text-lg pb-8 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200;
   margin-bottom: -1px;
 }
 
@@ -38,7 +42,7 @@ const show = ref(initialTab);
   @apply border-primary text-primary;
 }
 
-.tabs {
-  @apply dark:border-gray-700;
+.tab-contents {
+  @apply dark:text-gray-300;
 }
 </style>
