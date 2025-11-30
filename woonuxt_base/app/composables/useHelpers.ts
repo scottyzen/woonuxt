@@ -194,7 +194,7 @@ export function useHelpers() {
     const errorMessage = error?.gqlErrors?.[0]?.message;
 
     // Check for server errors that require clearing cookies and reloading
-    const serverErrors = ['The iss do not match with this server', 'Invalid session token', 'expired token'];
+    const serverErrors = ['The iss do not match with this server', 'Invalid session token', 'expired token', 'invalid-secret-key'];
     const shouldClearAndReload = serverErrors.some((serverError) => errorMessage?.toLowerCase().includes(serverError.toLowerCase()));
 
     if (shouldClearAndReload) {
@@ -203,6 +203,28 @@ export function useHelpers() {
     }
 
     return errorMessage;
+  };
+
+  /**
+   * Check GraphQL response extensions for authentication errors
+   * This handles cases where WordPress returns 403 with valid data but auth errors in extensions.debug
+   * @param response - GraphQL response object that may contain extensions.debug array
+   */
+  const checkGraphQLExtensions = (response: any): void => {
+    const debugMessages = response?.extensions?.debug;
+    if (!Array.isArray(debugMessages)) return;
+
+    const serverErrors = ['invalid-secret-key', 'expired token', 'Invalid session token'];
+    const hasAuthError = debugMessages.some((debug: any) =>
+      serverErrors.some((serverError) => debug?.message?.toLowerCase().includes(serverError.toLowerCase())),
+    );
+
+    if (hasAuthError) {
+      console.warn('Authentication error detected in GraphQL response extensions. Clearing cookies and reloading...');
+      clearAllCookies();
+      clearAllLocalStorage();
+      window.location.reload();
+    }
   };
 
   /**
@@ -226,6 +248,7 @@ export function useHelpers() {
     wooNuxtSEO,
     frontEndUrl,
     isDev,
+    checkGraphQLExtensions,
     FALLBACK_IMG,
     formatArray,
     arraysEqual,

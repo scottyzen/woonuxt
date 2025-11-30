@@ -1,7 +1,7 @@
 export default defineNuxtPlugin(async (nuxtApp) => {
   if (!import.meta.env.SSR) {
     const { storeSettings } = useAppConfig();
-    const { clearAllCookies, clearAllLocalStorage, getDomain } = useHelpers();
+    const { clearAllCookies, getDomain } = useHelpers();
     const sessionToken = useCookie('woocommerce-session', { domain: getDomain(window.location.href) });
     if (sessionToken.value) useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken.value}` });
 
@@ -21,39 +21,37 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       initialised = true;
 
       const { refreshCart } = useCart();
-      const success: boolean = await refreshCart();
+      let success: boolean = await refreshCart();
 
       useGqlError((err: any) => {
         const serverErrors = ['The iss do not match with this server', 'Invalid session token'];
         if (serverErrors.includes(err?.gqlErrors?.[0]?.message)) {
           clearAllCookies();
-          clearAllLocalStorage();
           window.location.reload();
         }
       });
 
+      // If cart refresh failed, clear cookies and try one more time
       if (!success) {
         clearAllCookies();
-        clearAllLocalStorage();
+        // clearAllLocalStorage();
 
-        // Add a new cookie to prevent infinite reloads
-        const reloadCount = useCookie('reloadCount');
-        if (!reloadCount.value) {
-          reloadCount.value = '1';
-        } else {
-          return;
+        // Remove the old session header
+        useGqlHeaders({ 'woocommerce-session': '' });
+
+        // Retry the cart refresh with clean state
+        success = await refreshCart();
+
+        // If still failing, log out the user
+        if (!success) {
+          const { logoutUser } = useAuth();
+          await logoutUser();
         }
-
-        // Log out the user
-        const { logoutUser } = useAuth();
-        await logoutUser();
-
-        if (!reloadCount.value) window.location.reload();
       }
     }
 
     // If we are in development mode, we want to initialise the store immediately
-    const isDev = process.env.NODE_ENV === 'development';
+    const isDev = import.meta.dev || process.env.NODE_ENV === 'development';
 
     // Check if the current route path is one of the pages that need immediate initialization
     const pagesToInitializeRightAway = ['/checkout', '/my-account', '/order-summary'];
