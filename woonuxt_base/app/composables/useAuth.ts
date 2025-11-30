@@ -9,7 +9,7 @@ import type {
 
 export const useAuth = () => {
   const { refreshCart } = useCart();
-  const { clearAllCookies, getErrorMessage } = useHelpers();
+  const { clearAllCookies, getErrorMessage, clearAllLocalStorage } = useHelpers();
   const router = useRouter();
 
   const customer = useState<Customer>('customer', () => ({ billing: {}, shipping: {} }));
@@ -124,6 +124,7 @@ export const useAuth = () => {
       if (logout) {
         await refreshCart();
         clearAllCookies();
+        clearAllLocalStorage();
         customer.value = { billing: {}, shipping: {} };
         clearReturnUrl(); // Clear any stored return URL on logout
       }
