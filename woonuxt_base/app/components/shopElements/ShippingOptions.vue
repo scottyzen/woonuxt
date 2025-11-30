@@ -21,11 +21,11 @@ const setActiveOption = async (id) => {
       :class="{ 'active-option': option.id === activeOption }"
       @click="setActiveOption(option.id)">
       <div>
-        <div class="text-sm leading-tight text-gray-500" v-html="option.label"></div>
-        <div class="font-semibold text-gray-600">{{ currencySymbol }}{{ option.cost }}</div>
+        <div class="text-sm leading-tight text-gray-600 dark:text-gray-200" v-html="option.label"></div>
+        <div class="font-semibold text-gray-800 dark:text-white">{{ currencySymbol }}{{ option.cost }}</div>
       </div>
 
-      <icon name="ion:checkmark-circle" size="20" class="ml-auto text-primary checkmark opacity-0" />
+      <icon name="ion:checkmark-circle" size="20" class="ml-auto opacity-0 text-primary checkmark" />
     </div>
   </div>
 </template>
@@ -35,7 +35,7 @@ const setActiveOption = async (id) => {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 
   .option {
-    @apply bg-white border rounded-md text-gray-600 cursor-pointer flex flex-1 text-sm py-3 px-4 gap-2 items-center hover:border-purple-300;
+    @apply bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md cursor-pointer flex flex-1 text-sm py-3 px-4 gap-2 items-center hover:border-purple-300 dark:hover:border-purple-400 transition-colors;
 
     &.active-option {
       @apply border-primary cursor-default border-opacity-50 shadow-sm pointer-events-none;

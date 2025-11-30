@@ -186,10 +186,10 @@ const inputPlaceholder = computed(() => {
 input[type='text'],
 input[type='password'],
 button {
-  @apply border rounded-lg mb-4 w-full p-3 px-4 bg-white;
+  @apply border rounded-lg mb-4 w-full p-3 px-4 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white;
 }
 
 form button {
-  @apply rounded-lg font-bold bg-gray-800 text-white py-3 px-8 hover:bg-gray-800;
+  @apply rounded-lg font-bold bg-gray-800 dark:bg-gray-700 text-white py-3 px-8 hover:bg-gray-700 dark:hover:bg-gray-600;
 }
 </style>

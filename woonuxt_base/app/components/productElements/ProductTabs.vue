@@ -30,11 +30,15 @@ const show = ref(initialTab);
 
 <style lang="postcss" scoped>
 .tabs button {
-  @apply border-transparent border-b-2 text-lg pb-8;
+  @apply border-transparent border-b-2 text-lg pb-8 text-gray-600 dark:text-gray-400;
   margin-bottom: -1px;
 }
 
 .tabs button.active {
   @apply border-primary text-primary;
+}
+
+.tabs {
+  @apply dark:border-gray-700;
 }
 </style>
