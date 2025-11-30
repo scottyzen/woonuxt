@@ -1,6 +1,6 @@
 export const useUserPreferences = () => {
   const colorMode = useColorMode();
-  const { locale, setLocale } = useI18n();
+  const { locale } = useI18n();
 
   // Get saved currency preference
   const savedCurrency = useState<string>('userCurrency', () => {
@@ -10,6 +10,14 @@ export const useUserPreferences = () => {
     }
     return 'USD';
   });
+
+  // Cycle through themes (for toggle button)
+  const toggleTheme = () => {
+    const themes: string[] = ['light', 'dark', 'system'];
+    const currentIndex = themes.indexOf(colorMode.preference);
+    const nextTheme = themes[(currentIndex + 1) % themes.length] || 'light';
+    colorMode.preference = nextTheme;
+  };
 
   // Save currency preference
   const setCurrency = (currency: string) => {
@@ -29,6 +37,10 @@ export const useUserPreferences = () => {
   };
 
   return {
+    // Expose colorMode directly for full access to preference, value, unknown, forced
+    colorMode,
+    // Convenience methods
+    toggleTheme,
     currency: savedCurrency,
     setCurrency,
     getPreferences,

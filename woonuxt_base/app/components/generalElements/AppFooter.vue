@@ -9,7 +9,10 @@ const { wishlistLink } = useAuth();
       <div class="mr-auto">
         <Logo />
         <WebsiteShortDescription />
-        <LangSwitcher class="mt-8" />
+        <div class="inline-flex gap-2 justify-start mt-8">
+          <LangSwitcher />
+          <ColorModeSwitcher />
+        </div>
       </div>
       <div class="w-3/7 lg:w-auto">
         <div class="mb-1 font-semibold text-gray-900 dark:text-white">{{ $t('general.information') }}</div>
