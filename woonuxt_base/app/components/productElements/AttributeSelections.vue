@@ -54,9 +54,11 @@ onMounted(() => {
     <div v-for="(attr, i) in attributes" :key="i" class="flex flex-wrap py-2 relative justify-between">
       <!-- LOCAL -->
       <div v-if="attr.scope == 'LOCAL'" class="grid gap-2">
-        <div class="text-sm">
+        <div class="text-sm dark:text-gray-300">
           {{ attr.label }}
-          <span v-if="activeVariations.length && activeVariations[i]" class="text-gray-400">: {{ getSelectedName(attr, activeVariations[i]) }}</span>
+          <span v-if="activeVariations.length && activeVariations[i]" class="text-gray-400 dark:text-gray-500"
+            >: {{ getSelectedName(attr, activeVariations[i]) }}</span
+          >
         </div>
         <div class="flex gap-2">
           <span v-for="(option, index) in attr.options" :key="index">
@@ -106,10 +108,16 @@ onMounted(() => {
 
       <!-- DROPDOWN -->
       <div v-else-if="attr.terms.nodes && attr.terms.nodes?.length > 8" class="grid gap-2">
-        <div class="text-sm">
-          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400">{{ getSelectedName(attr, activeVariations[i]) }}</span>
+        <div class="text-sm dark:text-gray-300">
+          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400 dark:text-gray-500">{{ getSelectedName(attr, activeVariations[i]) }}</span>
         </div>
-        <select :id="attr.name" :ref="attr.name" :name="attr.name" required class="border-white shadow-sm" @change="updateAttrs">
+        <select
+          :id="attr.name"
+          :ref="attr.name"
+          :name="attr.name"
+          required
+          class="border-white dark:border-gray-600 shadow-sm dark:bg-gray-700 dark:text-white"
+          @change="updateAttrs">
           <option disabled hidden>{{ $t('general.choose') }} {{ decodeURIComponent(attr.label) }}</option>
           <option v-for="(term, dropdownIndex) in attr.terms.nodes" :key="dropdownIndex" :value="term.slug" v-html="term.name" :selected="dropdownIndex == 0" />
         </select>
@@ -117,8 +125,9 @@ onMounted(() => {
 
       <!-- CHECKBOXES -->
       <div v-else class="grid gap-2">
-        <div class="text-sm">
-          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400">: {{ getSelectedName(attr, activeVariations[i]) }}</span>
+        <div class="text-sm dark:text-gray-300">
+          {{ attr.label }}
+          <span v-if="activeVariations.length" class="text-gray-400 dark:text-gray-500">: {{ getSelectedName(attr, activeVariations[i]) }}</span>
         </div>
         <div class="flex gap-2">
           <span v-for="(term, index) in attr.terms.nodes" :key="index">
@@ -144,11 +153,11 @@ onMounted(() => {
 
 <style lang="postcss">
 .radio-button {
-  @apply border-transparent border-white rounded-lg cursor-pointer outline bg-gray-50 border-2 text-sm text-center outline-2 outline-gray-100 py-1.5 px-3 transition-all text-gray-800 inline-block hover:outline-gray-500;
+  @apply border-transparent border-white dark:border-gray-700 rounded-lg cursor-pointer outline bg-gray-50 dark:bg-gray-700 border-2 text-sm text-center outline-2 outline-gray-100 dark:outline-gray-600 py-1.5 px-3 transition-all text-gray-800 dark:text-gray-200 inline-block hover:outline-gray-500;
 }
 
 .color-button {
-  @apply border-transparent border-white cursor-pointer outline bg-gray-50 border-2 rounded-2xl text-sm text-center outline-2 outline-gray-100 transition-all text-gray-800 inline-block hover:outline-gray-500;
+  @apply border-transparent border-white dark:border-gray-700 cursor-pointer outline bg-gray-50 border-2 rounded-2xl text-sm text-center outline-2 outline-gray-100 dark:outline-gray-600 transition-all text-gray-800 inline-block hover:outline-gray-500;
   width: 2rem;
   height: 2rem;
 }
@@ -182,6 +191,6 @@ onMounted(() => {
 }
 
 input[type='radio']:checked ~ span {
-  @apply outline outline-2 outline-gray-500;
+  @apply outline outline-2 outline-gray-500 dark:outline-gray-400;
 }
 </style>

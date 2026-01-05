@@ -32,13 +32,13 @@ const onFocusOut = () => {
 </script>
 
 <template>
-  <div class="flex rounded bg-white text-sm leading-none shadow-sm shadow-gray-200 isolate">
+  <div class="flex rounded bg-white dark:bg-gray-700 text-sm leading-none shadow-sm shadow-gray-200 dark:shadow-gray-900 isolate">
     <button
       title="Decrease Quantity"
       aria-label="Decrease Quantity"
       @click="decrementQuantity"
       type="button"
-      class="focus:outline-none border-r w-6 h-6 border rounded-l border-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed"
+      class="focus:outline-none border-r w-6 h-6 border rounded-l border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:cursor-not-allowed text-gray-700 dark:text-gray-300"
       :disabled="isUpdatingCart || quantity <= 0">
       <Icon name="ion:remove" size="14" />
     </button>
@@ -49,13 +49,13 @@ const onFocusOut = () => {
       :max="productType.stockQuantity"
       aria-label="Quantity"
       @focusout="onFocusOut"
-      class="flex items-center justify-center w-8 px-2 text-xs focus:outline-none border-y border-gray-300 text-center" />
+      class="flex items-center justify-center w-8 px-2 text-xs focus:outline-none border-y border-gray-300 dark:border-gray-600 text-center text-gray-900 dark:text-white dark:bg-gray-700" />
     <button
       title="Increase Quantity"
       aria-label="Increase Quantity"
       @click="incrementQuantity"
       type="button"
-      class="focus:outline-none border-l w-6 h-6 border rounded-r hover:bg-gray-50 border-gray-300 disabled:cursor-not-allowed disabled:bg-gray-100"
+      class="focus:outline-none border-l w-6 h-6 border rounded-r hover:bg-gray-50 dark:hover:bg-gray-600 border-gray-300 dark:border-gray-600 disabled:cursor-not-allowed disabled:bg-gray-100 dark:disabled:bg-gray-800 text-gray-700 dark:text-gray-300"
       :disabled="isUpdatingCart || hasNoMoreStock">
       <Icon name="ion:add" size="14" />
     </button>

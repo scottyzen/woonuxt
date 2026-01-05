@@ -41,12 +41,17 @@ const moveToWishList = () => {
       </NuxtLink>
       <div class="flex-1">
         <div class="flex gap-x-2 gap-y-1 flex-wrap items-center">
-          <!-- 2025-6-4：line-clamp-2 is used to prevent product names that are too long from displaying incorrectly—on desktop in the checkout page and on mobile in the shopping cart. -->
-          <NuxtLink class="leading-tight line-clamp-2" :to="productSlug" :title="productType.name">{{ productType.name }}</NuxtLink>
-          <span v-if="productType.salePrice" class="text-[10px] border-green-200 leading-none bg-green-100 inline-block p-0.5 rounded text-green-600 border">
+          <NuxtLink class="leading-tight line-clamp-2 text-gray-900 dark:text-gray-100 hover:text-primary dark:hover:text-primary" :to="productSlug">{{
+            productType.name
+          }}</NuxtLink>
+          <span
+            v-if="productType.salePrice"
+            class="text-[10px] border-green-200 dark:border-green-800 leading-none bg-green-100 dark:bg-green-900/30 inline-block p-0.5 rounded text-green-600 dark:text-green-400 border">
             Save {{ salePercentage }}
           </span>
-          <span v-if="isLowStock" class="text-[10px] border-yellow-200 leading-none bg-yellow-100 inline-block p-0.5 rounded text-orange-500 border">
+          <span
+            v-if="isLowStock"
+            class="text-[10px] border-yellow-200 dark:border-yellow-800 leading-none bg-yellow-100 dark:bg-yellow-900/30 inline-block p-0.5 rounded text-orange-500 dark:text-orange-400 border">
             Low Stock
           </span>
         </div>
@@ -54,14 +59,16 @@ const moveToWishList = () => {
       </div>
       <div class="inline-flex gap-2 flex-col items-end">
         <QuantityInput :item />
-        <div class="text-xs text-gray-400 group-hover:text-gray-700 flex leading-none items-center">
-          <button v-if="storeSettings.showMoveToWishlist" class="mr-2 pr-2 border-r" @click="moveToWishList" type="button">Move to Wishlist</button>
+        <div class="text-xs text-gray-400 dark:text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300 flex leading-none items-center">
+          <button v-if="storeSettings.showMoveToWishlist" class="mr-2 pr-2 border-r border-gray-300 dark:border-gray-600" @click="moveToWishList" type="button">
+            Move to Wishlist
+          </button>
           <button
             title="Remove Item"
             aria-label="Remove Item"
             @click="removeItem"
             type="button"
-            class="flex items-center gap-1 hover:text-red-500 cursor-pointer">
+            class="flex items-center gap-1 hover:text-red-500 dark:hover:text-red-400 cursor-pointer">
             <Icon name="ion:trash" class="hidden md:inline-block" size="12" />
           </button>
         </div>

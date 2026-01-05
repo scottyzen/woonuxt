@@ -10,28 +10,39 @@ const show = ref(initialTab);
 
 <template>
   <div>
-    <nav class="border-b flex gap-8 tabs">
+    <nav class="flex gap-8 border-b tabs">
       <button v-if="product.description" type="button" :class="show === 0 ? 'active' : ''" @click.prevent="show = 0">
         {{ $t('shop.productDescription') }}
       </button>
-      <button v-if="storeSettings.showReviews" type="button" :class="show === 1 ? 'active' : ''" @click.prevent="show = 1">
-        {{ $t('shop.reviews') }} ({{ product.reviewCount }})
+      <button v-if="storeSettings.showReviews" type="button" class="flex items-center gap-2" :class="show === 1 ? 'active' : ''" @click.prevent="show = 1">
+        {{ $t('shop.reviews') }}
+        <span class="bg-primary rounded-full text-white leading-none min-w-[18px] p-[3px] text-[12px] inline-flex justify-center items-center">{{
+          product.reviewCount
+        }}</span>
       </button>
     </nav>
     <div class="tab-contents">
-      <div v-if="show === 0 && product.description" class="font-light mt-8 prose" v-html="product.description" />
+      <div v-if="show === 0 && product.description" class="mt-8 font-light prose dark:prose-invert" v-html="product.description" />
       <ProductReviews v-if="show === 1" :product="product" />
     </div>
   </div>
 </template>
 
 <style lang="postcss" scoped>
+.tabs {
+  @apply dark:border-gray-700;
+}
+
 .tabs button {
-  @apply border-transparent border-b-2 text-lg pb-8;
+  @apply border-transparent border-b-2 text-lg pb-8 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200;
   margin-bottom: -1px;
 }
 
 .tabs button.active {
   @apply border-primary text-primary;
+}
+
+.tab-contents {
+  @apply dark:text-gray-300;
 }
 </style>

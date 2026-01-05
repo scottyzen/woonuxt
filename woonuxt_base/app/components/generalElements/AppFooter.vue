@@ -4,16 +4,21 @@ const { wishlistLink } = useAuth();
 </script>
 
 <template>
-  <footer class="bg-white order-last">
+  <footer class="bg-white dark:bg-gray-800 order-last">
     <div class="container flex flex-wrap justify-between gap-12 my-24 md:gap-24">
       <div class="mr-auto">
         <Logo />
         <WebsiteShortDescription />
-        <LangSwitcher class="mt-8" />
+        <div class="inline-flex gap-2 justify-start mt-8">
+          <LangSwitcher />
+          <ClientOnly>
+            <ColorModeSwitcher />
+          </ClientOnly>
+        </div>
       </div>
       <div class="w-3/7 lg:w-auto">
-        <div class="mb-1 font-semibold">{{ $t('general.information') }}</div>
-        <div class="text-sm">
+        <div class="mb-1 font-semibold text-gray-900 dark:text-white">{{ $t('general.information') }}</div>
+        <div class="text-sm text-gray-700 dark:text-gray-300">
           <a class="py-1.5 block" href="https://github.com/scottyzen/woonuxt?tab=readme-ov-file#next-generation-front-end-for-woocommerce" target="_blank">{{
             $t('general.about')
           }}</a>
@@ -23,8 +28,8 @@ const { wishlistLink } = useAuth();
         </div>
       </div>
       <div class="w-3/7 lg:w-auto">
-        <div class="mb-1 font-semibold">{{ $t('general.products') }}</div>
-        <div class="text-sm">
+        <div class="mb-1 font-semibold text-gray-900 dark:text-white">{{ $t('general.products') }}</div>
+        <div class="text-sm text-gray-700 dark:text-gray-300">
           <ClientOnly>
             <NuxtLink to="/products" class="py-1.5 block">{{ $t('shop.newArrivals') }}</NuxtLink>
             <template #fallback>
@@ -47,8 +52,8 @@ const { wishlistLink } = useAuth();
         </div>
       </div>
       <div class="w-3/7 lg:w-auto">
-        <div class="mb-1 font-semibold">{{ $t('general.customerService') }}</div>
-        <div class="text-sm">
+        <div class="mb-1 font-semibold text-gray-900 dark:text-white">{{ $t('general.customerService') }}</div>
+        <div class="text-sm text-gray-700 dark:text-gray-300">
           <ClientOnly>
             <NuxtLink to="/contact" class="py-1.5 block">{{ $t('general.contactUs') }}</NuxtLink>
             <template #fallback>
@@ -61,8 +66,8 @@ const { wishlistLink } = useAuth();
         </div>
       </div>
       <div class="w-3/7 lg:w-auto">
-        <div class="mb-1 font-semibold">{{ $t('account.myAccount') }}</div>
-        <div class="text-sm">
+        <div class="mb-1 font-semibold text-gray-900 dark:text-white">{{ $t('account.myAccount') }}</div>
+        <div class="text-sm text-gray-700 dark:text-gray-300">
           <ClientOnly>
             <NuxtLink to="/my-account/" class="py-1.5 block">{{ $t('account.myAccount') }}</NuxtLink>
             <template #fallback>
@@ -85,9 +90,9 @@ const { wishlistLink } = useAuth();
         </div>
       </div>
     </div>
-    <div class="container border-t flex items-center justify-center mb-4">
+    <div class="container border-t border-gray-200 dark:border-gray-700 flex items-center justify-center mb-4">
       <div class="copywrite">
-        <p class="py-4 text-xs text-center">
+        <p class="py-4 text-xs text-center text-gray-600 dark:text-gray-400">
           <a href="https://woonuxt.com" :title="`WooNuxt v${wooNuxtVersionInfo}`">{{ `WooNuxt v${wooNuxtVersionInfo}` }}</a> - by
           <a href="https://scottyzen.com" title="Scott Kennedy - Web Developer" target="_blank">Scott Kennedy</a>
         </p>

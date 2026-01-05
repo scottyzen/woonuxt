@@ -288,8 +288,8 @@ useSeoMeta({
         <div class="grid w-full max-w-2xl gap-8 checkout-form md:flex-1">
           <!-- Customer details -->
           <div v-if="!viewer && customer?.billing">
-            <h2 class="w-full mb-2 text-2xl font-semibold leading-none">Contact Information</h2>
-            <p class="mt-1 text-sm text-gray-500">
+            <h2 class="w-full mb-2 text-2xl font-semibold leading-none dark:text-white">Contact Information</h2>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
               Already have an account? <NuxtLink to="/my-account" @click="navigateToLogin('/checkout')" class="text-primary text-semibold">Log in</NuxtLink>.
             </p>
             <div class="w-full mt-4">
@@ -326,7 +326,7 @@ useSeoMeta({
 
           <!-- Shipping Address Section -->
           <div v-if="cart?.availableShippingMethods?.length">
-            <h2 class="text-2xl font-semibold text-gray-900 mb-4 leading-none">Billing</h2>
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4 leading-none">Billing</h2>
 
             <!-- Shipping Address Summary or Form -->
             <div v-if="!isEditingShipping" class="space-y-4">
@@ -340,8 +340,8 @@ useSeoMeta({
                   v-model="shipToDifferentAddress"
                   type="checkbox"
                   name="useSameAddress"
-                  class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-2" />
-                <label for="useSameAddress" class="text-sm font-medium text-gray-700">
+                  class="w-4 h-4 text-primary bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-primary focus:ring-2" />
+                <label for="useSameAddress" class="text-sm font-medium text-gray-700 dark:text-gray-300">
                   {{ $t('billing.differentAddress') }}
                 </label>
               </div>
@@ -360,8 +360,8 @@ useSeoMeta({
                   v-model="shipToDifferentAddress"
                   type="checkbox"
                   name="useSameAddressEdit"
-                  class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary focus:ring-2" />
-                <label for="useSameAddressEdit" class="text-sm font-medium text-gray-700">
+                  class="w-4 h-4 text-primary bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-primary focus:ring-2" />
+                <label for="useSameAddressEdit" class="text-sm font-medium text-gray-700 dark:text-gray-300">
                   {{ $t('billing.differentAddress') }}
                 </label>
               </div>
@@ -370,41 +370,41 @@ useSeoMeta({
 
           <div v-if="shipToDifferentAddress">
             <div class="mb-6">
-              <h2 class="text-2xl font-semibold text-gray-900 mb-2 leading-none">Shipping Address</h2>
+              <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2 leading-none">Shipping Address</h2>
             </div>
             <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
           </div>
           <!-- Fallback: If no shipping methods available, show billing details -->
           <div v-if="!cart?.availableShippingMethods?.length">
-            <h2 class="w-full mb-3 text-2xl font-semibold">{{ $t('billing.billingDetails') }}</h2>
+            <h2 class="w-full mb-3 text-2xl font-semibold dark:text-white">{{ $t('billing.billingDetails') }}</h2>
             <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
           </div>
 
-          <hr />
+          <hr class="border-gray-300 dark:border-gray-600" />
 
           <!-- Shipping methods -->
           <div v-if="cart?.availableShippingMethods?.length">
-            <h3 class="mb-4 text-xl font-semibold leading-none">{{ $t('general.shippingSelect') }}</h3>
+            <h3 class="mb-4 text-xl font-semibold leading-none dark:text-white">{{ $t('general.shippingSelect') }}</h3>
             <ShippingOptions
               v-if="cart.availableShippingMethods[0]?.rates && cart.chosenShippingMethods?.[0]"
               :options="cart.availableShippingMethods[0].rates"
               :active-option="cart.chosenShippingMethods[0]" />
           </div>
 
-          <hr />
+          <hr class="border-gray-300 dark:border-gray-600" />
 
           <!-- Pay methods -->
           <div v-if="paymentGateways?.nodes.length" class="mt-2 col-span-full">
-            <h2 class="mb-4 text-xl font-semibold leading-none">{{ $t('billing.paymentOptions') }}</h2>
+            <h2 class="mb-4 text-xl font-semibold leading-none dark:text-white">{{ $t('billing.paymentOptions') }}</h2>
             <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :paymentGateways />
             <StripeElement v-if="stripe" v-show="orderInput.paymentMethod.id == 'stripe'" :stripe @updateElement="handleStripeElement" />
           </div>
 
-          <hr />
+          <hr class="border-gray-300 dark:border-gray-600" />
 
           <!-- Order note -->
           <div>
-            <h2 class="mb-4 text-xl font-semibold leading-none">{{ $t('shop.orderNote') }} ({{ $t('general.optional') }})</h2>
+            <h2 class="mb-4 text-xl font-semibold leading-none dark:text-white">{{ $t('shop.orderNote') }} ({{ $t('general.optional') }})</h2>
             <textarea
               id="order-note"
               v-model="orderInput.customerNote"
@@ -434,11 +434,15 @@ useSeoMeta({
 .checkout-form input[type='tel'],
 .checkout-form input[type='password'],
 .checkout-form textarea {
-  @apply bg-white border rounded-md outline-none border-gray-300 shadow-inner w-full py-2 px-4;
+  @apply bg-white border rounded-md outline-none border-gray-300 shadow-inner w-full py-2 px-4 dark:bg-gray-700 dark:border-gray-600 dark:text-white;
 }
 
 .checkout-form select {
-  @apply bg-white border rounded-md outline-none border-gray-300 shadow-sm w-full py-2 px-4;
+  @apply bg-white border rounded-md outline-none border-gray-300 shadow-sm w-full py-2 px-4 dark:bg-gray-700 dark:border-gray-600 dark:text-white;
+}
+
+.checkout-form label {
+  @apply dark:text-gray-300;
 }
 
 .checkout-form input.has-error,

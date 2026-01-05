@@ -32,3 +32,9 @@ const handleInputChanged = (e: Event) => {
     <Icon name="ion:eye-off-outline" size="20" class="absolute cursor-pointer right-4" @click="showPassword = !showPassword" v-else />
   </div>
 </template>
+
+<style scoped lang="postcss">
+input {
+  @apply border  rounded-lg w-full p-3 px-4 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white;
+}
+</style>

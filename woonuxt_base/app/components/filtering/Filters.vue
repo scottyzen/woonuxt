@@ -25,7 +25,7 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({ ...attr, te
 <template>
   <aside id="filters">
     <OrderByDropdown class="block w-full md:hidden" />
-    <div class="relative z-30 grid mb-12 space-y-8 divide-y">
+    <div class="relative z-30 grid mb-12 space-y-8 divide-y dark:divide-gray-700">
       <PriceFilter />
       <CategoryFilter v-if="!hideCategories" :terms="productCategoryTerms" />
       <div v-for="attribute in attributesWithTerms" :key="attribute.slug">
@@ -37,7 +37,7 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({ ...attr, te
       <LazyResetFiltersButton v-if="isFiltersActive" />
     </div>
   </aside>
-  <div class="fixed inset-0 z-50 hidden bg-black opacity-25 filter-overlay" @click="removeBodyClass('show-filters')"></div>
+  <div class="fixed inset-0 z-50 hidden bg-black dark:bg-black opacity-25 dark:opacity-50 filter-overlay" @click="removeBodyClass('show-filters')"></div>
 </template>
 
 <style lang="postcss">
@@ -70,13 +70,20 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({ ...attr, te
 
 @media (max-width: 768px) {
   #filters {
-    @apply bg-white h-full p-8 transform pl-2 transition-all ease-in-out bottom-0 left-4 -translate-x-[110vw] duration-300 overflow-auto fixed;
+    @apply bg-white dark:bg-gray-800 h-full p-8 transform pl-2 transition-all ease-in-out bottom-0 left-4 -translate-x-[110vw] duration-300 overflow-auto fixed;
 
     box-shadow:
       -100px 0 0 white,
       -200px 0 0 white,
       -300px 0 0 white;
     z-index: 60;
+  }
+
+  .dark #filters {
+    box-shadow:
+      -100px 0 0 rgb(31 41 55),
+      -200px 0 0 rgb(31 41 55),
+      -300px 0 0 rgb(31 41 55);
   }
 
   .show-filters #filters {

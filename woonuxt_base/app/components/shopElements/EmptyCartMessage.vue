@@ -3,10 +3,10 @@ const { toggleCart } = useCart();
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center flex-1 mb-20 text-gray-400">
+  <div class="flex flex-col items-center justify-center flex-1 mb-20 text-gray-400 dark:text-gray-500">
     <Icon name="ion:cart-outline" size="96" class="opacity-75 mb-5" />
-    <div class="mb-2 text-xl font-semibold">{{ $t('shop.cartEmpty') }}</div>
-    <span class="mb-8">{{ $t('shop.addProductsInYourCart') }}</span>
+    <div class="mb-2 text-xl font-semibold text-gray-600 dark:text-gray-300">{{ $t('shop.cartEmpty') }}</div>
+    <span class="mb-8 text-gray-500 dark:text-gray-400">{{ $t('shop.addProductsInYourCart') }}</span>
     <NuxtLink
       to="/products"
       @click="toggleCart(false)"
