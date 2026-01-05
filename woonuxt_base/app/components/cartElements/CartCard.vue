@@ -41,7 +41,7 @@ const moveToWishList = () => {
       </NuxtLink>
       <div class="flex-1">
         <div class="flex gap-x-2 gap-y-1 flex-wrap items-center">
-          <NuxtLink class="leading-tight text-gray-900 dark:text-gray-100 hover:text-primary dark:hover:text-primary" :to="productSlug">{{
+          <NuxtLink class="leading-tight line-clamp-2 text-gray-900 dark:text-gray-100 hover:text-primary dark:hover:text-primary" :to="productSlug">{{
             productType.name
           }}</NuxtLink>
           <span
