@@ -22,11 +22,11 @@ async function submitCoupon(): Promise<void> {
         v-model="couponCode"
         type="text"
         :placeholder="$t('shop.couponCode')"
-        class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm outline-none"
+        class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white"
         required />
       <button
-        class="flex items-center justify-center px-4 py-2 text-white bg-gray-800 border rounded-md shadow-sm outline-none min-w-20"
-        :disabled="isUpdatingCoupon">
+        class="flex items-center justify-center px-4 py-2 text-white bg-gray-800 border rounded-md shadow-sm outline-none min-w-20 disabled:cursor-not-allowed disabled:bg-gray-400"
+        :disabled="isUpdatingCoupon || couponCode === ''">
         <LoadingIcon v-if="isUpdatingCoupon" color="#fff" size="16" />
         <span v-else>{{ $t('general.apply') }}</span>
       </button>

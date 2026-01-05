@@ -104,7 +104,7 @@ const disabledAddToCart = computed(() => {
         <div class="lg:max-w-md xl:max-w-lg md:py-2 w-full">
           <div class="flex justify-between mb-4">
             <div class="flex-1">
-              <h1 class="flex flex-wrap items-center gap-2 mb-2 text-2xl font-sesmibold">
+              <h1 class="flex flex-wrap items-center gap-2 mb-2 text-2xl font-sesmibold dark:text-white">
                 {{ type.name }}
                 <LazyWPAdminLink :link="`/wp-admin/post.php?post=${product.databaseId}&action=edit`">Edit</LazyWPAdminLink>
               </h1>
@@ -115,18 +115,18 @@ const disabledAddToCart = computed(() => {
 
           <div class="grid gap-2 my-8 text-sm empty:hidden">
             <div v-if="!isExternalProduct" class="flex items-center gap-2">
-              <span class="text-gray-400">{{ $t('shop.availability') }}: </span>
+              <span class="text-gray-400 dark:text-gray-500">{{ $t('shop.availability') }}: </span>
               <StockStatus :stockStatus @updated="mergeLiveStockStatus" />
             </div>
             <div class="flex items-center gap-2" v-if="storeSettings.showSKU && product.sku">
-              <span class="text-gray-400">{{ $t('shop.sku') }}: </span>
-              <span>{{ product.sku || 'N/A' }}</span>
+              <span class="text-gray-400 dark:text-gray-500">{{ $t('shop.sku') }}: </span>
+              <span class="dark:text-gray-300">{{ product.sku || 'N/A' }}</span>
             </div>
           </div>
 
-          <div class="mb-8 font-light prose" v-html="product.shortDescription || product.description" />
+          <div class="mb-8 font-light prose dark:prose-invert" v-html="product.shortDescription || product.description" />
 
-          <hr />
+          <hr class="border-gray-300 dark:border-gray-600" />
 
           <form @submit.prevent="addToCart(selectProductInput)">
             <AttributeSelections
@@ -138,20 +138,20 @@ const disabledAddToCart = computed(() => {
               @attrs-changed="updateSelectedVariations" />
             <div
               v-if="isVariableProduct || isSimpleProduct"
-              class="fixed bottom-0 left-0 z-10 flex items-center w-full gap-4 p-4 mt-12 bg-white md:static md:bg-transparent bg-opacity-90 md:p-0">
+              class="fixed bottom-0 left-0 z-10 flex items-center w-full gap-4 p-4 mt-12 md:static md:bg-transparent bg-opacity-90 md:p-0 shadow-lg md:shadow-none dark:shadow-gray-900">
               <input
                 v-model="quantity"
                 type="number"
                 min="1"
                 aria-label="Quantity"
-                class="bg-white border rounded-lg flex text-left p-2.5 w-20 gap-4 items-center justify-center focus:outline-none" />
+                class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg flex text-left p-2.5 w-20 gap-4 items-center justify-center focus:outline-none dark:text-white" />
               <AddToCartButton class="flex-1 w-full md:max-w-xs" :disabled="disabledAddToCart" :class="{ loading: isUpdatingCart }" />
             </div>
             <a
               v-if="isExternalProduct && product.externalUrl"
               :href="product.externalUrl"
               target="_blank"
-              class="rounded-lg flex font-bold bg-gray-800 text-white text-center min-w-[150px] p-2.5 gap-4 items-center justify-center focus:outline-none">
+              class="rounded-lg flex font-bold bg-gray-800 dark:bg-gray-700 text-white text-center min-w-[150px] p-2.5 gap-4 items-center justify-center focus:outline-none hover:bg-gray-700 dark:hover:bg-gray-600">
               {{ product?.buttonText || 'View product' }}
             </a>
           </form>
@@ -159,20 +159,20 @@ const disabledAddToCart = computed(() => {
           <div v-if="storeSettings.showProductCategoriesOnSingleProduct && product.productCategories">
             <div class="grid gap-2 my-8 text-sm">
               <div class="flex items-center gap-2">
-                <span class="text-gray-400">{{ $t('shop.category', 2) }}:</span>
+                <span class="text-gray-400 dark:text-gray-500">{{ $t('shop.category', 2) }}:</span>
                 <div class="product-categories">
                   <NuxtLink
                     v-for="category in product.productCategories.nodes"
                     :key="category.databaseId"
                     :to="`/product-category/${decodeURIComponent(category?.slug || '')}`"
-                    class="hover:text-primary"
-                    :title="category.name"
+                    class="hover:text-primary dark:text-gray-300 dark:hover:text-primary"
+                    :title="category.name || ''"
                     >{{ category.name }}<span class="comma">, </span>
                   </NuxtLink>
                 </div>
               </div>
             </div>
-            <hr />
+            <hr class="border-gray-300 dark:border-gray-600" />
           </div>
 
           <div class="flex flex-wrap gap-4">
@@ -185,7 +185,7 @@ const disabledAddToCart = computed(() => {
         <ProductTabs :product />
       </div>
       <div class="my-32" v-if="product.related && storeSettings.showRelatedProducts">
-        <div class="mb-4 text-xl font-semibold">{{ $t('shop.youMayLike') }}</div>
+        <div class="mb-4 text-xl font-semibold dark:text-white">{{ $t('shop.youMayLike') }}</div>
         <LazyProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
       </div>
     </div>
@@ -197,7 +197,13 @@ const disabledAddToCart = computed(() => {
   display: none;
 }
 
-input[type='number']::-webkit-inner-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   opacity: 1;
+}
+
+/* Dark mode uses color-scheme to style native controls */
+.dark input[type='number'] {
+  color-scheme: dark;
 }
 </style>

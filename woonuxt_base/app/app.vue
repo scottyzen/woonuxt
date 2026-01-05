@@ -49,7 +49,7 @@ useHead({
 <style lang="postcss">
 html,
 body {
-  @apply bg-gray-100 text-gray-900;
+  @apply bg-gray-100 dark:bg-[#18202f] text-gray-900 dark:text-gray-100;
   scroll-behavior: smooth;
 }
 
@@ -63,11 +63,15 @@ pre {
 }
 
 select {
-  @apply bg-white border rounded-md font-medium border-gray-300 flex-1 text-sm p-1.5 pr-12 pl-4 text-gray-500 relative inline-flex items-center hover:bg-gray-50 focus:z-20 py-2 px-4 appearance-none;
+  @apply bg-white dark:bg-gray-700 border rounded-md font-medium border-gray-300 dark:border-gray-600 flex-1 text-sm p-1.5 pr-12 pl-4 text-gray-500 dark:text-gray-300 relative inline-flex items-center hover:bg-gray-50 dark:hover:bg-gray-600 focus:z-20 py-2 px-4 appearance-none;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M4 6l4 4 4-4'/%3E%3C/svg%3E")
     center right 10px no-repeat;
   background-size: 1rem;
   padding-right: 2.5rem;
+}
+
+.dark select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath stroke='%23D1D5DB' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
 }
 
 /* Slide-from-right & Slide-from-left */
@@ -203,7 +207,7 @@ img.skeleton {
 
 input[type='checkbox'],
 input[type='radio'] {
-  @apply bg-white border rounded-lg cursor-pointer font-sans outline-none border-gray-300 w-full p-3 transition-all duration-150 appearance-none hover:border-primary;
+  @apply bg-white border rounded-lg cursor-pointer font-sans outline-none border-gray-300 w-full p-3 transition-all duration-150 appearance-none hover:border-primary dark:bg-gray-700 dark:border-gray-600;
 
   width: 1em;
   height: 1em;
@@ -211,6 +215,10 @@ input[type='radio'] {
   cursor: pointer;
   border-radius: 4px;
   padding: 0;
+}
+
+.dark input {
+  color-scheme: dark;
 }
 
 input[type='radio'] {

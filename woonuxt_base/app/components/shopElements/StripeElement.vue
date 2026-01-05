@@ -54,14 +54,17 @@ const createStripeElements = async () => {
     case 'card':
     default:
       // Traditional Card Element - single card input
+      // Check if dark mode is active
+      const isDarkMode = document.documentElement.classList.contains('dark');
       paymentElement = elements.create('card', {
         hidePostalCode: true,
         style: {
           base: {
             fontSize: '16px',
-            color: '#424770',
+            color: isDarkMode ? '#f3f4f6' : '#424770',
+            backgroundColor: isDarkMode ? '#374151' : '#ffffff',
             '::placeholder': {
-              color: '#aab7c4',
+              color: isDarkMode ? '#9ca3af' : '#aab7c4',
             },
           },
         },
@@ -107,12 +110,15 @@ onMounted(() => {
 <template>
   <div class="stripe-elements-container">
     <!-- Payment Element container (shows multiple payment methods in tabs/accordion) -->
-    <div v-if="paymentMethodType === 'payment'" id="payment-element" class="stripe-element">
+    <div
+      v-if="paymentMethodType === 'payment'"
+      id="payment-element"
+      class="stripe-element bg-white dark:bg-gray-700 rounded-md p-4 border border-gray-300 dark:border-gray-600">
       <!-- Payment Element will be mounted here -->
     </div>
 
     <!-- Card Element container (traditional single card input) -->
-    <div v-else id="card-element" class="stripe-element">
+    <div v-else id="card-element" class="stripe-element bg-white dark:bg-gray-700 rounded-md p-4 border border-gray-300 dark:border-gray-600">
       <!-- Card Element will be mounted here -->
     </div>
   </div>

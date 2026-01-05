@@ -1,21 +1,21 @@
 <template>
   <div class="max-w-lg mx-auto my-16 min-h-[600px] text-center align-center flex flex-col justify-center">
     <div class="flex flex-col my-8">
-      <h1 class="text-xl font-semibold lg:text-3xl">{{ formTitle }}</h1>
-      <p v-if="formView === FormView.LOGIN" class="text-gray-500 mt-2">
+      <h1 class="text-xl font-semibold lg:text-3xl text-gray-900 dark:text-white">{{ formTitle }}</h1>
+      <p v-if="formView === FormView.LOGIN" class="text-gray-500 dark:text-gray-400 mt-2">
         {{ $t('account.noAccount') }}
-        <a class="font-semibold cursor-pointer text-primary" @click="navigate(FormView.REGISTER)"> {{ $t('account.accountRegister') }} </a>.
+        <a class="font-semibold cursor-pointer text-primary hover:underline" @click="navigate(FormView.REGISTER)"> {{ $t('account.accountRegister') }} </a>.
       </p>
-      <p v-else-if="formView === FormView.REGISTER" class="text-gray-500 mt-2">
+      <p v-else-if="formView === FormView.REGISTER" class="text-gray-500 dark:text-gray-400 mt-2">
         {{ $t('account.hasAccount') }}
-        <a @click="navigate(FormView.LOGIN)" class="text-primary text-semibold cursor-pointer">Sign in</a>.
+        <a @click="navigate(FormView.LOGIN)" class="text-primary text-semibold cursor-pointer hover:underline">Sign in</a>.
       </p>
     </div>
 
     <LoginProviders class="mb-8" v-if="formView === FormView.LOGIN || formView === FormView.REGISTER" />
 
     <form @submit.prevent="handleFormSubmit(userInfo)">
-      <p v-if="formView === FormView.FORGOT_PASSWORD" class="text-sm text-gray-500 mb-8">{{ $t('account.enterEmailOrUsernameForReset') }}</p>
+      <p v-if="formView === FormView.FORGOT_PASSWORD" class="text-sm text-gray-500 dark:text-gray-400 mb-8">{{ $t('account.enterEmailOrUsernameForReset') }}</p>
       <input
         v-if="formView === FormView.REGISTER || formView === FormView.FORGOT_PASSWORD"
         id="email"
@@ -27,7 +27,6 @@
       <div v-if="formView !== FormView.FORGOT_PASSWORD">
         <input v-model="userInfo.username" :placeholder="inputPlaceholder.username" autocomplete="username" type="text" required />
         <PasswordInput
-          className="border rounded-lg w-full p-3 px-4 bg-white "
           v-model="userInfo.password"
           :placeholder="passwordLabel"
           :autocomplete="formView === FormView.LOGIN ? 'current-password' : 'new-password'"
@@ -44,11 +43,11 @@
       </button>
 
       <div class="flex items-center justify-between mt-4" v-if="formView === FormView.LOGIN">
-        <div class="font-semibold cursor-pointer text-sm text-primary hover:text-primary" @click="navigate(FormView.FORGOT_PASSWORD)">Forgot password?</div>
+        <div class="font-semibold cursor-pointer text-sm text-primary hover:underline" @click="navigate(FormView.FORGOT_PASSWORD)">Forgot password?</div>
       </div>
     </form>
 
-    <div class="my-8 text-center cursor-pointer" @click="navigate(FormView.LOGIN)" v-if="formView === FormView.FORGOT_PASSWORD">
+    <div class="my-8 text-center cursor-pointer text-primary hover:underline" @click="navigate(FormView.LOGIN)" v-if="formView === FormView.FORGOT_PASSWORD">
       {{ $t('account.backToLogin') }}
     </div>
 
@@ -184,12 +183,11 @@ const inputPlaceholder = computed(() => {
 
 <style lang="postcss" scoped>
 input[type='text'],
-input[type='password'],
 button {
-  @apply border rounded-lg mb-4 w-full p-3 px-4 bg-white;
+  @apply border rounded-lg mb-4 w-full p-3 px-4 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white;
 }
 
 form button {
-  @apply rounded-lg font-bold bg-gray-800 text-white py-3 px-8 hover:bg-gray-800;
+  @apply rounded-lg font-bold bg-gray-800 dark:bg-gray-200 text-white py-3 px-8 hover:bg-gray-100 dark:hover:bg-gray-100 dark:text-gray-800;
 }
 </style>

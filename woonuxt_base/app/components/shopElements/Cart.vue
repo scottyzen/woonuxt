@@ -3,11 +3,15 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
 </script>
 
 <template>
-  <div class="fixed top-0 bottom-0 right-0 z-50 flex flex-col w-11/12 max-w-lg overflow-x-hidden bg-white shadow-lg">
-    <Icon name="ion:close-outline" class="absolute p-1 rounded-lg shadow-lg top-6 left-6 md:left-8 cursor-pointer" size="34" @click="toggleCart(false)" />
+  <div class="fixed top-0 bottom-0 right-0 z-50 flex flex-col w-11/12 max-w-lg overflow-x-hidden bg-white dark:bg-gray-800 shadow-lg">
+    <Icon
+      name="ion:close-outline"
+      class="absolute p-1 rounded-lg shadow-lg top-6 left-6 md:left-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+      size="34"
+      @click="toggleCart(false)" />
     <EmptyCart v-if="cart && !cart.isEmpty" class="rounded-lg shadow-lg p-1.5 hover:bg-red-400 hover:text-white" />
 
-    <div class="mt-8 text-center">
+    <div class="mt-8 text-center text-gray-900 dark:text-white font-semibold">
       {{ $t('shop.cart') }}
       <span v-if="cart?.contents?.productCount"> ({{ cart?.contents?.productCount }}) </span>
     </div>
@@ -19,7 +23,7 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
         </ul>
         <div class="px-8 mb-8">
           <NuxtLink
-            class="block p-3 text-lg text-center text-white bg-gray-800 rounded-lg shadow-md justify-evenly hover:bg-gray-900"
+            class="block p-3 text-lg text-center text-white bg-gray-800 dark:bg-gray-700 rounded-lg shadow-md justify-evenly hover:bg-gray-900 dark:hover:bg-gray-600"
             to="/checkout"
             @click.prevent="toggleCart()">
             <span class="mx-2">{{ $t('shop.checkout') }}</span>
@@ -35,7 +39,7 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
       </div>
     </ClientOnly>
     <!-- Cart Loading Overlay -->
-    <div v-if="isUpdatingCart" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-25">
+    <div v-if="isUpdatingCart" class="absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-800 bg-opacity-25 dark:bg-opacity-50">
       <LoadingIcon />
     </div>
   </div>
