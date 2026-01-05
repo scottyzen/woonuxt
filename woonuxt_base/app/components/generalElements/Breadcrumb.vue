@@ -17,7 +17,7 @@ const format = computed(() => [
 </script>
 
 <template>
-  <div class="flex text-sm leading-none text-gray-400 dark:text-gray-500 gap-1 items-center">
+  <div class="flex flex-wrap  text-sm leading-none text-gray-400 dark:text-gray-500 gap-1 items-center">
     <span>
       <NuxtLink to="/" class="hover:text-primary">{{ $t('general.home') }}</NuxtLink>
       <span> /</span>
