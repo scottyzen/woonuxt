@@ -21,7 +21,7 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
         <ul class="flex flex-col flex-1 gap-4 p-6 overflow-y-scroll md:p-8">
           <CartCard v-for="item in cart.contents?.nodes" :key="item.key" :item />
         </ul>
-        <div class="px-8 mb-8">
+        <div class="px-6 pb-6 mb-safe md:px-8 md:mb-8">
           <NuxtLink
             class="block p-3 text-lg text-center text-white bg-gray-800 dark:bg-gray-700 rounded-lg shadow-md justify-evenly hover:bg-gray-900 dark:hover:bg-gray-600"
             to="/checkout"
