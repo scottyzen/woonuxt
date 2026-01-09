@@ -192,23 +192,8 @@ useSeoMeta({
       </div>
       <div v-else-if="errorMessage" class="flex flex-col items-center justify-center flex-1 w-full gap-4 text-center">
         <Icon name="ion:sad-outline" size="96" class="text-gray-700 dark:text-gray-400" />
-        <h1 class="text-xl font-semibold text-gray-900 dark:text-white">{{ $t('shop.orderError') }}</h1>
+        <h1 class="text-xl font-semibold text-gray-900 dark:text-white">Error</h1>
         <div v-if="errorMessage" class="text-sm text-red-500 dark:text-red-400" v-html="errorMessage" />
-        <p class="text-sm text-gray-600 dark:text-gray-400 mt-4 max-w-md">
-          {{ $t('shop.orderErrorHint') }}
-        </p>
-        <div class="flex gap-4 mt-4">
-          <NuxtLink
-            to="/my-account?tab=orders"
-            class="px-6 py-2 text-sm font-semibold text-white bg-gray-800 dark:bg-gray-700 rounded-lg hover:bg-gray-900 dark:hover:bg-gray-600">
-            {{ $t('account.viewOrders') }}
-          </NuxtLink>
-          <NuxtLink
-            to="/contact"
-            class="px-6 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
-            {{ $t('general.contactUs') }}
-          </NuxtLink>
-        </div>
       </div>
     </template>
   </div>
