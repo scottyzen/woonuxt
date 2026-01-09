@@ -54,9 +54,11 @@ onMounted(async () => {
 
 async function getOrder() {
   try {
-    const data = await GqlGetOrder({ id: params.orderId as string });
-    if (data.order) {
-      order.value = data.order;
+    const { customer } = await GqlGetOrder({ id: params.orderId as string });
+    const fetchedOrder = customer?.orders?.nodes?.[0];
+
+    if (fetchedOrder) {
+      order.value = fetchedOrder;
     } else {
       errorMessage.value = 'Could not find order';
     }
@@ -113,7 +115,7 @@ useSeoMeta({
         </template>
         <hr class="my-8 border-gray-200 dark:border-gray-700" />
       </div>
-      <div v-if="order && !isGuest" class="flex-1 w-full">
+      <div v-if="order" class="flex-1 w-full">
         <div class="flex items-start justify-between">
           <div class="w-[21%]">
             <div class="mb-2 text-xs text-gray-400 dark:text-gray-500 uppercase">{{ $t('shop.order') }}</div>

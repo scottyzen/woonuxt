@@ -22,6 +22,9 @@ export default <Partial<Config>>{
       screens: {
         '2xl': '1400px',
       },
+      spacing: {
+        safe: 'env(safe-area-inset-bottom)',
+      },
     },
   },
   plugins: [require('@tailwindcss/typography')],

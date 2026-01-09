@@ -12,12 +12,12 @@
   },
   "dependencies": {
     "@nuxtjs/color-mode": "^4.0.0",
-    "@stripe/stripe-js": "^8.6.0",
+    "@stripe/stripe-js": "^8.6.1",
     "@vueform/slider": "^2.1.10",
     "@vueuse/core": "^14.1.0"
   },
   "devDependencies": {
-    "@nuxt/icon": "^2.1.1",
+    "@nuxt/icon": "^2.2.0",
     "@nuxt/image": "2.0.0",
     "@nuxtjs/i18n": "^10.2.1",
     "@nuxtjs/tailwindcss": "^6.14.0",
