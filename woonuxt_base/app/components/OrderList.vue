@@ -11,7 +11,7 @@ const refresh = () => {
   getOrders();
 };
 
-const goToOrder = (orderNumber?: string): void => {
+const goToOrder = (orderNumber?: string | null): void => {
   if (!orderNumber) return;
   router.push(`/order-summary/${orderNumber}`);
 };
