@@ -54,9 +54,11 @@ onMounted(async () => {
 
 async function getOrder() {
   try {
-    const data = await GqlGetOrder({ id: params.orderId as string });
-    if (data.order) {
-      order.value = data.order;
+    const { customer } = await GqlGetOrder({ id: params.orderId as string });
+    const fetchedOrder = customer?.orders?.nodes?.[0];
+
+    if (fetchedOrder) {
+      order.value = fetchedOrder;
     } else {
       errorMessage.value = 'Could not find order';
     }
@@ -113,7 +115,7 @@ useSeoMeta({
         </template>
         <hr class="my-8 border-gray-200 dark:border-gray-700" />
       </div>
-      <div v-if="order && !isGuest" class="flex-1 w-full">
+      <div v-if="order" class="flex-1 w-full">
         <div class="flex items-start justify-between">
           <div class="w-[21%]">
             <div class="mb-2 text-xs text-gray-400 dark:text-gray-500 uppercase">{{ $t('shop.order') }}</div>
@@ -190,8 +192,23 @@ useSeoMeta({
       </div>
       <div v-else-if="errorMessage" class="flex flex-col items-center justify-center flex-1 w-full gap-4 text-center">
         <Icon name="ion:sad-outline" size="96" class="text-gray-700 dark:text-gray-400" />
-        <h1 class="text-xl font-semibold text-gray-900 dark:text-white">Error</h1>
+        <h1 class="text-xl font-semibold text-gray-900 dark:text-white">{{ $t('shop.orderError') }}</h1>
         <div v-if="errorMessage" class="text-sm text-red-500 dark:text-red-400" v-html="errorMessage" />
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-4 max-w-md">
+          {{ $t('shop.orderErrorHint') }}
+        </p>
+        <div class="flex gap-4 mt-4">
+          <NuxtLink
+            to="/my-account?tab=orders"
+            class="px-6 py-2 text-sm font-semibold text-white bg-gray-800 dark:bg-gray-700 rounded-lg hover:bg-gray-900 dark:hover:bg-gray-600">
+            {{ $t('account.viewOrders') }}
+          </NuxtLink>
+          <NuxtLink
+            to="/contact"
+            class="px-6 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
+            {{ $t('general.contactUs') }}
+          </NuxtLink>
+        </div>
       </div>
     </template>
   </div>
