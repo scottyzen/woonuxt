@@ -49,7 +49,7 @@ const imagetoDisplay = computed<string>(() => {
         :title="node.image?.title || node.name"
         :loading="index <= 3 ? 'eager' : 'lazy'"
         :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
-        class="rounded-lg object-top object-cover w-full aspect-9/8 dark:brightness-90 dark:contrast-95"
+        class="rounded-lg object-top object-cover w-full dark:brightness-90 dark:contrast-95"
         placeholder
         placeholder-class="blur-xl" />
     </NuxtLink>

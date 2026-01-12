@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-4 bg-white border border-gray-200 rounded-md shadow-sm outline-none dark:bg-gray-800 dark:border-gray-700">
+  <div class="w-full p-4 bg-white border border-gray-200 rounded-md shadow-xs outline-hidden dark:bg-gray-800 dark:border-gray-700">
     <!-- Header with name and edit button -->
     <div class="flex items-start justify-between mb-4">
       <div class="flex items-center gap-3">

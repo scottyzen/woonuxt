@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+/* Center container */
+.container {
+  @apply mx-auto px-4;
+}
+
+@theme {
+  /* Primary Color Shades */
+  --color-primary: var(--color-primary, #7f54b2);
+  --color-primary-light: oklch(from var(--color-primary) calc(l + 0.15) c h);
+  --color-primary-dark: oklch(from var(--color-primary) calc(l - 0.15) c h);
+
+  /* Breakpoints */
+  --breakpoint-2xl: 1400px;
+
+  /* Spacing for Safe Areas */
+  --spacing-safe: env(safe-area-inset-bottom);
+}
+
+@variant dark (&:where(.dark, .dark *));

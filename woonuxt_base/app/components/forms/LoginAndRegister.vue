@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-lg mx-auto my-16 min-h-[600px] text-center align-center flex flex-col justify-center">
+  <div class="max-w-lg mx-auto my-16 min-h-150 text-center align-center flex flex-col justify-center">
     <div class="flex flex-col my-8">
       <h1 class="text-xl font-semibold lg:text-3xl text-gray-900 dark:text-white">{{ formTitle }}</h1>
       <p v-if="formView === FormView.LOGIN" class="text-gray-500 dark:text-gray-400 mt-2">
@@ -181,13 +181,14 @@ const inputPlaceholder = computed(() => {
 });
 </script>
 
-<style lang="postcss" scoped>
-input[type='text'],
-button {
+<style scoped>
+@reference "#tailwind";
+
+input[type='text'] {
   @apply border rounded-lg mb-4 w-full p-3 px-4 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white;
 }
 
 form button {
-  @apply rounded-lg font-bold bg-gray-800 dark:bg-gray-200 text-white py-3 px-8 hover:bg-gray-100 dark:hover:bg-gray-100 dark:text-gray-800;
+  @apply rounded-lg font-bold bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 py-3 px-8 hover:bg-gray-900 dark:hover:bg-gray-100 mb-4 w-full;
 }
 </style>

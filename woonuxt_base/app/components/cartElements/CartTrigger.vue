@@ -17,7 +17,7 @@ const { toggleCart, cart } = useCart();
   </div>
 </template>
 
-<style lang="postcss">
+<style>
 /* popIn */
 .popIn-enter-active,
 .popIn-leave-active {

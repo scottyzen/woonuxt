@@ -25,7 +25,7 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({ ...attr, te
 <template>
   <aside id="filters">
     <OrderByDropdown class="block w-full md:hidden" />
-    <div class="relative z-30 grid mb-12 space-y-8 divide-y dark:divide-gray-700">
+    <div class="relative z-30 grid mb-12 divide-y divide-gray-200 dark:divide-gray-700 filters-container">
       <PriceFilter />
       <CategoryFilter v-if="!hideCategories" :terms="productCategoryTerms" />
       <div v-for="attribute in attributesWithTerms" :key="attribute.slug">
@@ -40,7 +40,9 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({ ...attr, te
   <div class="fixed inset-0 z-50 hidden bg-black dark:bg-black opacity-25 dark:opacity-50 filter-overlay" @click="removeBodyClass('show-filters')"></div>
 </template>
 
-<style lang="postcss">
+<style>
+@reference "#tailwind";
+
 .show-filters .filter-overlay {
   @apply block;
 }
@@ -49,10 +51,10 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({ ...attr, te
 }
 
 #filters {
-  @apply w-[280px];
+  width: 280px;
 
   & .slider-connect {
-    @apply bg-primary;
+    background-color: var(--color-primary);
   }
 
   &::-webkit-scrollbar {
@@ -61,7 +63,7 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({ ...attr, te
 }
 
 .price-input {
-  @apply border rounded-xl outline-none leading-tight w-full p-2 transition-all;
+  @apply border rounded-xl outline-hidden leading-tight w-full p-2 transition-all;
 
   &.active {
     @apply border-gray-400 pl-6;
@@ -89,5 +91,9 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({ ...attr, te
   .show-filters #filters {
     @apply transform-none;
   }
+}
+
+.filters-container > div {
+  @apply pb-8;
 }
 </style>

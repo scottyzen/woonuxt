@@ -22,10 +22,10 @@ async function submitCoupon(): Promise<void> {
         v-model="couponCode"
         type="text"
         :placeholder="$t('shop.couponCode')"
-        class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-xs outline-hidden dark:bg-gray-700 dark:border-gray-600 dark:text-white"
         required />
       <button
-        class="flex items-center justify-center px-4 py-2 text-white bg-gray-800 border rounded-md shadow-sm outline-none min-w-20 disabled:cursor-not-allowed disabled:bg-gray-400"
+        class="flex items-center justify-center px-4 py-2 text-white bg-gray-800 border rounded-md shadow-xs outline-hidden min-w-20 disabled:cursor-not-allowed disabled:bg-gray-400"
         :disabled="isUpdatingCoupon || couponCode === ''">
         <LoadingIcon v-if="isUpdatingCoupon" color="#fff" size="16" />
         <span v-else>{{ $t('general.apply') }}</span>
@@ -37,9 +37,7 @@ async function submitCoupon(): Promise<void> {
     <Transition name="scale-y" mode="out-in">
       <div v-if="cart && cart.appliedCoupons" class="text-xs font-semibold uppercase flex flex-wrap gap-2">
         <div v-for="(coupon, index) in cart.appliedCoupons" :key="coupon?.code || index" class="flex flex-wrap mt-2 flex-2">
-          <div
-            v-if="coupon?.code"
-            class="bg-primary border-primary border rounded-md flex bg-opacity-5 border-opacity-10 text-primary leading-none p-1.5 gap-1 items-center">
+          <div v-if="coupon?.code" class="bg-primary/5 border-primary/10 border rounded-md flex text-primary leading-none p-1.5 gap-1 items-center">
             <span v-html="coupon.code" />
             <Icon name="ion:close" class="rounded-full cursor-pointer hover:bg-primary hover:text-white" @click="removeCoupon(coupon.code)" />
           </div>

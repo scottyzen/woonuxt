@@ -6,18 +6,20 @@
   </div>
 </template>
 
-<style lang="postcss">
+<style>
+@reference "#tailwind";
+
 .account-form input[type='text'],
 .account-form input[type='email'],
 .account-form input[type='tel'],
 .account-form input[type='password'],
 .account-form textarea,
 .account-form .StripeElement {
-  @apply bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md outline-none w-full py-2 px-4 block md:bg-gray-50 dark:md:bg-gray-700 shadow-inner text-gray-900 dark:text-white;
+  @apply bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md outline-hidden w-full py-2 px-4 block md:bg-gray-50 dark:md:bg-gray-700 shadow-inner text-gray-900 dark:text-white;
 }
 
 .account-form select {
-  @apply bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md outline-none w-full py-2 px-4 block md:bg-gray-50 dark:md:bg-gray-700 shadow-sm text-gray-900 dark:text-white;
+  @apply bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md outline-hidden w-full py-2 px-4 block md:bg-gray-50 dark:md:bg-gray-700 shadow-xs text-gray-900 dark:text-white;
 }
 
 .account-form label {

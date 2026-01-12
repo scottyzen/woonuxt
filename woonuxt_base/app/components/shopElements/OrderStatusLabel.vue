@@ -8,7 +8,9 @@ const readableStatus = computed(() => props.order?.status?.replace(/_/g, ' ') ||
   <span :class="`order-${order?.status}`" class="order-status">{{ readableStatus }}</span>
 </template>
 
-<style lang="postcss" scoped>
+<style scoped>
+@reference "#tailwind";
+
 .order-status {
   @apply border rounded-md font-semibold bg-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 text-xs leading-none p-1.5 inline-block;
 }

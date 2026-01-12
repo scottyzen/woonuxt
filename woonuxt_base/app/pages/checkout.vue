@@ -271,7 +271,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="flex flex-col min-h-[600px]">
+  <div class="flex flex-col min-h-150">
     <template v-if="cart && customer">
       <div v-if="cart.isEmpty" class="flex flex-col items-center justify-center flex-1 mb-12">
         <Icon name="ion:cart-outline" size="156" class="opacity-25 mb-5" />
@@ -340,7 +340,7 @@ useSeoMeta({
                   v-model="shipToDifferentAddress"
                   type="checkbox"
                   name="useSameAddress"
-                  class="w-4 h-4 text-primary bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-primary focus:ring-2" />
+                  class="w-4 h-4 text-primary bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-sm focus:ring-3 focus:ring-primary" />
                 <label for="useSameAddress" class="text-sm font-medium text-gray-700 dark:text-gray-300">
                   {{ $t('billing.differentAddress') }}
                 </label>
@@ -360,7 +360,7 @@ useSeoMeta({
                   v-model="shipToDifferentAddress"
                   type="checkbox"
                   name="useSameAddressEdit"
-                  class="w-4 h-4 text-primary bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-primary focus:ring-2" />
+                  class="w-4 h-4 text-primary bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-sm focus:ring-3 focus:ring-primary" />
                 <label for="useSameAddressEdit" class="text-sm font-medium text-gray-700 dark:text-gray-300">
                   {{ $t('billing.differentAddress') }}
                 </label>
@@ -409,7 +409,7 @@ useSeoMeta({
               id="order-note"
               v-model="orderInput.customerNote"
               name="order-note"
-              class="w-full min-h-[100px]"
+              class="w-full min-h-25"
               rows="4"
               :placeholder="$t('shop.orderNotePlaceholder')"></textarea>
           </div>
@@ -428,17 +428,19 @@ useSeoMeta({
   </div>
 </template>
 
-<style lang="postcss">
+<style>
+@reference "#tailwind";
+
 .checkout-form input[type='text'],
 .checkout-form input[type='email'],
 .checkout-form input[type='tel'],
 .checkout-form input[type='password'],
 .checkout-form textarea {
-  @apply bg-white border rounded-md outline-none border-gray-300 shadow-inner w-full py-2 px-4 dark:bg-gray-700 dark:border-gray-600 dark:text-white;
+  @apply bg-white border rounded-md outline-hidden border-gray-300 shadow-inner w-full py-2 px-4 dark:bg-gray-700 dark:border-gray-600 dark:text-white;
 }
 
 .checkout-form select {
-  @apply bg-white border rounded-md outline-none border-gray-300 shadow-sm w-full py-2 px-4 dark:bg-gray-700 dark:border-gray-600 dark:text-white;
+  @apply bg-white border rounded-md outline-hidden border-gray-300 shadow-xs w-full py-2 px-4 dark:bg-gray-700 dark:border-gray-600 dark:text-white;
 }
 
 .checkout-form label {

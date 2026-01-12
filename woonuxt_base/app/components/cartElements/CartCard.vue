@@ -46,12 +46,12 @@ const moveToWishList = () => {
           }}</NuxtLink>
           <span
             v-if="productType.salePrice"
-            class="text-[10px] border-green-200 dark:border-green-800 leading-none bg-green-100 dark:bg-green-900/30 inline-block p-0.5 rounded text-green-600 dark:text-green-400 border">
+            class="text-[10px] border-green-200 dark:border-green-800 leading-none bg-green-100 dark:bg-green-900/30 inline-block p-0.5 rounded-sm text-green-600 dark:text-green-400 border">
             Save {{ salePercentage }}
           </span>
           <span
             v-if="isLowStock"
-            class="text-[10px] border-yellow-200 dark:border-yellow-800 leading-none bg-yellow-100 dark:bg-yellow-900/30 inline-block p-0.5 rounded text-orange-500 dark:text-orange-400 border">
+            class="text-[10px] border-yellow-200 dark:border-yellow-800 leading-none bg-yellow-100 dark:bg-yellow-900/30 inline-block p-0.5 rounded-sm text-orange-500 dark:text-orange-400 border">
             Low Stock
           </span>
         </div>

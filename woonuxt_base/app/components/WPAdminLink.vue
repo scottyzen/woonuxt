@@ -28,9 +28,11 @@ const linkStartsWithWpAdmin = link?.startsWith('/wp-admin') || false;
   </DevOnly>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
+@reference "#tailwind";
+
 .wp-admin-link {
-  @apply inline-flex items-center bg-yellow-400 leading-tight py-1 px-2 rounded gap-1 text-xs text-yellow-900 border-b border-yellow-500 uppercase transition-all duration-100 ease-in-out;
+  @apply inline-flex items-center bg-yellow-400 leading-tight py-1 px-2 rounded-sm gap-1 text-xs text-yellow-900 border-b border-yellow-500 uppercase transition-all duration-100 ease-in-out;
 
   &:hover {
     @apply bg-yellow-500 border-yellow-600 border-b;

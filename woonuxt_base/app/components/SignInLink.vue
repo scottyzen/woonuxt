@@ -30,7 +30,9 @@ const linkTitle = computed<string>(() => viewer.value?.username || 'Sign In');
   </NuxtLink>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
+@reference "#tailwind";
+
 .pop-in-enter-active,
 .pop-in-leave-active {
   transition: transform 0.3s;
@@ -47,7 +49,7 @@ const linkTitle = computed<string>(() => viewer.value?.username || 'Sign In');
 
     a,
     button {
-      @apply flex gap-2 items-center p-2 rounded whitespace-nowrap min-w-[200px];
+      @apply flex gap-2 items-center p-2 rounded-sm whitespace-nowrap min-w-50;
     }
 
     a:hover {

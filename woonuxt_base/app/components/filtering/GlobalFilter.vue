@@ -25,7 +25,7 @@ const checkboxChanged = () => {
     <span>{{ filterTitle }}</span>
     <Icon name="ion:chevron-down-outline" class="transform text-gray-600 dark:text-gray-400" :class="isOpen ? 'rotate-180' : ''" />
   </div>
-  <div v-show="isOpen" class="mt-3 mr-1 max-h-[240px] grid gap-1 overflow-auto custom-scrollbar">
+  <div v-show="isOpen" class="mt-3 mr-1 max-h-60 grid gap-1 overflow-auto custom-scrollbar">
     <div v-for="term in attribute.terms" :key="term.slug" class="flex gap-2 items-center">
       <input :id="term.slug" v-model="selectedTerms" type="checkbox" :value="term.slug" @change="checkboxChanged" />
       <label :for="term.slug" class="cursor-pointer m-0 text-sm flex items-center flex-wrap text-gray-700 dark:text-gray-300">
