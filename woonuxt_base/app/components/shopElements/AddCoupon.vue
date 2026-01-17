@@ -25,7 +25,7 @@ async function submitCoupon(): Promise<void> {
         class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-xs outline-hidden dark:bg-gray-700 dark:border-gray-600 dark:text-white"
         required />
       <button
-        class="flex items-center justify-center px-4 py-2 text-white bg-gray-800 border rounded-md shadow-xs outline-hidden min-w-20 disabled:cursor-not-allowed disabled:bg-gray-400"
+        class="flex items-center justify-center px-4 py-2 text-white bg-gray-800 border rounded-md shadow-xs outline-hidden min-w-20 disabled:cursor-not-allowed disabled:bg-gray-400 dark:disabled:border-gray-600 dark:hover:bg-gray-500 dark:border-primary dark:bg-primary hover:bg-gray-700"
         :disabled="isUpdatingCoupon || couponCode === ''">
         <LoadingIcon v-if="isUpdatingCoupon" color="#fff" size="16" />
         <span v-else>{{ $t('general.apply') }}</span>
