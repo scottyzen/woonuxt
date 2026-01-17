@@ -16,6 +16,7 @@
     "@tailwindcss/postcss": "^4.1.18",
     "@vueform/slider": "^2.1.10",
     "@vueuse/core": "^14.1.0",
+    "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
