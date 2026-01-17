@@ -39,7 +39,7 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
       </div>
     </ClientOnly>
     <!-- Cart Loading Overlay -->
-    <div v-if="isUpdatingCart" class="absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-800 bg-opacity-25 dark:bg-opacity-50">
+    <div v-if="isUpdatingCart" class="absolute inset-0 flex items-center justify-center bg-white/25 dark:bg-gray-800/50">
       <LoadingIcon />
     </div>
   </div>

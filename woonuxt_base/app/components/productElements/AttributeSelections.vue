@@ -116,7 +116,7 @@ onMounted(() => {
           :ref="attr.name"
           :name="attr.name"
           required
-          class="border-white dark:border-gray-600 shadow-sm dark:bg-gray-700 dark:text-white"
+          class="border-white dark:border-gray-600 shadow-xs dark:bg-gray-700 dark:text-white"
           @change="updateAttrs">
           <option disabled hidden>{{ $t('general.choose') }} {{ decodeURIComponent(attr.label) }}</option>
           <option v-for="(term, dropdownIndex) in attr.terms.nodes" :key="dropdownIndex" :value="term.slug" v-html="term.name" :selected="dropdownIndex == 0" />
@@ -151,7 +151,9 @@ onMounted(() => {
   </div>
 </template>
 
-<style lang="postcss">
+<style>
+@reference "#tailwind";
+
 .radio-button {
   @apply border-transparent border-white dark:border-gray-700 rounded-lg cursor-pointer outline bg-gray-50 dark:bg-gray-700 border-2 text-sm text-center outline-2 outline-gray-100 dark:outline-gray-600 py-1.5 px-3 transition-all text-gray-800 dark:text-gray-200 inline-block hover:outline-gray-500;
 }

@@ -16,7 +16,7 @@ const { wishlistLink } = useAuth();
           </ClientOnly>
         </div>
       </div>
-      <div class="w-3/7 lg:w-auto">
+      <div class="w-[42.857%] lg:w-auto">
         <div class="mb-1 font-semibold text-gray-900 dark:text-white">{{ $t('general.information') }}</div>
         <div class="text-sm text-gray-700 dark:text-gray-300">
           <a class="py-1.5 block" href="https://github.com/scottyzen/woonuxt?tab=readme-ov-file#next-generation-front-end-for-woocommerce" target="_blank">{{
@@ -27,7 +27,7 @@ const { wishlistLink } = useAuth();
           <a href="https://woonuxt.com/faq" class="py-1.5 block" rel="noreferrer" target="_blank">FAQ's</a>
         </div>
       </div>
-      <div class="w-3/7 lg:w-auto">
+      <div class="w-[42.857%] lg:w-auto">
         <div class="mb-1 font-semibold text-gray-900 dark:text-white">{{ $t('general.products') }}</div>
         <div class="text-sm text-gray-700 dark:text-gray-300">
           <ClientOnly>
@@ -51,7 +51,7 @@ const { wishlistLink } = useAuth();
           <a href="/" class="py-1.5 block">{{ $t('shop.giftCards') }}</a>
         </div>
       </div>
-      <div class="w-3/7 lg:w-auto">
+      <div class="w-[42.857%] lg:w-auto">
         <div class="mb-1 font-semibold text-gray-900 dark:text-white">{{ $t('general.customerService') }}</div>
         <div class="text-sm text-gray-700 dark:text-gray-300">
           <ClientOnly>
@@ -65,7 +65,7 @@ const { wishlistLink } = useAuth();
           <a href="/" class="py-1.5 block">{{ $t('general.termsConditions') }}</a>
         </div>
       </div>
-      <div class="w-3/7 lg:w-auto">
+      <div class="w-[42.857%] lg:w-auto">
         <div class="mb-1 font-semibold text-gray-900 dark:text-white">{{ $t('account.myAccount') }}</div>
         <div class="text-sm text-gray-700 dark:text-gray-300">
           <ClientOnly>
@@ -102,8 +102,8 @@ const { wishlistLink } = useAuth();
   </footer>
 </template>
 
-<style scoped lang="postcss">
-a {
-  @apply hover:underline;
+<style scoped>
+a:hover {
+  text-decoration: underline;
 }
 </style>

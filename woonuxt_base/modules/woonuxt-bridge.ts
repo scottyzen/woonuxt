@@ -125,6 +125,7 @@ export default defineNuxtModule({
       process.env.PRIMARY_COLOR = data.woonuxtSettings?.primary_color || '#7F54B2';
 
       // Default runtimeConfig
+      nuxt.options.runtimeConfig.public.PRIMARY_COLOR = data.woonuxtSettings?.primary_color || '#7F54B2';
       nuxt.options.runtimeConfig.public.LOGO = data.woonuxtSettings?.logo || null;
       nuxt.options.runtimeConfig.public.PRODUCTS_PER_PAGE = data.woonuxtSettings?.productsPerPage || process.env.PRODUCTS_PER_PAGE || 24;
       nuxt.options.runtimeConfig.public.GLOBAL_PRODUCT_ATTRIBUTES = data.woonuxtSettings?.global_attributes || [];

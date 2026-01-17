@@ -62,7 +62,7 @@ useHead({
 </script>
 
 <template>
-  <div class="max-w-lg mx-auto my-16 min-h-[600px] lg:my-24">
+  <div class="max-w-lg mx-auto my-16 min-h-150 lg:my-24">
     <div class="flex flex-col items-center">
       <Logo class="mb-6 scale-125" />
       <h1 class="text-xl font-semibold lg:text-3xl">{{ $t('account.resetPassword') }}</h1>
@@ -105,13 +105,14 @@ useHead({
   </div>
 </template>
 
-<style lang="postcss" scoped>
-input,
-button {
-  @apply border rounded-lg mb-4 w-full p-3 px-4 bg-white;
+<style scoped>
+@reference "#tailwind";
+
+input {
+  @apply border rounded-lg mb-4 w-full p-3 px-4 bg-white border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white;
 }
 
 form button {
-  @apply rounded-lg font-bold bg-gray-800 text-white py-3 px-8 hover:bg-gray-800;
+  @apply rounded-lg font-bold bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 py-3 px-8 hover:bg-gray-900 dark:hover:bg-gray-100 mb-4 w-full;
 }
 </style>

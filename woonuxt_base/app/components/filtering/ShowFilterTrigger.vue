@@ -7,7 +7,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="relative inline-flex -space-x-px shadow-sm rounded-m isolate">
+  <div class="relative inline-flex -space-x-px shadow-xs rounded-md isolate">
     <button
       class="relative inline-flex items-center p-2 text-sm text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:z-20"
       aria-label="Show filters"

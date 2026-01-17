@@ -8,7 +8,7 @@
 
     <form class="space-y-6" @submit.prevent="saveChanges">
       <!-- Billing Address Card -->
-      <div class="bg-white border border-gray-100 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+      <div class="bg-white border border-gray-100 rounded-lg shadow-xs dark:bg-gray-800 dark:border-gray-700">
         <div class="p-6 pb-4 border-b border-gray-100 md:px-8 dark:border-gray-700">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Billing Address</h3>
         </div>
@@ -139,7 +139,7 @@
       </div>
 
       <!-- Shipping Address Card -->
-      <div class="bg-white border border-gray-100 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+      <div class="bg-white border border-gray-100 rounded-lg shadow-xs dark:bg-gray-800 dark:border-gray-700">
         <div class="p-6 pb-4 border-b border-gray-100 md:px-8 dark:border-gray-700">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Shipping Address</h3>
         </div>

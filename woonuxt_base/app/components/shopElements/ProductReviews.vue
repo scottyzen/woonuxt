@@ -5,7 +5,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="flex flex-wrap gap-32 items-start">
+  <div class="flex flex-wrap gap-32 items-start mt-8">
     <div class="flex max-w-sm gap-4 prose dark:prose-invert">
       <ReviewsScore v-if="product.reviews" :reviews="product.reviews" :productId="product.databaseId" />
     </div>

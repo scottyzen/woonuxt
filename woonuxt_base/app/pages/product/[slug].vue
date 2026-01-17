@@ -138,20 +138,20 @@ const disabledAddToCart = computed(() => {
               @attrs-changed="updateSelectedVariations" />
             <div
               v-if="isVariableProduct || isSimpleProduct"
-              class="fixed bottom-0 left-0 z-10 flex items-center w-full gap-4 p-4 mt-12 md:static md:bg-transparent bg-opacity-90 md:p-0 shadow-lg md:shadow-none dark:shadow-gray-900">
+              class="fixed bottom-0 left-0 z-10 flex items-center w-full gap-4 p-4 mt-12 bg-white/90 md:static md:bg-transparent md:p-0 shadow-lg md:shadow-none dark:shadow-gray-900">
               <input
                 v-model="quantity"
                 type="number"
                 min="1"
                 aria-label="Quantity"
-                class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg flex text-left p-2.5 w-20 gap-4 items-center justify-center focus:outline-none dark:text-white" />
+                class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg flex text-left p-2.5 w-20 gap-4 items-center justify-center focus:outline-hidden dark:text-white" />
               <AddToCartButton class="flex-1 w-full md:max-w-xs" :disabled="disabledAddToCart" :class="{ loading: isUpdatingCart }" />
             </div>
             <a
               v-if="isExternalProduct && product.externalUrl"
               :href="product.externalUrl"
               target="_blank"
-              class="rounded-lg flex font-bold bg-gray-800 dark:bg-gray-700 text-white text-center min-w-[150px] p-2.5 gap-4 items-center justify-center focus:outline-none hover:bg-gray-700 dark:hover:bg-gray-600">
+              class="rounded-lg flex font-bold bg-gray-800 dark:bg-gray-700 text-white text-center min-w-37.5 p-2.5 gap-4 items-center justify-center focus:outline-hidden hover:bg-gray-700 dark:hover:bg-gray-600">
               {{ product?.buttonText || 'View product' }}
             </a>
           </form>

@@ -102,7 +102,7 @@ async function addComment() {
                 <label
                   v-for="i in 5"
                   :key="i"
-                  class="grid p-1 rounded"
+                  class="grid p-1 rounded-sm"
                   :class="rating < i && i > hovered ? 'disable-star' : 'checked-star'"
                   @mouseover="setHovered(i)"
                   @mouseout="resetHovered">
@@ -147,9 +147,11 @@ async function addComment() {
   </div>
 </template>
 
-<style lang="postcss" scoped>
+<style scoped>
+@reference "#tailwind";
+
 .disable-star {
-  @apply bg-white dark:bg-gray-700 shadow-sm text-gray-300 dark:text-gray-600 border border-gray-300 dark:border-gray-600;
+  @apply bg-white dark:bg-gray-700 shadow-xs text-gray-300 dark:text-gray-600 border border-gray-300 dark:border-gray-600;
   transition: 0.15s ease-in-out;
 }
 .checked-star {
@@ -159,7 +161,7 @@ async function addComment() {
 }
 .writeReview input,
 .writeReview textarea {
-  @apply bg-white dark:bg-gray-700 border rounded-md outline-none border-gray-300 dark:border-gray-600 shadow-inner w-full py-2 px-4 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500;
+  @apply bg-white dark:bg-gray-700 border rounded-md outline-hidden border-gray-300 dark:border-gray-600 shadow-inner w-full py-2 px-4 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500;
 }
 
 .writeReview input:focus,

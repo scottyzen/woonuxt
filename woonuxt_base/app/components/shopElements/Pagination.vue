@@ -51,7 +51,7 @@ const numberSrc = (pageNumber: number) => {
 <template>
   <div class="flex justify-center mt-8 mb-16 col-span-full tabular-nums">
     <!-- Pagination -->
-    <nav v-if="numberOfPages && numberOfPages > 1" class="inline-flex self-end -space-x-px rounded-md shadow-sm isolate" aria-label="Pagination">
+    <nav v-if="numberOfPages && numberOfPages > 1" class="inline-flex self-end -space-x-px rounded-md shadow-xs isolate" aria-label="Pagination">
       <!-- PREV -->
       <NuxtLink
         :to="prevSrc(page)"
@@ -87,7 +87,9 @@ const numberSrc = (pageNumber: number) => {
   </div>
 </template>
 
-<style lang="postcss" scoped>
+<style scoped>
+@reference "#tailwind";
+
 .prev,
 .next,
 .page-number {
@@ -107,6 +109,6 @@ const numberSrc = (pageNumber: number) => {
 }
 
 .page-number[aria-current='page'] {
-  @apply bg-primary dark:bg-primary border-primary dark:border-primary border bg-opacity-10 dark:bg-opacity-20 text-primary dark:text-primary z-10;
+  @apply bg-primary/10 dark:bg-primary/20 border-primary dark:border-primary border text-primary dark:text-primary z-10;
 }
 </style>

@@ -28,8 +28,8 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="container min-h-[600px] py-8">
-    <div v-if="showLoader || isRedirecting" class="flex flex-col min-h-[500px]">
+  <div class="container min-h-150 py-8">
+    <div v-if="showLoader || isRedirecting" class="flex flex-col min-h-125">
       <LoadingIcon class="m-auto" />
     </div>
     <template v-else>
@@ -38,12 +38,12 @@ useSeoMeta({
         <!-- Enhanced Sidebar -->
         <aside class="w-full lg:w-72 lg:sticky lg:top-20 shrink-0 dark:text-gray-200">
           <!-- User Profile Card -->
-          <div class="p-5 mb-6 bg-white border border-gray-100 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+          <div class="p-5 mb-6 bg-white border border-gray-100 rounded-lg shadow-xs dark:bg-gray-800 dark:border-gray-700">
             <div class="flex items-center gap-6">
               <img v-if="avatar" :src="avatar" class="rounded-full aspect-square ring-4 ring-primary/10" alt="user-image" width="64" height="64" />
               <div
                 v-else
-                class="flex items-center justify-center w-16 h-16 text-2xl font-bold text-white rounded-full bg-gradient-to-br from-primary to-primary-dark">
+                class="flex items-center justify-center w-16 h-16 text-2xl font-bold text-white rounded-full bg-linear-to-br from-primary to-primary-dark">
                 {{ viewer?.firstName?.charAt(0) }}{{ viewer?.lastName?.charAt(0) }}
               </div>
               <div class="flex-1 min-w-0">
@@ -54,7 +54,7 @@ useSeoMeta({
           </div>
 
           <!-- Navigation Card -->
-          <nav class="p-3 mb-6 bg-white border border-gray-100 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+          <nav class="p-3 mb-6 bg-white border border-gray-100 rounded-lg shadow-xs dark:bg-gray-800 dark:border-gray-700">
             <NuxtLink to="/my-account?tab=personal-info" class="nav-link" :class="{ active: activeTab == 'personal-info' }">
               <Icon name="ion:person-outline" size="20" />
               <span>Personal Information</span>
@@ -118,7 +118,9 @@ useSeoMeta({
   </div>
 </template>
 
-<style lang="postcss" scoped>
+<style scoped>
+@reference "#tailwind";
+
 .nav-link {
   @apply flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-200 mb-1;
 
@@ -127,7 +129,7 @@ useSeoMeta({
   }
 
   &.active {
-    @apply bg-gradient-to-r from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 text-primary font-semibold shadow-sm;
+    @apply bg-linear-to-r from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 text-primary font-semibold shadow-xs;
 
     svg {
       @apply text-primary;

@@ -10,15 +10,15 @@ const show = ref(initialTab);
 
 <template>
   <div>
-    <nav class="flex gap-8 border-b tabs">
+    <nav class="flex gap-8 border-b border-gray-200 tabs">
       <button v-if="product.description" type="button" :class="show === 0 ? 'active' : ''" @click.prevent="show = 0">
         {{ $t('shop.productDescription') }}
       </button>
       <button v-if="storeSettings.showReviews" type="button" class="flex items-center gap-2" :class="show === 1 ? 'active' : ''" @click.prevent="show = 1">
         {{ $t('shop.reviews') }}
-        <span class="bg-primary rounded-full text-white leading-none min-w-[18px] p-[3px] text-[12px] inline-flex justify-center items-center">{{
-          product.reviewCount
-        }}</span>
+        <span class="bg-primary rounded-full text-white leading-none min-w-4.5 p-0.75 text-[12px] inline-flex justify-center items-center">
+          {{ product.reviewCount }}
+        </span>
       </button>
     </nav>
     <div class="tab-contents">
@@ -28,9 +28,11 @@ const show = ref(initialTab);
   </div>
 </template>
 
-<style lang="postcss" scoped>
+<style scoped>
+@reference "#tailwind";
+
 .tabs {
-  @apply dark:border-gray-700;
+  @apply border-gray-200 dark:border-gray-700;
 }
 
 .tabs button {

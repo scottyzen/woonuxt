@@ -31,7 +31,9 @@ const props = defineProps({
   </table>
 </template>
 
-<style lang="postcss" scoped>
+<style scoped>
+@reference "#tailwind";
+
 tbody tr:nth-child(odd) {
   @apply bg-gray-50 dark:bg-gray-700/50;
 }

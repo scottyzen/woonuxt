@@ -103,7 +103,7 @@ const deleteAccount = () => {
 
     <form @submit.prevent="saveSettings" class="space-y-6">
       <!-- Preferences Section -->
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xs border border-gray-100 dark:border-gray-700">
         <div class="p-6 md:px-8 pb-4 border-b border-gray-100 dark:border-gray-700">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Preferences</h3>
         </div>
@@ -149,7 +149,7 @@ const deleteAccount = () => {
     </form>
 
     <!-- Danger Zone -->
-    <div class="mt-12 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-red-200 dark:border-red-800 overflow-hidden">
+    <div class="mt-12 bg-white dark:bg-gray-800 rounded-lg shadow-xs border border-red-200 dark:border-red-800 overflow-hidden">
       <div class="p-6 md:px-8 pb-4 border-b border-red-100 dark:border-red-800 bg-red-50 dark:bg-red-900/20">
         <h3 class="text-lg font-semibold text-red-900 dark:text-red-400">Danger Zone</h3>
       </div>

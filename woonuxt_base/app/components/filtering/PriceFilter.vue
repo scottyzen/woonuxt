@@ -60,6 +60,8 @@ watch(isFiltersActive, () => {
 <style src="@vueform/slider/themes/default.css"></style>
 
 <style scoped>
+@reference "#tailwind";
+
 :deep(.slider-base) {
   @apply dark:bg-gray-600;
 }

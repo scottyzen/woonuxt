@@ -39,12 +39,14 @@ onMounted(() => {
   </div>
 </template>
 
-<style lang="postcss" scoped>
+<style scoped>
+@reference "#tailwind";
+
 .option {
   @apply bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200 cursor-pointer flex flex-1 text-sm py-3 px-4 gap-2 items-center hover:border-purple-300 dark:hover:border-purple-400 font-medium;
 
   &.active-option {
-    @apply border-primary cursor-default border-opacity-50 shadow-sm pointer-events-none;
+    @apply border-primary/50 cursor-default shadow-xs pointer-events-none;
 
     & .checkmark {
       @apply opacity-100;

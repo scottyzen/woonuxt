@@ -21,11 +21,11 @@ const checkboxChanged = () => {
 </script>
 
 <template>
-  <div class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center text-gray-900 dark:text-white" @click="isOpen = !isOpen">
+  <div class="cursor-pointer flex font-semibold pt-8 pb-4 leading-none justify-between items-center text-gray-900 dark:text-white" @click="isOpen = !isOpen">
     <span>{{ filterTitle }}</span>
     <Icon name="ion:chevron-down-outline" class="transform text-gray-600 dark:text-gray-400" :class="isOpen ? 'rotate-180' : ''" />
   </div>
-  <div v-show="isOpen" class="mt-3 mr-6 max-h-[240px] grid gap-1.5 swatches overflow-auto custom-scrollbar">
+  <div v-show="isOpen" class="mr-6 max-h-60 grid gap-1.5 swatches overflow-auto custom-scrollbar">
     <div v-for="color in attribute.terms" :key="color.slug" :style="{ '--color': color.slug }" :title="color.name">
       <input :id="color.slug" v-model="selectedTerms" class="hidden" type="checkbox" :value="color.slug" @change="checkboxChanged" />
       <label :for="color.slug" class="cursor-pointer m-0"></label>
@@ -33,13 +33,15 @@ const checkboxChanged = () => {
   </div>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
+@reference "#tailwind";
+
 .swatches {
   grid-template-columns: repeat(auto-fit, minmax(24px, 1fr));
 }
 
 .swatches label {
-  @apply rounded-md cursor-pointer shadow-sm m-0 mb-1 w-full block relative;
+  @apply rounded-md cursor-pointer shadow-xs m-0 mb-1 w-full block relative;
   background-color: var(--color, #eee);
   filter: saturate(0.75);
   aspect-ratio: 1/1;

@@ -18,12 +18,14 @@ const productsToShow = computed(() => products.value.slice((page.value - 1) * pr
   </Transition>
 </template>
 
-<style lang="postcss" scoped>
-.product-grid {
-  @apply my-4 min-h-[600px] grid transition-all gap-8 lg:my-8;
+<style scoped>
+@reference "#tailwind";
 
+.product-grid {
+  @apply grid my-4 min-h-37.5 transition-all gap-8 lg:my-8;
   grid-template-columns: repeat(2, 1fr);
 }
+
 .product-grid:empty {
   display: none;
 }
