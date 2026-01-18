@@ -144,8 +144,10 @@ const disabledAddToCart = computed(() => {
                 type="number"
                 min="1"
                 aria-label="Quantity"
-                class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg flex text-left p-2.5 w-20 gap-4 items-center justify-center focus:outline-hidden dark:text-white" />
-              <AddToCartButton class="flex-1 w-full md:max-w-xs" :disabled="disabledAddToCart" :class="{ loading: isUpdatingCart }" />
+                class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg flex text-left p-2 w-20 gap-4 items-center justify-center focus:outline-hidden dark:text-white" />
+              <Button class="flex-1 w-full md:max-w-xs" :disabled="disabledAddToCart" :loading="isUpdatingCart" type="submit">
+                {{ $t('shop.addToCart') }}
+              </Button>
             </div>
             <a
               v-if="isExternalProduct && product.externalUrl"

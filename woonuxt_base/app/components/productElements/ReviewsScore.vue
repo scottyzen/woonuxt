@@ -85,11 +85,9 @@ async function addComment() {
     </div>
     <div class="mt-10 text-xl mb-2 text-gray-900 dark:text-white font-semibold">Share your thoughts</div>
     <div class="text-sm mb-4 text-gray-600 dark:text-gray-400">If you have used this product, we would love to hear about your experience.</div>
-    <button
-      @click="show = !show"
-      class="border border-gray-300 dark:border-gray-600 rounded-lg text-center w-full p-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors dark:text-gray-200">
+    <Button @click="show = !show" variant="outline" class="w-full mb-4">
       {{ show ? $t('shop.close') : $t('shop.writeReview') }}
-    </button>
+    </Button>
     <transition class="ease-in-out transform transition-all" name="scale-y">
       <form v-if="show" @submit.prevent="addComment" class="writeReview">
         <div class="w-full text-gray-500 dark:text-gray-400">
@@ -106,7 +104,7 @@ async function addComment() {
                   :class="rating < i && i > hovered ? 'disable-star' : 'checked-star'"
                   @mouseover="setHovered(i)"
                   @mouseout="resetHovered">
-                  <input type="radio" class="overflow-hidden appearance-none opacity-0 absolute" name="rating" :value="i" v-model="rating" required />
+                  <input type="radio" class="overflow-hidden hidden appearance-none opacity-0 absolute" name="rating" :value="i" v-model="rating" required />
                   <Icon name="ion:star" :size="size + ''" />
                 </label>
               </div>
@@ -133,12 +131,9 @@ async function addComment() {
               <div v-if="successMessage" class="my-4 text-sm text-green-500" v-html="successMessage"></div>
             </Transition>
             <div class="w-full col-span-full text-center mt-3">
-              <button
-                class="flex gap-4 justify-center items-center transition font-semibold rounded-md w-full p-2 bg-amber-300 text-amber-900 hover:bg-amber-400"
-                type="submit">
-                <LoadingIcon v-if="isPending" stroke="4" size="16" color="#78350F" />
-                <span>{{ $t('shop.submit') }}</span>
-              </button>
+              <Button :loading="isPending" type="submit" variant="primary" class="w-full">
+                {{ $t('shop.submit') }}
+              </Button>
             </div>
           </div>
         </div>

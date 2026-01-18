@@ -89,7 +89,7 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({ ...attr, te
   }
 
   .show-filters #filters {
-    @apply transform-none;
+    translate: none;
   }
 }
 

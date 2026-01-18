@@ -93,10 +93,9 @@ useHead({
         </div>
       </Transition>
 
-      <button class="flex items-center justify-center gap-4 mt-4 text-lg">
-        <LoadingIcon v-if="isPending" stroke="4" size="16" color="#fff" />
-        <span>{{ $t('account.resetPassword') }}</span>
-      </button>
+      <Button :loading="isPending" type="submit" class="mt-4">
+        {{ $t('account.resetPassword') }}
+      </Button>
     </form>
 
     <div class="my-8 text-center cursor-pointer">

@@ -17,16 +17,9 @@ const clearAll = () => {
       <p class="mt-4 max-w-md">
         <slot>{{ $t('shop.noProductsFound.subText') }}</slot>
       </p>
-      <div>
-        <button
-          v-if="allProducts.length"
-          class="bg-primary rounded-lg font-bold mt-8 text-center text-white text-sm w-full p-2 px-3 inline-block hover:bg-primary-dark"
-          :title="$t('shop.noProductsFound.clearFiltersAndSearch')"
-          aria-label="Clear all filters and search"
-          @click="clearAll">
-          {{ $t('shop.noProductsFound.clearFiltersAndSearch') }}
-        </button>
-      </div>
+      <Button v-if="allProducts.length" class="mt-8" @click="clearAll">
+        {{ $t('shop.noProductsFound.clearFiltersAndSearch') }}
+      </Button>
     </div>
   </div>
 </template>
