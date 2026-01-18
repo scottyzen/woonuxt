@@ -6,4 +6,5 @@
   command = "nuxt generate"
 
 [images]
+  # Repclace with your own domain to allow remote images to be optimized
   remote_images = ["https://secure.woonuxt.com/.*"]
