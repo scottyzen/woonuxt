@@ -40,13 +40,9 @@ const goToOrder = (orderNumber?: string | null): void => {
         </tbody>
       </table>
       <div class="flex justify-center w-full mt-8 text-center">
-        <button
-          type="button"
-          @click="refresh"
-          class="flex items-center gap-1 p-2 text-sm leading-none text-gray-700 transition-colors rounded-sm dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
-          <span>Reresh list</span>
-          <Icon name="ion:refresh-outline" />
-        </button>
+        <div class="text-center flex justify-center w-full mt-8">
+          <Button type="button" size="sm" variant="secondary" icon="ion:refresh-outline" @click="refresh"> Refresh list </Button>
+        </div>
       </div>
     </div>
     <div v-else-if="orders && orders.length === 0" class="min-h-62.5 flex items-center justify-center text-gray-500 dark:text-gray-400 text-lg">

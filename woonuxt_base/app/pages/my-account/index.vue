@@ -92,14 +92,9 @@ useSeoMeta({
             </NuxtLink>
           </nav>
 
-          <!-- Logout Button -->
-          <button
-            class="flex items-center justify-center w-full gap-3 p-3 text-sm font-semibold text-red-700 transition-colors duration-200 bg-red-100 rounded-lg dark:text-red-400 dark:bg-red-900/20 hover:bg-red-200 dark:hover:bg-red-900/30"
-            @click="logoutUser">
-            <LoadingIcon v-if="isPending" size="20" color="#B91C1C" />
-            <Icon v-else name="ion:log-out" size="20" />
-            <span>{{ $t('account.logout') }}</span>
-          </button>
+          <Button class="w-full mt-2" icon="ion:log-out" @click="logoutUser" :loading="isPending">
+            {{ $t('account.logout') }}
+          </Button>
         </aside>
 
         <!-- Main Content -->

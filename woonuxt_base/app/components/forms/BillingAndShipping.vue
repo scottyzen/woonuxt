@@ -259,14 +259,10 @@
         </div>
 
         <!-- Submit Button -->
-        <div class="p-6 pt-4 border-t border-gray-100 rounded-b-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-          <button
-            class="flex items-center justify-center gap-3 px-6 py-2 ml-auto font-semibold text-white transition-colors rounded-lg disabled:bg-gray-400 disabled:cursor-not-allowed"
-            :class="button.color"
-            :disabled="loading">
-            <LoadingIcon v-if="loading" color="#fff" size="18" />
-            <span>{{ button.text }}</span>
-          </button>
+        <div class="p-6 pt-4 border-t flex border-gray-100 rounded-b-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+          <Button :loading="loading" type="submit" class="ml-auto" :class="button.color">
+            {{ button.text }}
+          </Button>
         </div>
       </div>
     </form>

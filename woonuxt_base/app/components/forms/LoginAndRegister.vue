@@ -37,10 +37,9 @@
       </Transition>
 
       <!-- Login button -->
-      <button class="flex items-center justify-center gap-4 my-6 text-lg">
-        <LoadingIcon v-if="isPending" stroke="4" size="16" color="#fff" />
-        <span>{{ buttonText }}</span>
-      </button>
+      <Button :loading="isPending" type="submit" class="my-6 text-lg">
+        {{ buttonText }}
+      </Button>
 
       <div class="flex items-center justify-between mt-4" v-if="formView === FormView.LOGIN">
         <div class="font-semibold cursor-pointer text-sm text-primary hover:underline" @click="navigate(FormView.FORGOT_PASSWORD)">Forgot password?</div>

@@ -17,10 +17,9 @@
         </div>
       </div>
 
-      <button type="button" @click="$emit('edit')" title="Edit Address" class="flex items-center gap-2 text-sm font-medium leading-none text-primary">
-        <Icon name="ion:pencil" />
+      <Button type="button" size="sm" variant="ghost" icon="ion:pencil" @click="$emit('edit')">
         {{ $t('general.edit') }}
-      </button>
+      </Button>
     </div>
 
     <!-- Address details -->

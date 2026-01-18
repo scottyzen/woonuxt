@@ -15,14 +15,19 @@ const linkTitle = computed<string>(() => viewer.value?.username || 'Sign In');
           width="22"
           height="22"
           :alt="linkTitle" />
-        <div class="account-dropdown">
-          <NuxtLink :to="wishlistLink" class="hover:bg-gray-100"><Icon name="ion:heart-outline" size="16" /><span>Wishlist</span></NuxtLink>
-          <NuxtLink to="/my-account" class="hover:bg-gray-100"><Icon name="ion:person-outline" size="16" /><span>My Account</span></NuxtLink>
-          <button class="text-red-600 hover:bg-red-50" @click.prevent="logoutUser">
-            <LoadingIcon v-if="isPending" size="16" />
-            <Icon v-else name="ion:log-out-outline" size="16" />
-            <span>Logout</span>
-          </button>
+        <div class="account-dropdown font-semibold">
+          <Button to="/my-account" size="sm" variant="ghost" class="w-full justify-start" icon="ion:person"> My Account </Button>
+          <Button :to="wishlistLink" size="sm" variant="ghost" class="w-full justify-start" icon="ion:heart"> Wishlist </Button>
+          <Button
+            type="button"
+            size="sm"
+            variant="ghost"
+            class="w-full justify-start text-red-600 hover:bg-red-50"
+            icon="ion:log-out"
+            @click="logoutUser"
+            :loading="isPending">
+            Logout
+          </Button>
         </div>
       </span>
       <Icon v-else name="ion:person-outline" size="22" class="border border-transparent" />
@@ -45,7 +50,7 @@ const linkTitle = computed<string>(() => viewer.value?.username || 'Sign In');
 
 .avatar {
   .account-dropdown {
-    @apply absolute gap-2 top-6 -right-2 z-50 p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg dark:shadow-gray-900/50 text-sm text-gray-700 dark:text-gray-300 hidden;
+    @apply absolute gap-1 top-6 -right-2 z-50 p-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg dark:shadow-gray-900/50 text-sm text-gray-700 dark:text-gray-300 hidden;
 
     a,
     button {

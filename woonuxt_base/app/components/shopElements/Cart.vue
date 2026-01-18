@@ -9,6 +9,7 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
       class="absolute p-1 rounded-lg shadow-lg top-6 left-6 md:left-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
       size="34"
       @click="toggleCart(false)" />
+
     <EmptyCart v-if="cart && !cart.isEmpty" class="rounded-lg shadow-lg p-1.5 hover:bg-red-400 hover:text-white" />
 
     <div class="mt-8 text-center text-gray-900 dark:text-white font-semibold">
@@ -22,13 +23,11 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
           <CartCard v-for="item in cart.contents?.nodes" :key="item.key" :item />
         </ul>
         <div class="px-6 pb-6 mb-safe md:px-8 md:mb-8">
-          <NuxtLink
-            class="block p-3 text-lg text-center text-white bg-gray-800 dark:bg-gray-700 rounded-lg shadow-md justify-evenly hover:bg-gray-900 dark:hover:bg-gray-600"
-            to="/checkout"
-            @click.prevent="toggleCart()">
-            <span class="mx-2">{{ $t('shop.checkout') }}</span>
-            <span v-html="cart.total" />
-          </NuxtLink>
+          <Button :to="cart && !cart.isEmpty ? '/checkout' : '/shop'" class="w-full" size="lg" variant="primary" @click="toggleCart()">
+            <span class="mx-2" v-if="cart && !cart.isEmpty">{{ $t('shop.checkout') }}</span>
+            <span class="mx-2" v-else>{{ $t('shop.continueShopping') }}</span>
+            <span v-if="cart && !cart.isEmpty" v-html="cart.total" />
+          </Button>
         </div>
       </template>
       <!-- Empty Cart Message -->
