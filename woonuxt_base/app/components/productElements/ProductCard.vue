@@ -102,6 +102,14 @@ const activeImageIndex = computed<number>(() => {
   return index >= 0 ? index : 0;
 });
 
+const productLink = computed<string>(() => {
+  const baseUrl = `/product/${decodeURIComponent(props.node.slug || '')}`;
+  if (paColor.value.length) {
+    return `${baseUrl}?pa_color=${paColor.value[0]}`;
+  }
+  return baseUrl;
+});
+
 const updateCurrentSlide = () => {
   const container = sliderRef.value;
   if (!container) return;
@@ -149,7 +157,7 @@ watch(
             v-if="node.slug"
             class="product-card-slide block flex-[0_0_100%] snap-start snap-always aspect-8/9 overflow-hidden rounded-lg"
             :data-index="slideIndex"
-            :to="`/product/${decodeURIComponent(node.slug)}`">
+            :to="productLink">
             <NuxtImg
               :width="imgWidth"
               :height="imgHeight"
@@ -191,7 +199,7 @@ watch(
     </div>
     <div class="p-2">
       <StarRating v-if="storeSettings.showReviews" :rating="node.averageRating" :count="node.reviewCount" />
-      <NuxtLink v-if="node.slug" :to="`/product/${decodeURIComponent(node.slug)}`" :title="node.name">
+      <NuxtLink v-if="node.slug" :to="productLink" :title="node.name">
         <h2 class="mb-2 font-light leading-tight text-gray-900 dark:text-gray-200 group-hover:text-primary">{{ node.name }}</h2>
       </NuxtLink>
       <ProductPrice class="text-sm" :sale-price="node.salePrice" :regular-price="node.regularPrice" />
