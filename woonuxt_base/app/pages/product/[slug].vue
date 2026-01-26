@@ -2,6 +2,7 @@
 import { StockStatusEnum, ProductTypesEnum, type AddToCartInput } from '#woo';
 
 const route = useRoute();
+const router = useRouter();
 const { storeSettings } = useAppConfig();
 const { arraysEqual, formatArray, checkForVariationTypeOfAny } = useHelpers();
 const { addToCart, isUpdatingCart } = useCart();
@@ -19,32 +20,49 @@ const activeVariation = ref<Variation | null>(null);
 const variation = ref<VariationAttribute[]>([]);
 const indexOfTypeAny = computed<number[]>(() => checkForVariationTypeOfAny(product.value));
 const attrValues = ref();
+
+// Pre-select variation based on URL query params BEFORE component mounts
+const queryParams = route.query;
+
+// Check if there are any attribute params in the URL (e.g., pa_color=green, pa_size=large)
+if (Object.keys(queryParams).length > 0 && product.value.variations?.nodes) {
+  // Filter to only attribute-like query params (pa_color, pa_size, etc.)
+  const attributeParams = Object.keys(queryParams).filter((key) => product.value.attributes?.nodes.some((attr) => attr.name === key));
+
+  if (attributeParams.length > 0) {
+    const matchingVariation = product.value.variations.nodes.find((variation: Variation) => {
+      if (!variation?.attributes?.nodes) return false;
+
+      // Check if all URL attribute params match this variation's attributes
+      return attributeParams.every((paramKey) => {
+        const paramValue = queryParams[paramKey] as string;
+        const attr = variation?.attributes?.nodes?.find((a: VariationAttribute) => a.name === paramKey);
+        return attr && attr.value === paramValue;
+      });
+    });
+
+    if (matchingVariation?.attributes?.nodes) {
+      variation.value = matchingVariation.attributes.nodes.map((attr: VariationAttribute) => ({
+        name: attr.name || '',
+        value: attr.value || '',
+      }));
+    }
+  }
+}
+
+const defaultAttributes = computed(() => {
+  if (variation.value.length > 0) {
+    return { nodes: variation.value };
+  }
+  return product.value.defaultAttributes;
+});
+
 const isSimpleProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.SIMPLE);
 const isVariableProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.VARIABLE);
 const isExternalProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.EXTERNAL);
 
 const type = computed(() => activeVariation.value || product.value);
 const selectProductInput = computed<any>(() => ({ productId: type.value?.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
-
-const mergeLiveStockStatus = (payload: Product): void => {
-  product.value.stockStatus = payload.stockStatus ?? product.value?.stockStatus;
-
-  payload.variations?.nodes?.forEach((variation: Variation, index: number) => {
-    if (product.value?.variations?.nodes[index]) {
-      product.value.variations.nodes[index].stockStatus = variation.stockStatus;
-    }
-  });
-};
-
-onMounted(async () => {
-  try {
-    const { product } = await GqlGetStockStatus({ slug });
-    if (product) mergeLiveStockStatus(product as Product);
-  } catch (error: any) {
-    const errorMessage = error?.gqlErrors?.[0].message;
-    if (errorMessage) console.error(errorMessage);
-  }
-});
 
 const updateSelectedVariations = (variations: VariationAttribute[]): void => {
   if (!product.value.variations) return;
@@ -67,7 +85,44 @@ const updateSelectedVariations = (variations: VariationAttribute[]): void => {
   selectProductInput.value.variationId = activeVariation.value?.databaseId ?? null;
   selectProductInput.value.variation = activeVariation.value ? attrValues.value : null;
   variation.value = variations;
+
+  // Update URL with current selections for persistence and sharing (client-side only)
+  if (import.meta.client) {
+    const query: Record<string, string> = {};
+    variations.forEach((v) => {
+      if (v.name && v.value) {
+        query[v.name] = v.value;
+      }
+    });
+
+    // Build new URL with query params
+    const url = new URL(window.location.href);
+    url.search = new URLSearchParams(query).toString();
+
+    // Use replaceState to update URL without triggering navigation/scroll
+    window.history.replaceState({ ...window.history.state }, '', url.toString());
+  }
 };
+
+const mergeLiveStockStatus = (payload: Product): void => {
+  product.value.stockStatus = payload.stockStatus ?? product.value?.stockStatus;
+
+  payload.variations?.nodes?.forEach((variation: Variation, index: number) => {
+    if (product.value?.variations?.nodes[index]) {
+      product.value.variations.nodes[index].stockStatus = variation.stockStatus;
+    }
+  });
+};
+
+onMounted(async () => {
+  try {
+    const { product } = await GqlGetStockStatus({ slug });
+    if (product) mergeLiveStockStatus(product as Product);
+  } catch (error: any) {
+    const errorMessage = error?.gqlErrors?.[0].message;
+    if (errorMessage) console.error(errorMessage);
+  }
+});
 
 const stockStatus = computed(() => {
   if (isVariableProduct.value) {
@@ -133,7 +188,7 @@ const disabledAddToCart = computed(() => {
               v-if="isVariableProduct && product.attributes && product.variations"
               class="mt-4 mb-8"
               :attributes="product.attributes.nodes"
-              :defaultAttributes="product.defaultAttributes"
+              :defaultAttributes="defaultAttributes"
               :variations="product.variations.nodes"
               @attrs-changed="updateSelectedVariations" />
             <div
