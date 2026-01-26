@@ -41,7 +41,7 @@ const setDefaultAttributes = () => {
   }
 };
 
-const className = (name: string) => `name-${name.toLowerCase()}`;
+const className = (name: string) => `name-${name.toLowerCase().split(' ').join('-')}`;
 
 onMounted(() => {
   setDefaultAttributes();
