@@ -19,3 +19,11 @@
 }
 
 @variant dark (&:where(.dark, .dark *));
+
+/* Class for no slider */
+.no-slider {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
+}

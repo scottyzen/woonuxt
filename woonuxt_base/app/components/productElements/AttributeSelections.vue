@@ -41,7 +41,7 @@ const setDefaultAttributes = () => {
   }
 };
 
-const className = (name: string) => `name-${name.toLowerCase()}`;
+const className = (name: string) => `name-${name.toLowerCase().split(' ').join('-')}`;
 
 onMounted(() => {
   setDefaultAttributes();
@@ -155,11 +155,11 @@ onMounted(() => {
 @reference "#tailwind";
 
 .radio-button {
-  @apply border-transparent border-white dark:border-gray-700 rounded-lg cursor-pointer outline bg-gray-50 dark:bg-gray-700 border-2 text-sm text-center outline-2 outline-gray-100 dark:outline-gray-600 py-1.5 px-3 transition-all text-gray-800 dark:text-gray-200 inline-block hover:outline-gray-500;
+  @apply border-white dark:border-gray-700 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 border-2 text-sm text-center outline-2 outline-gray-100 dark:outline-gray-600 py-1.5 px-3 transition-all text-gray-800 dark:text-gray-200 inline-block hover:outline-gray-500;
 }
 
 .color-button {
-  @apply border-transparent border-white dark:border-gray-700 cursor-pointer outline bg-gray-50 border-2 rounded-2xl text-sm text-center outline-2 outline-gray-100 dark:outline-gray-600 transition-all text-gray-800 inline-block hover:outline-gray-500;
+  @apply border-white dark:border-gray-700 cursor-pointer bg-gray-50 border-2 rounded-2xl text-sm text-center outline-2 outline-gray-100 dark:outline-gray-600 transition-all text-gray-800 inline-block hover:outline-gray-500;
   width: 2rem;
   height: 2rem;
 }
@@ -193,6 +193,6 @@ onMounted(() => {
 }
 
 input[type='radio']:checked ~ span {
-  @apply outline outline-2 outline-gray-500 dark:outline-gray-400;
+  @apply outline-2 outline-gray-500 dark:outline-gray-300;
 }
 </style>
