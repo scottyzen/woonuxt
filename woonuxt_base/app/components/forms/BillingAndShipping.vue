@@ -6,7 +6,7 @@
       <p class="text-gray-600 dark:text-gray-400">Manage your billing and shipping addresses for orders and deliveries</p>
     </div>
 
-    <form class="space-y-6" @submit.prevent="saveChanges">
+    <form class="space-y-6 wn-form" @submit.prevent="saveChanges">
       <!-- Billing Address Card -->
       <div class="bg-white border border-gray-100 rounded-lg shadow-xs dark:bg-gray-800 dark:border-gray-700">
         <div class="p-6 pb-4 border-b border-gray-100 md:px-8 dark:border-gray-700">
@@ -22,8 +22,7 @@
               placeholder="John"
               autocomplete="given-name"
               type="text"
-              required
-              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
+              required />
           </div>
 
           <div class="w-full space-y-2">
@@ -34,8 +33,7 @@
               placeholder="Doe"
               autocomplete="family-name"
               type="text"
-              required
-              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
+              required />
           </div>
 
           <div class="w-full space-y-2">
@@ -47,8 +45,7 @@
               v-model="customer.billing.phone"
               placeholder="+1 234 567 8901"
               autocomplete="tel"
-              type="tel"
-              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
+              type="tel" />
           </div>
 
           <div class="w-full space-y-2">
@@ -60,8 +57,7 @@
               v-model="customer.billing.company"
               placeholder="Company Name"
               autocomplete="organization"
-              type="text"
-              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
+              type="text" />
           </div>
 
           <div class="w-full space-y-2">
@@ -71,8 +67,7 @@
               v-model="customer.billing.address1"
               placeholder="123 Main St"
               autocomplete="address-line1"
-              type="text"
-              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
+              type="text" />
           </div>
 
           <div class="w-full space-y-2">
@@ -84,8 +79,7 @@
               v-model="customer.billing.address2"
               placeholder="Apartment, studio, or floor"
               autocomplete="address-line2"
-              type="text"
-              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
+              type="text" />
           </div>
 
           <div class="w-full space-y-2">
@@ -95,15 +89,18 @@
               v-model="customer.billing.city"
               placeholder="New York"
               autocomplete="address-level2"
-              type="text"
-              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
+              type="text" />
           </div>
 
           <div class="w-full space-y-2" v-if="customer.billing.state && customer.billing.country">
             <label for="billing-state" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >{{ $t('billing.state') }} <span class="font-normal text-gray-400 dark:text-gray-500">({{ $t('general.optional') }})</span></label
             >
-            <StateSelect id="billing-state" v-model="customer.billing.state" :default-value="customer.billing.state" :country-code="customer.billing.country" />
+            <StateSelect
+              id="billing-state"
+              v-model="customer.billing.state"
+              :default-value="customer.billing.state"
+              :country-code="customer.billing.country" />
           </div>
 
           <div class="w-full space-y-2" v-if="customer.billing.country">
@@ -118,8 +115,7 @@
               v-model="customer.billing.postcode"
               placeholder="10001"
               autocomplete="postal-code"
-              type="text"
-              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
+              type="text" />
           </div>
 
           <div class="w-full space-y-2 col-span-full">
@@ -132,8 +128,7 @@
               placeholder="johndoe@email.com"
               autocomplete="email"
               type="email"
-              required
-              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
+              required />
           </div>
         </div>
       </div>
@@ -153,8 +148,7 @@
               placeholder="John"
               autocomplete="given-name"
               type="text"
-              required
-              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
+              required />
           </div>
 
           <div class="w-full space-y-2">
@@ -165,8 +159,7 @@
               placeholder="Doe"
               autocomplete="family-name"
               type="text"
-              required
-              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
+              required />
           </div>
 
           <div class="w-full space-y-2">
@@ -178,8 +171,7 @@
               v-model="customer.shipping.phone"
               placeholder="+1 234 567 8901"
               autocomplete="tel"
-              type="tel"
-              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
+              type="tel" />
           </div>
 
           <div class="w-full space-y-2">
@@ -191,8 +183,7 @@
               v-model="customer.shipping.company"
               placeholder="Company Name"
               autocomplete="organization"
-              type="text"
-              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
+              type="text" />
           </div>
 
           <div class="w-full space-y-2">
@@ -202,8 +193,7 @@
               v-model="customer.shipping.address1"
               placeholder="O'Connell Street 47"
               autocomplete="address-line1"
-              type="text"
-              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
+              type="text" />
           </div>
 
           <div class="w-full space-y-2">
@@ -215,8 +205,7 @@
               v-model="customer.shipping.address2"
               placeholder="Apartment, studio, or floor"
               autocomplete="address-line2"
-              type="text"
-              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
+              type="text" />
           </div>
 
           <div class="w-full space-y-2">
@@ -226,8 +215,7 @@
               v-model="customer.shipping.city"
               placeholder="New York"
               autocomplete="address-level2"
-              type="text"
-              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
+              type="text" />
           </div>
 
           <div class="w-full space-y-2" v-if="customer.shipping.state && customer.shipping.country">
@@ -253,8 +241,7 @@
               v-model="customer.shipping.postcode"
               placeholder="10001"
               autocomplete="postal-code"
-              type="text"
-              class="w-full px-4 py-3 text-gray-900 transition-all border border-gray-200 rounded-lg dark:border-gray-600 focus:ring-2 focus:ring-primary/20 focus:border-primary bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 dark:text-white" />
+              type="text" />
           </div>
         </div>
 

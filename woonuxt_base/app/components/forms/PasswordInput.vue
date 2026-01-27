@@ -37,6 +37,6 @@ const handleInputChanged = (e: Event) => {
 @reference "#tailwind";
 
 input {
-  @apply border  rounded-lg w-full p-3 px-4 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white;
+  @apply bg-white border border-gray-300 rounded-md shadow-inner outline-hidden w-full py-2 px-4 text-base leading-6 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white;
 }
 </style>
