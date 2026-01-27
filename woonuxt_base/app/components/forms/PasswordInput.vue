@@ -2,7 +2,7 @@
 const showPassword = ref(false);
 
 const { modelValue, className, placeholder, required } = defineProps({
-  modelValue: { type: String, required: true },
+  modelValue: { type: String, default: '' },
   className: { type: String, default: '' },
   placeholder: { type: String, default: '' },
   autocomplete: { type: String, default: 'new-password' },

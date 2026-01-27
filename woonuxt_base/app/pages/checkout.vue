@@ -31,8 +31,13 @@ const stripe: Stripe | null = stripeKey ? await loadStripe(stripeKey) : null;
 const elements = ref();
 const isPaid = ref<boolean>(false);
 
-// New reactive refs for the improved checkout flow
-const shipToDifferentAddress = ref<boolean>(false);
+// Sync the shipping-address toggle with orderInput so checkout logic stays consistent
+const shipToDifferentAddress = computed<boolean>({
+  get: () => !!orderInput.value.shipToDifferentAddress,
+  set: (value) => {
+    orderInput.value.shipToDifferentAddress = value;
+  },
+});
 const isEditingShipping = ref<boolean>(false);
 const isEditingBilling = ref<boolean>(false);
 
