@@ -8,7 +8,7 @@
       </p>
     </div>
 
-    <form class="bg-white dark:bg-gray-800 rounded-lg shadow-xs border border-gray-100 dark:border-gray-700" @submit.prevent="saveChanges">
+    <form class="bg-white dark:bg-gray-800 rounded-lg shadow-xs border border-gray-100 dark:border-gray-700 wn-form" @submit.prevent="saveChanges">
       <div class="p-6 md:px-8 pb-4 border-b border-gray-100 dark:border-gray-700">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Personal Details</h3>
       </div>
@@ -21,8 +21,7 @@
             v-model="customer.firstName"
             placeholder="John"
             autocomplete="given-name"
-            type="text"
-            class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+            type="text" />
         </div>
 
         <div class="w-full space-y-2">
@@ -32,8 +31,7 @@
             v-model="customer.lastName"
             placeholder="Doe"
             autocomplete="family-name"
-            type="text"
-            class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+            type="text" />
         </div>
 
         <div class="w-full space-y-2">
@@ -47,7 +45,7 @@
             autocomplete="username"
             type="text"
             disabled
-            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 cursor-not-allowed opacity-60" />
+            class="bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 cursor-not-allowed opacity-60" />
         </div>
 
         <div class="w-full space-y-2">
@@ -59,8 +57,7 @@
             v-model="customer.email"
             placeholder="johndoe@email.com"
             autocomplete="email"
-            type="email"
-            class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+            type="email" />
         </div>
       </div>
 

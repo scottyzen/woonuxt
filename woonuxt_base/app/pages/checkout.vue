@@ -290,7 +290,7 @@ useSeoMeta({
       </div>
 
       <form v-else class="container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-20" @submit.prevent="payNow">
-        <div class="grid w-full max-w-2xl gap-8 checkout-form md:flex-1">
+        <div class="grid w-full max-w-2xl gap-8 wn-form md:flex-1">
           <!-- Customer details -->
           <div v-if="!viewer && customer?.billing">
             <h2 class="w-full mb-2 text-2xl font-semibold leading-none dark:text-white">Contact Information</h2>
@@ -432,29 +432,6 @@ useSeoMeta({
 </template>
 
 <style>
-@reference "#tailwind";
-
-.checkout-form input[type='text'],
-.checkout-form input[type='email'],
-.checkout-form input[type='tel'],
-.checkout-form input[type='password'],
-.checkout-form textarea {
-  @apply bg-white border rounded-md outline-hidden border-gray-300 shadow-inner w-full py-2 px-4 dark:bg-gray-700 dark:border-gray-600 dark:text-white;
-}
-
-.checkout-form select {
-  @apply bg-white border rounded-md outline-hidden border-gray-300 shadow-xs w-full py-2 px-4 dark:bg-gray-700 dark:border-gray-600 dark:text-white;
-}
-
-.checkout-form label {
-  @apply dark:text-gray-300;
-}
-
-.checkout-form input.has-error,
-.checkout-form textarea.has-error {
-  @apply border-red-500;
-}
-
 /* Keep only the scale-y transition for email validation */
 .scale-y-enter-active,
 .scale-y-leave-active {

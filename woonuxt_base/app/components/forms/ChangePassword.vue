@@ -6,7 +6,7 @@
       <p class="text-gray-600 dark:text-gray-400">Update your password to keep your account secure</p>
     </div>
 
-    <form class="bg-white dark:bg-gray-800 rounded-lg shadow-xs border border-gray-100 dark:border-gray-700" @submit.prevent="updatePassword">
+    <form class="bg-white dark:bg-gray-800 rounded-lg shadow-xs border border-gray-100 dark:border-gray-700 wn-form" @submit.prevent="updatePassword">
       <div class="p-6 md:px-8 pb-4 border-b border-gray-100 dark:border-gray-700">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Change Password</h3>
       </div>
@@ -21,8 +21,7 @@
             v-model="password.new"
             placeholder="••••••••••"
             type="text"
-            required
-            className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+            required />
         </div>
 
         <div class="w-full space-y-2">
@@ -32,8 +31,7 @@
             v-model="password.confirm"
             placeholder="••••••••••"
             type="text"
-            required
-            className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white" />
+            required />
         </div>
 
         <!-- Password Requirements -->

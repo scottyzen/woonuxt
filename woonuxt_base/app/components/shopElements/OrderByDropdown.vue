@@ -20,9 +20,9 @@ watch([orderby, order], () => {
       <Icon name="ion:filter-outline" size="18" :class="order === 'ASC' ? 'rotate-180' : ''" class="transition-transform transform transform-origin-center" />
     </button>
     <select
-      id="orderby-dropdown"
+      name="orderby"
       v-model="orderby"
-      class="bg-white dark:bg-gray-700 dark:text-white border border-gray-300 dark:border-gray-600 rounded-l-none! border-l-0"
+      class="select bg-white dark:bg-gray-700 dark:text-white border border-gray-300 dark:border-gray-600 rounded-l-none! border-l-0 text-sm leading-5 py-1.5"
       aria-label="Order by">
       <option value="date">{{ $t('general.latest') }}</option>
       <option value="alphabetically">{{ $t('general.alphabetically') }}</option>

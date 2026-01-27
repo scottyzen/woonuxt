@@ -101,7 +101,7 @@ const deleteAccount = () => {
       <p class="text-gray-600 dark:text-gray-400">Manage your preferences, notifications, and privacy settings</p>
     </div>
 
-    <form @submit.prevent="saveSettings" class="space-y-6">
+    <form @submit.prevent="saveSettings" class="space-y-6 wn-form">
       <!-- Preferences Section -->
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xs border border-gray-100 dark:border-gray-700">
         <div class="p-6 md:px-8 pb-4 border-b border-gray-100 dark:border-gray-700">
@@ -137,10 +137,7 @@ const deleteAccount = () => {
           <!-- Language -->
           <div class="space-y-2">
             <label for="language" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Language</label>
-            <select
-              id="language"
-              v-model="settings.preferences.language"
-              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-gray-50 dark:bg-gray-700 focus:bg-white dark:focus:bg-gray-600 text-gray-900 dark:text-white">
+            <select id="language" v-model="settings.preferences.language">
               <option v-for="lang in languages" :key="lang.value" :value="lang.value">{{ lang.label }}</option>
             </select>
           </div>

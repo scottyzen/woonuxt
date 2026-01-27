@@ -116,7 +116,7 @@ onMounted(() => {
           :ref="attr.name"
           :name="attr.name"
           required
-          class="border-white dark:border-gray-600 shadow-xs dark:bg-gray-700 dark:text-white"
+          class="select border-white dark:border-gray-600 shadow-xs dark:bg-gray-700 dark:text-white"
           @change="updateAttrs">
           <option disabled hidden>{{ $t('general.choose') }} {{ decodeURIComponent(attr.label) }}</option>
           <option v-for="(term, dropdownIndex) in attr.terms.nodes" :key="dropdownIndex" :value="term.slug" v-html="term.name" :selected="dropdownIndex == 0" />
