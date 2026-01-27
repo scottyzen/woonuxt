@@ -1,7 +1,7 @@
 import type { CheckoutInput, CreateAccountInput, UpdateCustomerInput } from '#gql';
 
 export function useCheckout() {
-  const { customer, loginUser, viewer } = useAuth();
+  const { customer, loginUser } = useAuth();
   const { cart, emptyCart, refreshCart, isUpdatingCart } = useCart();
 
   const orderInput = useState<any>('orderInput', () => {
@@ -18,8 +18,10 @@ export function useCheckout() {
   // Helper function to build checkout payload
   const buildCheckoutPayload = (isPaid = false): CheckoutInput => {
     const { username, password, shipToDifferentAddress } = orderInput.value;
-    const billing = customer.value?.billing;
-    const shipping = shipToDifferentAddress ? customer.value?.shipping : billing;
+    const shippingSource = customer.value?.shipping ?? customer.value?.billing;
+    const billingSource = shipToDifferentAddress ? customer.value?.billing : shippingSource;
+    const billing = billingSource;
+    const shipping = shipToDifferentAddress ? shippingSource : billingSource;
 
     const payload: CheckoutInput = {
       billing,
@@ -102,19 +104,38 @@ export function useCheckout() {
     isUpdatingCart.value = true;
 
     try {
-      if (!viewer?.value?.id) {
-        throw new Error('Viewer ID is missing.');
+      const pickLocation = (address: any) => {
+        if (!address) return {};
+        const { address1, address2, city, country, postcode, state } = address;
+        return { address1, address2, city, country, postcode, state };
+      };
+
+      const shippingSource = customer.value?.shipping ?? customer.value?.billing;
+      const billingSource = orderInput.value.shipToDifferentAddress ? customer.value?.billing : shippingSource;
+
+      if (!orderInput.value.shipToDifferentAddress && customer.value?.billing && shippingSource) {
+        Object.assign(customer.value.billing, {
+          ...shippingSource,
+          email: customer.value.billing.email,
+        });
       }
+
+      const shipping = pickLocation(shippingSource);
+      const billing = pickLocation(billingSource);
 
       const { updateCustomer } = await GqlUpdateCustomer({
         input: {
-          id: viewer.value.id,
-          shipping: orderInput.value.shipToDifferentAddress ? customer.value.shipping : customer.value.billing,
-          billing: customer.value.billing,
+          isSession: true,
+          shipping,
+          billing,
         } as UpdateCustomerInput,
       });
 
-      if (updateCustomer) await refreshCart();
+      if (!updateCustomer) {
+        console.warn('[updateShippingLocation] updateCustomer returned null/false');
+      }
+
+      await refreshCart();
     } catch (error) {
       console.error('Error updating shipping location:', error);
     } finally {

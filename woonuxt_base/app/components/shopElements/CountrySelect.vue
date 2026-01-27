@@ -4,14 +4,16 @@ const props = defineProps({
 });
 
 const { getAllowedCountries, countriesToShow } = useCountry();
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'change']);
 
 onMounted(() => {
   getAllowedCountries();
 });
 
 function select(evt) {
-  emit('update:modelValue', evt.target.value);
+  const value = evt.target.value;
+  emit('update:modelValue', value);
+  emit('change', value);
 }
 </script>
 
