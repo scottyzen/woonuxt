@@ -72,19 +72,6 @@ pre {
   @apply rounded-sm bg-gray-800 my-8 text-xs text-white p-4 whitespace-pre-wrap overflow-auto;
 }
 
-select {
-  @apply bg-white dark:bg-gray-700 border rounded-md border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 focus:z-20 appearance-none px-4 py-2 text-base leading-6 text-gray-900 dark:text-white;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
-  background-position: center right 10px;
-  background-repeat: no-repeat;
-  background-size: 1rem;
-  padding-right: 2.5rem;
-}
-
-.dark select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath stroke='%23D1D5DB' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
-}
-
 /* Slide-from-right & Slide-from-left */
 .slide-from-right-leave-active,
 .slide-from-right-enter-active,
