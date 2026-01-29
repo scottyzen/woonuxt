@@ -21,33 +21,6 @@ export function useHelpers() {
   }
 
   /**
-   * Formats an array of variation objects by removing spaces and hyphens from the 'name' and 'value' properties.
-   * @param {VariationAttribute[]} arr - The array of variation objects to format. Each object should have 'name' and 'value' properties.
-   * @returns {VariationAttribute[]} The formatted array of variation objects.
-   */
-  const formatVariationArrays = (arr: VariationAttribute[]): VariationAttribute[] =>
-    arr.map((a) => ({ ...a, name: a.name?.replace(/[-\s]/g, '') || '', value: a.value?.replace(/[-\s]/g, '') || '' }));
-
-  /**
-   * Determines if two arrays of variations are equal by comparing the formatted arrays.
-   * @param {VariationAttribute[]} a1 - The first array of variations to compare.
-   * @param {VariationAttribute[]} a2 - The second array of variations to compare.
-   * @returns {boolean} True if the arrays are equal, false otherwise.
-   */
-  const arraysEqual = (a1: VariationAttribute[], a2: VariationAttribute[]): boolean =>
-    JSON.stringify(formatVariationArrays(a1)) === JSON.stringify(formatVariationArrays(a2));
-
-  // Formats an array of variations by converting the name and value properties to lowercase.
-  const formatArray = (arr: VariationAttribute[]): Array<{ name: string; value: string }> => {
-    return arr.map((v) => {
-      let name = v.name?.toLowerCase() || '';
-      name = name.startsWith('pa_') ? name.replace('pa_', '') : name;
-      const value = v.value?.toLowerCase() || '';
-      return { name, value };
-    });
-  };
-
-  /**
    * Clears all cookies.
    */
   function clearAllCookies(): void {
@@ -105,28 +78,6 @@ export function useHelpers() {
     const body = document.querySelector('body');
     body?.classList.contains(className) ? body.classList.remove(className) : body?.classList.add(className);
   }
-
-  /**
-   * Checks for variation type of 'any' and returns an array of the indexes of those variations.
-   * @param {Product} product - The product to check.
-   * @returns {number[]} An array of the indexes of variations with a type of 'any'.
-   */
-  const checkForVariationTypeOfAny = (product: Product): number[] => {
-    const numberOfVariation = product?.attributes?.nodes?.length ?? 0;
-    let indexOfTypeAny = [] as number[];
-
-    for (let index = 0; index < numberOfVariation; index++) {
-      const tempArray = [] as string[];
-      product?.variations?.nodes?.forEach((element) => {
-        const value = element.attributes?.nodes[index]?.value;
-        if (typeof value === 'string') tempArray.push(value);
-      });
-
-      if (!tempArray.some(Boolean)) indexOfTypeAny.push(index);
-    }
-
-    return indexOfTypeAny;
-  };
 
   /**
    * Determines if the route query is empty.
@@ -250,8 +201,6 @@ export function useHelpers() {
     isDev,
     checkGraphQLExtensions,
     FALLBACK_IMG,
-    formatArray,
-    arraysEqual,
     clearAllCookies,
     clearAllLocalStorage,
     replaceQueryParam,
@@ -259,7 +208,6 @@ export function useHelpers() {
     removeBodyClass,
     toggleBodyClass,
     toggleMobileMenu,
-    checkForVariationTypeOfAny,
     formatDate,
     formatPrice,
     scrollToTop,

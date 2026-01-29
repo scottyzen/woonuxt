@@ -4,7 +4,6 @@ import { StockStatusEnum, ProductTypesEnum, type AddToCartInput } from '#woo';
 const route = useRoute();
 const router = useRouter();
 const { storeSettings } = useAppConfig();
-const { arraysEqual, formatArray, checkForVariationTypeOfAny } = useHelpers();
 const { addToCart, isUpdatingCart } = useCart();
 const { t } = useI18n();
 const slug = route.params.slug as string;
@@ -18,34 +17,140 @@ const product = ref<Product>(data?.value?.product);
 const quantity = ref<number>(1);
 const activeVariation = ref<Variation | null>(null);
 const variation = ref<VariationAttribute[]>([]);
-const indexOfTypeAny = computed<number[]>(() => checkForVariationTypeOfAny(product.value));
 const attrValues = ref();
+
+const normalizeMatchToken = (value?: string | null): string =>
+  (value ?? '')
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/[\s-_]+/g, '');
+
+const stripPaPrefix = (value?: string | null): string => (value ?? '').toString().replace(/^pa[_-]/i, '');
+
+const normalizeMatchKey = (value?: string | null): string => normalizeMatchToken(stripPaPrefix(value));
+const normalizeMatchValue = (value?: string | null): string => normalizeMatchToken(value);
+
+const toSelectionName = (name?: string | null): string => {
+  if (!name) return '';
+  return name.charAt(0).toLowerCase() + name.slice(1);
+};
+
+const normalizedVariations = computed(() => {
+  const nodes = product.value.variations?.nodes ?? [];
+  return nodes.map((node: Variation) => {
+    const attrs: Record<string, string> = {};
+    node.attributes?.nodes?.forEach((attr) => {
+      const key = normalizeMatchKey(attr.name);
+      if (!key) return;
+      attrs[key] = normalizeMatchValue(attr.value);
+    });
+
+    const specificity = Object.values(attrs).filter(Boolean).length;
+    return { variation: node, attrs, specificity };
+  });
+});
+
+const findMatchingVariation = (selected: VariationAttribute[]): Variation | null => {
+  if (!selected?.length) return null;
+
+  const selectedMap: Record<string, string> = {};
+  selected.forEach((attr) => {
+    const key = normalizeMatchKey(attr.name);
+    if (!key) return;
+    const value = normalizeMatchValue(attr.value);
+    if (!value) return;
+    selectedMap[key] = value;
+  });
+
+  if (Object.keys(selectedMap).length === 0) return null;
+
+  let bestMatch: { variation: Variation; score: number } | null = null;
+
+  for (const candidate of normalizedVariations.value) {
+    let matches = true;
+    let matchedSpecific = 0;
+
+    for (const [key, value] of Object.entries(selectedMap)) {
+      const candidateValue = candidate.attrs[key];
+      if (!candidateValue) continue;
+      if (candidateValue !== value) {
+        matches = false;
+        break;
+      }
+      matchedSpecific += 1;
+    }
+
+    if (!matches) continue;
+
+    const score = matchedSpecific * 100 + candidate.specificity;
+    if (!bestMatch || score > bestMatch.score) {
+      bestMatch = { variation: candidate.variation, score };
+    }
+  }
+
+  return bestMatch?.variation ?? null;
+};
 
 // Pre-select variation based on URL query params BEFORE component mounts
 const queryParams = route.query;
 
-// Check if there are any attribute params in the URL (e.g., pa_color=green, pa_size=large)
-if (Object.keys(queryParams).length > 0 && product.value.variations?.nodes) {
-  // Filter to only attribute-like query params (pa_color, pa_size, etc.)
-  const attributeParams = Object.keys(queryParams).filter((key) => product.value.attributes?.nodes.some((attr) => attr.name === key));
+const findVariationById = (value?: string | number | null): Variation | null => {
+  if (!value || !product.value.variations?.nodes) return null;
+  const parsed = typeof value === 'string' ? Number.parseInt(value, 10) : value;
+  if (!parsed || Number.isNaN(parsed)) return null;
+  return product.value.variations.nodes.find((node: Variation) => node.databaseId === parsed) ?? null;
+};
 
-  if (attributeParams.length > 0) {
-    const matchingVariation = product.value.variations.nodes.find((variation: Variation) => {
-      if (!variation?.attributes?.nodes) return false;
+const buildQuerySelections = (): VariationAttribute[] => {
+  if (!product.value.attributes?.nodes) return [];
 
-      // Check if all URL attribute params match this variation's attributes
-      return attributeParams.every((paramKey) => {
-        const paramValue = queryParams[paramKey] as string;
-        const attr = variation?.attributes?.nodes?.find((a: VariationAttribute) => a.name === paramKey);
-        return attr && attr.value === paramValue;
-      });
-    });
+  const selections: VariationAttribute[] = [];
+  for (const attr of product.value.attributes.nodes) {
+    const key = toSelectionName(attr?.name);
+    if (!key) continue;
 
-    if (matchingVariation?.attributes?.nodes) {
-      variation.value = matchingVariation.attributes.nodes.map((attr: VariationAttribute) => ({
+    const rawQueryValue = queryParams[key];
+    if (!rawQueryValue) continue;
+
+    const value = Array.isArray(rawQueryValue) ? rawQueryValue[0] : rawQueryValue;
+    const normalizedValue = normalizeMatchValue(value);
+    if (!normalizedValue) continue;
+
+    const isValidValue =
+      attr.scope === 'LOCAL'
+        ? (attr.options ?? []).some((option: string) => normalizeMatchValue(option) === normalizedValue)
+        : (attr.terms?.nodes ?? []).some((term: { slug: string }) => normalizeMatchValue(term.slug) === normalizedValue);
+
+    if (!isValidValue) continue;
+
+    selections.push({ name: key, value: String(value) });
+  }
+
+  return selections;
+};
+
+const queryVariationId = queryParams.variationId ?? queryParams.variation;
+const variationFromQuery = findVariationById(Array.isArray(queryVariationId) ? queryVariationId[0] : queryVariationId);
+
+if (variationFromQuery?.attributes?.nodes?.length) {
+  variation.value = variationFromQuery.attributes.nodes.map((attr: VariationAttribute) => ({
+    name: attr.name || '',
+    value: attr.value || '',
+  }));
+  activeVariation.value = variationFromQuery;
+} else {
+  const initialSelections = buildQuerySelections();
+  if (initialSelections.length > 0) {
+    const matched = findMatchingVariation(initialSelections);
+    if (matched?.attributes?.nodes?.length) {
+      variation.value = matched.attributes.nodes.map((attr: VariationAttribute) => ({
         name: attr.name || '',
         value: attr.value || '',
       }));
+      activeVariation.value = matched;
+    } else {
+      variation.value = initialSelections;
     }
   }
 }
@@ -60,6 +165,7 @@ const defaultAttributes = computed(() => {
 const isSimpleProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.SIMPLE);
 const isVariableProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.VARIABLE);
 const isExternalProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.EXTERNAL);
+const shouldSkipStockRefresh = computed<boolean>(() => isExternalProduct.value);
 
 const type = computed(() => activeVariation.value || product.value);
 const selectProductInput = computed<any>(() => ({ productId: type.value?.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
@@ -68,19 +174,7 @@ const updateSelectedVariations = (variations: VariationAttribute[]): void => {
   if (!product.value.variations) return;
 
   attrValues.value = variations.map((el) => ({ attributeName: el.name, attributeValue: el.value }));
-  const clonedVariations = JSON.parse(JSON.stringify(variations));
-  const getActiveVariation = product.value.variations?.nodes.filter((variation: any) => {
-    // If there is any variation of type ANY set the value to ''
-    if (variation.attributes) {
-      // Set the value of the variation of type ANY to ''
-      indexOfTypeAny.value.forEach((index) => (clonedVariations[index].value = ''));
-
-      return arraysEqual(formatArray(variation.attributes.nodes), formatArray(clonedVariations));
-    }
-  });
-
-  // Set variation to the selected variation if it exists
-  activeVariation.value = getActiveVariation?.[0] || null;
+  activeVariation.value = findMatchingVariation(variations);
 
   selectProductInput.value.variationId = activeVariation.value?.databaseId ?? null;
   selectProductInput.value.variation = activeVariation.value ? attrValues.value : null;
@@ -94,6 +188,9 @@ const updateSelectedVariations = (variations: VariationAttribute[]): void => {
         query[v.name] = v.value;
       }
     });
+    if (activeVariation.value?.databaseId) {
+      query.variationId = String(activeVariation.value.databaseId);
+    }
 
     // Build new URL with query params
     const url = new URL(window.location.href);
@@ -114,14 +211,60 @@ const mergeLiveStockStatus = (payload: Product): void => {
   });
 };
 
-onMounted(async () => {
+const refreshStockStatus = async (): Promise<void> => {
   try {
     const { product } = await GqlGetStockStatus({ slug });
     if (product) mergeLiveStockStatus(product as Product);
   } catch (error: any) {
-    const errorMessage = error?.gqlErrors?.[0].message;
+    const errorMessage = error?.gqlErrors?.[0]?.message;
     if (errorMessage) console.error(errorMessage);
   }
+};
+
+type IdleCallback = (deadline: { didTimeout: boolean; timeRemaining: () => number }) => void;
+type IdleCallbackWindow = Window & {
+  requestIdleCallback?: (callback: IdleCallback, options?: { timeout: number }) => number;
+  cancelIdleCallback?: (handle: number) => void;
+};
+
+let stockRefreshHandle: number | null = null;
+let stockRefreshHandleType: 'idle' | 'timeout' | null = null;
+
+const scheduleStockRefresh = (): void => {
+  if (!import.meta.client || shouldSkipStockRefresh.value) return;
+
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+  if (connection?.saveData) return;
+
+  if (stockRefreshHandle !== null) return;
+
+  const run = () => {
+    stockRefreshHandle = null;
+    stockRefreshHandleType = null;
+    void refreshStockStatus();
+  };
+
+  const idleWindow = window as IdleCallbackWindow;
+  if (idleWindow.requestIdleCallback) {
+    stockRefreshHandleType = 'idle';
+    stockRefreshHandle = idleWindow.requestIdleCallback(() => run(), { timeout: 2000 });
+  } else {
+    stockRefreshHandleType = 'timeout';
+    stockRefreshHandle = window.setTimeout(run, 900);
+  }
+};
+
+onMounted(scheduleStockRefresh);
+onBeforeUnmount(() => {
+  if (!import.meta.client || stockRefreshHandle === null) return;
+  const idleWindow = window as IdleCallbackWindow;
+  if (stockRefreshHandleType === 'idle' && idleWindow.cancelIdleCallback) {
+    idleWindow.cancelIdleCallback(stockRefreshHandle);
+  } else {
+    clearTimeout(stockRefreshHandle);
+  }
+  stockRefreshHandle = null;
+  stockRefreshHandleType = null;
 });
 
 const stockStatus = computed(() => {
