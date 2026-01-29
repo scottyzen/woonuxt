@@ -2,51 +2,309 @@
 interface Props {
   attributes: any[];
   defaultAttributes?: { nodes: VariationAttribute[] } | null;
+  variations?: any[];
 }
 
-const { attributes, defaultAttributes } = defineProps<Props>();
+const { attributes, defaultAttributes, variations } = defineProps<Props>();
 const emit = defineEmits(['attrs-changed']);
 
-const activeVariations = ref<VariationAttribute[]>([]);
+const selections = ref<Record<string, string>>({});
 
-const getSelectedName = (attr: any, activeVariation?: VariationAttribute) => {
-  if (attr?.terms?.nodes && activeVariation) {
-    return attr.terms.nodes.find((node: { slug: string }) => node.slug === activeVariation.value)?.name;
-  }
+const primaryAttribute = computed(() => {
+  if (!attributes?.length) return null;
+  return attributes.find((attr) => ['pa_color', 'color'].includes(attr?.name)) ?? attributes[0];
+});
 
-  return activeVariation?.value || '';
+const primarySelection = computed(() => {
+  const primary = primaryAttribute.value;
+  if (!primary?.name) return '';
+  return selections.value[primary.name] ?? '';
+});
+
+const normalizeMatchToken = (name?: string | null): string =>
+  (name ?? '')
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/[\s-_]+/g, '');
+
+const stripPaPrefix = (name?: string | null): string =>
+  (name ?? '')
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/^pa[_-]/, '');
+
+const normalizeMatchKey = (name?: string | null): string => normalizeMatchToken(stripPaPrefix(name));
+
+const normalizeMatchValue = (value?: string | null): string => normalizeMatchToken(value);
+
+const toSelectionName = (name?: string | null): string => {
+  if (!name) return '';
+  return name.charAt(0).toLowerCase() + name.slice(1);
 };
 
-const updateAttrs = () => {
-  const selectedVariations = attributes.map((row): VariationAttribute => {
-    const radioValue = document.querySelector(`.name-${row.name.toLowerCase()}:checked`) as HTMLInputElement;
-    const dropdownValue = document.querySelector(`#${row.name}`) as HTMLSelectElement;
-    const name = row.name.charAt(0).toLowerCase() + row.name.slice(1);
-    const value = radioValue?.value ?? dropdownValue?.value ?? '';
-    return { name, value };
-  });
+const toHintLabel = (label?: string | null): string => (label ?? '').toString().trim().toLowerCase();
 
-  activeVariations.value = selectedVariations;
+const getSelectionHint = (attr: any): string => {
+  const primary = primaryAttribute.value;
+  if (!primary || primary === attr) return '';
+  if (primarySelection.value) return '';
+
+  const primaryLabel = toHintLabel(primary.label ?? primary.name);
+  const attrLabel = toHintLabel(attr.label ?? attr.name);
+  if (!primaryLabel || !attrLabel) return '';
+
+  return `Select ${primaryLabel} to see available ${attrLabel}`;
+};
+
+const getSelectedName = (attr: any, value?: string) => {
+  if (attr?.terms?.nodes && value) {
+    return attr.terms.nodes.find((node: { slug: string }) => node.slug === value)?.name ?? value;
+  }
+
+  return value || '';
+};
+
+const emitSelection = () => {
+  const selectedVariations = attributes.map(
+    (row): VariationAttribute => ({
+      name: toSelectionName(row?.name),
+      value: selections.value[row?.name] ?? '',
+    }),
+  );
+
   emit('attrs-changed', selectedVariations);
 };
 
-const setDefaultAttributes = () => {
-  if (defaultAttributes?.nodes) {
-    defaultAttributes?.nodes.forEach((attr: VariationAttribute) => {
-      const radio = document.querySelector(`.name-${attr.name?.toLowerCase()}[value="${attr.value}"]`) as HTMLInputElement;
-      if (radio) radio.checked = true;
-      const dropdown = document.querySelector(`#${attr.name}`) as HTMLSelectElement;
-      if (dropdown) dropdown.value = attr.value || '';
+const buildSelectionMap = (source: Record<string, string>, excludeName?: string): Record<string, string> => {
+  const map: Record<string, string> = {};
+  Object.entries(source).forEach(([key, value]) => {
+    if (excludeName && key === excludeName) return;
+    const normalizedKey = normalizeMatchKey(key);
+    const normalizedValue = normalizeMatchValue(value);
+    if (!normalizedKey || !normalizedValue) return;
+    map[normalizedKey] = normalizedValue;
+  });
+  return map;
+};
+
+const normalizedVariations = computed(() => {
+  if (!variations?.length) return [];
+  return variations.map((variation) => {
+    const attrs: Record<string, string> = {};
+    variation?.attributes?.nodes?.forEach((attr: VariationAttribute) => {
+      const key = normalizeMatchKey(attr.name);
+      if (!key) return;
+      attrs[key] = normalizeMatchValue(attr.value);
+    });
+    const specificity = Object.values(attrs).filter(Boolean).length;
+    return { variation, attrs, specificity };
+  });
+});
+
+const isOptionEnabled = (attrName: string, optionValue: string, source: Record<string, string> = selections.value): boolean => {
+  if (!variations?.length) return true;
+  const attrKey = normalizeMatchKey(attrName);
+  const optionKey = normalizeMatchValue(optionValue);
+  if (!attrKey || !optionKey) return true;
+
+  const selectedMap = buildSelectionMap(source, attrName);
+
+  return normalizedVariations.value.some((candidate) => {
+    for (const [key, value] of Object.entries(selectedMap)) {
+      const candidateValue = candidate.attrs[key];
+      if (!candidateValue) continue;
+      if (candidateValue !== value) return false;
+    }
+
+    const candidateAttrValue = candidate.attrs[attrKey];
+    if (!candidateAttrValue) return true;
+    return candidateAttrValue === optionKey;
+  });
+};
+
+const matchesSelection = (candidateAttrs: Record<string, string>, source: Record<string, string>): boolean => {
+  const selectedMap = buildSelectionMap(source);
+  if (Object.keys(selectedMap).length === 0) return true;
+
+  for (const [key, value] of Object.entries(selectedMap)) {
+    const candidateValue = candidateAttrs[key];
+    if (!candidateValue) continue;
+    if (candidateValue !== value) return false;
+  }
+
+  return true;
+};
+
+const hasValidCombination = (source: Record<string, string>): boolean => {
+  if (!variations?.length) return true;
+  return normalizedVariations.value.some((candidate) => matchesSelection(candidate.attrs, source));
+};
+
+const findBestVariationForSelection = (source: Record<string, string>, requiredKey?: string): any | null => {
+  if (!variations?.length) return null;
+  const selectedMap = buildSelectionMap(source);
+  if (requiredKey && !selectedMap[requiredKey]) return null;
+
+  let best: { variation: any; score: number } | null = null;
+
+  for (const candidate of normalizedVariations.value) {
+    if (requiredKey) {
+      const requiredValue = selectedMap[requiredKey];
+      const candidateValue = candidate.attrs[requiredKey];
+      if (candidateValue && candidateValue !== requiredValue) continue;
+    }
+
+    let matches = true;
+    let matchedSpecific = 0;
+    let mismatchedSpecific = 0;
+
+    for (const [key, value] of Object.entries(selectedMap)) {
+      const candidateValue = candidate.attrs[key];
+      if (!candidateValue) continue;
+      if (candidateValue !== value) {
+        if (!requiredKey || key === requiredKey) {
+          matches = false;
+          break;
+        }
+        mismatchedSpecific += 1;
+        continue;
+      }
+      if (candidateValue === value) matchedSpecific += 1;
+    }
+
+    if (!matches) continue;
+
+    const score = matchedSpecific * 100 + candidate.specificity - mismatchedSpecific * 10;
+    if (!best || score > best.score) {
+      best = { variation: candidate.variation, score };
+    }
+  }
+
+  return best?.variation ?? null;
+};
+
+const applyVariationSelections = (variation: any, source: Record<string, string>): Record<string, string> => {
+  if (!variation?.attributes?.nodes) return source;
+
+  const next = { ...source };
+  attributes.forEach((attr) => {
+    const key = attr?.name ?? '';
+    if (!key) return;
+
+    const matchKey = normalizeMatchKey(key);
+    const matchingAttr = variation.attributes.nodes.find((variationAttr: VariationAttribute) => normalizeMatchKey(variationAttr.name) === matchKey);
+    if (!matchingAttr) return;
+
+    next[key] = matchingAttr.value ?? '';
+  });
+
+  return next;
+};
+
+const resolveInvalidSelections = (source: Record<string, string>, options: { allowEmpty?: boolean; preferClear?: boolean } = {}): Record<string, string> => {
+  const allowEmpty = options.allowEmpty ?? true;
+  const preferClear = options.preferClear ?? true;
+  let next = { ...source };
+  let changed = true;
+  let guard = 0;
+
+  while (changed && guard < 5) {
+    guard += 1;
+    changed = false;
+
+    attributes.forEach((attr) => {
+      const key = attr?.name ?? '';
+      if (!key) return;
+
+      const currentValue = next[key];
+      if (currentValue && isOptionEnabled(key, currentValue, next)) return;
+      if (!currentValue && allowEmpty) return;
+
+      const options = attr.scope === 'LOCAL' ? (attr.options ?? []) : (attr.terms?.nodes ?? []).map((term: { slug: string }) => term.slug);
+
+      const fallback = options.find((option: string) => isOptionEnabled(key, option, next)) ?? '';
+      const nextValue = preferClear && currentValue ? '' : fallback;
+      if (nextValue !== currentValue) {
+        next = { ...next, [key]: nextValue };
+        changed = true;
+      }
     });
   }
+
+  return next;
+};
+
+const handleSelectionChange = (changedKey?: string) => {
+  if (!variations?.length) {
+    emitSelection();
+    return;
+  }
+
+  if (hasValidCombination(selections.value)) {
+    emitSelection();
+    return;
+  }
+
+  const requiredKey = changedKey ? normalizeMatchKey(changedKey) : undefined;
+  const best = findBestVariationForSelection(selections.value, requiredKey);
+  if (best) {
+    selections.value = applyVariationSelections(best, selections.value);
+    emitSelection();
+    return;
+  }
+
+  const resolved = resolveInvalidSelections(selections.value, { allowEmpty: true, preferClear: true });
+  const resolvedKeys = Object.keys(resolved);
+  const currentKeys = Object.keys(selections.value);
+  const hasChanges = resolvedKeys.length !== currentKeys.length || resolvedKeys.some((key) => selections.value[key] !== resolved[key]);
+
+  if (hasChanges) {
+    selections.value = resolved;
+  }
+
+  emitSelection();
+};
+
+const setInitialSelections = () => {
+  const defaults = new Map<string, string>();
+  defaultAttributes?.nodes?.forEach((attr: VariationAttribute) => {
+    const key = normalizeMatchKey(attr.name);
+    if (key) defaults.set(key, attr.value ?? '');
+  });
+
+  const nextSelections: Record<string, string> = { ...selections.value };
+  attributes.forEach((attr) => {
+    const key = attr?.name ?? '';
+    if (!key) return;
+
+    const matchKey = normalizeMatchKey(key);
+    const defaultValue = defaults.get(matchKey);
+    if (defaultValue !== undefined) {
+      nextSelections[key] = defaultValue ?? '';
+      return;
+    }
+  });
+
+  const resolved = resolveInvalidSelections(nextSelections, { allowEmpty: true, preferClear: true });
+  const currentKeys = Object.keys(selections.value);
+  const resolvedKeys = Object.keys(resolved);
+  const hasChanges = currentKeys.length !== resolvedKeys.length || resolvedKeys.some((key) => selections.value[key] !== resolved[key]);
+
+  if (!hasChanges) return;
+
+  selections.value = resolved;
+  emitSelection();
 };
 
 const className = (name: string) => `name-${name.toLowerCase().split(' ').join('-')}`;
 
-onMounted(() => {
-  setDefaultAttributes();
-  updateAttrs();
-});
+watch(
+  () => [attributes, defaultAttributes, variations],
+  () => setInitialSelections(),
+  { deep: true, immediate: true },
+);
 </script>
 
 <template>
@@ -56,24 +314,30 @@ onMounted(() => {
       <div v-if="attr.scope == 'LOCAL'" class="grid gap-2">
         <div class="text-sm dark:text-gray-300">
           {{ attr.label }}
-          <span v-if="activeVariations.length && activeVariations[i]" class="text-gray-400 dark:text-gray-500"
-            >: {{ getSelectedName(attr, activeVariations[i]) }}</span
-          >
+          <span v-if="selections[attr?.name]" class="text-gray-400 dark:text-gray-500">: {{ getSelectedName(attr, selections[attr?.name]) }}</span>
+        </div>
+        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400 dark:text-gray-500">
+          {{ getSelectionHint(attr) }}
         </div>
         <div class="flex gap-2">
           <span v-for="(option, index) in attr.options" :key="index">
             <label :for="`${option}_${index}`">
               <input
                 :id="`${option}_${index}`"
-                :ref="attr.name"
                 class="hidden"
-                :checked="index == 0"
                 type="radio"
                 :class="`name-${attr.name.toLowerCase()}`"
                 :name="attr.name"
                 :value="option"
-                @change="updateAttrs" />
-              <span class="radio-button" :class="`picker-${option}`" :title="`${attr.name}: ${option}`">{{ option }}</span>
+                v-model="selections[attr.name]"
+                :aria-disabled="!isOptionEnabled(attr.name, option)"
+                @change="handleSelectionChange(attr.name)" />
+              <span
+                class="radio-button"
+                :class="[`picker-${option}`, { 'is-disabled': !isOptionEnabled(attr.name, option) }]"
+                :title="`${attr.name}: ${option}`"
+                >{{ option }}</span
+              >
             </label>
           </span>
         </div>
@@ -83,7 +347,10 @@ onMounted(() => {
       <div v-else-if="attr.name == 'pa_color' || attr.name == 'color'" class="grid gap-2">
         <div class="text-sm">
           {{ $t('general.color') }}
-          <span v-if="activeVariations.length" class="text-gray-400">{{ getSelectedName(attr, activeVariations[i]) }}</span>
+          <span v-if="selections[attr?.name]" class="text-gray-400">{{ getSelectedName(attr, selections[attr?.name]) }}</span>
+        </div>
+        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400 dark:text-gray-500">
+          {{ getSelectionHint(attr) }}
         </div>
         <div class="flex gap-2">
           <span v-for="(term, termIndex) in attr.terms.nodes" :key="termIndex">
@@ -91,15 +358,18 @@ onMounted(() => {
               <label :for="`${term.slug}_${termIndex}`">
                 <input
                   :id="`${term.slug}_${termIndex}`"
-                  :ref="attr.name"
                   class="hidden"
-                  :checked="termIndex == 0"
                   type="radio"
                   :class="className(attr.name)"
                   :name="attr.name"
                   :value="term.slug"
-                  @change="updateAttrs" />
-                <span class="color-button" :class="`color-${term.slug}`" :title="`${attr.name}: ${term}`"></span>
+                  v-model="selections[attr.name]"
+                  :aria-disabled="!isOptionEnabled(attr.name, term.slug)"
+                  @change="handleSelectionChange(attr.name)" />
+                <span
+                  class="color-button"
+                  :class="[`color-${term.slug}`, { 'is-disabled': !isOptionEnabled(attr.name, term.slug) }]"
+                  :title="`${attr.name}: ${term}`"></span>
               </label>
             </Tooltip>
           </span>
@@ -109,17 +379,26 @@ onMounted(() => {
       <!-- DROPDOWN -->
       <div v-else-if="attr.terms.nodes && attr.terms.nodes?.length > 8" class="grid gap-2">
         <div class="text-sm dark:text-gray-300">
-          {{ attr.label }} <span v-if="activeVariations.length" class="text-gray-400 dark:text-gray-500">{{ getSelectedName(attr, activeVariations[i]) }}</span>
+          {{ attr.label }}
+          <span v-if="selections[attr?.name]" class="text-gray-400 dark:text-gray-500">{{ getSelectedName(attr, selections[attr?.name]) }}</span>
+        </div>
+        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400 dark:text-gray-500">
+          {{ getSelectionHint(attr) }}
         </div>
         <select
           :id="attr.name"
-          :ref="attr.name"
           :name="attr.name"
           required
           class="select border-white dark:border-gray-600 shadow-xs dark:bg-gray-700 dark:text-white"
-          @change="updateAttrs">
+          v-model="selections[attr.name]"
+          @change="handleSelectionChange(attr.name)">
           <option disabled hidden>{{ $t('general.choose') }} {{ decodeURIComponent(attr.label) }}</option>
-          <option v-for="(term, dropdownIndex) in attr.terms.nodes" :key="dropdownIndex" :value="term.slug" v-html="term.name" :selected="dropdownIndex == 0" />
+          <option
+            v-for="(term, dropdownIndex) in attr.terms.nodes"
+            :key="dropdownIndex"
+            :value="term.slug"
+            :aria-disabled="!isOptionEnabled(attr.name, term.slug)"
+            v-html="term.name" />
         </select>
       </div>
 
@@ -127,22 +406,30 @@ onMounted(() => {
       <div v-else class="grid gap-2">
         <div class="text-sm dark:text-gray-300">
           {{ attr.label }}
-          <span v-if="activeVariations.length" class="text-gray-400 dark:text-gray-500">: {{ getSelectedName(attr, activeVariations[i]) }}</span>
+          <span v-if="selections[attr?.name]" class="text-gray-400 dark:text-gray-500">: {{ getSelectedName(attr, selections[attr?.name]) }}</span>
+        </div>
+        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400 dark:text-gray-500">
+          {{ getSelectionHint(attr) }}
         </div>
         <div class="flex gap-2">
           <span v-for="(term, index) in attr.terms.nodes" :key="index">
             <label :for="`${term.slug}_${index}`">
               <input
                 :id="`${term.slug}_${index}`"
-                :ref="attr.name"
                 class="hidden"
-                :checked="index == 0"
                 type="radio"
                 :class="className(attr.name)"
                 :name="attr.name"
                 :value="term.slug"
-                @change="updateAttrs" />
-              <span class="radio-button" :class="`picker-${term.slug}`" :title="`${attr.name}: ${term.slug}`">{{ term.name }}</span>
+                v-model="selections[attr.name]"
+                :aria-disabled="!isOptionEnabled(attr.name, term.slug)"
+                @change="handleSelectionChange(attr.name)" />
+              <span
+                class="radio-button"
+                :class="[`picker-${term.slug}`, { 'is-disabled': !isOptionEnabled(attr.name, term.slug) }]"
+                :title="`${attr.name}: ${term.slug}`"
+                >{{ term.name }}</span
+              >
             </label>
           </span>
         </div>
@@ -158,10 +445,18 @@ onMounted(() => {
   @apply border-white dark:border-gray-700 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 border-2 text-sm text-center outline-2 outline-gray-100 dark:outline-gray-600 py-1.5 px-3 transition-all text-gray-800 dark:text-gray-200 inline-block hover:outline-gray-500;
 }
 
+.radio-button.is-disabled {
+  @apply opacity-40 hover:outline-gray-100 dark:hover:outline-gray-600;
+}
+
 .color-button {
   @apply border-white dark:border-gray-700 cursor-pointer bg-gray-50 border-2 rounded-2xl text-sm text-center outline-2 outline-gray-100 dark:outline-gray-600 transition-all text-gray-800 inline-block hover:outline-gray-500;
   width: 2rem;
   height: 2rem;
+}
+
+.color-button.is-disabled {
+  @apply opacity-40 hover:outline-gray-100 dark:hover:outline-gray-600;
 }
 
 .color-green {
