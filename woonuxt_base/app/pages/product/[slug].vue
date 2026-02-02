@@ -5,10 +5,11 @@ const route = useRoute();
 const router = useRouter();
 const { storeSettings } = useAppConfig();
 const { addToCart, isUpdatingCart } = useCart();
+const { frontEndUrl } = useHelpers();
 const { t } = useI18n();
 const slug = route.params.slug as string;
 
-const { data } = await useAsyncGql('getProduct', { slug });
+const { data } = await useAsyncGql('getProduct', { slug, frontEndUrl });
 if (!data.value?.product) {
   throw showError({ statusCode: 404, statusMessage: t('shop.productNotFound') });
 }
@@ -119,7 +120,7 @@ const buildQuerySelections = (): VariationAttribute[] => {
 
     const isValidValue =
       attr.scope === 'LOCAL'
-        ? (attr.options ?? []).some((option: string) => normalizeMatchValue(option) === normalizedValue)
+        ? (attr.options ?? []).some((option: string | null) => normalizeMatchValue(option) === normalizedValue)
         : (attr.terms?.nodes ?? []).some((term: { slug: string }) => normalizeMatchValue(term.slug) === normalizedValue);
 
     if (!isValidValue) continue;
