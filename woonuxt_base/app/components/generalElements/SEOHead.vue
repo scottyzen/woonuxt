@@ -1,48 +1,85 @@
 <script setup lang="ts">
+import { useYoastHead } from '~/woonuxt_base/app/composables/useYoastHead';
+
+// Types for Yoast head parsing
+interface YoastScript {
+  type: string;
+  innerHTML: string;
+}
+interface YoastHead {
+  title: string;
+  meta: Array<Record<string, string>>;
+  link: Array<Record<string, string>>;
+  script: YoastScript[];
+}
+
+// Types for SEO providers
+interface SEOProvider {
+  provider?: string;
+  url?: string;
+  handle?: string;
+}
+
 const { frontEndUrl, wooNuxtSEO, stripHtml } = useHelpers();
 const { path } = useRoute();
 const { info } = defineProps({ info: { type: Object as PropType<Product>, required: true } });
 
-const title = info.name;
-const canonical = `${frontEndUrl}${path}`;
-const siteName = process.env.SITE_TITLE ?? 'WooNuxt';
+// If Yoast is present, use its head tags
+let yoastHead: YoastHead | null = null;
+if (info.fullYoastHead && info.fullYoastHead.trim()) {
+  yoastHead = useYoastHead(info.fullYoastHead) as YoastHead;
+  useHead({
+    title: yoastHead.title,
+    meta: yoastHead.meta,
+    link: yoastHead.link,
+    script: (yoastHead.script || []).map((s: YoastScript) => ({ type: s.type, innerHTML: s.innerHTML })),
+  });
+} else {
+  // Default/fallback meta tags
+  const title = info.name;
+  const canonical = `${frontEndUrl}${path}`;
+  const siteName = process.env.SITE_TITLE ?? 'WooNuxt';
+  const img = useImage();
+  const imageURL = info.image?.sourceUrl ?? '/images/placeholder.jpg';
+  // Generate optimized image URLs using Nuxt Image (1200x630 for og:image, 1600x900 for twitter:image)
+  const ogImageSrc = img(imageURL, { width: 1200, height: 630, quality: 90 });
+  const twitterImageSrc = img(imageURL, { width: 1600, height: 900, quality: 90 });
+  // Ensure absolute URLs
+  const makeAbsolute = (url: string) => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    return `${frontEndUrl}${url}`;
+  };
+  const ogImage = makeAbsolute(ogImageSrc);
+  const twitterImage = makeAbsolute(twitterImageSrc);
+  const description = info.shortDescription || info.description ? stripHtml(info.shortDescription || '') : stripHtml(info.description || '');
+  const facebook = (wooNuxtSEO as SEOProvider[] | undefined)?.find((item) => item?.provider === 'facebook') ?? null;
+  const twitter = (wooNuxtSEO as SEOProvider[] | undefined)?.find((item) => item?.provider === 'twitter') ?? null;
 
-const img = useImage();
-const imageURL = info.image?.sourceUrl ?? '/images/placeholder.jpg';
-const defaultImageSrc = img.getSizes(imageURL, { width: 1200, height: 630 }).src;
-const twitterImageSrc = img.getSizes(imageURL, { width: 1600, height: 900 }).src;
-
-const getFullImageURL = (url?: string) => {
-  if (!url) return '';
-  if (url.startsWith('http')) return url;
-  return `${frontEndUrl}${url}`;
-};
-
-const defaultImage = getFullImageURL(defaultImageSrc);
-const twitterImage = getFullImageURL(twitterImageSrc);
-const description = info.shortDescription || info.description ? stripHtml(info.shortDescription || '') : stripHtml(info.description || '');
-
-const facebook = wooNuxtSEO?.find((item) => item?.provider === 'facebook') ?? null;
-const twitter = wooNuxtSEO?.find((item) => item?.provider === 'twitter') ?? null;
+  useHead({
+    title,
+    meta: [
+      description ? { name: 'description', content: description } : undefined,
+      { name: 'image', content: ogImage },
+      { property: 'og:site_name', content: siteName },
+      { property: 'og:url', content: canonical },
+      info.name ? { property: 'og:title', content: info.name } : undefined,
+      description ? { property: 'og:description', content: description } : undefined,
+      { property: 'og:image', content: ogImage },
+      facebook && facebook.url ? { property: 'article:publisher', content: facebook.url } : undefined,
+      { name: 'twitter:card', content: 'summary_large_image' },
+      twitter && twitter.handle ? { name: 'twitter:site', content: twitter.handle } : undefined,
+      info.name ? { name: 'twitter:title', content: info.name } : undefined,
+      description ? { name: 'twitter:description', content: description } : undefined,
+      { name: 'twitter:image', content: twitterImage },
+      { name: 'twitter:url', content: canonical },
+    ].filter(Boolean),
+    link: [{ rel: 'canonical', href: canonical }],
+  });
+}
 </script>
 
 <template>
-  <Head>
-    <Title>{{ title }}</Title>
-    <Meta v-if="description" name="description" :content="description" />
-    <Meta name="image" :content="defaultImage" />
-    <Meta property="og:site_name" :content="siteName" />
-    <Meta property="og:url" :content="canonical" />
-    <Meta v-if="info.name" property="og:title" :content="info.name" />
-    <Meta v-if="description" property="og:description" :content="description" />
-    <Meta property="og:image" :content="defaultImage" />
-    <Meta v-if="facebook?.url" property="article:publisher" :content="facebook.url" />
-    <Meta name="twitter:card" content="summary_large_image" />
-    <Meta v-if="twitter?.handle" name="twitter:site" :content="twitter.handle" />
-    <Meta v-if="info.name" name="twitter:title" :content="info.name" />
-    <Meta v-if="description" name="twitter:description" :content="description" />
-    <Meta name="twitter:image" :content="twitterImage" />
-    <Meta name="twitter:url" :content="canonical" />
-    <Link rel="canonical" :href="canonical" />
-  </Head>
+  <!-- SEO head tags are injected via useHead composable. -->
+  <div style="display: none"></div>
 </template>

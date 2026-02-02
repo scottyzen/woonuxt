@@ -4,6 +4,7 @@ query getProduct($slug: ID!) {
     type
     databaseId
     id
+    fullYoastHead
     metaData {
       id
       key
