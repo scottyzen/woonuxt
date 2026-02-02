@@ -4,7 +4,7 @@ query getProduct($slug: ID!) {
     type
     databaseId
     id
-    fullYoastHead
+    fullYoastHead(sanitize: true, frontendUrl: "https://v3.woonuxt.com/")
     metaData {
       id
       key
