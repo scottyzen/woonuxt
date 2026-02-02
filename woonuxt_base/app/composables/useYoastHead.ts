@@ -1,22 +1,13 @@
+import type { SeoHeadData, SeoLink, SeoMeta, SeoScript } from '~/woonuxt_base/app/types/seo-provider';
 import { computed, ref } from 'vue';
 
-type YoastMeta = { name?: string; property?: string; content: string };
-type YoastLink = { rel: string; href: string };
-type YoastScript = { type: string; innerHTML: string };
-export interface YoastHeadParsed {
-  title: string;
-  meta: YoastMeta[];
-  link: YoastLink[];
-  script: YoastScript[];
-}
-
 // Server-safe HTML parser using regex (works on both server and client)
-function parseYoastHeadSSR(html: string | undefined): YoastHeadParsed {
+function parseYoastHeadSSR(html: string | undefined): SeoHeadData {
   if (!html) return { title: '', meta: [], link: [], script: [] };
 
-  const meta: YoastMeta[] = [];
-  const link: YoastLink[] = [];
-  const script: YoastScript[] = [];
+  const meta: SeoMeta[] = [];
+  const link: SeoLink[] = [];
+  const script: SeoScript[] = [];
   let title = '';
 
   // Parse meta tags
@@ -73,13 +64,12 @@ function parseYoastHeadSSR(html: string | undefined): YoastHeadParsed {
     title = titleMatch[1];
   }
 
-  console.log('Parsed Yoast Head (SSR-safe):', { title, meta, link, script });
   return { title, meta, link, script };
 }
 
 export function useYoastHead(fullYoastHead: string | undefined) {
   // Parse Yoast head immediately (works on both server and client)
-  const parsed = ref<YoastHeadParsed>(parseYoastHeadSSR(fullYoastHead));
+  const parsed = ref<SeoHeadData>(parseYoastHeadSSR(fullYoastHead));
   const head = computed(() => parsed.value);
   return head.value;
 }
