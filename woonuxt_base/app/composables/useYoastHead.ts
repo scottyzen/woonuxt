@@ -1,7 +1,17 @@
-import { computed, ref, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+
+type YoastMeta = { name?: string; property?: string; content: string };
+type YoastLink = { rel: string; href: string };
+type YoastScript = { type: string; innerHTML: string };
+export interface YoastHeadParsed {
+  title: string;
+  meta: YoastMeta[];
+  link: YoastLink[];
+  script: YoastScript[];
+}
 
 // Minimal parser for Yoast fullYoastHead HTML string (client-only)
-function parseYoastHead(html: string) {
+function parseYoastHead(html: string): YoastHeadParsed {
   if (!html || typeof window === 'undefined' || typeof document === 'undefined') {
     return { title: '', meta: [], link: [], script: [] };
   }
@@ -21,11 +31,14 @@ function parseYoastHead(html: string) {
     innerHTML: el.innerHTML,
   }));
   const title = div.querySelector('title')?.textContent || '';
+
+  // Log for debugging
+  console.log('Parsed Yoast Head:', { title, meta, link, script });
   return { title, meta, link, script };
 }
 
 export function useYoastHead(fullYoastHead: string) {
-  const parsed = ref({ title: '', meta: [], link: [], script: [] });
+  const parsed = ref<YoastHeadParsed>({ title: '', meta: [], link: [], script: [] });
   if (process.client) {
     parsed.value = parseYoastHead(fullYoastHead);
   } else {
