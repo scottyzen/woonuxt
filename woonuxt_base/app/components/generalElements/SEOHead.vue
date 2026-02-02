@@ -24,12 +24,34 @@ const { frontEndUrl, wooNuxtSEO, stripHtml } = useHelpers();
 const { path } = useRoute();
 const { info } = defineProps({ info: { type: Object as PropType<Product>, required: true } });
 
-// If Yoast is present, use its head tags
+// If Yoast is present, use its head tags with fallbacks
 let yoastHead: YoastHead | null = null;
 if (info.fullYoastHead && info.fullYoastHead.trim()) {
   yoastHead = useYoastHead(info.fullYoastHead) as YoastHead;
+
+  // Validate Yoast data and apply fallbacks
+  const title = yoastHead.title || info.name || 'WooNuxt';
+  const description = info.shortDescription || info.description || '';
+
+  // Fallback for missing OG image (use Nuxt Image if no Yoast image)
+  const img = useImage();
+  const imageURL = info.image?.sourceUrl ?? '/images/placeholder.jpg';
+  const ogImageSrc = img(imageURL, { width: 1200, height: 630, quality: 90 });
+  const makeAbsolute = (url: string) => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    return `${frontEndUrl}${url}`;
+  };
+  const fallbackOgImage = makeAbsolute(ogImageSrc);
+
+  // Check if OG image is missing in Yoast meta, and add fallback
+  const hasOgImage = yoastHead.meta?.some((m) => m.property === 'og:image' && m.content);
+  if (!hasOgImage && fallbackOgImage) {
+    yoastHead.meta.push({ property: 'og:image', content: fallbackOgImage });
+  }
+
   useHead({
-    title: yoastHead.title,
+    title,
     meta: yoastHead.meta,
     link: yoastHead.link,
     script: (yoastHead.script || []).map((s: YoastScript) => ({ type: s.type, innerHTML: s.innerHTML })),

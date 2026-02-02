@@ -1,4 +1,4 @@
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 type YoastMeta = { name?: string; property?: string; content: string };
 type YoastLink = { rel: string; href: string };
@@ -10,43 +10,76 @@ export interface YoastHeadParsed {
   script: YoastScript[];
 }
 
-// Minimal parser for Yoast fullYoastHead HTML string (client-only)
-function parseYoastHead(html: string): YoastHeadParsed {
-  if (!html || typeof window === 'undefined' || typeof document === 'undefined') {
-    return { title: '', meta: [], link: [], script: [] };
-  }
-  const div = document.createElement('div');
-  div.innerHTML = html;
-  const meta = Array.from(div.querySelectorAll('meta')).map((el) => ({
-    name: el.getAttribute('name') || undefined,
-    property: el.getAttribute('property') || undefined,
-    content: el.getAttribute('content') || '',
-  }));
-  const link = Array.from(div.querySelectorAll('link')).map((el) => ({
-    rel: el.getAttribute('rel') || '',
-    href: el.getAttribute('href') || '',
-  }));
-  const script = Array.from(div.querySelectorAll('script')).map((el) => ({
-    type: el.getAttribute('type') || 'application/ld+json',
-    innerHTML: el.innerHTML,
-  }));
-  const title = div.querySelector('title')?.textContent || '';
+// Server-safe HTML parser using regex (works on both server and client)
+function parseYoastHeadSSR(html: string | undefined): YoastHeadParsed {
+  if (!html) return { title: '', meta: [], link: [], script: [] };
 
-  // Log for debugging
-  console.log('Parsed Yoast Head:', { title, meta, link, script });
+  const meta: YoastMeta[] = [];
+  const link: YoastLink[] = [];
+  const script: YoastScript[] = [];
+  let title = '';
+
+  // Parse meta tags
+  const metaRegex = /<meta\s+([^>]*?)>/gi;
+  let metaMatch;
+  while ((metaMatch = metaRegex.exec(html)) !== null) {
+    const attrs = metaMatch[1] || '';
+    const nameMatch = /name=["']([^"']+)["']/i.exec(attrs);
+    const propertyMatch = /property=["']([^"']+)["']/i.exec(attrs);
+    const contentMatch = /content=["']([^"']+)["']/i.exec(attrs);
+
+    if (contentMatch?.[1]) {
+      meta.push({
+        name: nameMatch?.[1],
+        property: propertyMatch?.[1],
+        content: contentMatch[1],
+      });
+    }
+  }
+
+  // Parse link tags
+  const linkRegex = /<link\s+([^>]*?)>/gi;
+  let linkMatch;
+  while ((linkMatch = linkRegex.exec(html)) !== null) {
+    const attrs = linkMatch[1] || '';
+    const relMatch = /rel=["']([^"']+)["']/i.exec(attrs);
+    const hrefMatch = /href=["']([^"']+)["']/i.exec(attrs);
+
+    if (relMatch?.[1] && hrefMatch?.[1]) {
+      link.push({
+        rel: relMatch[1],
+        href: hrefMatch[1],
+      });
+    }
+  }
+
+  // Parse script tags
+  const scriptRegex = /<script\s+([^>]*?)>([\s\S]*?)<\/script>/gi;
+  let scriptMatch;
+  while ((scriptMatch = scriptRegex.exec(html)) !== null) {
+    const attrs = scriptMatch[1] || '';
+    const typeMatch = /type=["']([^"']+)["']/i.exec(attrs);
+    const innerHTML = scriptMatch[2] || '';
+    script.push({
+      type: typeMatch?.[1] || 'application/ld+json',
+      innerHTML,
+    });
+  }
+
+  // Parse title tag
+  const titleRegex = /<title>([\s\S]*?)<\/title>/i;
+  const titleMatch = titleRegex.exec(html);
+  if (titleMatch?.[1]) {
+    title = titleMatch[1];
+  }
+
+  console.log('Parsed Yoast Head (SSR-safe):', { title, meta, link, script });
   return { title, meta, link, script };
 }
 
-export function useYoastHead(fullYoastHead: string) {
-  const parsed = ref<YoastHeadParsed>({ title: '', meta: [], link: [], script: [] });
-  if (process.client) {
-    parsed.value = parseYoastHead(fullYoastHead);
-  } else {
-    // Hydrate on client after mount
-    onMounted(() => {
-      parsed.value = parseYoastHead(fullYoastHead);
-    });
-  }
+export function useYoastHead(fullYoastHead: string | undefined) {
+  // Parse Yoast head immediately (works on both server and client)
+  const parsed = ref<YoastHeadParsed>(parseYoastHeadSSR(fullYoastHead));
   const head = computed(() => parsed.value);
   return head.value;
 }
