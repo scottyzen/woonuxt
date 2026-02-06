@@ -127,13 +127,13 @@ export const useAuth = () => {
         clearAllLocalStorage();
         customer.value = { billing: {}, shipping: {} };
         clearReturnUrl(); // Clear any stored return URL on logout
+        updateViewer(null);
       }
       return { success: true };
     } catch (error: any) {
       const errorMsg = getErrorMessage(error);
       return { success: false, error: errorMsg };
     } finally {
-      updateViewer(null);
       if (router.currentRoute.value.path === '/my-account' && viewer.value === null) {
         router.push('/my-account');
       } else {
@@ -149,8 +149,9 @@ export const useAuth = () => {
       return { success: true };
     } catch (error: any) {
       const errorMsg = getErrorMessage(error);
-      isPending.value = false;
       return { success: false, error: errorMsg };
+    } finally {
+      isPending.value = false;
     }
   }
 
