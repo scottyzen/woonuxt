@@ -1,11 +1,17 @@
 import type {
+  ApiResponse,
+  AuthResponse,
+  Customer,
+  DownloadableItem,
+  LoginClient,
+  Order,
+  Viewer,
   CreateAccountInput,
-  LoginClientFragment,
   LoginInput,
   RegisterCustomerInput,
   ResetPasswordEmailMutationVariables,
   ResetPasswordKeyMutationVariables,
-} from '#gql';
+} from '#types/gql';
 
 export const useAuth = () => {
   const { refreshCart } = useCart();
@@ -71,7 +77,7 @@ export const useAuth = () => {
       return {
         success: true,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
 
       return {
@@ -104,7 +110,7 @@ export const useAuth = () => {
       return {
         success: true,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
 
       return {
@@ -130,7 +136,7 @@ export const useAuth = () => {
         updateViewer(null);
       }
       return { success: true };
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       return { success: false, error: errorMsg };
     } finally {
@@ -147,7 +153,7 @@ export const useAuth = () => {
     try {
       await GqlRegisterCustomer({ input: userInfo });
       return { success: true };
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       return { success: false, error: errorMsg };
     } finally {
@@ -181,7 +187,7 @@ export const useAuth = () => {
         return { success: true };
       }
       return { success: false, error: 'There was an error sending the reset password email. Please try again later.' };
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       isPending.value = false;
       return { success: false, error: errorMsg };
@@ -198,9 +204,8 @@ export const useAuth = () => {
         return { success: true };
       }
       return { success: false, error: 'There was an error resetting the password. Please try again later.' };
-    } catch (error: any) {
+    } catch (error: unknown) {
       isPending.value = false;
-      const gqlError = error?.gqlErrors?.[0];
       return { success: false, error: getErrorMessage(error) };
     }
   };
@@ -214,7 +219,7 @@ export const useAuth = () => {
         return { success: true, data: orderNodes };
       }
       return { success: false, error: 'There was an error getting your orders. Please try again later.' };
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       return { success: false, error: errorMsg };
     }
@@ -229,7 +234,7 @@ export const useAuth = () => {
         return { success: true, data: downloadNodes };
       }
       return { success: false, error: 'There was an error getting your downloads. Please try again later.' };
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       return { success: false, error: errorMsg };
     }

@@ -1,4 +1,4 @@
-import type { CheckoutInput, CreateAccountInput, UpdateCustomerInput } from '#gql';
+import type { CheckoutInput, CreateAccountInput, UpdateCustomerInput } from '#types/gql';
 
 export function useCheckout() {
   const { customer, loginUser } = useAuth();
@@ -194,9 +194,9 @@ export function useCheckout() {
       await finalizeCheckout(checkout);
 
       return checkout;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Checkout error:', error);
-      if (error.message) alert(error.message);
+      if (error instanceof Error && error.message) alert(error.message);
       return null;
     } finally {
       isProcessingOrder.value = false;

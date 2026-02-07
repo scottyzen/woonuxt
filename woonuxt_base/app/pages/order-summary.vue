@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { OrderStatusEnum } from '#woo';
+import { OrderStatusEnum } from '#gql/default';
+import type { Order } from '#types/gql';
 
 const { query, params, name } = useRoute();
 const { customer } = useAuth();
-const { formatDate, formatPrice } = useHelpers();
+const { formatDate, formatPrice, getErrorMessage } = useHelpers();
 const { t } = useI18n();
 const { cart, emptyCart, refreshCart } = useCart();
 
@@ -62,8 +63,8 @@ async function getOrder() {
     } else {
       errorMessage.value = 'Could not find order';
     }
-  } catch (err: any) {
-    errorMessage.value = err?.gqlErrors?.[0].message || 'Could not find order';
+  } catch (err: unknown) {
+    errorMessage.value = getErrorMessage(err) || 'Could not find order';
   }
   isLoaded.value = true;
 }

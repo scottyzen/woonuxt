@@ -9,10 +9,13 @@ import type {
   OrderFragmentFragment,
   GetProductQuery,
   GetProductsQuery,
+  ImageFragment as BaseImageFragment,
   SimpleProductFragment,
   VariableProductFragment,
   ExternalProductFragment,
   ProductWithAttributesFragment,
+  ProductVariationFragment,
+  ImageFragment,
   DownloadableItemFragment,
   ProductCategoryFragment,
   AddressFragment,
@@ -29,17 +32,67 @@ export type Customer = CustomerFragment;
 export type Viewer = ViewerFragment;
 export type PaymentGateway = PaymentGatewayFragment;
 export type Order = OrderFragmentFragment;
+export type ImageWithSizes = BaseImageFragment & {
+  cartSourceUrl?: string | null;
+  producCardSourceUrl?: string | null;
+};
 export type ProductBase = GetProductQuery['product'];
-export type ProductDetail = NonNullable<GetProductQuery['product']>;
-export type ProductListItem = NonNullable<NonNullable<GetProductsQuery['products']>['nodes'][number]> & {
-  description?: string | null;
-  shortDescription?: string | null;
-  date?: string | null;
-  onSale?: boolean | null;
+export type ProductDetail = NonNullable<GetProductQuery['product']> &
+  ProductImageFields &
+  ProductPricingFields &
+  ProductReviewFields &
+  ProductDateFields &
+  ProductVariationFields &
+  ProductAttributeFields &
+  ProductStockFields;
+export type ProductListItem = NonNullable<NonNullable<GetProductsQuery['products']>['nodes'][number]> &
+  ProductImageFields &
+  ProductPricingFields &
+  ProductReviewFields &
+  ProductVariationFields & {
+    description?: string | null;
+    shortDescription?: string | null;
+    date?: string | null;
+  };
+type ProductImageFields = {
+  image?: ImageWithSizes | null;
+  galleryImages?: { nodes?: BaseImageFragment[] | null } | null;
+};
+
+type ProductPricingFields = {
+  price?: string | null;
+  regularPrice?: string | null;
+  salePrice?: string | null;
   rawPrice?: string | null;
   rawRegularPrice?: string | null;
   rawSalePrice?: string | null;
+  onSale?: boolean | null;
 };
+
+type ProductReviewFields = {
+  averageRating?: number | null;
+  reviewCount?: number | null;
+};
+
+type ProductDateFields = {
+  date?: string | null;
+};
+
+type ProductVariationFields = {
+  variations?: { nodes?: ProductVariationFragment[] | null } | null;
+};
+
+type ProductAttributeFields = {
+  attributes?: { nodes?: ProductAttributeFragment[] | null } | null;
+  defaultAttributes?: { nodes?: VariationAttributeFragment[] | null } | null;
+};
+
+type ProductStockFields = {
+  stockStatus?: StockStatusEnum | null;
+  stockQuantity?: number | null;
+  lowStockAmount?: number | null;
+};
+
 export type Product = ProductDetail | ProductListItem;
 export type SimpleProduct = SimpleProductFragment;
 export type VariableProduct = VariableProductFragment;

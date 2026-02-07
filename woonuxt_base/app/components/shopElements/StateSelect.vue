@@ -1,23 +1,23 @@
-<script setup>
+<script setup lang="ts">
+import type { CountriesEnum } from '#types/gql';
+
 defineOptions({ inheritAttrs: false });
 
-const props = defineProps({
-  modelValue: { type: String, default: '' },
-  countryCode: { type: String, default: '' },
-});
+const props = defineProps<{ modelValue?: string | null; countryCode?: string | null }>();
 
 const { getStatesForCountry, countryStatesDict } = useCountry();
 const emit = defineEmits(['update:modelValue', 'change']);
 
-function select(evt) {
-  const value = evt.target.value;
+function select(evt: Event) {
+  const value = (evt.target as HTMLSelectElement | HTMLInputElement | null)?.value ?? '';
   emit('update:modelValue', value);
   emit('change', value);
 }
 
 async function updateState() {
-  if (props.countryCode && props.countryCode.length > 0) {
-    await getStatesForCountry(props.countryCode);
+  const code = props.countryCode ?? '';
+  if (code.length > 0) {
+    await getStatesForCountry(code as CountriesEnum);
   }
 }
 
@@ -34,9 +34,13 @@ watch(
 </script>
 
 <template>
-  <select v-bind="$attrs" @change="select" v-if="countryStatesDict[props.countryCode]?.length">
-    <option value="" :selected="!props.modelValue">Select a state</option>
-    <option v-for="state in countryStatesDict[props.countryCode]" :key="state.code" :value="state.code" :selected="state.code === props.modelValue">
+  <select v-bind="$attrs" @change="select" v-if="countryStatesDict[props.countryCode ?? '']?.length">
+    <option value="" :selected="!(props.modelValue ?? '')">Select a state</option>
+    <option
+      v-for="state in countryStatesDict[props.countryCode ?? '']"
+      :key="state.code"
+      :value="state.code"
+      :selected="state.code === (props.modelValue ?? '')">
       {{ state.name }}
     </option>
   </select>

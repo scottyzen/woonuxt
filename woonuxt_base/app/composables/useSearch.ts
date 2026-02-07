@@ -1,4 +1,6 @@
 // Example: ?search=shirt
+import type { Product } from '#types/gql';
+
 export function useSearching() {
   const route = useRoute();
   const router = useRouter();
