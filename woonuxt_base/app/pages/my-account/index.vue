@@ -28,7 +28,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="container min-h-150 py-8">
+  <div class="container py-8 min-h-150">
     <div v-if="showLoader || isRedirecting" class="flex flex-col min-h-125">
       <LoadingIcon class="m-auto" />
     </div>

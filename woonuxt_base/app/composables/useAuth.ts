@@ -1,21 +1,21 @@
 import type {
   ApiResponse,
   AuthResponse,
+  CreateAccountInput,
   Customer,
   DownloadableItem,
   LoginClient,
-  Order,
-  Viewer,
-  CreateAccountInput,
   LoginInput,
+  Order,
   RegisterCustomerInput,
   ResetPasswordEmailMutationVariables,
   ResetPasswordKeyMutationVariables,
+  Viewer,
 } from '#types/gql';
 
 export const useAuth = () => {
-  const { refreshCart } = useCart();
-  const { clearAllCookies, getErrorMessage, clearAllLocalStorage } = useHelpers();
+  const { refreshCart, updateCart } = useCart();
+  const { clearAllCookies, getErrorMessage } = useHelpers();
   const router = useRouter();
 
   const customer = useState<Customer>('customer', () => ({ billing: {}, shipping: {} }));
@@ -128,11 +128,14 @@ export const useAuth = () => {
     try {
       const { logout } = await GqlLogout();
       if (logout) {
-        await refreshCart();
+        // Clear auth token/header before refreshing cart to avoid stale auth state.
+        useGqlToken(null);
+        useGqlHeaders({ Authorization: '' });
+
         clearAllCookies();
-        clearAllLocalStorage();
-        customer.value = { billing: {}, shipping: {} };
+
         clearReturnUrl(); // Clear any stored return URL on logout
+        updateCart({}); // Clear cart on logout
         updateViewer(null);
       }
       return { success: true };
