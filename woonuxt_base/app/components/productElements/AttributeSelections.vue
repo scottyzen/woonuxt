@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import type { ProductAttribute, ProductVariationFragment, VariationAttribute } from '#types/gql';
+
 interface Props {
-  attributes: any[];
+  attributes: ProductAttribute[];
   defaultAttributes?: { nodes: VariationAttribute[] } | null;
-  variations?: any[];
+  variations?: ProductVariationFragment[] | null;
 }
 
 const { attributes, defaultAttributes, variations } = defineProps<Props>();
@@ -12,13 +14,14 @@ const selections = ref<Record<string, string>>({});
 
 const primaryAttribute = computed(() => {
   if (!attributes?.length) return null;
-  return attributes.find((attr) => ['pa_color', 'color'].includes(attr?.name)) ?? attributes[0];
+  return attributes.find((attr) => ['pa_color', 'color'].includes(attr?.name || '')) ?? attributes[0];
 });
 
 const primarySelection = computed(() => {
   const primary = primaryAttribute.value;
-  if (!primary?.name) return '';
-  return selections.value[primary.name] ?? '';
+  const name = primary?.name || '';
+  if (!name) return '';
+  return selections.value[name] ?? '';
 });
 
 const normalizeMatchToken = (name?: string | null): string =>
@@ -46,7 +49,7 @@ const toSelectionName = (name?: string | null): string => {
 
 const toHintLabel = (label?: string | null): string => (label ?? '').toString().trim().toLowerCase();
 
-const getSelectionHint = (attr: any): string => {
+const getSelectionHint = (attr: ProductAttribute): string => {
   const primary = primaryAttribute.value;
   if (!primary || primary === attr) return '';
   if (primarySelection.value) return '';
@@ -58,19 +61,20 @@ const getSelectionHint = (attr: any): string => {
   return `Select ${primaryLabel} to see available ${attrLabel}`;
 };
 
-const getSelectedName = (attr: any, value?: string) => {
-  if (attr?.terms?.nodes && value) {
-    return attr.terms.nodes.find((node: { slug: string }) => node.slug === value)?.name ?? value;
+const getSelectedName = (attr: ProductAttribute, value?: string) => {
+  if (!value) return '';
+  if ('terms' in attr && attr?.terms?.nodes?.length) {
+    return attr.terms.nodes.find((node: { slug?: string | null; name?: string | null }) => node?.slug === value)?.name ?? value;
   }
 
-  return value || '';
+  return value;
 };
 
 const emitSelection = () => {
   const selectedVariations = attributes.map(
     (row): VariationAttribute => ({
       name: toSelectionName(row?.name),
-      value: selections.value[row?.name] ?? '',
+      value: selections.value[row?.name ?? ''] ?? '',
     }),
   );
 
@@ -142,12 +146,12 @@ const hasValidCombination = (source: Record<string, string>): boolean => {
   return normalizedVariations.value.some((candidate) => matchesSelection(candidate.attrs, source));
 };
 
-const findBestVariationForSelection = (source: Record<string, string>, requiredKey?: string): any | null => {
+const findBestVariationForSelection = (source: Record<string, string>, requiredKey?: string): ProductVariationFragment | null => {
   if (!variations?.length) return null;
   const selectedMap = buildSelectionMap(source);
   if (requiredKey && !selectedMap[requiredKey]) return null;
 
-  let best: { variation: any; score: number } | null = null;
+  let best: { variation: ProductVariationFragment; score: number } | null = null;
 
   for (const candidate of normalizedVariations.value) {
     if (requiredKey) {
@@ -185,16 +189,18 @@ const findBestVariationForSelection = (source: Record<string, string>, requiredK
   return best?.variation ?? null;
 };
 
-const applyVariationSelections = (variation: any, source: Record<string, string>): Record<string, string> => {
+const applyVariationSelections = (variation: ProductVariationFragment, source: Record<string, string>): Record<string, string> => {
   if (!variation?.attributes?.nodes) return source;
 
   const next = { ...source };
+  const attrNodes = variation.attributes?.nodes;
+  if (!attrNodes) return next;
   attributes.forEach((attr) => {
     const key = attr?.name ?? '';
     if (!key) return;
 
     const matchKey = normalizeMatchKey(key);
-    const matchingAttr = variation.attributes.nodes.find((variationAttr: VariationAttribute) => normalizeMatchKey(variationAttr.name) === matchKey);
+    const matchingAttr = attrNodes.find((variationAttr: VariationAttribute) => normalizeMatchKey(variationAttr.name) === matchKey);
     if (!matchingAttr) return;
 
     next[key] = matchingAttr.value ?? '';
@@ -222,9 +228,12 @@ const resolveInvalidSelections = (source: Record<string, string>, options: { all
       if (currentValue && isOptionEnabled(key, currentValue, next)) return;
       if (!currentValue && allowEmpty) return;
 
-      const options = attr.scope === 'LOCAL' ? (attr.options ?? []) : (attr.terms?.nodes ?? []).map((term: { slug: string }) => term.slug);
+      const options =
+        attr.scope === 'LOCAL'
+          ? (attr.options ?? []).filter((option): option is string => !!option)
+          : ('terms' in attr ? (attr.terms?.nodes ?? []) : []).map((term) => term?.slug).filter((slug): slug is string => !!slug);
 
-      const fallback = options.find((option: string) => isOptionEnabled(key, option, next)) ?? '';
+      const fallback = options.find((option) => isOptionEnabled(key, option, next)) ?? '';
       const nextValue = preferClear && currentValue ? '' : fallback;
       if (nextValue !== currentValue) {
         next = { ...next, [key]: nextValue };
@@ -298,7 +307,7 @@ const setInitialSelections = () => {
   emitSelection();
 };
 
-const className = (name: string) => `name-${name.toLowerCase().split(' ').join('-')}`;
+const className = (name: string) => (name ? `name-${name.toLowerCase().split(' ').join('-')}` : '');
 
 watch(
   () => [attributes, defaultAttributes, variations],
@@ -308,34 +317,34 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col gap-1 justify-between" v-if="attributes">
-    <div v-for="(attr, i) in attributes" :key="i" class="flex flex-wrap py-2 relative justify-between">
+  <div class="flex flex-col justify-between gap-1" v-if="attributes">
+    <div v-for="(attr, i) in attributes" :key="i" class="relative flex flex-wrap justify-between py-2">
       <!-- LOCAL -->
       <div v-if="attr.scope == 'LOCAL'" class="grid gap-2">
         <div class="text-sm dark:text-gray-300">
-          {{ attr.label }}
-          <span v-if="selections[attr?.name]" class="text-gray-400 dark:text-gray-500">: {{ getSelectedName(attr, selections[attr?.name]) }}</span>
+          {{ attr.label || attr.name }}
+          <span v-if="selections[attr.name || '']" class="text-gray-400 dark:text-gray-500">: {{ getSelectedName(attr, selections[attr.name || '']) }}</span>
         </div>
         <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400 dark:text-gray-500">
           {{ getSelectionHint(attr) }}
         </div>
         <div class="flex gap-2">
-          <span v-for="(option, index) in attr.options" :key="index">
+          <span v-for="(option, index) in (attr.options || []).filter((option): option is string => !!option)" :key="index">
             <label :for="`${option}_${index}`">
               <input
                 :id="`${option}_${index}`"
                 class="hidden"
                 type="radio"
-                :class="`name-${attr.name.toLowerCase()}`"
-                :name="attr.name"
+                :class="className(attr.name || '')"
+                :name="attr.name || ''"
                 :value="option"
-                v-model="selections[attr.name]"
-                :aria-disabled="!isOptionEnabled(attr.name, option)"
-                @change="handleSelectionChange(attr.name)" />
+                v-model="selections[attr.name || '']"
+                :aria-disabled="!isOptionEnabled(attr.name || '', option)"
+                @change="handleSelectionChange(attr.name || '')" />
               <span
                 class="radio-button"
-                :class="[`picker-${option}`, { 'is-disabled': !isOptionEnabled(attr.name, option) }]"
-                :title="`${attr.name}: ${option}`"
+                :class="[`picker-${option}`, { 'is-disabled': !isOptionEnabled(attr.name || '', option) }]"
+                :title="`${attr.label || attr.name}: ${option}`"
                 >{{ option }}</span
               >
             </label>
@@ -347,29 +356,31 @@ watch(
       <div v-else-if="attr.name == 'pa_color' || attr.name == 'color'" class="grid gap-2">
         <div class="text-sm">
           {{ $t('general.color') }}
-          <span v-if="selections[attr?.name]" class="text-gray-400">{{ getSelectedName(attr, selections[attr?.name]) }}</span>
+          <span v-if="selections[attr.name || '']" class="text-gray-400">{{ getSelectedName(attr, selections[attr.name || '']) }}</span>
         </div>
         <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400 dark:text-gray-500">
           {{ getSelectionHint(attr) }}
         </div>
         <div class="flex gap-2">
-          <span v-for="(term, termIndex) in attr.terms.nodes" :key="termIndex">
-            <Tooltip :text="term.name">
-              <label :for="`${term.slug}_${termIndex}`">
+          <span
+            v-for="(term, termIndex) in 'terms' in attr && attr.terms?.nodes ? attr.terms.nodes.filter((term) => term?.slug) : []"
+            :key="term.slug || termIndex">
+            <Tooltip :text="term.name || ''">
+              <label :for="`${term.slug || ''}_${termIndex}`">
                 <input
-                  :id="`${term.slug}_${termIndex}`"
+                  :id="`${term.slug || ''}_${termIndex}`"
                   class="hidden"
                   type="radio"
-                  :class="className(attr.name)"
-                  :name="attr.name"
-                  :value="term.slug"
-                  v-model="selections[attr.name]"
-                  :aria-disabled="!isOptionEnabled(attr.name, term.slug)"
-                  @change="handleSelectionChange(attr.name)" />
+                  :class="className(attr.name || '')"
+                  :name="attr.name || ''"
+                  :value="term.slug || ''"
+                  v-model="selections[attr.name || '']"
+                  :aria-disabled="!isOptionEnabled(attr.name || '', term.slug || '')"
+                  @change="handleSelectionChange(attr.name || '')" />
                 <span
                   class="color-button"
-                  :class="[`color-${term.slug}`, { 'is-disabled': !isOptionEnabled(attr.name, term.slug) }]"
-                  :title="`${attr.name}: ${term}`"></span>
+                  :class="[`color-${term.slug}`, { 'is-disabled': !isOptionEnabled(attr.name || '', term.slug || '') }]"
+                  :title="`${attr.label || attr.name}: ${term.name || term.slug}`"></span>
               </label>
             </Tooltip>
           </span>
@@ -377,27 +388,27 @@ watch(
       </div>
 
       <!-- DROPDOWN -->
-      <div v-else-if="attr.terms.nodes && attr.terms.nodes?.length > 8" class="grid gap-2">
+      <div v-else-if="'terms' in attr && (attr.terms?.nodes?.length || 0) > 8" class="grid gap-2">
         <div class="text-sm dark:text-gray-300">
-          {{ attr.label }}
-          <span v-if="selections[attr?.name]" class="text-gray-400 dark:text-gray-500">{{ getSelectedName(attr, selections[attr?.name]) }}</span>
+          {{ attr.label || attr.name }}
+          <span v-if="selections[attr.name || '']" class="text-gray-400 dark:text-gray-500">{{ getSelectedName(attr, selections[attr.name || '']) }}</span>
         </div>
         <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400 dark:text-gray-500">
           {{ getSelectionHint(attr) }}
         </div>
         <select
-          :id="attr.name"
-          :name="attr.name"
+          :id="attr.name || ''"
+          :name="attr.name || ''"
           required
-          class="select border-white dark:border-gray-600 shadow-xs dark:bg-gray-700 dark:text-white"
-          v-model="selections[attr.name]"
-          @change="handleSelectionChange(attr.name)">
-          <option disabled hidden>{{ $t('general.choose') }} {{ decodeURIComponent(attr.label) }}</option>
+          class="border-white shadow-xs select dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+          v-model="selections[attr.name || '']"
+          @change="handleSelectionChange(attr.name || '')">
+          <option disabled hidden>{{ $t('general.choose') }} {{ decodeURIComponent(attr.label || attr.name || '') }}</option>
           <option
-            v-for="(term, dropdownIndex) in attr.terms.nodes"
-            :key="dropdownIndex"
-            :value="term.slug"
-            :aria-disabled="!isOptionEnabled(attr.name, term.slug)"
+            v-for="(term, dropdownIndex) in 'terms' in attr && attr.terms?.nodes ? attr.terms.nodes.filter((term) => term?.slug) : []"
+            :key="term.slug || dropdownIndex"
+            :value="term.slug || ''"
+            :aria-disabled="!isOptionEnabled(attr.name || '', term.slug || '')"
             v-html="term.name" />
         </select>
       </div>
@@ -405,29 +416,29 @@ watch(
       <!-- CHECKBOXES -->
       <div v-else class="grid gap-2">
         <div class="text-sm dark:text-gray-300">
-          {{ attr.label }}
-          <span v-if="selections[attr?.name]" class="text-gray-400 dark:text-gray-500">: {{ getSelectedName(attr, selections[attr?.name]) }}</span>
+          {{ attr.label || attr.name }}
+          <span v-if="selections[attr.name || '']" class="text-gray-400 dark:text-gray-500">: {{ getSelectedName(attr, selections[attr.name || '']) }}</span>
         </div>
         <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400 dark:text-gray-500">
           {{ getSelectionHint(attr) }}
         </div>
         <div class="flex gap-2">
-          <span v-for="(term, index) in attr.terms.nodes" :key="index">
+          <span v-for="(term, index) in 'terms' in attr && attr.terms?.nodes ? attr.terms.nodes.filter((term) => term?.slug) : []" :key="term.slug || index">
             <label :for="`${term.slug}_${index}`">
               <input
                 :id="`${term.slug}_${index}`"
                 class="hidden"
                 type="radio"
-                :class="className(attr.name)"
-                :name="attr.name"
-                :value="term.slug"
-                v-model="selections[attr.name]"
-                :aria-disabled="!isOptionEnabled(attr.name, term.slug)"
-                @change="handleSelectionChange(attr.name)" />
+                :class="className(attr.name || '')"
+                :name="attr.name || ''"
+                :value="term.slug || ''"
+                v-model="selections[attr.name || '']"
+                :aria-disabled="!isOptionEnabled(attr.name || '', term.slug || '')"
+                @change="handleSelectionChange(attr.name || '')" />
               <span
                 class="radio-button"
-                :class="[`picker-${term.slug}`, { 'is-disabled': !isOptionEnabled(attr.name, term.slug) }]"
-                :title="`${attr.name}: ${term.slug}`"
+                :class="[`picker-${term.slug}`, { 'is-disabled': !isOptionEnabled(attr.name || '', term.slug || '') }]"
+                :title="`${attr.label || attr.name}: ${term.slug}`"
                 >{{ term.name }}</span
               >
             </label>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Product } from '#types/gql';
+
 const runtimeConfig = useRuntimeConfig();
 
 const { product } = defineProps<{ product: Product }>();

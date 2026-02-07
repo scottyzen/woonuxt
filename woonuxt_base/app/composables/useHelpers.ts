@@ -24,6 +24,7 @@ export function useHelpers() {
    * Clears all cookies.
    */
   function clearAllCookies(): void {
+    if (!import.meta.client) return;
     const cookies = document.cookie.split(';');
     for (const cookie of cookies) {
       const eqPos = cookie.indexOf('=');
@@ -36,6 +37,7 @@ export function useHelpers() {
    * Clear all local storage.
    */
   function clearAllLocalStorage(): void {
+    if (!import.meta.client) return;
     localStorage.clear();
   }
 
@@ -57,6 +59,7 @@ export function useHelpers() {
    * @param {string} className - The class to remove.
    */
   function removeBodyClass(className: string): void {
+    if (!import.meta.client) return;
     const body = document.querySelector('body');
     body?.classList.remove(className);
   }
@@ -66,6 +69,7 @@ export function useHelpers() {
    * @param {string} className - The class to add.
    */
   function addBodyClass(className: string): void {
+    if (!import.meta.client) return;
     const body = document.querySelector('body');
     body?.classList.add(className);
   }
@@ -75,6 +79,7 @@ export function useHelpers() {
    * @param {string} className - The class to toggle.
    */
   function toggleBodyClass(className: string): void {
+    if (!import.meta.client) return;
     const body = document.querySelector('body');
     body?.classList.contains(className) ? body.classList.remove(className) : body?.classList.add(className);
   }
@@ -110,6 +115,7 @@ export function useHelpers() {
    * Scrolls to the top of the page.
    */
   const scrollToTop = () => {
+    if (!import.meta.client) return;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -136,19 +142,26 @@ export function useHelpers() {
     };
   };
 
+  type GqlErrorMessage = { message?: string | null };
+  type GqlErrorLike = { gqlErrors?: GqlErrorMessage[] };
+
+  const isGqlErrorLike = (value: unknown): value is GqlErrorLike => {
+    return typeof value === 'object' && value !== null && 'gqlErrors' in value;
+  };
+
   /**
    * Extract GraphQL error message and optionally log it
    * @param error - GraphQL error object
    * @returns The error message or undefined
    */
-  const getErrorMessage = (error: any): string | undefined => {
-    const errorMessage = error?.gqlErrors?.[0]?.message;
+  const getErrorMessage = (error: unknown): string | undefined => {
+    const errorMessage = isGqlErrorLike(error) ? error.gqlErrors?.[0]?.message ?? undefined : undefined;
 
     // Check for server errors that require clearing cookies and reloading
     const serverErrors = ['The iss do not match with this server', 'Invalid session token', 'expired token', 'invalid-secret-key'];
     const shouldClearAndReload = serverErrors.some((serverError) => errorMessage?.toLowerCase().includes(serverError.toLowerCase()));
 
-    if (shouldClearAndReload) {
+    if (shouldClearAndReload && import.meta.client) {
       clearAllCookies();
       window.location.reload();
     }
@@ -162,6 +175,7 @@ export function useHelpers() {
    * @param response - GraphQL response object that may contain extensions.debug array
    */
   const checkGraphQLExtensions = (response: any): void => {
+    if (!import.meta.client) return;
     const debugMessages = response?.extensions?.debug;
     if (!Array.isArray(debugMessages)) return;
 

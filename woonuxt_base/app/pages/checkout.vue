@@ -279,9 +279,9 @@ useSeoMeta({
   <div class="flex flex-col min-h-150">
     <template v-if="cart && customer">
       <div v-if="cart.isEmpty" class="flex flex-col items-center justify-center flex-1 mb-12">
-        <Icon name="ion:cart-outline" size="156" class="opacity-25 mb-5" />
-        <h2 class="text-2xl font-bold mb-2">{{ $t('shop.cartEmpty') }}</h2>
-        <span class="text-gray-400 mb-4">{{ $t('shop.addProductsInYourCart') }}</span>
+        <Icon name="ion:cart-outline" size="156" class="mb-5 opacity-25" />
+        <h2 class="mb-2 text-2xl font-bold">{{ $t('shop.cartEmpty') }}</h2>
+        <span class="mb-4 text-gray-400">{{ $t('shop.addProductsInYourCart') }}</span>
         <NuxtLink
           to="/products"
           class="flex items-center justify-center gap-3 p-2 px-3 mt-4 font-semibold text-center text-white rounded-lg shadow-lg bg-primary hover:bg-primary-dark">
@@ -331,12 +331,12 @@ useSeoMeta({
 
           <!-- Shipping Address Section -->
           <div v-if="cart?.availableShippingMethods?.length">
-            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4 leading-none">Billing</h2>
+            <h2 class="mb-4 text-2xl font-semibold leading-none text-gray-900 dark:text-white">Billing</h2>
 
             <!-- Shipping Address Summary or Form -->
             <div v-if="!isEditingShipping" class="space-y-4">
               <!-- Shipping Address Summary -->
-              <AddressSummary :address="customer?.shipping" :show-validation-warnings="!!viewer" @edit="editShippingAddress" />
+              <AddressSummary :address="customer?.shipping ?? null" :show-validation-warnings="!!viewer" @edit="editShippingAddress" />
 
               <!-- Ship to Different Address Checkbox -->
               <div class="flex items-center gap-3">
@@ -345,7 +345,7 @@ useSeoMeta({
                   v-model="shipToDifferentAddress"
                   type="checkbox"
                   name="useSameAddress"
-                  class="w-4 h-4 text-primary bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-sm focus:ring-3 focus:ring-primary" />
+                  class="w-4 h-4 bg-white border-gray-300 rounded-sm text-primary dark:bg-gray-700 dark:border-gray-600 focus:ring-3 focus:ring-primary" />
                 <label for="useSameAddress" class="text-sm font-medium text-gray-700 dark:text-gray-300">
                   {{ $t('billing.differentAddress') }}
                 </label>
@@ -365,7 +365,7 @@ useSeoMeta({
                   v-model="shipToDifferentAddress"
                   type="checkbox"
                   name="useSameAddressEdit"
-                  class="w-4 h-4 text-primary bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-sm focus:ring-3 focus:ring-primary" />
+                  class="w-4 h-4 bg-white border-gray-300 rounded-sm text-primary dark:bg-gray-700 dark:border-gray-600 focus:ring-3 focus:ring-primary" />
                 <label for="useSameAddressEdit" class="text-sm font-medium text-gray-700 dark:text-gray-300">
                   {{ $t('billing.differentAddress') }}
                 </label>
@@ -375,7 +375,7 @@ useSeoMeta({
 
           <div v-if="shipToDifferentAddress">
             <div class="mb-6">
-              <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2 leading-none">Shipping Address</h2>
+              <h2 class="mb-2 text-2xl font-semibold leading-none text-gray-900 dark:text-white">Shipping Address</h2>
             </div>
             <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
           </div>

@@ -49,8 +49,8 @@ const handlePasswordReset = async () => {
     }
 
     router.push('/my-account');
-  } catch (error: any) {
-    errorMessage.value = error.message || t('error.general');
+  } catch (error: unknown) {
+    errorMessage.value = error instanceof Error ? error.message : t('error.general');
   } finally {
     isPending.value = false;
   }

@@ -1,6 +1,14 @@
 {
   "extends": "../.nuxt/tsconfig.json",
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "#types/*": ["./app/types/*"],
+      "#constants": ["./app/constants/index.ts"],
+      "#constants/*": ["./app/constants/*"],
+      "#gql": ["../.nuxt/gql/index.d.ts"],
+      "#gql/*": ["../.nuxt/gql/*"]
+    },
     "allowJs": true,
     "types": ["@nuxt/image", "@nuxtjs/i18n", "nuxt-graphql-client"],
     "strict": true
