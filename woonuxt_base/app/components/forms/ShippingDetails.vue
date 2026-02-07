@@ -1,8 +1,10 @@
 <script lang="ts" setup>
+import type { Address } from '#types/gql';
+
 const { updateShippingLocation } = useCheckout();
 
 const props = defineProps({
-  modelValue: { type: Object, required: true },
+  modelValue: { type: Object as PropType<Address>, required: true },
 });
 
 const shipping = toRef(props, 'modelValue');

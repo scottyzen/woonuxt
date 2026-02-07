@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Product } from '#types/gql';
+
 const { removeFromWishlist } = useWishlist();
 const { product } = defineProps<{ product: Product }>();
 </script>
@@ -18,7 +20,7 @@ const { product } = defineProps<{ product: Product }>();
     </NuxtLink>
     <div>
       <NuxtLink v-if="product.slug" class="text-lg leading-tight" :to="`/product/${decodeURIComponent(product.slug)}`">{{ product.name }}</NuxtLink>
-      <ProductPrice :sale-price="product.salePrice" :regular-price="product.regularPrice" class="ml-auto" />
+      <ProductPrice :sale-price="product.salePrice ?? undefined" :regular-price="product.regularPrice ?? undefined" class="ml-auto" />
     </div>
     <div class="ml-auto">
       <button v-if="product.databaseId" title="Remove Item" @click="removeFromWishlist(product.databaseId)">

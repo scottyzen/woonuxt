@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { DownloadableItem } from '#types/gql';
+
 const { formatDate } = useHelpers();
 
 const props = defineProps({

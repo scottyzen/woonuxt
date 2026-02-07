@@ -16,22 +16,12 @@
       <div class="grid gap-6 p-6 md:p-8 md:grid-cols-2">
         <div class="w-full space-y-2">
           <label for="first-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('billing.firstName') }}</label>
-          <input
-            id="first-name"
-            v-model="customer.firstName"
-            placeholder="John"
-            autocomplete="given-name"
-            type="text" />
+          <input id="first-name" v-model="customer.firstName" placeholder="John" autocomplete="given-name" type="text" />
         </div>
 
         <div class="w-full space-y-2">
           <label for="last-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('billing.lastName') }}</label>
-          <input
-            id="last-name"
-            v-model="customer.lastName"
-            placeholder="Doe"
-            autocomplete="family-name"
-            type="text" />
+          <input id="last-name" v-model="customer.lastName" placeholder="Doe" autocomplete="family-name" type="text" />
         </div>
 
         <div class="w-full space-y-2">
@@ -52,12 +42,7 @@
           <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
             {{ $t('billing.email') }}
           </label>
-          <input
-            id="email"
-            v-model="customer.email"
-            placeholder="johndoe@email.com"
-            autocomplete="email"
-            type="email" />
+          <input id="email" v-model="customer.email" placeholder="johndoe@email.com" autocomplete="email" type="email" />
         </div>
       </div>
 
@@ -79,6 +64,11 @@ const loading = ref<boolean>(false);
 const button = ref<{ text: string; color: string }>({ text: t('account.updateDetails'), color: 'bg-primary hover:bg-primary-dark' });
 
 async function saveChanges() {
+  if (!viewer.value?.id || !customer.value) {
+    button.value = { text: t('account.failed'), color: 'bg-red-500' };
+    return;
+  }
+
   loading.value = true;
   button.value.text = t('account.updating');
   const firstName = customer.value.firstName;

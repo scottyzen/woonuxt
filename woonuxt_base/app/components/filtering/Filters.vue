@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { TaxonomyEnum } from '#woo';
+import { TaxonomyEnum } from '#gql/default';
+import type { WooNuxtFilter } from '#types/gql';
 
 const { isFiltersActive } = useFiltering();
 const { removeBodyClass } = useHelpers();
@@ -13,13 +14,13 @@ const globalProductAttributes = (runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTE
 const taxonomies = globalProductAttributes.map((attr) => attr?.slug?.toUpperCase().replace(/_/g, '')) as TaxonomyEnum[];
 
 const { data } = await useAsyncGql('getAllTerms', { taxonomies: [...taxonomies, TaxonomyEnum.PRODUCTCATEGORY] });
-const terms = data.value?.terms?.nodes;
+const terms = data.value?.terms?.nodes ?? [];
 
 // Filter out the product category terms and the global product attributes with their terms
-const productCategoryTerms = terms?.filter((term) => term.taxonomyName === 'product_cat');
+const productCategoryTerms = terms.filter((term) => term.taxonomyName === 'product_cat');
 
 // Filter out the color attribute and the rest of the global product attributes
-const attributesWithTerms = globalProductAttributes.map((attr) => ({ ...attr, terms: terms?.filter((term) => term.taxonomyName === attr.slug) }));
+const attributesWithTerms = globalProductAttributes.map((attr) => ({ ...attr, terms: terms.filter((term) => term.taxonomyName === attr.slug) }));
 </script>
 
 <template>

@@ -57,6 +57,8 @@
 </template>
 
 <script setup lang="ts">
+import type { UserInfo } from '#types/gql';
+
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();

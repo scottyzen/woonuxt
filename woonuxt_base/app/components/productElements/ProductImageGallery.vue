@@ -1,28 +1,32 @@
 <script setup lang="ts">
+import type { ImageFragment, Product, Variation } from '#types/gql';
+
 const { FALLBACK_IMG } = useHelpers();
 
+type Gallery = { nodes: ImageFragment[] };
+
 const props = defineProps({
-  mainImage: { type: Object, required: true },
-  gallery: { type: Object, required: true },
+  mainImage: { type: Object as PropType<ImageFragment>, required: true },
+  gallery: { type: Object as PropType<Gallery>, required: true },
   node: { type: Object as PropType<Product | Variation>, required: true },
-  activeVariation: { type: Object, required: false },
+  activeVariation: { type: Object as PropType<Variation | null>, required: false },
 });
 
-const primaryImage = computed(() => ({
+const primaryImage = computed<ImageFragment>(() => ({
   sourceUrl: props.mainImage.sourceUrl || FALLBACK_IMG,
   title: props.mainImage.title,
   altText: props.mainImage.altText,
   databaseId: props.mainImage.databaseId,
 }));
 
-const imageToShow = ref(primaryImage.value);
+const imageToShow = ref<ImageFragment>(primaryImage.value);
 
-const galleryImages = computed(() => {
+const galleryImages = computed<ImageFragment[]>(() => {
   // Add the primary image to the start of the gallery and remove duplicates
-  return [primaryImage.value, ...props.gallery.nodes].filter((img, index, self) => index === self.findIndex((t) => t?.databaseId === img?.databaseId));
+  return [primaryImage.value, ...(props.gallery.nodes || [])].filter((img, index, self) => index === self.findIndex((t) => t?.databaseId === img?.databaseId));
 });
 
-const changeImage = (image: any) => {
+const changeImage = (image: ImageFragment) => {
   if (image) imageToShow.value = image;
 };
 
@@ -30,7 +34,7 @@ watch(
   () => props.activeVariation,
   (newVal) => {
     if (newVal?.image) {
-      const foundImage = galleryImages.value.find((img) => img.databaseId === newVal.image?.databaseId);
+      const foundImage = galleryImages.value.find((img) => img.sourceUrl && img.sourceUrl === newVal.image?.sourceUrl);
       if (foundImage) imageToShow.value = foundImage;
     }
   },
@@ -43,7 +47,7 @@ const imgWidth = 640;
   <div>
     <SaleBadge :node class="absolute text-base top-4 right-4" />
     <NuxtImg
-      class="rounded-xl object-contain w-full min-w-[350px]"
+      class="rounded-xl object-contain w-full min-w-87.5"
       :width="imgWidth"
       :height="imgWidth"
       :alt="imageToShow.altText || node.name"
@@ -59,7 +63,7 @@ const imgWidth = 640;
         class="cursor-pointer rounded-xl"
         :width="imgWidth"
         :height="imgWidth"
-        :src="galleryImg.sourceUrl"
+        :src="galleryImg.sourceUrl || FALLBACK_IMG"
         :alt="galleryImg.altText || node.name"
         :title="galleryImg.title || node.name"
         placeholder

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Product } from '#types/gql';
+
 const { addToWishlist, removeFromWishlist, isInList } = useWishlist();
 
 const { product } = defineProps<{ product: Product }>();

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Order } from '#types/gql';
+
 const props = defineProps<{ order: Order }>();
 
 const readableStatus = computed(() => props.order?.status?.replace(/_/g, ' ') || '');

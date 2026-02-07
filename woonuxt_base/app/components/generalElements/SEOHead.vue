@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Product, WooNuxtSEOItem } from '#types/gql';
+
 const { frontEndUrl, wooNuxtSEO, stripHtml } = useHelpers();
 const { path } = useRoute();
 const { info } = defineProps({ info: { type: Object as PropType<Product>, required: true } });
@@ -9,8 +11,8 @@ const siteName = process.env.SITE_TITLE ?? 'WooNuxt';
 
 const img = useImage();
 const imageURL = info.image?.sourceUrl ?? '/images/placeholder.jpg';
-const defaultImageSrc = img.getSizes(imageURL, { width: 1200, height: 630 }).src;
-const twitterImageSrc = img.getSizes(imageURL, { width: 1600, height: 900 }).src;
+const defaultImageSrc = img.getSizes(imageURL, { sizes: '1200px', modifiers: { width: 1200, height: 630 } }).src;
+const twitterImageSrc = img.getSizes(imageURL, { sizes: '1600px', modifiers: { width: 1600, height: 900 } }).src;
 
 const getFullImageURL = (url?: string) => {
   if (!url) return '';
@@ -20,10 +22,12 @@ const getFullImageURL = (url?: string) => {
 
 const defaultImage = getFullImageURL(defaultImageSrc);
 const twitterImage = getFullImageURL(twitterImageSrc);
-const description = info.shortDescription || info.description ? stripHtml(info.shortDescription || '') : stripHtml(info.description || '');
+const description = stripHtml(info.shortDescription || info.description || '');
 
-const facebook = wooNuxtSEO?.find((item) => item?.provider === 'facebook') ?? null;
-const twitter = wooNuxtSEO?.find((item) => item?.provider === 'twitter') ?? null;
+const seoItems = computed(() => (wooNuxtSEO as WooNuxtSEOItem[] | undefined) ?? []);
+
+const facebook = seoItems.value.find((item) => item?.provider === 'facebook') ?? null;
+const twitter = seoItems.value.find((item) => item?.provider === 'twitter') ?? null;
 </script>
 
 <template>

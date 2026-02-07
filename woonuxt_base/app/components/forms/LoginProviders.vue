@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { LoginProviderEnum } from '#woo';
+import { LoginProviderEnum } from '#gql/default';
+import type { LoginClient } from '#types/gql';
 const { loginClients, loginWithProvider } = useAuth();
 
 const route = useRoute();

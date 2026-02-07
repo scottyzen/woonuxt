@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { StockStatusEnum } from '#woo';
+import { StockStatusEnum } from '#gql/default';
 
 defineProps({
   stockStatus: { type: String, required: false },

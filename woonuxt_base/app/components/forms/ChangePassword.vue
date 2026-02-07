@@ -12,26 +12,16 @@
       </div>
       <!-- Form Fields -->
       <div class="grid p-6 md:p-8 gap-6 md:grid-cols-2">
-        <input type="text" v-model="viewer.username" name="username" autocomplete="username" style="display: none" />
+        <input type="text" :value="viewer?.username || ''" name="username" autocomplete="username" style="display: none" />
 
         <div class="w-full space-y-2">
           <label for="new-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('account.newPassword') }}</label>
-          <PasswordInput
-            id="new-password"
-            v-model="password.new"
-            placeholder="••••••••••"
-            type="text"
-            required />
+          <PasswordInput id="new-password" v-model="password.new" placeholder="••••••••••" type="text" required />
         </div>
 
         <div class="w-full space-y-2">
           <label for="new-password-confirm" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ $t('account.confirmNewPassword') }}</label>
-          <PasswordInput
-            id="new-password-confirm"
-            v-model="password.confirm"
-            placeholder="••••••••••"
-            type="text"
-            required />
+          <PasswordInput id="new-password-confirm" v-model="password.confirm" placeholder="••••••••••" type="text" required />
         </div>
 
         <!-- Password Requirements -->
@@ -97,6 +87,11 @@ const updatePassword = async () => {
     return;
   }
 
+  if (!viewer.value?.id || !viewer.value?.username) {
+    errorMessage.value = t('error.somethingWentWrong');
+    return;
+  }
+
   try {
     loading.value = true;
     const { updateCustomer } = await GqlUpdateCustomer({ input: { id: viewer.value.id, password: password.value.new } });
@@ -113,7 +108,7 @@ const updatePassword = async () => {
     }
   } catch (error) {
     console.error(error);
-    const gqlError = error?.gqlErrors?.[0]?.message;
+    const gqlError = (error as { gqlErrors?: Array<{ message?: string }> } | null)?.gqlErrors?.[0]?.message;
     errorMessage.value = gqlError || 'An error occurred. Please try again.';
     button.value = { text: t('account.failed'), color: 'bg-red-500' };
   }

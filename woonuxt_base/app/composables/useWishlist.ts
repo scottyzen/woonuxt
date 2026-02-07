@@ -2,6 +2,7 @@
  * @name useWishlist
  * @description A composable that handles the wishlist in local storage
  */
+import type { Product } from '#types/gql';
 
 export function useWishlist() {
   const theList = useState<Product[]>('wishlist', () => []);

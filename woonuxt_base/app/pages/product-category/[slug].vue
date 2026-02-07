@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Product } from '#types/gql';
+
 const { setProducts, updateProductList } = useProducts();
 const { isQueryEmpty } = useHelpers();
 const { storeSettings } = useAppConfig();

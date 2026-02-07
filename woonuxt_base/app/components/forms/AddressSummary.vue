@@ -55,9 +55,11 @@
   </div>
 </template>
 <script setup lang="ts">
+import type { Address } from '#types/gql';
+
 interface Props {
   title?: string;
-  address: any;
+  address: Address | null;
   showValidationWarnings?: boolean; // New prop to control when to show validation warnings
 }
 
@@ -84,8 +86,8 @@ const isAddressComplete = computed(() => {
 const missingFields = computed(() => {
   if (!props.address) return [];
 
-  const required = ['firstName', 'lastName', 'address1', 'city', 'country'];
-  return required.filter((field) => !props.address[field]);
+  const required: (keyof Address)[] = ['firstName', 'lastName', 'address1', 'city', 'country'];
+  return required.filter((field) => !props.address?.[field]);
 });
 
 // Only show validation warnings if explicitly enabled and there are issues

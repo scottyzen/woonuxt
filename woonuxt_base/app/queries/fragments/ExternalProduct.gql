@@ -1,4 +1,19 @@
 fragment ExternalProduct on ExternalProduct {
   externalUrl
   buttonText
+  ...ProductPricing
+  image {
+    sourceUrl
+    altText
+    title
+    databaseId
+    cartSourceUrl: sourceUrl(size: THUMBNAIL)
+    producCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
+  }
+  galleryImages(first: 20) {
+    nodes {
+      ...Image
+      databaseId
+    }
+  }
 }
