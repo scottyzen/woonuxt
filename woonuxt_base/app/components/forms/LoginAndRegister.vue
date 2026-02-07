@@ -1,21 +1,21 @@
 <template>
-  <div class="max-w-lg mx-auto my-16 min-h-150 text-center align-center flex flex-col justify-center">
+  <div class="flex flex-col justify-center max-w-lg mx-auto my-16 text-center min-h-150 align-center">
     <div class="flex flex-col my-8">
-      <h1 class="text-xl font-semibold lg:text-3xl text-gray-900 dark:text-white">{{ formTitle }}</h1>
-      <p v-if="formView === FormView.LOGIN" class="text-gray-500 dark:text-gray-400 mt-2">
+      <h1 class="text-xl font-semibold text-gray-900 lg:text-3xl dark:text-white">{{ formTitle }}</h1>
+      <p v-if="formView === FormView.LOGIN" class="mt-2 text-gray-500 dark:text-gray-400">
         {{ $t('account.noAccount') }}
         <a class="font-semibold cursor-pointer text-primary hover:underline" @click="navigate(FormView.REGISTER)"> {{ $t('account.accountRegister') }} </a>.
       </p>
-      <p v-else-if="formView === FormView.REGISTER" class="text-gray-500 dark:text-gray-400 mt-2">
+      <p v-else-if="formView === FormView.REGISTER" class="mt-2 text-gray-500 dark:text-gray-400">
         {{ $t('account.hasAccount') }}
-        <a @click="navigate(FormView.LOGIN)" class="text-primary text-semibold cursor-pointer hover:underline">Sign in</a>.
+        <a @click="navigate(FormView.LOGIN)" class="cursor-pointer text-primary text-semibold hover:underline">Sign in</a>.
       </p>
     </div>
 
     <LoginProviders class="mb-8" v-if="formView === FormView.LOGIN || formView === FormView.REGISTER" />
 
     <form @submit.prevent="handleFormSubmit(userInfo)">
-      <p v-if="formView === FormView.FORGOT_PASSWORD" class="text-sm text-gray-500 dark:text-gray-400 mb-8">{{ $t('account.enterEmailOrUsernameForReset') }}</p>
+      <p v-if="formView === FormView.FORGOT_PASSWORD" class="mb-8 text-sm text-gray-500 dark:text-gray-400">{{ $t('account.enterEmailOrUsernameForReset') }}</p>
       <input
         v-if="formView === FormView.REGISTER || formView === FormView.FORGOT_PASSWORD"
         id="email"
@@ -42,7 +42,7 @@
       </Button>
 
       <div class="flex items-center justify-between mt-4" v-if="formView === FormView.LOGIN">
-        <div class="font-semibold cursor-pointer text-sm text-primary hover:underline" @click="navigate(FormView.FORGOT_PASSWORD)">Forgot password?</div>
+        <div class="text-sm font-semibold cursor-pointer text-primary hover:underline" @click="navigate(FormView.FORGOT_PASSWORD)">Forgot password?</div>
       </div>
     </form>
 
@@ -57,6 +57,8 @@
 </template>
 
 <script setup lang="ts">
+import type { UserInfo } from '#types/gql';
+
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();

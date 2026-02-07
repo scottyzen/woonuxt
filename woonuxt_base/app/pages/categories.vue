@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { ProductCategory } from '#types/gql';
+
 const { data } = await useAsyncGql('getProductCategories');
 const productCategories = (data.value?.productCategories?.nodes as ProductCategory[]) || [];
 

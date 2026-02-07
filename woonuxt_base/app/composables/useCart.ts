@@ -1,4 +1,4 @@
-import type { AddToCartInput } from '#gql';
+import type { AddToCartInput, ApiResponse, Cart, PaymentGateways, SimpleProduct } from '#types/gql';
 
 /**
  * @name useCart
@@ -30,7 +30,7 @@ export function useCart() {
       if (loginClients) updateLoginClients(loginClients.filter((client) => client !== null));
 
       return true; // Cart was successfully refreshed
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       console.error('Error refreshing cart:', errorMsg);
       clearAllCookies();
@@ -69,7 +69,7 @@ export function useCart() {
       // Auto open the cart when an item is added to the cart if the setting is enabled
       const { storeSettings } = useAppConfig();
       if (storeSettings.autoOpenCart && !isShowingCart.value) toggleCart(true);
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       console.error('Error adding to cart:', errorMsg);
     } finally {
@@ -83,7 +83,7 @@ export function useCart() {
     try {
       const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity: 0 });
       updateCart(updateItemQuantities?.cart);
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       console.error('Error removing item from cart:', errorMsg);
     } finally {
@@ -97,7 +97,7 @@ export function useCart() {
     try {
       const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity });
       updateCart(updateItemQuantities?.cart);
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       console.error('Error updating item quantity:', errorMsg);
     } finally {
@@ -111,7 +111,7 @@ export function useCart() {
       isUpdatingCart.value = true;
       const { emptyCart } = await GqlEmptyCart();
       updateCart(emptyCart?.cart);
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       // Don't log error if cart is already empty
       if (errorMsg && !errorMsg.toLowerCase().includes('cart is empty')) {
@@ -128,7 +128,7 @@ export function useCart() {
     try {
       const { updateShippingMethod } = await GqlChangeShippingMethod({ shippingMethods });
       updateCart(updateShippingMethod?.cart);
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       console.error('Error updating shipping method:', errorMsg);
     } finally {
@@ -143,7 +143,7 @@ export function useCart() {
       const { applyCoupon } = await GqlApplyCoupon({ code });
       updateCart(applyCoupon?.cart);
       return { success: true, data: applyCoupon?.cart || null };
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       return { success: false, error: errorMsg };
     } finally {
@@ -157,7 +157,7 @@ export function useCart() {
       isUpdatingCart.value = true;
       const { removeCoupons } = await GqlRemoveCoupons({ codes: [code] });
       updateCart(removeCoupons?.cart);
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       console.error('Error removing coupon:', errorMsg);
     } finally {

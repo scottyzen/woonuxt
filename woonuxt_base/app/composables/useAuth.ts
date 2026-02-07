@@ -1,15 +1,21 @@
 import type {
+  ApiResponse,
+  AuthResponse,
   CreateAccountInput,
-  LoginClientFragment,
+  Customer,
+  DownloadableItem,
+  LoginClient,
   LoginInput,
+  Order,
   RegisterCustomerInput,
   ResetPasswordEmailMutationVariables,
   ResetPasswordKeyMutationVariables,
-} from '#gql';
+  Viewer,
+} from '#types/gql';
 
 export const useAuth = () => {
-  const { refreshCart } = useCart();
-  const { clearAllCookies, getErrorMessage, clearAllLocalStorage } = useHelpers();
+  const { refreshCart, updateCart } = useCart();
+  const { clearAllCookies, getErrorMessage } = useHelpers();
   const router = useRouter();
 
   const customer = useState<Customer>('customer', () => ({ billing: {}, shipping: {} }));
@@ -71,7 +77,7 @@ export const useAuth = () => {
       return {
         success: true,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
 
       return {
@@ -104,7 +110,7 @@ export const useAuth = () => {
       return {
         success: true,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
 
       return {
@@ -122,18 +128,21 @@ export const useAuth = () => {
     try {
       const { logout } = await GqlLogout();
       if (logout) {
-        await refreshCart();
+        // Clear auth token/header before refreshing cart to avoid stale auth state.
+        useGqlToken(null);
+        useGqlHeaders({ Authorization: '' });
+
         clearAllCookies();
-        clearAllLocalStorage();
-        customer.value = { billing: {}, shipping: {} };
+
         clearReturnUrl(); // Clear any stored return URL on logout
+        updateCart({}); // Clear cart on logout
+        updateViewer(null);
       }
       return { success: true };
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       return { success: false, error: errorMsg };
     } finally {
-      updateViewer(null);
       if (router.currentRoute.value.path === '/my-account' && viewer.value === null) {
         router.push('/my-account');
       } else {
@@ -147,10 +156,11 @@ export const useAuth = () => {
     try {
       await GqlRegisterCustomer({ input: userInfo });
       return { success: true };
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
-      isPending.value = false;
       return { success: false, error: errorMsg };
+    } finally {
+      isPending.value = false;
     }
   }
 
@@ -180,7 +190,7 @@ export const useAuth = () => {
         return { success: true };
       }
       return { success: false, error: 'There was an error sending the reset password email. Please try again later.' };
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       isPending.value = false;
       return { success: false, error: errorMsg };
@@ -197,9 +207,8 @@ export const useAuth = () => {
         return { success: true };
       }
       return { success: false, error: 'There was an error resetting the password. Please try again later.' };
-    } catch (error: any) {
+    } catch (error: unknown) {
       isPending.value = false;
-      const gqlError = error?.gqlErrors?.[0];
       return { success: false, error: getErrorMessage(error) };
     }
   };
@@ -213,7 +222,7 @@ export const useAuth = () => {
         return { success: true, data: orderNodes };
       }
       return { success: false, error: 'There was an error getting your orders. Please try again later.' };
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       return { success: false, error: errorMsg };
     }
@@ -228,7 +237,7 @@ export const useAuth = () => {
         return { success: true, data: downloadNodes };
       }
       return { success: false, error: 'There was an error getting your downloads. Please try again later.' };
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       return { success: false, error: errorMsg };
     }

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { PaymentGateway, PaymentGateways } from '#types/gql';
+
 const props = defineProps<{
   modelValue: string | object;
   paymentGateways: PaymentGateways;

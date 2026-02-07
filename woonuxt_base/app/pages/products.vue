@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Product } from '#types/gql';
+
 const { setProducts, updateProductList } = useProducts();
 const route = useRoute();
 const { storeSettings } = useAppConfig();

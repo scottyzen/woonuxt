@@ -1,4 +1,4 @@
-mutation ChangeShippingCounty($shippingState: String!, $shippingCountry: CountriesEnum!, $billingState: String!, $billingCountry: CountriesEnum!) {
+mutation ChangeShippingCounty($shippingState: String, $shippingCountry: CountriesEnum!, $billingState: String, $billingCountry: CountriesEnum!) {
   updateCustomer(
     input: { isSession: true, shipping: { state: $shippingState, country: $shippingCountry }, billing: { state: $billingState, country: $billingCountry } }
   ) {

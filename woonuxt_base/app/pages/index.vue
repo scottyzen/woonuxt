@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ProductsOrderByEnum } from '#woo';
+import { ProductsOrderByEnum } from '#gql/default';
 const { siteName, description, shortDescription, siteImage } = useAppConfig();
 
 const { data } = await useAsyncGql('getProductCategories', { first: 6 });

@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { type PropType } from 'vue';
-import type { SeoHeadData } from '~/woonuxt_base/app/types/seo-provider';
-import { useYoastHead } from '~/woonuxt_base/app/composables/useYoastHead';
-import { useSEOFallbacks, mergeSEOFallbacks } from '~/woonuxt_base/app/composables/useSEOFallbacks';
+import type { Product, WooNuxtSEOItem } from '#types/gql';
 
+const { frontEndUrl, wooNuxtSEO, stripHtml } = useHelpers();
 const { path } = useRoute();
 const { info } = defineProps({ info: { type: Object as PropType<Product>, required: true } });
 
@@ -20,11 +18,10 @@ if (info.fullYoastHead && info.fullYoastHead.trim()) {
   seoData = mergeSEOFallbacks(seoData, fallbacks);
 }
 
-// 2. TODO: Check All in One SEO (when available)
-// else if (hasAllInOneSEOData(info)) {
-//   seoData = useAllInOneSeoHead(info) as SeoHeadData;
-//   seoData = mergeSEOFallbacks(seoData, fallbacks);
-// }
+const img = useImage();
+const imageURL = info.image?.sourceUrl ?? '/images/placeholder.jpg';
+const defaultImageSrc = img.getSizes(imageURL, { sizes: '1200px', modifiers: { width: 1200, height: 630 } }).src;
+const twitterImageSrc = img.getSizes(imageURL, { sizes: '1600px', modifiers: { width: 1600, height: 900 } }).src;
 
 // 3. TODO: Check Rank Math (when available)
 // else if (hasRankMathData(info)) {
@@ -32,18 +29,14 @@ if (info.fullYoastHead && info.fullYoastHead.trim()) {
 //   seoData = mergeSEOFallbacks(seoData, fallbacks);
 // }
 
-// 4. Use fallback SEO tags as default
-else {
-  seoData = fallbacks;
-}
+const defaultImage = getFullImageURL(defaultImageSrc);
+const twitterImage = getFullImageURL(twitterImageSrc);
+const description = stripHtml(info.shortDescription || info.description || '');
 
-// Inject head tags via Nuxt useHead
-useHead({
-  title: seoData.title,
-  meta: seoData.meta as any,
-  link: seoData.link as any,
-  script: (seoData.script || []).map((s) => ({ type: s.type, innerHTML: s.innerHTML })) as any,
-} as any);
+const seoItems = computed(() => (wooNuxtSEO as WooNuxtSEOItem[] | undefined) ?? []);
+
+const facebook = seoItems.value.find((item) => item?.provider === 'facebook') ?? null;
+const twitter = seoItems.value.find((item) => item?.provider === 'twitter') ?? null;
 </script>
 
 <template>

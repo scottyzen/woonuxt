@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { StockStatusEnum, ProductTypesEnum, type AddToCartInput } from '#woo';
+import { StockStatusEnum, ProductTypesEnum, type AddToCartInput } from '#gql/default';
+import type { ExternalProduct, ProductDetail, SimpleProduct, VariableProduct, Variation, VariationAttribute } from '#types/gql';
 
 const route = useRoute();
 const router = useRouter();
@@ -14,7 +15,7 @@ if (!data.value?.product) {
   throw showError({ statusCode: 404, statusMessage: t('shop.productNotFound') });
 }
 
-const product = ref<Product>(data?.value?.product);
+const product = ref<ProductDetail>(data?.value?.product);
 const quantity = ref<number>(1);
 const activeVariation = ref<Variation | null>(null);
 const variation = ref<VariationAttribute[]>([]);
@@ -38,7 +39,7 @@ const toSelectionName = (name?: string | null): string => {
 };
 
 const normalizedVariations = computed(() => {
-  const nodes = product.value.variations?.nodes ?? [];
+  const nodes = product.value?.variations?.nodes ?? [];
   return nodes.map((node: Variation) => {
     const attrs: Record<string, string> = {};
     node.attributes?.nodes?.forEach((attr) => {
@@ -97,14 +98,14 @@ const findMatchingVariation = (selected: VariationAttribute[]): Variation | null
 const queryParams = route.query;
 
 const findVariationById = (value?: string | number | null): Variation | null => {
-  if (!value || !product.value.variations?.nodes) return null;
+  if (!value || !product.value?.variations?.nodes?.length) return null;
   const parsed = typeof value === 'string' ? Number.parseInt(value, 10) : value;
   if (!parsed || Number.isNaN(parsed)) return null;
-  return product.value.variations.nodes.find((node: Variation) => node.databaseId === parsed) ?? null;
+  return product.value?.variations?.nodes?.find((node: Variation) => node.databaseId === parsed) ?? null;
 };
 
 const buildQuerySelections = (): VariationAttribute[] => {
-  if (!product.value.attributes?.nodes) return [];
+  if (!product.value?.attributes?.nodes?.length) return [];
 
   const selections: VariationAttribute[] = [];
   for (const attr of product.value.attributes.nodes) {
@@ -120,8 +121,8 @@ const buildQuerySelections = (): VariationAttribute[] => {
 
     const isValidValue =
       attr.scope === 'LOCAL'
-        ? (attr.options ?? []).some((option: string | null) => normalizeMatchValue(option) === normalizedValue)
-        : (attr.terms?.nodes ?? []).some((term: { slug: string }) => normalizeMatchValue(term.slug) === normalizedValue);
+        ? (attr.options ?? []).some((option: string | null) => normalizeMatchValue(option ?? '') === normalizedValue)
+        : 'terms' in attr && (attr.terms?.nodes ?? []).some((term) => normalizeMatchValue(term?.slug ?? '') === normalizedValue);
 
     if (!isValidValue) continue;
 
@@ -156,23 +157,30 @@ if (variationFromQuery?.attributes?.nodes?.length) {
   }
 }
 
-const defaultAttributes = computed(() => {
+const defaultAttributes = computed<{ nodes: VariationAttribute[] } | null>(() => {
   if (variation.value.length > 0) {
     return { nodes: variation.value };
   }
-  return product.value.defaultAttributes;
+  return product.value?.defaultAttributes ? { nodes: product.value.defaultAttributes.nodes ?? [] } : null;
 });
 
 const isSimpleProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.SIMPLE);
 const isVariableProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.VARIABLE);
 const isExternalProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.EXTERNAL);
+const externalProduct = computed<ExternalProduct | null>(() => (isExternalProduct.value ? (product.value as ExternalProduct) : null));
 const shouldSkipStockRefresh = computed<boolean>(() => isExternalProduct.value);
 
-const type = computed(() => activeVariation.value || product.value);
-const selectProductInput = computed<any>(() => ({ productId: type.value?.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
+const displayProduct = computed(() => activeVariation.value || product.value);
+const priceTarget = computed(() => activeVariation.value || product.value);
+const productImage = computed(() => product.value?.image || null);
+const productGallery = computed(() => ({ nodes: product.value?.galleryImages?.nodes ?? [] }));
+const averageRating = computed(() => product.value?.averageRating ?? 0);
+const reviewCount = computed(() => product.value?.reviewCount ?? 0);
+
+const selectProductInput = computed<any>(() => ({ productId: displayProduct.value?.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
 
 const updateSelectedVariations = (variations: VariationAttribute[]): void => {
-  if (!product.value.variations) return;
+  if (!product.value?.variations) return;
 
   attrValues.value = variations.map((el) => ({ attributeName: el.name, attributeValue: el.value }));
   activeVariation.value = findMatchingVariation(variations);
@@ -202,11 +210,11 @@ const updateSelectedVariations = (variations: VariationAttribute[]): void => {
   }
 };
 
-const mergeLiveStockStatus = (payload: Product): void => {
-  product.value.stockStatus = payload.stockStatus ?? product.value?.stockStatus;
+const mergeLiveStockStatus = (payload: ProductDetail): void => {
+  product.value.stockStatus = payload.stockStatus ?? product.value.stockStatus;
 
   payload.variations?.nodes?.forEach((variation: Variation, index: number) => {
-    if (product.value?.variations?.nodes[index]) {
+    if (product.value?.variations?.nodes?.[index]) {
       product.value.variations.nodes[index].stockStatus = variation.stockStatus;
     }
   });
@@ -215,7 +223,7 @@ const mergeLiveStockStatus = (payload: Product): void => {
 const refreshStockStatus = async (): Promise<void> => {
   try {
     const { product } = await GqlGetStockStatus({ slug });
-    if (product) mergeLiveStockStatus(product as Product);
+    if (product) mergeLiveStockStatus(product as ProductDetail);
   } catch (error: any) {
     const errorMessage = error?.gqlErrors?.[0]?.message;
     if (errorMessage) console.error(errorMessage);
@@ -272,12 +280,12 @@ const stockStatus = computed(() => {
   if (isVariableProduct.value) {
     return activeVariation.value?.stockStatus || StockStatusEnum.OUT_OF_STOCK;
   }
-  return type.value?.stockStatus || StockStatusEnum.OUT_OF_STOCK;
+  return (product.value as SimpleProduct | VariableProduct)?.stockStatus || StockStatusEnum.OUT_OF_STOCK;
 });
 
 const disabledAddToCart = computed(() => {
   const isOutOfStock = stockStatus.value === StockStatusEnum.OUT_OF_STOCK;
-  const isInvalidType = !type.value;
+  const isInvalidType = !displayProduct.value;
   const isCartUpdating = isUpdatingCart.value;
   const isValidActiveVariation = isVariableProduct.value ? !!activeVariation.value : true;
   return isInvalidType || isOutOfStock || isCartUpdating || !isValidActiveVariation;
@@ -292,24 +300,24 @@ const disabledAddToCart = computed(() => {
 
       <div class="flex flex-col gap-10 md:flex-row md:justify-between lg:gap-24">
         <ProductImageGallery
-          v-if="product.image"
+          v-if="productImage"
           class="relative flex-1"
-          :main-image="product.image"
-          :gallery="product.galleryImages!"
-          :node="type"
+          :main-image="productImage"
+          :gallery="productGallery"
+          :node="displayProduct"
           :activeVariation="activeVariation || {}" />
         <NuxtImg v-else class="relative flex-1 skeleton" src="/images/placeholder.jpg" :alt="product?.name || 'Product'" />
 
-        <div class="lg:max-w-md xl:max-w-lg md:py-2 w-full">
+        <div class="w-full lg:max-w-md xl:max-w-lg md:py-2">
           <div class="flex justify-between mb-4">
             <div class="flex-1">
               <h1 class="flex flex-wrap items-center gap-2 mb-2 text-2xl font-sesmibold dark:text-white">
-                {{ type.name }}
+                {{ displayProduct.name }}
                 <LazyWPAdminLink :link="`/wp-admin/post.php?post=${product.databaseId}&action=edit`">Edit</LazyWPAdminLink>
               </h1>
-              <StarRating :rating="product.averageRating || 0" :count="product.reviewCount || 0" v-if="storeSettings.showReviews" />
+              <StarRating :rating="averageRating" :count="reviewCount" v-if="storeSettings.showReviews" />
             </div>
-            <ProductPrice class="text-xl" :sale-price="type.salePrice" :regular-price="type.regularPrice" />
+            <ProductPrice class="text-xl" :sale-price="priceTarget?.salePrice" :regular-price="priceTarget?.regularPrice" />
           </div>
 
           <div class="grid gap-2 my-8 text-sm empty:hidden">
@@ -317,9 +325,9 @@ const disabledAddToCart = computed(() => {
               <span class="text-gray-400 dark:text-gray-500">{{ $t('shop.availability') }}: </span>
               <StockStatus :stockStatus @updated="mergeLiveStockStatus" />
             </div>
-            <div class="flex items-center gap-2" v-if="storeSettings.showSKU && product.sku">
+            <div class="flex items-center gap-2" v-if="storeSettings.showSKU && product?.sku">
               <span class="text-gray-400 dark:text-gray-500">{{ $t('shop.sku') }}: </span>
-              <span class="dark:text-gray-300">{{ product.sku || 'N/A' }}</span>
+              <span class="dark:text-gray-300">{{ product?.sku || 'N/A' }}</span>
             </div>
           </div>
 
@@ -329,7 +337,7 @@ const disabledAddToCart = computed(() => {
 
           <form @submit.prevent="addToCart(selectProductInput)">
             <AttributeSelections
-              v-if="isVariableProduct && product.attributes && product.variations"
+              v-if="isVariableProduct && product?.attributes?.nodes?.length && product?.variations"
               class="mt-4 mb-8"
               :attributes="product.attributes.nodes"
               :defaultAttributes="defaultAttributes"
@@ -337,23 +345,23 @@ const disabledAddToCart = computed(() => {
               @attrs-changed="updateSelectedVariations" />
             <div
               v-if="isVariableProduct || isSimpleProduct"
-              class="fixed bottom-0 left-0 z-10 flex items-center w-full gap-4 p-4 mt-12 bg-white/90 md:static md:bg-transparent md:p-0 shadow-lg md:shadow-none dark:shadow-gray-900">
+              class="fixed bottom-0 left-0 z-10 flex items-center w-full gap-4 p-4 mt-12 shadow-lg bg-white/90 md:static md:bg-transparent md:p-0 md:shadow-none dark:shadow-gray-900">
               <input
                 v-model="quantity"
                 type="number"
                 min="1"
                 aria-label="Quantity"
-                class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg flex text-left p-2 w-20 gap-4 items-center justify-center focus:outline-hidden dark:text-white" />
+                class="flex items-center justify-center w-20 gap-4 p-2 text-left bg-white border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-hidden dark:text-white" />
               <Button class="flex-1 w-full md:max-w-xs" :disabled="disabledAddToCart" :loading="isUpdatingCart" type="submit">
                 {{ $t('shop.addToCart') }}
               </Button>
             </div>
             <a
-              v-if="isExternalProduct && product.externalUrl"
-              :href="product.externalUrl"
+              v-if="externalProduct?.externalUrl"
+              :href="externalProduct.externalUrl"
               target="_blank"
               class="rounded-lg flex font-bold bg-gray-800 dark:bg-gray-700 text-white text-center min-w-37.5 p-2.5 gap-4 items-center justify-center focus:outline-hidden hover:bg-gray-700 dark:hover:bg-gray-600">
-              {{ product?.buttonText || 'View product' }}
+              {{ externalProduct?.buttonText || 'View product' }}
             </a>
           </form>
 

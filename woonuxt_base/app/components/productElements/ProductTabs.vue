@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import type { Product } from '#types/gql';
+
 const { product } = defineProps({
   product: { type: Object as PropType<Product>, required: true },
 });
 const { storeSettings } = useAppConfig();
 const { t } = useI18n();
+
+const reviewCount = computed(() => ('reviewCount' in product ? (product.reviewCount ?? undefined) : undefined));
 
 const tabs = computed(() => {
   const tabList = [];
@@ -17,7 +21,7 @@ const tabs = computed(() => {
   if (storeSettings.showReviews) {
     tabList.push({
       label: t('shop.reviews'),
-      badge: product.reviewCount ?? undefined,
+      badge: reviewCount.value,
     });
   }
 

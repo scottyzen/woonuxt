@@ -3,6 +3,8 @@
  * @description A composable that handles the filtering of products. For reference this
  * is what the filter query looks like: ?filter=pa_color[green,blue],pa_size[md]
  */
+import type { Product } from '#types/gql';
+
 export function useFiltering() {
   const route = useRoute();
   const router = useRouter();
