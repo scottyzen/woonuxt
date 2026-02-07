@@ -51,34 +51,20 @@ watch(isFiltersActive, () => {
         <label for="price-to" class="absolute px-2 leading-none text-gray-400 dark:text-gray-500" v-html="currencySymbol" />
       </div>
       <div class="mx-1 mt-1 col-span-full">
-        <SliderRoot v-model="price" :min="0" :max="maxPrice" aria-labelledby="price-from price-to" @valueCommit="applyPrice" class="slider-root">
-          <SliderTrack class="slider-track">
-            <SliderRange class="slider-range" />
+        <SliderRoot
+          v-model="price"
+          :min="0"
+          :max="maxPrice"
+          aria-labelledby="price-from price-to"
+          @valueCommit="applyPrice"
+          class="relative flex items-center w-full">
+          <SliderTrack class="relative flex-1 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600 cursor-pointer">
+            <SliderRange class="absolute h-full rounded-full bg-primary" />
           </SliderTrack>
-          <SliderThumb class="slider-thumb" />
-          <SliderThumb class="slider-thumb" />
+          <SliderThumb class="block w-5 h-5 bg-white border border-gray-300 rounded-full dark:bg-gray-200 dark:border-gray-500" />
+          <SliderThumb class="block w-5 h-5 bg-white border border-gray-300 rounded-full dark:bg-gray-200 dark:border-gray-500" />
         </SliderRoot>
       </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-@reference "#tailwind";
-
-.slider-root {
-  @apply relative flex items-center w-full;
-}
-
-.slider-track {
-  @apply relative flex-1 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600 cursor-pointer;
-}
-
-.slider-range {
-  @apply absolute h-full rounded-full bg-primary;
-}
-
-.slider-thumb {
-  @apply block w-5 h-5 rounded-full bg-white border border-gray-300  dark:bg-gray-200 dark:border-gray-500;
-}
-</style>
