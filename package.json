@@ -15,7 +15,7 @@
     "@nuxtjs/color-mode": "^4.0.0",
     "@stripe/stripe-js": "^8.7.0",
     "@tailwindcss/postcss": "^4.1.18",
-    "@vueform/slider": "^2.1.10",
+    "reka-ui": "^2.0.0",
     "@vueuse/core": "^14.2.0",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18"
