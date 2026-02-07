@@ -133,7 +133,8 @@ const scrollToSlide = (index: number) => {
   const container = sliderRef.value;
   if (!container) return;
   const target = container.querySelector(`[data-index="${index}"]`) as HTMLElement | null;
-  target?.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+  if (!target) return;
+  container.scrollTo({ left: target.offsetLeft, behavior: 'smooth' });
 };
 
 watch(
@@ -143,7 +144,9 @@ watch(
       const container = sliderRef.value;
       if (!container?.children?.length) return;
       const target = container.querySelector(`[data-index="${activeImageIndex.value}"]`) as HTMLElement | null;
-      target?.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      if (target) {
+        container.scrollTo({ left: target.offsetLeft, behavior: 'smooth' });
+      }
       currentSlide.value = activeImageIndex.value;
     });
   },
@@ -153,8 +156,8 @@ watch(
 
 <template>
   <div class="relative group">
-    <div class="block relative">
-      <SaleBadge :node class="absolute top-2 right-2 z-10" />
+    <div class="relative block">
+      <SaleBadge :node class="absolute z-10 top-2 right-2" />
       <div
         ref="sliderRef"
         class="no-slider flex gap-3 overflow-x-auto snap-x snap-mandatory scroll-smooth touch-pan-x overscroll-x-contain overscroll-y-auto [-webkit-overflow-scrolling:touch]"
@@ -173,7 +176,7 @@ watch(
               :title="image.title"
               :loading="slideIndex === 0 && index <= 3 ? 'eager' : 'lazy'"
               :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
-              class="rounded-lg object-top object-cover w-full h-full"
+              class="object-cover object-top w-full h-full rounded-lg"
               placeholder
               placeholder-class="blur-xl" />
           </NuxtLink>
@@ -186,13 +189,13 @@ watch(
               :title="image.title"
               :loading="slideIndex === 0 && index <= 3 ? 'eager' : 'lazy'"
               :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
-              class="rounded-lg object-top object-cover w-full h-full"
+              class="object-cover object-top w-full h-full rounded-lg"
               placeholder
               placeholder-class="blur-xl" />
           </div>
         </template>
       </div>
-      <div v-if="sliderImages.length > 1" class="absolute bottom-2 flex gap-1 justify-self-center">
+      <div v-if="sliderImages.length > 1" class="absolute flex gap-1 bottom-2 justify-self-center">
         <button
           v-for="(image, dotIndex) in sliderImages"
           :key="`dot-${image.key}`"
