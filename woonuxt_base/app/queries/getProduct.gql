@@ -1,9 +1,10 @@
-query getProduct($slug: ID!) {
+query getProduct($slug: ID!, $frontEndUrl: String = "") {
   product(id: $slug, idType: SLUG) {
     name
     type
     databaseId
     id
+    fullYoastHead(sanitize: true, frontendUrl: $frontEndUrl)
     metaData {
       id
       key

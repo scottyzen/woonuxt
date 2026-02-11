@@ -6,10 +6,11 @@ const route = useRoute();
 const router = useRouter();
 const { storeSettings } = useAppConfig();
 const { addToCart, isUpdatingCart, isAddingToCart, isOptimisticCartMode } = useCart();
+const { frontEndUrl } = useHelpers();
 const { t } = useI18n();
 const slug = route.params.slug as string;
 
-const { data } = await useAsyncGql('getProduct', { slug });
+const { data } = await useAsyncGql('getProduct', { slug, frontEndUrl });
 if (!data.value?.product) {
   throw showError({ statusCode: 404, statusMessage: t('shop.productNotFound') });
 }

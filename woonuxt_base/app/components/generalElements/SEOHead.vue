@@ -1,52 +1,23 @@
 <script setup lang="ts">
-import type { Product, WooNuxtSEOItem } from '#types/gql';
+import type { ProductDetail } from '#types/gql';
+import type { SeoHeadData } from '#types/seo-provider';
 
-const { frontEndUrl, wooNuxtSEO, stripHtml } = useHelpers();
 const { path } = useRoute();
-const { info } = defineProps({ info: { type: Object as PropType<Product>, required: true } });
+const { info } = defineProps({ info: { type: Object as PropType<ProductDetail>, required: true } });
 
-const title = info.name;
-const canonical = `${frontEndUrl}${path}`;
-const siteName = process.env.SITE_TITLE ?? 'WooNuxt';
+const fallbacks = useSEOFallbacks(info, path);
+const yoastHead = info.fullYoastHead;
 
-const img = useImage();
-const imageURL = info.image?.sourceUrl ?? '/images/placeholder.jpg';
-const defaultImageSrc = img.getSizes(imageURL, { sizes: '1200px', modifiers: { width: 1200, height: 630 } }).src;
-const twitterImageSrc = img.getSizes(imageURL, { sizes: '1600px', modifiers: { width: 1600, height: 900 } }).src;
+const seoData: SeoHeadData = typeof yoastHead === 'string' && yoastHead.trim() ? mergeSEOFallbacks(useYoastHead(yoastHead), fallbacks) : fallbacks;
 
-const getFullImageURL = (url?: string) => {
-  if (!url) return '';
-  if (url.startsWith('http')) return url;
-  return `${frontEndUrl}${url}`;
-};
-
-const defaultImage = getFullImageURL(defaultImageSrc);
-const twitterImage = getFullImageURL(twitterImageSrc);
-const description = stripHtml(info.shortDescription || info.description || '');
-
-const seoItems = computed(() => (wooNuxtSEO as WooNuxtSEOItem[] | undefined) ?? []);
-
-const facebook = seoItems.value.find((item) => item?.provider === 'facebook') ?? null;
-const twitter = seoItems.value.find((item) => item?.provider === 'twitter') ?? null;
+useHead({
+  title: seoData.title,
+  meta: seoData.meta,
+  link: seoData.link,
+  script: seoData.script.map((item) => ({ type: item.type, innerHTML: item.innerHTML })),
+});
 </script>
 
 <template>
-  <Head>
-    <Title>{{ title }}</Title>
-    <Meta v-if="description" name="description" :content="description" />
-    <Meta name="image" :content="defaultImage" />
-    <Meta property="og:site_name" :content="siteName" />
-    <Meta property="og:url" :content="canonical" />
-    <Meta v-if="info.name" property="og:title" :content="info.name" />
-    <Meta v-if="description" property="og:description" :content="description" />
-    <Meta property="og:image" :content="defaultImage" />
-    <Meta v-if="facebook?.url" property="article:publisher" :content="facebook.url" />
-    <Meta name="twitter:card" content="summary_large_image" />
-    <Meta v-if="twitter?.handle" name="twitter:site" :content="twitter.handle" />
-    <Meta v-if="info.name" name="twitter:title" :content="info.name" />
-    <Meta v-if="description" name="twitter:description" :content="description" />
-    <Meta name="twitter:image" :content="twitterImage" />
-    <Meta name="twitter:url" :content="canonical" />
-    <Link rel="canonical" :href="canonical" />
-  </Head>
+  <div style="display: none"></div>
 </template>
