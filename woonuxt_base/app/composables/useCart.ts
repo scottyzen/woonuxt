@@ -1,4 +1,6 @@
-import type { AddToCartInput, ApiResponse, Cart, PaymentGateways, SimpleProduct } from '#types/gql';
+import type { AddToCartInput, ApiResponse, Cart, PaymentGateways, ProductDetail, SimpleProduct, Variation } from '#types/gql';
+
+let cartMutationQueue: Promise<void> = Promise.resolve();
 
 /**
  * @name useCart
@@ -6,13 +8,214 @@ import type { AddToCartInput, ApiResponse, Cart, PaymentGateways, SimpleProduct 
  */
 export function useCart() {
   const { storeSettings } = useAppConfig();
+  const isOptimisticCartMode = computed(() => (storeSettings.cartMode ?? 'optimistic') === 'optimistic');
 
   const cart = useState<Cart | null>('cart', () => null);
   const isShowingCart = useState<boolean>('isShowingCart', () => false);
   const isUpdatingCart = useState<boolean>('isUpdatingCart', () => false);
+  const isAddingToCart = useState<boolean>('isAddingToCart', () => false);
   const isUpdatingCoupon = useState<boolean>('isUpdatingCoupon', () => false);
+  const optimisticPendingMutations = useState<number>('optimisticPendingMutations', () => 0);
+  const optimisticServerCart = useState<Cart | null>('optimisticServerCart', () => null);
+  const optimisticHadError = useState<boolean>('optimisticHadError', () => false);
   const paymentGateways = useState<PaymentGateways | null>('paymentGateways', () => null);
   const { clearAllCookies, getErrorMessage } = useHelpers();
+
+  type CartNode = NonNullable<NonNullable<Cart['contents']>['nodes']>[number];
+  type CartItem = CartNode & { key: string };
+  type OptimisticAddPayload = {
+    product: ProductDetail;
+    variation?: Variation | null;
+  };
+
+  const normalizeQuantity = (value?: number | string | null): number => {
+    const qty = typeof value === 'number' ? value : Number(value);
+    return Number.isFinite(qty) && qty > 0 ? qty : 1;
+  };
+
+  const normalizeCountQuantity = (value?: number | string | null): number => {
+    const qty = typeof value === 'number' ? value : Number(value);
+    return Number.isFinite(qty) && qty > 0 ? qty : 0;
+  };
+
+  const buildEmptyCart = (): Cart =>
+    ({
+      isEmpty: true,
+      contents: {
+        itemCount: 0,
+        productCount: 0,
+        nodes: [],
+      },
+    }) as Cart;
+
+  const getOptimisticBase = (): Cart => cart.value ?? buildEmptyCart();
+
+  const createOptimisticKey = (): string => `optimistic:${Date.now()}:${Math.random().toString(36).slice(2, 8)}`;
+
+  const buildOptimisticProductNode = (product: ProductDetail) => ({
+    name: product.name,
+    slug: product.slug,
+    databaseId: product.databaseId,
+    regularPrice: product.regularPrice,
+    rawRegularPrice: product.rawRegularPrice ?? product.regularPrice ?? null,
+    salePrice: product.salePrice,
+    rawSalePrice: product.rawSalePrice ?? product.salePrice ?? null,
+    stockQuantity: product.stockQuantity,
+    lowStockAmount: product.lowStockAmount,
+    image: product.image,
+  });
+
+  const buildOptimisticVariationNode = (variation?: Variation | null) => {
+    if (!variation) return null;
+    return {
+      ...variation,
+      rawRegularPrice: (variation as { rawRegularPrice?: string | null }).rawRegularPrice ?? variation.regularPrice ?? null,
+      rawSalePrice: (variation as { rawSalePrice?: string | null }).rawSalePrice ?? variation.salePrice ?? null,
+    };
+  };
+
+  const buildOptimisticItem = (payload: OptimisticAddPayload, quantity: number): CartItem => {
+    const productNode = buildOptimisticProductNode(payload.product);
+    const variationNode = buildOptimisticVariationNode(payload.variation);
+
+    return {
+      key: createOptimisticKey(),
+      quantity,
+      product: {
+        node: productNode,
+        image: productNode.image,
+      },
+      variation: variationNode ? { node: variationNode } : null,
+    } as CartItem;
+  };
+
+  const matchesOptimisticTarget = (node: CartItem, payload: OptimisticAddPayload): boolean => {
+    const nodeVariationId = (node.variation?.node as { databaseId?: number } | null)?.databaseId;
+    if (payload.variation?.databaseId && nodeVariationId) {
+      return nodeVariationId === payload.variation.databaseId;
+    }
+    if (payload.variation?.slug) {
+      return node.variation?.node?.slug === payload.variation.slug;
+    }
+    return node.product?.node?.databaseId === payload.product.databaseId;
+  };
+
+  const applyOptimisticAdd = (payload: OptimisticAddPayload, quantity: number): void => {
+    const base = getOptimisticBase();
+    const nodes = (base.contents?.nodes ?? []).filter((node): node is CartItem => !!node?.key);
+    const matchIndex = nodes.findIndex((node) => matchesOptimisticTarget(node, payload));
+
+    if (matchIndex >= 0) {
+      const existing = nodes[matchIndex];
+      if (!existing) return;
+      nodes[matchIndex] = {
+        ...existing,
+        quantity: normalizeQuantity(existing.quantity) + quantity,
+      };
+    } else {
+      nodes.unshift(buildOptimisticItem(payload, quantity));
+    }
+
+    const itemCount = nodes.reduce((sum, node) => sum + normalizeQuantity(node.quantity), 0);
+    const productCount = nodes.length;
+
+    const nextCart: Cart = {
+      ...base,
+      contents: {
+        ...(base.contents ?? {}),
+        nodes,
+        itemCount,
+        productCount,
+      },
+      isEmpty: nodes.length === 0,
+    };
+    cart.value = nextCart;
+  };
+
+  const applyOptimisticEmptyCart = (): void => {
+    cart.value = buildEmptyCart();
+  };
+
+  const applyOptimisticQuantityChange = (key: string, quantity: number): void => {
+    const base = getOptimisticBase();
+    const nodes = (base.contents?.nodes ?? []).filter((node): node is CartItem => !!node?.key);
+    const matchIndex = nodes.findIndex((node) => node.key === key);
+    if (matchIndex < 0) return;
+
+    const safeQuantity = Number.isFinite(quantity) && quantity > 0 ? quantity : 0;
+    if (safeQuantity === 0) {
+      nodes.splice(matchIndex, 1);
+    } else {
+      const existing = nodes[matchIndex];
+      if (!existing) return;
+      nodes[matchIndex] = {
+        ...existing,
+        quantity: safeQuantity,
+      };
+    }
+
+    const itemCount = nodes.reduce((sum, node) => sum + normalizeCountQuantity(node.quantity), 0);
+    const productCount = nodes.length;
+
+    const nextCart: Cart = {
+      ...base,
+      contents: {
+        ...(base.contents ?? {}),
+        nodes,
+        itemCount,
+        productCount,
+      },
+      isEmpty: nodes.length === 0,
+    };
+    cart.value = nextCart;
+  };
+
+  const finalizeOptimisticMutations = async (): Promise<void> => {
+    if (optimisticPendingMutations.value !== 0) return;
+    if (optimisticHadError.value) {
+      optimisticHadError.value = false;
+      await refreshCart();
+      return;
+    }
+    if (optimisticServerCart.value) {
+      cart.value = optimisticServerCart.value;
+      optimisticServerCart.value = null;
+    }
+  };
+
+  const enqueueCartMutation = (fn: () => Promise<Cart | null>, optimistic: boolean): Promise<void> => {
+    const run = cartMutationQueue
+      .catch(() => {})
+      .then(async () => {
+        try {
+          const nextCart = await fn();
+          if (optimistic) {
+            if (nextCart) optimisticServerCart.value = nextCart;
+          } else if (nextCart) {
+            cart.value = nextCart;
+          }
+        } catch (error: unknown) {
+          const errorMsg = getErrorMessage(error);
+          console.error('Error updating cart:', errorMsg);
+          if (optimistic) optimisticHadError.value = true;
+          throw error;
+        }
+      });
+
+    cartMutationQueue = run.catch(() => {});
+    return run;
+  };
+
+  const runOptimisticMutation = (applyLocal: () => void, mutation: () => Promise<Cart | null>): void => {
+    applyLocal();
+    optimisticPendingMutations.value += 1;
+    void enqueueCartMutation(mutation, true)
+      .catch(() => {})
+      .finally(async () => {
+        optimisticPendingMutations.value = Math.max(0, optimisticPendingMutations.value - 1);
+        await finalizeOptimisticMutations();
+      });
+  };
 
   /** Refesh the cart from the server
    * @returns {Promise<boolean>} - A promise that resolves
@@ -60,39 +263,67 @@ export function useCart() {
   }
 
   // add an item to the cart
-  async function addToCart(input: AddToCartInput): Promise<void> {
-    isUpdatingCart.value = true;
+  async function addToCart(input: AddToCartInput, optimistic?: OptimisticAddPayload): Promise<void> {
+    isAddingToCart.value = true;
+    const quantity = normalizeQuantity(input.quantity);
+    // cartMode controls whether we update UI immediately or wait for server confirmation.
+    const canOptimistic = !!optimistic?.product && isOptimisticCartMode.value;
+
+    if (!canOptimistic) {
+      isUpdatingCart.value = true;
+    }
 
     try {
-      const { addToCart } = await GqlAddToCart({ input });
-      if (addToCart?.cart) cart.value = addToCart.cart;
+      if (canOptimistic) {
+        runOptimisticMutation(
+          () => {
+            applyOptimisticAdd(optimistic, quantity);
+            if (storeSettings.autoOpenCart && !isShowingCart.value) toggleCart(true);
+          },
+          async () => {
+            const { addToCart } = await GqlAddToCart({ input: { ...input, quantity } });
+            return addToCart?.cart ?? null;
+          },
+        );
+        return;
+      }
+
+      await enqueueCartMutation(async () => {
+        const { addToCart } = await GqlAddToCart({ input: { ...input, quantity } });
+        return addToCart?.cart ?? null;
+      }, false);
       // Auto open the cart when an item is added to the cart if the setting is enabled
-      const { storeSettings } = useAppConfig();
-      if (storeSettings.autoOpenCart && !isShowingCart.value) toggleCart(true);
+      if (!canOptimistic && storeSettings.autoOpenCart && !isShowingCart.value) toggleCart(true);
     } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       console.error('Error adding to cart:', errorMsg);
     } finally {
-      isUpdatingCart.value = false;
+      isAddingToCart.value = false;
+      if (!canOptimistic) isUpdatingCart.value = false;
     }
   }
 
   // remove an item from the cart
   async function removeItem(key: string): Promise<void> {
-    isUpdatingCart.value = true;
-    try {
-      const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity: 0 });
-      updateCart(updateItemQuantities?.cart);
-    } catch (error: unknown) {
-      const errorMsg = getErrorMessage(error);
-      console.error('Error removing item from cart:', errorMsg);
-    } finally {
-      isUpdatingCart.value = false;
-    }
+    await updateItemQuantity(key, 0);
   }
 
   // update the quantity of an item in the cart
   async function updateItemQuantity(key: string, quantity: number): Promise<void> {
+    const canOptimistic = isOptimisticCartMode.value;
+
+    if (canOptimistic) {
+      const safeQuantity = normalizeCountQuantity(quantity);
+      runOptimisticMutation(
+        () => applyOptimisticQuantityChange(key, safeQuantity),
+        async () => {
+          const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity: safeQuantity });
+          return updateItemQuantities?.cart ?? null;
+        },
+      );
+      return;
+    }
+
     isUpdatingCart.value = true;
     try {
       const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity });
@@ -107,6 +338,19 @@ export function useCart() {
 
   // empty the cart
   async function emptyCart(): Promise<void> {
+    const canOptimistic = isOptimisticCartMode.value;
+
+    if (canOptimistic) {
+      runOptimisticMutation(
+        () => applyOptimisticEmptyCart(),
+        async () => {
+          const { emptyCart } = await GqlEmptyCart();
+          return emptyCart?.cart ?? null;
+        },
+      );
+      return;
+    }
+
     try {
       isUpdatingCart.value = true;
       const { emptyCart } = await GqlEmptyCart();
@@ -166,7 +410,8 @@ export function useCart() {
   }
 
   // Stop the loading spinner when the cart is updated
-  watch(cart, (val) => {
+  watch(cart, () => {
+    if (!isUpdatingCart.value) return;
     isUpdatingCart.value = false;
   });
 
@@ -183,9 +428,11 @@ export function useCart() {
     cart,
     isShowingCart,
     isUpdatingCart,
+    isAddingToCart,
     isUpdatingCoupon,
     paymentGateways,
     isBillingAddressEnabled,
+    isOptimisticCartMode,
     updateCart,
     refreshCart,
     toggleCart,

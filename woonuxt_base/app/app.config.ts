@@ -15,6 +15,8 @@ export default defineAppConfig({
   // - 'payment': Modern Payment Element with tabs for multiple payment methods (recommended)
   storeSettings: {
     autoOpenCart: false,
+    // cartMode: 'optimistic' updates UI immediately; 'safe' waits for the server response.
+    cartMode: 'optimistic',
     showReviews: true,
     showFilters: true,
     showOrderByDropdown: true,

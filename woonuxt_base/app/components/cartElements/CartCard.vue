@@ -15,8 +15,10 @@ const imgScr = computed(() => productType.value.image?.cartSourceUrl || productT
 const regularPrice = computed(() => parseFloat(productType.value.rawRegularPrice));
 const salePrice = computed(() => parseFloat(productType.value.rawSalePrice));
 const salePercentage = computed(() => Math.round(((regularPrice.value - salePrice.value) / regularPrice.value) * 100) + '%');
+const isOptimisticItem = computed(() => String(item.key || '').startsWith('optimistic:'));
 
 const removeItem = () => {
+  if (isOptimisticItem.value) return;
   updateItemQuantity(item.key, 0);
 };
 
@@ -27,7 +29,7 @@ const moveToWishList = () => {
 </script>
 
 <template>
-  <SwipeCard @remove="removeItem">
+  <SwipeCard :disabled="isOptimisticItem" @remove="removeItem">
     <div v-if="productType" class="flex items-center gap-3 group">
       <NuxtLink :to="productSlug">
         <NuxtImg
@@ -60,7 +62,12 @@ const moveToWishList = () => {
       <div class="inline-flex gap-2 flex-col items-end">
         <QuantityInput :item />
         <div class="text-xs text-gray-400 dark:text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300 flex leading-none items-center">
-          <button v-if="storeSettings.showMoveToWishlist" class="mr-2 pr-2 border-r border-gray-300 dark:border-gray-600" @click="moveToWishList" type="button">
+          <button
+            v-if="storeSettings.showMoveToWishlist"
+            class="mr-2 pr-2 border-r border-gray-300 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
+            :disabled="isOptimisticItem"
+            @click="moveToWishList"
+            type="button">
             Move to Wishlist
           </button>
           <button
@@ -68,7 +75,8 @@ const moveToWishList = () => {
             aria-label="Remove Item"
             @click="removeItem"
             type="button"
-            class="flex items-center gap-1 hover:text-red-500 dark:hover:text-red-400 cursor-pointer">
+            :disabled="isOptimisticItem"
+            class="flex items-center gap-1 hover:text-red-500 dark:hover:text-red-400 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50">
             <Icon name="ion:trash" class="hidden md:inline-block" size="12" />
           </button>
         </div>

@@ -22,7 +22,7 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
         <ul class="flex flex-col flex-1 gap-4 p-6 overflow-y-scroll md:p-8">
           <CartCard v-for="item in cart.contents?.nodes" :key="item.key" :item />
         </ul>
-        <div class="px-6 pb-6 mb-safe md:px-8 md:mb-8">
+        <div class="px-6 pb-8 mb-safe md:px-8">
           <Button :to="cart && !cart.isEmpty ? '/checkout' : '/shop'" class="w-full" size="lg" variant="primary" @click="toggleCart()">
             <span class="mx-2" v-if="cart && !cart.isEmpty">{{ $t('shop.checkout') }}</span>
             <span class="mx-2" v-else>{{ $t('shop.continueShopping') }}</span>
