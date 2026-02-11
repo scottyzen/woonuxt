@@ -4,12 +4,13 @@ import pkg from '../../../woonuxt_base/package.json';
 export function useHelpers() {
   const route = useRoute();
   const runtimeConfig = useRuntimeConfig();
+  const requestOrigin = import.meta.server ? useRequestURL().origin : import.meta.client ? window.location.origin : undefined;
 
   const isShowingMobileMenu = useState<boolean>('isShowingMobileMenu', () => false);
   const wooNuxtVersionInfo: string = pkg.version || '0.0.0';
   const productsPerPage: number = runtimeConfig.public?.PRODUCTS_PER_PAGE || 24;
   const wooNuxtSEO = Array.isArray(runtimeConfig.public?.WOO_NUXT_SEO) ? runtimeConfig.public?.WOO_NUXT_SEO : [];
-  const frontEndUrl = runtimeConfig.public?.FRONT_END_URL?.replace(/\/$/, '') || undefined;
+  const frontEndUrl = runtimeConfig.public?.FRONT_END_URL?.replace(/\/$/, '') || requestOrigin;
   const isDev: boolean = process.env.NODE_ENV === 'development';
   const FALLBACK_IMG = '/images/placeholder.jpg';
 
@@ -155,7 +156,7 @@ export function useHelpers() {
    * @returns The error message or undefined
    */
   const getErrorMessage = (error: unknown): string | undefined => {
-    const errorMessage = isGqlErrorLike(error) ? error.gqlErrors?.[0]?.message ?? undefined : undefined;
+    const errorMessage = isGqlErrorLike(error) ? (error.gqlErrors?.[0]?.message ?? undefined) : undefined;
 
     // Check for server errors that require clearing cookies and reloading
     const serverErrors = ['The iss do not match with this server', 'Invalid session token', 'expired token', 'invalid-secret-key'];
