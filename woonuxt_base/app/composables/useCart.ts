@@ -313,10 +313,11 @@ export function useCart() {
     const canOptimistic = isOptimisticCartMode.value;
 
     if (canOptimistic) {
+      const safeQuantity = normalizeCountQuantity(quantity);
       runOptimisticMutation(
-        () => applyOptimisticQuantityChange(key, quantity),
+        () => applyOptimisticQuantityChange(key, safeQuantity),
         async () => {
-          const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity });
+          const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity: safeQuantity });
           return updateItemQuantities?.cart ?? null;
         },
       );
