@@ -7,6 +7,7 @@ const { item } = defineProps({ item: { type: Object, required: true } });
 const productType = computed(() => (item.variation ? item.variation?.node : item.product?.node));
 const quantity = ref(item.quantity);
 const hasNoMoreStock = computed(() => (productType.value.stockQuantity ? productType.value.stockQuantity <= quantity.value : false));
+const isOptimisticItem = computed(() => String(item.key || '').startsWith('optimistic:'));
 
 const incrementQuantity = () => quantity.value++;
 const decrementQuantity = () => quantity.value--;
@@ -39,7 +40,7 @@ const onFocusOut = () => {
       @click="decrementQuantity"
       type="button"
       class="focus:outline-hidden border-r w-6 h-6 border rounded-l border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:cursor-not-allowed text-gray-700 dark:text-gray-300"
-      :disabled="isUpdatingCart || quantity <= 0">
+      :disabled="isUpdatingCart || isOptimisticItem || quantity <= 0">
       <Icon name="ion:remove" size="14" />
     </button>
     <input
@@ -47,6 +48,7 @@ const onFocusOut = () => {
       type="number"
       min="0"
       :max="productType.stockQuantity"
+      :disabled="isOptimisticItem"
       aria-label="Quantity"
       @focusout="onFocusOut"
       class="flex items-center justify-center w-8 px-2 text-xs focus:outline-hidden border-y border-gray-300 dark:border-gray-600 text-center text-gray-900 dark:text-white dark:bg-gray-700" />
@@ -56,7 +58,7 @@ const onFocusOut = () => {
       @click="incrementQuantity"
       type="button"
       class="focus:outline-hidden border-l w-6 h-6 border rounded-r hover:bg-gray-50 dark:hover:bg-gray-600 border-gray-300 dark:border-gray-600 disabled:cursor-not-allowed disabled:bg-gray-100 dark:disabled:bg-gray-800 text-gray-700 dark:text-gray-300"
-      :disabled="isUpdatingCart || hasNoMoreStock">
+      :disabled="isUpdatingCart || isOptimisticItem || hasNoMoreStock">
       <Icon name="ion:add" size="14" />
     </button>
   </div>

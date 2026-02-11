@@ -5,7 +5,7 @@ import type { ExternalProduct, ProductDetail, SimpleProduct, VariableProduct, Va
 const route = useRoute();
 const router = useRouter();
 const { storeSettings } = useAppConfig();
-const { addToCart, isUpdatingCart, isAddingToCart } = useCart();
+const { addToCart, isUpdatingCart, isAddingToCart, isOptimisticCartMode } = useCart();
 const { t } = useI18n();
 const slug = route.params.slug as string;
 
@@ -175,7 +175,6 @@ const productImage = computed(() => product.value?.image || null);
 const productGallery = computed(() => ({ nodes: product.value?.galleryImages?.nodes ?? [] }));
 const averageRating = computed(() => product.value?.averageRating ?? 0);
 const reviewCount = computed(() => product.value?.reviewCount ?? 0);
-const isOptimisticCartMode = computed(() => (storeSettings.cartMode ?? 'optimistic') === 'optimistic');
 
 const selectProductInput = computed<any>(() => ({ productId: displayProduct.value?.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
 

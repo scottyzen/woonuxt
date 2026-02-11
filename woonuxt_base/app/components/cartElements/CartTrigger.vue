@@ -1,5 +1,5 @@
 <script setup>
-const { toggleCart, cart, isAddingToCart } = useCart();
+const { toggleCart, cart } = useCart();
 // Watch for a check in cart count and add an animation to show when the count had increased
 watch(
   () => cart.value?.contents?.itemCount ?? 0,
