@@ -1,7 +1,5 @@
 import type { SeoHeadData, SeoLink, SeoMeta, SeoScript } from '#types/seo-provider';
-import { computed, ref } from 'vue';
 
-// Server-safe HTML parser using regex (works on both server and client)
 function parseYoastHeadSSR(html: string | undefined): SeoHeadData {
   if (!html) return { title: '', meta: [], link: [], script: [] };
 
@@ -11,7 +9,7 @@ function parseYoastHeadSSR(html: string | undefined): SeoHeadData {
   let title = '';
 
   // Parse meta tags
-  const metaRegex = /<meta\s+([^>]*?)>/gi;
+  const metaRegex = /<meta\b([^>]*)>/gi;
   let metaMatch;
   while ((metaMatch = metaRegex.exec(html)) !== null) {
     const attrs = metaMatch[1] || '';
@@ -29,7 +27,7 @@ function parseYoastHeadSSR(html: string | undefined): SeoHeadData {
   }
 
   // Parse link tags
-  const linkRegex = /<link\s+([^>]*?)>/gi;
+  const linkRegex = /<link\b([^>]*)>/gi;
   let linkMatch;
   while ((linkMatch = linkRegex.exec(html)) !== null) {
     const attrs = linkMatch[1] || '';
@@ -45,7 +43,7 @@ function parseYoastHeadSSR(html: string | undefined): SeoHeadData {
   }
 
   // Parse script tags
-  const scriptRegex = /<script\s+([^>]*?)>([\s\S]*?)<\/script>/gi;
+  const scriptRegex = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
   let scriptMatch;
   while ((scriptMatch = scriptRegex.exec(html)) !== null) {
     const attrs = scriptMatch[1] || '';
@@ -68,8 +66,5 @@ function parseYoastHeadSSR(html: string | undefined): SeoHeadData {
 }
 
 export function useYoastHead(fullYoastHead: string | undefined) {
-  // Parse Yoast head immediately (works on both server and client)
-  const parsed = ref<SeoHeadData>(parseYoastHeadSSR(fullYoastHead));
-  const head = computed(() => parsed.value);
-  return head.value;
+  return parseYoastHeadSSR(fullYoastHead);
 }

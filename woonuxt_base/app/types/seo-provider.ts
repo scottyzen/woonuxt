@@ -7,11 +7,13 @@ export interface SeoMeta {
   name?: string;
   property?: string;
   content: string;
+  [key: `data-${string}`]: string | undefined;
 }
 
 export interface SeoLink {
   rel: string;
   href: string;
+  [key: `data-${string}`]: string | undefined;
 }
 
 export interface SeoScript {
