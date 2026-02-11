@@ -5,7 +5,7 @@ import type { ExternalProduct, ProductDetail, SimpleProduct, VariableProduct, Va
 const route = useRoute();
 const router = useRouter();
 const { storeSettings } = useAppConfig();
-const { addToCart, isUpdatingCart } = useCart();
+const { addToCart, isUpdatingCart, isAddingToCart } = useCart();
 const { t } = useI18n();
 const slug = route.params.slug as string;
 
@@ -175,8 +175,14 @@ const productImage = computed(() => product.value?.image || null);
 const productGallery = computed(() => ({ nodes: product.value?.galleryImages?.nodes ?? [] }));
 const averageRating = computed(() => product.value?.averageRating ?? 0);
 const reviewCount = computed(() => product.value?.reviewCount ?? 0);
+const isOptimisticCartMode = computed(() => (storeSettings.cartMode ?? 'optimistic') === 'optimistic');
 
 const selectProductInput = computed<any>(() => ({ productId: displayProduct.value?.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
+
+const handleAddToCart = (): void => {
+  if (!product.value) return;
+  void addToCart(selectProductInput.value, { product: product.value, variation: activeVariation.value });
+};
 
 const updateSelectedVariations = (variations: VariationAttribute[]): void => {
   if (!product.value?.variations) return;
@@ -285,10 +291,12 @@ const stockStatus = computed(() => {
 const disabledAddToCart = computed(() => {
   const isOutOfStock = stockStatus.value === StockStatusEnum.OUT_OF_STOCK;
   const isInvalidType = !displayProduct.value;
-  const isCartUpdating = isUpdatingCart.value;
+  const isCartUpdating = isOptimisticCartMode.value ? false : isUpdatingCart.value || isAddingToCart.value;
   const isValidActiveVariation = isVariableProduct.value ? !!activeVariation.value : true;
   return isInvalidType || isOutOfStock || isCartUpdating || !isValidActiveVariation;
 });
+
+const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : isUpdatingCart.value));
 </script>
 
 <template>
@@ -334,7 +342,7 @@ const disabledAddToCart = computed(() => {
 
           <hr class="border-gray-300 dark:border-gray-600" />
 
-          <form @submit.prevent="addToCart(selectProductInput)">
+          <form @submit.prevent="handleAddToCart">
             <AttributeSelections
               v-if="isVariableProduct && product?.attributes?.nodes?.length && product?.variations"
               class="mt-4 mb-8"
@@ -351,7 +359,7 @@ const disabledAddToCart = computed(() => {
                 min="1"
                 aria-label="Quantity"
                 class="flex items-center justify-center w-20 gap-4 p-2 text-left bg-white border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-hidden dark:text-white" />
-              <Button class="flex-1 w-full md:max-w-xs" :disabled="disabledAddToCart" :loading="isUpdatingCart" type="submit">
+              <Button class="flex-1 w-full" :disabled="disabledAddToCart" :loading="addToCartLoading" type="submit">
                 {{ $t('shop.addToCart') }}
               </Button>
             </div>
