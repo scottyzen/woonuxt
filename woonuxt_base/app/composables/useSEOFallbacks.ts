@@ -1,5 +1,5 @@
 // composables/useSEOFallbacks.ts - Renamed from useDefaultSeoHead
-import type { SeoHeadData } from '~/woonuxt_base/app/types/seo-provider';
+import type { SeoHeadData } from '#types/seo-provider';
 
 /**
  * Generate SEO fallback values from product data

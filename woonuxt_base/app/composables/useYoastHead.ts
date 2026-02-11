@@ -1,4 +1,4 @@
-import type { SeoHeadData, SeoLink, SeoMeta, SeoScript } from '~/woonuxt_base/app/types/seo-provider';
+import type { SeoHeadData, SeoLink, SeoMeta, SeoScript } from '#types/seo-provider';
 import { computed, ref } from 'vue';
 
 // Server-safe HTML parser using regex (works on both server and client)
