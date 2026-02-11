@@ -37,19 +37,9 @@ export function useCart() {
     return Number.isFinite(qty) && qty > 0 ? qty : 0;
   };
 
-  const buildBaseCart = (): Cart =>
+  const buildEmptyCart = (): Cart =>
     ({
-      total: '',
-      rawTotal: '0',
-      subtotal: '',
-      totalTax: '',
-      discountTotal: '',
-      rawDiscountTotal: '0',
-      shippingTotal: '',
-      chosenShippingMethods: [],
-      availableShippingMethods: [],
-      appliedCoupons: [],
-      isEmpty: false,
+      isEmpty: true,
       contents: {
         itemCount: 0,
         productCount: 0,
@@ -57,10 +47,7 @@ export function useCart() {
       },
     }) as Cart;
 
-  const buildEmptyCart = (): Cart => ({
-    ...buildBaseCart(),
-    isEmpty: true,
-  });
+  const getOptimisticBase = (): Cart => cart.value ?? buildEmptyCart();
 
   const createOptimisticKey = (): string => `optimistic:${Date.now()}:${Math.random().toString(36).slice(2, 8)}`;
 
@@ -118,7 +105,7 @@ export function useCart() {
   };
 
   const applyOptimisticAdd = (payload: OptimisticAddPayload, quantity: number): void => {
-    const base = cart.value ?? buildBaseCart();
+    const base = getOptimisticBase();
     const nodes = (base.contents?.nodes ?? []).filter((node): node is CartItem => !!node?.key);
     const matchIndex = nodes.findIndex((node) => matchesOptimisticTarget(node, payload));
 
@@ -154,7 +141,7 @@ export function useCart() {
   };
 
   const applyOptimisticQuantityChange = (key: string, quantity: number): void => {
-    const base = cart.value ?? buildBaseCart();
+    const base = getOptimisticBase();
     const nodes = (base.contents?.nodes ?? []).filter((node): node is CartItem => !!node?.key);
     const matchIndex = nodes.findIndex((node) => node.key === key);
     if (matchIndex < 0) return;
