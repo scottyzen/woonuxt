@@ -32,7 +32,7 @@ For large catalogs, avoid full static generation and use Nuxt hybrid rendering w
 
 - Build with `nuxt build` (not `nuxt generate`).
 - Product catalog routes use Nitro `routeRules` with `isr` in `nuxt.config.ts`.
-- Default revalidation window is 3600 seconds and can be overridden via `CATALOG_ISR_TTL`.
+- Default revalidation window is 3600 seconds and can be overridden via `CATALOG_ISR_TTL` (set this in your hosting provider's environment settings if you need a different TTL).
 
 How ISR gets triggered:
 
