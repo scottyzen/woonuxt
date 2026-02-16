@@ -23,11 +23,17 @@ const { cart, toggleCart, isUpdatingCart } = useCart();
           <CartCard v-for="item in cart.contents?.nodes" :key="item.key" :item />
         </ul>
         <div class="px-6 pb-8 mb-safe md:px-8">
+          <!-- Hook: Before cart totals -->
+          <HookOutlet name="cart.summary.beforeTotals" :ctx="{ cart }" as="div" class="mb-4" />
+
           <Button :to="cart && !cart.isEmpty ? '/checkout' : '/shop'" class="w-full" size="lg" variant="primary" @click="toggleCart()">
             <span class="mx-2" v-if="cart && !cart.isEmpty">{{ $t('shop.checkout') }}</span>
             <span class="mx-2" v-else>{{ $t('shop.continueShopping') }}</span>
             <span v-if="cart && !cart.isEmpty" v-html="cart.total" />
           </Button>
+
+          <!-- Hook: After cart totals -->
+          <HookOutlet name="cart.summary.afterTotals" :ctx="{ cart }" as="div" class="mt-4" />
         </div>
       </template>
       <!-- Empty Cart Message -->

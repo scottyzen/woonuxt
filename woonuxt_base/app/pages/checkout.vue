@@ -293,6 +293,9 @@ useSeoMeta({
         <div class="grid w-full max-w-2xl gap-8 wn-form md:flex-1">
           <!-- Customer details -->
           <div v-if="!viewer && customer?.billing">
+            <!-- Hook: Before customer details -->
+            <HookOutlet name="checkout.customer.before" :ctx="{ checkout: orderInput }" as="div" class="mb-4" />
+
             <h2 class="w-full mb-2 text-2xl font-semibold leading-none dark:text-white">Contact Information</h2>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
               Already have an account? <NuxtLink to="/my-account" @click="navigateToLogin('/checkout')" class="text-primary text-semibold">Log in</NuxtLink>.
@@ -394,12 +397,18 @@ useSeoMeta({
               v-if="cart.availableShippingMethods[0]?.rates && cart.chosenShippingMethods?.[0]"
               :options="cart.availableShippingMethods[0].rates"
               :active-option="cart.chosenShippingMethods[0]" />
+
+            <!-- Hook: After shipping methods -->
+            <HookOutlet name="checkout.shipping.afterMethods" :ctx="{ checkout: orderInput }" as="div" class="mt-4" />
           </div>
 
           <hr class="border-gray-300 dark:border-gray-600" />
 
           <!-- Pay methods -->
           <div v-if="paymentGateways?.nodes.length" class="mt-2 col-span-full">
+            <!-- Hook: Before payment methods -->
+            <HookOutlet name="checkout.payment.beforeMethods" :ctx="{ checkout: orderInput }" as="div" class="mb-4" />
+
             <h2 class="mb-4 text-xl font-semibold leading-none dark:text-white">{{ $t('billing.paymentOptions') }}</h2>
             <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :paymentGateways />
             <StripeElement v-if="stripe" v-show="orderInput.paymentMethod.id == 'stripe'" :stripe @updateElement="handleStripeElement" />
@@ -418,6 +427,9 @@ useSeoMeta({
               rows="4"
               :placeholder="$t('shop.orderNotePlaceholder')"></textarea>
           </div>
+
+          <!-- Hook: After checkout review/order note -->
+          <HookOutlet name="checkout.review.after" :ctx="{ checkout: orderInput }" as="div" />
         </div>
 
         <OrderSummary>
