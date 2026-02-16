@@ -7,6 +7,10 @@ const { resolve } = createResolver(import.meta.url);
 const GQL_HOST = process.env.GQL_HOST || 'http://localhost:4000/graphql';
 const APP_HOST = process.env.APP_HOST || 'http://localhost:3000';
 
+// ISR configuration for large catalogs
+const parsedCatalogIsrTtl = Number.parseInt(process.env.CATALOG_ISR_TTL || '3600', 10);
+const catalogIsrTtl = Number.isFinite(parsedCatalogIsrTtl) && parsedCatalogIsrTtl > 0 ? parsedCatalogIsrTtl : 3600;
+
 export default defineNuxtConfig({
   compatibilityDate: '2026-01-18',
 
@@ -70,8 +74,17 @@ export default defineNuxtConfig({
 
   nitro: {
     routeRules: {
+      // Disable prerendering for dynamic checkout/order pages
       '/checkout/order-received/**': { prerender: false },
       '/order-summary/**': { prerender: false },
+      // ISR for large catalogs:
+      // - First request renders and caches the response
+      // - Requests during TTL serve cached content
+      // - After TTL, next request serves stale content and triggers background regeneration
+      // Override with CATALOG_ISR_TTL environment variable (in seconds)
+      '/product/**': { isr: catalogIsrTtl },
+      '/product-category/**': { isr: catalogIsrTtl },
+      '/products/**': { isr: catalogIsrTtl },
     },
   },
 

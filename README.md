@@ -26,6 +26,25 @@ You can find some common errors and how to fix them [here](https://woonuxt.com/f
 
 [![button](https://user-images.githubusercontent.com/5116925/218880214-a16287a7-fd8c-4299-9e65-0871136f0771.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/scottyzen/woonuxt) [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fscottyzen%2FWooNuxt3&repository-name=WooNuxt&env=GQL_HOST,NUXT_IMAGE_DOMAINS)
 
+## Large Catalog ISR Setup (10K+ Products)
+
+For large catalogs, avoid full static generation and use Nuxt hybrid rendering with ISR.
+
+- Build with `nuxt build` (not `nuxt generate`).
+- Product catalog routes use Nitro `routeRules` with `isr` in `nuxt.config.ts`.
+- Default revalidation window is 3600 seconds and can be overridden via `CATALOG_ISR_TTL`.
+
+How ISR gets triggered:
+
+- The first request to a route (for example `/product/some-slug`) generates the page and caches it.
+- Requests during the TTL are served from cache.
+- After TTL, the next request serves stale content and triggers background regeneration.
+
+Platform notes:
+
+- Vercel: uses Nuxt/Nitro ISR route rules directly.
+- Netlify: use server build mode (`nuxt build`) so route rules can run on the serverless/edge runtime. Static generate mode (`nuxt generate`) bypasses ISR.
+
 ## How to customize & extend WooNuxt 🎨
 
 WooNuxt now uses the Nuxt layers feature to make it easy to customize any part of WooNuxt just like you would with a WordPress theme with its child theme.
