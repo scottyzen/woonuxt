@@ -104,7 +104,15 @@ export const useHooks = (): HookRegistry => {
     const entries = hookRegistry.get(name) || [];
 
     // Check for duplicate IDs
-    if (entries.some((entry) => entry.id === id)) {
+    const isDuplicate = entries.some((entry) => entry.id === id);
+    if (isDuplicate) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(
+          `[useHooks] Duplicate hook id "${id}" detected for hook "${name}".` +
+            (source ? ` Source: ${source}.` : '') +
+            ' This registration will be ignored.',
+        );
+      }
       return;
     }
 
