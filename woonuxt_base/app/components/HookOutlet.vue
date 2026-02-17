@@ -21,6 +21,16 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { get } = useHooks();
 
+// Warn in development if required outlet has no hooks
+if (process.env.NODE_ENV !== 'production' && props.required) {
+  watchEffect(() => {
+    const allEntries = get(props.name);
+    if (allEntries.length === 0) {
+      console.warn(`[HookOutlet] Required outlet "${props.name}" has no hooks registered.`);
+    }
+  });
+}
+
 // Get hook entries for this outlet
 const entries = computed(() => {
   const allEntries = get(props.name);
@@ -31,6 +41,9 @@ const entries = computed(() => {
     try {
       return entry.when(props.ctx);
     } catch (error) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.error(`[HookOutlet] Error evaluating "when" condition for hook "${entry.id}" at outlet "${props.name}":`, error);
+      }
       return false;
     }
   });
@@ -46,6 +59,9 @@ const renderEntry = (entry: any) => {
     }
     return h(entry.renderer, { ctx: props.ctx });
   } catch (error) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.error(`[HookOutlet] Error rendering hook "${entry.id}" at outlet "${props.name}":`, error);
+    }
     return null;
   }
 };

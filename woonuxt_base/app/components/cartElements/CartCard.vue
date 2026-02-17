@@ -1,5 +1,5 @@
 <script setup>
-const { updateItemQuantity } = useCart();
+const { updateItemQuantity, cart } = useCart();
 const { addToWishlist } = useWishlist();
 const { FALLBACK_IMG } = useHelpers();
 const { storeSettings } = useAppConfig();
@@ -48,7 +48,7 @@ const moveToWishList = () => {
           }}</NuxtLink>
 
           <!-- Hook: After cart line item name -->
-          <HookOutlet name="cart.lineItem.afterName" :ctx="{ item, cart: null }" as="span" />
+          <HookOutlet name="cart.lineItem.afterName" :ctx="{ item, cart }" as="span" />
 
           <span
             v-if="productType.salePrice"
