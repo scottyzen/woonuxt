@@ -430,6 +430,7 @@ export function useCart() {
     isUpdatingCart,
     isAddingToCart,
     isUpdatingCoupon,
+    optimisticPendingMutations,
     paymentGateways,
     isBillingAddressEnabled,
     isOptimisticCartMode,
