@@ -5,6 +5,9 @@ const { wishlistLink } = useAuth();
 
 <template>
   <footer class="bg-white dark:bg-gray-800 order-last">
+    <!-- Hook: Top of footer -->
+    <HookOutlet name="layout.footer.top" as="div" class="container pt-8" />
+
     <div class="container flex flex-wrap justify-between gap-12 my-24 md:gap-24">
       <div class="mr-auto">
         <Logo />
@@ -99,6 +102,9 @@ const { wishlistLink } = useAuth();
       </div>
       <SocialIcons class="ml-auto" />
     </div>
+
+    <!-- Hook: Bottom of footer -->
+    <HookOutlet name="layout.footer.bottom" as="div" class="container pb-8" />
   </footer>
 </template>
 

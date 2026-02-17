@@ -306,16 +306,24 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
       <Breadcrumb :product class="mb-6" v-if="storeSettings.showBreadcrumbOnSingleProduct" />
 
       <div class="flex flex-col gap-10 md:flex-row md:justify-between lg:gap-24">
-        <ProductImageGallery
-          v-if="productImage"
-          class="relative flex-1"
-          :main-image="productImage"
-          :gallery="productGallery"
-          :node="displayProduct"
-          :activeVariation="activeVariation || {}" />
-        <NuxtImg v-else class="relative flex-1 skeleton" src="/images/placeholder.jpg" :alt="product?.name || 'Product'" />
+        <div class="relative flex-1">
+          <ProductImageGallery
+            v-if="productImage"
+            class="w-full"
+            :main-image="productImage"
+            :gallery="productGallery"
+            :node="displayProduct"
+            :activeVariation="activeVariation || {}" />
+          <NuxtImg v-else class="w-full skeleton" src="/images/placeholder.jpg" :alt="product?.name || 'Product'" />
+
+          <!-- Hook: After product gallery -->
+          <HookOutlet name="product.gallery.after" :ctx="{ product: displayProduct }" as="div" />
+        </div>
 
         <div class="w-full lg:max-w-md xl:max-w-lg md:py-2">
+          <!-- Hook: Before product title -->
+          <HookOutlet name="product.summary.beforeTitle" :ctx="{ product: displayProduct }" as="div" />
+
           <div class="flex justify-between mb-4">
             <div class="flex-1">
               <h1 class="flex flex-wrap items-center gap-2 mb-2 text-2xl font-sesmibold dark:text-white">
@@ -326,6 +334,9 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
             </div>
             <ProductPrice class="text-xl" :sale-price="priceTarget?.salePrice" :regular-price="priceTarget?.regularPrice" />
           </div>
+
+          <!-- Hook: After product price -->
+          <HookOutlet name="product.summary.afterPrice" :ctx="{ product: displayProduct }" as="div" />
 
           <div class="grid gap-2 my-8 text-sm empty:hidden">
             <div v-if="!isExternalProduct" class="flex items-center gap-2">
@@ -339,6 +350,9 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
           </div>
 
           <div class="mb-8 font-light prose dark:prose-invert" v-html="product.shortDescription || product.description" />
+
+          <!-- Hook: After product description -->
+          <HookOutlet name="product.summary.afterDescription" :ctx="{ product: displayProduct }" as="div" />
 
           <hr class="border-gray-300 dark:border-gray-600" />
 
@@ -399,6 +413,9 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
       </div>
       <div v-if="product.description || product.reviews" class="my-32">
         <ProductTabs :product />
+
+        <!-- Hook: After product tabs -->
+        <HookOutlet name="product.tabs.after" :ctx="{ product }" as="div" />
       </div>
       <div class="my-32" v-if="product.related && storeSettings.showRelatedProducts">
         <div class="mb-4 text-xl font-semibold dark:text-white">{{ $t('shop.youMayLike') }}</div>

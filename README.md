@@ -35,6 +35,39 @@ Example: I have created a pages directory and added a `contact.vue` file in the 
 Here is a [branch](https://github.com/scottyzen/woonuxt/tree/myshop) with an example of some basic customizations:
 And here is the live demo of the customized WooNuxt site: [My Shop](https://myshop.woonuxt.com/).
 
+### Location Hooks System 🪝
+
+WooNuxt now includes a **Location Hooks** system that provides WordPress-like extensibility for headless storefronts. Instead of overriding entire components, you can inject custom UI and logic at predefined extension points throughout the site.
+
+**Key Features:**
+
+- ✅ **SSR/SSG Compatible** - Hooks render in static builds
+- ✅ **SEO Friendly** - Content included in initial HTML
+- ✅ **Type-safe** - Full TypeScript support
+- ✅ **Layer Compatible** - Works seamlessly with Nuxt layers
+
+**Available Hook Locations** (14 outlets):
+
+- Layout (header/footer)
+- Product pages (title, price, gallery, tabs)
+- Cart (line items, totals)
+- Checkout (customer, shipping, payment, review)
+
+**Quick Example:**
+
+```ts
+// plugins/my-hooks.ts
+import TrustBadge from "~/components/TrustBadge.vue";
+
+export default defineNuxtPlugin(() => {
+  registerHook({
+    name: "product.summary.afterPrice",
+    id: "trust-badge",
+    renderer: TrustBadge,
+  });
+});
+```
+
 ### Progress
 
 | Feature                                                   | Ongoing Enhancements | In the Pipeline | In Progress | Done | Next |
