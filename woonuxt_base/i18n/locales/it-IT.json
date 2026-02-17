@@ -43,7 +43,8 @@
     "contactUs": "Contattaci",
     "shippingReturns": "Spedizione e Resi",
     "privacyPolicy": "Informativa sulla Privacy",
-    "termsConditions": "Termini e Condizioni"
+    "termsConditions": "Termini e Condizioni",
+    "updating": "Aggiornamento"
   },
   "account": {
     "changePassword": "Cambia password",
@@ -125,6 +126,7 @@
     "cartEmpty": "Il tuo carrello è vuoto.",
     "addProductsInYourCart": "Per favore, aggiungi alcuni prodotti al tuo carrello.",
     "browseOurProducts": "Sfoglia i nostri prodotti",
+    "viewCart": "Visualizza carrello",
     "checkout": "Pagamento",
     "checkoutButton": "Procedi al pagamento",
     "discount": "Sconto",

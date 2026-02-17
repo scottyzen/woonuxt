@@ -44,7 +44,8 @@
     "contactUs": "Contact Us",
     "shippingReturns": "Shipping & Returns",
     "privacyPolicy": "Privacy Policy",
-    "termsConditions": "Terms & Conditions"
+    "termsConditions": "Terms & Conditions",
+    "updating": "Updating"
   },
   "account": {
     "changePassword": "Change Password",
@@ -127,6 +128,7 @@
     "cartEmpty": "Your cart is empty.",
     "addProductsInYourCart": "Please, add some products to your cart.",
     "browseOurProducts": "Browse our products",
+    "viewCart": "View Cart",
     "checkout": "Checkout",
     "checkoutButton": "Checkout",
     "discount": "Discount",

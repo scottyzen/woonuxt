@@ -44,7 +44,8 @@
     "contactUs": "Nous contacter",
     "shippingReturns": "Expédition et Retours",
     "privacyPolicy": "Politique de Confidentialité",
-    "termsConditions": "Conditions Générales"
+    "termsConditions": "Conditions Générales",
+    "updating": "Mise à jour"
   },
   "account": {
     "changePassword": "Modifier le mot de passe",
@@ -126,6 +127,7 @@
     "cartEmpty": "Votre panier est vide.",
     "addProductsInYourCart": "Veuillez ajouter des produits à votre panier.",
     "browseOurProducts": "Parcourez nos produits",
+    "viewCart": "Voir le panier",
     "checkout": "Commander",
     "checkoutButton": "Commander",
     "discount": "Remise",

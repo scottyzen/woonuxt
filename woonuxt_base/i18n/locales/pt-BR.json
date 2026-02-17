@@ -43,7 +43,8 @@
     "contactUs": "Entre em Contato",
     "shippingReturns": "Envio e Devoluções",
     "privacyPolicy": "Política de Privacidade",
-    "termsConditions": "Termos e Condições"
+    "termsConditions": "Termos e Condições",
+    "updating": "Atualizando"
   },
   "account": {
     "changePassword": "Alterar Senha",
@@ -125,7 +126,8 @@
     "cartEmpty": "Seu carrinho está vazio.",
     "addProductsInYourCart": "Por favor, adicione alguns produtos ao seu carrinho.",
     "browseOurProducts": "Navegue pelos nossos produtos",
-    "checkout": "Finalizar Compra",
+    "viewCart": "Ver carrinho",
+    "checkout": "Finalizar compra",
     "checkoutButton": "Finalizar",
     "discount": "Desconto",
     "giftCards": "Cartões Presente",
