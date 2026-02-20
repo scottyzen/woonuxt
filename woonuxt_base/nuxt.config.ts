@@ -84,6 +84,7 @@ export default defineNuxtConfig({
       // Override with CATALOG_ISR_TTL environment variable (in seconds)
       '/product/**': { isr: catalogIsrTtl },
       '/product-category/**': { isr: catalogIsrTtl },
+      '/products': { isr: catalogIsrTtl },
       '/products/**': { isr: catalogIsrTtl },
     },
   },
