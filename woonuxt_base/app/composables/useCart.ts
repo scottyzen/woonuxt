@@ -421,6 +421,9 @@ export function useCart() {
     return nodes.length === 0 ? false : nodes.every((node) => (node.product?.node as SimpleProduct)?.virtual === true);
   });
 
+  // Unified cart mutation state for optimistic and non-optimistic flows.
+  const isCartMutating = computed(() => isUpdatingCart.value || optimisticPendingMutations.value > 0);
+
   // Check if the billing address is enabled
   const isBillingAddressEnabled = computed(() => (storeSettings.hideBillingAddressForVirtualProducts ? !allProductsAreVirtual.value : true));
 
@@ -428,6 +431,7 @@ export function useCart() {
     cart,
     isShowingCart,
     isUpdatingCart,
+    isCartMutating,
     isAddingToCart,
     isUpdatingCoupon,
     optimisticPendingMutations,

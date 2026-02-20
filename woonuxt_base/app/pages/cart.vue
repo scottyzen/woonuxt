@@ -1,6 +1,5 @@
 <script setup lang="ts">
-const { cart, isUpdatingCart, optimisticPendingMutations } = useCart();
-const isCartUpdating = computed(() => isUpdatingCart.value || optimisticPendingMutations.value > 0);
+const { cart, isCartMutating } = useCart();
 
 definePageMeta({
   title: 'Cart',
@@ -51,13 +50,13 @@ useSeoMeta({
             </div>
 
             <Button
-              :to="isCartUpdating ? undefined : '/checkout'"
-              :disabled="isCartUpdating"
-              :loading="isCartUpdating"
+              :to="isCartMutating ? undefined : '/checkout'"
+              :disabled="isCartMutating"
+              :loading="isCartMutating"
               class="w-full"
               size="lg"
               variant="primary">
-              <span class="mx-2">{{ isCartUpdating ? $t('general.updating') : $t('shop.checkout') }}</span>
+              <span class="mx-2">{{ isCartMutating ? $t('general.updating') : $t('shop.checkout') }}</span>
             </Button>
           </div>
         </div>

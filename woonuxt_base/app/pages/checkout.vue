@@ -4,7 +4,7 @@ import type { Stripe, StripeElements, CreateSourceData, StripeCardElement } from
 
 const { t } = useI18n();
 const { query } = useRoute();
-const { cart, isUpdatingCart, paymentGateways, emptyCart, refreshCart } = useCart();
+const { cart, isCartMutating, paymentGateways, emptyCart, refreshCart } = useCart();
 const { customer, viewer, navigateToLogin } = useAuth();
 const { orderInput, isProcessingOrder, processCheckout } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
@@ -16,7 +16,7 @@ const isStripeElementReady = ref<boolean>(false);
 const stripeClientSecret = ref<string>('');
 
 const isCheckoutDisabled = computed<boolean>(() => {
-  if (isProcessingOrder.value || isUpdatingCart.value || !orderInput.value.paymentMethod) return true;
+  if (isProcessingOrder.value || isCartMutating.value || !orderInput.value.paymentMethod) return true;
 
   // Check if Stripe is selected and element is not ready
   if (orderInput.value.paymentMethod?.id === 'stripe') {

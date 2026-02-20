@@ -1,11 +1,11 @@
 <script setup>
-const { cart, isUpdatingCart } = useCart();
+const { cart, isCartMutating } = useCart();
 </script>
 
 <template>
   <aside
     v-if="cart"
-    class="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900/50 mb-8 w-full min-h-[280px] p-4 sm:p-8 relative md:max-w-md md:top-32 md:sticky">
+    class="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900/50 mb-8 w-full min-h-70 p-4 sm:p-8 relative md:max-w-md md:top-32 md:sticky">
     <h2 class="mb-6 text-xl font-semibold leading-none dark:text-white">{{ $t('shop.orderSummary') }}</h2>
 
     <ul class="flex flex-col gap-4 overflow-y-auto">
@@ -39,7 +39,7 @@ const { cart, isUpdatingCart } = useCart();
 
     <slot></slot>
 
-    <div v-if="isUpdatingCart" class="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-gray-800/50">
+    <div v-if="isCartMutating" class="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-gray-800/50">
       <LoadingIcon />
     </div>
   </aside>

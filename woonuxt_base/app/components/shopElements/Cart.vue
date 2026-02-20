@@ -1,6 +1,5 @@
 <script setup lang="ts">
-const { cart, toggleCart, isUpdatingCart, optimisticPendingMutations } = useCart();
-const isCartUpdating = computed(() => isUpdatingCart.value || optimisticPendingMutations.value > 0);
+const { cart, toggleCart, isCartMutating } = useCart();
 </script>
 
 <template>
@@ -51,11 +50,11 @@ const isCartUpdating = computed(() => isUpdatingCart.value || optimisticPendingM
               {{ $t('shop.viewCart') }}
             </Button>
             <Button
-              :to="isCartUpdating ? undefined : '/checkout'"
+              :to="isCartMutating ? undefined : '/checkout'"
               class="flex-1"
               variant="primary"
-              @click="!isCartUpdating && toggleCart()"
-              :disabled="isCartUpdating">
+              @click="!isCartMutating && toggleCart()"
+              :disabled="isCartMutating">
               {{ $t('shop.checkout') }} <span v-html="cart.total" />
             </Button>
           </div>
@@ -69,7 +68,7 @@ const isCartUpdating = computed(() => isUpdatingCart.value || optimisticPendingM
       </div>
     </ClientOnly>
     <!-- Cart Loading Overlay -->
-    <div v-if="isCartUpdating" class="absolute inset-0 flex items-center justify-center bg-white/25 dark:bg-gray-800/50">
+    <div v-if="isCartMutating" class="absolute inset-0 flex items-center justify-center bg-white/25 dark:bg-gray-800/50">
       <LoadingIcon />
     </div>
   </div>
