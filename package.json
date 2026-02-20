@@ -9,7 +9,7 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "serve": "nuxi generate && npx serve .output/public -l 8080",
-    "typecheck": "nuxi typecheck --tsconfig woonuxt_base/tsconfig.json"
+    "typecheck": "nuxi typecheck"
   },
   "dependencies": {
     "@nuxtjs/color-mode": "^4.0.0",

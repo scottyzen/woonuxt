@@ -13,5 +13,5 @@
     "types": ["@nuxt/image", "@nuxtjs/i18n", "nuxt-graphql-client"],
     "strict": true
   },
-  "include": ["../.nuxt/nuxt.d.ts", "../.nuxt/imports.d.ts", "./types/nuxt.d.ts", "./app/**/*", "./**/*.ts", "./**/*.vue"]
+  "include": ["../.nuxt/nuxt.d.ts", "../.nuxt/types/**/*.d.ts", "../.nuxt/imports.d.ts", "./types/nuxt.d.ts", "./app/**/*", "./**/*.ts", "./**/*.vue"]
 }
