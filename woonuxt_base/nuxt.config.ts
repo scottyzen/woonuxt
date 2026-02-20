@@ -24,11 +24,6 @@ export default defineNuxtConfig({
 
   modules: [resolve('./modules/woonuxt-bridge.ts'), 'nuxt-graphql-client', '@nuxt/icon', '@nuxt/image', '@nuxtjs/i18n', '@nuxtjs/color-mode'],
 
-  image: {
-    provider: 'netlify',
-    domains: ['secure.woonuxt.com'],
-  },
-
   postcss: {
     plugins: {
       '@tailwindcss/postcss': {},
