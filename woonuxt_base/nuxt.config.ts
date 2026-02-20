@@ -76,7 +76,6 @@ export default defineNuxtConfig({
   },
 
   // Multilingual support
-  // @ts-ignore - i18n types not recognized
   i18n: {
     locales: [
       { code: 'en_US', file: 'en-US.json', name: 'English 🇺🇸' },
