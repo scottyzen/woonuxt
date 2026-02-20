@@ -44,7 +44,8 @@
     "contactUs": "Contáctanos",
     "shippingReturns": "Envío y Devoluciones",
     "privacyPolicy": "Política de Privacidad",
-    "termsConditions": "Términos y Condiciones"
+    "termsConditions": "Términos y Condiciones",
+    "updating": "Actualizando"
   },
   "account": {
     "changePassword": "Cambiar contraseña",
@@ -126,6 +127,7 @@
     "cartEmpty": "Tu carrito está vacío",
     "addProductsInYourCart": "Por favor, añade algunos productos a tu carrito.",
     "browseOurProducts": "Explora nuestros productos",
+    "viewCart": "Ver carrito",
     "checkout": "Pagar",
     "checkoutButton": "Pagar ahora",
     "discount": "Descuento",

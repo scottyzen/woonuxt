@@ -44,7 +44,8 @@
     "contactUs": "Kontaktieren Sie uns",
     "shippingReturns": "Versand & Rücksendungen",
     "privacyPolicy": "Datenschutzerklärung",
-    "termsConditions": "Allgemeine Geschäftsbedingungen"
+    "termsConditions": "Allgemeine Geschäftsbedingungen",
+    "updating": "Aktualisierung"
   },
   "account": {
     "changePassword": "Passwort ändern",
@@ -126,6 +127,7 @@
     "cartEmpty": "Ihr Warenkorb ist leer",
     "addProductsInYourCart": "Bitte fügen Sie einige Produkte in Ihren Warenkorb hinzu.",
     "browseOurProducts": "Stöbern Sie in unseren Produkten",
+    "viewCart": "Warenkorb ansehen",
     "checkout": "Kasse",
     "checkoutButton": "jetzt bezahlen",
     "discount": "Rabatt",
