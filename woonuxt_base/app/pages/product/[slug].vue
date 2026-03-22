@@ -283,7 +283,7 @@ onBeforeUnmount(() => {
 
 const stockStatus = computed(() => {
   if (isVariableProduct.value) {
-    return activeVariation.value?.stockStatus || StockStatusEnum.OUT_OF_STOCK;
+    return activeVariation.value?.stockStatus || (product.value as VariableProduct)?.stockStatus || StockStatusEnum.OUT_OF_STOCK;
   }
   return (product.value as SimpleProduct | VariableProduct)?.stockStatus || StockStatusEnum.OUT_OF_STOCK;
 });
