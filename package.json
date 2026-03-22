@@ -13,20 +13,20 @@
   },
   "dependencies": {
     "@nuxtjs/color-mode": "^4.0.0",
-    "@stripe/stripe-js": "^8.8.0",
-    "@tailwindcss/postcss": "^4.2.0",
-    "reka-ui": "^2.8.2",
+    "@stripe/stripe-js": "^8.11.0",
+    "@tailwindcss/postcss": "^4.2.2",
     "@vueuse/core": "^14.2.1",
+    "reka-ui": "^2.9.2",
     "tailwind-merge": "^3.5.0",
-    "tailwindcss": "^4.2.0"
+    "tailwindcss": "^4.2.2"
   },
   "devDependencies": {
-    "@iconify-json/ion": "^1.2.6",
+    "@iconify-json/ion": "^1.2.7",
     "@nuxt/icon": "^2.2.1",
     "@nuxt/image": "2.0.0",
     "@nuxtjs/i18n": "^10.2.3",
     "@tailwindcss/typography": "^0.5.19",
-    "nuxt": "^4.3.1",
+    "nuxt": "^4.4.2",
     "nuxt-graphql-client": "^0.2.46",
     "prettier": "^3.8.1"
   }
