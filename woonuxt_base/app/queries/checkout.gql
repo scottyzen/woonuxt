@@ -8,6 +8,7 @@ mutation Checkout(
   $account: CreateAccountInput = { username: "", password: "" }
   $transactionId: String = ""
   $isPaid: Boolean = false
+  $shippingMethod: [String] = ""
 ) {
   checkout(
     input: {
@@ -15,6 +16,7 @@ mutation Checkout(
       billing: $billing
       metaData: $metaData
       shipping: $shipping
+      shippingMethod: $shippingMethod
       customerNote: $customerNote
       shipToDifferentAddress: $shipToDifferentAddress
       account: $account
