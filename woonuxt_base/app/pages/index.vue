@@ -6,7 +6,7 @@ const { data } = await useAsyncGql('getProductCategories', { first: 6 });
 const productCategories = data.value?.productCategories?.nodes || [];
 
 const { data: productData } = await useAsyncGql('getProducts', { first: 5, orderby: ProductsOrderByEnum.POPULARITY });
-const popularProducts = productData.value.products?.nodes || [];
+const popularProducts = productData.value?.products?.nodes || [];
 
 useSeoMeta({
   title: `Home`,
