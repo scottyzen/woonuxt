@@ -125,7 +125,6 @@ export function useCheckout() {
 
       const { updateCustomer } = await GqlUpdateCustomer({
         input: {
-          isSession: true,
           shipping,
           billing,
         } as UpdateCustomerInput,
@@ -174,8 +173,8 @@ export function useCheckout() {
       // Handle account creation if requested
       await handleAccountCreation();
 
-      const orderId = checkout?.order?.databaseId;
-      const orderKey = checkout?.order?.orderKey;
+      const orderId = checkout?.order?.databaseId as number | undefined;
+      const orderKey = checkout?.order?.orderKey as string | undefined;
 
       // Ensure we have required order details
       if (!orderId || !orderKey) {
