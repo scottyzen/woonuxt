@@ -181,6 +181,14 @@ export function useCheckout() {
         throw new Error('Order ID or order key is missing from checkout response');
       }
 
+      // Empty cart BEFORE any redirect - critical for Stripe and other payment methods
+      try {
+        await emptyCart();
+        await refreshCart();
+      } catch (cartError) {
+        console.error('Error clearing cart after successful order:', cartError);
+      }
+
       // Handle PayPal redirect if needed
       if (checkout?.redirect && isPayPalPayment()) {
         await handlePayPalRedirect(checkout, String(orderId), orderKey);
@@ -189,7 +197,7 @@ export function useCheckout() {
         router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
       }
 
-      // Finalize the checkout (this will also clear cart for PayPal)
+      // Finalize the checkout
       await finalizeCheckout(checkout);
 
       return checkout;
