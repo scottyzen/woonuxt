@@ -2,7 +2,7 @@ import type { CheckoutInput, CreateAccountInput, UpdateCustomerInput } from '#ty
 
 export function useCheckout() {
   const { customer, loginUser } = useAuth();
-  const { cart, emptyCart, refreshCart, isUpdatingCart } = useCart();
+  const { cart, refreshCart, isUpdatingCart } = useCart();
 
   const orderInput = useState<any>('orderInput', () => {
     return {
@@ -83,16 +83,6 @@ export function useCheckout() {
 
   // Helper function to finalize checkout
   const finalizeCheckout = async (checkout: any): Promise<void> => {
-    // For PayPal payments, clear the cart here since they handle redirect differently
-    // Only clear if cart has items to avoid "Cart is empty" errors
-    if (isPayPalPayment() && cart.value?.contents?.nodes?.length) {
-      await emptyCart();
-      await refreshCart();
-      return;
-    }
-
-    // For other payment methods, don't clear cart here to avoid flash
-    // Cart will be cleared on the order-received page
     if (checkout?.result !== 'success' && !checkout?.order?.databaseId) {
       alert('There was an error processing your order. Please try again.');
       window.location.reload();
@@ -179,14 +169,6 @@ export function useCheckout() {
       // Ensure we have required order details
       if (!orderId || !orderKey) {
         throw new Error('Order ID or order key is missing from checkout response');
-      }
-
-      // Empty cart BEFORE any redirect - critical for Stripe and other payment methods
-      try {
-        await emptyCart();
-        await refreshCart();
-      } catch (cartError) {
-        console.error('Error clearing cart after successful order:', cartError);
       }
 
       // Handle PayPal redirect if needed

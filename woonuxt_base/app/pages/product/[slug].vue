@@ -216,13 +216,21 @@ const updateSelectedVariations = (variations: VariationAttribute[]): void => {
 };
 
 const mergeLiveStockStatus = (payload: ProductDetail): void => {
-  product.value.stockStatus = payload.stockStatus ?? product.value.stockStatus;
-
-  payload.variations?.nodes?.forEach((variation: Variation, index: number) => {
-    if (product.value?.variations?.nodes?.[index]) {
-      product.value.variations.nodes[index].stockStatus = variation.stockStatus;
-    }
-  });
+  if (product.value) {
+    product.value = {
+      ...product.value,
+      stockStatus: payload.stockStatus,
+      variations: product.value.variations
+        ? {
+            ...product.value.variations,
+            nodes: product.value.variations.nodes?.map((node, index) => ({
+              ...node,
+              stockStatus: payload.variations?.nodes?.[index]?.stockStatus || node.stockStatus,
+            })),
+          }
+        : undefined,
+    };
+  }
 };
 
 const refreshStockStatus = async (): Promise<void> => {
@@ -283,17 +291,16 @@ onBeforeUnmount(() => {
 
 const stockStatus = computed(() => {
   if (isVariableProduct.value) {
-    return activeVariation.value?.stockStatus || (product.value as VariableProduct)?.stockStatus || StockStatusEnum.OUT_OF_STOCK;
+    return activeVariation.value?.stockStatus || product.value?.stockStatus;
   }
-  return (product.value as SimpleProduct | VariableProduct)?.stockStatus || StockStatusEnum.OUT_OF_STOCK;
+  return product.value?.stockStatus;
 });
 
 const disabledAddToCart = computed(() => {
-  const isOutOfStock = stockStatus.value === StockStatusEnum.OUT_OF_STOCK;
-  const isInvalidType = !displayProduct.value;
+  const canPurchaseWithCurrentStock = stockStatus.value === StockStatusEnum.IN_STOCK || stockStatus.value === StockStatusEnum.ON_BACKORDER;
   const isCartUpdating = isOptimisticCartMode.value ? false : isUpdatingCart.value || isAddingToCart.value;
-  const isValidActiveVariation = isVariableProduct.value ? !!activeVariation.value : true;
-  return isInvalidType || isOutOfStock || isCartUpdating || !isValidActiveVariation;
+  const hasValidVariation = !isVariableProduct.value || !!activeVariation.value;
+  return !canPurchaseWithCurrentStock || isCartUpdating || !hasValidVariation;
 });
 
 const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : isUpdatingCart.value));
@@ -330,7 +337,7 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
           <div class="grid gap-2 my-8 text-sm empty:hidden">
             <div v-if="!isExternalProduct" class="flex items-center gap-2">
               <span class="text-gray-400 dark:text-gray-500">{{ $t('shop.availability') }}: </span>
-              <StockStatus :stockStatus @updated="mergeLiveStockStatus" />
+              <StockStatus :stockStatus="stockStatus || undefined" @updated="mergeLiveStockStatus" />
             </div>
             <div class="flex items-center gap-2" v-if="storeSettings.showSKU && product?.sku">
               <span class="text-gray-400 dark:text-gray-500">{{ $t('shop.sku') }}: </span>

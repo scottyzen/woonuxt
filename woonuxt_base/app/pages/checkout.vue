@@ -4,7 +4,7 @@ import type { Stripe, StripeElements, CreateSourceData, StripeCardElement } from
 
 const { t } = useI18n();
 const { query } = useRoute();
-const { cart, isCartMutating, paymentGateways, emptyCart, refreshCart } = useCart();
+const { cart, isCartMutating, paymentGateways } = useCart();
 const { customer, viewer, navigateToLogin } = useAuth();
 const { orderInput, isProcessingOrder, processCheckout } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
@@ -115,14 +115,14 @@ const payNow = async () => {
               billing_details: {
                 name: `${customer.value?.billing?.firstName || ''} ${customer.value?.billing?.lastName || ''}`.trim() || undefined,
                 email: customer.value?.billing?.email || undefined,
-                phone: customer.value?.billing?.phone ?? '',
+                phone: customer.value?.billing?.phone || undefined,
                 address: {
-                  line1: customer.value?.billing?.address1 ?? '',
-                  line2: customer.value?.billing?.address2 ?? '',
-                  city: customer.value?.billing?.city ?? '',
-                  state: customer.value?.billing?.state ?? '',
-                  postal_code: customer.value?.billing?.postcode ?? '',
-                  country: customer.value?.billing?.country ?? '',
+                  line1: customer.value?.billing?.address1 || undefined,
+                  line2: customer.value?.billing?.address2 || undefined,
+                  city: customer.value?.billing?.city || undefined,
+                  state: customer.value?.billing?.state || undefined,
+                  postal_code: customer.value?.billing?.postcode || undefined,
+                  country: customer.value?.billing?.country || undefined,
                 },
               },
             },
@@ -202,13 +202,7 @@ const payNow = async () => {
   }
 
   // Process the checkout
-  const result = await processCheckout(isPaid.value);
-
-  // If checkout was successful and we had a successful payment, ensure cart is cleared
-  if (isPaid.value && result) {
-    await emptyCart();
-    await refreshCart();
-  }
+  await processCheckout(isPaid.value);
 };
 
 const handleStripeElement = (stripeElements: StripeElements): void => {
