@@ -39,6 +39,31 @@ function validateEnvironment() {
   }
 }
 
+function parsePriceValue(value: unknown): number {
+  if (typeof value === 'number') return Number.isFinite(value) ? value : NaN;
+  if (typeof value !== 'string') return NaN;
+
+  const sanitized = value.replace(/[^\d.,-]/g, '');
+  if (!sanitized) return NaN;
+
+  const lastComma = sanitized.lastIndexOf(',');
+  const lastDot = sanitized.lastIndexOf('.');
+  let normalized = sanitized;
+
+  // Normalize both common decimal separators and strip thousands separators.
+  if (lastComma > -1 && lastDot > -1) {
+    normalized = lastComma > lastDot ? sanitized.replace(/\./g, '').replace(',', '.') : sanitized.replace(/,/g, '');
+  } else if (lastComma > -1) {
+    normalized = sanitized.split(',').length > 2 ? sanitized.replace(/,/g, '') : sanitized.replace(',', '.');
+  } else if (lastDot > -1 && sanitized.split('.').length > 2) {
+    const parts = sanitized.split('.');
+    normalized = `${parts.slice(0, -1).join('')}.${parts.at(-1)}`;
+  }
+
+  const parsed = Number.parseFloat(normalized);
+  return Number.isFinite(parsed) ? parsed : NaN;
+}
+
 const getVersionQuery = `query getVersion {
   woonuxtSettings {
     wooCommerceSettingsVersion
@@ -112,6 +137,11 @@ export default defineNuxtModule({
       woonuxtSettings ${woonuxtSettings}
       generalSettings { title }
       allSettings { generalSettingsUrl }
+      collectionStats(calculatePriceRange: true, where: { visibility: VISIBLE }) {
+        priceRange {
+          maxPrice
+        }
+      }
     }`;
 
     try {
@@ -124,12 +154,21 @@ export default defineNuxtModule({
       // Default env variables
       process.env.PRIMARY_COLOR = data.woonuxtSettings?.primary_color || '#7F54B2';
 
+      const configuredMaxPrice = parsePriceValue(data.woonuxtSettings?.maxPrice);
+      const statsMaxPrice = parsePriceValue(data.collectionStats?.priceRange?.maxPrice);
+      const resolvedMaxPrice =
+        Number.isFinite(statsMaxPrice) && statsMaxPrice > 0
+          ? Math.ceil(statsMaxPrice)
+          : Number.isFinite(configuredMaxPrice) && configuredMaxPrice > 0
+            ? Math.ceil(configuredMaxPrice)
+            : 1000;
+
       // Default runtimeConfig
       nuxt.options.runtimeConfig.public.PRIMARY_COLOR = data.woonuxtSettings?.primary_color || '#7F54B2';
       nuxt.options.runtimeConfig.public.LOGO = data.woonuxtSettings?.logo || null;
       nuxt.options.runtimeConfig.public.PRODUCTS_PER_PAGE = data.woonuxtSettings?.productsPerPage || process.env.PRODUCTS_PER_PAGE || 24;
       nuxt.options.runtimeConfig.public.GLOBAL_PRODUCT_ATTRIBUTES = data.woonuxtSettings?.global_attributes || [];
-      nuxt.options.runtimeConfig.public.MAX_PRICE = data.woonuxtSettings?.maxPrice || 1000;
+      nuxt.options.runtimeConfig.public.MAX_PRICE = resolvedMaxPrice;
       nuxt.options.runtimeConfig.public.FRONT_END_URL = data.woonuxtSettings?.frontEndUrl || null;
       nuxt.options.runtimeConfig.public.BACKEND_URL = data.allSettings?.generalSettingsUrl || null;
       nuxt.options.runtimeConfig.public.CURRENCY_CODE = data.woonuxtSettings?.currencyCode || null;
