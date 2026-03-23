@@ -14,6 +14,7 @@ export function useCheckout() {
   });
 
   const isProcessingOrder = useState<boolean>('isProcessingOrder', () => false);
+  const checkoutError = ref<string | null>(null);
 
   // Helper function to build checkout payload
   const buildCheckoutPayload = (isPaid = false): CheckoutInput => {
@@ -84,8 +85,7 @@ export function useCheckout() {
   // Helper function to finalize checkout
   const finalizeCheckout = async (checkout: any): Promise<void> => {
     if (checkout?.result !== 'success' && !checkout?.order?.databaseId) {
-      alert('There was an error processing your order. Please try again.');
-      window.location.reload();
+      checkoutError.value = 'There was an error processing your order. Please try again.';
     }
   };
 
@@ -152,6 +152,7 @@ export function useCheckout() {
     const router = useRouter();
 
     isProcessingOrder.value = true;
+    checkoutError.value = null;
 
     try {
       // Build checkout payload
@@ -185,7 +186,7 @@ export function useCheckout() {
       return checkout;
     } catch (error: unknown) {
       console.error('Checkout error:', error);
-      if (error instanceof Error && error.message) alert(error.message);
+      checkoutError.value = error instanceof Error && error.message ? error.message : 'An error occurred during checkout. Please try again.';
       return null;
     } finally {
       isProcessingOrder.value = false;
@@ -195,6 +196,7 @@ export function useCheckout() {
   return {
     orderInput,
     isProcessingOrder,
+    checkoutError,
     processCheckout,
     updateShippingLocation,
   };
