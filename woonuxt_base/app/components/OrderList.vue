@@ -11,9 +11,9 @@ const refresh = () => {
   getOrders();
 };
 
-const goToOrder = (orderNumber?: string | null): void => {
-  if (!orderNumber) return;
-  router.push(`/order-summary/${orderNumber}`);
+const goToOrder = (databaseId?: string | number | null): void => {
+  if (!databaseId) return;
+  router.push(`/order-summary/${databaseId}`);
 };
 </script>
 
@@ -31,7 +31,11 @@ const goToOrder = (orderNumber?: string | null): void => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="order in orders" :key="order.orderNumber || ''" class="cursor-pointer hover:underline" @click="goToOrder(order.orderNumber)">
+          <tr
+            v-for="order in orders"
+            :key="order.orderNumber || String(order.databaseId)"
+            class="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+            @click="goToOrder(order.databaseId)">
             <td class="rounded-l-lg">{{ order.orderNumber }}</td>
             <td>{{ formatDate(order.date) }}</td>
             <td><OrderStatusLabel v-if="order.status" :order="order" /></td>
@@ -39,10 +43,14 @@ const goToOrder = (orderNumber?: string | null): void => {
           </tr>
         </tbody>
       </table>
-      <div class="flex justify-center w-full mt-8 text-center">
-        <div class="text-center flex justify-center w-full mt-8">
-          <Button type="button" size="sm" variant="secondary" icon="ion:refresh-outline" @click="refresh"> Refresh list </Button>
-        </div>
+      <div class="text-center flex justify-center w-full mt-8">
+        <button
+          type="button"
+          @click="refresh"
+          class="flex items-center gap-1 text-sm leading-none hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded transition-colors">
+          <span>Refresh list</span>
+          <Icon name="ion:refresh-outline" />
+        </button>
       </div>
     </div>
     <div v-else-if="orders && orders.length === 0" class="min-h-62.5 flex items-center justify-center text-gray-500 dark:text-gray-400 text-lg">

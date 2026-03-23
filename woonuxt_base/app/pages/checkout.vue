@@ -4,9 +4,9 @@ import type { Stripe, StripeElements, CreateSourceData, StripeCardElement } from
 
 const { t } = useI18n();
 const { query } = useRoute();
-const { cart, isCartMutating, paymentGateways, emptyCart, refreshCart } = useCart();
+const { cart, isCartMutating, paymentGateways } = useCart();
 const { customer, viewer, navigateToLogin } = useAuth();
-const { orderInput, isProcessingOrder, processCheckout } = useCheckout();
+const { orderInput, isProcessingOrder, processCheckout, checkoutError } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
 const appConfig = useAppConfig();
 const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
@@ -202,13 +202,7 @@ const payNow = async () => {
   }
 
   // Process the checkout
-  const result = await processCheckout(isPaid.value);
-
-  // If checkout was successful and we had a successful payment, ensure cart is cleared
-  if (isPaid.value && result) {
-    await emptyCart();
-    await refreshCart();
-  }
+  await processCheckout(isPaid.value);
 };
 
 const handleStripeElement = (stripeElements: StripeElements): void => {
@@ -421,6 +415,7 @@ useSeoMeta({
         </div>
 
         <OrderSummary>
+          <p v-if="checkoutError" role="alert" class="text-red-500 text-sm mt-2">{{ checkoutError }}</p>
           <Button :loading="isProcessingOrder" :disabled="isCheckoutDisabled" size="lg" type="submit" class="w-full mt-4">
             {{ buttonText }}
           </Button>

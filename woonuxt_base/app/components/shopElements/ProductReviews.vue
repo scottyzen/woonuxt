@@ -7,7 +7,7 @@ const props = defineProps({
 <template>
   <div class="flex flex-wrap gap-32 items-start mt-8">
     <div class="flex max-w-sm gap-4 prose dark:prose-invert">
-      <ReviewsScore v-if="product.reviews" :reviews="product.reviews" :productId="product.databaseId" />
+      <ReviewsScore v-if="product.reviews" :reviews="product.reviews" :productId="product.databaseId" :reviewCount="product.reviewCount" />
     </div>
     <div class="divide-y divide-gray-200 dark:divide-gray-700 flex-1" v-if="product.reviews?.edges && product.reviews.edges.length">
       <div v-for="review in product.reviews.edges" :key="review.id" class="my-2 py-8">

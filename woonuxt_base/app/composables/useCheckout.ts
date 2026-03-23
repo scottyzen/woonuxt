@@ -2,7 +2,7 @@ import type { CheckoutInput, CreateAccountInput, UpdateCustomerInput } from '#ty
 
 export function useCheckout() {
   const { customer, loginUser } = useAuth();
-  const { cart, emptyCart, refreshCart, isUpdatingCart } = useCart();
+  const { cart, refreshCart, isUpdatingCart } = useCart();
 
   const orderInput = useState<any>('orderInput', () => {
     return {
@@ -14,6 +14,7 @@ export function useCheckout() {
   });
 
   const isProcessingOrder = useState<boolean>('isProcessingOrder', () => false);
+  const checkoutError = ref<string | null>(null);
 
   // Helper function to build checkout payload
   const buildCheckoutPayload = (isPaid = false): CheckoutInput => {
@@ -83,19 +84,8 @@ export function useCheckout() {
 
   // Helper function to finalize checkout
   const finalizeCheckout = async (checkout: any): Promise<void> => {
-    // For PayPal payments, clear the cart here since they handle redirect differently
-    // Only clear if cart has items to avoid "Cart is empty" errors
-    if (isPayPalPayment() && cart.value?.contents?.nodes?.length) {
-      await emptyCart();
-      await refreshCart();
-      return;
-    }
-
-    // For other payment methods, don't clear cart here to avoid flash
-    // Cart will be cleared on the order-received page
     if (checkout?.result !== 'success' && !checkout?.order?.databaseId) {
-      alert('There was an error processing your order. Please try again.');
-      window.location.reload();
+      checkoutError.value = 'There was an error processing your order. Please try again.';
     }
   };
 
@@ -125,7 +115,6 @@ export function useCheckout() {
 
       const { updateCustomer } = await GqlUpdateCustomer({
         input: {
-          isSession: true,
           shipping,
           billing,
         } as UpdateCustomerInput,
@@ -163,6 +152,7 @@ export function useCheckout() {
     const router = useRouter();
 
     isProcessingOrder.value = true;
+    checkoutError.value = null;
 
     try {
       // Build checkout payload
@@ -174,8 +164,8 @@ export function useCheckout() {
       // Handle account creation if requested
       await handleAccountCreation();
 
-      const orderId = checkout?.order?.databaseId;
-      const orderKey = checkout?.order?.orderKey;
+      const orderId = checkout?.order?.databaseId as number | undefined;
+      const orderKey = checkout?.order?.orderKey as string | undefined;
 
       // Ensure we have required order details
       if (!orderId || !orderKey) {
@@ -190,13 +180,13 @@ export function useCheckout() {
         router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
       }
 
-      // Finalize the checkout (this will also clear cart for PayPal)
+      // Finalize the checkout
       await finalizeCheckout(checkout);
 
       return checkout;
     } catch (error: unknown) {
       console.error('Checkout error:', error);
-      if (error instanceof Error && error.message) alert(error.message);
+      checkoutError.value = error instanceof Error && error.message ? error.message : 'An error occurred during checkout. Please try again.';
       return null;
     } finally {
       isProcessingOrder.value = false;
@@ -206,6 +196,7 @@ export function useCheckout() {
   return {
     orderInput,
     isProcessingOrder,
+    checkoutError,
     processCheckout,
     updateShippingLocation,
   };

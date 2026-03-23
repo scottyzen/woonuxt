@@ -2,6 +2,7 @@
 const props = defineProps({
   reviews: { type: Object, default: null },
   productId: { type: Number, default: null },
+  reviewCount: { type: Number, default: null },
   size: { type: Number, default: 21 },
 });
 
@@ -65,11 +66,11 @@ async function addComment() {
 
 <template>
   <div>
-    <h4 v-if="reviews.edges.length" class="font-semibold text-2xl text-gray-900 dark:text-white">{{ $t('shop.customerReviews') }}</h4>
+    <h4 v-if="reviewCount" class="font-semibold text-2xl text-gray-900 dark:text-white">{{ $t('shop.customerReviews') }}</h4>
     <h4 v-else class="font-semibold text-2xl text-gray-900 dark:text-white">{{ $t('shop.noReviews') }}</h4>
-    <div v-if="reviews.edges.length" class="my-2">
+    <div v-if="reviewCount" class="my-2">
       <StarRating :rating="reviews.averageRating" :hide-count="true" class="text-sm mr-2" />
-      <span class="text-sm dark:text-gray-300"> {{ $t('general.basedOn') }} {{ reviews.edges.length }} {{ $t('shop.reviews') }}</span>
+      <span class="text-sm dark:text-gray-300"> {{ $t('general.basedOn') }} {{ reviewCount }} {{ $t('shop.reviews') }}</span>
     </div>
     <div class="my-4 bars">
       <div v-for="rating in numberAndPercentageOfEachRating" :key="rating" class="flex gap-4 items-center">
