@@ -34,7 +34,7 @@ export type PaymentGateway = PaymentGatewayFragment;
 export type Order = OrderFragmentFragment;
 export type ImageWithSizes = BaseImageFragment & {
   cartSourceUrl?: string | null;
-  producCardSourceUrl?: string | null;
+  productCardSourceUrl?: string | null;
 };
 export type ProductBase = GetProductQuery['product'];
 export type ProductDetail = NonNullable<GetProductQuery['product']> &
