@@ -29,7 +29,16 @@ onMounted(() => {
       :class="{ 'active-option': gateway.id === activePaymentMethod.id }"
       @click="updatePaymentMethod(gateway)"
       :title="gateway?.description || gateway?.title || 'Payment Method'">
-      <icon v-if="gateway.id === 'stripe'" name="ion:card-outline" size="20" />
+      <NuxtImg
+        v-if="gateway.icon"
+        :src="gateway.icon"
+        :alt="gateway.title || 'Payment Method'"
+        width="20"
+        height="20"
+        class="h-5 w-5 object-contain"
+        fit="outside"
+        loading="lazy" />
+      <icon v-else-if="gateway.id === 'stripe'" name="ion:card-outline" size="20" />
       <icon v-else-if="gateway.id === 'paypal'" name="ion:logo-paypal" size="20" />
       <icon v-else name="ion:cash-outline" size="20" />
       <span class="whitespace-nowrap" v-html="gateway.title" />
@@ -45,7 +54,7 @@ onMounted(() => {
 @reference "#tailwind";
 
 .option {
-  @apply bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200 cursor-pointer flex flex-1 text-sm py-3 px-4 gap-2 items-center hover:border-purple-300 dark:hover:border-purple-400 font-medium;
+  @apply bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200 cursor-pointer flex flex-1 text-sm py-3 px-4 gap-2 items-center hover:border-primary dark:hover:border-primary font-medium;
 
   &.active-option {
     @apply border-primary/50 cursor-default shadow-xs pointer-events-none;
