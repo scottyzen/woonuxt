@@ -25,7 +25,7 @@ fragment SimpleProduct on SimpleProduct {
     title
     databaseId
     cartSourceUrl: sourceUrl(size: THUMBNAIL)
-    producCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
+    productCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
   }
   galleryImages(first: 20) {
     nodes {

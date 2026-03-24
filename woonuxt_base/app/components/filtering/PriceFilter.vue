@@ -3,7 +3,7 @@ import { SliderRange, SliderRoot, SliderThumb, SliderTrack } from 'reka-ui';
 
 const { getFilter, setFilter, isFiltersActive } = useFiltering();
 const runtimeConfig = useRuntimeConfig();
-const maxPrice = runtimeConfig?.public?.MAX_PRICE || 1000;
+const maxPrice = Number(runtimeConfig?.public?.MAX_PRICE) || 1000;
 const currencySymbol = runtimeConfig?.public?.CURRENCY_SYMBOL || '$';
 
 const activeFilters = ref(getFilter('price'));

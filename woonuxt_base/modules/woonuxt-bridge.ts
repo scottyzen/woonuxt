@@ -124,12 +124,15 @@ export default defineNuxtModule({
       // Default env variables
       process.env.PRIMARY_COLOR = data.woonuxtSettings?.primary_color || '#7F54B2';
 
+      const configuredMaxPrice = Number(data.woonuxtSettings?.maxPrice);
+      const resolvedMaxPrice = Number.isFinite(configuredMaxPrice) && configuredMaxPrice > 0 ? Math.ceil(configuredMaxPrice) : 1000;
+
       // Default runtimeConfig
       nuxt.options.runtimeConfig.public.PRIMARY_COLOR = data.woonuxtSettings?.primary_color || '#7F54B2';
       nuxt.options.runtimeConfig.public.LOGO = data.woonuxtSettings?.logo || null;
       nuxt.options.runtimeConfig.public.PRODUCTS_PER_PAGE = data.woonuxtSettings?.productsPerPage || process.env.PRODUCTS_PER_PAGE || 24;
       nuxt.options.runtimeConfig.public.GLOBAL_PRODUCT_ATTRIBUTES = data.woonuxtSettings?.global_attributes || [];
-      nuxt.options.runtimeConfig.public.MAX_PRICE = data.woonuxtSettings?.maxPrice || 1000;
+      nuxt.options.runtimeConfig.public.MAX_PRICE = resolvedMaxPrice;
       nuxt.options.runtimeConfig.public.FRONT_END_URL = data.woonuxtSettings?.frontEndUrl || null;
       nuxt.options.runtimeConfig.public.BACKEND_URL = data.allSettings?.generalSettingsUrl || null;
       nuxt.options.runtimeConfig.public.CURRENCY_CODE = data.woonuxtSettings?.currencyCode || null;

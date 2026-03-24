@@ -26,7 +26,7 @@ const placeholderImage = '/images/placeholder.jpg';
 const sliderRef = ref<HTMLElement | null>(null);
 const currentSlide = ref(0);
 
-const mainImage = computed<string>(() => props.node?.image?.producCardSourceUrl || props.node?.image?.sourceUrl || placeholderImage);
+const mainImage = computed<string>(() => props.node?.image?.productCardSourceUrl || props.node?.image?.sourceUrl || placeholderImage);
 
 const matchesSelectedColor = (variation: ProductVariationFragment) => {
   if (!paColor.value.length) return false;
@@ -46,7 +46,7 @@ const sliderImages = computed<ProductImage[]>(() => {
     images.push(image);
   };
   const addVariationImage = (variation: ProductVariationFragment) => {
-    const src = variation?.image?.producCardSourceUrl || variation?.image?.sourceUrl;
+    const src = variation?.image?.productCardSourceUrl || variation?.image?.sourceUrl;
     if (!src) return;
     addImage({
       src,
@@ -77,7 +77,7 @@ const sliderImages = computed<ProductImage[]>(() => {
   if (paColor.value.length) {
     const matching = variations.filter((variation: ProductVariationFragment) => matchesSelectedColor(variation));
     if (matching.length) {
-      if (matching.some((variation: ProductVariationFragment) => (variation?.image?.producCardSourceUrl || variation?.image?.sourceUrl) === main.src)) {
+      if (matching.some((variation: ProductVariationFragment) => (variation?.image?.productCardSourceUrl || variation?.image?.sourceUrl) === main.src)) {
         addImage(main);
       }
       matching.forEach(addVariationImage);
@@ -99,7 +99,7 @@ const activeVariationImageSrc = computed<string | null>(() => {
   if (!paColor.value.length) return null;
   const variations = props.node?.variations?.nodes || [];
   const activeColorImage = variations.filter((variation: ProductVariationFragment) => matchesSelectedColor(variation));
-  if (activeColorImage?.length) return activeColorImage[0]?.image?.producCardSourceUrl || activeColorImage[0]?.image?.sourceUrl || null;
+  if (activeColorImage?.length) return activeColorImage[0]?.image?.productCardSourceUrl || activeColorImage[0]?.image?.sourceUrl || null;
   return null;
 });
 

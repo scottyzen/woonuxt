@@ -8,7 +8,7 @@ fragment ExternalProduct on ExternalProduct {
     title
     databaseId
     cartSourceUrl: sourceUrl(size: THUMBNAIL)
-    producCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
+    productCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
   }
   galleryImages(first: 20) {
     nodes {
