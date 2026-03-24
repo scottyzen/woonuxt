@@ -30,8 +30,8 @@ const activities = ref([
     description: '123 Main Street, New York, NY 10001',
     timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
     icon: 'ion:location-outline',
-    iconColor: 'text-purple-600',
-    iconBg: 'bg-purple-50',
+    iconColor: 'text-primary',
+    iconBg: 'bg-primary/10',
   },
   {
     id: 4,
