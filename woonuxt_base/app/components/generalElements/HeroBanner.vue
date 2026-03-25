@@ -8,8 +8,7 @@
       alt="Hero image"
       loading="eager"
       sizes="sm:100vw md:1400px"
-      fetchpriority="high"
-      preload
+      :preload="{ fetchPriority: 'high' }"
       placeholder
       placeholder-class="blur-xl" />
     <div class="container absolute inset-0 flex flex-col items-start justify-center bg-linear-to-l from-gray-200 sm:bg-none dark:text-gray-700">

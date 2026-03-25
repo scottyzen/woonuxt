@@ -53,7 +53,7 @@ const imgWidth = 640;
       :alt="imageToShow.altText || node.name"
       :title="imageToShow.title || node.name"
       :src="imageToShow.sourceUrl || FALLBACK_IMG"
-      fetchpriority="high"
+      :preload="{ fetchPriority: 'high' }"
       placeholder
       placeholder-class="blur-xl" />
     <div v-if="gallery.nodes.length" class="my-4 gallery-images">
