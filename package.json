@@ -24,7 +24,7 @@
     "@iconify-json/ion": "^1.2.7",
     "@nuxt/icon": "^2.2.1",
     "@nuxt/image": "2.0.0",
-    "@nuxtjs/i18n": "^10.2.3",
+    "@nuxtjs/i18n": "^10.2.4",
     "@tailwindcss/typography": "^0.5.19",
     "nuxt": "^4.4.2",
     "nuxt-graphql-client": "^0.2.46",
