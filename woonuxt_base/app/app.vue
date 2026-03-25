@@ -63,6 +63,10 @@ body {
   scroll-behavior: smooth;
 }
 
+html {
+  scrollbar-gutter: stable both-edges;
+}
+
 img {
   image-rendering: crisp-edges;
   image-rendering: -webkit-optimize-contrast;
