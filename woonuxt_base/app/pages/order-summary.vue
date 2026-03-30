@@ -8,7 +8,22 @@ const { formatDate, formatPrice, getErrorMessage } = useHelpers();
 const { t } = useI18n();
 const { cart, emptyCart, refreshCart } = useCart();
 
-const order = ref<Order | null>(null);
+const orderFallback = computed<Order | null>(() => {
+  if (typeof query.order_fallback === 'string') {
+    try {
+      return JSON.parse(decodeURIComponent(query.order_fallback)) as Order;
+    } catch {
+      try {
+        return JSON.parse(query.order_fallback) as Order;
+      } catch {
+        return null;
+      }
+    }
+  }
+  return null;
+});
+
+const order = ref<Order | null>(orderFallback.value || null);
 const fetchDelay = ref<boolean>(query.fetch_delay === 'true');
 const delayLength = 2500;
 const isLoaded = ref<boolean>(false);
@@ -55,16 +70,19 @@ onMounted(async () => {
 
 async function getOrder() {
   try {
-    const { customer } = await GqlGetOrder({ id: params.orderId as string });
+    const { customer } = await GqlGetOrder({ id: String(params.orderId) });
     const fetchedOrder = customer?.orders?.nodes?.[0];
 
     if (fetchedOrder) {
       order.value = fetchedOrder;
-    } else {
+      errorMessage.value = '';
+    } else if (!order.value) {
       errorMessage.value = 'Could not find order';
     }
   } catch (err: unknown) {
-    errorMessage.value = getErrorMessage(err) || 'Could not find order';
+    if (!order.value) {
+      errorMessage.value = getErrorMessage(err) || 'Could not find order';
+    }
   }
   isLoaded.value = true;
 }
@@ -83,7 +101,7 @@ useSeoMeta({
 
 <template>
   <div
-    class="w-full min-h-[600px] flex items-center p-4 text-gray-800 dark:text-gray-200 md:bg-white md:dark:bg-gray-800 md:rounded-xl md:mx-auto md:shadow-lg md:my-24 md:mt-8 md:max-w-3xl md:p-16 flex-col">
+    class="w-full min-h-150 flex items-center p-4 text-gray-800 dark:text-gray-200 md:bg-white md:dark:bg-gray-800 md:rounded-xl md:mx-auto md:shadow-lg md:my-24 md:mt-8 md:max-w-3xl md:p-16 flex-col">
     <LoadingIcon v-if="!isLoaded" class="flex-1" />
     <template v-else>
       <div v-if="order" class="w-full">
@@ -186,7 +204,7 @@ useSeoMeta({
           </div>
           <hr class="my-8 border-gray-200 dark:border-gray-700" />
           <div class="flex justify-between text-gray-900 dark:text-white">
-            <span class>{{ $t('shop.total') }}</span>
+            <span>{{ $t('shop.total') }}</span>
             <span class="font-semibold" v-html="order.total"></span>
           </div>
         </div>

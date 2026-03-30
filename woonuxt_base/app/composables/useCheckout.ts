@@ -52,15 +52,32 @@ export function useCheckout() {
     return paymentId === 'paypal' || paymentId === 'ppcp-gateway';
   };
 
+  const createOrderFallbackQueryValue = (checkoutOrder: any, orderId: string, orderKey: string): string => {
+    if (!import.meta.client) return '';
+
+    try {
+      const fallbackOrder = {
+        ...(checkoutOrder || {}),
+        databaseId: Number.parseInt(orderId, 10),
+        orderKey,
+      };
+
+      return encodeURIComponent(JSON.stringify(fallbackOrder));
+    } catch {
+      return '';
+    }
+  };
+
   // Helper function to handle PayPal redirect
-  const handlePayPalRedirect = async (checkout: any, orderId: string, orderKey: string): Promise<void> => {
+  const handlePayPalRedirect = async (checkout: any, orderId: string, orderKey: string, fallbackOrderParam = ''): Promise<void> => {
     const { replaceQueryParam } = useHelpers();
     const router = useRouter();
 
     const frontEndUrl = window.location.origin;
     let redirectUrl = checkout?.redirect ?? '';
+    const fallbackOrderQuery = fallbackOrderParam ? `&order_fallback=${fallbackOrderParam}` : '';
 
-    const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}&from_paypal=true`;
+    const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}&from_paypal=true${fallbackOrderQuery}`;
     const payPalCancelUrl = `${frontEndUrl}/checkout/?cancel_order=true&from_paypal=true`;
 
     redirectUrl = replaceQueryParam('return', payPalReturnUrl, redirectUrl);
@@ -70,7 +87,7 @@ export function useCheckout() {
     const isPayPalWindowClosed = await openPayPalWindow(redirectUrl);
 
     if (isPayPalWindowClosed) {
-      router.push(`/checkout/order-received/${orderId}/?key=${orderKey}&fetch_delay=true`);
+      router.push(`/checkout/order-received/${orderId}/?key=${orderKey}&fetch_delay=true${fallbackOrderQuery}`);
     }
   };
 
@@ -164,20 +181,28 @@ export function useCheckout() {
       // Handle account creation if requested
       await handleAccountCreation();
 
-      const orderId = checkout?.order?.databaseId as number | undefined;
-      const orderKey = checkout?.order?.orderKey as string | undefined;
+      const orderId = checkout?.order?.databaseId?.toString();
+      const orderKey = checkout?.order?.orderKey;
 
       // Ensure we have required order details
       if (!orderId || !orderKey) {
+        if (checkout?.redirect && import.meta.client) {
+          await finalizeCheckout(checkout);
+          window.location.href = checkout.redirect;
+          return checkout;
+        }
         throw new Error('Order ID or order key is missing from checkout response');
       }
 
+      const fallbackOrderParam = createOrderFallbackQueryValue(checkout?.order, orderId, orderKey);
+      const fallbackOrderQuery = fallbackOrderParam ? `&order_fallback=${fallbackOrderParam}` : '';
+
       // Handle PayPal redirect if needed
       if (checkout?.redirect && isPayPalPayment()) {
-        await handlePayPalRedirect(checkout, String(orderId), orderKey);
+        await handlePayPalRedirect(checkout, orderId, orderKey, fallbackOrderParam);
       } else {
         // Standard redirect to order received page
-        router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
+        router.push(`/checkout/order-received/${orderId}/?key=${orderKey}${fallbackOrderQuery}`);
       }
 
       // Finalize the checkout
