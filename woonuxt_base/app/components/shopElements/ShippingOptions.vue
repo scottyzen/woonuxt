@@ -13,39 +13,66 @@ const setActiveOption = async (id) => {
 </script>
 
 <template>
-  <div class="grid gap-4 shipping-options">
-    <div
+  <div class="shipping-options" role="radiogroup" aria-label="Shipping methods">
+    <button
       v-for="option in options"
       :key="option.id"
-      class="flex items-center justify-between option"
+      type="button"
+      class="shipping-option"
       :class="{ 'active-option': option.id === activeOption }"
+      role="radio"
+      :aria-checked="option.id === activeOption"
       @click="setActiveOption(option.id)">
-      <div>
-        <div class="text-sm leading-tight text-gray-600 dark:text-gray-200" v-html="option.label"></div>
-        <div class="font-semibold text-gray-800 dark:text-white">{{ currencySymbol }}{{ option.cost }}</div>
-      </div>
-
-      <icon name="ion:checkmark-circle" size="20" class="ml-auto opacity-0 text-primary checkmark" />
-    </div>
+      <span class="shipping-option-content">
+        <span class="shipping-option-label" v-html="option.label"></span>
+        <span class="shipping-option-price">{{ currencySymbol }}{{ option.cost }}</span>
+      </span>
+      <icon name="ion:checkmark-circle" size="20" class="shipping-option-check" />
+    </button>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="postcss">
 @reference "#tailwind";
 
 .shipping-options {
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  @apply grid gap-3;
+  container-type: inline-size;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
 
-  .option {
-    @apply bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md cursor-pointer flex flex-1 text-sm py-3 px-4 gap-2 items-center hover:border-primary dark:hover:border-primary transition-colors;
+.shipping-option {
+  @apply w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-left text-sm transition-colors hover:border-primary hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 dark:border-white/10 dark:bg-white/5 dark:hover:border-primary dark:hover:bg-white/10;
+  @apply flex items-center justify-between gap-3;
+}
 
-    &.active-option {
-      @apply border-primary/50 cursor-default shadow-xs pointer-events-none;
+.shipping-option-content {
+  @apply flex flex-col gap-1 min-w-0;
+}
 
-      & .checkmark {
-        @apply opacity-100;
-      }
-    }
+.shipping-option-label {
+  @apply text-sm font-medium text-gray-700 dark:text-gray-200;
+}
+
+.shipping-option-price {
+  @apply text-base font-semibold text-gray-900 dark:text-white;
+}
+
+.shipping-option-check {
+  @apply text-primary opacity-0 transition-opacity;
+}
+
+.shipping-option.active-option {
+  @apply border-primary bg-white dark:bg-primary/15;
+}
+
+.shipping-option.active-option .shipping-option-check {
+  @apply opacity-100;
+}
+
+@container (max-width: 36rem) {
+  .shipping-options {
+    grid-template-columns: 1fr;
   }
 }
 </style>

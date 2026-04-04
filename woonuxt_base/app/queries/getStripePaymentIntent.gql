@@ -1,9 +1,10 @@
-query getStripePaymentIntent($stripePaymentMethod: StripePaymentMethodEnum!) {
-  stripePaymentIntent(stripePaymentMethod: $stripePaymentMethod) {
+query getStripePaymentIntent($stripePaymentMethod: StripePaymentMethodEnum!, $customerId: String, $saveForFuture: Boolean) {
+  stripePaymentIntent(stripePaymentMethod: $stripePaymentMethod, customerId: $customerId, saveForFuture: $saveForFuture) {
     amount
     clientSecret
     error
     id
     currency
+    stripePaymentMethod
   }
 }

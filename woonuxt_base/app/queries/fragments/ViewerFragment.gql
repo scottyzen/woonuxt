@@ -7,6 +7,7 @@ fragment Viewer on User {
   username
   nicename
   wooSessionToken
+  stripeCustomerId
   avatar {
     url
   }

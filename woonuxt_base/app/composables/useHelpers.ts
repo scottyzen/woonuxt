@@ -144,10 +144,105 @@ export function useHelpers() {
   };
 
   type GqlErrorMessage = { message?: string | null };
-  type GqlErrorLike = { gqlErrors?: GqlErrorMessage[] };
+  type GqlErrorLike = {
+    gqlErrors?: GqlErrorMessage[];
+    message?: string | null;
+    response?: {
+      status?: number;
+      statusCode?: number;
+      errors?: GqlErrorMessage[];
+      data?: {
+        errors?: GqlErrorMessage[];
+        extensions?: {
+          debug?: Array<{ message?: string | null }>;
+        };
+      };
+    };
+    status?: number;
+    statusCode?: number;
+    cause?: {
+      response?: {
+        status?: number;
+        statusCode?: number;
+        data?: {
+          errors?: GqlErrorMessage[];
+          extensions?: {
+            debug?: Array<{ message?: string | null }>;
+          };
+        };
+      };
+    };
+  };
 
   const isGqlErrorLike = (value: unknown): value is GqlErrorLike => {
-    return typeof value === 'object' && value !== null && 'gqlErrors' in value;
+    return typeof value === 'object' && value !== null;
+  };
+
+  type ErrorContext = {
+    message?: string;
+    messages: string[];
+    status?: number;
+    isAuthError: boolean;
+  };
+
+  const getErrorContext = (error: unknown): ErrorContext => {
+    if (!isGqlErrorLike(error)) {
+      return {
+        message: undefined,
+        messages: [],
+        status: undefined,
+        isAuthError: false,
+      };
+    }
+
+    const messages: string[] = [];
+    const pushMessage = (value?: string | null) => {
+      if (!value) return;
+      const trimmed = value.trim();
+      if (!trimmed) return;
+      if (!messages.includes(trimmed)) messages.push(trimmed);
+    };
+
+    error.gqlErrors?.forEach((gqlError) => pushMessage(gqlError?.message));
+    error.response?.errors?.forEach((gqlError) => pushMessage(gqlError?.message));
+    error.response?.data?.errors?.forEach((gqlError) => pushMessage(gqlError?.message));
+    error.response?.data?.extensions?.debug?.forEach((debug) => pushMessage(debug?.message));
+    error.cause?.response?.data?.errors?.forEach((gqlError) => pushMessage(gqlError?.message));
+    error.cause?.response?.data?.extensions?.debug?.forEach((debug) => pushMessage(debug?.message));
+    pushMessage(error.message);
+
+    const status =
+      error.response?.status ??
+      error.response?.statusCode ??
+      error.status ??
+      error.statusCode ??
+      error.cause?.response?.status ??
+      error.cause?.response?.statusCode;
+    const lowerMessages = messages.map((msg) => msg.toLowerCase());
+    const authIndicators = [
+      'invalid session token',
+      'expired token',
+      'invalid-secret-key',
+      'forbidden',
+      'not authorized',
+      'not authenticated',
+      'authorization',
+      'authentication',
+      'jwt',
+      'the iss do not match with this server',
+    ];
+
+    const isAuthError =
+      status === 401 ||
+      status === 403 ||
+      lowerMessages.some((msg) => authIndicators.some((indicator) => msg.includes(indicator.toLowerCase())));
+
+    return {
+      message: messages[0],
+      messages,
+      status,
+      isAuthError,
+    };
   };
 
   /**
@@ -156,10 +251,10 @@ export function useHelpers() {
    * @returns The error message or undefined
    */
   const getErrorMessage = (error: unknown): string | undefined => {
-    const errorMessage = isGqlErrorLike(error) ? (error.gqlErrors?.[0]?.message ?? undefined) : undefined;
+    const { message: errorMessage } = getErrorContext(error);
 
     // Check for server errors that require clearing cookies and reloading
-    const serverErrors = ['The iss do not match with this server', 'Invalid session token', 'expired token', 'invalid-secret-key'];
+    const serverErrors = ['The iss do not match with this server', 'expired token', 'invalid-secret-key'];
     const shouldClearAndReload = serverErrors.some((serverError) => errorMessage?.toLowerCase().includes(serverError.toLowerCase()));
 
     if (shouldClearAndReload && import.meta.client) {
@@ -180,7 +275,7 @@ export function useHelpers() {
     const debugMessages = response?.extensions?.debug;
     if (!Array.isArray(debugMessages)) return;
 
-    const serverErrors = ['invalid-secret-key', 'expired token', 'Invalid session token'];
+    const serverErrors = ['invalid-secret-key', 'expired token'];
     const hasAuthError = debugMessages.some((debug: any) =>
       serverErrors.some((serverError) => debug?.message?.toLowerCase().includes(serverError.toLowerCase())),
     );
@@ -228,6 +323,7 @@ export function useHelpers() {
     scrollToTop,
     stripHtml,
     debounce,
+    getErrorContext,
     getErrorMessage,
     getDomain,
   };

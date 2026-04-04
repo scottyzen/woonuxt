@@ -1,4 +1,6 @@
-import type { AddToCartInput, ApiResponse, Cart, PaymentGateways, ProductDetail, SimpleProduct, Variation } from '#types/gql';
+import type { AddToCartInput, ApiResponse, Cart, Customer, PaymentGateways, ProductDetail, SimpleProduct, Variation } from '#types/gql';
+import { GetCartDocument } from '#gql/default';
+import type { GetCartQuery } from '#gql/default';
 
 let cartMutationQueue: Promise<void> = Promise.resolve();
 
@@ -19,7 +21,7 @@ export function useCart() {
   const optimisticServerCart = useState<Cart | null>('optimisticServerCart', () => null);
   const optimisticHadError = useState<boolean>('optimisticHadError', () => false);
   const paymentGateways = useState<PaymentGateways | null>('paymentGateways', () => null);
-  const { clearAllCookies, getErrorMessage } = useHelpers();
+  const { getDomain, getErrorContext, getErrorMessage } = useHelpers();
 
   type CartNode = NonNullable<NonNullable<Cart['contents']>['nodes']>[number];
   type CartItem = CartNode & { key: string };
@@ -217,26 +219,118 @@ export function useCart() {
       });
   };
 
+  type CartQueryPayload = {
+    cart?: Cart | null;
+    customer?: any;
+    viewer?: any;
+    paymentGateways?: PaymentGateways | null;
+    loginClients?: Array<any> | null;
+  };
+
+  const applyCartSnapshot = (payload: CartQueryPayload): void => {
+    const { updateCustomer, updateViewer, updateLoginClients } = useAuth();
+    const { cart, customer, viewer, paymentGateways, loginClients } = payload;
+    const hasKey = (key: keyof CartQueryPayload) => Object.prototype.hasOwnProperty.call(payload, key);
+
+    if (hasKey('cart')) updateCart(cart ?? null);
+    if (hasKey('viewer')) updateViewer(viewer ?? null);
+    if (customer) updateCustomer(customer);
+
+    if (paymentGateways) updatePaymentGateways(paymentGateways);
+    if (loginClients) updateLoginClients(loginClients.filter((client) => client !== null));
+  };
+
+  const extractCartPayloadFromError = (error: unknown): CartQueryPayload | null => {
+    const candidate =
+      (error as any)?.response?.data?.data ??
+      (error as any)?.response?.data ??
+      (error as any)?.data?.data ??
+      (error as any)?.data ??
+      null;
+
+    if (!candidate || typeof candidate !== 'object') return null;
+
+    const hasUsableCartFields =
+      Object.prototype.hasOwnProperty.call(candidate, 'cart') ||
+      Object.prototype.hasOwnProperty.call(candidate, 'customer') ||
+      Object.prototype.hasOwnProperty.call(candidate, 'viewer') ||
+      Object.prototype.hasOwnProperty.call(candidate, 'paymentGateways') ||
+      Object.prototype.hasOwnProperty.call(candidate, 'loginClients');
+
+    return hasUsableCartFields ? (candidate as CartQueryPayload) : null;
+  };
+
+  const fetchCartSnapshot = async (): Promise<CartQueryPayload> => {
+    const nuxtApp = useNuxtApp() as {
+      _gqlState?: {
+        value?: Record<string, { instance?: { request: <T>(args: { document: string; variables?: any }) => Promise<T> } }>;
+      };
+    };
+    const state = nuxtApp?._gqlState?.value ?? {};
+    const primaryClientState = state.default ?? state[Object.keys(state)[0] ?? ''];
+    const gqlClient = primaryClientState?.instance;
+
+    if (!gqlClient?.request) {
+      throw new Error('GraphQL client instance is not available');
+    }
+
+    return await gqlClient.request<GetCartQuery>({
+      document: GetCartDocument,
+    });
+  };
+
   /** Refesh the cart from the server
    * @returns {Promise<boolean>} - A promise that resolves
    * to true if the cart was successfully refreshed
    */
   async function refreshCart(): Promise<boolean> {
     try {
-      const { cart, customer, viewer, paymentGateways, loginClients } = await GqlGetCart();
-      const { updateCustomer, updateViewer, updateLoginClients } = useAuth();
-
-      if (cart) updateCart(cart);
-      if (customer) updateCustomer(customer);
-      if (viewer) updateViewer(viewer);
-      if (paymentGateways) updatePaymentGateways(paymentGateways);
-      if (loginClients) updateLoginClients(loginClients.filter((client) => client !== null));
-
+      const payload = await fetchCartSnapshot();
+      applyCartSnapshot(payload as CartQueryPayload);
       return true; // Cart was successfully refreshed
     } catch (error: unknown) {
-      const errorMsg = getErrorMessage(error);
-      console.error('Error refreshing cart:', errorMsg);
-      clearAllCookies();
+      if (import.meta.dev) {
+        console.debug('[Cart] refreshCart raw error object', error);
+      }
+
+      const recoveredPayload = extractCartPayloadFromError(error);
+      if (recoveredPayload) {
+        console.warn('[Cart] refreshCart recovered usable payload from non-2xx response.');
+        applyCartSnapshot(recoveredPayload);
+        return true;
+      }
+
+      const { status, message, messages, isAuthError } = getErrorContext(error);
+
+      console.error('[Cart] refreshCart failed', {
+        status: status ?? null,
+        message: message ?? null,
+        isAuthError,
+        messages,
+      });
+
+      if (isAuthError) {
+        console.warn('[Auth] Detected auth/session failure during cart refresh. Clearing auth/session state.');
+        useGqlToken(null);
+        useGqlHeaders({ Authorization: '', 'woocommerce-session': '' });
+
+        if (import.meta.client) {
+          useCookie<string | null>('woocommerce-session', { path: '/' }).value = null;
+          const domain = getDomain(window.location.href);
+          if (domain) {
+            useCookie<string | null>('woocommerce-session', { domain, path: '/' }).value = null;
+          }
+        }
+
+        const { updateCustomer, updateViewer } = useAuth();
+        updateViewer(null);
+        updateCustomer({ billing: {}, shipping: {} } as Customer);
+      }
+
+      if (!isAuthError) {
+        const errorMsg = getErrorMessage(error);
+        if (errorMsg) console.error('[Cart] refreshCart message:', errorMsg);
+      }
       resetInitialState();
       return false; // Cart was not successfully refreshed
     } finally {

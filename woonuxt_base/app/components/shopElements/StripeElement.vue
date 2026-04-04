@@ -1,36 +1,54 @@
 <script setup lang="ts">
-const { cart } = useCart();
-const { stripe } = defineProps(['stripe']);
-const appConfig = useAppConfig();
-const runtimeConfig = useRuntimeConfig();
+import type { Stripe, StripeElements } from '@stripe/stripe-js';
 
-const rawCartTotal = computed(() => cart.value && parseFloat(cart.value.rawTotal as string) * 100);
+const props = defineProps<{
+  stripe: Stripe;
+  clientSecret?: string | null;
+  amount?: number | null;
+  currency?: string | null;
+}>();
+const appConfig = useAppConfig();
+
 const emit = defineEmits(['updateElement']);
-let elements = null as any;
-let paymentElement = null as any;
+let elements: StripeElements | null = null;
+let paymentElement: any = null;
+let elementsMode: 'intent' | 'deferred' | null = null;
 
 // Get the payment method type from config (default to 'payment' to match app.config.ts)
 const paymentMethodType = computed(() => appConfig.stripePaymentMethod || 'payment');
+const normalizedCurrency = computed(() => (props.currency || '').toLowerCase());
+const normalizedAmount = computed(() => (typeof props.amount === 'number' ? Math.max(0, props.amount) : null));
+const canCreateDeferred = computed(
+  () => paymentMethodType.value === 'payment' && !props.clientSecret && !!normalizedCurrency.value && (normalizedAmount.value ?? 0) > 0,
+);
 
-// Get currency from runtime config, fallback to 'usd' if not available
-const currency = computed(() => {
-  const currencyCode = runtimeConfig.public?.CURRENCY_CODE;
-  return currencyCode ? currencyCode.toLowerCase() : 'usd';
-});
-
-const options = {
-  mode: 'payment' as const,
-  currency: currency.value,
-  amount: rawCartTotal.value || 100, // Ensure amount is always provided and never 0
-  // paymentMethodCreation: 'manual',
+const resetStripeElements = () => {
+  if (paymentElement) {
+    paymentElement.unmount();
+  }
+  paymentElement = null;
+  elements = null;
+  elementsMode = null;
 };
 
 const createStripeElements = async () => {
-  elements = stripe.elements(options);
+  resetStripeElements();
 
   // Create different element types based on config
   switch (paymentMethodType.value) {
     case 'payment':
+      if (props.clientSecret) {
+        elements = props.stripe.elements({ clientSecret: props.clientSecret });
+        elementsMode = 'intent';
+      } else {
+        if (!canCreateDeferred.value) return;
+        elements = props.stripe.elements({
+          mode: 'payment',
+          currency: normalizedCurrency.value,
+          amount: normalizedAmount.value ?? 0,
+        });
+        elementsMode = 'deferred';
+      }
       // Modern Payment Element - supports multiple payment methods
       paymentElement = elements.create('payment', {
         layout: 'tabs',
@@ -53,6 +71,8 @@ const createStripeElements = async () => {
 
     case 'card':
     default:
+      elements = props.stripe.elements();
+      elementsMode = 'intent';
       // Traditional Card Element - single card input
       // Check if dark mode is active
       const isDarkMode = document.documentElement.classList.contains('dark');
@@ -73,34 +93,41 @@ const createStripeElements = async () => {
       break;
   }
 
-  emit('updateElement', elements);
+  if (elements) emit('updateElement', elements);
 };
 
-// Recreate elements when cart total or currency changes
+// Recreate elements when payment method or client secret changes
 watch(
-  () => [rawCartTotal.value, currency.value],
-  ([newAmount, newCurrency]) => {
-    if (newAmount && elements && typeof newCurrency === 'string') {
-      // Update the options with new amount and currency
-      options.amount = Number(newAmount);
-      options.currency = newCurrency;
-      // Note: In v8.0.0, you would need to recreate elements for amount changes
-      // For now, we'll keep the existing element since amount changes are less critical for card setup
+  () => [paymentMethodType.value, props.clientSecret],
+  () => {
+    if (paymentMethodType.value === 'payment' && !props.clientSecret && !canCreateDeferred.value) {
+      resetStripeElements();
+      return;
     }
+    createStripeElements();
   },
 );
 
-// Watch for payment method type changes and recreate elements
-watch(
-  () => paymentMethodType.value,
-  () => {
-    if (elements && paymentElement) {
-      // Unmount current element before creating new one
-      paymentElement.unmount();
-      createStripeElements();
-    }
-  },
-);
+watch([normalizedAmount, normalizedCurrency], async ([amount, currency]) => {
+  if (paymentMethodType.value !== 'payment') return;
+  if (!elements || elementsMode !== 'deferred') return;
+  if (!amount || !currency) return;
+
+  try {
+    await elements.update({
+      mode: 'payment',
+      amount,
+      currency,
+    });
+  } catch (error) {
+    console.error('Failed to update Stripe elements:', error);
+  }
+});
+
+watch(canCreateDeferred, (canCreate) => {
+  if (!canCreate || elements || paymentMethodType.value !== 'payment') return;
+  createStripeElements();
+});
 
 onMounted(() => {
   createStripeElements();
@@ -110,10 +137,7 @@ onMounted(() => {
 <template>
   <div class="stripe-elements-container">
     <!-- Payment Element container (shows multiple payment methods in tabs/accordion) -->
-    <div
-      v-if="paymentMethodType === 'payment'"
-      id="payment-element"
-      class="stripe-element bg-white dark:bg-gray-700 rounded-md p-4 border border-gray-300 dark:border-gray-600">
+    <div v-if="paymentMethodType === 'payment'" id="payment-element" class="stripe-element">
       <!-- Payment Element will be mounted here -->
     </div>
 

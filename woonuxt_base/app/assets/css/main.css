@@ -2,7 +2,7 @@
 
 /* Center container */
 .container {
-  @apply mx-auto px-4;
+  @apply mx-auto px-4 md:px-12 max-w-360;
 }
 
 @theme {
@@ -10,9 +10,6 @@
   --color-primary: var(--color-primary, #7f54b2);
   --color-primary-light: oklch(from var(--color-primary) calc(l + 0.15) c h);
   --color-primary-dark: oklch(from var(--color-primary) calc(l - 0.15) c h);
-
-  /* Breakpoints */
-  --breakpoint-2xl: 1400px;
 
   /* Spacing for Safe Areas */
   --spacing-safe: env(safe-area-inset-bottom);
@@ -41,7 +38,6 @@
   .dark .select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath stroke='%23D1D5DB' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
   }
-
 
   .wn-form input[type='text'],
   .wn-form input[type='email'],

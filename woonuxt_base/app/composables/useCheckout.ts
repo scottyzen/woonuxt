@@ -8,6 +8,9 @@ export function useCheckout() {
     return {
       customerNote: '',
       paymentMethod: '',
+      createAccount: false,
+      username: '',
+      password: '',
       shipToDifferentAddress: false,
       metaData: [{ key: 'order_via', value: 'WooNuxt' }],
     };

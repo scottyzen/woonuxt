@@ -35,6 +35,14 @@ const isCheckoutPage = computed<boolean>(() => name === 'order-received');
 const orderIsNotCompleted = computed<boolean>(() => order.value?.status !== OrderStatusEnum.COMPLETED);
 const hasDiscount = computed<boolean>(() => !!parseFloat(order.value?.rawDiscountTotal || '0'));
 const downloadableItems = computed(() => order.value?.downloadableItems?.nodes || []);
+const hasClearedCart = ref<boolean>(false);
+
+const clearCartIfNeeded = async () => {
+  if (hasClearedCart.value || !isCheckoutPage.value || !order.value) return;
+  hasClearedCart.value = true;
+  await emptyCart();
+  await refreshCart();
+};
 
 onBeforeMount(() => {
   /**
@@ -47,13 +55,8 @@ onBeforeMount(() => {
 onMounted(async () => {
   await getOrder();
 
-  // Clear the cart once the order is confirmed to be loaded
-  // This prevents the cart flash on the checkout page during navigation
-  // Only clear if cart has items to avoid "Cart is empty" errors
-  if (order.value && isCheckoutPage.value && cart.value?.contents?.nodes?.length) {
-    await emptyCart();
-    await refreshCart();
-  }
+  // Clear the cart once the order is confirmed to be loaded.
+  await clearCartIfNeeded();
 
   /**
    * WooCommerce sometimes takes a while to update the order status.
@@ -67,6 +70,14 @@ onMounted(async () => {
     }, delayLength);
   }
 });
+
+watch(
+  () => cart.value,
+  () => {
+    void clearCartIfNeeded();
+  },
+  { immediate: true },
+);
 
 async function getOrder() {
   try {

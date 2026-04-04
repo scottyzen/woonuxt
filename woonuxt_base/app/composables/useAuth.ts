@@ -15,7 +15,7 @@ import type {
 
 export const useAuth = () => {
   const { refreshCart, updateCart } = useCart();
-  const { clearAllCookies, getErrorMessage } = useHelpers();
+  const { clearAllCookies, getDomain, getErrorMessage } = useHelpers();
   const router = useRouter();
 
   const customer = useState<Customer>('customer', () => ({ billing: {}, shipping: {} }));
@@ -130,12 +130,21 @@ export const useAuth = () => {
       if (logout) {
         // Clear auth token/header before refreshing cart to avoid stale auth state.
         useGqlToken(null);
-        useGqlHeaders({ Authorization: '' });
+        useGqlHeaders({ Authorization: '', 'woocommerce-session': '' });
+
+        if (import.meta.client) {
+          useCookie<string | null>('woocommerce-session', { path: '/' }).value = null;
+          const domain = getDomain(window.location.href);
+          if (domain) {
+            useCookie<string | null>('woocommerce-session', { domain, path: '/' }).value = null;
+          }
+        }
 
         clearAllCookies();
 
         clearReturnUrl(); // Clear any stored return URL on logout
         updateCart({}); // Clear cart on logout
+        updateCustomer({ billing: {}, shipping: {} } as Customer);
         updateViewer(null);
       }
       return { success: true };
@@ -169,7 +178,9 @@ export const useAuth = () => {
     const sessionToken = payload?.sessionToken;
     if (sessionToken) {
       useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken}` });
-      const newToken = useCookie('woocommerce-session');
+      const domain = import.meta.client ? getDomain(window.location.href) : '';
+      const cookieOptions = domain ? { domain, path: '/' } : { path: '/' };
+      const newToken = useCookie<string | null>('woocommerce-session', cookieOptions);
       newToken.value = sessionToken;
     }
     customer.value = payload;
