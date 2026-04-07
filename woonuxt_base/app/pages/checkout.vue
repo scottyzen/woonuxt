@@ -381,7 +381,7 @@ useSeoMeta({
         <div class="checkout-form grid w-full gap-8 wn-form lg:flex-1">
           <!-- Customer details -->
           <div v-if="!viewer && customer?.billing" class="checkout-section">
-            <h2 class="w-full mb-2 text-2xl font-semibold leading-none dark:text-white">Contact Information</h2>
+            <h3 class="w-full mb-2 text-xl font-semibold leading-none dark:text-white">Contact Information</h3>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
               Already have an account? <NuxtLink to="/my-account" @click="navigateToLogin('/checkout')" class="text-primary text-semibold">Log in</NuxtLink>.
             </p>
@@ -411,15 +411,15 @@ useSeoMeta({
                 <PasswordInput id="password" class="my-2" v-model="orderInput.password" placeholder="••••••••••" :required="true" />
               </div>
             </template>
-            <div v-if="!viewer" class="flex items-center gap-2 my-2">
-              <label for="creat-account">Create an account?</label>
+            <div v-if="!viewer" class="flex items-center gap-2 mt-4">
               <input id="creat-account" v-model="orderInput.createAccount" type="checkbox" name="creat-account" />
+              <label for="creat-account">Create an account?</label>
             </div>
           </div>
 
           <!-- Shipping Address Section -->
           <div v-if="shouldShowShippingFlow" class="checkout-section">
-            <h2 class="mb-4 text-2xl font-semibold leading-none text-gray-900 dark:text-white">Billing</h2>
+            <h3 class="mb-4 text-xl font-semibold leading-none text-gray-900 dark:text-white">Billing</h3>
 
             <div class="space-y-6">
               <div>
@@ -442,13 +442,13 @@ useSeoMeta({
 
           <div v-if="shipToDifferentAddress" class="checkout-section">
             <div class="mb-6">
-              <h2 class="mb-2 text-2xl font-semibold leading-none text-gray-900 dark:text-white">Shipping Address</h2>
+              <h3 class="mb-2 text-xl font-semibold leading-none text-gray-900 dark:text-white">Shipping Address</h3>
             </div>
             <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
           </div>
           <!-- Fallback: For fully virtual carts, show only billing details -->
           <div v-if="!shouldShowShippingFlow" class="checkout-section">
-            <h2 class="w-full mb-3 text-2xl font-semibold dark:text-white">{{ $t('billing.billingDetails') }}</h2>
+            <h3 class="w-full mb-3 text-xl font-semibold dark:text-white">{{ $t('billing.billingDetails') }}</h3>
             <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
           </div>
 
@@ -464,7 +464,7 @@ useSeoMeta({
 
           <!-- Pay methods -->
           <div v-if="checkoutPaymentGateways?.nodes.length" class="checkout-section col-span-full">
-            <h2 class="mb-4 text-xl font-semibold leading-none dark:text-white">{{ $t('billing.paymentOptions') }}</h2>
+            <h3 class="mb-4 text-xl font-semibold leading-none dark:text-white">{{ $t('billing.paymentOptions') }}</h3>
             <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :payment-gateways="checkoutPaymentGateways" />
             <StripeElement
               v-if="stripe"
@@ -490,7 +490,7 @@ useSeoMeta({
 
           <!-- Order note -->
           <div class="checkout-section">
-            <h2 class="mb-4 text-xl font-semibold leading-none dark:text-white">{{ $t('shop.orderNote') }} ({{ $t('general.optional') }})</h2>
+            <h3 class="mb-4 text-xl font-semibold leading-none dark:text-white">{{ $t('shop.orderNote') }} ({{ $t('general.optional') }})</h3>
             <textarea
               id="order-note"
               v-model="orderInput.customerNote"

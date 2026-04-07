@@ -1,4 +1,5 @@
 import type { AddToCartInput, ApiResponse, Cart, Customer, PaymentGateways, ProductDetail, SimpleProduct, Variation } from '#types/gql';
+
 import { GetCartDocument } from '#gql/default';
 import type { GetCartQuery } from '#gql/default';
 
@@ -227,6 +228,17 @@ export function useCart() {
     loginClients?: Array<any> | null;
   };
 
+  const syncWooSession = (token?: string | null): void => {
+    if (!token) return;
+    useGqlHeaders({ 'woocommerce-session': `Session ${token}` });
+
+    if (!import.meta.client) return;
+    const domain = getDomain(window.location.href);
+    const cookieOptions = domain ? { domain, path: '/' } : { path: '/' };
+    const sessionCookie = useCookie<string | null>('woocommerce-session', cookieOptions);
+    sessionCookie.value = token;
+  };
+
   const applyCartSnapshot = (payload: CartQueryPayload): void => {
     const { updateCustomer, updateViewer, updateLoginClients } = useAuth();
     const { cart, customer, viewer, paymentGateways, loginClients } = payload;
@@ -235,18 +247,14 @@ export function useCart() {
     if (hasKey('cart')) updateCart(cart ?? null);
     if (hasKey('viewer')) updateViewer(viewer ?? null);
     if (customer) updateCustomer(customer);
+    if (!customer?.sessionToken && viewer?.wooSessionToken) syncWooSession(viewer.wooSessionToken);
 
     if (paymentGateways) updatePaymentGateways(paymentGateways);
     if (loginClients) updateLoginClients(loginClients.filter((client) => client !== null));
   };
 
   const extractCartPayloadFromError = (error: unknown): CartQueryPayload | null => {
-    const candidate =
-      (error as any)?.response?.data?.data ??
-      (error as any)?.response?.data ??
-      (error as any)?.data?.data ??
-      (error as any)?.data ??
-      null;
+    const candidate = (error as any)?.response?.data?.data ?? (error as any)?.response?.data ?? (error as any)?.data?.data ?? (error as any)?.data ?? null;
 
     if (!candidate || typeof candidate !== 'object') return null;
 
@@ -274,9 +282,7 @@ export function useCart() {
       throw new Error('GraphQL client instance is not available');
     }
 
-    return await gqlClient.request<GetCartQuery>({
-      document: GetCartDocument,
-    });
+    return await gqlClient.request<GetCartQuery>({ document: GetCartDocument });
   };
 
   /** Refesh the cart from the server
