@@ -45,7 +45,7 @@
   .wn-form input[type='password'],
   .wn-form textarea,
   .wn-form select {
-    @apply bg-white border rounded-md outline-hidden border-gray-300 shadow-inner w-full py-2 px-4 text-base text-gray-900 leading-6 dark:bg-gray-700 dark:border-gray-600 dark:text-white;
+    @apply bg-gray-50 border rounded-md outline-hidden border-gray-300 shadow-inner w-full py-2 px-4 text-base text-gray-900 leading-6 dark:bg-gray-700 dark:border-gray-600 dark:text-white;
   }
 
   .wn-form select {

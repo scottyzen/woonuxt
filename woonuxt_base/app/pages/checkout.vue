@@ -522,7 +522,7 @@ useSeoMeta({
 }
 
 .checkout-section {
-  @apply w-full rounded-lg border border-gray-200 bg-white p-6 shadow-xs dark:border-gray-700 dark:bg-gray-800/60;
+  @apply w-full rounded-lg bg-white p-6 shadow-sm dark:bg-gray-800/60;
 }
 
 /* Keep only the scale-y transition for email validation */
