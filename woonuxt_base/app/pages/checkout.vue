@@ -377,7 +377,7 @@ useSeoMeta({
         </NuxtLink>
       </div>
 
-      <form v-else class="checkout-container container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-20" @submit.prevent="payNow">
+      <form v-else class="checkout-container container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-16" @submit.prevent="payNow">
         <div class="checkout-form grid w-full gap-8 wn-form lg:flex-1">
           <!-- Customer details -->
           <div v-if="!viewer && customer?.billing" class="checkout-section">
