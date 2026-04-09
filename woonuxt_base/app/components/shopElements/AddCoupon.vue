@@ -24,7 +24,7 @@ async function submitCoupon(): Promise<void> {
         :placeholder="$t('shop.couponCode')"
         class="w-full bg-gray-50 border border-gray-300 rounded-md shadow-inner outline-hidden px-4 py-2 text-base text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
         required />
-      <Button :loading="isUpdatingCoupon" :disabled="couponCode === ''" type="submit" variant="primary" class="min-w-20">
+      <Button :loading="isUpdatingCoupon" :disabled="couponCode === '' || isUpdatingCoupon" type="submit" variant="primary" class="min-w-20">
         {{ $t('general.apply') }}
       </Button>
     </form>
