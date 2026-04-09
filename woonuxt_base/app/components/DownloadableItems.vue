@@ -37,7 +37,7 @@ const props = defineProps({
 @reference "#tailwind";
 
 tbody tr:nth-child(odd) {
-  @apply bg-gray-50 dark:bg-gray-700/50;
+  @apply bg-gray-50;
 }
 
 thead tr {
@@ -45,11 +45,11 @@ thead tr {
 }
 
 tbody tr {
-  @apply text-xs sm:text-sm text-gray-500 dark:text-gray-400;
+  @apply text-xs sm:text-sm text-gray-500;
 }
 
 td,
 th {
-  @apply py-2 px-3 dark:text-gray-300;
+  @apply py-2 px-3;
 }
 </style>

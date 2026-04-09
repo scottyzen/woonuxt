@@ -42,7 +42,7 @@ const setActiveOption = async (id) => {
 }
 
 .shipping-option {
-  @apply w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-left text-sm transition-colors hover:border-primary hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 dark:border-white/10 dark:bg-white/5 dark:hover:border-primary dark:hover:bg-white/10;
+  @apply w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-left text-sm transition-colors hover:border-primary hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40;
   @apply flex items-center justify-between gap-3;
 }
 
@@ -51,11 +51,11 @@ const setActiveOption = async (id) => {
 }
 
 .shipping-option-label {
-  @apply text-sm font-medium text-gray-700 dark:text-gray-200;
+  @apply text-sm font-medium text-gray-700;
 }
 
 .shipping-option-price {
-  @apply text-base font-semibold text-gray-900 dark:text-white;
+  @apply text-base font-semibold text-gray-900;
 }
 
 .shipping-option-check {
@@ -63,7 +63,7 @@ const setActiveOption = async (id) => {
 }
 
 .shipping-option.active-option {
-  @apply border-primary bg-white dark:bg-primary/15;
+  @apply border-primary bg-white;
 }
 
 .shipping-option.active-option .shipping-option-check {

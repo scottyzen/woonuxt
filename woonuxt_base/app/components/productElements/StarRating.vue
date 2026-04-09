@@ -25,6 +25,6 @@ const display = computed(() => {
       :size="size + ''"
       class="mr-0.5"
       :style="{ color: i <= display.full || (i === display.full + 1 && display.half) ? '#FBBE24' : '#ccc' }" />
-    <span v-if="count !== null && !hideCount" class="text-xs ml-1 text-gray-500 dark:text-gray-400">({{ count }})</span>
+    <span v-if="count !== null && !hideCount" class="text-xs ml-1 text-gray-500 ">({{ count }})</span>
   </div>
 </template>

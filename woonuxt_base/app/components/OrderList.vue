@@ -18,8 +18,7 @@ const goToOrder = (databaseId?: string | number | null): void => {
 </script>
 
 <template>
-  <div
-    class="bg-white dark:bg-gray-800 rounded-lg flex shadow-xs border border-gray-100 dark:border-gray-700 min-h-62.5 p-4 md:p-8 justify-center items-center">
+  <div class="bg-white rounded-lg flex shadow-xs border border-gray-100 min-h-62.5 p-4 md:p-8 justify-center items-center">
     <div v-if="orders && orders.length" class="w-full">
       <table class="w-full text-left table-auto" aria-label="Order List">
         <thead>
@@ -34,7 +33,7 @@ const goToOrder = (databaseId?: string | number | null): void => {
           <tr
             v-for="order in orders"
             :key="order.orderNumber || String(order.databaseId)"
-            class="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+            class="cursor-pointer hover:bg-gray-50 transition-colors"
             @click="goToOrder(order.databaseId)">
             <td class="rounded-l-lg">{{ order.orderNumber }}</td>
             <td>{{ formatDate(order.date) }}</td>
@@ -44,18 +43,13 @@ const goToOrder = (databaseId?: string | number | null): void => {
         </tbody>
       </table>
       <div class="text-center flex justify-center w-full mt-8">
-        <button
-          type="button"
-          @click="refresh"
-          class="flex items-center gap-1 text-sm leading-none hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded transition-colors">
+        <button type="button" @click="refresh" class="flex items-center gap-1 text-sm leading-none hover:bg-gray-50 p-2 rounded transition-colors">
           <span>Refresh list</span>
           <Icon name="ion:refresh-outline" />
         </button>
       </div>
     </div>
-    <div v-else-if="orders && orders.length === 0" class="min-h-62.5 flex items-center justify-center text-gray-500 dark:text-gray-400 text-lg">
-      No orders found.
-    </div>
+    <div v-else-if="orders && orders.length === 0" class="min-h-62.5 flex items-center justify-center text-gray-500 text-lg">No orders found.</div>
     <LoadingIcon v-else size="24" stroke="2" />
   </div>
 </template>
@@ -64,15 +58,15 @@ const goToOrder = (databaseId?: string | number | null): void => {
 @reference "#tailwind";
 
 tbody tr:nth-child(odd) {
-  @apply bg-gray-50 dark:bg-gray-700/50;
+  @apply bg-gray-50;
 }
 
 tbody tr {
-  @apply text-sm text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200;
+  @apply text-sm text-gray-500  hover:text-gray-800;
 }
 
 td,
 th {
-  @apply py-2 px-3 dark:text-gray-300;
+  @apply py-2 px-3;
 }
 </style>

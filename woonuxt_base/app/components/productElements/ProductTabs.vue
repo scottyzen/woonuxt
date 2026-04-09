@@ -34,7 +34,7 @@ const activeTab = ref(0);
 <template>
   <Tabs v-if="tabs.length" v-model="activeTab" :tabs="tabs">
     <template #default="{ activeTab: currentTab }">
-      <div v-if="currentTab === 0 && product.description" class="font-light prose dark:prose-invert" v-html="product.description" />
+      <div v-if="currentTab === 0 && product.description" class="font-light prose " v-html="product.description" />
       <ProductReviews v-else-if="currentTab === 1 || (currentTab === 0 && !product.description)" :product="product" />
     </template>
   </Tabs>

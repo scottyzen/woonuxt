@@ -24,28 +24,28 @@ useSeoMeta({
 
         <!-- Order Summary Sidebar -->
         <div class="lg:col-span-1">
-          <div class="sticky top-24 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">{{ $t('shop.orderSummary') }}</h2>
+          <div class="sticky top-24 bg-white  rounded-lg shadow-md p-6 border border-gray-200 ">
+            <h2 class="text-xl font-semibold text-gray-900  mb-4">{{ $t('shop.orderSummary') }}</h2>
 
             <div class="space-y-3 mb-6">
-              <div class="flex justify-between text-gray-700 dark:text-gray-300">
+              <div class="flex justify-between text-gray-700 ">
                 <span>{{ $t('shop.subtotal') }}</span>
                 <span class="font-medium tabular-nums" v-html="cart.subtotal" />
               </div>
 
-              <div v-if="cart.shippingTotal" class="flex justify-between text-gray-700 dark:text-gray-300">
+              <div v-if="cart.shippingTotal" class="flex justify-between text-gray-700 ">
                 <span>{{ $t('general.shipping') }}</span>
                 <span class="font-medium tabular-nums"> {{ parseFloat(cart.shippingTotal) > 0 ? '+' : '' }} <span v-html="cart.shippingTotal"></span> </span>
               </div>
 
-              <div v-if="cart.discountTotal && parseFloat(cart.rawDiscountTotal || '0') > 0" class="flex justify-between text-primary dark:text-primary-light">
+              <div v-if="cart.discountTotal && parseFloat(cart.rawDiscountTotal || '0') > 0" class="flex justify-between text-primary ">
                 <span>{{ $t('shop.discount') }}</span>
                 <span class="font-medium tabular-nums">- <span v-html="cart.discountTotal" /></span>
               </div>
 
-              <div class="border-t border-gray-200 dark:border-gray-700 pt-3 flex justify-between items-center">
-                <span class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('shop.total') }}</span>
-                <span class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums" v-html="cart.total" />
+              <div class="border-t border-gray-200  pt-3 flex justify-between items-center">
+                <span class="text-lg font-semibold text-gray-900 ">{{ $t('shop.total') }}</span>
+                <span class="text-2xl font-bold text-gray-900  tabular-nums" v-html="cart.total" />
               </div>
             </div>
 

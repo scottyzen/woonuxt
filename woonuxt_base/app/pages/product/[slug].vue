@@ -326,7 +326,7 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
         <div class="w-full lg:max-w-md xl:max-w-lg md:py-2">
           <div class="flex justify-between mb-4">
             <div class="flex-1">
-              <h1 class="flex flex-wrap items-center gap-2 mb-2 text-2xl font-sesmibold dark:text-white">
+              <h1 class="flex flex-wrap items-center gap-2 mb-2 text-2xl font-sesmibold">
                 {{ displayProduct.name }}
                 <LazyWPAdminLink :link="`/wp-admin/post.php?post=${product.databaseId}&action=edit`">Edit</LazyWPAdminLink>
               </h1>
@@ -337,18 +337,18 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
 
           <div class="grid gap-2 my-8 text-sm empty:hidden">
             <div v-if="!isExternalProduct" class="flex items-center gap-2">
-              <span class="text-gray-400 dark:text-gray-500">{{ $t('shop.availability') }}: </span>
+              <span class="text-gray-400">{{ $t('shop.availability') }}: </span>
               <StockStatus :stockStatus="stockStatus" @updated="mergeLiveStockStatus" />
             </div>
             <div class="flex items-center gap-2" v-if="storeSettings.showSKU && product?.sku">
-              <span class="text-gray-400 dark:text-gray-500">{{ $t('shop.sku') }}: </span>
-              <span class="dark:text-gray-300">{{ product?.sku || 'N/A' }}</span>
+              <span class="text-gray-400">{{ $t('shop.sku') }}: </span>
+              <span class="">{{ product?.sku || 'N/A' }}</span>
             </div>
           </div>
 
-          <div class="mb-8 font-light prose dark:prose-invert" v-html="product.shortDescription || product.description" />
+          <div class="mb-8 font-light prose" v-html="product.shortDescription || product.description" />
 
-          <hr class="border-gray-300 dark:border-gray-600" />
+          <hr class="border-gray-300" />
 
           <form @submit.prevent="handleAddToCart">
             <AttributeSelections
@@ -360,13 +360,13 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
               @attrs-changed="updateSelectedVariations" />
             <div
               v-if="isVariableProduct || isSimpleProduct"
-              class="fixed bottom-0 left-0 z-10 flex items-center w-full gap-4 p-4 mt-12 shadow-lg bg-white/90 md:static md:bg-transparent md:p-0 md:shadow-none dark:shadow-gray-900">
+              class="fixed bottom-0 left-0 z-10 flex items-center w-full gap-4 p-4 mt-12 shadow-lg bg-white/90 md:static md:bg-transparent md:p-0 md:shadow-none">
               <input
                 v-model="quantity"
                 type="number"
                 min="1"
                 aria-label="Quantity"
-                class="flex items-center justify-center w-20 gap-4 p-2 text-left bg-white border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-hidden dark:text-white" />
+                class="flex items-center justify-center w-20 gap-4 p-2 text-left bg-white border border-gray-300 rounded-lg focus:outline-hidden" />
               <Button class="flex-1 w-full" :disabled="disabledAddToCart" :loading="addToCartLoading" type="submit">
                 {{ $t('shop.addToCart') }}
               </Button>
@@ -375,7 +375,7 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
               v-if="externalProduct?.externalUrl"
               :href="externalProduct.externalUrl"
               target="_blank"
-              class="rounded-lg flex font-bold bg-gray-800 dark:bg-gray-700 text-white text-center min-w-37.5 p-2.5 gap-4 items-center justify-center focus:outline-hidden hover:bg-gray-700 dark:hover:bg-gray-600">
+              class="rounded-lg flex font-bold bg-gray-800 text-white text-center min-w-37.5 p-2.5 gap-4 items-center justify-center focus:outline-hidden hover:bg-gray-700">
               {{ externalProduct?.buttonText || 'View product' }}
             </a>
           </form>
@@ -383,20 +383,20 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
           <div v-if="storeSettings.showProductCategoriesOnSingleProduct && product.productCategories">
             <div class="grid gap-2 my-8 text-sm">
               <div class="flex items-center gap-2">
-                <span class="text-gray-400 dark:text-gray-500">{{ $t('shop.category', 2) }}:</span>
+                <span class="text-gray-400">{{ $t('shop.category', 2) }}:</span>
                 <div class="product-categories">
                   <NuxtLink
                     v-for="category in product.productCategories.nodes"
                     :key="category.databaseId"
                     :to="`/product-category/${decodeURIComponent(category?.slug || '')}`"
-                    class="hover:text-primary dark:text-gray-300 dark:hover:text-primary"
+                    class="hover:text-primary"
                     :title="category.name || ''"
                     >{{ category.name }}<span class="comma">, </span>
                   </NuxtLink>
                 </div>
               </div>
             </div>
-            <hr class="border-gray-300 dark:border-gray-600" />
+            <hr class="border-gray-300" />
           </div>
 
           <div class="flex flex-wrap gap-4">
@@ -409,7 +409,7 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
         <ProductTabs :product />
       </div>
       <div class="my-32" v-if="product.related && storeSettings.showRelatedProducts">
-        <div class="mb-4 text-xl font-semibold dark:text-white">{{ $t('shop.youMayLike') }}</div>
+        <div class="mb-4 text-xl font-semibold">{{ $t('shop.youMayLike') }}</div>
         <LazyProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
       </div>
     </div>

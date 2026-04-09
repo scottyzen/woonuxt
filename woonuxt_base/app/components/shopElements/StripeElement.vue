@@ -287,6 +287,6 @@ onMounted(() => {
 }
 
 .stripe-card-shell {
-  @apply rounded-md border border-gray-300 bg-gray-50 px-4 py-2 shadow-inner dark:border-gray-600 dark:bg-gray-700;
+  @apply rounded-md border border-gray-300 bg-gray-50 px-4 py-2 shadow-inner;
 }
 </style>

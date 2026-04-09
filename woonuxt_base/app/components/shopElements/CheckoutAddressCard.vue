@@ -35,17 +35,17 @@ const addressLines = computed(() => {
 
 <template>
   <div
-    class="rounded-[1.75rem] border-2 border-gray-900/90 bg-white px-5 py-5 shadow-[0_16px_32px_-24px_rgba(15,23,42,0.45)] dark:border-white/15 dark:bg-gray-900/40">
+    class="rounded-[1.75rem] border-2 border-gray-900/90 bg-white px-5 py-5 shadow-[0_16px_32px_-24px_rgba(15,23,42,0.45)]  ">
     <div class="flex items-start gap-4">
-      <div class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-gray-300 bg-white shadow-xs dark:border-white/20 dark:bg-gray-800">
-        <span class="h-4.5 w-4.5 rounded-full bg-gray-900 dark:bg-white" />
+      <div class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-gray-300 bg-white shadow-xs  ">
+        <span class="h-4.5 w-4.5 rounded-full bg-gray-900 " />
       </div>
 
       <div class="min-w-0 flex-1">
         <div class="flex items-start justify-between gap-4">
           <div class="min-w-0">
-            <p class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white sm:text-[2rem] sm:leading-none">{{ fullName }}</p>
-            <div class="mt-3 space-y-1.5 text-base leading-7 text-gray-700 dark:text-gray-300 sm:text-lg">
+            <p class="text-xl font-semibold tracking-tight text-gray-900  sm:text-[2rem] sm:leading-none">{{ fullName }}</p>
+            <div class="mt-3 space-y-1.5 text-base leading-7 text-gray-700  sm:text-lg">
               <p v-for="line in addressLines" :key="line" class="truncate sm:whitespace-normal">{{ line }}</p>
             </div>
           </div>
@@ -53,7 +53,7 @@ const addressLines = computed(() => {
           <button
             type="button"
             :aria-label="actionAriaLabel"
-            class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-white/10 dark:hover:text-white"
+            class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900   "
             @click="emit('edit')">
             <Icon name="ion:pencil-outline" size="20" />
           </button>

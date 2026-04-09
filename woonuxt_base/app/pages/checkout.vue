@@ -366,7 +366,7 @@ useSeoMeta({
               <div>
                 <div class="flex flex-wrap items-center gap-3">
                   <div class="flex items-center gap-3">
-                    <h3 class="flex flex-1 items-center gap-2 text-xl font-semibold leading-none dark:text-white">
+                    <h3 class="flex flex-1 items-center gap-2 text-xl font-semibold leading-none">
                       <span>{{ $t('billing.billingDetails') }}</span>
                     </h3>
                     <span
@@ -378,12 +378,12 @@ useSeoMeta({
                 </div>
               </div>
 
-              <p v-if="!viewer" class="text-sm text-gray-500 dark:text-gray-400">
+              <p v-if="!viewer" class="text-sm text-gray-500">
                 Already have an account?
                 <NuxtLink
                   to="/my-account"
                   @click="navigateToLogin('/checkout')"
-                  class="font-medium text-gray-900 underline decoration-gray-400 underline-offset-4 transition-colors hover:text-primary dark:text-white dark:decoration-white/40">
+                  class="font-medium text-gray-900 underline decoration-gray-400 underline-offset-4 transition-colors hover:text-primary">
                   Sign in
                 </NuxtLink>
               </p>
@@ -427,7 +427,7 @@ useSeoMeta({
               <input id="creat-account" v-model="orderInput.createAccount" type="checkbox" name="creat-account" />
               <label for="creat-account">Create an account?</label>
             </div>
-            <hr v-if="!viewer" class="flex-1 my-6 border-gray-300 dark:border-gray-600" />
+            <hr v-if="!viewer" class="flex-1 my-6 border-gray-300" />
 
             <div class="mt-6">
               <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
@@ -439,8 +439,8 @@ useSeoMeta({
                 v-model="shipToDifferentAddress"
                 type="checkbox"
                 name="ship-to-different-address"
-                class="w-4 h-4 bg-white border-gray-300 rounded-sm text-primary dark:bg-gray-700 dark:border-gray-600 focus:ring-3 focus:ring-primary" />
-              <label for="ship-to-different-address" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                class="w-4 h-4 bg-white border-gray-300 rounded-sm text-primary focus:ring-3 focus:ring-primary" />
+              <label for="ship-to-different-address" class="text-sm font-medium text-gray-700">
                 {{ $t('billing.differentAddress') }}
               </label>
             </div>
@@ -448,7 +448,7 @@ useSeoMeta({
 
           <div v-if="shipToDifferentAddress" class="checkout-section">
             <div class="mb-6">
-              <h3 class="flex items-center gap-2 text-xl font-semibold leading-none text-gray-900 dark:text-white">
+              <h3 class="flex items-center gap-2 text-xl font-semibold leading-none text-gray-900">
                 <span>{{ $t('general.shippingAddress') }}</span>
               </h3>
             </div>
@@ -456,19 +456,19 @@ useSeoMeta({
           </div>
           <!-- Shipping methods -->
           <div v-if="shouldShowShippingFlow" class="checkout-section">
-            <h3 class="mb-4 flex items-center gap-2 text-xl font-semibold leading-none dark:text-white">
+            <h3 class="mb-4 flex items-center gap-2 text-xl font-semibold leading-none">
               <span>{{ $t('general.shippingSelect') }}</span>
             </h3>
             <ShippingOptions
               v-if="hasAvailableShippingMethods && cart?.chosenShippingMethods?.[0]"
               :options="cart?.availableShippingMethods?.[0]?.rates ?? []"
               :active-option="cart.chosenShippingMethods[0]" />
-            <p v-else class="text-sm text-amber-600 dark:text-amber-400">Add or confirm your shipping address to load shipping methods.</p>
+            <p v-else class="text-sm text-amber-600">Add or confirm your shipping address to load shipping methods.</p>
           </div>
 
           <!-- Pay methods -->
           <div v-if="checkoutPaymentGateways?.nodes.length" class="checkout-section col-span-full">
-            <h3 class="mb-4 flex items-center gap-2 text-xl font-semibold leading-none dark:text-white">
+            <h3 class="mb-4 flex items-center gap-2 text-xl font-semibold leading-none">
               <span>{{ $t('billing.paymentOptions') }}</span>
             </h3>
             <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :payment-gateways="checkoutPaymentGateways" />
@@ -487,16 +487,14 @@ useSeoMeta({
                 v-model="savePaymentMethod"
                 type="checkbox"
                 name="save-payment-method"
-                class="mt-0.5 h-4 w-4 rounded-sm border-gray-300 bg-white text-primary focus:ring-3 focus:ring-primary dark:border-gray-600 dark:bg-gray-700" />
-              <label for="save-payment-method" class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Save payment information to my account for future purchases.
-              </label>
+                class="mt-0.5 h-4 w-4 rounded-sm border-gray-300 bg-white text-primary focus:ring-3 focus:ring-primary" />
+              <label for="save-payment-method" class="text-sm font-medium text-gray-700"> Save payment information to my account for future purchases. </label>
             </div>
           </div>
 
           <!-- Order note -->
           <div class="checkout-section">
-            <h3 class="mb-4 text-xl font-semibold leading-none dark:text-white">{{ $t('shop.orderNote') }} ({{ $t('general.optional') }})</h3>
+            <h3 class="mb-4 text-xl font-semibold leading-none">{{ $t('shop.orderNote') }} ({{ $t('general.optional') }})</h3>
             <textarea
               id="order-note"
               v-model="orderInput.customerNote"
@@ -528,7 +526,7 @@ useSeoMeta({
 }
 
 .checkout-section {
-  @apply w-full rounded-lg bg-white p-4 sm:p-8 shadow dark:bg-gray-800/60 outline-gray-800/10 outline dark:outline-gray-50/10;
+  @apply w-full rounded-lg bg-white p-4 sm:p-8 shadow  outline-gray-800/10 outline;
 }
 
 /* Keep only the scale-y transition for email validation */

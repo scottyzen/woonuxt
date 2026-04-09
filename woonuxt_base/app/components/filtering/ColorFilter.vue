@@ -21,9 +21,9 @@ const checkboxChanged = () => {
 </script>
 
 <template>
-  <div class="cursor-pointer flex font-semibold pt-8 pb-4 leading-none justify-between items-center text-gray-900 dark:text-white" @click="isOpen = !isOpen">
+  <div class="cursor-pointer flex font-semibold pt-8 pb-4 leading-none justify-between items-center text-gray-900" @click="isOpen = !isOpen">
     <span>{{ filterTitle }}</span>
-    <Icon name="ion:chevron-down-outline" class="transform text-gray-600 dark:text-gray-400" :class="isOpen ? 'rotate-180' : ''" />
+    <Icon name="ion:chevron-down-outline" class="transform text-gray-600" :class="isOpen ? 'rotate-180' : ''" />
   </div>
   <div v-show="isOpen" class="mr-6 max-h-60 grid gap-1.5 swatches overflow-auto custom-scrollbar">
     <div v-for="color in attribute.terms" :key="color.slug" :style="{ '--color': color.slug }" :title="color.name">
