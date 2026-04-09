@@ -120,15 +120,16 @@ export function useCheckout() {
         return { address1, address2, city, country, postcode, state };
       };
 
+      if (!orderInput.value.shipToDifferentAddress && customer.value?.billing) {
+        if (!customer.value.shipping) {
+          customer.value.shipping = { ...customer.value.billing };
+        } else {
+          Object.assign(customer.value.shipping, { ...customer.value.billing });
+        }
+      }
+
       const shippingSource = customer.value?.shipping ?? customer.value?.billing;
       const billingSource = orderInput.value.shipToDifferentAddress ? customer.value?.billing : shippingSource;
-
-      if (!orderInput.value.shipToDifferentAddress && customer.value?.billing && shippingSource) {
-        Object.assign(customer.value.billing, {
-          ...shippingSource,
-          email: customer.value.billing.email,
-        });
-      }
 
       const shipping = pickLocation(shippingSource);
       const billing = pickLocation(billingSource);

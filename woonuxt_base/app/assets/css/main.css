@@ -62,7 +62,7 @@
   }
 
   .wn-form label {
-    @apply dark:text-gray-300;
+    @apply dark:text-gray-300 inline-block leading-loose text-sm text-gray-700;
   }
 
   .wn-form input.has-error,
