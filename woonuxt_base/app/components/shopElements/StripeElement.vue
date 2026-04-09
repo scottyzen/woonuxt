@@ -266,15 +266,8 @@ onMounted(() => {
 
 <template>
   <div class="stripe-elements-container">
-    <!-- Payment Element container (shows multiple payment methods in tabs/accordion) -->
-    <div v-if="paymentMethodType === 'payment'" id="payment-element" class="stripe-element">
-      <!-- Payment Element will be mounted here -->
-    </div>
-
-    <!-- Card Element container (traditional single card input) -->
-    <div v-else id="card-element" class="stripe-element stripe-card-shell">
-      <!-- Card Element will be mounted here -->
-    </div>
+    <div v-if="paymentMethodType === 'payment'" id="payment-element" class="stripe-element"></div>
+    <div v-else id="card-element" class="stripe-element stripe-card-shell"></div>
   </div>
 </template>
 
