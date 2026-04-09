@@ -8,7 +8,6 @@ const props = defineProps<{
   currency?: string | null;
 }>();
 const appConfig = useAppConfig();
-const colorMode = useColorMode();
 
 const emit = defineEmits(['updateElement']);
 let elements: StripeElements | null = null;
@@ -19,7 +18,6 @@ let elementsMode: 'intent' | 'deferred' | null = null;
 const paymentMethodType = computed(() => appConfig.stripePaymentMethod || 'payment');
 const normalizedCurrency = computed(() => (props.currency || '').toLowerCase());
 const normalizedAmount = computed(() => (typeof props.amount === 'number' ? Math.max(0, props.amount) : null));
-const isDarkMode = computed(() => colorMode.value === 'dark');
 const canCreateDeferred = computed(
   () => paymentMethodType.value === 'payment' && !props.clientSecret && !!normalizedCurrency.value && (normalizedAmount.value ?? 0) > 0,
 );
@@ -36,19 +34,19 @@ const resolveBodyFontFamily = (): string => {
 
 const stripeAppearance = computed<Appearance>(() => {
   const primaryColor = resolveRootCssVariable('--color-primary', '#7f54b2');
-  const backgroundColor = isDarkMode.value ? '#374151' : '#f9fafb';
-  const borderColor = isDarkMode.value ? '#4b5563' : '#d1d5db';
-  const surfaceColor = isDarkMode.value ? '#1f2937' : '#ffffff';
-  const surfaceBorderColor = isDarkMode.value ? '#4b5563' : '#e5e7eb';
-  const textColor = isDarkMode.value ? '#f9fafb' : '#111827';
-  const mutedTextColor = isDarkMode.value ? '#d1d5db' : '#374151';
-  const placeholderColor = isDarkMode.value ? '#9ca3af' : '#9ca3af';
-  const errorColor = isDarkMode.value ? '#f87171' : '#ef4444';
-  const shadowColor = isDarkMode.value ? 'rgba(0, 0, 0, 0.24)' : 'rgba(15, 23, 42, 0.05)';
-  const insetShadowColor = isDarkMode.value ? 'rgba(15, 23, 42, 0.35)' : 'rgba(15, 23, 42, 0.06)';
+  const backgroundColor = '#f9fafb';
+  const borderColor = '#d1d5db';
+  const surfaceColor = '#ffffff';
+  const surfaceBorderColor = '#e5e7eb';
+  const textColor = '#111827';
+  const mutedTextColor = '#374151';
+  const placeholderColor = '#9ca3af';
+  const errorColor = '#ef4444';
+  const shadowColor = 'rgba(15, 23, 42, 0.05)';
+  const insetShadowColor = 'rgba(15, 23, 42, 0.06)';
 
   return {
-    theme: isDarkMode.value ? 'night' : 'flat',
+    theme: 'flat',
     labels: 'above' as const,
     inputs: 'spaced' as const,
     variables: {
@@ -58,8 +56,8 @@ const stripeAppearance = computed<Appearance>(() => {
       colorTextSecondary: mutedTextColor,
       colorTextPlaceholder: placeholderColor,
       colorDanger: errorColor,
-      iconColor: isDarkMode.value ? '#d1d5db' : '#6b7280',
-      iconCardCvcColor: isDarkMode.value ? '#d1d5db' : '#6b7280',
+      iconColor: '#6b7280',
+      iconCardCvcColor: '#6b7280',
       iconCardErrorColor: errorColor,
       fontFamily: resolveBodyFontFamily(),
       fontSizeBase: '16px',
@@ -110,7 +108,7 @@ const stripeAppearance = computed<Appearance>(() => {
         boxShadow: '0 0 0 1px var(--colorPrimary)',
       },
       '.TabIcon': {
-        color: isDarkMode.value ? '#d1d5db' : '#6b7280',
+        color: '#6b7280',
       },
       '.TabIcon--selected': {
         color: 'var(--colorPrimary)',
@@ -145,18 +143,18 @@ const stripeAppearance = computed<Appearance>(() => {
 
 const stripeCardStyle = computed(() => ({
   base: {
-    color: isDarkMode.value ? '#f9fafb' : '#111827',
+    color: '#111827',
     fontFamily: resolveBodyFontFamily(),
     fontSize: '16px',
     fontSmoothing: 'antialiased',
-    iconColor: isDarkMode.value ? '#d1d5db' : '#6b7280',
+    iconColor: '#6b7280',
     '::placeholder': {
       color: '#9ca3af',
     },
   },
   invalid: {
-    color: isDarkMode.value ? '#fca5a5' : '#dc2626',
-    iconColor: isDarkMode.value ? '#f87171' : '#ef4444',
+    color: '#dc2626',
+    iconColor: '#ef4444',
   },
 }));
 
@@ -254,21 +252,6 @@ watch([normalizedAmount, normalizedCurrency], async ([amount, currency]) => {
   } catch (error) {
     console.error('Failed to update Stripe elements:', error);
   }
-});
-
-watch(isDarkMode, async () => {
-  if (!elements) return;
-
-  if (paymentMethodType.value === 'payment') {
-    try {
-      await elements.update({ appearance: stripeAppearance.value });
-      return;
-    } catch (error) {
-      console.error('Failed to restyle Stripe elements:', error);
-    }
-  }
-
-  createStripeElements();
 });
 
 watch(canCreateDeferred, (canCreate) => {

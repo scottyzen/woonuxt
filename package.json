@@ -12,7 +12,6 @@
     "typecheck": "nuxi typecheck"
   },
   "dependencies": {
-    "@nuxtjs/color-mode": "^4.0.0",
     "@stripe/stripe-js": "^9.1.0",
     "@tailwindcss/postcss": "^4.2.2",
     "@vueuse/core": "^14.2.1",

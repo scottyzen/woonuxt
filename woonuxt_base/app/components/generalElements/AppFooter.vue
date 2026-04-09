@@ -11,9 +11,6 @@ const { wishlistLink } = useAuth();
         <WebsiteShortDescription />
         <div class="inline-flex gap-2 justify-start mt-8">
           <LangSwitcher />
-          <ClientOnly>
-            <ColorModeSwitcher />
-          </ClientOnly>
         </div>
       </div>
       <div class="w-[42.857%] lg:w-auto">
