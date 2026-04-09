@@ -21,12 +21,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       initialised = true;
 
       const { refreshCart } = useCart();
-      console.info('[Init] Starting store init', {
-        path: useRoute().path,
-        hasWooSessionCookie: !!sessionToken.value,
-      });
       let success: boolean = await refreshCart();
-      console.info('[Init] refreshCart attempt #1', { success });
 
       useGqlError((err: any) => {
         const serverErrors = ['The iss do not match with this server'];
@@ -44,7 +39,6 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
         // Retry the cart refresh with clean state
         success = await refreshCart();
-        console.info('[Init] refreshCart attempt #2', { success });
       }
     }
 

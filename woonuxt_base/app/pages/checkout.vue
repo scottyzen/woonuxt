@@ -15,8 +15,14 @@ const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
 const buttonText = ref<string>(isProcessingOrder.value ? t('general.processing') : t('shop.checkoutButton'));
 const savePaymentMethod = ref<boolean>(false);
 
-type StripeViewer = Viewer & { stripeCustomerId?: string | null };
-const stripeCustomerId = computed<string | null>(() => (viewer.value as StripeViewer | null)?.stripeCustomerId ?? null);
+type CheckoutViewer = Viewer & {
+  stripeCustomerId?: string | null;
+  email?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  databaseId?: number | null;
+};
+const stripeCustomerId = computed<string | null>(() => (viewer.value as CheckoutViewer | null)?.stripeCustomerId ?? null);
 const isCreatingAccountAtCheckout = computed<boolean>(() => !viewer.value && !!orderInput.value.createAccount);
 const canSavePaymentMethod = computed<boolean>(() => !!viewer.value || isCreatingAccountAtCheckout.value);
 const checkoutPaymentGateways = computed(() => paymentGateways.value);
@@ -42,6 +48,12 @@ const resolveStripeAmount = (rawTotal: string | number | null | undefined, curre
 };
 
 const stripeAmount = computed(() => resolveStripeAmount(cart.value?.rawTotal ?? '0', stripeCurrency.value));
+const viewerEmail = computed<string>(() => customer.value?.billing?.email || (viewer.value as CheckoutViewer | null)?.email || '');
+const viewerFirstName = computed<string>(() => customer.value?.billing?.firstName || (viewer.value as CheckoutViewer | null)?.firstName || '');
+const viewerCustomerId = computed<number | null>(() => (viewer.value as CheckoutViewer | null)?.databaseId ?? null);
+const viewerGreeting = computed<string>(() =>
+  viewerFirstName.value ? `${customer.value?.billing?.firstName} ${customer.value?.billing?.lastName || ''}` : 'Hello',
+);
 const resolvePaymentMethodId = (paymentMethod: unknown): string => {
   if (typeof paymentMethod === 'string') return paymentMethod;
   if (paymentMethod && typeof paymentMethod === 'object' && 'id' in paymentMethod) {
@@ -179,6 +191,12 @@ watch(
   },
   { immediate: true },
 );
+
+watchEffect(() => {
+  if (viewer.value && customer.value?.billing && !customer.value.billing.email && viewerEmail.value) {
+    customer.value.billing.email = viewerEmail.value;
+  }
+});
 
 const payNow = async () => {
   buttonText.value = t('general.processing');
@@ -360,36 +378,56 @@ useSeoMeta({
 
       <form v-else class="checkout-container container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-16" @submit.prevent="payNow">
         <div class="checkout-form grid w-full gap-8 wn-form lg:flex-1">
+          <div v-if="viewer" class="flex w-full flex-wrap items-center justify-between gap-4">
+            <div class="min-w-0 space-y-1">
+              <div class="text-2xl font-semibold leading-none text-gray-900 flex gap-2 items-end">
+                <span>{{ viewerGreeting }}</span>
+                <span
+                  v-if="viewerCustomerId"
+                  class="inline-block leading-none text-primary font-normal text-sm border-primary/20 bg-primary/10 border rounded p-0.5">
+                  #{{ viewerCustomerId }}</span
+                >
+              </div>
+              <span v-if="viewerEmail" class="truncate" :title="viewerEmail">{{ viewerEmail }}</span>
+            </div>
+            <NuxtLink
+              to="/my-account"
+              class="text-sm font-medium text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:text-primary">
+              Manage account
+            </NuxtLink>
+          </div>
+
           <!-- Billing details -->
           <div v-if="customer?.billing" class="checkout-section">
-            <div class="flex flex-wrap items-start gap-4 sm:flex-nowrap sm:items-center sm:justify-between">
-              <div>
-                <div class="flex flex-wrap items-center gap-3">
-                  <div class="flex items-center gap-3">
-                    <h3 class="flex flex-1 items-center gap-2 text-xl font-semibold leading-none">
-                      <span>{{ $t('billing.billingDetails') }}</span>
-                    </h3>
-                    <span
-                      v-if="!viewer"
-                      class="inline-flex items-center rounded-sm border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs font-semibold tracking-wide text-primary">
-                      Guest
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <p v-if="!viewer" class="text-sm text-gray-500">
-                Already have an account?
-                <NuxtLink
-                  to="/my-account"
-                  @click="navigateToLogin('/checkout')"
-                  class="font-medium text-gray-900 underline decoration-gray-400 underline-offset-4 transition-colors hover:text-primary">
-                  Sign in
-                </NuxtLink>
-              </p>
+            <div>
+              <h3 class="text-xl font-semibold leading-none">
+                {{ $t('billing.billingDetails') }}
+              </h3>
             </div>
 
-            <div class="w-full mt-4">
+            <div
+              v-if="!viewer"
+              class="mt-4 flex flex-col gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <p class="text-sm font-semibold text-gray-900">Guest checkout</p>
+                  <span
+                    class="inline-flex items-center rounded-sm border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs font-semibold tracking-wide text-primary">
+                    Guest
+                  </span>
+                </div>
+                <p class="mt-1 text-sm text-gray-500">Use guest checkout, or sign in to use your saved details.</p>
+              </div>
+
+              <NuxtLink
+                to="/my-account"
+                @click="navigateToLogin('/checkout')"
+                class="text-sm font-medium text-gray-900 underline decoration-gray-400 underline-offset-4 transition-colors hover:text-primary">
+                Sign in
+              </NuxtLink>
+            </div>
+
+            <div v-if="!viewer" class="w-full mt-4">
               <label for="email">{{ $t('billing.email') }}</label>
               <input
                 v-model="customer.billing.email"
@@ -397,8 +435,6 @@ useSeoMeta({
                 autocomplete="email"
                 type="email"
                 name="email"
-                :readonly="!!viewer"
-                :aria-readonly="!!viewer"
                 :class="{ 'has-error': isInvalidEmail }"
                 @blur="checkEmailOnBlur(customer.billing.email)"
                 @input="checkEmailOnInput(customer.billing.email)"
@@ -429,7 +465,7 @@ useSeoMeta({
             </div>
             <hr v-if="!viewer" class="flex-1 my-6 border-gray-300" />
 
-            <div class="mt-6">
+            <div :class="viewer ? 'mt-4' : 'mt-6'">
               <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
             </div>
 
