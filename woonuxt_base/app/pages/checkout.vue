@@ -39,10 +39,11 @@ const resolveStripeAmount = (rawTotal: string | number | null | undefined, curre
   const parsed = Number.parseFloat(String(rawTotal ?? '0'));
   if (!Number.isFinite(parsed)) return 0;
 
-  const fractionDigits = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: currency.toUpperCase(),
-  }).resolvedOptions().maximumFractionDigits;
+  const fractionDigits =
+    new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currency.toUpperCase(),
+    }).resolvedOptions().maximumFractionDigits ?? 2;
 
   return Math.round(parsed * 10 ** fractionDigits);
 };
@@ -50,10 +51,10 @@ const resolveStripeAmount = (rawTotal: string | number | null | undefined, curre
 const stripeAmount = computed(() => resolveStripeAmount(cart.value?.rawTotal ?? '0', stripeCurrency.value));
 const viewerEmail = computed<string>(() => customer.value?.billing?.email || (viewer.value as CheckoutViewer | null)?.email || '');
 const viewerFirstName = computed<string>(() => customer.value?.billing?.firstName || (viewer.value as CheckoutViewer | null)?.firstName || '');
-const viewerCustomerId = computed<number | null>(() => (viewer.value as CheckoutViewer | null)?.databaseId ?? null);
 const viewerGreeting = computed<string>(() =>
-  viewerFirstName.value ? `${customer.value?.billing?.firstName} ${customer.value?.billing?.lastName || ''}` : 'Hello',
+  viewerFirstName.value ? `Welcome back, ${customer.value?.billing?.firstName} ${customer.value?.billing?.lastName || ''}` : 'Welcome',
 );
+
 const resolvePaymentMethodId = (paymentMethod: unknown): string => {
   if (typeof paymentMethod === 'string') return paymentMethod;
   if (paymentMethod && typeof paymentMethod === 'object' && 'id' in paymentMethod) {
@@ -378,23 +379,20 @@ useSeoMeta({
 
       <form v-else class="checkout-container container flex flex-wrap items-start gap-8 my-16 justify-evenly lg:gap-16" @submit.prevent="payNow">
         <div class="checkout-form grid w-full gap-8 wn-form lg:flex-1">
-          <div v-if="viewer" class="flex w-full flex-wrap items-center justify-between gap-4">
-            <div class="min-w-0 space-y-1">
-              <div class="text-2xl font-semibold leading-none text-gray-900 flex gap-2 items-end">
-                <span>{{ viewerGreeting }}</span>
-                <span
-                  v-if="viewerCustomerId"
-                  class="inline-block leading-none text-primary font-normal text-sm border-primary/20 bg-primary/10 border rounded p-0.5">
-                  #{{ viewerCustomerId }}</span
-                >
+          <div v-if="viewer" class="checkout-section">
+            <div class="">
+              <div class="flex flex-wrap items-center gap-2">
+                <h1 class="text-2xl font-semibold leading-none text-gray-900">{{ viewerGreeting }}</h1>
               </div>
-              <span v-if="viewerEmail" class="truncate" :title="viewerEmail">{{ viewerEmail }}</span>
+              <p v-if="viewerEmail" class="flex flex-wrap items-center gap-2 text-sm text-gray-600 mt-4">
+                <span class="text-gray-400">Email: </span>
+                <span class="truncate" :title="viewerEmail">{{ viewerEmail }}</span>
+              </p>
+              <p v-if="viewer.databaseId" class="flex flex-wrap items-center gap-2 text-sm text-gray-600">
+                <span class="text-gray-400">Customer ID: </span>
+                <span>#{{ viewer.databaseId }}</span>
+              </p>
             </div>
-            <NuxtLink
-              to="/my-account"
-              class="text-sm font-medium text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:text-primary">
-              Manage account
-            </NuxtLink>
           </div>
 
           <!-- Billing details -->
