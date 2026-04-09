@@ -6,15 +6,19 @@ const linkTitle = computed<string>(() => viewer.value?.username || 'Sign In');
 </script>
 
 <template>
-  <NuxtLink to="/my-account" :title="linkTitle" @click="navigateToLogin(route.fullPath)" class="hidden sm:inline-flex aspect-square items-center">
+  <div class="hidden sm:inline-flex aspect-square items-center">
     <Transition name="pop-in" mode="out-in">
-      <span v-if="avatar" class="relative avatar">
-        <img
-          :src="avatar"
-          class="rounded-full transform scale-125 shadow-md overflow-hidden border border-white my-auto"
-          width="22"
-          height="22"
-          :alt="linkTitle" />
+      <div v-if="viewer" class="relative avatar">
+        <NuxtLink to="/my-account" :title="linkTitle" class="inline-flex items-center">
+          <img
+            v-if="avatar"
+            :src="avatar"
+            class="rounded-full transform scale-125 shadow-md overflow-hidden border border-white my-auto"
+            width="22"
+            height="22"
+            :alt="linkTitle" />
+          <Icon v-else name="ion:person-outline" size="22" class="border border-transparent" />
+        </NuxtLink>
         <div class="account-dropdown font-semibold">
           <Button to="/my-account" size="sm" variant="ghost" class="w-full justify-start" icon="ion:person"> My Account </Button>
           <Button :to="wishlistLink" size="sm" variant="ghost" class="w-full justify-start" icon="ion:heart"> Wishlist </Button>
@@ -24,15 +28,17 @@ const linkTitle = computed<string>(() => viewer.value?.username || 'Sign In');
             variant="ghost"
             class="w-full justify-start text-red-600 hover:bg-red-50"
             icon="ion:log-out"
-            @click="logoutUser"
+            @click.stop="logoutUser"
             :loading="isPending">
             Logout
           </Button>
         </div>
-      </span>
-      <Icon v-else name="ion:person-outline" size="22" class="border border-transparent" />
+      </div>
+      <NuxtLink v-else to="/my-account" :title="linkTitle" @click="navigateToLogin(route.fullPath)" class="inline-flex items-center">
+        <Icon name="ion:person-outline" size="22" class="border border-transparent" />
+      </NuxtLink>
     </Transition>
-  </NuxtLink>
+  </div>
 </template>
 
 <style scoped>

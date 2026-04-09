@@ -125,37 +125,51 @@ export const useAuth = () => {
   // Log out the user
   async function logoutUser(): Promise<AuthResponse> {
     isPending.value = true;
+    let errorMsg: string | undefined;
+
     try {
       const { logout } = await GqlLogout();
-      if (logout) {
-        // Clear auth token/header before refreshing cart to avoid stale auth state.
-        useGqlToken(null);
-        useGqlHeaders({ Authorization: '', 'woocommerce-session': '' });
-
-        if (import.meta.client) {
-          useCookie<string | null>('woocommerce-session', { path: '/' }).value = null;
-          const domain = getDomain(window.location.href);
-          if (domain) {
-            useCookie<string | null>('woocommerce-session', { domain, path: '/' }).value = null;
-          }
-        }
-
-        clearAllCookies();
-
-        clearReturnUrl(); // Clear any stored return URL on logout
-        updateCart({}); // Clear cart on logout
-        updateCustomer({ billing: {}, shipping: {} } as Customer);
-        updateViewer(null);
+      if (!logout?.success) {
+        errorMsg = 'There was an error logging out. Your session was cleared locally.';
       }
-      return { success: true };
     } catch (error: unknown) {
-      const errorMsg = getErrorMessage(error);
-      return { success: false, error: errorMsg };
+      errorMsg = getErrorMessage(error);
+    }
+
+    try {
+      // Clear auth token/header before refreshing cart to avoid stale auth state.
+      useGqlToken(null);
+      useGqlHeaders({ Authorization: '', 'woocommerce-session': '' });
+
+      if (import.meta.client) {
+        useCookie<string | null>('woocommerce-session', { path: '/' }).value = null;
+        const domain = getDomain(window.location.href);
+        if (domain) {
+          useCookie<string | null>('woocommerce-session', { domain, path: '/' }).value = null;
+        }
+      }
+
+      clearAllCookies();
+      clearReturnUrl();
+
+      orders.value = null;
+      downloads.value = null;
+      updateCustomer({ billing: {}, shipping: {} } as Customer);
+      updateViewer(null);
+
+      const refreshed = await refreshCart();
+      if (!refreshed) updateCart(null);
+
+      if (errorMsg) {
+        return { success: false, error: errorMsg };
+      }
+
+      return { success: true };
     } finally {
       if (router.currentRoute.value.path === '/my-account' && viewer.value === null) {
-        router.push('/my-account');
+        await router.push('/my-account');
       } else {
-        router.push('/');
+        await router.push('/');
       }
     }
   }
