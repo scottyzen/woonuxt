@@ -395,26 +395,13 @@ useSeoMeta({
             </div>
           </div>
 
-          <!-- Billing details -->
-          <div v-if="customer?.billing" class="checkout-section">
-            <div>
-              <h3 class="text-xl font-semibold leading-none">
-                {{ $t('billing.billingDetails') }}
-              </h3>
-            </div>
-
-            <div
-              v-if="!viewer"
-              class="mt-4 flex flex-col gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div v-if="!viewer" class="checkout-section">
+            <div class="flex flex-wrap items-start gap-4 sm:items-center sm:justify-between">
               <div class="min-w-0">
                 <div class="flex flex-wrap items-center gap-2">
-                  <p class="text-sm font-semibold text-gray-900">Guest checkout</p>
-                  <span
-                    class="inline-flex items-center rounded-sm border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs font-semibold tracking-wide text-primary">
-                    Guest
-                  </span>
+                  <h1 class="text-2xl font-semibold leading-none text-gray-900">Guest checkout</h1>
                 </div>
-                <p class="mt-1 text-sm text-gray-500">Use guest checkout, or sign in to use your saved details.</p>
+                <p class="mt-4 text-sm text-gray-600">Use guest checkout, or sign in to use your saved details.</p>
               </div>
 
               <NuxtLink
@@ -423,6 +410,15 @@ useSeoMeta({
                 class="text-sm font-medium text-gray-900 underline decoration-gray-400 underline-offset-4 transition-colors hover:text-primary">
                 Sign in
               </NuxtLink>
+            </div>
+          </div>
+
+          <!-- Billing details -->
+          <div v-if="customer?.billing" class="checkout-section">
+            <div>
+              <h3 class="text-xl font-semibold leading-none">
+                {{ $t('billing.billingDetails') }}
+              </h3>
             </div>
 
             <div v-if="!viewer" class="w-full mt-4">
