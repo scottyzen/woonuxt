@@ -5,7 +5,7 @@ import type { Viewer } from '#types/gql';
 
 const { t } = useI18n();
 const { query } = useRoute();
-const { cart, paymentGateways, isBillingAddressEnabled } = useCart();
+const { cart, paymentGateways } = useCart();
 const { customer, viewer, navigateToLogin } = useAuth();
 const { orderInput, isProcessingOrder, processCheckout, checkoutError, updateShippingLocation } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
@@ -13,7 +13,6 @@ const appConfig = useAppConfig();
 const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
 
 const buttonText = ref<string>(isProcessingOrder.value ? t('general.processing') : t('shop.checkoutButton'));
-const isStripeElementReady = ref<boolean>(false);
 const savePaymentMethod = ref<boolean>(false);
 
 type StripeViewer = Viewer & { stripeCustomerId?: string | null };
@@ -43,15 +42,6 @@ const resolveStripeAmount = (rawTotal: string | number | null | undefined, curre
 };
 
 const stripeAmount = computed(() => resolveStripeAmount(cart.value?.rawTotal ?? '0', stripeCurrency.value));
-
-const textValue = (value: unknown): string => {
-  return typeof value === 'string' ? value.trim() : '';
-};
-
-const hasValue = (value: unknown): boolean => {
-  return textValue(value).length > 0;
-};
-
 const resolvePaymentMethodId = (paymentMethod: unknown): string => {
   if (typeof paymentMethod === 'string') return paymentMethod;
   if (paymentMethod && typeof paymentMethod === 'object' && 'id' in paymentMethod) {
@@ -190,59 +180,7 @@ watch(
   { immediate: true },
 );
 
-const hasValidEmail = computed<boolean>(() => {
-  const email = textValue(customer.value?.billing?.email);
-  return email.length > 0 && emailRegex.test(email);
-});
-
-const sectionState = (label: string, checks: boolean[]) => {
-  const total = checks.length;
-  const count = checks.filter(Boolean).length;
-  const complete = total > 0 && count === total;
-  return { label, percent: total ? Math.round((count / total) * 100) : 0, complete };
-};
-
-const progress = computed(() => {
-  const billing = customer.value?.billing;
-  const shipping = customer.value?.shipping;
-  const billingChecks = [
-    hasValidEmail.value,
-    hasValue(billing?.firstName),
-    hasValue(billing?.lastName),
-    ...(isBillingAddressEnabled.value ? [hasValue(billing?.address1), hasValue(billing?.city), hasValue(billing?.country), hasValue(billing?.postcode)] : []),
-    ...(orderInput.value.createAccount ? [hasValue(orderInput.value.username), hasValue(orderInput.value.password)] : []),
-  ];
-  const shippingAddressChecks = shipToDifferentAddress.value
-    ? [
-        hasValue(shipping?.firstName),
-        hasValue(shipping?.lastName),
-        hasValue(shipping?.address1),
-        hasValue(shipping?.city),
-        hasValue(shipping?.country),
-        hasValue(shipping?.postcode),
-      ]
-    : [];
-  const shippingMethodChecks = shouldShowShippingFlow.value ? [!!cart.value?.chosenShippingMethods?.[0]] : [];
-  const paymentChecks = [!!selectedPaymentMethodId.value, ...(selectedPaymentMethodId.value === 'stripe' ? [stripe ? isStripeElementReady.value : false] : [])];
-  const sections = [
-    sectionState('Billing', billingChecks),
-    ...(shippingAddressChecks.length || shippingMethodChecks.length ? [sectionState('Shipping', [...shippingAddressChecks, ...shippingMethodChecks])] : []),
-    ...(checkoutPaymentGateways.value?.nodes?.length ? [sectionState('Payment', paymentChecks)] : []),
-  ];
-
-  return {
-    sections,
-    ready: sections.length > 0 && sections.every(({ complete }) => complete),
-    billingComplete: billingChecks.length > 0 && billingChecks.every(Boolean),
-    shippingAddressComplete: shippingAddressChecks.length > 0 && shippingAddressChecks.every(Boolean),
-    shippingMethodComplete: shippingMethodChecks.length > 0 && shippingMethodChecks.every(Boolean),
-    paymentComplete: paymentChecks.length > 0 && paymentChecks.every(Boolean),
-  };
-});
-
 const payNow = async () => {
-  if (!progress.value.ready) return;
-
   buttonText.value = t('general.processing');
 
   try {
@@ -391,30 +329,6 @@ const payNow = async () => {
 
 const handleStripeElement = (stripeElements: StripeElements): void => {
   elements.value = stripeElements;
-
-  // Get the payment method type from config
-  const paymentMethodType = appConfig.stripePaymentMethod || 'payment';
-
-  if (paymentMethodType === 'payment') {
-    // Modern Payment Element - listen for changes
-    const paymentElement = stripeElements.getElement('payment');
-    if (paymentElement) {
-      paymentElement.on('change', (event) => {
-        // Payment Element change event has different structure
-        isStripeElementReady.value = event.complete;
-      });
-      isStripeElementReady.value = false;
-    }
-  } else {
-    // Card Element
-    const cardElement = stripeElements.getElement('card');
-    if (cardElement) {
-      cardElement.on('change', (event) => {
-        isStripeElementReady.value = event.complete && !event.error;
-      });
-      isStripeElementReady.value = false;
-    }
-  }
 };
 
 const checkEmailOnBlur = (email?: string | null): void => {
@@ -454,12 +368,6 @@ useSeoMeta({
                   <div class="flex items-center gap-3">
                     <h3 class="flex flex-1 items-center gap-2 text-xl font-semibold leading-none dark:text-white">
                       <span>{{ $t('billing.billingDetails') }}</span>
-                      <span
-                        v-if="progress.billingComplete"
-                        class="inline-flex items-center justify-center text-emerald-500 dark:text-emerald-400"
-                        aria-label="Billing complete">
-                        <Icon name="ion:checkmark-circle" size="18" />
-                      </span>
                     </h3>
                     <span
                       v-if="!viewer"
@@ -489,6 +397,8 @@ useSeoMeta({
                 autocomplete="email"
                 type="email"
                 name="email"
+                :readonly="!!viewer"
+                :aria-readonly="!!viewer"
                 :class="{ 'has-error': isInvalidEmail }"
                 @blur="checkEmailOnBlur(customer.billing.email)"
                 @input="checkEmailOnInput(customer.billing.email)"
@@ -497,16 +407,22 @@ useSeoMeta({
                 <div v-if="isInvalidEmail" class="mt-1 text-sm text-red-500">Invalid email address</div>
               </Transition>
             </div>
-            <template v-if="orderInput.createAccount">
-              <div class="w-full mt-4">
+            <div v-if="!viewer && orderInput.createAccount" class="flex w-full mt-4 gap-4">
+              <div class="flex-1">
                 <label for="username">{{ $t('account.username') }}</label>
-                <input v-model="orderInput.username" placeholder="johndoe" autocomplete="username" type="text" name="username" required />
+                <input
+                  v-model="orderInput.username"
+                  placeholder="johndoe"
+                  autocomplete="username"
+                  type="text"
+                  name="username"
+                  :required="orderInput.createAccount" />
               </div>
-              <div class="w-full my-2" v-if="orderInput.createAccount">
+              <div class="flex-1">
                 <label for="email">{{ $t('account.password') }}</label>
-                <PasswordInput id="password" class="my-2" v-model="orderInput.password" placeholder="••••••••••" :required="true" />
+                <PasswordInput id="password" v-model="orderInput.password" placeholder="••••••••••" :required="orderInput.createAccount" />
               </div>
-            </template>
+            </div>
             <div v-if="!viewer" class="flex items-center gap-2 mt-4">
               <input id="creat-account" v-model="orderInput.createAccount" type="checkbox" name="creat-account" />
               <label for="creat-account">Create an account?</label>
@@ -534,12 +450,6 @@ useSeoMeta({
             <div class="mb-6">
               <h3 class="flex items-center gap-2 text-xl font-semibold leading-none text-gray-900 dark:text-white">
                 <span>{{ $t('general.shippingAddress') }}</span>
-                <span
-                  v-if="progress.shippingAddressComplete"
-                  class="inline-flex items-center justify-center text-emerald-500 dark:text-emerald-400"
-                  aria-label="Shipping address complete">
-                  <Icon name="ion:checkmark-circle" size="18" />
-                </span>
               </h3>
             </div>
             <ShippingDetails v-if="customer?.shipping" v-model="customer.shipping" />
@@ -548,12 +458,6 @@ useSeoMeta({
           <div v-if="shouldShowShippingFlow" class="checkout-section">
             <h3 class="mb-4 flex items-center gap-2 text-xl font-semibold leading-none dark:text-white">
               <span>{{ $t('general.shippingSelect') }}</span>
-              <span
-                v-if="progress.shippingMethodComplete"
-                class="inline-flex items-center justify-center text-emerald-500 dark:text-emerald-400"
-                aria-label="Shipping method complete">
-                <Icon name="ion:checkmark-circle" size="18" />
-              </span>
             </h3>
             <ShippingOptions
               v-if="hasAvailableShippingMethods && cart?.chosenShippingMethods?.[0]"
@@ -566,12 +470,6 @@ useSeoMeta({
           <div v-if="checkoutPaymentGateways?.nodes.length" class="checkout-section col-span-full">
             <h3 class="mb-4 flex items-center gap-2 text-xl font-semibold leading-none dark:text-white">
               <span>{{ $t('billing.paymentOptions') }}</span>
-              <span
-                v-if="progress.paymentComplete"
-                class="inline-flex items-center justify-center text-emerald-500 dark:text-emerald-400"
-                aria-label="Payment complete">
-                <Icon name="ion:checkmark-circle" size="18" />
-              </span>
             </h3>
             <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :payment-gateways="checkoutPaymentGateways" />
             <StripeElement
@@ -611,48 +509,9 @@ useSeoMeta({
 
         <OrderSummary>
           <p v-if="checkoutError" role="alert" class="text-red-500 text-sm mt-2">{{ checkoutError }}</p>
-          <div v-if="progress.sections.length" class="group relative mt-4 w-full" role="group" aria-label="Checkout progress">
-            <div
-              role="status"
-              aria-live="polite"
-              class="pointer-events-none invisible absolute bottom-full left-1/2 z-20 mb-4 w-full max-w-md -translate-x-1/2 translate-y-0 rounded-lg border border-gray-200 bg-white p-3 opacity-0 shadow-sm transition-all duration-200 group-hover:visible group-hover:-translate-y-1 group-hover:opacity-100 group-focus-within:visible group-focus-within:-translate-y-1 group-focus-within:opacity-100 dark:border-gray-700 dark:bg-gray-800">
-              <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
-                <div
-                  v-for="section in progress.sections"
-                  :key="section.label"
-                  class="flex items-center justify-center gap-3 rounded-lg bg-gray-50 px-3 py-3 text-center text-gray-800 dark:bg-gray-700/60 dark:text-gray-100">
-                  <span class="inline-flex h-5 w-5 shrink-0 items-center justify-center" :aria-label="`${section.label} ${section.percent}% complete`">
-                    <Icon
-                      v-if="section.complete"
-                      name="ion:checkmark-circle"
-                      size="18"
-                      class="text-emerald-500 dark:text-emerald-400" />
-                    <svg v-else viewBox="0 0 32 32" class="h-5 w-5 -rotate-90">
-                      <circle fill="none" stroke="currentColor" stroke-width="3" class="text-gray-200 dark:text-gray-500" cx="16" cy="16" r="12" />
-                      <circle
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-width="3"
-                        class="text-primary transition-all duration-200"
-                        cx="16"
-                        cy="16"
-                        r="12"
-                        stroke-dasharray="75.4"
-                        :stroke-dashoffset="75.4 - (section.percent / 100) * 75.4" />
-                    </svg>
-                  </span>
-                  <span class="text-base font-medium">{{ section.label }}</span>
-                </div>
-              </div>
-              <div
-                class="absolute left-1/2 top-full h-4 w-4 -translate-x-1/2 -translate-y-2 rotate-45 border-b border-r border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800" />
-            </div>
-
-            <Button :loading="isProcessingOrder" size="lg" type="submit" class="w-full">
-              {{ buttonText }}
-            </Button>
-          </div>
+          <Button :loading="isProcessingOrder" size="lg" type="submit" class="mt-4 w-full">
+            {{ buttonText }}
+          </Button>
         </OrderSummary>
       </form>
     </template>
@@ -669,7 +528,7 @@ useSeoMeta({
 }
 
 .checkout-section {
-  @apply w-full rounded-lg bg-white p-6 shadow-sm dark:bg-gray-800/60;
+  @apply w-full rounded-lg bg-white p-4 sm:p-8 shadow dark:bg-gray-800/60 outline-gray-800/10 outline dark:outline-gray-50/10;
 }
 
 /* Keep only the scale-y transition for email validation */
