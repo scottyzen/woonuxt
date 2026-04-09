@@ -34,15 +34,8 @@ const resolveBodyFontFamily = (): string => {
 
 const stripeAppearance = computed<Appearance>(() => {
   const primaryColor = resolveRootCssVariable('--color-primary', '#7f54b2');
-  const backgroundColor = '#f9fafb';
-  const borderColor = '#d1d5db';
-  const surfaceColor = '#ffffff';
-  const surfaceBorderColor = '#e5e7eb';
-  const textColor = '#111827';
-  const mutedTextColor = '#374151';
-  const placeholderColor = '#9ca3af';
-  const errorColor = '#ef4444';
-  const shadowColor = 'rgba(15, 23, 42, 0.05)';
+  const inputBorderColor = '#d1d5db';
+  const inputBackgroundColor = '#f9fafb';
   const insetShadowColor = 'rgba(15, 23, 42, 0.06)';
 
   return {
@@ -51,39 +44,17 @@ const stripeAppearance = computed<Appearance>(() => {
     inputs: 'spaced' as const,
     variables: {
       colorPrimary: primaryColor,
-      colorBackground: backgroundColor,
-      colorText: textColor,
-      colorTextSecondary: mutedTextColor,
-      colorTextPlaceholder: placeholderColor,
-      colorDanger: errorColor,
-      iconColor: '#6b7280',
-      iconCardCvcColor: '#6b7280',
-      iconCardErrorColor: errorColor,
+      colorDanger: '#ef4444',
       fontFamily: resolveBodyFontFamily(),
       fontSizeBase: '16px',
-      fontLineHeight: '1.5',
-      fontWeightNormal: '400',
-      fontWeightMedium: '500',
-      spacingUnit: '4px',
-      gridRowSpacing: '16px',
-      gridColumnSpacing: '16px',
       borderRadius: '6px',
-      focusOutline: 'none',
-      focusBoxShadow: '0 0 0 1px var(--colorPrimary)',
     },
     rules: {
-      '.Label': {
-        color: mutedTextColor,
-        fontSize: '14px',
-        fontWeight: '500',
-      },
       '.Input': {
-        backgroundColor,
-        border: `1px solid ${borderColor}`,
+        backgroundColor: inputBackgroundColor,
+        border: `1px solid ${inputBorderColor}`,
+        padding: '10px 12px',
         boxShadow: `inset 0 1px 2px ${insetShadowColor}`,
-      },
-      '.Input::placeholder': {
-        color: placeholderColor,
       },
       '.Input:focus': {
         borderColor: 'var(--colorPrimary)',
@@ -92,50 +63,6 @@ const stripeAppearance = computed<Appearance>(() => {
       '.Input--invalid': {
         borderColor: 'var(--colorDanger)',
         boxShadow: '0 0 0 1px var(--colorDanger)',
-      },
-      '.Tab': {
-        backgroundColor: surfaceColor,
-        border: `1px solid ${surfaceBorderColor}`,
-        boxShadow: `0 1px 2px ${shadowColor}`,
-      },
-      '.Tab:hover': {
-        color: textColor,
-        borderColor,
-      },
-      '.Tab--selected': {
-        backgroundColor: surfaceColor,
-        borderColor: 'var(--colorPrimary)',
-        boxShadow: '0 0 0 1px var(--colorPrimary)',
-      },
-      '.TabIcon': {
-        color: '#6b7280',
-      },
-      '.TabIcon--selected': {
-        color: 'var(--colorPrimary)',
-      },
-      '.TabLabel': {
-        color: mutedTextColor,
-        fontWeight: '500',
-      },
-      '.TabLabel--selected': {
-        color: textColor,
-      },
-      '.Block': {
-        backgroundColor: surfaceColor,
-        border: `1px solid ${surfaceBorderColor}`,
-        boxShadow: `0 1px 2px ${shadowColor}`,
-      },
-      '.BlockDivider': {
-        backgroundColor: surfaceBorderColor,
-      },
-      '.PickerItem': {
-        backgroundColor: surfaceColor,
-        border: `1px solid ${surfaceBorderColor}`,
-        boxShadow: `0 1px 2px ${shadowColor}`,
-      },
-      '.PickerItem--selected': {
-        borderColor: 'var(--colorPrimary)',
-        boxShadow: '0 0 0 1px var(--colorPrimary)',
       },
     },
   };
