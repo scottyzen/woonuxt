@@ -55,7 +55,7 @@ export function useCheckout() {
     return paymentId === 'paypal' || paymentId === 'ppcp-gateway';
   };
 
-  const createOrderFallbackQueryValue = (checkoutOrder: any, orderId: string, orderKey: string): string => {
+  const createOrderFallbackKey = (checkoutOrder: any, orderId: string, orderKey: string): string => {
     if (!import.meta.client) return '';
 
     try {
@@ -64,21 +64,23 @@ export function useCheckout() {
         databaseId: Number.parseInt(orderId, 10),
         orderKey,
       };
+      const fallbackKey = `woonuxt-order-${orderId}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 
-      return encodeURIComponent(JSON.stringify(fallbackOrder));
+      window.localStorage.setItem(`woonuxt:order-fallback:${fallbackKey}`, JSON.stringify(fallbackOrder));
+      return fallbackKey;
     } catch {
       return '';
     }
   };
 
   // Helper function to handle PayPal redirect
-  const handlePayPalRedirect = async (checkout: any, orderId: string, orderKey: string, fallbackOrderParam = ''): Promise<void> => {
+  const handlePayPalRedirect = async (checkout: any, orderId: string, orderKey: string, fallbackOrderKey = ''): Promise<void> => {
     const { replaceQueryParam } = useHelpers();
     const router = useRouter();
 
     const frontEndUrl = window.location.origin;
     let redirectUrl = checkout?.redirect ?? '';
-    const fallbackOrderQuery = fallbackOrderParam ? `&order_fallback=${fallbackOrderParam}` : '';
+    const fallbackOrderQuery = fallbackOrderKey ? `&order_fallback_key=${fallbackOrderKey}` : '';
 
     const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}&from_paypal=true${fallbackOrderQuery}`;
     const payPalCancelUrl = `${frontEndUrl}/checkout/?cancel_order=true&from_paypal=true`;
@@ -198,12 +200,12 @@ export function useCheckout() {
         throw new Error('Order ID or order key is missing from checkout response');
       }
 
-      const fallbackOrderParam = createOrderFallbackQueryValue(checkout?.order, orderId, orderKey);
-      const fallbackOrderQuery = fallbackOrderParam ? `&order_fallback=${fallbackOrderParam}` : '';
+      const fallbackOrderKey = createOrderFallbackKey(checkout?.order, orderId, orderKey);
+      const fallbackOrderQuery = fallbackOrderKey ? `&order_fallback_key=${fallbackOrderKey}` : '';
 
       // Handle PayPal redirect if needed
       if (checkout?.redirect && isPayPalPayment()) {
-        await handlePayPalRedirect(checkout, orderId, orderKey, fallbackOrderParam);
+        await handlePayPalRedirect(checkout, orderId, orderKey, fallbackOrderKey);
       } else {
         // Standard redirect to order received page
         router.push(`/checkout/order-received/${orderId}/?key=${orderKey}${fallbackOrderQuery}`);

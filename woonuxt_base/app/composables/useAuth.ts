@@ -166,6 +166,7 @@ export const useAuth = () => {
 
       return { success: true };
     } finally {
+      isPending.value = false;
       if (router.currentRoute.value.path === '/my-account' && viewer.value === null) {
         await router.push('/my-account');
       } else {

@@ -8,22 +8,7 @@ const { formatDate, formatPrice, getErrorMessage } = useHelpers();
 const { t } = useI18n();
 const { cart, emptyCart, refreshCart } = useCart();
 
-const orderFallback = computed<Order | null>(() => {
-  if (typeof query.order_fallback === 'string') {
-    try {
-      return JSON.parse(decodeURIComponent(query.order_fallback)) as Order;
-    } catch {
-      try {
-        return JSON.parse(query.order_fallback) as Order;
-      } catch {
-        return null;
-      }
-    }
-  }
-  return null;
-});
-
-const order = ref<Order | null>(orderFallback.value || null);
+const order = ref<Order | null>(null);
 const fetchDelay = ref<boolean>(query.fetch_delay === 'true');
 const delayLength = 2500;
 const isLoaded = ref<boolean>(false);
@@ -37,6 +22,32 @@ const hasDiscount = computed<boolean>(() => !!parseFloat(order.value?.rawDiscoun
 const downloadableItems = computed(() => order.value?.downloadableItems?.nodes || []);
 const hasClearedCart = ref<boolean>(false);
 
+const readStoredOrderFallback = (): Order | null => {
+  if (!import.meta.client) return null;
+
+  const fallbackKey = typeof query.order_fallback_key === 'string' ? query.order_fallback_key : null;
+  if (!fallbackKey) return null;
+
+  const storageKey = `woonuxt:order-fallback:${fallbackKey}`;
+
+  try {
+    const rawFallback = window.localStorage.getItem(storageKey);
+    window.localStorage.removeItem(storageKey);
+    if (!rawFallback) return null;
+
+    const parsedFallback = JSON.parse(rawFallback) as Order;
+    if (String(parsedFallback.databaseId ?? '') !== String(params.orderId ?? '')) return null;
+
+    const requestOrderKey = typeof query.key === 'string' ? query.key : null;
+    if (requestOrderKey && parsedFallback.orderKey && parsedFallback.orderKey !== requestOrderKey) return null;
+
+    return parsedFallback;
+  } catch {
+    window.localStorage.removeItem(storageKey);
+    return null;
+  }
+};
+
 const clearCartIfNeeded = async () => {
   if (hasClearedCart.value || !isCheckoutPage.value || !order.value) return;
   hasClearedCart.value = true;
@@ -45,11 +56,17 @@ const clearCartIfNeeded = async () => {
 };
 
 onBeforeMount(() => {
+  const shouldCloseChildWindow = isCheckoutPage.value && !!(query.cancel_order || query.from_paypal || query.PayerID);
+
+  if (!shouldCloseChildWindow) {
+    order.value = readStoredOrderFallback();
+  }
+
   /**
    * This is to close the child PayPal window we open on the checkout page.
    * It will fire off an event that redirects the parent window to the order summary page.
    */
-  if (isCheckoutPage.value && (query.cancel_order || query.from_paypal || query.PayerID)) window.close();
+  if (shouldCloseChildWindow) window.close();
 });
 
 onMounted(async () => {

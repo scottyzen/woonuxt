@@ -64,6 +64,10 @@ const resolvePaymentMethodId = (paymentMethod: unknown): string => {
 };
 
 const selectedPaymentMethodId = computed<string>(() => resolvePaymentMethodId(orderInput.value.paymentMethod));
+const isCheckoutDisabled = computed<boolean>(() => {
+  if (isProcessingOrder.value || !selectedPaymentMethodId.value) return true;
+  return selectedPaymentMethodId.value === 'stripe' ? !stripe || !elements.value : false;
+});
 
 // Sync the shipping-address toggle with orderInput so checkout logic stays consistent
 const shipToDifferentAddress = computed<boolean>({
@@ -201,6 +205,18 @@ watchEffect(() => {
 
 const payNow = async () => {
   buttonText.value = t('general.processing');
+  checkoutError.value = null;
+
+  if (isCheckoutDisabled.value) {
+    if (!selectedPaymentMethodId.value) {
+      checkoutError.value = 'Please select a payment method before checking out.';
+    } else if (selectedPaymentMethodId.value === 'stripe') {
+      checkoutError.value = 'Your payment details are still loading. Please wait a moment and try again.';
+    }
+
+    buttonText.value = t('shop.checkoutButton');
+    return;
+  }
 
   try {
     if (selectedPaymentMethodId.value === 'stripe' && stripe && elements.value) {
@@ -346,7 +362,7 @@ const payNow = async () => {
   await processCheckout(isPaid.value);
 };
 
-const handleStripeElement = (stripeElements: StripeElements): void => {
+const handleStripeElement = (stripeElements: StripeElements | null): void => {
   elements.value = stripeElements;
 };
 
@@ -537,7 +553,7 @@ useSeoMeta({
 
         <OrderSummary>
           <p v-if="checkoutError" role="alert" class="text-red-500 text-sm mt-2">{{ checkoutError }}</p>
-          <Button :loading="isProcessingOrder" size="lg" type="submit" class="mt-4 w-full">
+          <Button :loading="isProcessingOrder" :disabled="isCheckoutDisabled" size="lg" type="submit" class="mt-4 w-full">
             {{ buttonText }}
           </Button>
         </OrderSummary>

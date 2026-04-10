@@ -25,17 +25,17 @@ const shipping = toRef(props, 'modelValue');
 
       <div class="w-full col-span-full">
         <label for="address1">{{ $t('billing.address1') }}</label>
-        <input id="address1" v-model="shipping.address1" placeholder="O'Connell Street 47" autocomplete="street-address" type="text" required />
+        <input id="address1" v-model="shipping.address1" placeholder="O'Connell Street 47" autocomplete="street-address" type="text" @change="updateShippingLocation" required />
       </div>
 
       <div class="w-full col-span-full">
         <label for="address2">{{ $t('billing.address2') }} ({{ $t('general.optional') }})</label>
-        <input id="address2" v-model="shipping.address2" placeholder="Apartment, studio, or floor" autocomplete="address-line2" type="text" />
+        <input id="address2" v-model="shipping.address2" placeholder="Apartment, studio, or floor" autocomplete="address-line2" type="text" @change="updateShippingLocation" />
       </div>
 
       <div class="w-full">
         <label for="city">{{ $t('billing.city') }}</label>
-        <input id="city" v-model="shipping.city" placeholder="New York" autocomplete="locality" type="text" required />
+        <input id="city" v-model="shipping.city" placeholder="New York" autocomplete="locality" type="text" @change="updateShippingLocation" required />
       </div>
 
       <div class="w-full">
@@ -50,7 +50,7 @@ const shipping = toRef(props, 'modelValue');
 
       <div class="w-full">
         <label for="zip">{{ $t('billing.zip') }}</label>
-        <input id="zip" v-model="shipping.postcode" placeholder="10001" autocomplete="postal-code" type="text" required />
+        <input id="zip" v-model="shipping.postcode" placeholder="10001" autocomplete="postal-code" type="text" @change="updateShippingLocation" required />
       </div>
 
       <div class="w-full col-span-full">

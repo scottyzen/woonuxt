@@ -92,6 +92,7 @@ const resetStripeElements = () => {
   paymentElement = null;
   elements = null;
   elementsMode = null;
+  emit('updateElement', null);
 };
 
 const createStripeElements = async () => {
