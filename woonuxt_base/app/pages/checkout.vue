@@ -414,7 +414,7 @@ useSeoMeta({
 
           <div v-if="!viewer" class="checkout-section">
             <h1 class="text-2xl font-semibold leading-none text-gray-900">Guest checkout</h1>
-            <div @click="navigateToLogin(route.fullPath)" class="flex justify-between items-center gap-4 mt-4">
+            <div @click="navigateToLogin(route.fullPath)" class="flex justify-between items-center gap-4 mt-2">
               <p class="text-sm text-gray-600">Use guest checkout, or sign in to use your saved details.</p>
               <Button type="button" class="ml-auto" size="sm" variant="outline"> Sign in </Button>
             </div>
