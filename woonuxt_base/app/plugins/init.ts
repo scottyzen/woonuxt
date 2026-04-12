@@ -1,9 +1,21 @@
 export default defineNuxtPlugin(async (nuxtApp) => {
   if (!import.meta.env.SSR) {
     const { storeSettings } = useAppConfig();
-    const { clearAllCookies, getDomain } = useHelpers();
+    const { clearAllCookies, getDomain, getErrorContext } = useHelpers();
     const sessionToken = useCookie('woocommerce-session', { domain: getDomain(window.location.href), path: '/' });
     if (sessionToken.value) useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken.value}` });
+
+    const clearWooSession = (): void => {
+      useGqlToken(null);
+      useGqlHeaders({ Authorization: '', 'woocommerce-session': '' });
+
+      if (!import.meta.client) return;
+      useCookie<string | null>('woocommerce-session', { path: '/' }).value = null;
+      const domain = getDomain(window.location.href);
+      if (domain) {
+        useCookie<string | null>('woocommerce-session', { domain, path: '/' }).value = null;
+      }
+    };
 
     // Wait for the user to interact with the page before refreshing the cart, this is helpful to prevent excessive requests to the server
     let initialised = false;
@@ -23,12 +35,20 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       const { refreshCart } = useCart();
       let success: boolean = await refreshCart();
 
-      useGqlError((err: any) => {
-        const serverErrors = ['The iss do not match with this server'];
-        if (serverErrors.includes(err?.gqlErrors?.[0]?.message)) {
+      useGqlError((err: unknown) => {
+        const { isAuthError, message } = getErrorContext(err);
+        if (!isAuthError) return;
+
+        const normalizedMessage = message?.toLowerCase() || '';
+        const fatalAuthErrors = ['the iss do not match with this server', 'invalid-secret-key', 'expired token'];
+        if (fatalAuthErrors.some((fatal) => normalizedMessage.includes(fatal))) {
           clearAllCookies();
           window.location.reload();
+          return;
         }
+
+        console.warn('[Auth] Detected auth/session error. Clearing Woo session header and cookie.');
+        clearWooSession();
       });
 
       // If cart refresh failed, clear the Woo session header and retry once
