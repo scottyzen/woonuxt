@@ -2,6 +2,7 @@
 import { loadStripe } from '@stripe/stripe-js';
 import type { Stripe, StripeElements, StripeCardElement } from '@stripe/stripe-js';
 import type { Viewer } from '#types/gql';
+const route = useRoute();
 
 const { t } = useI18n();
 const { query } = useRoute();
@@ -412,20 +413,10 @@ useSeoMeta({
           </div>
 
           <div v-if="!viewer" class="checkout-section">
-            <div class="flex flex-wrap items-start gap-4 sm:items-center sm:justify-between">
-              <div class="min-w-0">
-                <div class="flex flex-wrap items-center gap-2">
-                  <h1 class="text-2xl font-semibold leading-none text-gray-900">Guest checkout</h1>
-                </div>
-                <p class="mt-4 text-sm text-gray-600">Use guest checkout, or sign in to use your saved details.</p>
-              </div>
-
-              <NuxtLink
-                to="/my-account"
-                @click="navigateToLogin('/checkout')"
-                class="text-sm font-medium text-gray-900 underline decoration-gray-400 underline-offset-4 transition-colors hover:text-primary">
-                Sign in
-              </NuxtLink>
+            <h1 class="text-2xl font-semibold leading-none text-gray-900">Guest checkout</h1>
+            <div @click="navigateToLogin(route.fullPath)" class="flex justify-between items-center gap-4 mt-4">
+              <p class="text-sm text-gray-600">Use guest checkout, or sign in to use your saved details.</p>
+              <Button type="button" class="ml-auto" size="sm" variant="outline"> Sign in </Button>
             </div>
           </div>
 

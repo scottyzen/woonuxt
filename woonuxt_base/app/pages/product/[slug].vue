@@ -191,7 +191,9 @@ const updateSelectedVariations = (variations: VariationAttribute[]): void => {
   activeVariation.value = findMatchingVariation(variations);
 
   selectProductInput.value.variationId = activeVariation.value?.databaseId ?? null;
-  selectProductInput.value.variation = activeVariation.value ? attrValues.value : null;
+  // Prefer the resolved variation ID once we have a match so spaced/display labels
+  // are not used as the source of truth for add-to-cart requests.
+  selectProductInput.value.variation = activeVariation.value ? null : attrValues.value;
   variation.value = variations;
 
   // Update URL with current selections for persistence and sharing (client-side only)
