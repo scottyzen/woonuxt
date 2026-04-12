@@ -36,9 +36,9 @@ useSeoMeta({
       <LazyLoginAndRegister v-if="!viewer" />
       <div v-else class="flex flex-col items-start justify-between w-full gap-8 mb-24 lg:flex-row">
         <!-- Enhanced Sidebar -->
-        <aside class="w-full lg:w-72 lg:sticky lg:top-20 shrink-0 dark:text-gray-200">
+        <aside class="w-full lg:w-72 lg:sticky lg:top-20 shrink-0">
           <!-- User Profile Card -->
-          <div class="p-5 mb-6 bg-white border border-gray-100 rounded-lg shadow-xs dark:bg-gray-800 dark:border-gray-700">
+          <div class="p-5 mb-6 bg-white border border-gray-100 rounded-lg shadow-xs">
             <div class="flex items-center gap-6">
               <img v-if="avatar" :src="avatar" class="rounded-full aspect-square ring-4 ring-primary/10" alt="user-image" width="64" height="64" />
               <div
@@ -47,14 +47,14 @@ useSeoMeta({
                 {{ viewer?.firstName?.charAt(0) }}{{ viewer?.lastName?.charAt(0) }}
               </div>
               <div class="flex-1 min-w-0">
-                <div class="text-lg font-semibold text-gray-900 truncate dark:text-white">{{ viewer?.firstName }} {{ viewer?.lastName }}</div>
-                <span v-if="viewer?.email" class="block text-sm text-gray-500 truncate dark:text-gray-400" :title="viewer?.email">{{ viewer?.email }}</span>
+                <div class="text-lg font-semibold text-gray-900 truncate">{{ viewer?.firstName }} {{ viewer?.lastName }}</div>
+                <span v-if="viewer?.email" class="block text-sm text-gray-500 truncate" :title="viewer?.email">{{ viewer?.email }}</span>
               </div>
             </div>
           </div>
 
           <!-- Navigation Card -->
-          <nav class="p-3 mb-6 bg-white border border-gray-100 rounded-lg shadow-xs dark:bg-gray-800 dark:border-gray-700">
+          <nav class="p-3 mb-6 bg-white border border-gray-100 rounded-lg shadow-xs">
             <NuxtLink to="/my-account?tab=personal-info" class="nav-link" :class="{ active: activeTab == 'personal-info' }">
               <Icon name="ion:person-outline" size="20" />
               <span>Personal Information</span>
@@ -72,7 +72,7 @@ useSeoMeta({
               <Icon name="ion:time-outline" size="20" />
               <span>Account Activity</span>
             </NuxtLink> -->
-            <div class="h-px my-2 bg-gray-200 dark:bg-gray-700"></div>
+            <div class="h-px my-2 bg-gray-200"></div>
             <NuxtLink to="/my-account?tab=orders" class="nav-link" :class="{ active: activeTab == 'orders' }">
               <Icon name="ion:bag-check-outline" size="20" />
               <span>{{ $t('shop.order', 2) }}</span>
@@ -85,7 +85,7 @@ useSeoMeta({
               <Icon name="ion:heart-outline" size="20" />
               <span>Wishlist</span>
             </NuxtLink>
-            <div class="h-px my-2 bg-gray-200 dark:bg-gray-700"></div>
+            <div class="h-px my-2 bg-gray-200"></div>
             <NuxtLink to="/my-account?tab=settings" class="nav-link" :class="{ active: activeTab == 'settings' }">
               <Icon name="ion:settings-outline" size="20" />
               <span>Settings</span>
@@ -117,14 +117,14 @@ useSeoMeta({
 @reference "#tailwind";
 
 .nav-link {
-  @apply flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-200 mb-1;
+  @apply flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-700  transition-all duration-200 mb-1;
 
   &:hover {
-    @apply bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white;
+    @apply bg-gray-50  text-gray-900;
   }
 
   &.active {
-    @apply bg-linear-to-r from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 text-primary font-semibold shadow-xs;
+    @apply bg-linear-to-r from-primary/10 to-primary/5   text-primary font-semibold shadow-xs;
 
     svg {
       @apply text-primary;

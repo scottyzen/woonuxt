@@ -12,11 +12,10 @@
     "typecheck": "nuxi typecheck"
   },
   "dependencies": {
-    "@nuxtjs/color-mode": "^4.0.0",
-    "@stripe/stripe-js": "^8.11.0",
+    "@stripe/stripe-js": "^9.1.0",
     "@tailwindcss/postcss": "^4.2.2",
     "@vueuse/core": "^14.2.1",
-    "reka-ui": "^2.9.2",
+    "reka-ui": "^2.9.5",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.2"
   },

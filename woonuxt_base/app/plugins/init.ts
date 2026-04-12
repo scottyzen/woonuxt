@@ -2,7 +2,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   if (!import.meta.env.SSR) {
     const { storeSettings } = useAppConfig();
     const { clearAllCookies, getDomain } = useHelpers();
-    const sessionToken = useCookie('woocommerce-session', { domain: getDomain(window.location.href) });
+    const sessionToken = useCookie('woocommerce-session', { domain: getDomain(window.location.href), path: '/' });
     if (sessionToken.value) useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken.value}` });
 
     // Wait for the user to interact with the page before refreshing the cart, this is helpful to prevent excessive requests to the server
@@ -24,29 +24,21 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       let success: boolean = await refreshCart();
 
       useGqlError((err: any) => {
-        const serverErrors = ['The iss do not match with this server', 'Invalid session token'];
+        const serverErrors = ['The iss do not match with this server'];
         if (serverErrors.includes(err?.gqlErrors?.[0]?.message)) {
           clearAllCookies();
           window.location.reload();
         }
       });
 
-      // If cart refresh failed, clear cookies and try one more time
+      // If cart refresh failed, clear the Woo session header and retry once
       if (!success) {
-        clearAllCookies();
-        // clearAllLocalStorage();
-
+        console.warn('[Init] refreshCart attempt #1 failed. Retrying with cleared Woo session header.');
         // Remove the old session header
         useGqlHeaders({ 'woocommerce-session': '' });
 
         // Retry the cart refresh with clean state
         success = await refreshCart();
-
-        // If still failing, log out the user
-        if (!success) {
-          const { logoutUser } = useAuth();
-          await logoutUser();
-        }
       }
     }
 

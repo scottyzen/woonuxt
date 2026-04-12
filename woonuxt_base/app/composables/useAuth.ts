@@ -15,7 +15,7 @@ import type {
 
 export const useAuth = () => {
   const { refreshCart, updateCart } = useCart();
-  const { clearAllCookies, getErrorMessage } = useHelpers();
+  const { clearAllCookies, getDomain, getErrorMessage } = useHelpers();
   const router = useRouter();
 
   const customer = useState<Customer>('customer', () => ({ billing: {}, shipping: {} }));
@@ -125,28 +125,52 @@ export const useAuth = () => {
   // Log out the user
   async function logoutUser(): Promise<AuthResponse> {
     isPending.value = true;
+    let errorMsg: string | undefined;
+
     try {
       const { logout } = await GqlLogout();
-      if (logout) {
-        // Clear auth token/header before refreshing cart to avoid stale auth state.
-        useGqlToken(null);
-        useGqlHeaders({ Authorization: '' });
-
-        clearAllCookies();
-
-        clearReturnUrl(); // Clear any stored return URL on logout
-        updateCart({}); // Clear cart on logout
-        updateViewer(null);
+      if (!logout?.success) {
+        errorMsg = 'There was an error logging out. Your session was cleared locally.';
       }
-      return { success: true };
     } catch (error: unknown) {
-      const errorMsg = getErrorMessage(error);
-      return { success: false, error: errorMsg };
+      errorMsg = getErrorMessage(error);
+    }
+
+    try {
+      // Clear auth token/header before refreshing cart to avoid stale auth state.
+      useGqlToken(null);
+      useGqlHeaders({ Authorization: '', 'woocommerce-session': '' });
+
+      if (import.meta.client) {
+        useCookie<string | null>('woocommerce-session', { path: '/' }).value = null;
+        const domain = getDomain(window.location.href);
+        if (domain) {
+          useCookie<string | null>('woocommerce-session', { domain, path: '/' }).value = null;
+        }
+      }
+
+      clearAllCookies();
+      clearReturnUrl();
+
+      orders.value = null;
+      downloads.value = null;
+      updateCustomer({ billing: {}, shipping: {} } as Customer);
+      updateViewer(null);
+
+      const refreshed = await refreshCart();
+      if (!refreshed) updateCart(null);
+
+      if (errorMsg) {
+        return { success: false, error: errorMsg };
+      }
+
+      return { success: true };
     } finally {
+      isPending.value = false;
       if (router.currentRoute.value.path === '/my-account' && viewer.value === null) {
-        router.push('/my-account');
+        await router.push('/my-account');
       } else {
-        router.push('/');
+        await router.push('/');
       }
     }
   }
@@ -169,7 +193,9 @@ export const useAuth = () => {
     const sessionToken = payload?.sessionToken;
     if (sessionToken) {
       useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken}` });
-      const newToken = useCookie('woocommerce-session');
+      const domain = import.meta.client ? getDomain(window.location.href) : '';
+      const cookieOptions = domain ? { domain, path: '/' } : { path: '/' };
+      const newToken = useCookie<string | null>('woocommerce-session', cookieOptions);
       newToken.value = sessionToken;
     }
     customer.value = payload;

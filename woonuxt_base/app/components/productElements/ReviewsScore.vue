@@ -66,35 +66,35 @@ async function addComment() {
 
 <template>
   <div>
-    <h4 v-if="reviewCount" class="font-semibold text-2xl text-gray-900 dark:text-white">{{ $t('shop.customerReviews') }}</h4>
-    <h4 v-else class="font-semibold text-2xl text-gray-900 dark:text-white">{{ $t('shop.noReviews') }}</h4>
+    <h4 v-if="reviewCount" class="font-semibold text-2xl text-gray-900 ">{{ $t('shop.customerReviews') }}</h4>
+    <h4 v-else class="font-semibold text-2xl text-gray-900 ">{{ $t('shop.noReviews') }}</h4>
     <div v-if="reviewCount" class="my-2">
       <StarRating :rating="reviews.averageRating" :hide-count="true" class="text-sm mr-2" />
-      <span class="text-sm dark:text-gray-300"> {{ $t('general.basedOn') }} {{ reviewCount }} {{ $t('shop.reviews') }}</span>
+      <span class="text-sm "> {{ $t('general.basedOn') }} {{ reviewCount }} {{ $t('shop.reviews') }}</span>
     </div>
     <div class="my-4 bars">
       <div v-for="rating in numberAndPercentageOfEachRating" :key="rating" class="flex gap-4 items-center">
-        <div class="flex text-sm gap-1 items-center dark:text-gray-300">
+        <div class="flex text-sm gap-1 items-center ">
           {{ rating.rating }}
           <Icon class="text-yellow-400" name="ion:star" />
         </div>
         <div class="flex-1 relative">
-          <div class="rounded-full bg-gray-200 dark:bg-gray-700 h-2.5 w-full"></div>
-          <div class="rounded-full bg-yellow-400 dark:bg-yellow-500 h-2.5 top-0 left-0 absolute" :style="{ width: rating.percentage + '%' }"></div>
+          <div class="rounded-full bg-gray-200  h-2.5 w-full"></div>
+          <div class="rounded-full bg-yellow-400  h-2.5 top-0 left-0 absolute" :style="{ width: rating.percentage + '%' }"></div>
         </div>
       </div>
     </div>
-    <div class="mt-10 text-xl mb-2 text-gray-900 dark:text-white font-semibold">Share your thoughts</div>
-    <div class="text-sm mb-4 text-gray-600 dark:text-gray-400">If you have used this product, we would love to hear about your experience.</div>
+    <div class="mt-10 text-xl mb-2 text-gray-900  font-semibold">Share your thoughts</div>
+    <div class="text-sm mb-4 text-gray-600 ">If you have used this product, we would love to hear about your experience.</div>
     <Button @click="show = !show" variant="outline" class="w-full mb-4">
       {{ show ? $t('shop.close') : $t('shop.writeReview') }}
     </Button>
     <transition class="ease-in-out transform transition-all" name="scale-y">
       <form v-if="show" @submit.prevent="addComment" class="writeReview">
-        <div class="w-full text-gray-500 dark:text-gray-400">
-          <div class="p-5 mt-3 grid gap-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800">
+        <div class="w-full text-gray-500 ">
+          <div class="p-5 mt-3 grid gap-2 border border-gray-300  rounded-lg bg-gray-50 ">
             <div class="block text-center mb-1.5">
-              <label class="text-center text-sm block relative m-auto dark:text-gray-300"
+              <label class="text-center text-sm block relative m-auto "
                 >{{ $t('shop.rateReview') }} <span class="text-red-500">*</span></label
               >
               <div class="gap-1 flex justify-center mt-2 relative">
@@ -111,11 +111,11 @@ async function addComment() {
               </div>
             </div>
             <div class="w-full col-span-full">
-              <label for="content" class="text-sm mb-0.5 dark:text-gray-300">{{ $t('shop.rateContent') }} <span class="text-red-500">*</span></label>
+              <label for="content" class="text-sm mb-0.5 ">{{ $t('shop.rateContent') }} <span class="text-red-500">*</span></label>
               <textarea class="w-full" id="content" placeholder="Great Quality" v-model="content" required></textarea>
             </div>
             <div class="w-full col-span-full">
-              <label for="author" class="text-sm mb-0.5 dark:text-gray-300">{{ $t('shop.rateEmail') }} <span class="text-red-500">*</span></label>
+              <label for="author" class="text-sm mb-0.5 ">{{ $t('shop.rateEmail') }} <span class="text-red-500">*</span></label>
               <input
                 class="w-full"
                 id="author"
@@ -147,17 +147,17 @@ async function addComment() {
 @reference "#tailwind";
 
 .disable-star {
-  @apply bg-white dark:bg-gray-700 shadow-xs text-gray-300 dark:text-gray-600 border border-gray-300 dark:border-gray-600;
+  @apply bg-white  shadow-xs text-gray-300  border border-gray-300;
   transition: 0.15s ease-in-out;
 }
 .checked-star {
-  @apply text-amber-400 bg-amber-50 dark:bg-amber-900/20 border border-amber-400 dark:border-amber-500;
+  @apply text-amber-400 bg-amber-50  border border-amber-400;
   transition: 0.15s ease-in-out;
   box-shadow: 0 0px 4px 0 rgb(249 191 59 / 21%);
 }
 .writeReview input,
 .writeReview textarea {
-  @apply bg-white dark:bg-gray-700 border rounded-md outline-hidden border-gray-300 dark:border-gray-600 shadow-inner w-full py-2 px-4 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500;
+  @apply bg-white  border rounded-md outline-hidden border-gray-300  shadow-inner w-full py-2 px-4 text-gray-900  placeholder:text-gray-400;
 }
 
 .writeReview input:focus,

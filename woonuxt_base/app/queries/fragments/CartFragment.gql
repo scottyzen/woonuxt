@@ -6,6 +6,7 @@ fragment Cart on Cart {
   discountTotal
   rawDiscountTotal: discountTotal(format: RAW)
   shippingTotal
+  needsShippingAddress
   chosenShippingMethods
   availableShippingMethods {
     rates {

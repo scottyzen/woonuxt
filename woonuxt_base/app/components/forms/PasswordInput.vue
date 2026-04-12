@@ -1,12 +1,13 @@
 <script setup lang="ts">
 const showPassword = ref(false);
 
-const { modelValue, className, placeholder, required } = defineProps({
+const { modelValue, className, placeholder, required, disabled } = defineProps({
   modelValue: { type: String, default: '' },
   className: { type: String, default: '' },
   placeholder: { type: String, default: '' },
   autocomplete: { type: String, default: 'new-password' },
   required: { type: Boolean, default: false },
+  disabled: { type: Boolean, default: false },
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -27,6 +28,7 @@ const handleInputChanged = (e: Event) => {
       :class="className"
       :placeholder="placeholder"
       :autocomplete="autocomplete"
+      :disabled="disabled"
       :required="required" />
     <Icon name="ion:eye-outline" size="20" class="absolute cursor-pointer right-4" @click="showPassword = !showPassword" v-if="showPassword" />
     <Icon name="ion:eye-off-outline" size="20" class="absolute cursor-pointer right-4" @click="showPassword = !showPassword" v-else />
@@ -37,6 +39,6 @@ const handleInputChanged = (e: Event) => {
 @reference "#tailwind";
 
 input {
-  @apply bg-white border border-gray-300 rounded-md shadow-inner outline-hidden w-full py-2 px-4 text-base leading-6 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white;
+  @apply bg-gray-50 border border-gray-300 rounded-md shadow-inner outline-hidden w-full py-2 px-4 text-base leading-6 text-gray-900;
 }
 </style>

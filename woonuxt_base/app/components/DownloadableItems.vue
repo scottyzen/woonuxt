@@ -6,6 +6,8 @@ const { formatDate } = useHelpers();
 const props = defineProps({
   downloadableItems: { type: Object as PropType<DownloadableItem[]>, default: [] },
 });
+
+const getDownloadHref = (item: DownloadableItem & { downloadUrl?: string | null }): string | null => item.downloadUrl || item.url || null;
 </script>
 
 <template>
@@ -25,8 +27,8 @@ const props = defineProps({
         </td>
         <td>{{ item.downloadsRemaining || '∞' }}</td>
         <td>{{ item.accessExpires ? formatDate(item.accessExpires) : 'Never' }}</td>
-        <td v-if="item.url">
-          <a :href="item.url" :download="item.name" class="text-primary hover:text-primary-dark hover:underline">{{ item.name }}</a>
+        <td v-if="getDownloadHref(item)">
+          <a :href="getDownloadHref(item) || undefined" :download="item.name" class="text-primary hover:text-primary-dark hover:underline">{{ item.name }}</a>
         </td>
       </tr>
     </tbody>
@@ -37,7 +39,7 @@ const props = defineProps({
 @reference "#tailwind";
 
 tbody tr:nth-child(odd) {
-  @apply bg-gray-50 dark:bg-gray-700/50;
+  @apply bg-gray-50;
 }
 
 thead tr {
@@ -45,11 +47,11 @@ thead tr {
 }
 
 tbody tr {
-  @apply text-xs sm:text-sm text-gray-500 dark:text-gray-400;
+  @apply text-xs sm:text-sm text-gray-500;
 }
 
 td,
 th {
-  @apply py-2 px-3 dark:text-gray-300;
+  @apply py-2 px-3;
 }
 </style>

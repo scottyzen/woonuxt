@@ -2,7 +2,7 @@
 
 /* Center container */
 .container {
-  @apply mx-auto px-4;
+  @apply mx-auto px-4 md:px-12 max-w-360;
 }
 
 @theme {
@@ -11,14 +11,9 @@
   --color-primary-light: oklch(from var(--color-primary) calc(l + 0.15) c h);
   --color-primary-dark: oklch(from var(--color-primary) calc(l - 0.15) c h);
 
-  /* Breakpoints */
-  --breakpoint-2xl: 1400px;
-
   /* Spacing for Safe Areas */
   --spacing-safe: env(safe-area-inset-bottom);
 }
-
-@variant dark (&:where(.dark, .dark *));
 
 /* Class for no slider */
 .no-slider {
@@ -30,7 +25,7 @@
 
 @layer components {
   .select {
-    @apply bg-white border rounded-md border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 focus:z-20 appearance-none px-4 py-2 text-base leading-6 text-gray-900 dark:text-white dark:bg-gray-800;
+    @apply bg-white border rounded-md border-gray-300 hover:bg-gray-50 focus:z-20 appearance-none px-4 py-2 text-base leading-6 text-gray-900;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
     background-position: center right 10px;
     background-repeat: no-repeat;
@@ -38,18 +33,14 @@
     padding-right: 2.5rem;
   }
 
-  .dark .select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath stroke='%23D1D5DB' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
-  }
-
-
   .wn-form input[type='text'],
   .wn-form input[type='email'],
   .wn-form input[type='tel'],
   .wn-form input[type='password'],
   .wn-form textarea,
   .wn-form select {
-    @apply bg-white border rounded-md outline-hidden border-gray-300 shadow-inner w-full py-2 px-4 text-base text-gray-900 leading-6 dark:bg-gray-700 dark:border-gray-600 dark:text-white;
+    @apply bg-gray-50 border rounded-md border-gray-300 shadow-inner w-full py-2 px-4 text-base text-gray-900 leading-6 outline-none transition-colors;
+    @apply focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/30;
   }
 
   .wn-form select {
@@ -61,16 +52,41 @@
     padding-right: 2.5rem;
   }
 
-  .dark .wn-form select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath stroke='%23D1D5DB' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+  .wn-form label {
+    @apply inline-block leading-loose text-sm text-gray-700;
   }
 
-  .wn-form label {
-    @apply dark:text-gray-300;
+  .wn-form input::placeholder,
+  .wn-form textarea::placeholder {
+    @apply text-gray-400;
+  }
+
+  .wn-form input:read-only,
+  .wn-form textarea:read-only {
+    @apply bg-gray-100 border-gray-200 text-gray-900 shadow-none cursor-not-allowed;
+  }
+
+  .wn-form input:read-only:focus,
+  .wn-form input:read-only:focus-visible,
+  .wn-form textarea:read-only:focus,
+  .wn-form textarea:read-only:focus-visible {
+    @apply border-gray-200 ring-0;
+  }
+
+  .wn-form input:disabled,
+  .wn-form textarea:disabled,
+  .wn-form select:disabled {
+    @apply bg-gray-100 border-gray-200 text-gray-400 shadow-none cursor-not-allowed opacity-70;
   }
 
   .wn-form input.has-error,
   .wn-form textarea.has-error {
     @apply border-red-500;
+  }
+
+  .wn-form input[aria-invalid='true'],
+  .wn-form textarea[aria-invalid='true'],
+  .wn-form select[aria-invalid='true'] {
+    @apply border-red-500 ring-2 ring-red-500/25;
   }
 }
