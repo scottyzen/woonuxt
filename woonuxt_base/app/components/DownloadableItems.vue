@@ -6,6 +6,8 @@ const { formatDate } = useHelpers();
 const props = defineProps({
   downloadableItems: { type: Object as PropType<DownloadableItem[]>, default: [] },
 });
+
+const getDownloadHref = (item: DownloadableItem & { downloadUrl?: string | null }): string | null => item.downloadUrl || item.url || null;
 </script>
 
 <template>
@@ -25,8 +27,8 @@ const props = defineProps({
         </td>
         <td>{{ item.downloadsRemaining || '∞' }}</td>
         <td>{{ item.accessExpires ? formatDate(item.accessExpires) : 'Never' }}</td>
-        <td v-if="item.url">
-          <a :href="item.url" :download="item.name" class="text-primary hover:text-primary-dark hover:underline">{{ item.name }}</a>
+        <td v-if="getDownloadHref(item)">
+          <a :href="getDownloadHref(item) || undefined" :download="item.name" class="text-primary hover:text-primary-dark hover:underline">{{ item.name }}</a>
         </td>
       </tr>
     </tbody>

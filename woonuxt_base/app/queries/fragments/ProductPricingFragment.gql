@@ -5,7 +5,21 @@ fragment ProductPricing on ProductWithPricing {
   rawRegularPrice: regularPrice(format: RAW)
   salePrice
   rawSalePrice: salePrice(format: RAW)
-  onSale
+  ... on SimpleProduct {
+    onSale
+  }
+  ... on VariableProduct {
+    onSale
+  }
+  ... on ExternalProduct {
+    onSale
+  }
+  ... on GroupProduct {
+    onSale
+  }
+  ... on ProductVariation {
+    onSale
+  }
 }
 fragment ProductStock on InventoriedProduct {
   stockStatus
