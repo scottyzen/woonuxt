@@ -6,6 +6,7 @@ const props = defineProps<{
   clientSecret?: string | null;
   amount?: number | null;
   currency?: string | null;
+  saveForFuture?: boolean;
 }>();
 const appConfig = useAppConfig();
 
@@ -18,6 +19,7 @@ let elementsMode: 'intent' | 'deferred' | null = null;
 const paymentMethodType = computed(() => appConfig.stripePaymentMethod || 'payment');
 const normalizedCurrency = computed(() => (props.currency || '').toLowerCase());
 const normalizedAmount = computed(() => (typeof props.amount === 'number' ? Math.max(0, props.amount) : null));
+const normalizedSetupFutureUsage = computed<'off_session' | null>(() => (props.saveForFuture ? 'off_session' : null));
 const canCreateDeferred = computed(
   () => paymentMethodType.value === 'payment' && !props.clientSecret && !!normalizedCurrency.value && (normalizedAmount.value ?? 0) > 0,
 );
@@ -113,6 +115,7 @@ const createStripeElements = async () => {
           mode: 'payment',
           currency: normalizedCurrency.value,
           amount: normalizedAmount.value ?? 0,
+          setupFutureUsage: normalizedSetupFutureUsage.value,
           appearance: stripeAppearance.value,
         });
         elementsMode = 'deferred';
@@ -165,7 +168,7 @@ watch(
   },
 );
 
-watch([normalizedAmount, normalizedCurrency], async ([amount, currency]) => {
+watch([normalizedAmount, normalizedCurrency, normalizedSetupFutureUsage], async ([amount, currency, setupFutureUsage]) => {
   if (paymentMethodType.value !== 'payment') return;
   if (!elements || elementsMode !== 'deferred') return;
   if (!amount || !currency) return;
@@ -175,6 +178,7 @@ watch([normalizedAmount, normalizedCurrency], async ([amount, currency]) => {
       mode: 'payment',
       amount,
       currency,
+      setupFutureUsage,
       appearance: stripeAppearance.value,
     });
   } catch (error) {

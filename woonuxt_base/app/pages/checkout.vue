@@ -515,6 +515,7 @@ useSeoMeta({
               :stripe
               :amount="stripeAmount"
               :currency="stripeCurrency"
+              :save-for-future="canSavePaymentMethod && savePaymentMethod"
               @updateElement="handleStripeElement" />
             <div
               v-if="selectedPaymentMethodId === 'stripe' && canSavePaymentMethod && appConfig.stripePaymentMethod === 'payment'"
