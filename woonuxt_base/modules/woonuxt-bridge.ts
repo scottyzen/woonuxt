@@ -39,12 +39,6 @@ function validateEnvironment() {
   }
 }
 
-const getVersionQuery = `query getVersion {
-  woonuxtSettings {
-    wooCommerceSettingsVersion
-  }
-}`;
-
 // Validate environment variables before module setup
 validateEnvironment();
 
@@ -58,29 +52,6 @@ export default defineNuxtModule({
 
     // Environment variables are guaranteed to be valid at this point
     const GQL_HOST = process.env.GQL_HOST!;
-    let WOONUXT_SETTINGS_PLUGIN_VERSION = 0;
-
-    // Get the version of the woonuxt-settings plugin
-    try {
-      const { data } = await $fetch(GQL_HOST, {
-        method: 'POST',
-        body: JSON.stringify({ query: getVersionQuery }),
-        headers: { Origin: process.env.APP_HOST || 'http://localhost:3000' },
-      });
-
-      const versionString = data.woonuxtSettings?.wooCommerceSettingsVersion || '0.0.0';
-      logger.success(`WooNuxt Settings Plugin: v${versionString}`);
-
-      // Convert semantic version to comparable number (e.g., "2.2.1" -> 20201, "1.0.55" -> 10055)
-      const versionParts = versionString.split('.').map((part: string) => parseInt(part.replace(/\D/g, ''), 10) || 0);
-      WOONUXT_SETTINGS_PLUGIN_VERSION = versionParts[0] * 10000 + versionParts[1] * 100 + versionParts[2];
-    } catch (error) {
-      logger.error(error);
-    }
-
-    const wooNuxtSEO = WOONUXT_SETTINGS_PLUGIN_VERSION > 10043 ? 'wooNuxtSEO { provider url handle }' : '';
-    const currencyCode = WOONUXT_SETTINGS_PLUGIN_VERSION > 10055 ? 'currencyCode' : '';
-    const currencySymbol = WOONUXT_SETTINGS_PLUGIN_VERSION > 10055 ? 'currencySymbol' : '';
 
     const woonuxtSettings = `{
         primary_color
@@ -102,9 +73,9 @@ export default defineNuxtModule({
           test_publishable_key
           publishable_key
         }
-        ${wooNuxtSEO}
-        ${currencyCode}
-        ${currencySymbol}
+        wooNuxtSEO { provider url handle }
+        currencyCode
+        currencySymbol
     }`;
 
     const query = `
