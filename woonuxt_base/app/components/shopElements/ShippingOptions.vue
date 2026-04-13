@@ -25,7 +25,7 @@ const setActiveOption = async (id) => {
       @click="setActiveOption(option.id)">
       <span class="shipping-option-content">
         <span class="shipping-option-label" v-html="option.label"></span>
-        <span class="shipping-option-price">{{ currencySymbol }}{{ option.cost }}</span>
+        <span class="shipping-option-price">{{ option.cost }}</span>
       </span>
       <icon name="ion:checkmark-circle" size="20" class="shipping-option-check" />
     </button>
