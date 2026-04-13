@@ -12,10 +12,10 @@
     "typecheck": "nuxi typecheck"
   },
   "dependencies": {
-    "@stripe/stripe-js": "^9.1.0",
+    "@stripe/stripe-js": "^9.2.0",
     "@tailwindcss/postcss": "^4.2.2",
     "@vueuse/core": "^14.2.1",
-    "reka-ui": "^2.9.5",
+    "reka-ui": "^2.9.6",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.2"
   },
@@ -27,6 +27,6 @@
     "@tailwindcss/typography": "^0.5.19",
     "nuxt": "^4.4.2",
     "nuxt-graphql-client": "^0.2.46",
-    "prettier": "^3.8.1"
+    "prettier": "^3.8.2"
   }
 }
