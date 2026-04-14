@@ -6,7 +6,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     if (sessionToken.value) useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken.value}` });
 
     const clearAuthOnly = (): void => {
-      const { clearActiveAuthToken } = useAuth();
+      const { clearActiveAuthToken } = useAuthTokens();
       clearActiveAuthToken();
       useGqlHeaders({ Authorization: '' });
     };
@@ -33,7 +33,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         const { isAuthError, message } = getErrorContext(err);
         if (!isAuthError) return;
 
-        const { refreshAuthToken } = useAuth();
+        const { refreshAuthToken } = useAuthTokens();
         void (async () => {
           const refreshed = await refreshAuthToken(true);
           if (refreshed) {

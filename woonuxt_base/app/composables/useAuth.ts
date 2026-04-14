@@ -13,45 +13,11 @@ import type {
   Viewer,
 } from '#types/gql';
 
-let refreshInFlight: Promise<boolean> | null = null;
-const LEGACY_GQL_TOKEN_COOKIE = 'gql:default';
-const AUTH_TOKEN_COOKIE = 'auth-token';
-const REFRESH_TOKEN_COOKIE = 'auth-refresh-token';
-const AUTH_TOKEN_EXPIRES_AT_COOKIE = 'auth-token-expires-at';
-
 export const useAuth = () => {
-  const parseUnix = (value?: string | number | null): number => {
-    if (typeof value === 'number') return value;
-    if (!value) return 0;
-    const parsed = Number.parseInt(value, 10);
-    return Number.isFinite(parsed) ? parsed : 0;
-  };
-
-  const parseJwtExpiry = (token?: string | null): number => {
-    if (!token) return 0;
-
-    try {
-      const [, payload] = token.split('.');
-      if (!payload) return 0;
-      const normalized = payload.replace(/-/g, '+').replace(/_/g, '/');
-      const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '=');
-      const decoded =
-        import.meta.client ? JSON.parse(window.atob(padded)) : JSON.parse(Buffer.from(padded, 'base64').toString('utf-8'));
-      return typeof decoded?.exp === 'number' ? decoded.exp : 0;
-    } catch {
-      return 0;
-    }
-  };
-
   const { refreshCart, updateCart } = useCart();
   const { clearAllCookies, getDomain, getErrorMessage } = useHelpers();
   const router = useRouter();
-  const runtimeConfig = useRuntimeConfig();
-
-  const authTokenCookie = useCookie<string | null>(AUTH_TOKEN_COOKIE, { path: '/' });
-  const refreshTokenCookie = useCookie<string | null>(REFRESH_TOKEN_COOKIE, { path: '/' });
-  const authTokenExpiresAtCookie = useCookie<string | null>(AUTH_TOKEN_EXPIRES_AT_COOKIE, { path: '/' });
-  const legacyGqlTokenCookie = useCookie<string | null>(LEGACY_GQL_TOKEN_COOKIE, { path: '/' });
+  const { refreshAuthToken, clearAuthSession, setAuthSessionFromLogin } = useAuthTokens();
 
   const customer = useState<Customer>('customer', () => ({ billing: {}, shipping: {} }));
   const viewer = useState<Viewer | null>('viewer', () => null);
@@ -60,142 +26,6 @@ export const useAuth = () => {
   const downloads = useState<DownloadableItem[] | null>('downloads', () => null);
   const loginClients = useState<LoginClient[] | null>('loginClients', () => null);
   const returnUrl = useState<string | null>('loginReturnUrl', () => null);
-  const authToken = useState<string | null>('authToken', () => authTokenCookie.value ?? null);
-  const authTokenExpiresAt = useState<number>('authTokenExpiresAt', () => parseUnix(authTokenExpiresAtCookie.value) || parseJwtExpiry(authTokenCookie.value));
-  const refreshToken = useState<string | null>('authRefreshToken', () => refreshTokenCookie.value ?? null);
-
-  if (authTokenExpiresAt.value && authTokenExpiresAt.value <= Math.floor(Date.now() / 1000) && authTokenCookie.value) {
-    authToken.value = null;
-    authTokenCookie.value = null;
-    legacyGqlTokenCookie.value = null;
-    useGqlToken(null);
-    useGqlHeaders({ Authorization: '' });
-  }
-
-  const syncGraphqlAuth = (token: string | null): void => {
-    authToken.value = token;
-    authTokenCookie.value = token;
-    legacyGqlTokenCookie.value = null;
-    useGqlToken(token);
-    if (!token) useGqlHeaders({ Authorization: '' });
-  };
-
-  if (authToken.value) {
-    syncGraphqlAuth(authToken.value);
-  }
-
-  const persistAuthSession = (): void => {
-    authTokenCookie.value = authToken.value;
-    refreshTokenCookie.value = refreshToken.value;
-    authTokenExpiresAtCookie.value = authTokenExpiresAt.value ? String(authTokenExpiresAt.value) : null;
-    legacyGqlTokenCookie.value = null;
-  };
-
-  const clearActiveAuthToken = (): void => {
-    syncGraphqlAuth(null);
-    authTokenExpiresAt.value = 0;
-    authTokenExpiresAtCookie.value = null;
-  };
-
-  const clearAuthSession = (): void => {
-    clearActiveAuthToken();
-    refreshToken.value = null;
-    persistAuthSession();
-  };
-
-  const setAuthSessionFromLogin = (payload: any): void => {
-    if (!payload?.authToken) return;
-
-    syncGraphqlAuth(payload.authToken);
-    authTokenExpiresAt.value = parseUnix(payload.authTokenExpiration);
-    refreshToken.value = payload.refreshToken ?? null;
-    persistAuthSession();
-  };
-
-  const requestRefreshedAuthToken = async (
-    token: string,
-  ): Promise<{ authToken?: string | null; authTokenExpiration?: string | number | null; success?: boolean } | null> => {
-    const defaultClient = runtimeConfig.public?.['graphql-client']?.clients?.default;
-    const endpoint = typeof defaultClient === 'string' ? defaultClient : defaultClient?.host;
-    if (!endpoint) return null;
-
-    const sessionCookie = import.meta.client
-      ? useCookie<string | null>('woocommerce-session', { domain: getDomain(window.location.href), path: '/' }).value ||
-        useCookie<string | null>('woocommerce-session', { path: '/' }).value
-      : null;
-
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      credentials: 'include',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/graphql-response+json, application/json',
-        ...(sessionCookie ? { 'woocommerce-session': `Session ${sessionCookie}` } : {}),
-      },
-      body: JSON.stringify({
-        query: `mutation refreshToken($token: String!) { refreshToken(input: { refreshToken: $token }) { authToken authTokenExpiration success } }`,
-        variables: { token },
-        operationName: 'refreshToken',
-      }),
-    });
-
-    const body = await response.json().catch(() => null);
-    return body?.data?.refreshToken ?? null;
-  };
-
-  const refreshAuthToken = async (force = false): Promise<boolean> => {
-    if (refreshInFlight) return await refreshInFlight;
-
-    const currentRefreshToken = refreshToken.value;
-    if (!currentRefreshToken) return false;
-    const hasAuthToken = !!authToken.value;
-
-    const now = Math.floor(Date.now() / 1000);
-    const remainingSeconds = authTokenExpiresAt.value - now;
-    if (!force && hasAuthToken && authTokenExpiresAt.value && remainingSeconds > 60) return true;
-
-    refreshInFlight = (async () => {
-      try {
-        const refreshed = await requestRefreshedAuthToken(currentRefreshToken);
-        if (!refreshed?.success || !refreshed?.authToken) {
-          if (authTokenExpiresAt.value && authTokenExpiresAt.value <= now) {
-            clearActiveAuthToken();
-          }
-          return false;
-        }
-
-        syncGraphqlAuth(refreshed.authToken);
-        authTokenExpiresAt.value = parseUnix((refreshed as any).authTokenExpiration) || now + 240;
-        persistAuthSession();
-        return true;
-      } catch {
-        if (authTokenExpiresAt.value && authTokenExpiresAt.value <= now) {
-          clearActiveAuthToken();
-        }
-        return false;
-      } finally {
-        refreshInFlight = null;
-      }
-    })();
-
-    return await refreshInFlight;
-  };
-
-  const getAuthTokenForRequest = async (): Promise<string | null> => {
-    const now = Math.floor(Date.now() / 1000);
-
-    if (!authToken.value && refreshToken.value) {
-      await refreshAuthToken();
-      return authToken.value;
-    }
-
-    if (authTokenExpiresAt.value && authTokenExpiresAt.value <= now + 60) {
-      await refreshAuthToken();
-    }
-
-    return authToken.value;
-  };
 
   // Store the URL to redirect to after login
   const setReturnUrl = (url: string) => {
@@ -468,10 +298,6 @@ export const useAuth = () => {
     resetPasswordWithKey,
     getOrders,
     getDownloads,
-    refreshAuthToken,
-    getAuthTokenForRequest,
-    clearActiveAuthToken,
-    clearAuthSession,
     updateLoginClients,
     navigateToLogin,
     handlePostLoginRedirect,

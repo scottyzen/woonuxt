@@ -269,7 +269,7 @@ export function useCart() {
   };
 
   const fetchCartSnapshot = async (): Promise<CartQueryPayload> => {
-    const { refreshAuthToken } = useAuth();
+    const { refreshAuthToken } = useAuthTokens();
     await refreshAuthToken();
 
     const nuxtApp = useNuxtApp() as {
@@ -307,7 +307,7 @@ export function useCart() {
       const { isAuthError } = getErrorContext(error);
 
       if (isAuthError) {
-        const { refreshAuthToken } = useAuth();
+        const { refreshAuthToken, clearActiveAuthToken } = useAuthTokens();
         const refreshed = await refreshAuthToken(true);
         if (refreshed) {
           try {
@@ -317,7 +317,6 @@ export function useCart() {
           } catch {}
         }
 
-        const { clearActiveAuthToken } = useAuth();
         clearActiveAuthToken();
         useGqlHeaders({ Authorization: '' });
 
