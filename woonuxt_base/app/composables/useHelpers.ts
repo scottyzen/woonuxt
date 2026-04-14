@@ -185,6 +185,22 @@ export function useHelpers() {
     isAuthError: boolean;
   };
 
+  const hasGraphqlResponseData = (error: GqlErrorLike): boolean => {
+    const responseData =
+      (error.response as any)?.data?.data ??
+      (error.response as any)?.data ??
+      (error.cause?.response as any)?.data?.data ??
+      (error.cause?.response as any)?.data;
+
+    return (
+      !!responseData &&
+      typeof responseData === 'object' &&
+      ['cart', 'customer', 'viewer', 'orders', 'downloadableItems', 'paymentGateways', 'loginClients'].some((key) =>
+        Object.prototype.hasOwnProperty.call(responseData, key),
+      )
+    );
+  };
+
   const getErrorContext = (error: unknown): ErrorContext => {
     if (!isGqlErrorLike(error)) {
       return {
@@ -231,11 +247,9 @@ export function useHelpers() {
       'jwt',
       'the iss do not match with this server',
     ];
+    const hasExplicitAuthIndicator = lowerMessages.some((msg) => authIndicators.some((indicator) => msg.includes(indicator.toLowerCase())));
 
-    const isAuthError =
-      status === 401 ||
-      status === 403 ||
-      lowerMessages.some((msg) => authIndicators.some((indicator) => msg.includes(indicator.toLowerCase())));
+    const isAuthError = status === 401 || (status === 403 && (!hasGraphqlResponseData(error) || hasExplicitAuthIndicator)) || hasExplicitAuthIndicator;
 
     return {
       message: messages[0],
@@ -246,7 +260,7 @@ export function useHelpers() {
   };
 
   /**
-   * Extract GraphQL error message and optionally log it
+   * Extract GraphQL error message
    * @param error - GraphQL error object
    * @returns The error message or undefined
    */
@@ -254,7 +268,7 @@ export function useHelpers() {
     const { message: errorMessage } = getErrorContext(error);
 
     // Check for server errors that require clearing cookies and reloading
-    const serverErrors = ['The iss do not match with this server', 'expired token', 'invalid-secret-key'];
+    const serverErrors = ['The iss do not match with this server', 'invalid-secret-key'];
     const shouldClearAndReload = serverErrors.some((serverError) => errorMessage?.toLowerCase().includes(serverError.toLowerCase()));
 
     if (shouldClearAndReload && import.meta.client) {
@@ -275,13 +289,12 @@ export function useHelpers() {
     const debugMessages = response?.extensions?.debug;
     if (!Array.isArray(debugMessages)) return;
 
-    const serverErrors = ['invalid-secret-key', 'expired token'];
+    const serverErrors = ['invalid-secret-key'];
     const hasAuthError = debugMessages.some((debug: any) =>
       serverErrors.some((serverError) => debug?.message?.toLowerCase().includes(serverError.toLowerCase())),
     );
 
     if (hasAuthError) {
-      console.warn('Authentication error detected in GraphQL response extensions. Clearing cookies and reloading...');
       clearAllCookies();
       clearAllLocalStorage();
       window.location.reload();

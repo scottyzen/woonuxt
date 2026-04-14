@@ -22,7 +22,7 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'default' },
   },
 
-  plugins: [resolve('./app/plugins/init.ts')],
+  plugins: [resolve('./app/plugins/gql-auth.client.ts'), resolve('./app/plugins/init.ts')],
 
   components: [{ path: resolve('./app/components'), pathPrefix: false }],
 
@@ -43,6 +43,7 @@ export default defineNuxtConfig({
           default: {
             host: GQL_HOST,
             headers: { Origin: APP_HOST },
+            tokenStorage: false,
             fetchOptions: {
               mode: 'cors',
               credentials: 'include',
