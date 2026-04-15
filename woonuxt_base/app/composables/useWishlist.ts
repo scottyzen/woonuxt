@@ -12,6 +12,7 @@ export function useWishlist() {
    * @example addToWishlist({ databaseId: 123, name: 'My Product' })
    */
   function addToWishlist(item: Product): void {
+    if (!item?.databaseId || isInList(item.databaseId)) return;
     theList.value.push(item);
     localStorage.setItem('wishlist', JSON.stringify(theList.value));
   }
