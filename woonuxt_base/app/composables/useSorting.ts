@@ -14,18 +14,16 @@ export function useSorting() {
     return { orderBy: route.query.orderby as string, order: route.query.order as string };
   }
 
-  function setOrderQuery(orderby: string, order?: string): void {
-    router.push({ query: { ...route.query, orderby: orderby ?? undefined, order: order ?? undefined } });
-    setTimeout(() => {
-      updateProductList();
-    }, 100);
+  async function setOrderQuery(orderby: string, order?: string): Promise<void> {
+    await router.push({ query: { ...route.query, orderby: orderby ?? undefined, order: order ?? undefined } });
+    await updateProductList();
   }
 
   const isSortingActive = computed<boolean>(() => !!orderQuery.value);
 
   // Define a function to order the products
   function sortProducts(products: Product[]): Product[] {
-    if (!isSortingActive) return products;
+    if (!isSortingActive.value) return products;
 
     const orderQuery = getOrderQuery();
 
@@ -58,19 +56,19 @@ export function useSorting() {
 
       switch (orderby) {
         case 'price':
-          return order !== 'DESC' ? aPrice - bPrice : bPrice - aPrice;
+          return order === 'DESC' ? bPrice - aPrice : aPrice - bPrice;
         case 'rating':
-          return order !== 'DESC' ? bRating - aRating : aRating - bRating;
+          return order === 'DESC' ? bRating - aRating : aRating - bRating;
         case 'discount':
-          return order !== 'DESC' ? bDiscount - aDiscount : aDiscount - bDiscount;
+          return order === 'DESC' ? bDiscount - aDiscount : aDiscount - bDiscount;
         case 'alphabetically':
-          return order !== 'DESC' ? aName.localeCompare(bName) : bName.localeCompare(aName);
+          return order === 'DESC' ? bName.localeCompare(aName) : aName.localeCompare(bName);
         default:
-          return order !== 'DESC' ? aDate - bDate : bDate - aDate;
+          return order === 'DESC' ? bDate - aDate : aDate - bDate;
       }
     }
 
-    return products.sort(productComparator);
+    return [...products].sort(productComparator);
   }
 
   return { getOrderQuery, setOrderQuery, isSortingActive, orderQuery, sortProducts };

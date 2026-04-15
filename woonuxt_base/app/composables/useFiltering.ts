@@ -31,7 +31,7 @@ export function useFiltering() {
    * @param {string[]}
    * @example Just like the example above, but in reverse. setFilter('pa_color', ['green', 'blue'])
    */
-  function setFilter(filterName: string, filterValue: string[]) {
+  async function setFilter(filterName: string, filterValue: string[]): Promise<void> {
     let newFilterQuery = filterQuery.value || '';
 
     // If there are filters and filterName is not one of them, add the filter query
@@ -60,34 +60,29 @@ export function useFiltering() {
 
     // if the filter query is empty, remove it from the url
     if (!newFilterQuery) {
-      router.push({
+      await router.push({
         path,
         query: { ...route.query, filter: undefined },
       });
     } else {
-      router.push({
+      await router.push({
         path,
         query: { ...route.query, filter: newFilterQuery },
       });
     }
 
-    setTimeout(() => {
-      updateProductList();
-    }, 50);
+    await updateProductList();
   }
 
   /**
    * Reset the filter value in the url
    */
-  function resetFilter(): void {
+  async function resetFilter(): Promise<void> {
     const { scrollToTop } = useHelpers();
     filterQuery.value = '';
-    router.push({ query: { ...route.query, filter: undefined } });
-
-    setTimeout(() => {
-      updateProductList();
-      scrollToTop();
-    }, 50);
+    await router.push({ query: { ...route.query, filter: undefined } });
+    await updateProductList();
+    scrollToTop();
   }
 
   /**
