@@ -85,13 +85,14 @@ And here is the live demo of the customized WooNuxt site: [My Shop](https://mysh
 
 | Plugin Name                                                                        | Description                              |
 | ---------------------------------------------------------------------------------- | ---------------------------------------- |
+| [WooCommerce](https://wordpress.org/plugins/woocommerce/)                          | Core eCommerce plugin                    |
 | [WPGraphQL](https://www.wpgraphql.com/)                                            | A free, open-source plugin for WordPress |
 | [WooGraphQL](https://woographql.com/)                                              | GraphQL API for WooCommerce              |
 | ~~[WPGraphQL Cors](https://github.com/funkhaus/wp-graphql-cors)~~                  | ~~Enable CORS for WPGraphQL~~            |
 | [Headless Login for WPGraphQL](https://github.com/AxeWP/wp-graphql-headless-login) | Enable headless login for WPGraphQL      |
 | [woonuxt-settings.zip](https://github.com/scottyzen/woonuxt-settings/releases)     | WooNuxt Settings plugin                  |
 
-> **Note** The the [woonuxt-settings.zip](https://github.com/scottyzen/woonuxt-settings/releases) plugin will help you install all the required plugins.
+> **Note** The [woonuxt-settings.zip](https://github.com/scottyzen/woonuxt-settings/releases) plugin will help you install all the required plugins.
 
 &nbsp;
 
@@ -114,8 +115,8 @@ And here is the live demo of the customized WooNuxt site: [My Shop](https://mysh
 | Plugin/Software              | Version |
 | ---------------------------- | ------- |
 | WordPress                    | 6.9.4   |
-| WooCommerce                  | 10.6.1  |
-| WPGraphQL                    | 2.11.1  |
+| WooCommerce                  | 10.7.0  |
+| WPGraphQL                    | 2.11.2  |
 | WooGraphQL                   | 1.0.2   |
 | ~~WPGraphQL CORS~~           | ~~2.1~~ |
 | Headless Login for WPGraphQL | 0.4.4   |
