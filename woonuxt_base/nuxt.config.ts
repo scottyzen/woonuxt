@@ -22,7 +22,7 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'default' },
   },
 
-  plugins: [resolve('./app/plugins/gql-auth.client.ts'), resolve('./app/plugins/init.ts')],
+  plugins: [resolve('./app/plugins/gql-auth.ts'), resolve('./app/plugins/init.ts')],
 
   components: [{ path: resolve('./app/components'), pathPrefix: false }],
 

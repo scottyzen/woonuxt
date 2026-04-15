@@ -4,6 +4,7 @@ import type {
   CreateAccountInput,
   Customer,
   DownloadableItem,
+  LoginSession,
   LoginClient,
   LoginInput,
   Order,
@@ -84,7 +85,7 @@ export const useAuth = () => {
     viewer.value = null;
   };
 
-  const applyLoginSession = async (payload?: { authToken?: string | null; refreshToken?: string | null }): Promise<boolean> => {
+  const applyLoginSession = async (payload?: LoginSession | null): Promise<boolean> => {
     if (!payload?.authToken) return false;
     setAuthSessionFromLogin(payload);
     await refreshCart();
