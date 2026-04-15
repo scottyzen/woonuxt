@@ -14,11 +14,9 @@ export function useSorting() {
     return { orderBy: route.query.orderby as string, order: route.query.order as string };
   }
 
-  function setOrderQuery(orderby: string, order?: string): void {
-    router.push({ query: { ...route.query, orderby: orderby ?? undefined, order: order ?? undefined } });
-    setTimeout(() => {
-      updateProductList();
-    }, 100);
+  async function setOrderQuery(orderby: string, order?: string): Promise<void> {
+    await router.push({ query: { ...route.query, orderby: orderby ?? undefined, order: order ?? undefined } });
+    await updateProductList();
   }
 
   const isSortingActive = computed<boolean>(() => !!orderQuery.value);
