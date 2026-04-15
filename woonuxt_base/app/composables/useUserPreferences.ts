@@ -3,7 +3,7 @@ export const useUserPreferences = () => {
 
   // Get saved currency preference
   const savedCurrency = useState<string>('userCurrency', () => {
-    if (process.client) {
+    if (import.meta.client) {
       const saved = localStorage.getItem('userCurrency');
       return saved || 'USD';
     }
@@ -13,7 +13,7 @@ export const useUserPreferences = () => {
   // Save currency preference
   const setCurrency = (currency: string) => {
     savedCurrency.value = currency;
-    if (process.client) {
+    if (import.meta.client) {
       localStorage.setItem('userCurrency', currency);
     }
   };
