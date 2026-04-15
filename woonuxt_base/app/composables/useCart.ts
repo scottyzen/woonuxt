@@ -269,6 +269,9 @@ export function useCart() {
   };
 
   const fetchCartSnapshot = async (): Promise<CartQueryPayload> => {
+    const { refreshAuthToken } = useAuthTokens();
+    await refreshAuthToken();
+
     const nuxtApp = useNuxtApp() as {
       _gqlState?: {
         value?: Record<string, { instance?: { request: <T>(args: { document: string; variables?: any }) => Promise<T> } }>;
@@ -295,47 +298,43 @@ export function useCart() {
       applyCartSnapshot(payload as CartQueryPayload);
       return true; // Cart was successfully refreshed
     } catch (error: unknown) {
-      if (import.meta.dev) {
-        console.debug('[Cart] refreshCart raw error object', error);
-      }
-
       const recoveredPayload = extractCartPayloadFromError(error);
       if (recoveredPayload) {
-        console.warn('[Cart] refreshCart recovered usable payload from non-2xx response.');
         applyCartSnapshot(recoveredPayload);
         return true;
       }
 
-      const { status, message, messages, isAuthError } = getErrorContext(error);
-
-      console.error('[Cart] refreshCart failed', {
-        status: status ?? null,
-        message: message ?? null,
-        isAuthError,
-        messages,
-      });
+      const { isAuthError } = getErrorContext(error);
 
       if (isAuthError) {
-        console.warn('[Auth] Detected auth/session failure during cart refresh. Clearing auth/session state.');
-        useGqlToken(null);
-        useGqlHeaders({ Authorization: '', 'woocommerce-session': '' });
-
-        if (import.meta.client) {
-          useCookie<string | null>('woocommerce-session', { path: '/' }).value = null;
-          const domain = getDomain(window.location.href);
-          if (domain) {
-            useCookie<string | null>('woocommerce-session', { domain, path: '/' }).value = null;
-          }
+        const { refreshAuthToken, clearActiveAuthToken } = useAuthTokens();
+        const refreshed = await refreshAuthToken(true);
+        if (refreshed) {
+          try {
+            const retryPayload = await fetchCartSnapshot();
+            applyCartSnapshot(retryPayload as CartQueryPayload);
+            return true;
+          } catch {}
         }
+
+        clearActiveAuthToken();
+        useGqlHeaders({ Authorization: '' });
 
         const { updateCustomer, updateViewer } = useAuth();
         updateViewer(null);
-        updateCustomer({ billing: {}, shipping: {} } as Customer);
+
+        const sessionCookie = import.meta.client
+          ? useCookie<string | null>('woocommerce-session', { domain: getDomain(window.location.href), path: '/' }).value ||
+            useCookie<string | null>('woocommerce-session', { path: '/' }).value
+          : null;
+
+        if (!sessionCookie) {
+          updateCustomer({ billing: {}, shipping: {} } as Customer);
+        }
       }
 
       if (!isAuthError) {
-        const errorMsg = getErrorMessage(error);
-        if (errorMsg) console.error('[Cart] refreshCart message:', errorMsg);
+        getErrorMessage(error);
       }
       resetInitialState();
       return false; // Cart was not successfully refreshed

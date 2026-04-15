@@ -5,16 +5,10 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     const sessionToken = useCookie('woocommerce-session', { domain: getDomain(window.location.href), path: '/' });
     if (sessionToken.value) useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken.value}` });
 
-    const clearWooSession = (): void => {
-      useGqlToken(null);
-      useGqlHeaders({ Authorization: '', 'woocommerce-session': '' });
-
-      if (!import.meta.client) return;
-      useCookie<string | null>('woocommerce-session', { path: '/' }).value = null;
-      const domain = getDomain(window.location.href);
-      if (domain) {
-        useCookie<string | null>('woocommerce-session', { domain, path: '/' }).value = null;
-      }
+    const clearAuthOnly = (): void => {
+      const { clearActiveAuthToken } = useAuthTokens();
+      clearActiveAuthToken();
+      useGqlHeaders({ Authorization: '' });
     };
 
     // Wait for the user to interact with the page before refreshing the cart, this is helpful to prevent excessive requests to the server
@@ -39,21 +33,31 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         const { isAuthError, message } = getErrorContext(err);
         if (!isAuthError) return;
 
-        const normalizedMessage = message?.toLowerCase() || '';
-        const fatalAuthErrors = ['the iss do not match with this server', 'invalid-secret-key', 'expired token'];
-        if (fatalAuthErrors.some((fatal) => normalizedMessage.includes(fatal))) {
-          clearAllCookies();
-          window.location.reload();
-          return;
-        }
+        const { refreshAuthToken } = useAuthTokens();
+        void (async () => {
+          const refreshed = await refreshAuthToken(true);
+          if (refreshed) {
+            await refreshCart();
+            return;
+          }
 
-        console.warn('[Auth] Detected auth/session error. Clearing Woo session header and cookie.');
-        clearWooSession();
+          const normalizedMessage = message?.toLowerCase() || '';
+          const fatalAuthErrors = ['the iss do not match with this server', 'invalid-secret-key'];
+          if (fatalAuthErrors.some((fatal) => normalizedMessage.includes(fatal))) {
+            clearAllCookies();
+            window.location.reload();
+            return;
+          }
+
+          clearAuthOnly();
+
+          const { refreshCart: retryRefreshCart } = useCart();
+          await retryRefreshCart();
+        })();
       });
 
       // If cart refresh failed, clear the Woo session header and retry once
       if (!success) {
-        console.warn('[Init] refreshCart attempt #1 failed. Retrying with cleared Woo session header.');
         // Remove the old session header
         useGqlHeaders({ 'woocommerce-session': '' });
 

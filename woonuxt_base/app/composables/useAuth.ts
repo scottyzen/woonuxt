@@ -13,12 +13,18 @@ import type {
   Viewer,
 } from '#types/gql';
 
+const EMPTY_CUSTOMER = { billing: {}, shipping: {} } as Customer;
+const LOGIN_ERROR = 'There was an error logging in. Please try again.';
+const OAUTH_LOGIN_ERROR =
+  'Your credentials are correct, but there was an error logging in. This is most likely due to an SSL error. Please try again later. If the problem persists, please contact support.';
+
 export const useAuth = () => {
   const { refreshCart, updateCart } = useCart();
   const { clearAllCookies, getDomain, getErrorMessage } = useHelpers();
+  const { refreshAuthToken, clearAuthSession, setAuthSessionFromLogin } = useAuthTokens();
   const router = useRouter();
 
-  const customer = useState<Customer>('customer', () => ({ billing: {}, shipping: {} }));
+  const customer = useState<Customer>('customer', () => ({ ...EMPTY_CUSTOMER }));
   const viewer = useState<Viewer | null>('viewer', () => null);
   const isPending = useState<boolean>('isPending', () => false);
   const orders = useState<Order[] | null>('orders', () => null);
@@ -26,178 +32,41 @@ export const useAuth = () => {
   const loginClients = useState<LoginClient[] | null>('loginClients', () => null);
   const returnUrl = useState<string | null>('loginReturnUrl', () => null);
 
-  // Store the URL to redirect to after login
-  const setReturnUrl = (url: string) => {
-    returnUrl.value = url;
-  };
-
-  const getReturnUrl = (): string | null => {
-    return returnUrl.value;
-  };
-
-  const clearReturnUrl = () => {
-    returnUrl.value = null;
-  };
-
-  // High-level function to handle navigation to login page
-  const navigateToLogin = (currentRoute?: string) => {
-    const route = currentRoute || (typeof window !== 'undefined' ? window.location.pathname + window.location.search : '');
-
-    // Only store return URL if it's not already the login page
-    if (route && route !== '/my-account') {
-      setReturnUrl(route);
-    }
-
-    // Navigate to login page
-    return navigateTo('/my-account');
-  };
-
-  // High-level function to handle post-login redirect
-  const handlePostLoginRedirect = () => {
-    const returnUrl = getReturnUrl();
-    if (returnUrl && returnUrl !== '/my-account') {
-      clearReturnUrl();
-      return navigateTo(returnUrl);
-    }
-    return null;
-  };
-
-  // Log in the user
-  const loginUser = async (credentials: CreateAccountInput): Promise<AuthResponse> => {
+  const withPending = async <T>(action: () => Promise<T>): Promise<T> => {
     isPending.value = true;
-
     try {
-      const { login } = await GqlLogin(credentials);
-      if (login?.user && login?.authToken) {
-        useGqlToken(login.authToken);
-        await refreshCart();
-      }
-
-      isPending.value = false;
-      return {
-        success: true,
-      };
-    } catch (error: unknown) {
-      const errorMsg = getErrorMessage(error);
-
-      return {
-        success: false,
-        error: errorMsg || 'There was an error logging in. Please try again.',
-      };
+      return await action();
     } finally {
       isPending.value = false;
     }
   };
 
-  const loginWithProvider = async (state: string, code: string, provider: any): Promise<AuthResponse> => {
-    isPending.value = true;
+  const authError = (error: unknown, fallback?: string): AuthResponse => ({
+    success: false,
+    error: getErrorMessage(error) || fallback,
+  });
 
-    try {
-      const input: LoginInput = { oauthResponse: { state, code }, provider };
-      const response = await GqlLoginWithProvider({ input });
-      if (response.login?.authToken) {
-        useGqlToken(response.login.authToken);
-        await refreshCart();
-        if (viewer.value === null) {
-          return {
-            success: false,
-            error:
-              'Your credentials are correct, but there was an error logging in. This is most likely due to an SSL error. Please try again later. If the problem persists, please contact support.',
-          };
-        }
-      }
+  const setWooSession = (sessionToken?: string | null): void => {
+    if (!sessionToken) return;
 
-      return {
-        success: true,
-      };
-    } catch (error: unknown) {
-      const errorMsg = getErrorMessage(error);
+    useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken}` });
+    const domain = import.meta.client ? getDomain(window.location.href) : '';
+    useCookie<string | null>('woocommerce-session', domain ? { domain, path: '/' } : { path: '/' }).value = sessionToken;
+  };
 
-      return {
-        success: false,
-        error: errorMsg,
-      };
-    } finally {
-      isPending.value = false;
+  const clearWooSession = (): void => {
+    useGqlHeaders({ 'woocommerce-session': '' });
+    if (!import.meta.client) return;
+
+    useCookie<string | null>('woocommerce-session', { path: '/' }).value = null;
+    const domain = getDomain(window.location.href);
+    if (domain) {
+      useCookie<string | null>('woocommerce-session', { domain, path: '/' }).value = null;
     }
   };
 
-  // Log out the user
-  async function logoutUser(): Promise<AuthResponse> {
-    isPending.value = true;
-    let errorMsg: string | undefined;
-
-    try {
-      const { logout } = await GqlLogout();
-      if (!logout?.success) {
-        errorMsg = 'There was an error logging out. Your session was cleared locally.';
-      }
-    } catch (error: unknown) {
-      errorMsg = getErrorMessage(error);
-    }
-
-    try {
-      // Clear auth token/header before refreshing cart to avoid stale auth state.
-      useGqlToken(null);
-      useGqlHeaders({ Authorization: '', 'woocommerce-session': '' });
-
-      if (import.meta.client) {
-        useCookie<string | null>('woocommerce-session', { path: '/' }).value = null;
-        const domain = getDomain(window.location.href);
-        if (domain) {
-          useCookie<string | null>('woocommerce-session', { domain, path: '/' }).value = null;
-        }
-      }
-
-      clearAllCookies();
-      clearReturnUrl();
-
-      orders.value = null;
-      downloads.value = null;
-      updateCustomer({ billing: {}, shipping: {} } as Customer);
-      updateViewer(null);
-
-      const refreshed = await refreshCart();
-      if (!refreshed) updateCart(null);
-
-      if (errorMsg) {
-        return { success: false, error: errorMsg };
-      }
-
-      return { success: true };
-    } finally {
-      isPending.value = false;
-      if (router.currentRoute.value.path === '/my-account' && viewer.value === null) {
-        await router.push('/my-account');
-      } else {
-        await router.push('/');
-      }
-    }
-  }
-
-  async function registerUser(userInfo: RegisterCustomerInput): Promise<AuthResponse> {
-    isPending.value = true;
-    try {
-      await GqlRegisterCustomer({ input: userInfo });
-      return { success: true };
-    } catch (error: unknown) {
-      const errorMsg = getErrorMessage(error);
-      return { success: false, error: errorMsg };
-    } finally {
-      isPending.value = false;
-    }
-  }
-
-  // Update the user state
   const updateCustomer = (payload: Customer): void => {
-    const sessionToken = payload?.sessionToken;
-    if (sessionToken) {
-      useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken}` });
-      const domain = import.meta.client ? getDomain(window.location.href) : '';
-      const cookieOptions = domain ? { domain, path: '/' } : { path: '/' };
-      const newToken = useCookie<string | null>('woocommerce-session', cookieOptions);
-      newToken.value = sessionToken;
-    }
+    setWooSession(payload?.sessionToken);
     customer.value = payload;
     isPending.value = false;
   };
@@ -207,67 +76,153 @@ export const useAuth = () => {
     isPending.value = false;
   };
 
-  const sendResetPasswordEmail = async ({ username }: ResetPasswordEmailMutationVariables): Promise<AuthResponse> => {
-    try {
-      isPending.value = true;
-      const { sendPasswordResetEmail } = await GqlResetPasswordEmail({ username });
-      if (sendPasswordResetEmail?.success) {
-        isPending.value = false;
-        return { success: true };
-      }
-      return { success: false, error: 'There was an error sending the reset password email. Please try again later.' };
-    } catch (error: unknown) {
-      const errorMsg = getErrorMessage(error);
-      isPending.value = false;
-      return { success: false, error: errorMsg };
-    }
+  const resetAccountState = (): void => {
+    returnUrl.value = null;
+    orders.value = null;
+    downloads.value = null;
+    customer.value = { ...EMPTY_CUSTOMER };
+    viewer.value = null;
   };
 
-  const resetPasswordWithKey = async ({ key, login, password }: ResetPasswordKeyMutationVariables): Promise<AuthResponse> => {
+  const applyLoginSession = async (payload?: { authToken?: string | null; refreshToken?: string | null }): Promise<boolean> => {
+    if (!payload?.authToken) return false;
+    setAuthSessionFromLogin(payload);
+    await refreshCart();
+    return true;
+  };
+
+  const loadCustomerCollection = async <T>(
+    query: () => Promise<{ customer?: any }>,
+    getNodes: (customer: any) => T[] | null | undefined,
+    assign: (nodes: T[]) => void,
+    fallbackError: string,
+  ): Promise<ApiResponse<T[]>> => {
     try {
-      isPending.value = true;
-      const { resetUserPassword } = await GqlResetPasswordKey({ key, login, password });
-      const wasPasswordReset = Boolean(resetUserPassword?.user?.id);
-      if (wasPasswordReset) {
-        isPending.value = false;
-        return { success: true };
-      }
-      return { success: false, error: 'There was an error resetting the password. Please try again later.' };
+      await refreshAuthToken();
+      const { customer } = await query();
+      if (!customer) return { success: false, error: fallbackError };
+
+      const nodes = getNodes(customer) ?? [];
+      assign(nodes);
+      return { success: true, data: nodes };
     } catch (error: unknown) {
-      isPending.value = false;
       return { success: false, error: getErrorMessage(error) };
     }
   };
 
-  const getOrders = async (): Promise<ApiResponse<Order[]>> => {
-    try {
-      const { customer } = await GqlGetOrders();
-      if (customer) {
-        const orderNodes = customer.orders?.nodes ?? [];
-        orders.value = orderNodes;
-        return { success: true, data: orderNodes };
+  const navigateToLogin = (currentRoute?: string) => {
+    const route = currentRoute || (typeof window !== 'undefined' ? window.location.pathname + window.location.search : '');
+    if (route && route !== '/my-account') returnUrl.value = route;
+    return navigateTo('/my-account');
+  };
+
+  const handlePostLoginRedirect = () => {
+    if (returnUrl.value && returnUrl.value !== '/my-account') {
+      const destination = returnUrl.value;
+      returnUrl.value = null;
+      return navigateTo(destination);
+    }
+    return null;
+  };
+
+  const loginUser = (credentials: CreateAccountInput): Promise<AuthResponse> =>
+    withPending(async () => {
+      try {
+        await applyLoginSession((await GqlLogin(credentials)).login);
+        return { success: true };
+      } catch (error: unknown) {
+        return authError(error, LOGIN_ERROR);
       }
-      return { success: false, error: 'There was an error getting your orders. Please try again later.' };
-    } catch (error: unknown) {
-      const errorMsg = getErrorMessage(error);
-      return { success: false, error: errorMsg };
+    });
+
+  const loginWithProvider = (state: string, code: string, provider: any): Promise<AuthResponse> =>
+    withPending(async () => {
+      try {
+        const loggedIn = await applyLoginSession((await GqlLoginWithProvider({ input: { oauthResponse: { state, code }, provider } })).login);
+        return loggedIn && viewer.value === null ? { success: false, error: OAUTH_LOGIN_ERROR } : { success: true };
+      } catch (error: unknown) {
+        return authError(error);
+      }
+    });
+
+  const logoutUser = async (): Promise<AuthResponse> => {
+    isPending.value = true;
+    let errorMsg: string | undefined;
+
+    try {
+      try {
+        const { logout } = await GqlLogout();
+        if (!logout?.success) errorMsg = 'There was an error logging out. Your session was cleared locally.';
+      } catch (error: unknown) {
+        errorMsg = getErrorMessage(error);
+      }
+
+      clearAuthSession();
+      clearWooSession();
+      clearAllCookies();
+      resetAccountState();
+
+      if (!(await refreshCart())) updateCart(null);
+      return errorMsg ? { success: false, error: errorMsg } : { success: true };
+    } finally {
+      isPending.value = false;
+      await router.push(router.currentRoute.value.path === '/my-account' ? '/my-account' : '/');
     }
   };
 
-  const getDownloads = async (): Promise<ApiResponse<DownloadableItem[]>> => {
-    try {
-      const { customer } = await GqlGetDownloads();
-      if (customer) {
-        const downloadNodes = customer.downloadableItems?.nodes ?? [];
-        downloads.value = downloadNodes;
-        return { success: true, data: downloadNodes };
+  const registerUser = (userInfo: RegisterCustomerInput): Promise<AuthResponse> =>
+    withPending(async () => {
+      try {
+        await GqlRegisterCustomer({ input: userInfo });
+        return { success: true };
+      } catch (error: unknown) {
+        return authError(error);
       }
-      return { success: false, error: 'There was an error getting your downloads. Please try again later.' };
-    } catch (error: unknown) {
-      const errorMsg = getErrorMessage(error);
-      return { success: false, error: errorMsg };
-    }
-  };
+    });
+
+  const sendResetPasswordEmail = ({ username }: ResetPasswordEmailMutationVariables): Promise<AuthResponse> =>
+    withPending(async () => {
+      try {
+        const { sendPasswordResetEmail } = await GqlResetPasswordEmail({ username });
+        return sendPasswordResetEmail?.success
+          ? { success: true }
+          : { success: false, error: 'There was an error sending the reset password email. Please try again later.' };
+      } catch (error: unknown) {
+        return authError(error);
+      }
+    });
+
+  const resetPasswordWithKey = ({ key, login, password }: ResetPasswordKeyMutationVariables): Promise<AuthResponse> =>
+    withPending(async () => {
+      try {
+        const { resetUserPassword } = await GqlResetPasswordKey({ key, login, password });
+        return resetUserPassword?.user?.id
+          ? { success: true }
+          : { success: false, error: 'There was an error resetting the password. Please try again later.' };
+      } catch (error: unknown) {
+        return authError(error);
+      }
+    });
+
+  const getOrders = (): Promise<ApiResponse<Order[]>> =>
+    loadCustomerCollection(
+      () => GqlGetOrders(),
+      (customer) => customer.orders?.nodes,
+      (nodes) => {
+        orders.value = nodes;
+      },
+      'There was an error getting your orders. Please try again later.',
+    );
+
+  const getDownloads = (): Promise<ApiResponse<DownloadableItem[]>> =>
+    loadCustomerCollection(
+      () => GqlGetDownloads(),
+      (customer) => customer.downloadableItems?.nodes,
+      (nodes) => {
+        downloads.value = nodes;
+      },
+      'There was an error getting your downloads. Please try again later.',
+    );
 
   const updateLoginClients = (payload: LoginClient[]): void => {
     loginClients.value = payload;
