@@ -4,7 +4,7 @@ import type { Order } from '#types/gql';
 
 const { query, params, name } = useRoute();
 const { customer } = useAuth();
-const { formatDate, formatPrice, getErrorMessage } = useHelpers();
+const { formatDate, getErrorMessage } = useHelpers();
 const { t } = useI18n();
 const { cart, emptyCart, refreshCart } = useCart();
 
@@ -201,7 +201,7 @@ useSeoMeta({
                 {{ item.variation ? item.variation?.node?.name : item.product?.node.name! }}
               </div>
               <div class="text-sm text-gray-600">Qty. {{ item.quantity }}</div>
-              <span class="text-sm font-semibold text-gray-900">{{ formatPrice(item.total!) }}</span>
+              <span class="text-sm font-semibold text-gray-900" v-html="item.total || ''"></span>
             </div>
           </div>
         </template>

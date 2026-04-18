@@ -5,7 +5,7 @@ fragment DownloadableItem on DownloadableItem {
     name
     slug
   }
-  downloadUrl
+  # downloadUrl
   url
   accessExpires
   downloadsRemaining

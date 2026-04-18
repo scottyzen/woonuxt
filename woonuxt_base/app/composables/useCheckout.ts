@@ -4,6 +4,15 @@ export function useCheckout() {
   const { customer, loginUser } = useAuth();
   const { cart, refreshCart, isUpdatingCart } = useCart();
 
+  const resolvePaymentMethodId = (paymentMethod: unknown): string => {
+    if (typeof paymentMethod === 'string') return paymentMethod;
+    if (paymentMethod && typeof paymentMethod === 'object' && 'id' in paymentMethod) {
+      return String((paymentMethod as { id?: string | null }).id ?? '');
+    }
+
+    return '';
+  };
+
   const orderInput = useState<any>('orderInput', () => {
     return {
       customerNote: '',
@@ -26,13 +35,14 @@ export function useCheckout() {
     const billingSource = shipToDifferentAddress ? customer.value?.billing : shippingSource;
     const billing = billingSource;
     const shipping = shipToDifferentAddress ? shippingSource : billingSource;
+    const paymentMethodId = resolvePaymentMethodId(orderInput.value.paymentMethod);
 
     const payload: CheckoutInput = {
       billing,
       shipping,
       shippingMethod: cart.value?.chosenShippingMethods,
       metaData: orderInput.value.metaData,
-      paymentMethod: orderInput.value.paymentMethod.id,
+      paymentMethod: paymentMethodId,
       customerNote: orderInput.value.customerNote,
       shipToDifferentAddress,
       transactionId: orderInput.value.transactionId,
@@ -51,7 +61,7 @@ export function useCheckout() {
 
   // Helper function to check if payment method is PayPal
   const isPayPalPayment = (): boolean => {
-    const paymentId = orderInput.value.paymentMethod.id;
+    const paymentId = resolvePaymentMethodId(orderInput.value.paymentMethod);
     return paymentId === 'paypal' || paymentId === 'ppcp-gateway';
   };
 

@@ -6,5 +6,6 @@ query getStripePaymentIntent($stripePaymentMethod: StripePaymentMethodEnum!, $cu
     id
     currency
     stripePaymentMethod
+    customerSessionClientSecret
   }
 }

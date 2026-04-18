@@ -27,10 +27,16 @@ export function useHelpers() {
   function clearAllCookies(): void {
     if (!import.meta.client) return;
     const cookies = document.cookie.split(';');
+    const hostname = window.location.hostname;
+    const domain = hostname.includes('.') ? '.' + hostname.split('.').slice(-2).join('.') : hostname;
+    const past = 'Thu, 01 Jan 1970 00:00:00 GMT';
     for (const cookie of cookies) {
       const eqPos = cookie.indexOf('=');
-      const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
-      document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      const name = (eqPos > -1 ? cookie.substring(0, eqPos) : cookie).trim();
+      // Delete the cookie at every path/domain combination that could have set it.
+      document.cookie = `${name}=;expires=${past};path=/`;
+      document.cookie = `${name}=;expires=${past};path=/;domain=${hostname}`;
+      document.cookie = `${name}=;expires=${past};path=/;domain=${domain}`;
     }
   }
 
@@ -106,10 +112,27 @@ export function useHelpers() {
    * @param {string} price - The price string to format.
    * @returns {string} The formatted price string.
    */
-  const formatPrice = (price: string): string => {
+  const formatPrice = (price: string | number | null | undefined): string => {
     const runtimeConfig = useRuntimeConfig();
     const currencyCode = runtimeConfig.public?.CURRENCY_CODE || 'USD';
-    return parseFloat(price).toLocaleString('en-US', { style: 'currency', currency: currencyCode });
+    if (price === null || price === undefined) return '';
+
+    if (typeof price === 'number') {
+      if (!Number.isFinite(price)) return '';
+      return price.toLocaleString('en-US', { style: 'currency', currency: currencyCode });
+    }
+
+    const normalized = stripHtml(price)
+      .replace(/[^0-9,.-]/g, '')
+      .trim();
+    const decimalNormalized = normalized.includes(',') && !normalized.includes('.') ? normalized.replace(',', '.') : normalized.replace(/,/g, '');
+    const parsed = Number.parseFloat(decimalNormalized);
+
+    if (!Number.isFinite(parsed)) {
+      return price;
+    }
+
+    return parsed.toLocaleString('en-US', { style: 'currency', currency: currencyCode });
   };
 
   /**

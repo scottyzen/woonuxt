@@ -4,6 +4,8 @@ import type { Appearance, Stripe, StripeElements } from '@stripe/stripe-js';
 const props = defineProps<{
   stripe: Stripe;
   clientSecret?: string | null;
+  customerSessionClientSecret?: string | null;
+  customerId?: string | null;
   amount?: number | null;
   currency?: string | null;
   saveForFuture?: boolean;
@@ -20,8 +22,11 @@ const paymentMethodType = computed(() => appConfig.stripePaymentMethod || 'payme
 const normalizedCurrency = computed(() => (props.currency || '').toLowerCase());
 const normalizedAmount = computed(() => (typeof props.amount === 'number' ? Math.max(0, props.amount) : null));
 const normalizedSetupFutureUsage = computed<'off_session' | null>(() => (props.saveForFuture ? 'off_session' : null));
+
+/** Deferred mode has no customer association. If a customerId is set, wait for
+ * a clientSecret (intent mode) instead. */
 const canCreateDeferred = computed(
-  () => paymentMethodType.value === 'payment' && !props.clientSecret && !!normalizedCurrency.value && (normalizedAmount.value ?? 0) > 0,
+  () => paymentMethodType.value === 'payment' && !props.clientSecret && !props.customerId && !!normalizedCurrency.value && (normalizedAmount.value ?? 0) > 0,
 );
 
 const resolveRootCssVariable = (name: string, fallback: string): string => {
@@ -104,10 +109,14 @@ const createStripeElements = async () => {
   switch (paymentMethodType.value) {
     case 'payment':
       if (props.clientSecret) {
-        elements = props.stripe.elements({
+        const elementsOptions: any = {
           clientSecret: props.clientSecret,
           appearance: stripeAppearance.value,
-        });
+        };
+        if (props.customerSessionClientSecret) {
+          elementsOptions.customerSessionClientSecret = props.customerSessionClientSecret;
+        }
+        elements = props.stripe.elements(elementsOptions);
         elementsMode = 'intent';
       } else {
         if (!canCreateDeferred.value) return;
@@ -156,9 +165,8 @@ const createStripeElements = async () => {
   if (elements) emit('updateElement', elements);
 };
 
-// Recreate elements when payment method or client secret changes
 watch(
-  () => [paymentMethodType.value, props.clientSecret],
+  () => [paymentMethodType.value, props.clientSecret, props.customerSessionClientSecret],
   () => {
     if (paymentMethodType.value === 'payment' && !props.clientSecret && !canCreateDeferred.value) {
       resetStripeElements();
