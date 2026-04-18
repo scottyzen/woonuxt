@@ -317,15 +317,15 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col justify-between gap-1" v-if="attributes">
+  <div class="flex flex-col justify-between gap-1 attribute-selections" v-if="attributes">
     <div v-for="(attr, i) in attributes" :key="i" class="relative flex flex-wrap justify-between py-2">
       <!-- LOCAL -->
       <div v-if="attr.scope == 'LOCAL'" class="grid gap-2">
-        <div class="text-sm ">
+        <div class="text-sm">
           {{ attr.label || attr.name }}
-          <span v-if="selections[attr.name || '']" class="text-gray-400 ">: {{ getSelectedName(attr, selections[attr.name || '']) }}</span>
+          <span v-if="selections[attr.name || '']" class="text-gray-400">: {{ getSelectedName(attr, selections[attr.name || '']) }}</span>
         </div>
-        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400 ">
+        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400">
           {{ getSelectionHint(attr) }}
         </div>
         <div class="flex gap-2">
@@ -358,7 +358,7 @@ watch(
           {{ $t('general.color') }}
           <span v-if="selections[attr.name || '']" class="text-gray-400">{{ getSelectedName(attr, selections[attr.name || '']) }}</span>
         </div>
-        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400 ">
+        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400">
           {{ getSelectionHint(attr) }}
         </div>
         <div class="flex gap-2">
@@ -389,18 +389,18 @@ watch(
 
       <!-- DROPDOWN -->
       <div v-else-if="'terms' in attr && (attr.terms?.nodes?.length || 0) > 8" class="grid gap-2">
-        <div class="text-sm ">
+        <div class="text-sm">
           {{ attr.label || attr.name }}
-          <span v-if="selections[attr.name || '']" class="text-gray-400 ">{{ getSelectedName(attr, selections[attr.name || '']) }}</span>
+          <span v-if="selections[attr.name || '']" class="text-gray-400">{{ getSelectedName(attr, selections[attr.name || '']) }}</span>
         </div>
-        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400 ">
+        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400">
           {{ getSelectionHint(attr) }}
         </div>
         <select
           :id="attr.name || ''"
           :name="attr.name || ''"
           required
-          class="border-white shadow-xs select   "
+          class="border-white shadow-xs select"
           v-model="selections[attr.name || '']"
           @change="handleSelectionChange(attr.name || '')">
           <option disabled hidden>{{ $t('general.choose') }} {{ decodeURIComponent(attr.label || attr.name || '') }}</option>
@@ -415,11 +415,11 @@ watch(
 
       <!-- CHECKBOXES -->
       <div v-else class="grid gap-2">
-        <div class="text-sm ">
+        <div class="text-sm">
           {{ attr.label || attr.name }}
-          <span v-if="selections[attr.name || '']" class="text-gray-400 ">: {{ getSelectedName(attr, selections[attr.name || '']) }}</span>
+          <span v-if="selections[attr.name || '']" class="text-gray-400">: {{ getSelectedName(attr, selections[attr.name || '']) }}</span>
         </div>
-        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400 ">
+        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400">
           {{ getSelectionHint(attr) }}
         </div>
         <div class="flex gap-2">
@@ -498,7 +498,7 @@ watch(
   @apply bg-black;
 }
 
-input[type='radio']:checked ~ span {
+.attribute-selections input[type='radio']:checked ~ span {
   @apply outline-2 outline-gray-500;
 }
 </style>

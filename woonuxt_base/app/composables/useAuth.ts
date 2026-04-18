@@ -4,9 +4,9 @@ import type {
   CreateAccountInput,
   Customer,
   DownloadableItem,
-  LoginSession,
   LoginClient,
   LoginInput,
+  LoginSession,
   Order,
   RegisterCustomerInput,
   ResetPasswordEmailMutationVariables,
@@ -158,16 +158,24 @@ export const useAuth = () => {
         errorMsg = getErrorMessage(error);
       }
 
+      // Clear all auth/session state synchronously first so the UI updates immediately.
       clearAuthSession();
       clearWooSession();
       clearAllCookies();
       resetAccountState();
+      updateCart(null);
+      useGqlHeaders({ 'woocommerce-session': '' });
 
-      if (!(await refreshCart())) updateCart(null);
+      // Navigate now — don't wait for refreshCart() first. refreshCart() can take 1-2s
+      // and applyCartSnapshot could restore viewer state if a stale cookie survived.
+      await router.push(router.currentRoute.value.path === '/my-account' ? '/my-account' : '/');
+
+      // Fire-and-forget: get a fresh anonymous guest cart/session in the background.
+      void refreshCart().catch(() => {});
+
       return errorMsg ? { success: false, error: errorMsg } : { success: true };
     } finally {
       isPending.value = false;
-      await router.push(router.currentRoute.value.path === '/my-account' ? '/my-account' : '/');
     }
   };
 

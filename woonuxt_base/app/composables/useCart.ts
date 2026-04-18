@@ -440,13 +440,20 @@ export function useCart() {
     const canOptimistic = isOptimisticCartMode.value;
 
     if (canOptimistic) {
-      runOptimisticMutation(
-        () => applyOptimisticEmptyCart(),
-        async () => {
+      applyOptimisticEmptyCart();
+      optimisticPendingMutations.value += 1;
+
+      try {
+        await enqueueCartMutation(async () => {
           const { emptyCart } = await GqlEmptyCart();
           return emptyCart?.cart ?? null;
-        },
-      );
+        }, true);
+      } catch {
+        optimisticHadError.value = true;
+      } finally {
+        optimisticPendingMutations.value = Math.max(0, optimisticPendingMutations.value - 1);
+        await finalizeOptimisticMutations();
+      }
       return;
     }
 

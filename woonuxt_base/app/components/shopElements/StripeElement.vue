@@ -4,6 +4,8 @@ import type { Appearance, Stripe, StripeElements } from '@stripe/stripe-js';
 const props = defineProps<{
   stripe: Stripe;
   clientSecret?: string | null;
+  customerSessionClientSecret?: string | null;
+  customerId?: string | null;
   amount?: number | null;
   currency?: string | null;
   saveForFuture?: boolean;
@@ -104,10 +106,14 @@ const createStripeElements = async () => {
   switch (paymentMethodType.value) {
     case 'payment':
       if (props.clientSecret) {
-        elements = props.stripe.elements({
+        const elementsOptions: any = {
           clientSecret: props.clientSecret,
           appearance: stripeAppearance.value,
-        });
+        };
+        if (props.customerSessionClientSecret) {
+          elementsOptions.customerSessionClientSecret = props.customerSessionClientSecret;
+        }
+        elements = props.stripe.elements(elementsOptions);
         elementsMode = 'intent';
       } else {
         if (!canCreateDeferred.value) return;
@@ -156,9 +162,9 @@ const createStripeElements = async () => {
   if (elements) emit('updateElement', elements);
 };
 
-// Recreate elements when payment method or client secret changes
+// Recreate elements when payment method, client secret, or customer session changes
 watch(
-  () => [paymentMethodType.value, props.clientSecret],
+  () => [paymentMethodType.value, props.clientSecret, props.customerSessionClientSecret],
   () => {
     if (paymentMethodType.value === 'payment' && !props.clientSecret && !canCreateDeferred.value) {
       resetStripeElements();
