@@ -18,8 +18,8 @@ const savePaymentMethod = ref<boolean>(false);
 
 type SavedPaymentMethod = {
   id: number;
-  token: string; // pm_xxx Stripe payment method ID
-  customerId?: string | null; // cus_xxx — sourced from WC token meta, more reliable than viewer.stripeCustomerId
+  token: string; // pm_xxx
+  customerId?: string | null; // cus_xxx — from WC token meta, authoritative over viewer.stripeCustomerId
   last4: string;
   expiryMonth: string;
   expiryYear: string;
@@ -75,7 +75,7 @@ const resetStripeOrderMeta = (): void => {
   orderInput.value.metaData = orderInput.value.metaData.filter((entry: { key: string }) => !stripeMetaKeys.has(entry.key));
 };
 
-// Auto-select the default saved card (or the first one) when saved methods load.
+// Auto-select the default (or first) saved card when the viewer loads.
 watch(
   savedPaymentMethods,
   (methods) => {
@@ -87,17 +87,19 @@ watch(
   { immediate: true },
 );
 
-// Whenever a saved card is (re-)selected, keep Stripe active and avoid reusing
-// any PaymentIntent that was created for the Payment Element flow.
+/**
+ * Keep Stripe active when a saved card is selected. Don't clear stripeClientSecret —
+ * StripeElement is unmounted anyway (v-if), and preserving it avoids a round-trip
+ * when switching back to "Use another payment method".
+ */
 watch(selectedSavedToken, async (token, previousToken) => {
   if (token) {
     activateStripeGateway();
-    stripeClientSecret.value = null;
-    stripeCustomerSessionSecret.value = null;
     return;
   }
 
-  if (previousToken && stripe && appConfig.stripePaymentMethod === 'payment') {
+  // Fetch a PI only if we don't already have one.
+  if (previousToken && stripe && appConfig.stripePaymentMethod === 'payment' && !stripeClientSecret.value) {
     await initStripePaymentIntent();
   }
 });
@@ -154,9 +156,7 @@ const isCheckoutDisabled = computed<boolean>(() => {
   if (isProcessingOrder.value || !selectedPaymentMethodId.value) return true;
   if (selectedPaymentMethodId.value === 'stripe') {
     if (!stripe) return true;
-    // Saved card path creates its own fresh PaymentIntent at submit time.
-    if (selectedSavedToken.value) return false;
-    // New card path: need the Payment Element to be mounted.
+    if (selectedSavedToken.value) return false; // PI created fresh at submit time
     return !elements.value;
   }
   return false;
@@ -216,9 +216,7 @@ const ensureShippingRates = async () => {
   if (!shouldShowShippingFlow.value || hasAvailableShippingMethods.value || isResolvingShippingRates.value) return;
   if (!customer.value) return;
 
-  // Use shipping address if it has data; otherwise fall back to billing.
-  // We can't use `??` here because EMPTY_CUSTOMER initialises shipping as `{}`
-  // (truthy but with no fields), which would prevent the billing fallback.
+  // Fall back to billing when shipping is an empty object (EMPTY_CUSTOMER initialises it as {}).
   const hasAddrData = (addr: any) => !!(addr?.country || addr?.state || addr?.postcode || addr?.city || addr?.address1);
   const shippingLocation = hasAddrData(customer.value.shipping) ? customer.value.shipping : customer.value.billing;
 
@@ -236,8 +234,7 @@ const ensureShippingRates = async () => {
   }
 };
 
-// Eagerly create a PaymentIntent so StripeElement mounts in intent mode, which
-// allows Stripe to display saved payment methods for the current customer.
+// Eagerly create a PaymentIntent so StripeElement can mount in intent mode.
 const initStripePaymentIntent = async () => {
   if (!stripe || appConfig.stripePaymentMethod !== 'payment' || selectedSavedToken.value) return;
 
@@ -255,7 +252,9 @@ const initStripePaymentIntent = async () => {
     }
     if (stripePaymentIntent?.clientSecret) {
       stripeClientSecret.value = stripePaymentIntent.clientSecret;
-      stripeCustomerSessionSecret.value = (stripePaymentIntent as any).customerSessionClientSecret ?? null;
+      /** Don't attach the CustomerSession: it requires setup_future_usage on the PI,
+       * which this eager init doesn't set. Saved cards are shown via our own UI. */
+      stripeCustomerSessionSecret.value = null;
     } else {
       console.warn('[Stripe] No clientSecret in response');
     }
@@ -264,7 +263,6 @@ const initStripePaymentIntent = async () => {
   }
 };
 
-// Watch for address preference changes to auto-copy shipping to billing when using same address
 watch(shipToDifferentAddress, (newValue) => {
   if (!customer.value?.billing) return;
 
@@ -273,23 +271,18 @@ watch(shipToDifferentAddress, (newValue) => {
     return;
   }
 
-  // Keep shipping in sync with billing unless the shopper explicitly overrides it.
   if (!newValue || !hasAnyShippingInfo.value) {
     Object.assign(customer.value.shipping, { ...customer.value.billing });
   }
 });
 
-// viewer.stripeCustomerId may load AFTER onBeforeMount because refreshCart() is
-// async in the init plugin. Watch for it and (re)init the PaymentIntent when it
-// first becomes available so Stripe gets the customer association it needs to
-// show saved payment methods.
+/** stripeCustomerId loads async (after refreshCart). Re-init when it arrives so
+ * the PaymentIntent has the customer attached. */
 watch(stripeCustomerId, (newId, oldId) => {
   if (!stripe || appConfig.stripePaymentMethod !== 'payment') return;
   if (selectedSavedToken.value) return;
-  // Re-init whenever the customer ID loads for the first time or changes, as long as
-  // a clientSecret isn't already tied to this customer.
   if (newId && newId !== oldId) {
-    stripeClientSecret.value = null; // clear stale secret so StripeElement remounts
+    stripeClientSecret.value = null;
     stripeCustomerSessionSecret.value = null;
     initStripePaymentIntent();
   }
@@ -298,24 +291,19 @@ watch(stripeCustomerId, (newId, oldId) => {
 onBeforeMount(async () => {
   if (query.cancel_order) window.close();
 
-  // Initialize shipping address if it doesn't exist, independent of loaded shipping methods
   if (customer.value && !customer.value.shipping && customer.value.billing) {
     customer.value.shipping = { ...customer.value.billing };
   }
 
   await ensureShippingRates();
 
-  // Eagerly init the PaymentIntent in 'payment' mode. We wait one tick so that
-  // refreshCart() (which populates viewer.stripeCustomerId) has a chance to
-  // complete first. If the customer ID is already available we only need one call;
-  // if it arrives later the watcher handles re-init.
+  // Wait one tick so refreshCart() has a chance to populate stripeCustomerId first.
   if (stripe && appConfig.stripePaymentMethod === 'payment' && !selectedSavedToken.value) {
     await nextTick();
     await initStripePaymentIntent();
   }
 });
 
-// Helper to check if user has any shipping information
 const hasAnyShippingInfo = computed(() => {
   const shipping = customer.value?.shipping;
   if (!shipping) return false;
@@ -368,23 +356,16 @@ const payNow = async () => {
 
   try {
     if (selectedPaymentMethodId.value === 'stripe' && stripe) {
-      // ── Saved card path ─────────────────────────────────────────────────────
+      // ── Saved card ──────────────────────────────────────────────────────────
       if (selectedSavedToken.value) {
-        // Saved payment methods must use the customer ID that owns that exact
-        // payment method. Falling back to viewer.stripeCustomerId is unsafe
-        // because stale user meta can point at a different Stripe customer.
+        // Use the customer ID from the token itself — stale user meta can differ.
         const tokenCustomerId = selectedSavedToken.value.customerId || undefined;
 
         if (!tokenCustomerId) {
-          throw new Error(
-            'Saved payment method is missing its Stripe customer mapping. The backend must return savedPaymentMethods[].customerId for this card.',
-          );
+          throw new Error('Saved payment method is missing its Stripe customer ID.');
         }
 
-        // Always create a fresh PaymentIntent with the customer ID for saved cards.
-        // We cannot reuse the eager stripeClientSecret because it may have been
-        // created before stripeCustomerId loaded (i.e. without customer attached),
-        // which causes Stripe to reject the pm_xxx that belongs to that customer.
+        // Always create a fresh PI — the eager one may lack the customer association.
         const { stripePaymentIntent } = await GqlGetStripePaymentIntent({
           stripePaymentMethod: 'PAYMENT' as any,
           customerId: tokenCustomerId,
@@ -417,7 +398,7 @@ const payNow = async () => {
           orderInput.value.transactionId = paymentIntent.id;
         }
       } else if (elements.value) {
-        // ── New card / Payment Element path ───────────────────────────────────
+        // ── New card ────────────────────────────────────────────────────────────
         const paymentMethodType = appConfig.stripePaymentMethod || 'payment';
 
         if (paymentMethodType === 'payment') {
@@ -493,7 +474,7 @@ const payNow = async () => {
             orderInput.value.transactionId = paymentIntent.id;
           }
         } else {
-          // Traditional Card Element (legacy)
+          // Legacy Card Element
           let clientSecret = '';
           try {
             const { stripePaymentIntent } = await GqlGetStripePaymentIntent({ stripePaymentMethod: 'SETUP' as any });
@@ -525,17 +506,12 @@ const payNow = async () => {
   } catch (error) {
     console.error('Checkout error:', error);
 
-    // Provide user-friendly error message
     const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred during checkout';
-
-    // You could show a toast notification here instead
     alert(`Payment failed: ${errorMessage}. Please try again or contact support.`);
-
     buttonText.value = t('shop.checkoutButton');
-    return; // Don't process checkout if payment failed
+    return;
   }
 
-  // Process the checkout
   await processCheckout(isPaid.value);
 };
 

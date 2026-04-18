@@ -22,8 +22,11 @@ const paymentMethodType = computed(() => appConfig.stripePaymentMethod || 'payme
 const normalizedCurrency = computed(() => (props.currency || '').toLowerCase());
 const normalizedAmount = computed(() => (typeof props.amount === 'number' ? Math.max(0, props.amount) : null));
 const normalizedSetupFutureUsage = computed<'off_session' | null>(() => (props.saveForFuture ? 'off_session' : null));
+
+/** Deferred mode has no customer association. If a customerId is set, wait for
+ * a clientSecret (intent mode) instead. */
 const canCreateDeferred = computed(
-  () => paymentMethodType.value === 'payment' && !props.clientSecret && !!normalizedCurrency.value && (normalizedAmount.value ?? 0) > 0,
+  () => paymentMethodType.value === 'payment' && !props.clientSecret && !props.customerId && !!normalizedCurrency.value && (normalizedAmount.value ?? 0) > 0,
 );
 
 const resolveRootCssVariable = (name: string, fallback: string): string => {
@@ -162,7 +165,6 @@ const createStripeElements = async () => {
   if (elements) emit('updateElement', elements);
 };
 
-// Recreate elements when payment method, client secret, or customer session changes
 watch(
   () => [paymentMethodType.value, props.clientSecret, props.customerSessionClientSecret],
   () => {
