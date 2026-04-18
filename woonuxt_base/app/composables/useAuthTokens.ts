@@ -1,3 +1,5 @@
+import type { LoginSession } from '#types/gql';
+
 const REFRESH_TOKEN_COOKIE = 'auth-refresh-token';
 const LEGACY_GQL_TOKEN_COOKIE = 'gql:default';
 const REFRESH_BUFFER_SECONDS = 60;
@@ -53,7 +55,7 @@ export const useAuthTokens = () => {
     refreshToken.value = null;
   };
 
-  const setAuthSessionFromLogin = (payload?: { authToken?: string | null; refreshToken?: string | null }): void => {
+  const setAuthSessionFromLogin = (payload?: LoginSession | null): void => {
     if (!payload?.authToken) return;
     refreshToken.value = payload.refreshToken ?? null;
     setActiveAuthToken(payload.authToken);

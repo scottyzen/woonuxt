@@ -24,6 +24,8 @@ import type {
   CommentFragment,
   ProductAttributeFragment,
   LoginClientFragment,
+  LoginMutation,
+  LoginWithProviderMutation,
 } from '#gql';
 import type { StockStatusEnum } from '#gql/default';
 
@@ -106,6 +108,7 @@ export type VariationAttribute = VariationAttributeFragment;
 export type Comment = CommentFragment;
 export type ProductAttribute = ProductAttributeFragment;
 export type LoginClient = LoginClientFragment;
+export type LoginSession = NonNullable<LoginMutation['login']> | NonNullable<LoginWithProviderMutation['login']>;
 
 export interface ProductAttributeInput {
   attributeName: string;
