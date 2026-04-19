@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { loadStripe } from '@stripe/stripe-js';
-import type { Stripe, StripeElements, StripeCardElement } from '@stripe/stripe-js';
+import type { Stripe, StripeElements } from '@stripe/stripe-js';
 import type { Viewer } from '#types/gql';
 const route = useRoute();
 
@@ -10,7 +10,6 @@ const { cart, paymentGateways } = useCart();
 const { customer, viewer, navigateToLogin } = useAuth();
 const { orderInput, isProcessingOrder, processCheckout, checkoutError, updateShippingLocation } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
-const appConfig = useAppConfig();
 const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
 
 const buttonText = ref<string>(isProcessingOrder.value ? t('general.processing') : t('shop.checkoutButton'));
@@ -99,7 +98,7 @@ watch(selectedSavedToken, async (token, previousToken) => {
   }
 
   // Fetch a PI only if we don't already have one.
-  if (previousToken && stripe && appConfig.stripePaymentMethod === 'payment' && !stripeClientSecret.value) {
+  if (previousToken && stripe && !stripeClientSecret.value) {
     await initStripePaymentIntent();
   }
 });
@@ -236,7 +235,7 @@ const ensureShippingRates = async () => {
 
 // Eagerly create a PaymentIntent so StripeElement can mount in intent mode.
 const initStripePaymentIntent = async () => {
-  if (!stripe || appConfig.stripePaymentMethod !== 'payment' || selectedSavedToken.value) return;
+  if (!stripe || selectedSavedToken.value) return;
 
   const customerId = stripeCustomerId.value;
 
@@ -279,7 +278,7 @@ watch(shipToDifferentAddress, (newValue) => {
 /** stripeCustomerId loads async (after refreshCart). Re-init when it arrives so
  * the PaymentIntent has the customer attached. */
 watch(stripeCustomerId, (newId, oldId) => {
-  if (!stripe || appConfig.stripePaymentMethod !== 'payment') return;
+  if (!stripe) return;
   if (selectedSavedToken.value) return;
   if (newId && newId !== oldId) {
     stripeClientSecret.value = null;
@@ -298,7 +297,7 @@ onBeforeMount(async () => {
   await ensureShippingRates();
 
   // Wait one tick so refreshCart() has a chance to populate stripeCustomerId first.
-  if (stripe && appConfig.stripePaymentMethod === 'payment' && !selectedSavedToken.value) {
+  if (stripe && !selectedSavedToken.value) {
     await nextTick();
     await initStripePaymentIntent();
   }
@@ -399,107 +398,76 @@ const payNow = async () => {
         }
       } else if (elements.value) {
         // ── New card ────────────────────────────────────────────────────────────
-        const paymentMethodType = appConfig.stripePaymentMethod || 'payment';
+        const saveForFuture = canSavePaymentMethod.value && savePaymentMethod.value;
 
-        if (paymentMethodType === 'payment') {
-          const saveForFuture = canSavePaymentMethod.value && savePaymentMethod.value;
+        const { error: submitError } = await elements.value.submit();
+        if (submitError) {
+          console.error('Form validation failed:', submitError);
+          throw new Error(submitError.message);
+        }
 
-          const { error: submitError } = await elements.value.submit();
-          if (submitError) {
-            console.error('Form validation failed:', submitError);
-            throw new Error(submitError.message);
+        let clientSecret = stripeClientSecret.value;
+        if (!clientSecret) {
+          const { stripePaymentIntent } = await GqlGetStripePaymentIntent({
+            stripePaymentMethod: 'PAYMENT' as any,
+            customerId: stripeCustomerId.value || undefined,
+            saveForFuture,
+          } as any);
+
+          if (stripePaymentIntent?.error) {
+            checkoutError.value = stripePaymentIntent.error;
+            throw new Error(stripePaymentIntent.error);
           }
 
-          let clientSecret = stripeClientSecret.value;
-          if (!clientSecret) {
-            const { stripePaymentIntent } = await GqlGetStripePaymentIntent({
-              stripePaymentMethod: 'PAYMENT' as any,
-              customerId: stripeCustomerId.value || undefined,
-              saveForFuture,
-            } as any);
+          clientSecret = stripePaymentIntent?.clientSecret ?? null;
+        }
 
-            if (stripePaymentIntent?.error) {
-              checkoutError.value = stripePaymentIntent.error;
-              throw new Error(stripePaymentIntent.error);
-            }
+        if (!clientSecret) throw new Error('Payment intent not available. Please refresh and try again.');
 
-            clientSecret = stripePaymentIntent?.clientSecret ?? null;
-          }
+        checkoutError.value = null;
 
-          if (!clientSecret) throw new Error('Payment intent not available. Please refresh and try again.');
-
-          checkoutError.value = null;
-
-          const { error, paymentIntent } = await stripe.confirmPayment({
-            elements: elements.value,
-            clientSecret,
-            confirmParams: {
-              return_url: `${window.location.origin}/checkout/order-received`,
-              payment_method_data: {
-                billing_details: {
-                  name: `${customer.value?.billing?.firstName || ''} ${customer.value?.billing?.lastName || ''}`.trim() || undefined,
-                  email: customer.value?.billing?.email || undefined,
-                  phone: customer.value?.billing?.phone || undefined,
-                  address: {
-                    line1: customer.value?.billing?.address1 || undefined,
-                    line2: customer.value?.billing?.address2 || undefined,
-                    city: customer.value?.billing?.city || undefined,
-                    state: customer.value?.billing?.state || undefined,
-                    postal_code: customer.value?.billing?.postcode || undefined,
-                    country: customer.value?.billing?.country || undefined,
-                  },
+        const { error, paymentIntent } = await stripe.confirmPayment({
+          elements: elements.value,
+          clientSecret,
+          confirmParams: {
+            return_url: `${window.location.origin}/checkout/order-received`,
+            payment_method_data: {
+              billing_details: {
+                name: `${customer.value?.billing?.firstName || ''} ${customer.value?.billing?.lastName || ''}`.trim() || undefined,
+                email: customer.value?.billing?.email || undefined,
+                phone: customer.value?.billing?.phone || undefined,
+                address: {
+                  line1: customer.value?.billing?.address1 || undefined,
+                  line2: customer.value?.billing?.address2 || undefined,
+                  city: customer.value?.billing?.city || undefined,
+                  state: customer.value?.billing?.state || undefined,
+                  postal_code: customer.value?.billing?.postcode || undefined,
+                  country: customer.value?.billing?.country || undefined,
                 },
               },
             },
-            redirect: 'if_required',
-          });
+          },
+          redirect: 'if_required',
+        });
 
-          if (error) {
-            console.error('Payment failed:', error);
-            throw new Error(error.message);
-          }
+        if (error) {
+          console.error('Payment failed:', error);
+          throw new Error(error.message);
+        }
 
-          if (paymentIntent) {
-            upsertOrderMeta('_stripe_payment_intent_id', paymentIntent.id);
-            if (paymentIntent.payment_method) {
-              upsertOrderMeta('_stripe_payment_method_id', String(paymentIntent.payment_method));
-            }
-            upsertOrderMeta('_stripe_source_id', paymentIntent.id);
-            upsertOrderMeta('_stripe_fee', '0');
-            upsertOrderMeta('_stripe_net', paymentIntent.amount.toString());
-            upsertOrderMeta('_stripe_currency', paymentIntent.currency);
-            upsertOrderMeta('_stripe_charge_captured', 'yes');
-            upsertOrderMeta('_wc_stripe_payment_method_type', 'card');
-            isPaid.value = paymentIntent.status === 'succeeded' || paymentIntent.status === 'processing';
-            orderInput.value.transactionId = paymentIntent.id;
+        if (paymentIntent) {
+          upsertOrderMeta('_stripe_payment_intent_id', paymentIntent.id);
+          if (paymentIntent.payment_method) {
+            upsertOrderMeta('_stripe_payment_method_id', String(paymentIntent.payment_method));
           }
-        } else {
-          // Legacy Card Element
-          let clientSecret = '';
-          try {
-            const { stripePaymentIntent } = await GqlGetStripePaymentIntent({ stripePaymentMethod: 'SETUP' as any });
-            clientSecret = stripePaymentIntent?.clientSecret || '';
-          } catch (stripeError) {
-            console.error('Error getting Stripe setup intent:', stripeError);
-          }
-
-          const cardElement = elements.value.getElement('card') as StripeCardElement;
-
-          if (clientSecret) {
-            const { setupIntent } = await stripe.confirmCardSetup(clientSecret, { payment_method: { card: cardElement } });
-            if (setupIntent) upsertOrderMeta('_stripe_intent_id', setupIntent.id);
-            isPaid.value = setupIntent?.status === 'succeeded' || false;
-            orderInput.value.transactionId = setupIntent?.id || new Date().getTime().toString();
-          } else {
-            const { paymentMethod, error: paymentMethodError } = await stripe.createPaymentMethod({ type: 'card', card: cardElement });
-            if (paymentMethodError) throw new Error(paymentMethodError.message);
-            if (paymentMethod) {
-              upsertOrderMeta('_stripe_payment_method_id', paymentMethod.id);
-              upsertOrderMeta('_stripe_source_id', paymentMethod.id);
-              orderInput.value.transactionId = paymentMethod.id;
-              isPaid.value = true;
-            }
-          }
+          upsertOrderMeta('_stripe_source_id', paymentIntent.id);
+          upsertOrderMeta('_stripe_fee', '0');
+          upsertOrderMeta('_stripe_net', paymentIntent.amount.toString());
+          upsertOrderMeta('_stripe_currency', paymentIntent.currency);
+          upsertOrderMeta('_stripe_charge_captured', 'yes');
+          upsertOrderMeta('_wc_stripe_payment_method_type', 'card');
+          isPaid.value = paymentIntent.status === 'succeeded' || paymentIntent.status === 'processing';
+          orderInput.value.transactionId = paymentIntent.id;
         }
       }
     }
@@ -723,7 +691,7 @@ useSeoMeta({
                 :save-for-future="canSavePaymentMethod && savePaymentMethod"
                 @updateElement="handleStripeElement" />
               <div
-                v-if="selectedPaymentMethodId === 'stripe' && canSavePaymentMethod && appConfig.stripePaymentMethod === 'payment'"
+                v-if="selectedPaymentMethodId === 'stripe' && canSavePaymentMethod"
                 class="mt-3 flex items-start gap-2">
                 <input
                   id="save-payment-method"
