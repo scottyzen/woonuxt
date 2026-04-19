@@ -4,6 +4,7 @@ import type { PaymentGateway, PaymentGateways } from '#types/gql';
 const props = defineProps<{
   modelValue: string | object;
   paymentGateways: PaymentGateways;
+  forceInactive?: boolean;
 }>();
 
 const paymentMethod = toRef(props, 'modelValue');
@@ -46,9 +47,9 @@ watch(
         :key="gateway.id"
         type="button"
         class="payment-option"
-        :class="{ 'active-option': gateway.id === selectedGatewayId }"
+        :class="{ 'active-option': !forceInactive && gateway.id === selectedGatewayId }"
         role="radio"
-        :aria-checked="gateway.id === selectedGatewayId"
+        :aria-checked="!forceInactive && gateway.id === selectedGatewayId"
         :title="gateway?.description || gateway?.title || 'Payment Method'"
         @click="updatePaymentMethod(gateway)">
         <span class="payment-option-content">
@@ -71,7 +72,7 @@ watch(
     </div>
 
     <div v-if="activePaymentMethod?.description" class="prose block w-full mt-3">
-      <p class="text-sm text-gray-500 " v-html="activePaymentMethod.description" />
+      <p class="text-sm text-gray-500" v-html="activePaymentMethod.description" />
     </div>
   </div>
 </template>
@@ -86,7 +87,6 @@ watch(
 
 .payment-options-grid {
   @apply grid gap-3;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
 .payment-option {

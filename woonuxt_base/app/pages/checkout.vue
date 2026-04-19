@@ -487,6 +487,11 @@ const handleStripeElement = (stripeElements: StripeElements | null): void => {
   elements.value = stripeElements;
 };
 
+const handleGatewaySelect = (gateway: any): void => {
+  orderInput.value.paymentMethod = gateway;
+  selectedSavedToken.value = null;
+};
+
 const checkEmailOnBlur = (email?: string | null): void => {
   if (email) isInvalidEmail.value = !emailRegex.test(email);
 };
@@ -629,81 +634,69 @@ useSeoMeta({
               <span>{{ $t('billing.paymentOptions') }}</span>
             </h3>
 
-            <!-- ── Saved cards: primary option at the top ─────────────────── -->
-            <template v-if="savedPaymentMethods.length > 0">
-              <template v-if="selectedSavedToken">
-                <!-- Saved card list -->
-                <div class="flex flex-col gap-2 mb-3">
-                  <label
-                    v-for="pm in savedPaymentMethods"
-                    :key="pm.id"
-                    :for="`saved-pm-${pm.id}`"
-                    :class="[
-                      'flex items-center gap-3 cursor-pointer rounded-lg border p-3 transition-colors',
-                      selectedSavedToken?.id === pm.id ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-primary/40',
-                    ]">
-                    <input
-                      :id="`saved-pm-${pm.id}`"
-                      type="radio"
-                      name="saved-payment-method"
-                      :checked="selectedSavedToken?.id === pm.id"
-                      class="accent-primary"
-                      @change="selectedSavedToken = pm" />
-                    <span class="capitalize font-medium text-sm">{{ pm.cardType }}</span>
-                    <span class="text-sm"
-                      >ending in <strong>{{ pm.last4 }}</strong></span
-                    >
-                    <span class="text-sm text-gray-500">(expires {{ pm.expiryMonth }}/{{ pm.expiryYear }})</span>
-                    <span v-if="pm.isDefault" class="ml-auto text-xs font-semibold text-primary">Default</span>
-                  </label>
-                </div>
-                <!-- Use another payment method -->
-                <button
-                  type="button"
-                  class="text-sm text-gray-500 hover:text-primary hover:underline underline-offset-2 mt-1"
-                  @click="selectedSavedToken = null">
-                  Use another payment method
-                </button>
-              </template>
-
-              <!-- Back to saved card (shown when user switched away) -->
-              <button
-                v-else
-                type="button"
-                class="flex items-center gap-1 text-sm text-primary hover:underline underline-offset-2 mb-4"
-                @click="selectedSavedToken = savedPaymentMethods.find((m) => m.isDefault) ?? savedPaymentMethods[0] ?? null">
-                ← Use saved card
-              </button>
-            </template>
-
-            <!-- ── Gateway list + Payment Element: hidden while saved card is active ── -->
-            <template v-if="!selectedSavedToken">
-              <PaymentOptions v-model="orderInput.paymentMethod" class="mb-4" :payment-gateways="checkoutPaymentGateways" />
-              <StripeElement
-                v-if="stripe"
-                v-show="selectedPaymentMethodId === 'stripe'"
-                :stripe
-                :client-secret="stripeClientSecret"
-                :customer-session-client-secret="stripeCustomerSessionSecret"
-                :customer-id="stripeCustomerId"
-                :amount="stripeAmount"
-                :currency="stripeCurrency"
-                :save-for-future="canSavePaymentMethod && savePaymentMethod"
-                @updateElement="handleStripeElement" />
-              <div
-                v-if="selectedPaymentMethodId === 'stripe' && canSavePaymentMethod"
-                class="mt-3 flex items-start gap-2">
+            <!-- Saved card rows -->
+            <div v-if="savedPaymentMethods.length > 0" class="flex flex-col gap-3 mb-3">
+              <label
+                v-for="pm in savedPaymentMethods"
+                :key="pm.id"
+                :for="`saved-pm-${pm.id}`"
+                :class="[
+                  'flex items-center gap-3 cursor-pointer rounded-lg border px-4  py-3 transition-colors',
+                  selectedSavedToken?.id === pm.id ? 'border-primary bg-white' : 'border-gray-300 bg-white hover:border-primary hover:bg-gray-50',
+                ]">
                 <input
-                  id="save-payment-method"
-                  v-model="savePaymentMethod"
-                  type="checkbox"
-                  name="save-payment-method"
-                  class="mt-0.5 h-4 w-4 rounded-sm border-gray-300 bg-white text-primary focus:ring-3 focus:ring-primary" />
-                <label for="save-payment-method" class="text-sm font-medium text-gray-700">
-                  Save payment information to my account for future purchases.
-                </label>
-              </div>
-            </template>
+                  :id="`saved-pm-${pm.id}`"
+                  type="radio"
+                  name="payment-method-selector"
+                  :checked="selectedSavedToken?.id === pm.id"
+                  class="sr-only hidden"
+                  @change="selectedSavedToken = pm" />
+                <Icon name="ion:card-outline" size="18" class="text-gray-400 shrink-0" />
+                <span class="capitalize font-medium text-sm">{{ pm.cardType }}</span>
+                <span class="text-sm text-gray-500">•••• {{ pm.last4 }}</span>
+                <span class="text-sm text-gray-400">expires {{ pm.expiryMonth }}/{{ pm.expiryYear }}</span>
+                <span v-if="pm.isDefault" class="ml-auto text-xs font-semibold text-primary">Default</span>
+                <Icon
+                  name="ion:checkmark-circle"
+                  size="18"
+                  :class="[
+                    'text-primary transition-opacity shrink-0',
+                    selectedSavedToken?.id === pm.id ? 'opacity-100' : 'opacity-0',
+                    pm.isDefault ? '' : 'ml-auto',
+                  ]" />
+              </label>
+            </div>
+
+            <!-- Gateway options -->
+            <PaymentOptions
+              :model-value="orderInput.paymentMethod"
+              :force-inactive="!!selectedSavedToken"
+              class="mb-4"
+              :payment-gateways="checkoutPaymentGateways"
+              @update:model-value="handleGatewaySelect" />
+
+            <!-- Stripe Payment Element (always mounted, shown only when active) -->
+            <StripeElement
+              v-if="stripe"
+              v-show="selectedPaymentMethodId === 'stripe' && !selectedSavedToken"
+              :stripe
+              :client-secret="stripeClientSecret"
+              :customer-session-client-secret="stripeCustomerSessionSecret"
+              :customer-id="stripeCustomerId"
+              :amount="stripeAmount"
+              :currency="stripeCurrency"
+              :save-for-future="canSavePaymentMethod && savePaymentMethod"
+              @updateElement="handleStripeElement" />
+
+            <div v-if="selectedPaymentMethodId === 'stripe' && canSavePaymentMethod && !selectedSavedToken" class="mt-3 flex items-start gap-2">
+              <input
+                id="save-payment-method"
+                v-model="savePaymentMethod"
+                type="checkbox"
+                name="save-payment-method"
+                class="mt-0.5 h-4 w-4 rounded-sm border-gray-300 bg-white text-primary focus:ring-3 focus:ring-primary" />
+              <label for="save-payment-method" class="text-sm font-medium text-gray-700"> Save payment information to my account for future purchases. </label>
+            </div>
           </div>
 
           <!-- Order note -->
@@ -743,7 +736,7 @@ useSeoMeta({
   @apply w-full rounded-lg bg-white p-4 sm:p-8 shadow  outline-gray-800/10 outline;
 }
 
-/* Keep only the scale-y transition for email validation */
+/* Email validation */
 .scale-y-enter-active,
 .scale-y-leave-active {
   transition: all 0.2s ease-in-out;
