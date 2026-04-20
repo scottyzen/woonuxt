@@ -26,7 +26,9 @@ const setActiveOption = async (id) => {
         <span class="shipping-option-label" v-html="option.label"></span>
         <span class="shipping-option-price">{{ option.cost }}</span>
       </span>
-      <icon name="ion:checkmark-circle" size="20" class="shipping-option-check" />
+      <span class="shipping-option-radio" :class="option.id === activeOption ? 'border-primary bg-primary/10' : 'border-gray-400 bg-white'">
+        <span class="shipping-option-radio-dot" :class="option.id === activeOption ? 'bg-primary' : 'bg-transparent'" />
+      </span>
     </button>
   </div>
 </template>
@@ -41,7 +43,7 @@ const setActiveOption = async (id) => {
 }
 
 .shipping-option {
-  @apply w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-left text-sm transition-colors hover:border-primary hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40;
+  @apply w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-left text-sm transition-colors hover:border-gray-400 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40;
   @apply flex items-center justify-between gap-3;
 }
 
@@ -57,16 +59,16 @@ const setActiveOption = async (id) => {
   @apply text-base font-semibold text-gray-900;
 }
 
-.shipping-option-check {
-  @apply text-primary opacity-0 transition-opacity;
+.shipping-option-radio {
+  @apply inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors;
 }
 
 .shipping-option.active-option {
-  @apply border-primary bg-white;
+  @apply border-primary bg-primary/5 shadow-sm;
 }
 
-.shipping-option.active-option .shipping-option-check {
-  @apply opacity-100;
+.shipping-option-radio-dot {
+  @apply h-2.5 w-2.5 rounded-full transition-colors;
 }
 
 @container (max-width: 36rem) {

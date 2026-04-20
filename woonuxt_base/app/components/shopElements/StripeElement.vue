@@ -9,6 +9,19 @@ const props = defineProps<{
   amount?: number | null;
   currency?: string | null;
   saveForFuture?: boolean;
+  paymentDefaults?: {
+    name?: string | null;
+    email?: string | null;
+    phone?: string | null;
+    address?: {
+      line1?: string | null;
+      line2?: string | null;
+      city?: string | null;
+      state?: string | null;
+      postal_code?: string | null;
+      country?: string | null;
+    } | null;
+  } | null;
 }>();
 const emit = defineEmits(['updateElement']);
 let elements: StripeElements | null = null;
@@ -18,6 +31,40 @@ let elementsMode: 'intent' | 'deferred' | null = null;
 const normalizedCurrency = computed(() => (props.currency || '').toLowerCase());
 const normalizedAmount = computed(() => (typeof props.amount === 'number' ? Math.max(0, props.amount) : null));
 const normalizedSetupFutureUsage = computed<'off_session' | null>(() => (props.saveForFuture ? 'off_session' : null));
+const paymentElementDefaultValues = computed(() => {
+  const defaults = props.paymentDefaults;
+  if (!defaults) return undefined;
+
+  const billingDetails: Record<string, unknown> = {};
+  const trimmedName = defaults.name?.trim();
+  const trimmedEmail = defaults.email?.trim();
+  const trimmedPhone = defaults.phone?.trim();
+
+  if (trimmedName) billingDetails.name = trimmedName;
+  if (trimmedEmail) billingDetails.email = trimmedEmail;
+  if (trimmedPhone) billingDetails.phone = trimmedPhone;
+
+  const address = defaults.address;
+  if (address) {
+    const normalizedAddress = Object.fromEntries(
+      Object.entries({
+        line1: address.line1?.trim(),
+        line2: address.line2?.trim(),
+        city: address.city?.trim(),
+        state: address.state?.trim(),
+        postal_code: address.postal_code?.trim(),
+        country: address.country?.trim(),
+      }).filter(([, value]) => !!value),
+    );
+
+    if (Object.keys(normalizedAddress).length) {
+      billingDetails.address = normalizedAddress;
+    }
+  }
+
+  if (!Object.keys(billingDetails).length) return undefined;
+  return { billingDetails };
+});
 
 /** Deferred mode has no customer association. If a customerId is set, wait for
  * a clientSecret (intent mode) instead. */
@@ -107,6 +154,7 @@ const createStripeElements = async () => {
   paymentElement = elements.create('payment', {
     layout: 'tabs',
     paymentMethodOrder: ['card', 'apple_pay', 'google_pay', 'paypal'],
+    defaultValues: paymentElementDefaultValues.value,
     fields: {
       billingDetails: {
         name: 'auto',

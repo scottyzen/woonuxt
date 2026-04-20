@@ -1,0 +1,26 @@
+mutation setDefaultPaymentMethod($input: SetDefaultPaymentMethodInput!) {
+  setDefaultPaymentMethod(input: $input) {
+    status
+    token {
+      id
+      type
+      tokenId
+      isDefault
+      gateway {
+        title
+        id
+        icon
+        description
+      }
+      ... on PaymentTokenECheck {
+        last4
+      }
+      ... on PaymentTokenCC {
+        last4
+        expiryYear
+        expiryMonth
+        cardType
+      }
+    }
+  }
+}

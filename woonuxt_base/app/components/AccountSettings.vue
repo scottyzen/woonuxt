@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import type { CheckoutViewer, SavedPaymentMethod } from '#types/stripe-checkout';
+
 const { locale, locales, setLocale } = useI18n();
+const { viewer } = useAuth();
+const { refreshCart } = useCart();
+const { getErrorMessage } = useHelpers();
 
 // Settings data - preferences are real, others are mock
 const settings = ref({
@@ -34,6 +39,19 @@ const digestFrequencies = [
 
 const saving = ref(false);
 const successMessage = ref(false);
+const paymentMessage = ref<{ type: 'success' | 'error'; text: string } | null>(null);
+const isUpdatingDefaultPaymentMethod = ref(false);
+
+const savedPaymentMethods = computed<SavedPaymentMethod[]>(() => (viewer.value as CheckoutViewer | null)?.savedPaymentMethods ?? []);
+const getSavedPaymentMethodKey = (paymentMethod: SavedPaymentMethod): string => {
+  const tokenKey = paymentMethod.token?.trim();
+  if (tokenKey) return tokenKey;
+  return [paymentMethod.customerId || 'guest', paymentMethod.id, paymentMethod.last4, paymentMethod.expiryMonth, paymentMethod.expiryYear].join('-');
+};
+const defaultSavedPaymentMethodKey = computed<string>(() => {
+  const defaultMethod = savedPaymentMethods.value.find((paymentMethod) => paymentMethod.isDefault) ?? savedPaymentMethods.value[0] ?? null;
+  return defaultMethod ? getSavedPaymentMethodKey(defaultMethod) : '';
+});
 
 // Watch for language changes and apply immediately
 watch(
@@ -66,6 +84,30 @@ const saveSettings = async () => {
   }, 3000);
 };
 
+const setDefaultPaymentMethod = async (paymentMethod: SavedPaymentMethod) => {
+  if (isUpdatingDefaultPaymentMethod.value || paymentMethod.isDefault) return;
+
+  paymentMessage.value = null;
+  isUpdatingDefaultPaymentMethod.value = true;
+
+  try {
+    const { setDefaultPaymentMethod } = await GqlSetDefaultPaymentMethod({
+      input: { tokenId: paymentMethod.id },
+    });
+
+    if (!setDefaultPaymentMethod?.token?.isDefault) {
+      throw new Error(setDefaultPaymentMethod?.status || 'Unable to update the default payment method.');
+    }
+
+    await refreshCart();
+    paymentMessage.value = { type: 'success', text: 'Default payment method updated.' };
+  } catch (error) {
+    paymentMessage.value = { type: 'error', text: getErrorMessage(error) || 'Unable to update the default payment method.' };
+  } finally {
+    isUpdatingDefaultPaymentMethod.value = false;
+  }
+};
+
 const deleteAccount = () => {
   if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
     // In production, this would call a GraphQL mutation or REST API endpoint
@@ -83,6 +125,31 @@ const deleteAccount = () => {
     </div>
 
     <form @submit.prevent="saveSettings" class="space-y-6 wn-form">
+      <div class="bg-white rounded-lg shadow-xs border border-gray-100">
+        <div class="p-6 md:px-8 pb-4 border-b border-gray-100">
+          <h3 class="text-lg font-semibold text-gray-900">Saved Payment Methods</h3>
+          <p class="mt-2 text-sm text-gray-500">Choose which saved card should be used as the default across your account and checkout.</p>
+        </div>
+
+        <div class="p-6 md:p-8 space-y-4">
+          <SavedPaymentMethods
+            v-if="savedPaymentMethods.length"
+            :payment-methods="savedPaymentMethods"
+            :selected-payment-method-key="defaultSavedPaymentMethodKey"
+            :get-payment-method-key="getSavedPaymentMethodKey"
+            :disabled="isUpdatingDefaultPaymentMethod"
+            title="Saved payment methods"
+            @select="setDefaultPaymentMethod" />
+
+          <p v-else class="text-sm text-gray-500">You do not have any saved payment methods yet.</p>
+
+          <p v-if="isUpdatingDefaultPaymentMethod" class="text-sm text-gray-500">Updating your default payment method...</p>
+          <p v-else-if="paymentMessage" :class="paymentMessage.type === 'error' ? 'text-sm text-red-600' : 'text-sm text-green-600'">
+            {{ paymentMessage.text }}
+          </p>
+        </div>
+      </div>
+
       <!-- Preferences Section -->
       <div class="bg-white rounded-lg shadow-xs border border-gray-100">
         <div class="p-6 md:px-8 pb-4 border-b border-gray-100">

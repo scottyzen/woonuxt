@@ -1,52 +1,40 @@
 <script setup lang="ts">
-import { loadStripe } from '@stripe/stripe-js';
-import type { Stripe, StripeElements } from '@stripe/stripe-js';
-import type { Viewer } from '#types/gql';
+import type { StripeElements } from '@stripe/stripe-js';
+import type { SavedPaymentMethod } from '#types/stripe-checkout';
+import type { PaymentGateways } from '#types/gql';
 const route = useRoute();
 
 const { t } = useI18n();
 const { query } = useRoute();
-const { cart, paymentGateways } = useCart();
+const { cart } = useCart();
 const { customer, viewer, navigateToLogin } = useAuth();
 const { orderInput, isProcessingOrder, processCheckout, checkoutError, updateShippingLocation } = useCheckout();
-const runtimeConfig = useRuntimeConfig();
-const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
 
 const buttonText = ref<string>(isProcessingOrder.value ? t('general.processing') : t('shop.checkoutButton'));
-const savePaymentMethod = ref<boolean>(false);
 
-type SavedPaymentMethod = {
-  id: number;
-  token: string; // pm_xxx
-  customerId?: string | null; // cus_xxx — from WC token meta, authoritative over viewer.stripeCustomerId
-  last4: string;
-  expiryMonth: string;
-  expiryYear: string;
-  cardType: string;
-  isDefault: boolean;
-};
-
-type CheckoutViewer = Viewer & {
-  stripeCustomerId?: string | null;
-  savedPaymentMethods?: SavedPaymentMethod[] | null;
-  email?: string | null;
-  firstName?: string | null;
-  lastName?: string | null;
-  databaseId?: number | null;
-};
-const stripeCustomerId = computed<string | null>(() => (viewer.value as CheckoutViewer | null)?.stripeCustomerId ?? null);
-const savedPaymentMethods = computed<SavedPaymentMethod[]>(() => (viewer.value as CheckoutViewer | null)?.savedPaymentMethods ?? []);
-const selectedSavedToken = ref<SavedPaymentMethod | null>(null);
-const isCreatingAccountAtCheckout = computed<boolean>(() => !viewer.value && !!orderInput.value.createAccount);
-const canSavePaymentMethod = computed<boolean>(() => !!viewer.value || isCreatingAccountAtCheckout.value);
-const checkoutPaymentGateways = computed(() => paymentGateways.value);
-const stripeGateway = computed(() => checkoutPaymentGateways.value?.nodes.find((gateway) => gateway.id === 'stripe') ?? null);
-
-const activateStripeGateway = (): void => {
-  if (stripeGateway.value) {
-    orderInput.value.paymentMethod = stripeGateway.value;
-  }
-};
+const {
+  stripe,
+  stripeClientSecret,
+  stripeCustomerSessionSecret,
+  savePaymentMethod,
+  selectedSavedToken,
+  stripeCustomerId,
+  savedPaymentMethods,
+  canSavePaymentMethod,
+  checkoutPaymentGateways,
+  stripeGateway,
+  stripeCurrency,
+  stripeAmount,
+  viewerEmail,
+  viewerGreeting,
+  selectedSavedPaymentMethodKey,
+  stripePaymentElementDefaults,
+  selectedPaymentMethodId,
+  getSavedPaymentMethodKey,
+  activateStripeGateway,
+  resetStripeOrderMeta,
+  initStripePaymentIntent,
+} = await useStripeCheckout();
 
 const upsertOrderMeta = (key: string, value: string): void => {
   const existingMeta = orderInput.value.metaData.find((entry: { key: string }) => entry.key === key);
@@ -56,22 +44,6 @@ const upsertOrderMeta = (key: string, value: string): void => {
   }
 
   orderInput.value.metaData.push({ key, value });
-};
-
-const resetStripeOrderMeta = (): void => {
-  const stripeMetaKeys = new Set([
-    '_stripe_payment_intent_id',
-    '_stripe_payment_method_id',
-    '_stripe_source_id',
-    '_stripe_fee',
-    '_stripe_net',
-    '_stripe_currency',
-    '_stripe_charge_captured',
-    '_wc_stripe_payment_method_type',
-    '_stripe_intent_id',
-  ]);
-
-  orderInput.value.metaData = orderInput.value.metaData.filter((entry: { key: string }) => !stripeMetaKeys.has(entry.key));
 };
 
 // Auto-select the default (or first) saved card when the viewer loads.
@@ -114,43 +86,41 @@ watch(
 );
 
 const isInvalidEmail = ref<boolean>(false);
-const stripe: Stripe | null = stripeKey ? await loadStripe(stripeKey) : null;
 const elements = ref();
 const isPaid = ref<boolean>(false);
 const isResolvingShippingRates = ref<boolean>(false);
-const stripeClientSecret = ref<string | null>(null);
-const stripeCustomerSessionSecret = ref<string | null>(null);
-const stripeCurrency = computed(() => (runtimeConfig.public?.CURRENCY_CODE || 'USD').toLowerCase());
+const showAlternativePaymentMethods = ref<boolean>(false);
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const hasSavedCards = computed<boolean>(() => savedPaymentMethods.value.length > 0);
+const visiblePaymentGateways = computed<PaymentGateways | null>(() => {
+  const currentGateways = checkoutPaymentGateways.value;
+  if (!currentGateways?.nodes?.length) return null;
 
-const resolveStripeAmount = (rawTotal: string | number | null | undefined, currency: string): number => {
-  const parsed = Number.parseFloat(String(rawTotal ?? '0'));
-  if (!Number.isFinite(parsed)) return 0;
+  const nodes = currentGateways.nodes;
+  if (!nodes.length) return null;
 
-  const fractionDigits =
-    new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency.toUpperCase(),
-    }).resolvedOptions().maximumFractionDigits ?? 2;
-
-  return Math.round(parsed * 10 ** fractionDigits);
+  return {
+    ...currentGateways,
+    nodes,
+  } as PaymentGateways;
+});
+const hasAlternativePaymentMethods = computed<boolean>(() => (visiblePaymentGateways.value?.nodes.length ?? 0) > 0);
+const shouldShowStandalonePaymentMethods = computed<boolean>(() => !hasSavedCards.value && hasAlternativePaymentMethods.value);
+const shouldShowGatewayOptions = computed<boolean>(() => {
+  if (!hasSavedCards.value) return true;
+  return showAlternativePaymentMethods.value;
+});
+const revealAlternativePaymentMethods = (): void => {
+  showAlternativePaymentMethods.value = true;
+  selectedSavedToken.value = null;
 };
-
-const stripeAmount = computed(() => resolveStripeAmount(cart.value?.rawTotal ?? '0', stripeCurrency.value));
-const viewerEmail = computed<string>(() => customer.value?.billing?.email || (viewer.value as CheckoutViewer | null)?.email || '');
-const viewerFirstName = computed<string>(() => customer.value?.billing?.firstName || (viewer.value as CheckoutViewer | null)?.firstName || '');
-const viewerGreeting = computed<string>(() =>
-  viewerFirstName.value ? `Welcome back, ${customer.value?.billing?.firstName} ${customer.value?.billing?.lastName || ''}` : 'Welcome',
-);
-const resolvePaymentMethodId = (paymentMethod: unknown): string => {
-  if (typeof paymentMethod === 'string') return paymentMethod;
-  if (paymentMethod && typeof paymentMethod === 'object' && 'id' in paymentMethod) {
-    return String((paymentMethod as { id?: string | null }).id ?? '');
-  }
-  return '';
+const selectSavedPaymentMethod = (paymentMethod: SavedPaymentMethod): void => {
+  selectedSavedToken.value = paymentMethod;
+  activateStripeGateway();
 };
-
-const selectedPaymentMethodId = computed<string>(() => resolvePaymentMethodId(orderInput.value.paymentMethod));
+const manageSavedCards = (): void => {
+  navigateTo('/my-account?tab=settings');
+};
 const isCheckoutDisabled = computed<boolean>(() => {
   if (isProcessingOrder.value || !selectedPaymentMethodId.value) return true;
   if (selectedPaymentMethodId.value === 'stripe') {
@@ -230,35 +200,6 @@ const ensureShippingRates = async () => {
     await updateShippingLocation();
   } finally {
     isResolvingShippingRates.value = false;
-  }
-};
-
-// Eagerly create a PaymentIntent so StripeElement can mount in intent mode.
-const initStripePaymentIntent = async () => {
-  if (!stripe || selectedSavedToken.value) return;
-
-  const customerId = stripeCustomerId.value;
-
-  try {
-    const vars: any = { stripePaymentMethod: 'PAYMENT' as any, saveForFuture: false };
-    if (customerId) vars.customerId = customerId;
-
-    const { stripePaymentIntent } = await GqlGetStripePaymentIntent(vars);
-
-    if (stripePaymentIntent?.error) {
-      console.warn('[Stripe] PaymentIntent init error:', stripePaymentIntent.error);
-      return;
-    }
-    if (stripePaymentIntent?.clientSecret) {
-      stripeClientSecret.value = stripePaymentIntent.clientSecret;
-      /** Don't attach the CustomerSession: it requires setup_future_usage on the PI,
-       * which this eager init doesn't set. Saved cards are shown via our own UI. */
-      stripeCustomerSessionSecret.value = null;
-    } else {
-      console.warn('[Stripe] No clientSecret in response');
-    }
-  } catch (err) {
-    console.error('[Stripe] Failed to init PaymentIntent:', err);
   }
 };
 
@@ -490,6 +431,7 @@ const handleStripeElement = (stripeElements: StripeElements | null): void => {
 const handleGatewaySelect = (gateway: any): void => {
   orderInput.value.paymentMethod = gateway;
   selectedSavedToken.value = null;
+  showAlternativePaymentMethods.value = true;
 };
 
 const checkEmailOnBlur = (email?: string | null): void => {
@@ -628,74 +570,125 @@ useSeoMeta({
             <p v-else class="text-sm text-amber-600">Add or confirm your shipping address to load shipping methods.</p>
           </div>
 
-          <!-- Pay methods -->
-          <div v-if="checkoutPaymentGateways?.nodes.length" class="checkout-section col-span-full">
-            <h3 class="mb-4 flex items-center gap-2 text-xl font-semibold leading-none">
-              <span>{{ $t('billing.paymentOptions') }}</span>
-            </h3>
+          <!-- Saved cards -->
+          <div v-if="hasSavedCards" class="checkout-section col-span-full">
+            <div class="mb-6 flex items-start justify-between gap-4">
+              <div>
+                <h3 class="flex items-center gap-2 text-xl font-semibold leading-none">Payment options</h3>
+              </div>
 
-            <!-- Saved card rows -->
-            <div v-if="savedPaymentMethods.length > 0" class="flex flex-col gap-3 mb-3">
-              <label
-                v-for="pm in savedPaymentMethods"
-                :key="pm.id"
-                :for="`saved-pm-${pm.id}`"
-                :class="[
-                  'flex items-center gap-3 cursor-pointer rounded-lg border px-4  py-3 transition-colors',
-                  selectedSavedToken?.id === pm.id ? 'border-primary bg-white' : 'border-gray-300 bg-white hover:border-primary hover:bg-gray-50',
-                ]">
-                <input
-                  :id="`saved-pm-${pm.id}`"
-                  type="radio"
-                  name="payment-method-selector"
-                  :checked="selectedSavedToken?.id === pm.id"
-                  class="sr-only hidden"
-                  @change="selectedSavedToken = pm" />
-                <Icon name="ion:card-outline" size="18" class="text-gray-400 shrink-0" />
-                <span class="capitalize font-medium text-sm">{{ pm.cardType }}</span>
-                <span class="text-sm text-gray-500">•••• {{ pm.last4 }}</span>
-                <span class="text-sm text-gray-400">expires {{ pm.expiryMonth }}/{{ pm.expiryYear }}</span>
-                <span v-if="pm.isDefault" class="ml-auto text-xs font-semibold text-primary">Default</span>
-                <Icon
-                  name="ion:checkmark-circle"
-                  size="18"
-                  :class="[
-                    'text-primary transition-opacity shrink-0',
-                    selectedSavedToken?.id === pm.id ? 'opacity-100' : 'opacity-0',
-                    pm.isDefault ? '' : 'ml-auto',
-                  ]" />
-              </label>
+              <button type="button" class="shrink-0 text-sm font-medium text-primary transition-colors hover:text-primary-dark" @click="manageSavedCards">
+                Manage
+              </button>
             </div>
 
-            <!-- Gateway options -->
+            <SavedPaymentMethods
+              :payment-methods="savedPaymentMethods"
+              :selected-payment-method-key="selectedSavedPaymentMethodKey"
+              :get-payment-method-key="getSavedPaymentMethodKey"
+              :show-header="false"
+              @select="selectSavedPaymentMethod" />
+
+            <div v-if="hasAlternativePaymentMethods" class="mt-4 space-y-4">
+              <button
+                v-if="!showAlternativePaymentMethods"
+                type="button"
+                class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-primary/30 bg-white px-4 py-3 text-sm font-semibold text-primary transition-colors hover:border-primary hover:bg-primary/5"
+                @click="revealAlternativePaymentMethods">
+                <Icon name="ion:add-circle-outline" size="18" class="shrink-0" />
+                <span>New payment method</span>
+              </button>
+
+              <Transition name="scale-y">
+                <div v-if="showAlternativePaymentMethods" class="space-y-4">
+                  <div>
+                    <p class="text-sm font-semibold text-gray-900">Choose your payment method</p>
+                  </div>
+
+                  <PaymentOptions
+                    v-if="visiblePaymentGateways && shouldShowGatewayOptions"
+                    :model-value="orderInput.paymentMethod"
+                    :force-inactive="!!selectedSavedToken"
+                    :disable-auto-select="!!selectedSavedToken"
+                    :inline-active-description="true"
+                    :payment-gateways="visiblePaymentGateways"
+                    @update:model-value="handleGatewaySelect" />
+
+                  <div v-if="selectedPaymentMethodId === 'stripe' && !selectedSavedToken && shouldShowGatewayOptions" class="mt-3">
+                    <StripeElement
+                      v-if="stripe"
+                      :stripe
+                      :client-secret="stripeClientSecret"
+                      :customer-session-client-secret="stripeCustomerSessionSecret"
+                      :customer-id="stripeCustomerId"
+                      :amount="stripeAmount"
+                      :currency="stripeCurrency"
+                      :payment-defaults="stripePaymentElementDefaults"
+                      :save-for-future="canSavePaymentMethod && savePaymentMethod"
+                      @updateElement="handleStripeElement" />
+
+                    <div v-if="canSavePaymentMethod" class="mt-3 flex items-start gap-2">
+                      <input
+                        id="save-payment-method"
+                        v-model="savePaymentMethod"
+                        type="checkbox"
+                        name="save-payment-method"
+                        class="mt-0.5 h-4 w-4 rounded-sm border-gray-300 bg-white text-primary focus:ring-3 focus:ring-primary" />
+                      <label for="save-payment-method" class="text-sm font-medium text-gray-700">
+                        Save payment information to my account for future purchases.
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </Transition>
+            </div>
+          </div>
+
+          <!-- Payment methods -->
+          <div v-if="shouldShowStandalonePaymentMethods" class="checkout-section col-span-full">
+            <div class="mb-4">
+              <div>
+                <h3 class="flex items-center gap-2 text-xl font-semibold leading-none">
+                  <span>Payment methods</span>
+                </h3>
+                <p class="mt-2 text-sm text-gray-500">Choose how you would like to pay for this order.</p>
+              </div>
+            </div>
+
             <PaymentOptions
+              v-if="visiblePaymentGateways && shouldShowGatewayOptions"
               :model-value="orderInput.paymentMethod"
               :force-inactive="!!selectedSavedToken"
+              :disable-auto-select="!!selectedSavedToken"
+              :inline-active-description="true"
               class="mb-4"
-              :payment-gateways="checkoutPaymentGateways"
+              :payment-gateways="visiblePaymentGateways"
               @update:model-value="handleGatewaySelect" />
 
-            <!-- Stripe Payment Element (always mounted, shown only when active) -->
-            <StripeElement
-              v-if="stripe"
-              v-show="selectedPaymentMethodId === 'stripe' && !selectedSavedToken"
-              :stripe
-              :client-secret="stripeClientSecret"
-              :customer-session-client-secret="stripeCustomerSessionSecret"
-              :customer-id="stripeCustomerId"
-              :amount="stripeAmount"
-              :currency="stripeCurrency"
-              :save-for-future="canSavePaymentMethod && savePaymentMethod"
-              @updateElement="handleStripeElement" />
+            <div v-if="selectedPaymentMethodId === 'stripe' && !selectedSavedToken && shouldShowGatewayOptions" class="mt-3">
+              <StripeElement
+                v-if="stripe"
+                :stripe
+                :client-secret="stripeClientSecret"
+                :customer-session-client-secret="stripeCustomerSessionSecret"
+                :customer-id="stripeCustomerId"
+                :amount="stripeAmount"
+                :currency="stripeCurrency"
+                :payment-defaults="stripePaymentElementDefaults"
+                :save-for-future="canSavePaymentMethod && savePaymentMethod"
+                @updateElement="handleStripeElement" />
 
-            <div v-if="selectedPaymentMethodId === 'stripe' && canSavePaymentMethod && !selectedSavedToken" class="mt-3 flex items-start gap-2">
-              <input
-                id="save-payment-method"
-                v-model="savePaymentMethod"
-                type="checkbox"
-                name="save-payment-method"
-                class="mt-0.5 h-4 w-4 rounded-sm border-gray-300 bg-white text-primary focus:ring-3 focus:ring-primary" />
-              <label for="save-payment-method" class="text-sm font-medium text-gray-700"> Save payment information to my account for future purchases. </label>
+              <div v-if="canSavePaymentMethod" class="mt-3 flex items-start gap-2">
+                <input
+                  id="save-payment-method"
+                  v-model="savePaymentMethod"
+                  type="checkbox"
+                  name="save-payment-method"
+                  class="mt-0.5 h-4 w-4 rounded-sm border-gray-300 bg-white text-primary focus:ring-3 focus:ring-primary" />
+                <label for="save-payment-method" class="text-sm font-medium text-gray-700">
+                  Save payment information to my account for future purchases.
+                </label>
+              </div>
             </div>
           </div>
 
