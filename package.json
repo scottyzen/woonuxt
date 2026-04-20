@@ -13,11 +13,11 @@
   },
   "dependencies": {
     "@stripe/stripe-js": "^9.2.0",
-    "@tailwindcss/postcss": "^4.2.2",
+    "@tailwindcss/postcss": "^4.2.3",
     "@vueuse/core": "^14.2.1",
     "reka-ui": "^2.9.6",
     "tailwind-merge": "^3.5.0",
-    "tailwindcss": "^4.2.2"
+    "tailwindcss": "^4.2.3"
   },
   "devDependencies": {
     "@iconify-json/ion": "^1.2.7",
@@ -27,6 +27,6 @@
     "@tailwindcss/typography": "^0.5.19",
     "nuxt": "^4.4.2",
     "nuxt-graphql-client": "^0.2.46",
-    "prettier": "^3.8.2"
+    "prettier": "^3.8.3"
   }
 }
