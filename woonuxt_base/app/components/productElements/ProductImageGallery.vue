@@ -30,6 +30,21 @@ const changeImage = (image: ImageFragment) => {
   if (image) imageToShow.value = image;
 };
 
+const changeImageByOffset = (offset: number) => {
+  const images = galleryImages.value;
+  if (images.length <= 1) return false;
+
+  const currentIndex = images.findIndex((image) => image.databaseId === imageToShow.value.databaseId);
+  const fallbackIndex = offset > 0 ? 0 : images.length - 1;
+  const nextIndex = currentIndex === -1 ? fallbackIndex : (currentIndex + offset + images.length) % images.length;
+  const nextImage = images[nextIndex];
+  if (nextImage) {
+    changeImage(nextImage);
+    return true;
+  }
+  return false;
+};
+
 watch(
   () => props.activeVariation,
   (newVal) => {
@@ -45,22 +60,45 @@ const imgWidth = 640;
 
 <template>
   <div>
-    <SaleBadge :node class="absolute text-base top-4 right-4" />
-    <NuxtImg
-      class="rounded-xl object-contain w-full min-w-87.5"
-      :width="imgWidth"
-      :height="imgWidth"
-      :alt="imageToShow.altText || node.name"
-      :title="imageToShow.title || node.name"
-      :src="imageToShow.sourceUrl || FALLBACK_IMG"
-      :preload="{ fetchPriority: 'high' }"
-      placeholder
-      placeholder-class="blur-xl" />
-    <div v-if="gallery.nodes.length" class="my-4 gallery-images">
+    <div class="relative group">
+      <SaleBadge :node class="absolute text-base top-4 right-4" />
+      <NuxtImg
+        class="rounded-xl object-contain w-full min-w-87.5"
+        :width="imgWidth"
+        :height="imgWidth"
+        :alt="imageToShow.altText || node.name"
+        :title="imageToShow.title || node.name"
+        :src="imageToShow.sourceUrl || FALLBACK_IMG"
+        :preload="{ fetchPriority: 'high' }"
+        placeholder
+        placeholder-class="blur-xl" />
+
+      <button
+        v-if="galleryImages.length > 1"
+        class="absolute left-4 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/25 text-gray-900 opacity-0 shadow-md transition-[opacity,background-color,box-shadow] ease-in hover:bg-white/70 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary group-hover:opacity-100"
+        type="button"
+        :aria-label="`Previous image for ${node.name}`"
+        @click="changeImageByOffset(-1)">
+        <Icon name="ion:chevron-back-outline" size="24" />
+      </button>
+
+      <button
+        v-if="galleryImages.length > 1"
+        class="absolute right-4 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/25 text-gray-900 opacity-0 shadow-md transition-[opacity,background-color,box-shadow] ease-in hover:bg-white/70 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary group-hover:opacity-100"
+        type="button"
+        :aria-label="`Next image for ${node.name}`"
+        @click="changeImageByOffset(1)">
+        <Icon name="ion:chevron-forward-outline" size="24" />
+      </button>
+    </div>
+
+    <div
+      v-if="gallery.nodes.length"
+      class="my-4 flex gap-4 overflow-auto [scrollbar-width:none] md:grid md:grid-cols-[repeat(auto-fill,minmax(72px,1fr))] [&::-webkit-scrollbar]:hidden">
       <NuxtImg
         v-for="galleryImg in galleryImages"
         :key="galleryImg.databaseId"
-        class="cursor-pointer rounded-xl"
+        class="aspect-5/6 w-18 cursor-pointer rounded-xl object-cover md:w-full"
         :width="imgWidth"
         :height="imgWidth"
         :src="galleryImg.sourceUrl || FALLBACK_IMG"
@@ -69,36 +107,7 @@ const imgWidth = 640;
         placeholder
         placeholder-class="blur-xl"
         loading="lazy"
-        @click.native="changeImage(galleryImg)" />
+        @click="changeImage(galleryImg)" />
     </div>
   </div>
 </template>
-
-<style scoped>
-.gallery-images {
-  display: flex;
-  overflow: auto;
-  gap: 1rem;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.gallery-images img {
-  width: 72px;
-  aspect-ratio: 5/6;
-  object-fit: cover;
-}
-
-@media (min-width: 768px) {
-  .gallery-images {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
-
-    img {
-      width: 100%;
-    }
-  }
-}
-</style>
