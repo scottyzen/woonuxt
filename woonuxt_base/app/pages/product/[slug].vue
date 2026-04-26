@@ -5,7 +5,7 @@ import type { ExternalProduct, ProductDetail, SimpleProduct, VariableProduct, Va
 const route = useRoute();
 const router = useRouter();
 const { storeSettings } = useAppConfig();
-const { addToCart, isUpdatingCart, isAddingToCart, isOptimisticCartMode } = useCart();
+const { addToCart, isUpdatingCart, isAddingToCart } = useCart();
 const { frontEndUrl } = useHelpers();
 const { t } = useI18n();
 const slug = route.params.slug as string;
@@ -187,7 +187,7 @@ const selectProductInput = computed<any>(() => ({ productId: displayProduct.valu
 const handleAddToCart = (): void => {
   if (!product.value) return;
   if (!hasPriceForSelection.value) return;
-  void addToCart(selectProductInput.value, { product: product.value, variation: activeVariation.value });
+  void addToCart(selectProductInput.value);
 };
 
 const updateSelectedVariations = (variations: VariationAttribute[]): void => {
@@ -310,12 +310,12 @@ const stockStatus = computed(() => {
 const disabledAddToCart = computed(() => {
   const canPurchaseWithCurrentStock = stockStatus.value === StockStatusEnum.IN_STOCK || stockStatus.value === StockStatusEnum.ON_BACKORDER;
   const isInvalidType = !displayProduct.value;
-  const isCartUpdating = isOptimisticCartMode.value ? false : isUpdatingCart.value || isAddingToCart.value;
+  const isCartUpdating = isUpdatingCart.value || isAddingToCart.value;
   const hasValidVariation = !isVariableProduct.value || !!activeVariation.value;
   return !canPurchaseWithCurrentStock || isCartUpdating || !hasValidVariation || isInvalidType;
 });
 
-const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : isUpdatingCart.value));
+const addToCartLoading = computed(() => isUpdatingCart.value);
 </script>
 
 <template>
