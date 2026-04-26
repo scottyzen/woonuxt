@@ -5,7 +5,7 @@ import type { ExternalProduct, ProductDetail, SimpleProduct, VariableProduct, Va
 const route = useRoute();
 const router = useRouter();
 const { storeSettings } = useAppConfig();
-const { addToCart, isUpdatingCart, isAddingToCart } = useCart();
+const { addToCart, isUpdatingCart } = useCart();
 const { frontEndUrl } = useHelpers();
 const { t } = useI18n();
 const slug = route.params.slug as string;
@@ -310,7 +310,7 @@ const stockStatus = computed(() => {
 const disabledAddToCart = computed(() => {
   const canPurchaseWithCurrentStock = stockStatus.value === StockStatusEnum.IN_STOCK || stockStatus.value === StockStatusEnum.ON_BACKORDER;
   const isInvalidType = !displayProduct.value;
-  const isCartUpdating = isUpdatingCart.value || isAddingToCart.value;
+  const isCartUpdating = isUpdatingCart.value;
   const hasValidVariation = !isVariableProduct.value || !!activeVariation.value;
   return !canPurchaseWithCurrentStock || isCartUpdating || !hasValidVariation || isInvalidType;
 });

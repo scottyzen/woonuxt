@@ -15,7 +15,6 @@ export function useCart() {
   const cart = useState<Cart | null>('cart', () => null);
   const isShowingCart = useState<boolean>('isShowingCart', () => false);
   const isUpdatingCart = useState<boolean>('isUpdatingCart', () => false);
-  const isAddingToCart = useState<boolean>('isAddingToCart', () => false);
   const isUpdatingCoupon = useState<boolean>('isUpdatingCoupon', () => false);
   const paymentGateways = useState<PaymentGateways | null>('paymentGateways', () => null);
   const { getDomain, getErrorContext, getErrorMessage } = useHelpers();
@@ -188,7 +187,6 @@ export function useCart() {
 
   // add an item to the cart
   async function addToCart(input: AddToCartInput): Promise<void> {
-    isAddingToCart.value = true;
     isUpdatingCart.value = true;
     const quantity = normalizeQuantity(input.quantity);
 
@@ -203,7 +201,6 @@ export function useCart() {
       const errorMsg = getErrorMessage(error);
       console.error('Error adding to cart:', errorMsg);
     } finally {
-      isAddingToCart.value = false;
       isUpdatingCart.value = false;
     }
   }
@@ -287,12 +284,6 @@ export function useCart() {
     }
   }
 
-  // Stop the loading spinner when the cart is updated
-  watch(cart, () => {
-    if (!isUpdatingCart.value) return;
-    isUpdatingCart.value = false;
-  });
-
   // Check if all products in the cart are virtual
   const allProductsAreVirtual = computed(() => {
     const nodes = cart.value?.contents?.nodes || [];
@@ -309,7 +300,6 @@ export function useCart() {
     isShowingCart,
     isUpdatingCart,
     isCartMutating,
-    isAddingToCart,
     isUpdatingCoupon,
     paymentGateways,
     isBillingAddressEnabled,
