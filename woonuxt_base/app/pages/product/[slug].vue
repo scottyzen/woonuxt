@@ -177,10 +177,16 @@ const productGallery = computed(() => ({ nodes: product.value?.galleryImages?.no
 const averageRating = computed(() => product.value?.averageRating ?? 0);
 const reviewCount = computed(() => product.value?.reviewCount ?? 0);
 
+const hasPriceForSelection = computed<boolean>(() => {
+  if (isExternalProduct.value) return true;
+  return !!priceTarget.value?.price;
+});
+
 const selectProductInput = computed<any>(() => ({ productId: displayProduct.value?.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
 
 const handleAddToCart = (): void => {
   if (!product.value) return;
+  if (!hasPriceForSelection.value) return;
   void addToCart(selectProductInput.value, { product: product.value, variation: activeVariation.value });
 };
 
@@ -292,6 +298,9 @@ onBeforeUnmount(() => {
 });
 
 const stockStatus = computed(() => {
+  if (!hasPriceForSelection.value) {
+    return StockStatusEnum.OUT_OF_STOCK;
+  }
   if (isVariableProduct.value) {
     return activeVariation.value?.stockStatus ?? product.value?.stockStatus ?? StockStatusEnum.OUT_OF_STOCK;
   }

@@ -374,16 +374,19 @@ export function useCart() {
 
     try {
       if (canOptimistic) {
-        runOptimisticMutation(
-          () => {
-            applyOptimisticAdd(optimistic, quantity);
-            if (storeSettings.autoOpenCart && !isShowingCart.value) toggleCart(true);
-          },
-          async () => {
-            const { addToCart } = await GqlAddToCart({ input: { ...input, quantity } });
-            return addToCart?.cart ?? null;
-          },
-        );
+        applyOptimisticAdd(optimistic, quantity);
+        if (storeSettings.autoOpenCart && !isShowingCart.value) toggleCart(true);
+
+        optimisticPendingMutations.value += 1;
+        void enqueueCartMutation(async () => {
+          const { addToCart } = await GqlAddToCart({ input: { ...input, quantity } });
+          return addToCart?.cart ?? null;
+        }, true)
+          .catch(() => {})
+          .finally(async () => {
+            optimisticPendingMutations.value = Math.max(0, optimisticPendingMutations.value - 1);
+            await finalizeOptimisticMutations();
+          });
         return;
       }
 

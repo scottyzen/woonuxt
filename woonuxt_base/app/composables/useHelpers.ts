@@ -169,7 +169,11 @@ export function useHelpers() {
   type GqlErrorMessage = { message?: string | null };
   type GqlErrorLike = {
     gqlErrors?: GqlErrorMessage[];
+    errors?: GqlErrorMessage[];
     message?: string | null;
+    extensions?: {
+      debug?: Array<{ message?: string | null }>;
+    };
     response?: {
       status?: number;
       statusCode?: number;
@@ -243,8 +247,10 @@ export function useHelpers() {
     };
 
     error.gqlErrors?.forEach((gqlError) => pushMessage(gqlError?.message));
+    error.errors?.forEach((gqlError) => pushMessage(gqlError?.message));
     error.response?.errors?.forEach((gqlError) => pushMessage(gqlError?.message));
     error.response?.data?.errors?.forEach((gqlError) => pushMessage(gqlError?.message));
+    error.extensions?.debug?.forEach((debug) => pushMessage(debug?.message));
     error.response?.data?.extensions?.debug?.forEach((debug) => pushMessage(debug?.message));
     error.cause?.response?.data?.errors?.forEach((gqlError) => pushMessage(gqlError?.message));
     error.cause?.response?.data?.extensions?.debug?.forEach((debug) => pushMessage(debug?.message));
