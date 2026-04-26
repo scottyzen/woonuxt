@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. I'll try my best to keep it updated.
 
+## v4.18.1 (26-04-2026)
+
+- refactor: Removed optimistic cart mutation flow from base `useCart` to simplify state management and keep cart UI fully server-driven
+- refactor: Simplified cart loading state handling by relying on `isUpdatingCart` as the single mutation state
+- fix: Product page add-to-cart flow now treats products with no price as unavailable and prevents add-to-cart attempts
+- ui: Single-product add-to-cart button/loading logic simplified after cart state refactor
+
 ## v4.17.0 (19-04-2026)
 
 - feature: Saved card checkout — logged-in users can now pay with a previously saved card without re-entering card details
