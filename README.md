@@ -19,10 +19,10 @@ You can find some common errors and how to fix them [here](https://woonuxt.com/f
 
 ## Get Started
 
-- Download the latest WooNuxt Setting [(woonuxt-settings.zip)](<(https://github.com/scottyzen/woonuxt-settings/releases)>).
+- Download the latest WooNuxt Settings plugin from the [woonuxt-settings releases](https://github.com/scottyzen/woonuxt-settings/releases).
 - Install and activate the plugin on your WordPress site. This will install all the required plugins for WooNuxt, add some useful fields to the WPGraphQL schema, and automatically retrieve the WooCommerce payment gateway settings for [Stripe](https://wordpress.org/plugins/woocommerce-gateway-stripe/) and [PayPal](https://woo.com/document/paypal-standard/).
 - Once the plugin is activated you are ready to deploy WooNuxt on whatever hosting you like or click one of the fast deploy buttons below.
-- Once the plugin is activated the only required environment variable is `GQL_HOST`. Check out the `.env.example` file for more details.
+- Once the plugin is activated, configure `GQL_HOST` and `NUXT_IMAGE_DOMAINS`. Check out the `.env.example` file for details.
 
 [![button](https://user-images.githubusercontent.com/5116925/218880214-a16287a7-fd8c-4299-9e65-0871136f0771.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/scottyzen/woonuxt) [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fscottyzen%2FWooNuxt3&repository-name=WooNuxt&env=GQL_HOST,NUXT_IMAGE_DOMAINS)
 
@@ -106,7 +106,10 @@ And here is the live demo of the customized WooNuxt site: [My Shop](https://mysh
 
 ### Required Environment Variables
 
-`GQL_HOST` - The URL of your WordPress site. This is the only required environment variable. The WooNuxt Settings plugin will automatically populate the rest of the environment variables for you.
+- `GQL_HOST` - The GraphQL endpoint for your WordPress site, for example `https://wp.example.com/graphql`.
+- `NUXT_IMAGE_DOMAINS` - The WordPress/CDN hostnames used for optimized images, for example `wp.example.com,cdn.example.com`.
+
+The WooNuxt Settings plugin automatically provides the remaining storefront settings through GraphQL.
 
 &nbsp;
 
@@ -116,7 +119,7 @@ And here is the live demo of the customized WooNuxt site: [My Shop](https://mysh
 | ---------------------------- | ------- |
 | WordPress                    | 6.9.4   |
 | WooCommerce                  | 10.7.0  |
-| WPGraphQL                    | 2.11.2  |
+| WPGraphQL                    | 2.12.0  |
 | WooGraphQL                   | 1.0.2   |
 | ~~WPGraphQL CORS~~           | ~~2.1~~ |
 | Headless Login for WPGraphQL | 0.4.4   |
