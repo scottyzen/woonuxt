@@ -12,21 +12,21 @@
     "typecheck": "nuxi typecheck"
   },
   "dependencies": {
-    "@stripe/stripe-js": "^9.2.0",
-    "@tailwindcss/postcss": "^4.2.2",
+    "@stripe/stripe-js": "^9.3.1",
+    "@tailwindcss/postcss": "^4.2.4",
     "@vueuse/core": "^14.2.1",
     "reka-ui": "^2.9.6",
     "tailwind-merge": "^3.5.0",
-    "tailwindcss": "^4.2.2"
+    "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
     "@iconify-json/ion": "^1.2.7",
     "@nuxt/icon": "^2.2.1",
     "@nuxt/image": "2.0.0",
-    "@nuxtjs/i18n": "^10.2.4",
+    "@nuxtjs/i18n": "^10.3.0",
     "@tailwindcss/typography": "^0.5.19",
     "nuxt": "^4.4.2",
     "nuxt-graphql-client": "^0.2.46",
-    "prettier": "^3.8.2"
+    "prettier": "^3.8.3"
   }
 }
