@@ -1,6 +1,7 @@
 {
   "extends": "../.nuxt/tsconfig.json",
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "#types/*": ["./app/types/*"],
