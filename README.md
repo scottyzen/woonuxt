@@ -123,7 +123,7 @@ The WooNuxt Settings plugin automatically provides the remaining storefront sett
 | WooGraphQL                   | 1.0.2   |
 | ~~WPGraphQL CORS~~           | ~~2.1~~ |
 | Headless Login for WPGraphQL | 0.4.4   |
-| Node                         | 22.17.1 |
+| Node                         | 22.22.2 |
 | PHP                          | 8.4     |
 
 ### Current translations
