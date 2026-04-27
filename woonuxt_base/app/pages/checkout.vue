@@ -117,7 +117,6 @@ const isInvalidEmail = ref<boolean>(false);
 const stripe: Stripe | null = stripeKey ? await loadStripe(stripeKey) : null;
 const elements = ref();
 const isPaid = ref<boolean>(false);
-const isResolvingShippingRates = ref<boolean>(false);
 const stripeClientSecret = ref<string | null>(null);
 const stripeCustomerSessionSecret = ref<string | null>(null);
 const stripeCurrency = computed(() => (runtimeConfig.public?.CURRENCY_CODE || 'USD').toLowerCase());
@@ -210,29 +209,6 @@ watch(
   { immediate: true },
 );
 
-const ensureShippingRates = async () => {
-  if (!import.meta.client) return;
-  if (!shouldShowShippingFlow.value || hasAvailableShippingMethods.value || isResolvingShippingRates.value) return;
-  if (!customer.value) return;
-
-  // Fall back to billing when shipping is an empty object (EMPTY_CUSTOMER initialises it as {}).
-  const hasAddrData = (addr: any) => !!(addr?.country || addr?.state || addr?.postcode || addr?.city || addr?.address1);
-  const shippingLocation = hasAddrData(customer.value.shipping) ? customer.value.shipping : customer.value.billing;
-
-  const hasLocationData = hasAddrData(shippingLocation);
-
-  if (!hasLocationData) {
-    return;
-  }
-
-  isResolvingShippingRates.value = true;
-  try {
-    await updateShippingLocation();
-  } finally {
-    isResolvingShippingRates.value = false;
-  }
-};
-
 // Eagerly create a PaymentIntent so StripeElement can mount in intent mode.
 const initStripePaymentIntent = async () => {
   if (!stripe || selectedSavedToken.value) return;
@@ -270,7 +246,7 @@ watch(shipToDifferentAddress, (newValue) => {
     return;
   }
 
-  if (!newValue || !hasAnyShippingInfo.value) {
+  if (!newValue) {
     Object.assign(customer.value.shipping, { ...customer.value.billing });
   }
 });
@@ -294,8 +270,6 @@ onBeforeMount(async () => {
     customer.value.shipping = { ...customer.value.billing };
   }
 
-  await ensureShippingRates();
-
   // Wait one tick so refreshCart() has a chance to populate stripeCustomerId first.
   if (stripe && !selectedSavedToken.value) {
     await nextTick();
@@ -303,31 +277,12 @@ onBeforeMount(async () => {
   }
 });
 
-const hasAnyShippingInfo = computed(() => {
-  const shipping = customer.value?.shipping;
-  if (!shipping) return false;
-  return !!(shipping.firstName || shipping.lastName || shipping.address1 || shipping.city || shipping.country);
-});
-
 const shouldShowShippingFlow = computed<boolean>(() => {
   if (!cart.value || cart.value.isEmpty) return false;
   if (requiresShipping.value) return true;
   if (hasAvailableShippingMethods.value) return true;
-  if ((cart.value.chosenShippingMethods?.length ?? 0) > 0) return true;
-  return hasAnyShippingInfo.value;
+  return (cart.value.chosenShippingMethods?.length ?? 0) > 0;
 });
-
-watch(
-  [shouldShowShippingFlow, hasAvailableShippingMethods, hasAnyShippingInfo],
-  async ([showShippingFlow, hasRates, hasShippingInfo]) => {
-    if (!import.meta.client || !showShippingFlow) return;
-    if (!hasShippingInfo) {
-      return;
-    }
-    if (!hasRates) await ensureShippingRates();
-  },
-  { immediate: true },
-);
 
 watchEffect(() => {
   if (viewer.value && customer.value?.billing && !customer.value.billing.email && viewerEmail.value) {
@@ -617,15 +572,11 @@ useSeoMeta({
             <ShippingDetails v-if="customer?.shipping" v-model="customer.shipping" />
           </div>
           <!-- Shipping methods -->
-          <div v-if="shouldShowShippingFlow" class="checkout-section">
+          <div v-if="shouldShowShippingFlow && hasAvailableShippingMethods && cart?.chosenShippingMethods?.[0]" class="checkout-section">
             <h3 class="mb-4 flex items-center gap-2 text-xl font-semibold leading-none">
               <span>{{ $t('general.shippingSelect') }}</span>
             </h3>
-            <ShippingOptions
-              v-if="hasAvailableShippingMethods && cart?.chosenShippingMethods?.[0]"
-              :options="cart?.availableShippingMethods?.[0]?.rates ?? []"
-              :active-option="cart.chosenShippingMethods[0]" />
-            <p v-else class="text-sm text-amber-600">Add or confirm your shipping address to load shipping methods.</p>
+            <ShippingOptions :options="cart?.availableShippingMethods?.[0]?.rates ?? []" :active-option="cart.chosenShippingMethods[0]" />
           </div>
 
           <!-- Pay methods -->
