@@ -6,6 +6,10 @@ const { siteName } = useAppConfig();
 const config = useRuntimeConfig();
 
 const primaryColor = computed(() => config.public.PRIMARY_COLOR || '#7f54b2');
+const safePrimaryColor = computed(() => {
+  const color = String(primaryColor.value).trim();
+  return /^#[0-9a-f]{6}$/i.test(color) || /^#[0-9a-f]{3}$/i.test(color) ? color : '#7f54b2';
+});
 
 const closeCartAndMenu = () => {
   toggleCart(false);
@@ -25,7 +29,7 @@ useHead({
   titleTemplate: `%s - ${siteName}`,
   style: [
     {
-      innerHTML: `:root { --color-primary: ${primaryColor.value}; }`,
+      innerHTML: `:root { --color-primary: ${safePrimaryColor.value}; }`,
     },
   ],
 });
