@@ -269,12 +269,20 @@ export function useCart() {
   };
 
   const fetchCartSnapshot = async (): Promise<CartQueryPayload> => {
-    const { refreshAuthToken } = useAuthTokens();
-    await refreshAuthToken();
+    const { getAuthTokenForRequest } = useAuthTokens();
+    const authToken = await getAuthTokenForRequest();
+    const requestHeaders = authToken ? { Authorization: `Bearer ${authToken}` } : undefined;
 
     const nuxtApp = useNuxtApp() as {
       _gqlState?: {
-        value?: Record<string, { instance?: { request: <T>(args: { document: string; variables?: any }) => Promise<T> } }>;
+        value?: Record<
+          string,
+          {
+            instance?: {
+              request: <T>(args: { document: string; variables?: any; requestHeaders?: Record<string, string> }) => Promise<T>;
+            };
+          }
+        >;
       };
     };
     const state = nuxtApp?._gqlState?.value ?? {};
@@ -285,7 +293,10 @@ export function useCart() {
       throw new Error('GraphQL client instance is not available');
     }
 
-    return await gqlClient.request<GetCartQuery>({ document: GetCartDocument });
+    return await gqlClient.request<GetCartQuery>({
+      document: GetCartDocument,
+      ...(requestHeaders ? { requestHeaders } : {}),
+    });
   };
 
   /** Refesh the cart from the server

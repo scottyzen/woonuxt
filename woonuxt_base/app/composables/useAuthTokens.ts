@@ -1,8 +1,10 @@
 import type { LoginSession } from '#types/gql';
 
 const REFRESH_TOKEN_COOKIE = 'auth-refresh-token';
+const AUTH_TOKEN_COOKIE = 'auth-token';
 const LEGACY_GQL_TOKEN_COOKIE = 'gql:default';
 const REFRESH_BUFFER_SECONDS = 60;
+const REFRESH_REQUEST_TIMEOUT_MS = 5000;
 
 let refreshInFlight: Promise<boolean> | null = null;
 
@@ -14,8 +16,7 @@ const parseJwtExpiry = (token?: string | null): number => {
     if (!payload) return 0;
     const normalized = payload.replace(/-/g, '+').replace(/_/g, '/');
     const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '=');
-    const decoded =
-      import.meta.client ? JSON.parse(window.atob(padded)) : JSON.parse(Buffer.from(padded, 'base64').toString('utf-8'));
+    const decoded = import.meta.client ? JSON.parse(window.atob(padded)) : JSON.parse(Buffer.from(padded, 'base64').toString('utf-8'));
     return typeof decoded?.exp === 'number' ? decoded.exp : 0;
   } catch {
     return 0;
@@ -26,14 +27,19 @@ export const useAuthTokens = () => {
   const { getDomain } = useHelpers();
   const runtimeConfig = useRuntimeConfig();
   const authToken = useState<string | null>('authToken', () => null);
-  const refreshToken = useCookie<string | null>(REFRESH_TOKEN_COOKIE, { path: '/' });
+  const authTokenCookie = useCookie<string | null>(AUTH_TOKEN_COOKIE, { path: '/', sameSite: 'lax' });
+  const refreshToken = useCookie<string | null>(REFRESH_TOKEN_COOKIE, { path: '/', sameSite: 'lax' });
   const legacyGqlToken = useCookie<string | null>(LEGACY_GQL_TOKEN_COOKIE, { path: '/' });
 
   const now = () => Math.floor(Date.now() / 1000);
+
   const liveToken = () => {
-    const token = authToken.value;
-    return token && parseJwtExpiry(token) > now() ? token : null;
+    const token = authToken.value || authTokenCookie.value;
+    if (token && parseJwtExpiry(token) > now()) return token;
+    if (authToken.value || authTokenCookie.value) setActiveAuthToken(null);
+    return null;
   };
+
   const reusableToken = () => {
     const token = liveToken();
     return token && parseJwtExpiry(token) > now() + REFRESH_BUFFER_SECONDS ? token : null;
@@ -41,8 +47,9 @@ export const useAuthTokens = () => {
 
   const setActiveAuthToken = (token: string | null): void => {
     authToken.value = token;
+    authTokenCookie.value = token;
     legacyGqlToken.value = null;
-    useGqlToken(token);
+    useGqlToken({ token, config: { name: 'Authorization', type: 'Bearer' } });
     if (!token) useGqlHeaders({ Authorization: '' });
   };
 
@@ -68,16 +75,19 @@ export const useAuthTokens = () => {
     const endpoint = typeof defaultClient === 'string' ? defaultClient : defaultClient?.host;
     if (!endpoint) return null;
 
-    const wooSession =
-      import.meta.client
-        ? useCookie<string | null>('woocommerce-session', { domain: getDomain(window.location.href), path: '/' }).value ||
-          useCookie<string | null>('woocommerce-session', { path: '/' }).value
-        : null;
+    const wooSession = import.meta.client
+      ? useCookie<string | null>('woocommerce-session', { domain: getDomain(window.location.href), path: '/' }).value ||
+        useCookie<string | null>('woocommerce-session', { path: '/' }).value
+      : null;
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), REFRESH_REQUEST_TIMEOUT_MS);
 
     const response = await fetch(endpoint, {
       method: 'POST',
       credentials: 'include',
       mode: 'cors',
+      signal: controller.signal,
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/graphql-response+json, application/json',
@@ -93,10 +103,19 @@ export const useAuthTokens = () => {
         variables: { token: refreshToken.value },
         operationName: 'refreshToken',
       }),
-    });
+    }).finally(() => clearTimeout(timeout));
+
+    if (!response.ok) {
+      if (response.status >= 500) throw new Error('Refresh token request failed');
+      return null;
+    }
 
     const body = await response.json().catch(() => null);
-    return body?.data?.refreshToken?.success ? (body.data.refreshToken.authToken ?? null) : null;
+    if (body?.data?.refreshToken?.success && body.data.refreshToken.authToken) {
+      return body.data.refreshToken.authToken;
+    }
+
+    return null;
   };
 
   const refreshAuthToken = async (force = false): Promise<boolean> => {
@@ -111,7 +130,7 @@ export const useAuthTokens = () => {
       try {
         const token = await requestRefreshedAuthToken();
         if (!token) {
-          if (!liveToken()) clearActiveAuthToken();
+          if (!liveToken()) clearAuthSession();
           return false;
         }
 
@@ -142,6 +161,10 @@ export const useAuthTokens = () => {
   };
 
   if (authToken.value) {
+    const token = liveToken();
+    if (token) setActiveAuthToken(token);
+    else clearActiveAuthToken();
+  } else if (authTokenCookie.value) {
     const token = liveToken();
     if (token) setActiveAuthToken(token);
     else clearActiveAuthToken();

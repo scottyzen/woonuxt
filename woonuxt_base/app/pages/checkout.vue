@@ -8,7 +8,7 @@ const { t } = useI18n();
 const { query } = useRoute();
 const { cart, paymentGateways } = useCart();
 const { customer, viewer, navigateToLogin } = useAuth();
-const { orderInput, isProcessingOrder, processCheckout, checkoutError, updateShippingLocation } = useCheckout();
+const { orderInput, isProcessingOrder, processCheckout, checkoutError } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
 const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
 
@@ -17,8 +17,8 @@ const savePaymentMethod = ref<boolean>(false);
 
 type SavedPaymentMethod = {
   id: number;
-  token: string; // pm_xxx
-  customerId?: string | null; // cus_xxx — from WC token meta, authoritative over viewer.stripeCustomerId
+  token: string;
+  customerId?: string | null;
   last4: string;
   expiryMonth: string;
   expiryYear: string;
@@ -585,45 +585,12 @@ useSeoMeta({
               <span>{{ $t('billing.paymentOptions') }}</span>
             </h3>
 
-            <!-- Saved card rows -->
-            <div v-if="savedPaymentMethods.length > 0" class="flex flex-col gap-3 mb-3">
-              <label
-                v-for="pm in savedPaymentMethods"
-                :key="pm.id"
-                :for="`saved-pm-${pm.id}`"
-                :class="[
-                  'flex items-center gap-3 cursor-pointer rounded-lg border px-4  py-3 transition-colors',
-                  selectedSavedToken?.id === pm.id ? 'border-primary bg-white' : 'border-gray-300 bg-white hover:border-primary hover:bg-gray-50',
-                ]">
-                <input
-                  :id="`saved-pm-${pm.id}`"
-                  type="radio"
-                  name="payment-method-selector"
-                  :checked="selectedSavedToken?.id === pm.id"
-                  class="sr-only hidden"
-                  @change="selectedSavedToken = pm" />
-                <Icon name="ion:card-outline" size="18" class="text-gray-400 shrink-0" />
-                <span class="capitalize font-medium text-sm">{{ pm.cardType }}</span>
-                <span class="text-sm text-gray-500">•••• {{ pm.last4 }}</span>
-                <span class="text-sm text-gray-400">expires {{ pm.expiryMonth }}/{{ pm.expiryYear }}</span>
-                <span v-if="pm.isDefault" class="ml-auto text-xs font-semibold text-primary">Default</span>
-                <Icon
-                  name="ion:checkmark-circle"
-                  size="18"
-                  :class="[
-                    'text-primary transition-opacity shrink-0',
-                    selectedSavedToken?.id === pm.id ? 'opacity-100' : 'opacity-0',
-                    pm.isDefault ? '' : 'ml-auto',
-                  ]" />
-              </label>
-            </div>
-
-            <!-- Gateway options -->
             <PaymentOptions
               :model-value="orderInput.paymentMethod"
-              :force-inactive="!!selectedSavedToken"
+              v-model:selected-saved-payment-method="selectedSavedToken"
               class="mb-4"
               :payment-gateways="checkoutPaymentGateways"
+              :saved-payment-methods="savedPaymentMethods"
               @update:model-value="handleGatewaySelect" />
 
             <!-- Stripe Payment Element (always mounted, shown only when active) -->

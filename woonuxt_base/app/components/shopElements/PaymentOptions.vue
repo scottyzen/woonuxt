@@ -1,15 +1,31 @@
 <script setup lang="ts">
 import type { PaymentGateway, PaymentGateways } from '#types/gql';
 
+export type SavedPaymentMethod = {
+  id: number;
+  token: string;
+  customerId?: string | null;
+  last4: string;
+  expiryMonth: string;
+  expiryYear: string;
+  cardType: string;
+  isDefault: boolean;
+};
+
 const props = defineProps<{
   modelValue: string | object;
   paymentGateways: PaymentGateways;
-  forceInactive?: boolean;
+  savedPaymentMethods?: SavedPaymentMethod[];
+  selectedSavedPaymentMethod?: SavedPaymentMethod | null;
 }>();
 
 const paymentMethod = toRef(props, 'modelValue');
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits<{
+  'update:modelValue': [gateway: PaymentGateway];
+  'update:selectedSavedPaymentMethod': [method: SavedPaymentMethod | null];
+}>();
 const gateways = computed<PaymentGateway[]>(() => props.paymentGateways?.nodes || []);
+const savedMethods = computed<SavedPaymentMethod[]>(() => props.savedPaymentMethods || []);
 
 const selectedGatewayId = computed<string>(() => {
   const value = paymentMethod.value as PaymentGateway | string | null | undefined;
@@ -20,8 +36,30 @@ const activePaymentMethod = computed<PaymentGateway | null>(() => {
   return gateways.value.find((gateway) => gateway.id === selectedGatewayId.value) || null;
 });
 
+const normalizedCardBrand = (cardType?: string | null): string => {
+  const brand = cardType?.toLowerCase().replace(/[\s_-]/g, '') || '';
+  if (brand.includes('visa')) return 'visa';
+  if (brand.includes('master')) return 'mastercard';
+  return 'card';
+};
+
+const cardBrandIcon = (cardType?: string | null): string | null => {
+  const brand = normalizedCardBrand(cardType);
+  return brand === 'card' ? null : `/icons/payment/${brand}.svg`;
+};
+
+const gatewayIcon = (gateway: PaymentGateway): string | null => {
+  if (gateway.id === 'paypal') return '/icons/payment/paypal.svg';
+  return gateway.icon || null;
+};
+
 const updatePaymentMethod = (gateway: PaymentGateway) => {
+  emits('update:selectedSavedPaymentMethod', null);
   emits('update:modelValue', gateway);
+};
+
+const updateSavedPaymentMethod = (method: SavedPaymentMethod) => {
+  emits('update:selectedSavedPaymentMethod', method);
 };
 
 watch(
@@ -40,87 +78,85 @@ watch(
 </script>
 
 <template>
-  <div class="payment-options-root">
-    <div class="payment-options-grid" role="radiogroup" aria-label="Payment options">
+  <div class="w-full">
+    <div class="grid gap-3" role="radiogroup" aria-label="Payment options">
+      <button
+        v-for="method in savedMethods"
+        :key="method.id"
+        type="button"
+        class="flex w-full items-center justify-between gap-3 rounded-lg border bg-white px-4 py-3 text-left text-sm font-medium text-gray-900 transition-colors hover:border-primary hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+        :class="selectedSavedPaymentMethod?.id === method.id ? 'border-primary' : 'border-gray-300'"
+        role="radio"
+        :aria-checked="selectedSavedPaymentMethod?.id === method.id"
+        :title="`${method.cardType} ending in ${method.last4}`"
+        @click="updateSavedPaymentMethod(method)">
+        <span class="flex min-w-0 flex-1 items-center gap-3">
+          <span class="grid h-6 w-6 flex-none place-items-center" aria-hidden="true">
+            <NuxtImg
+              v-if="cardBrandIcon(method.cardType)"
+              :src="cardBrandIcon(method.cardType)!"
+              :alt="method.cardType"
+              width="28"
+              height="20"
+              class="h-5 w-6 object-contain"
+              fit="contain"
+              loading="lazy" />
+            <icon v-else name="ion:card-outline" size="22" class="text-gray-600" />
+          </span>
+          <span class="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1 leading-tight">
+            <span class="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1">
+              <span class="text-base font-semibold capitalize">{{ method.cardType }}</span>
+              <span class="text-base font-semibold text-gray-500">•••• {{ method.last4 }}</span>
+            </span>
+            <span class="text-base font-medium text-gray-500">expires {{ method.expiryMonth }}/{{ method.expiryYear }}</span>
+          </span>
+          <span v-if="method.isDefault" class="ml-auto hidden flex-none text-xs font-semibold text-primary sm:inline">Default</span>
+        </span>
+        <span
+          class="grid h-4 w-4 flex-none place-items-center rounded-full border transition-colors"
+          :class="selectedSavedPaymentMethod?.id === method.id ? 'border-primary bg-primary' : 'border-gray-300 bg-white'"
+          aria-hidden="true">
+          <span class="h-2 w-2 rounded-full bg-white" :class="selectedSavedPaymentMethod?.id === method.id ? 'opacity-100' : 'opacity-0'" />
+        </span>
+      </button>
+
       <button
         v-for="gateway in gateways"
         :key="gateway.id"
         type="button"
-        class="payment-option"
-        :class="{ 'active-option': !forceInactive && gateway.id === selectedGatewayId }"
+        class="flex w-full items-center justify-between gap-3 rounded-lg border bg-white px-4 py-3 text-left text-sm font-medium text-gray-900 transition-colors hover:border-primary hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+        :class="!selectedSavedPaymentMethod && gateway.id === selectedGatewayId ? 'border-primary' : 'border-gray-300'"
         role="radio"
-        :aria-checked="!forceInactive && gateway.id === selectedGatewayId"
+        :aria-checked="!selectedSavedPaymentMethod && gateway.id === selectedGatewayId"
         :title="gateway?.description || gateway?.title || 'Payment Method'"
         @click="updatePaymentMethod(gateway)">
-        <span class="payment-option-content">
-          <NuxtImg
-            v-if="gateway.icon"
-            :src="gateway.icon"
-            :alt="gateway.title || 'Payment Method'"
-            width="18"
-            height="18"
-            class="payment-option-icon object-contain"
-            fit="outside"
-            loading="lazy" />
-          <icon v-else-if="gateway.id === 'stripe'" name="ion:card-outline" size="18" class="payment-option-icon" />
-          <icon v-else-if="gateway.id === 'paypal'" name="ion:logo-paypal" size="18" class="payment-option-icon" />
-          <icon v-else name="ion:cash-outline" size="18" class="payment-option-icon" />
-          <span class="gateway-label" v-html="gateway.title" />
+        <span class="flex min-w-0 flex-1 items-center gap-3">
+          <span class="grid h-6 w-6 flex-none place-items-center" aria-hidden="true">
+            <NuxtImg
+              v-if="gatewayIcon(gateway)"
+              :src="gatewayIcon(gateway)!"
+              :alt="gateway.title || 'Payment Method'"
+              width="28"
+              height="24"
+              class="h-5 w-6 object-contain"
+              fit="contain"
+              loading="lazy" />
+            <icon v-else-if="gateway.id === 'stripe'" name="ion:card-outline" size="22" class="text-gray-600" />
+            <icon v-else name="ion:cash-outline" size="22" class="text-gray-600" />
+          </span>
+          <span class="min-w-0 truncate text-base font-semibold leading-tight" v-html="gateway.title" />
         </span>
-        <icon name="ion:checkmark-circle" size="18" class="payment-option-check" />
+        <span
+          class="grid h-4 w-4 flex-none place-items-center rounded-full border transition-colors"
+          :class="!selectedSavedPaymentMethod && gateway.id === selectedGatewayId ? 'border-primary bg-primary' : 'border-gray-300 bg-white'"
+          aria-hidden="true">
+          <span class="h-2 w-2 rounded-full bg-white" :class="!selectedSavedPaymentMethod && gateway.id === selectedGatewayId ? 'opacity-100' : 'opacity-0'" />
+        </span>
       </button>
     </div>
 
-    <div v-if="activePaymentMethod?.description" class="prose block w-full mt-3">
+    <div v-if="!selectedSavedPaymentMethod && activePaymentMethod?.description" class="prose block w-full mt-3">
       <p class="text-sm text-gray-500" v-html="activePaymentMethod.description" />
     </div>
   </div>
 </template>
-
-<style scoped>
-@reference "#tailwind";
-
-.payment-options-root {
-  @apply w-full;
-  container-type: inline-size;
-}
-
-.payment-options-grid {
-  @apply grid gap-3;
-}
-
-.payment-option {
-  @apply w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-left text-sm font-medium text-gray-900 transition-colors hover:border-primary hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40;
-  @apply flex items-center justify-between gap-3;
-}
-
-.payment-option-content {
-  @apply inline-flex items-center gap-2 min-w-0;
-}
-
-.payment-option-icon {
-  @apply h-4.5 w-4.5 flex-none;
-}
-
-.gateway-label {
-  @apply truncate;
-}
-
-.payment-option-check {
-  @apply text-primary opacity-0 transition-opacity;
-}
-
-.payment-option.active-option {
-  @apply border-primary bg-white;
-}
-
-.payment-option.active-option .payment-option-check {
-  @apply opacity-100;
-}
-
-@container (max-width: 36rem) {
-  .payment-options-grid {
-    grid-template-columns: 1fr;
-  }
-}
-</style>
