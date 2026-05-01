@@ -9,8 +9,8 @@
 @theme {
   /* Primary Color Shades */
   --color-primary: var(--color-primary, #7f54b2);
-  --color-primary-light: oklch(from var(--color-primary) calc(l + 0.15) c h);
-  --color-primary-dark: oklch(from var(--color-primary) calc(l - 0.15) c h);
+  --color-primary-light: color-mix(in oklab, var(--color-primary) 85%, white);
+  --color-primary-dark: color-mix(in oklab, var(--color-primary) 85%, black);
 
   /* Spacing for Safe Areas */
   --spacing-safe: env(safe-area-inset-bottom);
