@@ -6,7 +6,7 @@ const route = useRoute();
 
 const { t } = useI18n();
 const { query } = route;
-const { cart, paymentGateways } = useCart();
+const { cart, paymentGateways, isBillingAddressEnabled } = useCart();
 const { customer, viewer, navigateToLogin } = useAuth();
 const { orderInput, isProcessingOrder, processCheckout, checkoutError, resolvePaymentMethodId } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
@@ -540,7 +540,7 @@ useSeoMeta({
             <hr v-if="!viewer" class="flex-1 my-6 border-gray-300" />
 
             <div :class="viewer ? 'mt-4' : 'mt-6'">
-              <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
+              <AddressForm v-if="customer?.billing" v-model="customer.billing" :show-address-fields="isBillingAddressEnabled" />
             </div>
 
             <div v-if="shouldShowShippingFlow" class="flex items-center gap-3 mt-6">
@@ -562,7 +562,7 @@ useSeoMeta({
                 <span>{{ $t('general.shippingAddress') }}</span>
               </h3>
             </div>
-            <ShippingDetails v-if="customer?.shipping" v-model="customer.shipping" />
+            <AddressForm v-if="customer?.shipping" v-model="customer.shipping" />
           </div>
           <!-- Shipping methods -->
           <div v-if="shouldShowShippingFlow && hasAvailableShippingMethods && cart?.chosenShippingMethods?.[0]" class="checkout-section">
