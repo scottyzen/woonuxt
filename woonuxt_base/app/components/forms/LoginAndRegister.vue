@@ -8,11 +8,11 @@
       </p>
       <p v-else-if="formView === FormView.REGISTER" class="mt-2 text-gray-500">
         {{ $t('account.hasAccount') }}
-        <a @click="navigate(FormView.LOGIN)" class="cursor-pointer text-primary text-semibold hover:underline">Sign in</a>.
+        <a class="cursor-pointer text-primary text-semibold hover:underline" @click="navigate(FormView.LOGIN)">Sign in</a>.
       </p>
     </div>
 
-    <LoginProviders class="mb-8" v-if="formView === FormView.LOGIN || formView === FormView.REGISTER" />
+    <LoginProviders v-if="formView === FormView.LOGIN || formView === FormView.REGISTER" class="mb-8" />
 
     <form @submit.prevent="handleFormSubmit(userInfo)">
       <p v-if="formView === FormView.FORGOT_PASSWORD" class="mb-8 text-sm text-gray-500">{{ $t('account.enterEmailOrUsernameForReset') }}</p>
@@ -41,12 +41,12 @@
         {{ buttonText }}
       </Button>
 
-      <div class="flex items-center justify-between mt-4" v-if="formView === FormView.LOGIN">
+      <div v-if="formView === FormView.LOGIN" class="flex items-center justify-between mt-4">
         <div class="text-sm font-semibold cursor-pointer text-primary hover:underline" @click="navigate(FormView.FORGOT_PASSWORD)">Forgot password?</div>
       </div>
     </form>
 
-    <div class="my-8 text-center cursor-pointer text-primary hover:underline" @click="navigate(FormView.LOGIN)" v-if="formView === FormView.FORGOT_PASSWORD">
+    <div v-if="formView === FormView.FORGOT_PASSWORD" class="my-8 text-center cursor-pointer text-primary hover:underline" @click="navigate(FormView.LOGIN)">
       {{ $t('account.backToLogin') }}
     </div>
 
@@ -157,6 +157,7 @@ const formTitle = computed(() => {
   } else if (formView.value === FormView.FORGOT_PASSWORD) {
     return t('account.forgotPassword');
   }
+  return undefined;
 });
 
 const buttonText = computed(() => {
@@ -167,10 +168,9 @@ const buttonText = computed(() => {
   } else if (formView.value === FormView.FORGOT_PASSWORD) {
     return t('account.sendPasswordResetEmail');
   }
+  return undefined;
 });
 
-const emailLabel = computed(() => (formView.value === FormView.REGISTER ? t('billing.email') : t('account.emailOrUsername')));
-const usernameLabel = computed(() => (formView.value === FormView.LOGIN ? t('account.emailOrUsername') : t('account.username')));
 const passwordLabel = computed(() => t('account.password'));
 
 const inputPlaceholder = computed(() => {

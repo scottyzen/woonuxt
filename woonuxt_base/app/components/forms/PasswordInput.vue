@@ -24,14 +24,14 @@ const handleInputChanged = (e: Event) => {
       :type="showPassword ? 'text' : 'password'"
       class="flex items-center flex-1"
       :value="modelValue"
-      @input="handleInputChanged"
       :class="className"
       :placeholder="placeholder"
       :autocomplete="autocomplete"
       :disabled="disabled"
-      :required="required" />
-    <Icon name="ion:eye-outline" size="20" class="absolute cursor-pointer right-4" @click="showPassword = !showPassword" v-if="showPassword" />
-    <Icon name="ion:eye-off-outline" size="20" class="absolute cursor-pointer right-4" @click="showPassword = !showPassword" v-else />
+      :required="required"
+      @input="handleInputChanged" />
+    <Icon v-if="showPassword" name="ion:eye-outline" size="20" class="absolute cursor-pointer right-4" @click="showPassword = !showPassword" />
+    <Icon v-else name="ion:eye-off-outline" size="20" class="absolute cursor-pointer right-4" @click="showPassword = !showPassword" />
   </div>
 </template>
 

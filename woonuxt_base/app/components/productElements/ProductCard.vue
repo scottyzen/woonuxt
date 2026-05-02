@@ -204,13 +204,13 @@ watch(
           type="button"
           tabindex="-1"
           :aria-label="`View image ${dotIndex + 1} of ${sliderImages.length}`"
-          @click="scrollToSlide(dotIndex)" />
+          @click="scrollToSlide(dotIndex)"></button>
       </div>
     </div>
     <div class="p-2">
       <StarRating v-if="storeSettings.showReviews" :rating="node.averageRating ?? undefined" :count="node.reviewCount ?? undefined" />
       <NuxtLink v-if="node.slug" :to="productLink" :title="node.name || undefined">
-        <h2 class="mb-2 font-light leading-tight text-gray-900  group-hover:text-primary">{{ node.name }}</h2>
+        <h2 class="mb-2 font-light leading-tight text-gray-900 group-hover:text-primary">{{ node.name }}</h2>
       </NuxtLink>
       <ProductPrice class="text-sm" :sale-price="node.salePrice ?? undefined" :regular-price="node.regularPrice ?? undefined" />
     </div>

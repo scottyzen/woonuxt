@@ -26,7 +26,7 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({ ...attr, te
 <template>
   <aside id="filters">
     <OrderByDropdown class="block w-full md:hidden" />
-    <div class="relative z-30 grid mb-12 divide-y divide-gray-200  filters-container">
+    <div class="relative z-30 grid mb-12 divide-y divide-gray-200 filters-container">
       <PriceFilter />
       <CategoryFilter v-if="!hideCategories" :terms="productCategoryTerms" />
       <div v-for="attribute in attributesWithTerms" :key="attribute.slug">
@@ -38,7 +38,7 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({ ...attr, te
       <LazyResetFiltersButton v-if="isFiltersActive" />
     </div>
   </aside>
-  <div class="fixed inset-0 z-50 hidden bg-black  opacity-25  filter-overlay" @click="removeBodyClass('show-filters')"></div>
+  <div class="fixed inset-0 z-50 hidden bg-black opacity-25 filter-overlay" @click="removeBodyClass('show-filters')"></div>
 </template>
 
 <style>

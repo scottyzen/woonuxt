@@ -5,10 +5,10 @@ import type { Viewer } from '#types/gql';
 const route = useRoute();
 
 const { t } = useI18n();
-const { query } = useRoute();
-const { cart, paymentGateways } = useCart();
+const { query } = route;
+const { cart, paymentGateways, isBillingAddressEnabled } = useCart();
 const { customer, viewer, navigateToLogin } = useAuth();
-const { orderInput, isProcessingOrder, processCheckout, checkoutError } = useCheckout();
+const { orderInput, isProcessingOrder, processCheckout, checkoutError, resolvePaymentMethodId } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
 const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
 
@@ -34,13 +34,14 @@ type CheckoutViewer = Viewer & {
   lastName?: string | null;
   databaseId?: number | null;
 };
-const stripeCustomerId = computed<string | null>(() => (viewer.value as CheckoutViewer | null)?.stripeCustomerId ?? null);
-const savedPaymentMethods = computed<SavedPaymentMethod[]>(() => (viewer.value as CheckoutViewer | null)?.savedPaymentMethods ?? []);
+const viewerAsCheckoutViewer = computed<CheckoutViewer | null>(() => viewer.value as CheckoutViewer | null);
+const stripeCustomerId = computed<string | null>(() => viewerAsCheckoutViewer.value?.stripeCustomerId ?? null);
+const savedPaymentMethods = computed<SavedPaymentMethod[]>(() => viewerAsCheckoutViewer.value?.savedPaymentMethods ?? []);
 const selectedSavedToken = ref<SavedPaymentMethod | null>(null);
 const isCreatingAccountAtCheckout = computed<boolean>(() => !viewer.value && !!orderInput.value.createAccount);
 const canSavePaymentMethod = computed<boolean>(() => !!viewer.value || isCreatingAccountAtCheckout.value);
-const checkoutPaymentGateways = computed(() => paymentGateways.value);
-const stripeGateway = computed(() => checkoutPaymentGateways.value?.nodes.find((gateway) => gateway.id === 'stripe') ?? null);
+const checkoutPaymentGateways = paymentGateways;
+const stripeGateway = computed(() => paymentGateways.value?.nodes.find((gateway) => gateway.id === 'stripe') ?? null);
 
 const activateStripeGateway = (): void => {
   if (stripeGateway.value) {
@@ -136,19 +137,11 @@ const resolveStripeAmount = (rawTotal: string | number | null | undefined, curre
 };
 
 const stripeAmount = computed(() => resolveStripeAmount(cart.value?.rawTotal ?? '0', stripeCurrency.value));
-const viewerEmail = computed<string>(() => customer.value?.billing?.email || (viewer.value as CheckoutViewer | null)?.email || '');
-const viewerFirstName = computed<string>(() => customer.value?.billing?.firstName || (viewer.value as CheckoutViewer | null)?.firstName || '');
+const viewerEmail = computed<string>(() => customer.value?.billing?.email || viewerAsCheckoutViewer.value?.email || '');
+const viewerFirstName = computed<string>(() => customer.value?.billing?.firstName || viewerAsCheckoutViewer.value?.firstName || '');
 const viewerGreeting = computed<string>(() =>
   viewerFirstName.value ? `Welcome back, ${customer.value?.billing?.firstName} ${customer.value?.billing?.lastName || ''}` : 'Welcome',
 );
-const resolvePaymentMethodId = (paymentMethod: unknown): string => {
-  if (typeof paymentMethod === 'string') return paymentMethod;
-  if (paymentMethod && typeof paymentMethod === 'object' && 'id' in paymentMethod) {
-    return String((paymentMethod as { id?: string | null }).id ?? '');
-  }
-  return '';
-};
-
 const selectedPaymentMethodId = computed<string>(() => resolvePaymentMethodId(orderInput.value.paymentMethod));
 const isCheckoutDisabled = computed<boolean>(() => {
   if (isProcessingOrder.value || !selectedPaymentMethodId.value) return true;
@@ -430,7 +423,7 @@ const payNow = async () => {
     console.error('Checkout error:', error);
 
     const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred during checkout';
-    alert(`Payment failed: ${errorMessage}. Please try again or contact support.`);
+    checkoutError.value = errorMessage;
     buttonText.value = t('shop.checkoutButton');
     return;
   }
@@ -494,7 +487,7 @@ useSeoMeta({
 
           <div v-if="!viewer" class="checkout-section">
             <h1 class="text-2xl font-semibold leading-none text-gray-900">Guest checkout</h1>
-            <div @click="navigateToLogin(route.fullPath)" class="flex justify-between items-center gap-4 mt-2">
+            <div class="flex justify-between items-center gap-4 mt-2" @click="navigateToLogin(route.fullPath)">
               <p class="text-sm text-gray-600">Use guest checkout, or sign in to use your saved details.</p>
               <Button type="button" class="ml-auto" size="sm" variant="outline"> Sign in </Button>
             </div>
@@ -517,9 +510,9 @@ useSeoMeta({
                 type="email"
                 name="email"
                 :class="{ 'has-error': isInvalidEmail }"
+                required
                 @blur="checkEmailOnBlur(customer.billing.email)"
-                @input="checkEmailOnInput(customer.billing.email)"
-                required />
+                @input="checkEmailOnInput(customer.billing.email)" />
               <Transition name="scale-y" mode="out-in">
                 <div v-if="isInvalidEmail" class="mt-1 text-sm text-red-500">Invalid email address</div>
               </Transition>
@@ -547,7 +540,7 @@ useSeoMeta({
             <hr v-if="!viewer" class="flex-1 my-6 border-gray-300" />
 
             <div :class="viewer ? 'mt-4' : 'mt-6'">
-              <BillingDetails v-if="customer?.billing" v-model="customer.billing" />
+              <AddressForm v-if="customer?.billing" v-model="customer.billing" :show-address-fields="isBillingAddressEnabled" />
             </div>
 
             <div v-if="shouldShowShippingFlow" class="flex items-center gap-3 mt-6">
@@ -569,7 +562,7 @@ useSeoMeta({
                 <span>{{ $t('general.shippingAddress') }}</span>
               </h3>
             </div>
-            <ShippingDetails v-if="customer?.shipping" v-model="customer.shipping" />
+            <AddressForm v-if="customer?.shipping" v-model="customer.shipping" />
           </div>
           <!-- Shipping methods -->
           <div v-if="shouldShowShippingFlow && hasAvailableShippingMethods && cart?.chosenShippingMethods?.[0]" class="checkout-section">
@@ -586,8 +579,8 @@ useSeoMeta({
             </h3>
 
             <PaymentOptions
-              :model-value="orderInput.paymentMethod"
               v-model:selected-saved-payment-method="selectedSavedToken"
+              :model-value="orderInput.paymentMethod"
               class="mb-4"
               :payment-gateways="checkoutPaymentGateways"
               :saved-payment-methods="savedPaymentMethods"
@@ -604,7 +597,7 @@ useSeoMeta({
               :amount="stripeAmount"
               :currency="stripeCurrency"
               :save-for-future="canSavePaymentMethod && savePaymentMethod"
-              @updateElement="handleStripeElement" />
+              @update-element="handleStripeElement" />
 
             <div v-if="selectedPaymentMethodId === 'stripe' && canSavePaymentMethod && !selectedSavedToken" class="mt-3 flex items-start gap-2">
               <input

@@ -11,7 +11,7 @@ export function useHelpers() {
   const productsPerPage: number = runtimeConfig.public?.PRODUCTS_PER_PAGE || 24;
   const wooNuxtSEO = Array.isArray(runtimeConfig.public?.WOO_NUXT_SEO) ? runtimeConfig.public?.WOO_NUXT_SEO : [];
   const frontEndUrl = runtimeConfig.public?.FRONT_END_URL?.replace(/\/$/, '') || requestOrigin;
-  const isDev: boolean = process.env.NODE_ENV === 'development';
+  const isDev: boolean = import.meta.dev;
   const FALLBACK_IMG = '/images/placeholder.jpg';
 
   /**
@@ -87,8 +87,7 @@ export function useHelpers() {
    */
   function toggleBodyClass(className: string): void {
     if (!import.meta.client) return;
-    const body = document.querySelector('body');
-    body?.classList.contains(className) ? body.classList.remove(className) : body?.classList.add(className);
+    document.body.classList.toggle(className);
   }
 
   /**
@@ -113,7 +112,6 @@ export function useHelpers() {
    * @returns {string} The formatted price string.
    */
   const formatPrice = (price: string | number | null | undefined): string => {
-    const runtimeConfig = useRuntimeConfig();
     const currencyCode = runtimeConfig.public?.CURRENCY_CODE || 'USD';
     if (price === null || price === undefined) return '';
 
@@ -158,7 +156,7 @@ export function useHelpers() {
    * @param {number} delay - The delay in milliseconds.
    * @returns {Function} The debounced function.
    */
-  const debounce = (func: Function, delay: number = 100) => {
+  const debounce = (func: (...args: unknown[]) => unknown, delay: number = 100) => {
     let inDebounce: NodeJS.Timeout;
     return function (this: any, ...args: any[]) {
       clearTimeout(inDebounce);

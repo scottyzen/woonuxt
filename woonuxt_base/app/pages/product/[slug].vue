@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import { StockStatusEnum, ProductTypesEnum, type AddToCartInput } from '#gql/default';
-import type { ExternalProduct, ProductDetail, SimpleProduct, VariableProduct, Variation, VariationAttribute } from '#types/gql';
+import type { ExternalProduct, ProductDetail, Variation, VariationAttribute } from '#types/gql';
 
 const route = useRoute();
-const router = useRouter();
 const { storeSettings } = useAppConfig();
 const { addToCart, isUpdatingCart, isAddingToCart, isOptimisticCartMode } = useCart();
 const { frontEndUrl } = useHelpers();
@@ -313,7 +312,7 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
   <main class="container relative py-6 xl:max-w-7xl">
     <div v-if="product">
       <SEOHead :info="product" />
-      <Breadcrumb :product class="mb-6" v-if="storeSettings.showBreadcrumbOnSingleProduct" />
+      <Breadcrumb v-if="storeSettings.showBreadcrumbOnSingleProduct" :product class="mb-6" />
 
       <div class="flex flex-col gap-10 md:flex-row md:justify-between lg:gap-24">
         <ProductImageGallery
@@ -322,7 +321,7 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
           :main-image="productImage"
           :gallery="productGallery"
           :node="displayProduct"
-          :activeVariation="activeVariation || {}" />
+          :active-variation="activeVariation || {}" />
         <NuxtImg v-else class="relative flex-1 skeleton" src="/images/placeholder.jpg" :alt="product?.name || 'Product'" />
 
         <div class="w-full lg:max-w-md xl:max-w-lg md:py-2">
@@ -332,7 +331,7 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
                 {{ displayProduct.name }}
                 <LazyWPAdminLink :link="`/wp-admin/post.php?post=${product.databaseId}&action=edit`">Edit</LazyWPAdminLink>
               </h1>
-              <StarRating :rating="averageRating" :count="reviewCount" v-if="storeSettings.showReviews" />
+              <StarRating v-if="storeSettings.showReviews" :rating="averageRating" :count="reviewCount" />
             </div>
             <ProductPrice class="text-xl" :sale-price="priceTarget?.salePrice" :regular-price="priceTarget?.regularPrice" />
           </div>
@@ -340,15 +339,15 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
           <div class="grid gap-2 my-8 text-sm empty:hidden">
             <div v-if="!isExternalProduct" class="flex items-center gap-2">
               <span class="text-gray-400">{{ $t('shop.availability') }}: </span>
-              <StockStatus :stockStatus="stockStatus" @updated="mergeLiveStockStatus" />
+              <StockStatus :stock-status="stockStatus" @updated="mergeLiveStockStatus" />
             </div>
-            <div class="flex items-center gap-2" v-if="storeSettings.showSKU && product?.sku">
+            <div v-if="storeSettings.showSKU && product?.sku" class="flex items-center gap-2">
               <span class="text-gray-400">{{ $t('shop.sku') }}: </span>
               <span class="">{{ product?.sku || 'N/A' }}</span>
             </div>
           </div>
 
-          <div class="mb-8 font-light prose" v-html="product.shortDescription || product.description" />
+          <div class="mb-8 font-light prose" v-html="product.shortDescription || product.description"></div>
 
           <hr class="border-gray-300" />
 
@@ -357,7 +356,7 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
               v-if="isVariableProduct && product?.attributes?.nodes?.length && product?.variations"
               class="mt-4 mb-8"
               :attributes="product.attributes.nodes"
-              :defaultAttributes="defaultAttributes"
+              :default-attributes="defaultAttributes"
               :variations="product.variations.nodes"
               @attrs-changed="updateSelectedVariations" />
             <div
@@ -410,7 +409,7 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
       <div v-if="product.description || product.reviews" class="my-32">
         <ProductTabs :product />
       </div>
-      <div class="my-32" v-if="product.related && storeSettings.showRelatedProducts">
+      <div v-if="product.related && storeSettings.showRelatedProducts" class="my-32">
         <div class="mb-4 text-xl font-semibold">{{ $t('shop.youMayLike') }}</div>
         <LazyProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
       </div>

@@ -43,7 +43,7 @@ const goToOrder = (databaseId?: string | number | null): void => {
         </tbody>
       </table>
       <div class="text-center flex justify-center w-full mt-8">
-        <button type="button" @click="refresh" class="flex items-center gap-1 text-sm leading-none hover:bg-gray-50 p-2 rounded transition-colors">
+        <button type="button" class="flex items-center gap-1 text-sm leading-none hover:bg-gray-50 p-2 rounded transition-colors" @click="refresh">
           <span>Refresh list</span>
           <Icon name="ion:refresh-outline" />
         </button>

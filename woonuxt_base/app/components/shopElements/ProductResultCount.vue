@@ -6,7 +6,7 @@ const page = ref(parseInt(route.params.pageNumber as string) || 1);
 </script>
 
 <template>
-  <div class="text-sm font-light text-gray-700 " v-if="products.length !== 0">
+  <div v-if="products.length !== 0" class="text-sm font-light text-gray-700">
     <span>{{ $t('shop.productResultCount.showing') + ' ' }}</span>
     <span class="font-normal">{{ (page - 1) * productsPerPage + 1 + ' ' }}</span>
     <span>{{ $t('shop.productResultCount.to') + ' ' }}</span>

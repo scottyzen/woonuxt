@@ -21,20 +21,17 @@ async function updateState() {
   }
 }
 
-onMounted(() => {
-  updateState();
-});
-
 watch(
   () => props.countryCode,
   () => {
     updateState();
   },
+  { immediate: true },
 );
 </script>
 
 <template>
-  <select v-bind="$attrs" @change="select" v-if="countryStatesDict[props.countryCode ?? '']?.length">
+  <select v-if="countryStatesDict[props.countryCode ?? '']?.length" v-bind="$attrs" @change="select">
     <option value="" :selected="!(props.modelValue ?? '')">Select a state</option>
     <option
       v-for="state in countryStatesDict[props.countryCode ?? '']"
@@ -44,5 +41,5 @@ watch(
       {{ state.name }}
     </option>
   </select>
-  <input v-else v-bind="$attrs" type="text" @change="select" placeholder="State" />
+  <input v-else v-bind="$attrs" type="text" placeholder="State" @change="select" />
 </template>

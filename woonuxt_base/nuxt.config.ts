@@ -26,7 +26,7 @@ export default defineNuxtConfig({
 
   components: [{ path: resolve('./app/components'), pathPrefix: false }],
 
-  modules: [resolve('./modules/woonuxt-bridge.ts'), 'nuxt-graphql-client', '@nuxt/icon', '@nuxt/image', '@nuxtjs/i18n'],
+  modules: [resolve('./modules/woonuxt-bridge.ts'), 'nuxt-graphql-client', '@nuxt/icon', '@nuxt/image', '@nuxtjs/i18n', '@nuxt/eslint'],
 
   postcss: {
     plugins: {

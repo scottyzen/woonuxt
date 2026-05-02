@@ -1,7 +1,7 @@
 <script setup>
 const { updateShippingMethod } = useCart();
 
-const props = defineProps({
+defineProps({
   options: { type: Array, required: true },
   activeOption: { type: String, required: true },
 });

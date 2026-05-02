@@ -1,1 +1,1 @@
-export * from "../../woonuxt_base/app/types/gql";
+export * from '../../woonuxt_base/app/types/gql';

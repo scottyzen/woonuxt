@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineOptions({ inheritAttrs: false });
 
-const props = defineProps<{ modelValue?: string | null }>();
+defineProps<{ modelValue?: string | null }>();
 
 const { getAllowedCountries, countriesToShow } = useCountry();
 const emit = defineEmits(['update:modelValue', 'change']);
@@ -18,7 +18,7 @@ function select(evt: Event) {
 </script>
 
 <template>
-  <select v-bind="$attrs" :value="modelValue ?? ''" @change="select" required>
+  <select v-bind="$attrs" :value="modelValue ?? ''" required @change="select">
     <option value="" disabled>Select a country</option>
     <option v-for="country in countriesToShow" :key="country.code" :value="country.code">
       {{ country.name }}

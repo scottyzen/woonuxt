@@ -38,8 +38,7 @@ const variantClasses = computed(() => {
     secondary: 'bg-gray-100  text-gray-900  hover:bg-gray-200  focus:ring-gray-400',
     danger: 'bg-red-600  text-white hover:bg-red-700  focus:ring-red-500 shadow-sm',
     ghost: 'bg-transparent text-gray-700  hover:bg-gray-100  focus:ring-gray-400',
-    outline:
-      'bg-transparent border-1 border-gray-300  text-gray-700  hover:bg-gray-50  focus:ring-gray-400',
+    outline: 'bg-transparent border-1 border-gray-300  text-gray-700  hover:bg-gray-50  focus:ring-gray-400',
   };
   return variants[props.variant];
 });
@@ -94,7 +93,7 @@ const componentAttrs = computed(() => {
     <Icon v-if="icon && iconPosition === 'left' && !loading" :name="icon" :size="iconSize" />
 
     <!-- Default Slot for button content -->
-    <slot />
+    <slot></slot>
 
     <!-- Right Icon -->
     <Icon v-if="icon && iconPosition === 'right' && !loading" :name="icon" :size="iconSize" />

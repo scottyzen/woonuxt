@@ -18,7 +18,7 @@ const showShare = () => {
 
 <template>
   <Transition name="fade" mode="out-in">
-    <button type="button" v-if="!isOpen" class="flex items-center gap-2 mt-4 text-sm text-gray-400 cursor-pointer" @click="showShare">
+    <button v-if="!isOpen" type="button" class="flex items-center gap-2 mt-4 text-sm text-gray-400 cursor-pointer" @click="showShare">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="18" height="18">
         <circle cx="128" cy="256" r="48" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
         <circle cx="384" cy="112" r="48" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />

@@ -3,7 +3,6 @@ import { OrderStatusEnum } from '#gql/default';
 import type { Order } from '#types/gql';
 
 const { query, params, name } = useRoute();
-const { customer } = useAuth();
 const { formatDate, getErrorMessage } = useHelpers();
 const { t } = useI18n();
 const { cart, emptyCart, refreshCart } = useCart();
@@ -14,7 +13,6 @@ const delayLength = 2500;
 const isLoaded = ref<boolean>(false);
 const errorMessage = ref('');
 
-const isGuest = computed(() => !customer.value?.email);
 const isSummaryPage = computed<boolean>(() => name === 'order-summary');
 const isCheckoutPage = computed<boolean>(() => name === 'order-received');
 const orderIsNotCompleted = computed<boolean>(() => order.value?.status !== OrderStatusEnum.COMPLETED);
@@ -209,7 +207,7 @@ useSeoMeta({
         <hr class="my-8 border-gray-200" />
 
         <div v-if="downloadableItems.length && !orderIsNotCompleted">
-          <DownloadableItems :downloadableItems="downloadableItems" />
+          <DownloadableItems :downloadable-items="downloadableItems" />
           <hr class="my-8 border-gray-200" />
         </div>
 
@@ -240,7 +238,7 @@ useSeoMeta({
       <div v-else-if="errorMessage" class="flex flex-col items-center justify-center flex-1 w-full gap-4 text-center">
         <Icon name="ion:sad-outline" size="96" class="text-gray-700" />
         <h1 class="text-xl font-semibold text-gray-900">Error</h1>
-        <div v-if="errorMessage" class="text-sm text-red-500" v-html="errorMessage" />
+        <div v-if="errorMessage" class="text-sm text-red-500" v-html="errorMessage"></div>
       </div>
     </template>
   </div>
