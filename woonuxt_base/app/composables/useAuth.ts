@@ -112,7 +112,7 @@ export const useAuth = () => {
   };
 
   const navigateToLogin = (currentRoute?: string) => {
-    const route = currentRoute || (typeof window !== 'undefined' ? window.location.pathname + window.location.search : '');
+    const route = currentRoute || (import.meta.client ? window.location.pathname + window.location.search : '');
     if (route && route !== '/my-account') returnUrl.value = route;
     return navigateTo('/my-account');
   };
@@ -164,7 +164,6 @@ export const useAuth = () => {
       clearAllCookies();
       resetAccountState();
       updateCart(null);
-      useGqlHeaders({ 'woocommerce-session': '' });
 
       // Navigate now — don't wait for refreshCart() first. refreshCart() can take 1-2s
       // and applyCartSnapshot could restore viewer state if a stale cookie survived.
