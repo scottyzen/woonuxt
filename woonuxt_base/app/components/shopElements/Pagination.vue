@@ -3,49 +3,22 @@ const route = useRoute();
 const { productsPerPage } = useHelpers();
 const { products } = useProducts();
 
-// TODO: Refactor all this logic. It's a mess.
 const currentQuery = computed(() => {
-  const query = route.query;
-  const queryKeys = Object.keys(query);
-  let currentQuery = '';
-  if (queryKeys.length > 0) {
-    queryKeys.forEach((key, index) => {
-      currentQuery += index === 0 ? `${key}=${query[key]}` : `&${key}=${query[key]}`;
-    });
-  }
-  return decodeURIComponent(currentQuery);
+  const params = new URLSearchParams(route.query as Record<string, string>).toString();
+  return params ? decodeURIComponent(params) : '';
 });
 
 const page = ref(route.params.pageNumber ? parseInt(route.params.pageNumber as string) : 1);
 const numberOfPages = computed<number>(() => Math.ceil(products.value.length / productsPerPage || 1));
 
-const prevSrc = (pageNumber: number) => {
-  if (currentQuery.value === '') {
-    return decodeURIComponent(`/products/page/${pageNumber > 1 ? pageNumber - 1 : pageNumber}`);
-  } else {
-    return decodeURIComponent(
-      pageNumber > 1 ? `/products/page/${pageNumber - 1}/?${currentQuery.value}` : `/products/page/${pageNumber}/?${currentQuery.value}`,
-    );
-  }
+const pageSrc = (pageNumber: number) => {
+  const base = `/products/page/${pageNumber}`;
+  return currentQuery.value ? `${base}/?${currentQuery.value}` : base;
 };
 
-const nextSrc = (pageNumber: number) => {
-  if (currentQuery.value === '') {
-    return decodeURIComponent(`/products/page/${pageNumber < numberOfPages.value ? pageNumber + 1 : pageNumber}`);
-  } else {
-    return decodeURIComponent(
-      pageNumber < numberOfPages.value ? `/products/page/${pageNumber + 1}/?${currentQuery.value}` : `/products/page/${pageNumber}/?${currentQuery.value}`,
-    );
-  }
-};
-
-const numberSrc = (pageNumber: number) => {
-  if (currentQuery.value === '') {
-    return decodeURIComponent(`/products/page/${pageNumber}`);
-  } else {
-    return decodeURIComponent(`/products/page/${pageNumber}/?${currentQuery.value}`);
-  }
-};
+const prevSrc = (pageNumber: number) => pageSrc(Math.max(1, pageNumber - 1));
+const nextSrc = (pageNumber: number) => pageSrc(Math.min(numberOfPages.value, pageNumber + 1));
+const numberSrc = (pageNumber: number) => pageSrc(pageNumber);
 </script>
 
 <template>

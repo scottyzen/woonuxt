@@ -21,15 +21,12 @@ async function updateState() {
   }
 }
 
-onMounted(() => {
-  updateState();
-});
-
 watch(
   () => props.countryCode,
   () => {
     updateState();
   },
+  { immediate: true },
 );
 </script>
 

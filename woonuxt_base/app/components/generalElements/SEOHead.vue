@@ -18,6 +18,4 @@ useHead({
 });
 </script>
 
-<template>
-  <div style="display: none"></div>
-</template>
+<template></template>
