@@ -12,14 +12,11 @@ const isOptimisticItem = computed(() => String(item.key || '').startsWith('optim
 const incrementQuantity = () => quantity.value++;
 const decrementQuantity = () => quantity.value--;
 
-watch(
-  quantity,
-  debounce(() => {
-    if (quantity.value !== '') {
-      updateItemQuantity(item.key, quantity.value);
-    }
-  }, 250),
-);
+const debouncedUpdateQuantity = debounce((qty: number) => {
+  if (Number.isFinite(qty) && qty >= 0) updateItemQuantity(item.key, qty);
+}, 250);
+
+watch(quantity, debouncedUpdateQuantity);
 
 const onFocusOut = () => {
   if (quantity.value === '') {
@@ -33,13 +30,13 @@ const onFocusOut = () => {
 </script>
 
 <template>
-  <div class="flex rounded-sm bg-white  text-sm leading-none shadow-xs shadow-gray-200  isolate">
+  <div class="flex rounded-sm bg-white text-sm leading-none shadow-xs shadow-gray-200 isolate">
     <button
       title="Decrease Quantity"
       aria-label="Decrease Quantity"
       @click="decrementQuantity"
       type="button"
-      class="focus:outline-hidden border-r w-6 h-6 border rounded-l border-gray-300  hover:bg-gray-50  disabled:cursor-not-allowed text-gray-700 "
+      class="focus:outline-hidden border-r w-6 h-6 border rounded-l border-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed text-gray-700"
       :disabled="isUpdatingCart || isOptimisticItem || quantity <= 0">
       <Icon name="ion:remove" size="14" />
     </button>
@@ -51,13 +48,13 @@ const onFocusOut = () => {
       :disabled="isOptimisticItem"
       aria-label="Quantity"
       @focusout="onFocusOut"
-      class="flex items-center justify-center w-8 px-2 text-xs focus:outline-hidden border-y border-gray-300  text-center text-gray-900  " />
+      class="flex items-center justify-center w-8 px-2 text-xs focus:outline-hidden border-y border-gray-300 text-center text-gray-900" />
     <button
       title="Increase Quantity"
       aria-label="Increase Quantity"
       @click="incrementQuantity"
       type="button"
-      class="focus:outline-hidden border-l w-6 h-6 border rounded-r hover:bg-gray-50  border-gray-300  disabled:cursor-not-allowed disabled:bg-gray-100  text-gray-700 "
+      class="focus:outline-hidden border-l w-6 h-6 border rounded-r hover:bg-gray-50 border-gray-300 disabled:cursor-not-allowed disabled:bg-gray-100 text-gray-700"
       :disabled="isUpdatingCart || isOptimisticItem || hasNoMoreStock">
       <Icon name="ion:add" size="14" />
     </button>
