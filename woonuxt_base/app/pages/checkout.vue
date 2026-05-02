@@ -5,7 +5,7 @@ import type { Viewer } from '#types/gql';
 const route = useRoute();
 
 const { t } = useI18n();
-const { query } = useRoute();
+const { query } = route;
 const { cart, paymentGateways } = useCart();
 const { customer, viewer, navigateToLogin } = useAuth();
 const { orderInput, isProcessingOrder, processCheckout, checkoutError } = useCheckout();
@@ -39,8 +39,8 @@ const savedPaymentMethods = computed<SavedPaymentMethod[]>(() => (viewer.value a
 const selectedSavedToken = ref<SavedPaymentMethod | null>(null);
 const isCreatingAccountAtCheckout = computed<boolean>(() => !viewer.value && !!orderInput.value.createAccount);
 const canSavePaymentMethod = computed<boolean>(() => !!viewer.value || isCreatingAccountAtCheckout.value);
-const checkoutPaymentGateways = computed(() => paymentGateways.value);
-const stripeGateway = computed(() => checkoutPaymentGateways.value?.nodes.find((gateway) => gateway.id === 'stripe') ?? null);
+const checkoutPaymentGateways = paymentGateways;
+const stripeGateway = computed(() => paymentGateways.value?.nodes.find((gateway) => gateway.id === 'stripe') ?? null);
 
 const activateStripeGateway = (): void => {
   if (stripeGateway.value) {
@@ -430,7 +430,7 @@ const payNow = async () => {
     console.error('Checkout error:', error);
 
     const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred during checkout';
-    alert(`Payment failed: ${errorMessage}. Please try again or contact support.`);
+    checkoutError.value = errorMessage;
     buttonText.value = t('shop.checkoutButton');
     return;
   }
