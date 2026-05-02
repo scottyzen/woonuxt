@@ -12,8 +12,8 @@ const isOptimisticItem = computed(() => String(item.key || '').startsWith('optim
 const incrementQuantity = () => quantity.value++;
 const decrementQuantity = () => quantity.value--;
 
-const debouncedUpdateQuantity = debounce((qty: number) => {
-  if (Number.isFinite(qty) && qty >= 0) updateItemQuantity(item.key, qty);
+const debouncedUpdateQuantity = debounce((qty: unknown) => {
+  if (Number.isFinite(qty as number) && (qty as number) >= 0) updateItemQuantity(item.key, qty as number);
 }, 250);
 
 watch(quantity, debouncedUpdateQuantity);
