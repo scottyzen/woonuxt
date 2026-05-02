@@ -31,14 +31,9 @@ export function useCart() {
     variation?: Variation | null;
   };
 
-  const normalizeQuantity = (value?: number | string | null): number => {
+  const normalizeQuantity = (value?: number | string | null, fallback = 1): number => {
     const qty = typeof value === 'number' ? value : Number(value);
-    return Number.isFinite(qty) && qty > 0 ? qty : 1;
-  };
-
-  const normalizeCountQuantity = (value?: number | string | null): number => {
-    const qty = typeof value === 'number' ? value : Number(value);
-    return Number.isFinite(qty) && qty > 0 ? qty : 0;
+    return Number.isFinite(qty) && qty > 0 ? qty : fallback;
   };
 
   const buildEmptyCart = (): Cart =>
@@ -157,7 +152,7 @@ export function useCart() {
       };
     }
 
-    const itemCount = nodes.reduce((sum, node) => sum + normalizeCountQuantity(node.quantity), 0);
+    const itemCount = nodes.reduce((sum, node) => sum + normalizeQuantity(node.quantity, 0), 0);
     const productCount = nodes.length;
 
     const nextCart: Cart = {
@@ -423,7 +418,7 @@ export function useCart() {
     const canOptimistic = isOptimisticCartMode.value;
 
     if (canOptimistic) {
-      const safeQuantity = normalizeCountQuantity(quantity);
+      const safeQuantity = normalizeQuantity(quantity, 0);
       runOptimisticMutation(
         () => applyOptimisticQuantityChange(key, safeQuantity),
         async () => {
