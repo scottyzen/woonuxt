@@ -8,7 +8,7 @@ const { t } = useI18n();
 const { query } = route;
 const { cart, paymentGateways } = useCart();
 const { customer, viewer, navigateToLogin } = useAuth();
-const { orderInput, isProcessingOrder, processCheckout, checkoutError } = useCheckout();
+const { orderInput, isProcessingOrder, processCheckout, checkoutError, resolvePaymentMethodId } = useCheckout();
 const runtimeConfig = useRuntimeConfig();
 const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
 
@@ -34,8 +34,9 @@ type CheckoutViewer = Viewer & {
   lastName?: string | null;
   databaseId?: number | null;
 };
-const stripeCustomerId = computed<string | null>(() => (viewer.value as CheckoutViewer | null)?.stripeCustomerId ?? null);
-const savedPaymentMethods = computed<SavedPaymentMethod[]>(() => (viewer.value as CheckoutViewer | null)?.savedPaymentMethods ?? []);
+const viewerAsCheckoutViewer = computed<CheckoutViewer | null>(() => viewer.value as CheckoutViewer | null);
+const stripeCustomerId = computed<string | null>(() => viewerAsCheckoutViewer.value?.stripeCustomerId ?? null);
+const savedPaymentMethods = computed<SavedPaymentMethod[]>(() => viewerAsCheckoutViewer.value?.savedPaymentMethods ?? []);
 const selectedSavedToken = ref<SavedPaymentMethod | null>(null);
 const isCreatingAccountAtCheckout = computed<boolean>(() => !viewer.value && !!orderInput.value.createAccount);
 const canSavePaymentMethod = computed<boolean>(() => !!viewer.value || isCreatingAccountAtCheckout.value);
@@ -136,19 +137,11 @@ const resolveStripeAmount = (rawTotal: string | number | null | undefined, curre
 };
 
 const stripeAmount = computed(() => resolveStripeAmount(cart.value?.rawTotal ?? '0', stripeCurrency.value));
-const viewerEmail = computed<string>(() => customer.value?.billing?.email || (viewer.value as CheckoutViewer | null)?.email || '');
-const viewerFirstName = computed<string>(() => customer.value?.billing?.firstName || (viewer.value as CheckoutViewer | null)?.firstName || '');
+const viewerEmail = computed<string>(() => customer.value?.billing?.email || viewerAsCheckoutViewer.value?.email || '');
+const viewerFirstName = computed<string>(() => customer.value?.billing?.firstName || viewerAsCheckoutViewer.value?.firstName || '');
 const viewerGreeting = computed<string>(() =>
   viewerFirstName.value ? `Welcome back, ${customer.value?.billing?.firstName} ${customer.value?.billing?.lastName || ''}` : 'Welcome',
 );
-const resolvePaymentMethodId = (paymentMethod: unknown): string => {
-  if (typeof paymentMethod === 'string') return paymentMethod;
-  if (paymentMethod && typeof paymentMethod === 'object' && 'id' in paymentMethod) {
-    return String((paymentMethod as { id?: string | null }).id ?? '');
-  }
-  return '';
-};
-
 const selectedPaymentMethodId = computed<string>(() => resolvePaymentMethodId(orderInput.value.paymentMethod));
 const isCheckoutDisabled = computed<boolean>(() => {
   if (isProcessingOrder.value || !selectedPaymentMethodId.value) return true;

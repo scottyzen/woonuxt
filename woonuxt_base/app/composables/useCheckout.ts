@@ -240,5 +240,6 @@ export function useCheckout() {
     checkoutError,
     processCheckout,
     updateShippingLocation,
+    resolvePaymentMethodId,
   };
 }
