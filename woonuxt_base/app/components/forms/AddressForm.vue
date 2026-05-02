@@ -27,12 +27,25 @@ const address = toRef(props, 'modelValue');
       <template v-if="showAddressFields">
         <div class="w-full col-span-full">
           <label for="address1">{{ $t('billing.address1') }}</label>
-          <input id="address1" v-model="address.address1" placeholder="O'Connell Street 47" autocomplete="street-address" type="text" @change="updateShippingLocation" required />
+          <input
+            id="address1"
+            v-model="address.address1"
+            placeholder="O'Connell Street 47"
+            autocomplete="street-address"
+            type="text"
+            @change="updateShippingLocation"
+            required />
         </div>
 
         <div class="w-full col-span-full">
           <label for="address2">{{ $t('billing.address2') }} ({{ $t('general.optional') }})</label>
-          <input id="address2" v-model="address.address2" placeholder="Apartment, studio, or floor" autocomplete="address-line2" type="text" @change="updateShippingLocation" />
+          <input
+            id="address2"
+            v-model="address.address2"
+            placeholder="Apartment, studio, or floor"
+            autocomplete="address-line2"
+            type="text"
+            @change="updateShippingLocation" />
         </div>
 
         <div class="w-full">
