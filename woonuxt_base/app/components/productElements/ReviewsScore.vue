@@ -1,4 +1,6 @@
-<script setup>
+<script setup lang="ts">
+const { viewer } = useAuth();
+
 const props = defineProps({
   reviews: { type: Object, default: null },
   productId: { type: Number, default: null },
@@ -8,10 +10,11 @@ const props = defineProps({
 
 const numberAndPercentageOfEachRating = computed(() => {
   const ratings = [0, 0, 0, 0, 0];
-  props.reviews.edges.forEach((review) => {
-    ratings[review.rating - 1] += 1;
+  props.reviews.edges.forEach((review: any) => {
+    const idx = review.rating - 1;
+    if (idx >= 0 && idx < ratings.length) ratings[idx]!++;
   });
-  const total = ratings.reduce((a, b) => a + b, 0);
+  const total = ratings.reduce((a: number, b: number) => a + b, 0);
   return ratings
     .map((count, index) => {
       const percentage = (count / total) * 100;
@@ -22,14 +25,24 @@ const numberAndPercentageOfEachRating = computed(() => {
 
 const show = ref(false);
 const hovered = ref(0);
-const rating = ref(null);
-const content = ref(null);
-const authorEmail = ref(null);
+const rating = ref<number | null>(null);
+const content = ref('');
+const authorName = computed(() => (viewer.value ? `${viewer.value.firstName ?? ''} ${viewer.value.lastName ?? ''}`.trim() : authorNameInput.value));
+const authorNameInput = ref('');
+const authorEmail = computed(() => viewer.value?.email ?? authorEmailInput.value);
+const authorEmailInput = ref('');
 const errorMessage = ref('');
 const successMessage = ref('');
 const isPending = ref(false);
+let successTimer: ReturnType<typeof setTimeout> | null = null;
+let errorTimer: ReturnType<typeof setTimeout> | null = null;
 
-function setHovered(i) {
+onUnmounted(() => {
+  if (successTimer) clearTimeout(successTimer);
+  if (errorTimer) clearTimeout(errorTimer);
+});
+
+function setHovered(i: number) {
   hovered.value = i;
 }
 
@@ -40,22 +53,23 @@ function resetHovered() {
 async function addComment() {
   const variables = {
     commentOn: props.productId,
-    author: authorEmail.value.split('@')[0],
+    author: authorName.value,
     content: content.value,
     rating: rating.value,
     authorEmail: authorEmail.value,
   };
   try {
+    if (!rating.value) return;
     isPending.value = true;
-    await GqlWriteReview(variables);
+    await GqlWriteReview({ ...variables, rating: rating.value });
     successMessage.value = 'Your review is awaiting approval';
-    setTimeout(() => {
+    successTimer = setTimeout(() => {
       successMessage.value = '';
       show.value = false;
     }, 4000);
-  } catch (error) {
+  } catch (error: any) {
     errorMessage.value = error?.gqlErrors?.[0].message;
-    setTimeout(() => {
+    errorTimer = setTimeout(() => {
       errorMessage.value = '';
     }, 5000);
   } finally {
@@ -66,43 +80,41 @@ async function addComment() {
 
 <template>
   <div>
-    <h4 v-if="reviewCount" class="font-semibold text-2xl text-gray-900 ">{{ $t('shop.customerReviews') }}</h4>
-    <h4 v-else class="font-semibold text-2xl text-gray-900 ">{{ $t('shop.noReviews') }}</h4>
+    <h4 v-if="reviewCount" class="font-semibold text-2xl text-gray-900">{{ $t('shop.customerReviews') }}</h4>
+    <h4 v-else class="font-semibold text-2xl text-gray-900">{{ $t('shop.noReviews') }}</h4>
     <div v-if="reviewCount" class="my-2">
       <StarRating :rating="reviews.averageRating" :hide-count="true" class="text-sm mr-2" />
-      <span class="text-sm "> {{ $t('general.basedOn') }} {{ reviewCount }} {{ $t('shop.reviews') }}</span>
+      <span class="text-sm"> {{ $t('general.basedOn') }} {{ reviewCount }} {{ $t('shop.reviews') }}</span>
     </div>
     <div class="my-4 bars">
-      <div v-for="rating in numberAndPercentageOfEachRating" :key="rating" class="flex gap-4 items-center">
-        <div class="flex text-sm gap-1 items-center ">
-          {{ rating.rating }}
+      <div v-for="ratingBar in numberAndPercentageOfEachRating" :key="ratingBar.rating" class="flex gap-4 items-center">
+        <div class="flex text-sm gap-1 items-center">
+          {{ ratingBar.rating }}
           <Icon class="text-yellow-400" name="ion:star" />
         </div>
         <div class="flex-1 relative">
-          <div class="rounded-full bg-gray-200  h-2.5 w-full"></div>
-          <div class="rounded-full bg-yellow-400  h-2.5 top-0 left-0 absolute" :style="{ width: rating.percentage + '%' }"></div>
+          <div class="rounded-full bg-gray-200 h-2.5 w-full"></div>
+          <div class="rounded-full bg-yellow-400 h-2.5 top-0 left-0 absolute" :style="{ width: ratingBar.percentage + '%' }"></div>
         </div>
       </div>
     </div>
-    <div class="mt-10 text-xl mb-2 text-gray-900  font-semibold">Share your thoughts</div>
-    <div class="text-sm mb-4 text-gray-600 ">If you have used this product, we would love to hear about your experience.</div>
+    <div class="mt-10 text-xl mb-2 text-gray-900 font-semibold">Share your thoughts</div>
+    <div class="text-sm mb-4 text-gray-600">If you have used this product, we would love to hear about your experience.</div>
     <Button @click="show = !show" variant="outline" class="w-full mb-4">
       {{ show ? $t('shop.close') : $t('shop.writeReview') }}
     </Button>
     <transition class="ease-in-out transform transition-all" name="scale-y">
       <form v-if="show" @submit.prevent="addComment" class="writeReview">
-        <div class="w-full text-gray-500 ">
-          <div class="p-5 mt-3 grid gap-2 border border-gray-300  rounded-lg bg-gray-50 ">
+        <div class="w-full text-gray-500">
+          <div class="p-5 mt-3 grid gap-2 border border-gray-300 rounded-lg bg-gray-50">
             <div class="block text-center mb-1.5">
-              <label class="text-center text-sm block relative m-auto "
-                >{{ $t('shop.rateReview') }} <span class="text-red-500">*</span></label
-              >
+              <label class="text-center text-sm block relative m-auto">{{ $t('shop.rateReview') }} <span class="text-red-500">*</span></label>
               <div class="gap-1 flex justify-center mt-2 relative">
                 <label
                   v-for="i in 5"
                   :key="i"
                   class="grid p-1 rounded-sm"
-                  :class="rating < i && i > hovered ? 'disable-star' : 'checked-star'"
+                  :class="(rating ?? 0) < i && i > hovered ? 'disable-star' : 'checked-star'"
                   @mouseover="setHovered(i)"
                   @mouseout="resetHovered">
                   <input type="radio" class="overflow-hidden hidden appearance-none opacity-0 absolute" name="rating" :value="i" v-model="rating" required />
@@ -111,18 +123,22 @@ async function addComment() {
               </div>
             </div>
             <div class="w-full col-span-full">
-              <label for="content" class="text-sm mb-0.5 ">{{ $t('shop.rateContent') }} <span class="text-red-500">*</span></label>
+              <label for="content" class="text-sm mb-0.5">{{ $t('shop.rateContent') }} <span class="text-red-500">*</span></label>
               <textarea class="w-full" id="content" placeholder="Great Quality" v-model="content" required></textarea>
             </div>
-            <div class="w-full col-span-full">
-              <label for="author" class="text-sm mb-0.5 ">{{ $t('shop.rateEmail') }} <span class="text-red-500">*</span></label>
+            <div v-if="!viewer" class="w-full col-span-full">
+              <label for="authorName" class="text-sm mb-0.5">{{ $t('shop.rateName') }} <span class="text-red-500">*</span></label>
+              <input class="w-full" id="authorName" placeholder="Jane Doe" type="text" v-model="authorNameInput" required />
+            </div>
+            <div v-if="!viewer" class="w-full col-span-full">
+              <label for="author" class="text-sm mb-0.5">{{ $t('shop.rateEmail') }} <span class="text-red-500">*</span></label>
               <input
                 class="w-full"
                 id="author"
                 placeholder="example@example.com"
                 type="email"
                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                v-model="authorEmail"
+                v-model="authorEmailInput"
                 required />
             </div>
             <Transition name="scale-y" mode="out-in">
