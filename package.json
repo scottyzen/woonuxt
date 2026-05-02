@@ -9,7 +9,11 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "serve": "nuxi generate && npx serve .output/public -l 8080",
-    "typecheck": "nuxi typecheck"
+    "typecheck": "nuxi typecheck",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@stripe/stripe-js": "^9.4.0",
@@ -21,10 +25,12 @@
   },
   "devDependencies": {
     "@iconify-json/ion": "^1.2.7",
+    "@nuxt/eslint": "^1.15.2",
     "@nuxt/icon": "^2.2.1",
     "@nuxt/image": "2.0.0",
     "@nuxtjs/i18n": "^10.3.0",
     "@tailwindcss/typography": "^0.5.19",
+    "eslint": "^10.3.0",
     "nuxt": "^4.4.4",
     "nuxt-graphql-client": "^0.2.46",
     "prettier": "^3.8.3"
