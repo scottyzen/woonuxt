@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { getFilter, setFilter, isFiltersActive } = await useFiltering();
+const { getFilter, setFilter, isFiltersActive } = useFiltering();
 
 const selectedTerms = ref<string[]>(getFilter('rating'));
 const isOpen = ref(true);
