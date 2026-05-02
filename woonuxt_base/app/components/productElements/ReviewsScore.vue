@@ -27,10 +27,17 @@ const show = ref(false);
 const hovered = ref(0);
 const rating = ref<number | null>(null);
 const content = ref('');
-const authorName = computed(() => (viewer.value ? `${viewer.value.firstName ?? ''} ${viewer.value.lastName ?? ''}`.trim() : authorNameInput.value));
 const authorNameInput = ref('');
-const authorEmail = computed(() => viewer.value?.email ?? authorEmailInput.value);
 const authorEmailInput = ref('');
+const viewerName = computed(() => {
+  if (!viewer.value) return '';
+  return `${viewer.value.firstName ?? ''} ${viewer.value.lastName ?? ''}`.trim() || viewer.value.username || viewer.value.nicename || viewer.value.email?.split('@')[0] || '';
+});
+const viewerEmail = computed(() => viewer.value?.email || '');
+const needsAuthorNameInput = computed(() => !viewerName.value);
+const needsAuthorEmailInput = computed(() => !viewerEmail.value);
+const authorName = computed(() => viewerName.value || authorNameInput.value);
+const authorEmail = computed(() => viewerEmail.value || authorEmailInput.value);
 const errorMessage = ref('');
 const successMessage = ref('');
 const isPending = ref(false);
@@ -126,11 +133,11 @@ async function addComment() {
               <label for="content" class="text-sm mb-0.5">{{ $t('shop.rateContent') }} <span class="text-red-500">*</span></label>
               <textarea class="w-full" id="content" placeholder="Great Quality" v-model="content" required></textarea>
             </div>
-            <div v-if="!viewer" class="w-full col-span-full">
+            <div v-if="needsAuthorNameInput" class="w-full col-span-full">
               <label for="authorName" class="text-sm mb-0.5">{{ $t('shop.rateName') }} <span class="text-red-500">*</span></label>
               <input class="w-full" id="authorName" placeholder="Jane Doe" type="text" v-model="authorNameInput" required />
             </div>
-            <div v-if="!viewer" class="w-full col-span-full">
+            <div v-if="needsAuthorEmailInput" class="w-full col-span-full">
               <label for="author" class="text-sm mb-0.5">{{ $t('shop.rateEmail') }} <span class="text-red-500">*</span></label>
               <input
                 class="w-full"
