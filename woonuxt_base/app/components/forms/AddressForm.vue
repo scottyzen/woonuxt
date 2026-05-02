@@ -33,8 +33,8 @@ const address = toRef(props, 'modelValue');
             placeholder="O'Connell Street 47"
             autocomplete="street-address"
             type="text"
-            @change="updateShippingLocation"
-            required />
+            required
+            @change="updateShippingLocation" />
         </div>
 
         <div class="w-full col-span-full">
@@ -50,7 +50,7 @@ const address = toRef(props, 'modelValue');
 
         <div class="w-full">
           <label for="city">{{ $t('billing.city') }}</label>
-          <input id="city" v-model="address.city" placeholder="New York" autocomplete="locality" type="text" @change="updateShippingLocation" required />
+          <input id="city" v-model="address.city" placeholder="New York" autocomplete="locality" type="text" required @change="updateShippingLocation" />
         </div>
 
         <div class="w-full">
@@ -60,18 +60,18 @@ const address = toRef(props, 'modelValue');
             v-model="address.state"
             :default-value="address.state"
             :country-code="address.country"
-            @change="updateShippingLocation"
-            autocomplete="address-level1" />
+            autocomplete="address-level1"
+            @change="updateShippingLocation" />
         </div>
 
         <div class="w-full">
           <label for="country">{{ $t('billing.country') }}</label>
-          <CountrySelect id="country" v-model="address.country" :default-value="address.country" @change="updateShippingLocation" autocomplete="country" />
+          <CountrySelect id="country" v-model="address.country" :default-value="address.country" autocomplete="country" @change="updateShippingLocation" />
         </div>
 
         <div class="w-full">
           <label for="zip">{{ $t('billing.zip') }}</label>
-          <input id="zip" v-model="address.postcode" placeholder="10001" autocomplete="postal-code" type="text" @change="updateShippingLocation" required />
+          <input id="zip" v-model="address.postcode" placeholder="10001" autocomplete="postal-code" type="text" required @change="updateShippingLocation" />
         </div>
 
         <div class="w-full col-span-full">

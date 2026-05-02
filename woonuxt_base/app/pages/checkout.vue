@@ -487,7 +487,7 @@ useSeoMeta({
 
           <div v-if="!viewer" class="checkout-section">
             <h1 class="text-2xl font-semibold leading-none text-gray-900">Guest checkout</h1>
-            <div @click="navigateToLogin(route.fullPath)" class="flex justify-between items-center gap-4 mt-2">
+            <div class="flex justify-between items-center gap-4 mt-2" @click="navigateToLogin(route.fullPath)">
               <p class="text-sm text-gray-600">Use guest checkout, or sign in to use your saved details.</p>
               <Button type="button" class="ml-auto" size="sm" variant="outline"> Sign in </Button>
             </div>
@@ -510,9 +510,9 @@ useSeoMeta({
                 type="email"
                 name="email"
                 :class="{ 'has-error': isInvalidEmail }"
+                required
                 @blur="checkEmailOnBlur(customer.billing.email)"
-                @input="checkEmailOnInput(customer.billing.email)"
-                required />
+                @input="checkEmailOnInput(customer.billing.email)" />
               <Transition name="scale-y" mode="out-in">
                 <div v-if="isInvalidEmail" class="mt-1 text-sm text-red-500">Invalid email address</div>
               </Transition>
@@ -579,8 +579,8 @@ useSeoMeta({
             </h3>
 
             <PaymentOptions
-              :model-value="orderInput.paymentMethod"
               v-model:selected-saved-payment-method="selectedSavedToken"
+              :model-value="orderInput.paymentMethod"
               class="mb-4"
               :payment-gateways="checkoutPaymentGateways"
               :saved-payment-methods="savedPaymentMethods"
@@ -597,7 +597,7 @@ useSeoMeta({
               :amount="stripeAmount"
               :currency="stripeCurrency"
               :save-for-future="canSavePaymentMethod && savePaymentMethod"
-              @updateElement="handleStripeElement" />
+              @update-element="handleStripeElement" />
 
             <div v-if="selectedPaymentMethodId === 'stripe' && canSavePaymentMethod && !selectedSavedToken" class="mt-3 flex items-start gap-2">
               <input

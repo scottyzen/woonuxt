@@ -4,7 +4,7 @@ import type { DownloadableItem } from '#types/gql';
 const { formatDate } = useHelpers();
 
 const props = defineProps({
-  downloadableItems: { type: Object as PropType<DownloadableItem[]>, default: [] },
+  downloadableItems: { type: Array as PropType<DownloadableItem[]>, default: () => [] },
 });
 
 const getDownloadHref = (item: DownloadableItem & { downloadUrl?: string | null }): string | null => item.downloadUrl || item.url || null;

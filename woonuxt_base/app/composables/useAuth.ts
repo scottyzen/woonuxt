@@ -5,7 +5,6 @@ import type {
   Customer,
   DownloadableItem,
   LoginClient,
-  LoginInput,
   LoginSession,
   Order,
   RegisterCustomerInput,

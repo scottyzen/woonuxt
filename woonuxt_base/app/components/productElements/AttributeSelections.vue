@@ -317,7 +317,7 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col justify-between gap-1 attribute-selections" v-if="attributes">
+  <div v-if="attributes" class="flex flex-col justify-between gap-1 attribute-selections">
     <div v-for="(attr, i) in attributes" :key="i" class="relative flex flex-wrap justify-between py-2">
       <!-- LOCAL -->
       <div v-if="attr.scope == 'LOCAL'" class="grid gap-2">
@@ -333,12 +333,12 @@ watch(
             <label :for="`${option}_${index}`">
               <input
                 :id="`${option}_${index}`"
+                v-model="selections[attr.name || '']"
                 class="hidden"
                 type="radio"
                 :class="className(attr.name || '')"
                 :name="attr.name || ''"
                 :value="option"
-                v-model="selections[attr.name || '']"
                 :aria-disabled="!isOptionEnabled(attr.name || '', option)"
                 @change="handleSelectionChange(attr.name || '')" />
               <span
@@ -369,12 +369,12 @@ watch(
               <label :for="`${term.slug || ''}_${termIndex}`">
                 <input
                   :id="`${term.slug || ''}_${termIndex}`"
+                  v-model="selections[attr.name || '']"
                   class="hidden"
                   type="radio"
                   :class="className(attr.name || '')"
                   :name="attr.name || ''"
                   :value="term.slug || ''"
-                  v-model="selections[attr.name || '']"
                   :aria-disabled="!isOptionEnabled(attr.name || '', term.slug || '')"
                   @change="handleSelectionChange(attr.name || '')" />
                 <span
@@ -398,10 +398,10 @@ watch(
         </div>
         <select
           :id="attr.name || ''"
+          v-model="selections[attr.name || '']"
           :name="attr.name || ''"
           required
           class="border-white shadow-xs select"
-          v-model="selections[attr.name || '']"
           @change="handleSelectionChange(attr.name || '')">
           <option disabled hidden>{{ $t('general.choose') }} {{ decodeURIComponent(attr.label || attr.name || '') }}</option>
           <option
@@ -409,7 +409,7 @@ watch(
             :key="term.slug || dropdownIndex"
             :value="term.slug || ''"
             :aria-disabled="!isOptionEnabled(attr.name || '', term.slug || '')"
-            v-html="term.name" />
+            v-html="term.name"></option>
         </select>
       </div>
 
@@ -427,12 +427,12 @@ watch(
             <label :for="`${term.slug}_${index}`">
               <input
                 :id="`${term.slug}_${index}`"
+                v-model="selections[attr.name || '']"
                 class="hidden"
                 type="radio"
                 :class="className(attr.name || '')"
                 :name="attr.name || ''"
                 :value="term.slug || ''"
-                v-model="selections[attr.name || '']"
                 :aria-disabled="!isOptionEnabled(attr.name || '', term.slug || '')"
                 @change="handleSelectionChange(attr.name || '')" />
               <span

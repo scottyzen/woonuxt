@@ -25,13 +25,6 @@ const languages = computed(() => {
   }));
 });
 
-const digestFrequencies = [
-  { value: 'instant', label: 'Instant' },
-  { value: 'daily', label: 'Daily Digest' },
-  { value: 'weekly', label: 'Weekly Summary' },
-  { value: 'never', label: 'Never' },
-];
-
 const saving = ref(false);
 const successMessage = ref(false);
 
@@ -82,7 +75,7 @@ const deleteAccount = () => {
       <p class="text-gray-600">Manage your preferences, notifications, and privacy settings</p>
     </div>
 
-    <form @submit.prevent="saveSettings" class="space-y-6 wn-form">
+    <form class="space-y-6 wn-form" @submit.prevent="saveSettings">
       <!-- Preferences Section -->
       <div class="bg-white rounded-lg shadow-xs border border-gray-100">
         <div class="p-6 md:px-8 pb-4 border-b border-gray-100">

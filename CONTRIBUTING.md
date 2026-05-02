@@ -140,7 +140,6 @@ This guide is for contributors working on the WooNuxt codebase or documentation.
    ```
 
 3. **Make your changes** in the appropriate part of the codebase:
-
    - `woonuxt_base/` — Nuxt 3 frontend
 
 4. **Test your changes locally**:
@@ -152,7 +151,6 @@ This guide is for contributors working on the WooNuxt codebase or documentation.
    ```
 
    Then:
-
    - Open your browser and verify that pages load correctly
    - Interact with cart, product views, and checkout
    - Confirm that WPGraphQL queries resolve properly
@@ -166,7 +164,6 @@ This guide is for contributors working on the WooNuxt codebase or documentation.
    ```
 
    Common types:
-
    - `feat:` — a new feature
    - `fix:` — a bug fix
    - `docs:` — documentation-only changes

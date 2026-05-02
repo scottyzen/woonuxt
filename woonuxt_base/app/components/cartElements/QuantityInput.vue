@@ -34,10 +34,10 @@ const onFocusOut = () => {
     <button
       title="Decrease Quantity"
       aria-label="Decrease Quantity"
-      @click="decrementQuantity"
       type="button"
       class="focus:outline-hidden border-r w-6 h-6 border rounded-l border-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed text-gray-700"
-      :disabled="isUpdatingCart || isOptimisticItem || quantity <= 0">
+      :disabled="isUpdatingCart || isOptimisticItem || quantity <= 0"
+      @click="decrementQuantity">
       <Icon name="ion:remove" size="14" />
     </button>
     <input
@@ -47,15 +47,15 @@ const onFocusOut = () => {
       :max="productType.stockQuantity"
       :disabled="isOptimisticItem"
       aria-label="Quantity"
-      @focusout="onFocusOut"
-      class="flex items-center justify-center w-8 px-2 text-xs focus:outline-hidden border-y border-gray-300 text-center text-gray-900" />
+      class="flex items-center justify-center w-8 px-2 text-xs focus:outline-hidden border-y border-gray-300 text-center text-gray-900"
+      @focusout="onFocusOut" />
     <button
       title="Increase Quantity"
       aria-label="Increase Quantity"
-      @click="incrementQuantity"
       type="button"
       class="focus:outline-hidden border-l w-6 h-6 border rounded-r hover:bg-gray-50 border-gray-300 disabled:cursor-not-allowed disabled:bg-gray-100 text-gray-700"
-      :disabled="isUpdatingCart || isOptimisticItem || hasNoMoreStock">
+      :disabled="isUpdatingCart || isOptimisticItem || hasNoMoreStock"
+      @click="incrementQuantity">
       <Icon name="ion:add" size="14" />
     </button>
   </div>

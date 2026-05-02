@@ -72,7 +72,7 @@ useSeoMeta({
       </div>
     </section>
 
-    <section class="container my-16" v-if="popularProducts">
+    <section v-if="popularProducts" class="container my-16">
       <div class="flex items-end justify-between">
         <h2 class="text-lg font-semibold md:text-2xl">{{ $t('shop.popularProducts') }}</h2>
         <NuxtLink class="font-medium text-primary-dark" to="/products">{{ $t('general.viewAll') }}</NuxtLink>

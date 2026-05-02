@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { FALLBACK_IMG } = useHelpers();
-const props = defineProps({
+defineProps({
   node: { type: Object, required: true },
   imageLoading: { type: String as PropType<'lazy' | 'eager'>, default: 'lazy' },
 });
@@ -13,7 +13,7 @@ const imgHeight = Math.round(imgWidth * 1.125);
   <NuxtLink
     v-if="node"
     :to="`/product-category/${decodeURIComponent(node.slug)}`"
-    class="relative flex justify-center overflow-hidden border border-white  rounded-xl item snap-mandatory snap-x">
+    class="relative flex justify-center overflow-hidden border border-white rounded-xl item snap-mandatory snap-x">
     <NuxtImg
       :width="imgWidth"
       :height="imgHeight"
@@ -25,8 +25,8 @@ const imgHeight = Math.round(imgWidth * 1.125);
       :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
       placeholder
       placeholder-class="blur-xl" />
-    <div class="absolute inset-x-0 bottom-0 opacity-50 bg-linear-to-t from-black to-transparent h-1/2" />
-    <span class="relative z-10 mt-auto mb-2 text-sm font-semibold text-white capitalize md:text-base md:mb-4" v-html="node.name" />
+    <div class="absolute inset-x-0 bottom-0 opacity-50 bg-linear-to-t from-black to-transparent h-1/2"></div>
+    <span class="relative z-10 mt-auto mb-2 text-sm font-semibold text-white capitalize md:text-base md:mb-4" v-html="node.name"></span>
   </NuxtLink>
 </template>
 

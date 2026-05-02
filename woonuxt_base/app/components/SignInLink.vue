@@ -28,13 +28,13 @@ const linkTitle = computed<string>(() => viewer.value?.username || 'Sign In');
             variant="ghost"
             class="w-full justify-start text-red-600 hover:bg-red-50"
             icon="ion:log-out"
-            @click.stop="logoutUser"
-            :loading="isPending">
+            :loading="isPending"
+            @click.stop="logoutUser">
             Logout
           </Button>
         </div>
       </div>
-      <NuxtLink v-else to="/my-account" :title="linkTitle" @click="navigateToLogin(route.fullPath)" class="inline-flex items-center">
+      <NuxtLink v-else to="/my-account" :title="linkTitle" class="inline-flex items-center" @click="navigateToLogin(route.fullPath)">
         <Icon name="ion:person-outline" size="22" class="border border-transparent" />
       </NuxtLink>
     </Transition>

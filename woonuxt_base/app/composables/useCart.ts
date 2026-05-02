@@ -320,7 +320,9 @@ export function useCart() {
             const retryPayload = await fetchCartSnapshot();
             applyCartSnapshot(retryPayload as CartQueryPayload);
             return true;
-          } catch {}
+          } catch {
+            /* ignore retry error */
+          }
         }
 
         clearActiveAuthToken();

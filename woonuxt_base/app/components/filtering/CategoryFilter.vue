@@ -36,7 +36,7 @@ const checkboxChanged = () => {
       <div v-for="term in terms" :key="term.slug" class="flex gap-2 items-start">
         <input :id="term.slug" v-model="selectedTerms" type="checkbox" :value="term.slug" @change="checkboxChanged" />
         <label :for="term.slug" class="cursor-pointer m-0 text-sm flex-1 leading-tight text-gray-700">
-          <span v-html="term.name" />
+          <span v-html="term.name"></span>
           <small v-if="showCount" class="ml-1 text-gray-400 tabular-nums" aria-hidden="true">({{ term.count || 0 }})</small>
         </label>
       </div>

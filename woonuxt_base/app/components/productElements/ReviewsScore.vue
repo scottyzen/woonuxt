@@ -31,7 +31,13 @@ const authorNameInput = ref('');
 const authorEmailInput = ref('');
 const viewerName = computed(() => {
   if (!viewer.value) return '';
-  return `${viewer.value.firstName ?? ''} ${viewer.value.lastName ?? ''}`.trim() || viewer.value.username || viewer.value.nicename || viewer.value.email?.split('@')[0] || '';
+  return (
+    `${viewer.value.firstName ?? ''} ${viewer.value.lastName ?? ''}`.trim() ||
+    viewer.value.username ||
+    viewer.value.nicename ||
+    viewer.value.email?.split('@')[0] ||
+    ''
+  );
 });
 const viewerEmail = computed(() => viewer.value?.email || '');
 const needsAuthorNameInput = computed(() => !viewerName.value);
@@ -107,11 +113,11 @@ async function addComment() {
     </div>
     <div class="mt-10 text-xl mb-2 text-gray-900 font-semibold">Share your thoughts</div>
     <div class="text-sm mb-4 text-gray-600">If you have used this product, we would love to hear about your experience.</div>
-    <Button @click="show = !show" variant="outline" class="w-full mb-4">
+    <Button variant="outline" class="w-full mb-4" @click="show = !show">
       {{ show ? $t('shop.close') : $t('shop.writeReview') }}
     </Button>
     <transition class="ease-in-out transform transition-all" name="scale-y">
-      <form v-if="show" @submit.prevent="addComment" class="writeReview">
+      <form v-if="show" class="writeReview" @submit.prevent="addComment">
         <div class="w-full text-gray-500">
           <div class="p-5 mt-3 grid gap-2 border border-gray-300 rounded-lg bg-gray-50">
             <div class="block text-center mb-1.5">
@@ -124,28 +130,28 @@ async function addComment() {
                   :class="(rating ?? 0) < i && i > hovered ? 'disable-star' : 'checked-star'"
                   @mouseover="setHovered(i)"
                   @mouseout="resetHovered">
-                  <input type="radio" class="overflow-hidden hidden appearance-none opacity-0 absolute" name="rating" :value="i" v-model="rating" required />
+                  <input v-model="rating" type="radio" class="overflow-hidden hidden appearance-none opacity-0 absolute" name="rating" :value="i" required />
                   <Icon name="ion:star" :size="size + ''" />
                 </label>
               </div>
             </div>
             <div class="w-full col-span-full">
               <label for="content" class="text-sm mb-0.5">{{ $t('shop.rateContent') }} <span class="text-red-500">*</span></label>
-              <textarea class="w-full" id="content" placeholder="Great Quality" v-model="content" required></textarea>
+              <textarea id="content" v-model="content" class="w-full" placeholder="Great Quality" required></textarea>
             </div>
             <div v-if="needsAuthorNameInput" class="w-full col-span-full">
               <label for="authorName" class="text-sm mb-0.5">{{ $t('shop.rateName') }} <span class="text-red-500">*</span></label>
-              <input class="w-full" id="authorName" placeholder="Jane Doe" type="text" v-model="authorNameInput" required />
+              <input id="authorName" v-model="authorNameInput" class="w-full" placeholder="Jane Doe" type="text" required />
             </div>
             <div v-if="needsAuthorEmailInput" class="w-full col-span-full">
               <label for="author" class="text-sm mb-0.5">{{ $t('shop.rateEmail') }} <span class="text-red-500">*</span></label>
               <input
-                class="w-full"
                 id="author"
+                v-model="authorEmailInput"
+                class="w-full"
                 placeholder="example@example.com"
                 type="email"
                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                v-model="authorEmailInput"
                 required />
             </div>
             <Transition name="scale-y" mode="out-in">

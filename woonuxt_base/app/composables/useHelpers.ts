@@ -156,7 +156,7 @@ export function useHelpers() {
    * @param {number} delay - The delay in milliseconds.
    * @returns {Function} The debounced function.
    */
-  const debounce = (func: Function, delay: number = 100) => {
+  const debounce = (func: (...args: unknown[]) => unknown, delay: number = 100) => {
     let inDebounce: NodeJS.Timeout;
     return function (this: any, ...args: any[]) {
       clearTimeout(inDebounce);

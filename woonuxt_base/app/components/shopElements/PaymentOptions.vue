@@ -116,7 +116,7 @@ watch(
           class="grid h-4 w-4 flex-none place-items-center rounded-full border transition-colors"
           :class="selectedSavedPaymentMethod?.id === method.id ? 'border-primary bg-primary' : 'border-gray-300 bg-white'"
           aria-hidden="true">
-          <span class="h-2 w-2 rounded-full bg-white" :class="selectedSavedPaymentMethod?.id === method.id ? 'opacity-100' : 'opacity-0'" />
+          <span class="h-2 w-2 rounded-full bg-white" :class="selectedSavedPaymentMethod?.id === method.id ? 'opacity-100' : 'opacity-0'"></span>
         </span>
       </button>
 
@@ -144,19 +144,21 @@ watch(
             <icon v-else-if="gateway.id === 'stripe'" name="ion:card-outline" size="22" class="text-gray-600" />
             <icon v-else name="ion:cash-outline" size="22" class="text-gray-600" />
           </span>
-          <span class="min-w-0 truncate text-base font-semibold leading-tight" v-html="gateway.title" />
+          <span class="min-w-0 truncate text-base font-semibold leading-tight" v-html="gateway.title"></span>
         </span>
         <span
           class="grid h-4 w-4 flex-none place-items-center rounded-full border transition-colors"
           :class="!selectedSavedPaymentMethod && gateway.id === selectedGatewayId ? 'border-primary bg-primary' : 'border-gray-300 bg-white'"
           aria-hidden="true">
-          <span class="h-2 w-2 rounded-full bg-white" :class="!selectedSavedPaymentMethod && gateway.id === selectedGatewayId ? 'opacity-100' : 'opacity-0'" />
+          <span
+            class="h-2 w-2 rounded-full bg-white"
+            :class="!selectedSavedPaymentMethod && gateway.id === selectedGatewayId ? 'opacity-100' : 'opacity-0'"></span>
         </span>
       </button>
     </div>
 
     <div v-if="!selectedSavedPaymentMethod && activePaymentMethod?.description" class="prose block w-full mt-3">
-      <p class="text-sm text-gray-500" v-html="activePaymentMethod.description" />
+      <p class="text-sm text-gray-500" v-html="activePaymentMethod.description"></p>
     </div>
   </div>
 </template>

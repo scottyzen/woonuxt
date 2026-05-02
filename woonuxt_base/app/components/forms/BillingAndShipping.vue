@@ -13,7 +13,7 @@
           <h3 class="text-lg font-semibold text-gray-900">Billing Address</h3>
         </div>
         <!-- Billing Fields -->
-        <div class="grid gap-6 p-6 md:p-8 md:grid-cols-2" v-if="customer.billing">
+        <div v-if="customer.billing" class="grid gap-6 p-6 md:p-8 md:grid-cols-2">
           <div class="w-full space-y-2">
             <label for="billing-first-name" class="block text-sm font-medium text-gray-700">{{ $t('billing.firstName') }}</label>
             <input id="billing-first-name" v-model="customer.billing.firstName" placeholder="John" autocomplete="given-name" type="text" required />
@@ -60,14 +60,14 @@
             <input id="billing-city" v-model="customer.billing.city" placeholder="New York" autocomplete="address-level2" type="text" />
           </div>
 
-          <div class="w-full space-y-2" v-if="customer.billing.state && customer.billing.country">
+          <div v-if="customer.billing.state && customer.billing.country" class="w-full space-y-2">
             <label for="billing-state" class="block text-sm font-medium text-gray-700"
               >{{ $t('billing.state') }} <span class="font-normal text-gray-400">({{ $t('general.optional') }})</span></label
             >
             <StateSelect id="billing-state" v-model="customer.billing.state" :default-value="customer.billing.state" :country-code="customer.billing.country" />
           </div>
 
-          <div class="w-full space-y-2" v-if="customer.billing.country">
+          <div v-if="customer.billing.country" class="w-full space-y-2">
             <label for="billing-country" class="block text-sm font-medium text-gray-700">{{ $t('billing.country') }}</label>
             <CountrySelect id="billing-country" v-model="customer.billing.country" :default-value="customer.billing.country" />
           </div>
@@ -92,7 +92,7 @@
           <h3 class="text-lg font-semibold text-gray-900">Shipping Address</h3>
         </div>
         <!-- Shipping Fields -->
-        <div class="grid gap-6 p-6 md:p-8 md:grid-cols-2" v-if="customer.shipping">
+        <div v-if="customer.shipping" class="grid gap-6 p-6 md:p-8 md:grid-cols-2">
           <div class="w-full space-y-2">
             <label for="shipping-first-name" class="block text-sm font-medium text-gray-700">{{ $t('billing.firstName') }}</label>
             <input id="shipping-first-name" v-model="customer.shipping.firstName" placeholder="John" autocomplete="given-name" type="text" required />
@@ -139,7 +139,7 @@
             <input id="shipping-city" v-model="customer.shipping.city" placeholder="New York" autocomplete="address-level2" type="text" />
           </div>
 
-          <div class="w-full space-y-2" v-if="customer.shipping.state && customer.shipping.country">
+          <div v-if="customer.shipping.state && customer.shipping.country" class="w-full space-y-2">
             <label for="shipping-state" class="block text-sm font-medium text-gray-700"
               >{{ $t('billing.state') }} <span class="font-normal text-gray-400">({{ $t('general.optional') }})</span></label
             >
@@ -150,7 +150,7 @@
               :country-code="customer.shipping.country" />
           </div>
 
-          <div class="w-full space-y-2" v-if="customer.shipping.country">
+          <div v-if="customer.shipping.country" class="w-full space-y-2">
             <label for="shipping-country" class="block text-sm font-medium text-gray-700">{{ $t('billing.country') }}</label>
             <CountrySelect id="shipping-country" v-model="customer.shipping.country" :default-value="customer.shipping?.country" />
           </div>
@@ -190,7 +190,7 @@ async function saveChanges(): Promise<void> {
   try {
     const { updateCustomer } = await GqlUpdateCustomer({ input: { id: viewer.value.id, shipping, billing } });
     if (updateCustomer) button.value = { text: t('account.updateSuccess'), color: 'bg-green-500' };
-  } catch (error) {
+  } catch {
     button.value = { text: t('account.failed'), color: 'bg-red-500' };
   }
 

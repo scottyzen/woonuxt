@@ -23,7 +23,7 @@ const selectTab = (index: number) => {
 
 <template>
   <div>
-    <nav class="flex gap-8 border-b border-gray-200  tabs">
+    <nav class="flex gap-8 border-b border-gray-200 tabs">
       <button
         v-for="(tab, index) in tabs"
         :key="index"
@@ -46,8 +46,8 @@ const selectTab = (index: number) => {
         </span>
       </button>
     </nav>
-    <div class="tab-contents  mt-8">
-      <slot :active-tab="modelValue" />
+    <div class="tab-contents mt-8">
+      <slot :active-tab="modelValue"></slot>
     </div>
   </div>
 </template>

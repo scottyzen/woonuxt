@@ -1,4 +1,4 @@
-export default defineNuxtPlugin(async (nuxtApp) => {
+export default defineNuxtPlugin(async (_nuxtApp) => {
   if (!import.meta.env.SSR) {
     const { storeSettings } = useAppConfig();
     const { clearAllCookies, getDomain, getErrorContext } = useHelpers();

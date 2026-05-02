@@ -71,15 +71,15 @@ useHead({
     <form class="mt-6 flex flex-col" @submit.prevent="handlePasswordReset">
       <label for="password" class="mb-4">
         {{ $t('account.newPassword') }} <span class="text-red-500">*</span><br />
-        <PasswordInput id="password" className=" border rounded-lg w-full p-3 px-4 bg-white" v-model="password" placeholder="New Password" :required="true" />
+        <PasswordInput id="password" v-model="password" class-name=" border rounded-lg w-full p-3 px-4 bg-white" placeholder="New Password" :required="true" />
       </label>
 
       <label for="confirmPassword" class="mb-4">
         {{ $t('account.confirmNewPassword') }} <span class="text-red-500">*</span><br />
         <PasswordInput
           id="confirmPassword"
-          className="border rounded-lg w-full p-3 px-4 bg-white"
           v-model="confirmPassword"
+          class-name="border rounded-lg w-full p-3 px-4 bg-white"
           placeholder="Confirm Password"
           :required="true" />
       </label>

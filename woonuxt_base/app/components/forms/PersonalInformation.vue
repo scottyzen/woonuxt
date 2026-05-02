@@ -2,30 +2,28 @@
   <div v-if="customer">
     <!-- Page Header -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900  mb-2">Personal Information</h1>
-      <p class="text-gray-600 ">
-        Manage your personal information, including your name, username and email address where you can be contacted
-      </p>
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Personal Information</h1>
+      <p class="text-gray-600">Manage your personal information, including your name, username and email address where you can be contacted</p>
     </div>
 
-    <form class="bg-white  rounded-lg shadow-xs border border-gray-100  wn-form" @submit.prevent="saveChanges">
-      <div class="p-6 md:px-8 pb-4 border-b border-gray-100 ">
-        <h3 class="text-lg font-semibold text-gray-900 ">Personal Details</h3>
+    <form class="bg-white rounded-lg shadow-xs border border-gray-100 wn-form" @submit.prevent="saveChanges">
+      <div class="p-6 md:px-8 pb-4 border-b border-gray-100">
+        <h3 class="text-lg font-semibold text-gray-900">Personal Details</h3>
       </div>
       <!-- Form Fields -->
       <div class="grid gap-6 p-6 md:p-8 md:grid-cols-2">
         <div class="w-full space-y-2">
-          <label for="first-name" class="block text-sm font-medium text-gray-700 ">{{ $t('billing.firstName') }}</label>
+          <label for="first-name" class="block text-sm font-medium text-gray-700">{{ $t('billing.firstName') }}</label>
           <input id="first-name" v-model="customer.firstName" placeholder="John" autocomplete="given-name" type="text" />
         </div>
 
         <div class="w-full space-y-2">
-          <label for="last-name" class="block text-sm font-medium text-gray-700 ">{{ $t('billing.lastName') }}</label>
+          <label for="last-name" class="block text-sm font-medium text-gray-700">{{ $t('billing.lastName') }}</label>
           <input id="last-name" v-model="customer.lastName" placeholder="Doe" autocomplete="family-name" type="text" />
         </div>
 
         <div class="w-full space-y-2">
-          <label for="username" class="block text-sm font-medium text-gray-500 ">
+          <label for="username" class="block text-sm font-medium text-gray-500">
             {{ $t('account.username') }}
           </label>
           <input
@@ -35,11 +33,11 @@
             autocomplete="username"
             type="text"
             disabled
-            class="bg-gray-200  text-gray-600  cursor-not-allowed opacity-60" />
+            class="bg-gray-200 text-gray-600 cursor-not-allowed opacity-60" />
         </div>
 
         <div class="w-full space-y-2">
-          <label for="email" class="block text-sm font-medium text-gray-700 ">
+          <label for="email" class="block text-sm font-medium text-gray-700">
             {{ $t('billing.email') }}
           </label>
           <input id="email" v-model="customer.email" placeholder="johndoe@email.com" autocomplete="email" type="email" />
@@ -47,7 +45,7 @@
       </div>
 
       <!-- Submit Button -->
-      <div class="p-6 pt-4 flex bg-gray-50  rounded-b-lg border-t border-gray-100 ">
+      <div class="p-6 pt-4 flex bg-gray-50 rounded-b-lg border-t border-gray-100">
         <Button :loading="loading" type="submit" class="ml-auto" :class="button.color">
           {{ button.text }}
         </Button>
@@ -76,7 +74,7 @@ async function saveChanges() {
   try {
     const { updateCustomer } = await GqlUpdateCustomer({ input: { id: viewer.value.id, firstName, lastName } });
     if (updateCustomer) button.value = { text: t('account.updateSuccess'), color: 'bg-green-500' };
-  } catch (error) {
+  } catch {
     button.value = { text: t('account.failed'), color: 'bg-red-500' };
   }
 
