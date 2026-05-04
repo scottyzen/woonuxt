@@ -22,7 +22,14 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'default' },
   },
 
-  plugins: [resolve('./app/plugins/gql-auth.ts'), resolve('./app/plugins/init.ts')],
+  plugins: [
+    resolve('./app/plugins/gql-auth.ts'),
+    resolve('./app/plugins/init.ts'),
+    resolve('./app/plugins/payment-gateways/stripe.ts'),
+    resolve('./app/plugins/payment-gateways/paypal.ts'),
+    resolve('./app/plugins/payment-gateways/cod.ts'),
+    resolve('./app/plugins/payment-gateways/cheque.ts'),
+  ],
 
   components: [{ path: resolve('./app/components'), pathPrefix: false }],
 
