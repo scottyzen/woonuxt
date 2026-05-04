@@ -26,7 +26,7 @@
   "devDependencies": {
     "@iconify-json/ion": "^1.2.7",
     "@nuxt/eslint": "^1.15.2",
-    "@nuxt/icon": "^2.2.1",
+    "@nuxt/icon": "^2.2.2",
     "@nuxt/image": "2.0.0",
     "@nuxtjs/i18n": "^10.3.0",
     "@tailwindcss/typography": "^0.5.19",
