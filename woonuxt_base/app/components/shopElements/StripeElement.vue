@@ -4,7 +4,6 @@ import type { Appearance, Stripe, StripeElements } from '@stripe/stripe-js';
 const props = defineProps<{
   stripe: Stripe;
   clientSecret?: string | null;
-  customerSessionClientSecret?: string | null;
   customerId?: string | null;
   amount?: number | null;
   currency?: string | null;
@@ -87,9 +86,6 @@ const createStripeElements = async () => {
       clientSecret: props.clientSecret,
       appearance: stripeAppearance.value,
     };
-    if (props.customerSessionClientSecret) {
-      elementsOptions.customerSessionClientSecret = props.customerSessionClientSecret;
-    }
     elements = props.stripe.elements(elementsOptions);
     elementsMode = 'intent';
   } else {
@@ -126,7 +122,7 @@ const createStripeElements = async () => {
 };
 
 watch(
-  () => [props.clientSecret, props.customerSessionClientSecret],
+  () => props.clientSecret,
   () => {
     if (!props.clientSecret && !canCreateDeferred.value) {
       resetStripeElements();
@@ -160,6 +156,10 @@ watch(canCreateDeferred, (canCreate) => {
 
 onMounted(() => {
   createStripeElements();
+});
+
+onUnmounted(() => {
+  resetStripeElements();
 });
 </script>
 
