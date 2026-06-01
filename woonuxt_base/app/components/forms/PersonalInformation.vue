@@ -57,7 +57,7 @@
 <script setup lang="ts">
 const { viewer, customer } = useAuth();
 const { t } = useI18n();
-const { UpdateCustomer } = useWooGraphQL();
+const gql = useWooGraphQL();
 
 const loading = ref<boolean>(false);
 const button = ref<{ text: string; color: string }>({ text: t('account.updateDetails'), color: 'bg-primary hover:bg-primary-dark' });
@@ -73,7 +73,7 @@ async function saveChanges() {
   const firstName = customer.value.firstName;
   const lastName = customer.value.lastName;
   try {
-    const { updateCustomer } = await UpdateCustomer({ input: { id: viewer.value.id, firstName, lastName } });
+    const { updateCustomer } = await gql.UpdateCustomer({ input: { id: viewer.value.id, firstName, lastName } });
     if (updateCustomer) button.value = { text: t('account.updateSuccess'), color: 'bg-green-500' };
   } catch {
     button.value = { text: t('account.failed'), color: 'bg-red-500' };

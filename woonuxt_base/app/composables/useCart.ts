@@ -22,15 +22,7 @@ export function useCart() {
   const optimisticHadError = useState<boolean>('optimisticHadError', () => false);
   const paymentGateways = useState<PaymentGateways | null>('paymentGateways', () => null);
   const { getDomain, getErrorContext, getErrorMessage } = useHelpers();
-  const {
-    getCart,
-    addToCart: addToCartMutation,
-    UpDateCartQuantity,
-    EmptyCart,
-    ChangeShippingMethod,
-    applyCoupon: applyCouponMutation,
-    removeCoupons,
-  } = useWooGraphQL();
+  const gql = useWooGraphQL();
 
   type CartNode = NonNullable<NonNullable<Cart['contents']>['nodes']>[number];
   type CartItem = CartNode & { key: string };
@@ -270,7 +262,7 @@ export function useCart() {
     const authToken = await getAuthTokenForRequest();
     const requestHeaders = authToken ? { Authorization: `Bearer ${authToken}` } : undefined;
 
-    return await getCart(undefined, requestHeaders);
+    return await gql.getCart(undefined, requestHeaders);
   };
 
   /** Refesh the cart from the server
@@ -367,7 +359,7 @@ export function useCart() {
             if (storeSettings.autoOpenCart && !isShowingCart.value) toggleCart(true);
           },
           async () => {
-            const { addToCart } = await addToCartMutation({ input: { ...input, quantity } });
+            const { addToCart } = await gql.addToCart({ input: { ...input, quantity } });
             return addToCart?.cart ?? null;
           },
         );
@@ -375,7 +367,7 @@ export function useCart() {
       }
 
       await enqueueCartMutation(async () => {
-        const { addToCart } = await addToCartMutation({ input: { ...input, quantity } });
+        const { addToCart } = await gql.addToCart({ input: { ...input, quantity } });
         return addToCart?.cart ?? null;
       }, false);
       // Auto open the cart when an item is added to the cart if the setting is enabled
@@ -403,7 +395,7 @@ export function useCart() {
       runOptimisticMutation(
         () => applyOptimisticQuantityChange(key, safeQuantity),
         async () => {
-          const { updateItemQuantities } = await UpDateCartQuantity({ key, quantity: safeQuantity });
+          const { updateItemQuantities } = await gql.UpDateCartQuantity({ key, quantity: safeQuantity });
           return updateItemQuantities?.cart ?? null;
         },
       );
@@ -412,7 +404,7 @@ export function useCart() {
 
     isUpdatingCart.value = true;
     try {
-      const { updateItemQuantities } = await UpDateCartQuantity({ key, quantity });
+      const { updateItemQuantities } = await gql.UpDateCartQuantity({ key, quantity });
       updateCart(updateItemQuantities?.cart);
     } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
@@ -432,7 +424,7 @@ export function useCart() {
 
       try {
         await enqueueCartMutation(async () => {
-          const { emptyCart } = await EmptyCart();
+          const { emptyCart } = await gql.EmptyCart();
           return emptyCart?.cart ?? null;
         }, true);
       } catch {
@@ -446,7 +438,7 @@ export function useCart() {
 
     try {
       isUpdatingCart.value = true;
-      const { emptyCart } = await EmptyCart();
+      const { emptyCart } = await gql.EmptyCart();
       updateCart(emptyCart?.cart);
     } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
@@ -463,7 +455,7 @@ export function useCart() {
   async function updateShippingMethod(shippingMethods: string): Promise<void> {
     isUpdatingCart.value = true;
     try {
-      const { updateShippingMethod } = await ChangeShippingMethod({ shippingMethods });
+      const { updateShippingMethod } = await gql.ChangeShippingMethod({ shippingMethods });
       updateCart(updateShippingMethod?.cart);
     } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
@@ -477,7 +469,7 @@ export function useCart() {
   async function applyCoupon(code: string): Promise<ApiResponse<Cart | null>> {
     try {
       isUpdatingCoupon.value = true;
-      const { applyCoupon } = await applyCouponMutation({ code });
+      const { applyCoupon } = await gql.applyCoupon({ code });
       updateCart(applyCoupon?.cart);
       return { success: true, data: applyCoupon?.cart || null };
     } catch (error: unknown) {
@@ -492,7 +484,7 @@ export function useCart() {
   async function removeCoupon(code: string): Promise<void> {
     try {
       isUpdatingCart.value = true;
-      const { removeCoupons: removeCouponResponse } = await removeCoupons({ codes: [code] });
+      const { removeCoupons: removeCouponResponse } = await gql.removeCoupons({ codes: [code] });
       updateCart(removeCouponResponse?.cart);
     } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);

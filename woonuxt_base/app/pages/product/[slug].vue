@@ -7,7 +7,7 @@ const { storeSettings } = useAppConfig();
 const { addToCart, isUpdatingCart, isAddingToCart, isOptimisticCartMode } = useCart();
 const { frontEndUrl } = useHelpers();
 const { t } = useI18n();
-const { getStockStatus } = useWooGraphQL();
+const gql = useWooGraphQL();
 const slug = route.params.slug as string;
 
 const { data } = await useAsyncGql('getProduct', { slug, frontEndUrl });
@@ -250,7 +250,7 @@ const mergeLiveStockStatus = (payload: ProductDetail): void => {
 
 const refreshStockStatus = async (): Promise<void> => {
   try {
-    const { product } = await getStockStatus({ slug });
+    const { product } = await gql.getStockStatus({ slug });
     if (product) mergeLiveStockStatus(product as ProductDetail);
   } catch (error: any) {
     const errorMessage = error?.gqlErrors?.[0]?.message;

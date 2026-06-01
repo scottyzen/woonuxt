@@ -68,7 +68,7 @@ export default defineNuxtPlugin(() => {
   const runtimeConfig = useRuntimeConfig();
   const route = useRoute();
   const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
-  const { getStripePaymentIntent } = useWooGraphQL();
+  const gql = useWooGraphQL();
 
   const stripe = useState<Stripe | null>('stripeClient', () => null);
   const elements = useState<StripeElements | null>('stripeElements', () => null);
@@ -152,7 +152,7 @@ export default defineNuxtPlugin(() => {
       const vars = createPaymentIntentVariables({ saveForFuture });
       if (customerId) vars.customerId = customerId;
 
-      const { stripePaymentIntent } = await getStripePaymentIntent(vars);
+      const { stripePaymentIntent } = await gql.getStripePaymentIntent(vars);
 
       if (stripePaymentIntent?.error) {
         console.warn('[Stripe] PaymentIntent init error:', stripePaymentIntent.error);
@@ -190,7 +190,7 @@ export default defineNuxtPlugin(() => {
       throw new Error('Saved payment method is missing its Stripe customer ID.');
     }
 
-    const { stripePaymentIntent } = await getStripePaymentIntent(createPaymentIntentVariables({ customerId: tokenCustomerId, saveForFuture: false }));
+    const { stripePaymentIntent } = await gql.getStripePaymentIntent(createPaymentIntentVariables({ customerId: tokenCustomerId, saveForFuture: false }));
     if (stripePaymentIntent?.error) throw new Error(stripePaymentIntent.error);
     const clientSecret = stripePaymentIntent?.clientSecret ?? null;
     if (!clientSecret) throw new Error('Payment intent not available. Please refresh and try again.');
@@ -228,7 +228,7 @@ export default defineNuxtPlugin(() => {
 
     let clientSecret = stripeClientSecret.value;
     if (!clientSecret) {
-      const { stripePaymentIntent } = await getStripePaymentIntent(
+      const { stripePaymentIntent } = await gql.getStripePaymentIntent(
         createPaymentIntentVariables({
           customerId: stripeCustomerId.value || undefined,
           saveForFuture,

@@ -185,8 +185,8 @@ export const useAsyncGql = <TMethod extends keyof Sdk>(
   },
 ) => {
   const key = `gql:${String(operation)}:${JSON.stringify(variables ?? {})}`;
-  const sdk = useWooGraphQL();
-  const method = sdk[operation] as (...args: unknown[]) => Promise<Awaited<ReturnType<Sdk[TMethod]>>>;
+  const gql = useWooGraphQL();
+  const method = gql[operation] as (...args: unknown[]) => Promise<Awaited<ReturnType<Sdk[TMethod]>>>;
 
   return useAsyncData<Awaited<ReturnType<Sdk[TMethod]>>>(key, () => method(variables, options?.requestHeaders), options?.asyncDataOptions);
 };

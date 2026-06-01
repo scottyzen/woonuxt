@@ -6,7 +6,7 @@ const { query, params, name } = useRoute();
 const { formatDate, getErrorMessage } = useHelpers();
 const { t } = useI18n();
 const { cart, emptyCart, refreshCart } = useCart();
-const { getOrder: fetchOrder } = useWooGraphQL();
+const gql = useWooGraphQL();
 
 const order = ref<Order | null>(null);
 const fetchDelay = ref<boolean>(query.fetch_delay === 'true');
@@ -97,7 +97,7 @@ watch(
 
 async function getOrder() {
   try {
-    const { customer } = await fetchOrder({ id: String(params.orderId) });
+    const { customer } = await gql.getOrder({ id: String(params.orderId) });
     const fetchedOrder = customer?.orders?.nodes?.[0];
 
     if (fetchedOrder) {
