@@ -175,6 +175,7 @@
 <script setup lang="ts">
 const { viewer, customer } = useAuth();
 const { t } = useI18n();
+const { UpdateCustomer } = useWooGraphQL();
 
 const loading = ref<boolean>(false);
 const button = ref<{ text: string; color: string }>({ text: t('account.updateDetails'), color: 'bg-primary hover:bg-primary-dark' });
@@ -188,7 +189,7 @@ async function saveChanges(): Promise<void> {
   const billing = customer.value.billing;
 
   try {
-    const { updateCustomer } = await GqlUpdateCustomer({ input: { id: viewer.value.id, shipping, billing } });
+    const { updateCustomer } = await UpdateCustomer({ input: { id: viewer.value.id, shipping, billing } });
     if (updateCustomer) button.value = { text: t('account.updateSuccess'), color: 'bg-green-500' };
   } catch {
     button.value = { text: t('account.failed'), color: 'bg-red-500' };

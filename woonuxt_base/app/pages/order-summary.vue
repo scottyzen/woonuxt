@@ -6,6 +6,7 @@ const { query, params, name } = useRoute();
 const { formatDate, getErrorMessage } = useHelpers();
 const { t } = useI18n();
 const { cart, emptyCart, refreshCart } = useCart();
+const { getOrder: fetchOrder } = useWooGraphQL();
 
 const order = ref<Order | null>(null);
 const fetchDelay = ref<boolean>(query.fetch_delay === 'true');
@@ -15,7 +16,7 @@ const errorMessage = ref('');
 
 const isSummaryPage = computed<boolean>(() => name === 'order-summary');
 const isCheckoutPage = computed<boolean>(() => name === 'order-received');
-const orderIsNotCompleted = computed<boolean>(() => order.value?.status !== OrderStatusEnum.COMPLETED);
+const orderIsNotCompleted = computed<boolean>(() => order.value?.status !== OrderStatusEnum.Completed);
 const hasDiscount = computed<boolean>(() => !!parseFloat(order.value?.rawDiscountTotal || '0'));
 const downloadableItems = computed(() => order.value?.downloadableItems?.nodes || []);
 const hasClearedCart = ref<boolean>(false);
@@ -96,7 +97,7 @@ watch(
 
 async function getOrder() {
   try {
-    const { customer } = await GqlGetOrder({ id: String(params.orderId) });
+    const { customer } = await fetchOrder({ id: String(params.orderId) });
     const fetchedOrder = customer?.orders?.nodes?.[0];
 
     if (fetchedOrder) {

@@ -4,7 +4,7 @@ import withNuxt from './.nuxt/eslint.config.mjs';
 export default withNuxt(
   // Ignore auto-generated and declaration files
   {
-    ignores: ['**/types/gql.ts', '**/types/nuxt.d.ts', 'app/types/gql.ts'],
+    ignores: ['**/types/gql.ts', '**/app/gql/default.ts'],
   },
   // SEOHead is intentionally renderless — template has no child elements
   {

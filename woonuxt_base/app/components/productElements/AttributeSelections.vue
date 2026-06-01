@@ -75,6 +75,8 @@ const emitSelection = () => {
     (row): VariationAttribute => ({
       name: toSelectionName(row?.name),
       value: selections.value[row?.name ?? ''] ?? '',
+      attributeId: null,
+      label: row?.label ?? row?.name ?? '',
     }),
   );
 

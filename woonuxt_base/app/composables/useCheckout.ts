@@ -3,6 +3,7 @@ import type { CheckoutInput, CreateAccountInput, UpdateCustomerInput } from '#ty
 export function useCheckout() {
   const { customer, loginUser } = useAuth();
   const { cart, refreshCart, isUpdatingCart } = useCart();
+  const { UpdateCustomer, Checkout } = useWooGraphQL();
 
   const resolvePaymentMethodId = (paymentMethod: unknown): string => {
     if (typeof paymentMethod === 'string') return paymentMethod;
@@ -146,7 +147,7 @@ export function useCheckout() {
       const shipping = pickLocation(shippingSource);
       const billing = pickLocation(billingSource);
 
-      const { updateCustomer } = await GqlUpdateCustomer({
+      const { updateCustomer } = await UpdateCustomer({
         input: {
           shipping,
           billing,
@@ -192,7 +193,7 @@ export function useCheckout() {
       const checkoutPayload = buildCheckoutPayload(isPaid);
 
       // Process the checkout
-      const { checkout } = await GqlCheckout(checkoutPayload);
+      const { checkout } = await Checkout(checkoutPayload);
 
       // Handle account creation if requested
       await handleAccountCreation();

@@ -113,6 +113,16 @@ The WooNuxt Settings plugin automatically provides the remaining storefront sett
 
 &nbsp;
 
+### GraphQL Client Direction
+
+WooNuxt uses a WooNuxt-owned GraphQL layer built on `graphql-request` and GraphQL Code Generator's `typescript-graphql-request` SDK.
+
+This keeps the existing `.gql` files, generated operation types, and imperative storefront calls while avoiding a dependency on a Nuxt-specific GraphQL wrapper. Apollo is too heavy for WooNuxt's ISR-heavy catalog flow, urql's cache provides little value for the current architecture, and `gql.tada` would require a high-churn migration away from the existing query files.
+
+Run `npm run graphql:codegen` after changing GraphQL queries or updating the WPGraphQL schema. The generated SDK is committed at `woonuxt_base/app/gql/default.ts` so the template can typecheck and build without relying on Nuxt's generated `.nuxt/gql` output.
+
+&nbsp;
+
 #### Tested up to:
 
 | Plugin/Software              | Version |

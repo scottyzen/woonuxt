@@ -13,7 +13,7 @@ const { hideCategories } = defineProps({ hideCategories: { type: Boolean, defaul
 const globalProductAttributes = (runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES as WooNuxtFilter[]) || [];
 const taxonomies = globalProductAttributes.map((attr) => attr?.slug?.toUpperCase().replace(/_/g, '')) as TaxonomyEnum[];
 
-const { data } = await useAsyncGql('getAllTerms', { taxonomies: [...taxonomies, TaxonomyEnum.PRODUCTCATEGORY] });
+const { data } = await useAsyncGql('getAllTerms', { taxonomies: [...taxonomies, TaxonomyEnum.Productcategory] });
 const terms = data.value?.terms?.nodes ?? [];
 
 // Filter out the product category terms and the global product attributes with their terms
