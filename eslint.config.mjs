@@ -16,7 +16,7 @@ export default withNuxt(
       // Vue
       'vue/html-self-closing': ['error', { html: { void: 'always', normal: 'never', component: 'always' } }],
       'vue/component-name-in-template-casing': ['error', 'PascalCase'],
-      'vue/no-v-html': 'warn',
+      'vue/no-v-html': 'off',
 
       // TypeScript
       '@typescript-eslint/no-explicit-any': 'warn',
