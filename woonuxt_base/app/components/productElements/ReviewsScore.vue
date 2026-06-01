@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { viewer } = useAuth();
+const gql = useWooGraphQL();
 
 const props = defineProps({
   reviews: { type: Object, default: null },
@@ -74,7 +75,7 @@ async function addComment() {
   try {
     if (!rating.value) return;
     isPending.value = true;
-    await GqlWriteReview({ ...variables, rating: rating.value });
+    await gql.WriteReview({ ...variables, rating: rating.value });
     successMessage.value = 'Your review is awaiting approval';
     successTimer = setTimeout(() => {
       successMessage.value = '';

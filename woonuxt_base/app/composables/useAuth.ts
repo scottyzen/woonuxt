@@ -23,6 +23,7 @@ export const useAuth = () => {
   const { clearAllCookies, getDomain, getErrorMessage } = useHelpers();
   const { refreshAuthToken, clearAuthSession, setAuthSessionFromLogin } = useAuthTokens();
   const router = useRouter();
+  const gql = useWooGraphQL();
 
   const customer = useState<Customer>('customer', () => ({ ...EMPTY_CUSTOMER }));
   const viewer = useState<Viewer | null>('viewer', () => null);
@@ -128,7 +129,7 @@ export const useAuth = () => {
   const loginUser = (credentials: CreateAccountInput): Promise<AuthResponse> =>
     withPending(async () => {
       try {
-        await applyLoginSession((await GqlLogin(credentials)).login);
+        await applyLoginSession((await gql.login(credentials)).login);
         return { success: true };
       } catch (error: unknown) {
         return authError(error, LOGIN_ERROR);
@@ -138,7 +139,7 @@ export const useAuth = () => {
   const loginWithProvider = (state: string, code: string, provider: any): Promise<AuthResponse> =>
     withPending(async () => {
       try {
-        const loggedIn = await applyLoginSession((await GqlLoginWithProvider({ input: { oauthResponse: { state, code }, provider } })).login);
+        const loggedIn = await applyLoginSession((await gql.loginWithProvider({ input: { oauthResponse: { state, code }, provider } })).login);
         return loggedIn && viewer.value === null ? { success: false, error: OAUTH_LOGIN_ERROR } : { success: true };
       } catch (error: unknown) {
         return authError(error);
@@ -151,7 +152,7 @@ export const useAuth = () => {
 
     try {
       try {
-        const { logout } = await GqlLogout();
+        const { logout } = await gql.Logout();
         if (!logout?.success) errorMsg = 'There was an error logging out. Your session was cleared locally.';
       } catch (error: unknown) {
         errorMsg = getErrorMessage(error);
@@ -180,7 +181,7 @@ export const useAuth = () => {
   const registerUser = (userInfo: RegisterCustomerInput): Promise<AuthResponse> =>
     withPending(async () => {
       try {
-        await GqlRegisterCustomer({ input: userInfo });
+        await gql.registerCustomer({ input: userInfo });
         return { success: true };
       } catch (error: unknown) {
         return authError(error);
@@ -190,7 +191,7 @@ export const useAuth = () => {
   const sendResetPasswordEmail = ({ username }: ResetPasswordEmailMutationVariables): Promise<AuthResponse> =>
     withPending(async () => {
       try {
-        const { sendPasswordResetEmail } = await GqlResetPasswordEmail({ username });
+        const { sendPasswordResetEmail } = await gql.ResetPasswordEmail({ username });
         return sendPasswordResetEmail?.success
           ? { success: true }
           : { success: false, error: 'There was an error sending the reset password email. Please try again later.' };
@@ -202,7 +203,7 @@ export const useAuth = () => {
   const resetPasswordWithKey = ({ key, login, password }: ResetPasswordKeyMutationVariables): Promise<AuthResponse> =>
     withPending(async () => {
       try {
-        const { resetUserPassword } = await GqlResetPasswordKey({ key, login, password });
+        const { resetUserPassword } = await gql.ResetPasswordKey({ key, login, password });
         return resetUserPassword?.user?.id
           ? { success: true }
           : { success: false, error: 'There was an error resetting the password. Please try again later.' };
@@ -213,7 +214,7 @@ export const useAuth = () => {
 
   const getOrders = (): Promise<ApiResponse<Order[]>> =>
     loadCustomerCollection(
-      () => GqlGetOrders(),
+      () => gql.getOrders(),
       (customer) => customer.orders?.nodes,
       (nodes) => {
         orders.value = nodes;
@@ -223,7 +224,7 @@ export const useAuth = () => {
 
   const getDownloads = (): Promise<ApiResponse<DownloadableItem[]>> =>
     loadCustomerCollection(
-      () => GqlGetDownloads(),
+      () => gql.getDownloads(),
       (customer) => customer.downloadableItems?.nodes,
       (nodes) => {
         downloads.value = nodes;
@@ -236,7 +237,11 @@ export const useAuth = () => {
   };
 
   const avatar = computed(() => viewer.value?.avatar?.url ?? null);
-  const wishlistLink = computed<string>(() => (viewer.value ? '/my-account?tab=wishlist' : '/wishlist'));
+
+  const wishlistLink = computed<string>(() => {
+    if (!import.meta.client) return '/wishlist';
+    return viewer.value ? '/my-account?tab=wishlist' : '/wishlist';
+  });
 
   return {
     viewer,

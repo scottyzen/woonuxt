@@ -7,6 +7,7 @@ const { storeSettings } = useAppConfig();
 const { addToCart, isUpdatingCart, isAddingToCart, isOptimisticCartMode } = useCart();
 const { frontEndUrl } = useHelpers();
 const { t } = useI18n();
+const gql = useWooGraphQL();
 const slug = route.params.slug as string;
 
 const { data } = await useAsyncGql('getProduct', { slug, frontEndUrl });
@@ -31,6 +32,7 @@ const stripPaPrefix = (value?: string | null): string => (value ?? '').toString(
 
 const normalizeMatchKey = (value?: string | null): string => normalizeMatchToken(stripPaPrefix(value));
 const normalizeMatchValue = (value?: string | null): string => normalizeMatchToken(value);
+type VariationSelection = Pick<VariationAttribute, 'name' | 'value'>;
 
 const toSelectionName = (name?: string | null): string => {
   if (!name) return '';
@@ -52,7 +54,7 @@ const normalizedVariations = computed(() => {
   });
 });
 
-const findMatchingVariation = (selected: VariationAttribute[]): Variation | null => {
+const findMatchingVariation = (selected: VariationSelection[]): Variation | null => {
   if (!selected?.length) return null;
 
   const selectedMap: Record<string, string> = {};
@@ -103,10 +105,10 @@ const findVariationById = (value?: string | number | null): Variation | null => 
   return product.value?.variations?.nodes?.find((node: Variation) => node.databaseId === parsed) ?? null;
 };
 
-const buildQuerySelections = (): VariationAttribute[] => {
+const buildQuerySelections = (): VariationSelection[] => {
   if (!product.value?.attributes?.nodes?.length) return [];
 
-  const selections: VariationAttribute[] = [];
+  const selections: VariationSelection[] = [];
   for (const attr of product.value.attributes.nodes) {
     const key = toSelectionName(attr?.name);
     if (!key) continue;
@@ -125,7 +127,10 @@ const buildQuerySelections = (): VariationAttribute[] => {
 
     if (!isValidValue) continue;
 
-    selections.push({ name: key, value: String(value) });
+    selections.push({
+      name: key,
+      value: String(value),
+    });
   }
 
   return selections;
@@ -138,6 +143,8 @@ if (variationFromQuery?.attributes?.nodes?.length) {
   variation.value = variationFromQuery.attributes.nodes.map((attr: VariationAttribute) => ({
     name: attr.name || '',
     value: attr.value || '',
+    attributeId: attr.attributeId ?? null,
+    label: attr.label ?? attr.name ?? '',
   }));
   activeVariation.value = variationFromQuery;
 } else {
@@ -148,10 +155,17 @@ if (variationFromQuery?.attributes?.nodes?.length) {
       variation.value = matched.attributes.nodes.map((attr: VariationAttribute) => ({
         name: attr.name || '',
         value: attr.value || '',
+        attributeId: attr.attributeId ?? null,
+        label: attr.label ?? attr.name ?? '',
       }));
       activeVariation.value = matched;
     } else {
-      variation.value = initialSelections;
+      variation.value = initialSelections.map((selection) => ({
+        name: selection.name || '',
+        value: selection.value || '',
+        attributeId: null,
+        label: selection.name || '',
+      }));
     }
   }
 }
@@ -163,9 +177,9 @@ const defaultAttributes = computed<{ nodes: VariationAttribute[] } | null>(() =>
   return product.value?.defaultAttributes ? { nodes: product.value.defaultAttributes.nodes ?? [] } : null;
 });
 
-const isSimpleProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.SIMPLE);
-const isVariableProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.VARIABLE);
-const isExternalProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.EXTERNAL);
+const isSimpleProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.Simple);
+const isVariableProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.Variable);
+const isExternalProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.External);
 const externalProduct = computed<ExternalProduct | null>(() => (isExternalProduct.value ? (product.value as ExternalProduct) : null));
 const shouldSkipStockRefresh = computed<boolean>(() => isExternalProduct.value);
 
@@ -236,7 +250,7 @@ const mergeLiveStockStatus = (payload: ProductDetail): void => {
 
 const refreshStockStatus = async (): Promise<void> => {
   try {
-    const { product } = await GqlGetStockStatus({ slug });
+    const { product } = await gql.getStockStatus({ slug });
     if (product) mergeLiveStockStatus(product as ProductDetail);
   } catch (error: any) {
     const errorMessage = error?.gqlErrors?.[0]?.message;
@@ -292,13 +306,13 @@ onBeforeUnmount(() => {
 
 const stockStatus = computed(() => {
   if (isVariableProduct.value) {
-    return activeVariation.value?.stockStatus ?? product.value?.stockStatus ?? StockStatusEnum.OUT_OF_STOCK;
+    return activeVariation.value?.stockStatus ?? product.value?.stockStatus ?? StockStatusEnum.OutOfStock;
   }
-  return product.value?.stockStatus ?? StockStatusEnum.OUT_OF_STOCK;
+  return product.value?.stockStatus ?? StockStatusEnum.OutOfStock;
 });
 
 const disabledAddToCart = computed(() => {
-  const canPurchaseWithCurrentStock = stockStatus.value === StockStatusEnum.IN_STOCK || stockStatus.value === StockStatusEnum.ON_BACKORDER;
+  const canPurchaseWithCurrentStock = stockStatus.value === StockStatusEnum.InStock || stockStatus.value === StockStatusEnum.OnBackorder;
   const isInvalidType = !displayProduct.value;
   const isCartUpdating = isOptimisticCartMode.value ? false : isUpdatingCart.value || isAddingToCart.value;
   const hasValidVariation = !isVariableProduct.value || !!activeVariation.value;
@@ -321,7 +335,7 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
           :main-image="productImage"
           :gallery="productGallery"
           :node="displayProduct"
-          :active-variation="activeVariation || {}" />
+          :active-variation="activeVariation" />
         <NuxtImg v-else class="relative flex-1 skeleton" src="/images/placeholder.jpg" :alt="product?.name || 'Product'" />
 
         <div class="w-full lg:max-w-md xl:max-w-lg md:py-2">

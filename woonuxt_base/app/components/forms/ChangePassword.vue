@@ -72,6 +72,7 @@
 <script setup lang="ts">
 const { viewer, loginUser } = useAuth();
 const { t } = useI18n();
+const gql = useWooGraphQL();
 
 const password = ref<{ new: string; confirm: string }>({ new: '', confirm: '' });
 const loading = ref<boolean>(false);
@@ -92,7 +93,7 @@ const updatePassword = async () => {
 
   try {
     loading.value = true;
-    const { updateCustomer } = await GqlUpdateCustomer({ input: { id: viewer.value.id, password: password.value.new } });
+    const { updateCustomer } = await gql.UpdateCustomer({ input: { id: viewer.value.id, password: password.value.new } });
     if (updateCustomer) {
       button.value = { text: t('account.updateSuccess'), color: 'bg-green-500' };
       const { success, error } = await loginUser({ username: viewer.value.username, password: password.value.new });

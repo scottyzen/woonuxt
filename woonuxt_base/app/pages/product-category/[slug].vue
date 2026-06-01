@@ -7,9 +7,14 @@ const { storeSettings } = useAppConfig();
 const route = useRoute();
 const slug = route.params.slug;
 
-const { data } = await useAsyncGql('getProducts', { slug });
-const productsInCategory = (data.value?.products?.nodes || []) as Product[];
-setProducts(productsInCategory);
+const { data, error, status } = await useAsyncGql('getProducts', { slug });
+const productsInCategory = computed<Product[]>(() => (data.value?.products?.nodes ?? []) as Product[]);
+const isLoading = computed<boolean>(() => status.value === 'idle' || status.value === 'pending');
+const hasError = computed<boolean>(() => Boolean(error.value));
+
+watchEffect(() => {
+  setProducts(productsInCategory.value);
+});
 
 onMounted(() => {
   if (!isQueryEmpty.value) updateProductList();
@@ -30,7 +35,10 @@ useHead({
 </script>
 
 <template>
-  <div v-if="productsInCategory.length" class="container flex items-start gap-16">
+  <div v-if="isLoading" class="container flex items-center justify-center min-h-96">
+    <LoadingIcon size="32" stroke="3" />
+  </div>
+  <div v-else-if="productsInCategory.length" class="container flex items-start gap-16">
     <Filters v-if="storeSettings.showFilters" :hide-categories="true" />
 
     <div class="w-full">
@@ -42,4 +50,6 @@ useHead({
       <ProductGrid />
     </div>
   </div>
+  <NoProductsFound v-else-if="hasError">Products could not be loaded. Please refresh or try again in a moment.</NoProductsFound>
+  <NoProductsFound v-else>No products found in this category. Please try adjusting your filters or check back later.</NoProductsFound>
 </template>

@@ -14,6 +14,12 @@ const catalogIsrTtl = Number.isFinite(parsedCatalogIsrTtl) && parsedCatalogIsrTt
 export default defineNuxtConfig({
   compatibilityDate: '2026-05-02',
 
+  vite: {
+    optimizeDeps: {
+      include: ['@stripe/stripe-js', '@vue/devtools-core', '@vue/devtools-kit', '@vueuse/core', 'graphql-request', 'graphql-tag', 'reka-ui', 'tailwind-merge'],
+    },
+  },
+
   app: {
     head: {
       htmlAttrs: { lang: 'en' },
@@ -33,7 +39,7 @@ export default defineNuxtConfig({
 
   components: [{ path: resolve('./app/components'), pathPrefix: false }],
 
-  modules: [resolve('./modules/woonuxt-bridge.ts'), 'nuxt-graphql-client', '@nuxt/icon', '@nuxt/image', '@nuxtjs/i18n', '@nuxt/eslint'],
+  modules: [resolve('./modules/woonuxt-bridge.ts'), '@nuxt/icon', '@nuxt/image', '@nuxtjs/i18n', '@nuxt/eslint'],
 
   postcss: {
     plugins: {
@@ -64,6 +70,8 @@ export default defineNuxtConfig({
   alias: {
     '#constants': resolve('./app/constants'),
     '#types': resolve('./app/types'),
+    '#gql': resolve('./app/gql'),
+    '#gql/default': resolve('./app/gql/default.ts'),
   },
 
   hooks: {

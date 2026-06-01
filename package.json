@@ -3,12 +3,14 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
+    "graphql:codegen": "graphql-codegen --config codegen.ts",
     "dev": "nuxt dev --host 0.0.0.0",
     "dev:ssl": "NODE_TLS_REJECT_UNAUTHORIZED=0 nuxt dev --host 0.0.0.0 --https --ssl-cert localhost.pem --ssl-key localhost-key.pem",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "serve": "nuxi generate && npx serve .output/public -l 8080",
+    "test": "node --test tests/*.test.mjs",
     "typecheck": "nuxi typecheck",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -16,23 +18,31 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@stripe/stripe-js": "^9.4.0",
-    "@tailwindcss/postcss": "^4.2.4",
+    "@stripe/stripe-js": "^9.7.0",
+    "@tailwindcss/postcss": "^4.3.0",
     "@vueuse/core": "^14.3.0",
-    "reka-ui": "^2.9.6",
-    "tailwind-merge": "^3.5.0",
-    "tailwindcss": "^4.2.4"
+    "graphql": "^16.14.0",
+    "graphql-request": "^7.4.0",
+    "reka-ui": "^2.9.8",
+    "tailwind-merge": "^3.6.0",
+    "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
+    "@graphql-codegen/add": "^7.0.1",
+    "@graphql-codegen/cli": "^7.1.2",
+    "@graphql-codegen/typescript": "^6.0.2",
+    "@graphql-codegen/typescript-graphql-request": "^7.0.1",
+    "@graphql-codegen/typescript-operations": "^6.0.3",
     "@iconify-json/ion": "^1.2.7",
     "@nuxt/eslint": "^1.15.2",
     "@nuxt/icon": "^2.2.2",
     "@nuxt/image": "2.0.0",
-    "@nuxtjs/i18n": "^10.3.0",
+    "@nuxtjs/i18n": "^10.4.0",
     "@tailwindcss/typography": "^0.5.19",
-    "eslint": "^10.3.0",
-    "nuxt": "^4.4.4",
-    "nuxt-graphql-client": "^0.2.46",
-    "prettier": "^3.8.3"
+    "eslint": "^10.4.1",
+    "nuxt": "^4.4.6",
+    "prettier": "^3.8.3",
+    "typescript": "^6.0.3",
+    "vue-tsc": "^3.3.3"
   }
 }
