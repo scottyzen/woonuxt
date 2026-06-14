@@ -39,7 +39,7 @@ query getProduct($slug: ID!, $frontEndUrl: String = "") {
     }
   }
 }
-fragment ProductWithAttributes on ProductWithAttributes {
+fragment ProductWithAttributes on Product {
   attributes {
     nodes {
       ...ProductAttribute

@@ -9,7 +9,7 @@ const props = defineProps({
   mainImage: { type: Object as PropType<ImageFragment>, required: true },
   gallery: { type: Object as PropType<Gallery>, required: true },
   node: { type: Object as PropType<Product | Variation>, required: true },
-  activeVariation: { type: Object as PropType<Variation | null>, required: false },
+  activeVariation: { type: Object as PropType<Variation | null>, default: null },
 });
 
 const primaryImage = computed<ImageFragment>(() => ({
@@ -94,7 +94,7 @@ const imgWidth = 640;
 
     <div
       v-if="gallery.nodes.length"
-      class="my-4 flex gap-4 overflow-auto [scrollbar-width:none] md:grid md:grid-cols-[repeat(auto-fill,minmax(72px,1fr))] [&::-webkit-scrollbar]:hidden">
+      class="my-4 flex gap-4 overflow-auto scrollbar-none md:grid md:grid-cols-[repeat(auto-fill,minmax(72px,1fr))] [&::-webkit-scrollbar]:hidden">
       <NuxtImg
         v-for="galleryImg in galleryImages"
         :key="galleryImg.databaseId"
