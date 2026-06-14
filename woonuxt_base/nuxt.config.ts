@@ -12,7 +12,7 @@ const parsedCatalogIsrTtl = Number.parseInt(process.env.CATALOG_ISR_TTL || '3600
 const catalogIsrTtl = Number.isFinite(parsedCatalogIsrTtl) && parsedCatalogIsrTtl > 0 ? parsedCatalogIsrTtl : 3600;
 
 export default defineNuxtConfig({
-  compatibilityDate: '2026-05-02',
+  compatibilityDate: '2025-07-15',
 
   vite: {
     optimizeDeps: {
