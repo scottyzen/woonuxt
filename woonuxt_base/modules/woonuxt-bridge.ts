@@ -137,7 +137,7 @@ export default defineNuxtModule({
       settings = data?.woonuxtSettings || {};
     } catch {
       logger.warn(
-        'WooNuxt settings plugin not detected. Continuing with defaults. Install it later for store settings, Stripe keys, SEO profiles, colors, and filter defaults: https://github.com/scottyzen/woonuxt-settings',
+        'WooNuxt settings plugin not detected. Continuing with defaults so the store can run. Install the latest WooNuxt WordPress plugin to unlock store settings, Stripe keys, SEO profiles, colors, and filter defaults: https://github.com/scottyzen/woonuxt/releases',
       );
     }
 
