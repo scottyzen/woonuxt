@@ -5,12 +5,19 @@ import type { ExternalProduct, ProductDetail, Variation, VariationAttribute } fr
 const route = useRoute();
 const { storeSettings } = useAppConfig();
 const { addToCart, isUpdatingCart, isAddingToCart, isOptimisticCartMode } = useCart();
-const { frontEndUrl } = useHelpers();
+const { frontEndUrl, getErrorMessage } = useHelpers();
 const { t } = useI18n();
 const gql = useWooGraphQL();
 const slug = route.params.slug as string;
 
-const { data } = await useAsyncGql('getProduct', { slug, frontEndUrl });
+const { data, error } = await useAsyncGql('getProduct', { slug, frontEndUrl });
+if (error.value) {
+  throw showError({
+    statusCode: 502,
+    statusMessage: getErrorMessage(error.value) || `Unable to load product "${slug}" from WordPress`,
+  });
+}
+
 if (!data.value?.product) {
   throw showError({ statusCode: 404, statusMessage: t('shop.productNotFound') });
 }

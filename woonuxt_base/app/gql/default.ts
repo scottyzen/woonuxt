@@ -33667,7 +33667,7 @@ export const ProductAttributeFragmentDoc = gql`
 }
     `;
 export const ProductWithAttributesFragmentDoc = gql`
-    fragment ProductWithAttributes on ProductWithAttributes {
+    fragment ProductWithAttributes on Product {
   attributes {
     nodes {
       ...ProductAttribute
