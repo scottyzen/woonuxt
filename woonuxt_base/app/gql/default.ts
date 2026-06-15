@@ -32594,7 +32594,7 @@ export type GetCartQuery = { cart: { total: string | null, subtotal: string | nu
 export type GetCartSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCartSummaryQuery = { cart: { isEmpty: boolean | null, contents: { itemCount: number | null, productCount: number | null } | null } | null, viewer: { id: string, databaseId: number, firstName: string | null, lastName: string | null, username: string | null, nicename: string | null, email: string | null, wooSessionToken: string | null, avatar: { url: string | null } | null } | null };
+export type GetCartSummaryQuery = { cart: { isEmpty: boolean | null, contents: { itemCount: number | null, productCount: number | null } | null } | null, viewer: { lastName: string | null, email: string | null, databaseId: number, id: string, firstName: string | null, username: string | null, nicename: string | null, wooSessionToken: string | null, stripeCustomerId: string | null, savedPaymentMethods: Array<{ id: number | null, token: string | null, customerId: string | null, last4: string | null, expiryMonth: string | null, expiryYear: string | null, cardType: string | null, isDefault: boolean | null } | null> | null, avatar: { url: string | null } | null } | null };
 
 export type GetDownloadsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -33799,10 +33799,10 @@ export const GetCartSummaryDocument = gql`
     }
   }
   viewer {
-    ...ViewerSummary
+    ...Viewer
   }
 }
-    ${ViewerSummaryFragmentDoc}`;
+    ${ViewerFragmentDoc}`;
 export const GetDownloadsDocument = gql`
     query getDownloads {
   customer {

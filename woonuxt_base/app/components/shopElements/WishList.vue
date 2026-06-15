@@ -3,7 +3,7 @@ const { theList } = useWishlist();
 </script>
 
 <template>
-  <div class="bg-white rounded-lg shadow min-h-100 w-full p-4 md:p-12 justify-center items-start">
+  <div class="bg-white rounded-lg shadow min-h-56 w-full p-4 md:p-12 justify-center items-start">
     <div class="container">
       <div class="flex justify-between items-center mb-4">
         <h1 class="text-xl font-semibold text-gray-900">{{ $t('shop.wishlist') }}</h1>
@@ -13,7 +13,7 @@ const { theList } = useWishlist();
         <ul v-if="theList.length" class="grid divide-y divide-gray-100">
           <WishListItem v-for="product in theList" :key="product.databaseId" :product="product" />
         </ul>
-        <div v-else class="flex text-center min-h-150 text-gray-500 items-center justify-center">
+        <div v-else class="flex text-center min-h-56 text-gray-500 items-center justify-center">
           <p>{{ $t('shop.wishlistNoItems') }}</p>
         </div>
       </client-only>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { viewer, avatar, logoutUser, isPending, wishlistLink, navigateToLogin } = useAuth();
+const { viewer, avatar, logoutUser, isPending, navigateToLogin } = useAuth();
 const route = useRoute();
 
 const linkTitle = computed<string>(() => viewer.value?.username || 'Sign In');
@@ -21,7 +21,7 @@ const linkTitle = computed<string>(() => viewer.value?.username || 'Sign In');
         </NuxtLink>
         <div class="account-dropdown font-semibold">
           <Button to="/my-account" size="sm" variant="ghost" class="w-full justify-start" icon="ion:person"> My Account </Button>
-          <Button :to="wishlistLink" size="sm" variant="ghost" class="w-full justify-start" icon="ion:heart"> Wishlist </Button>
+          <Button to="/wishlist" size="sm" variant="ghost" class="w-full justify-start" icon="ion:heart"> Wishlist </Button>
           <Button
             type="button"
             size="sm"
