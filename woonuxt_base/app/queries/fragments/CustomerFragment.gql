@@ -6,6 +6,7 @@ fragment Customer on Customer {
   databaseId
   sessionToken
   isPayingCustomer
+  date
   billing {
     ...Address
   }

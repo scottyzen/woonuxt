@@ -1,70 +1,101 @@
-export default defineNuxtPlugin(async (nuxtApp) => {
+export default defineNuxtPlugin(async (_nuxtApp) => {
   if (!import.meta.env.SSR) {
     const { storeSettings } = useAppConfig();
-    const { clearAllCookies, getDomain } = useHelpers();
-    const sessionToken = useCookie('woocommerce-session', { domain: getDomain(window.location.href) });
-    if (sessionToken.value) useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken.value}` });
+    const { clearAllCookies, getDomain, getErrorContext } = useHelpers();
+    const sessionToken = useCookie('woocommerce-session', { domain: getDomain(window.location.href), path: '/' });
+    const fallbackSessionToken = useCookie('woocommerce-session', { path: '/' });
+    const wooSessionToken = sessionToken.value || fallbackSessionToken.value;
+    if (wooSessionToken) useGqlHeaders({ 'woocommerce-session': `Session ${wooSessionToken}` });
 
-    // Wait for the user to interact with the page before refreshing the cart, this is helpful to prevent excessive requests to the server
-    let initialised = false;
-    const eventsToFireOn = ['mousedown', 'keydown', 'touchstart', 'scroll', 'wheel', 'click', 'resize', 'mousemove', 'mouseover'];
+    const clearAuthOnly = (): void => {
+      const { clearActiveAuthToken } = useAuthTokens();
+      clearActiveAuthToken();
+      useGqlHeaders({ Authorization: '' });
+    };
 
-    async function initStore() {
-      if (initialised) {
-        // We only want to execute this code block once, so we return if initialised is truthy and remove the event listeners
-        eventsToFireOn.forEach((event) => {
-          window.removeEventListener(event, initStore);
-        });
-        return;
-      }
+    const hasKnownSession = (): boolean => {
+      const authToken = useCookie('auth-token', { path: '/' });
+      const refreshToken = useCookie('auth-refresh-token', { path: '/' });
+      const legacyGqlToken = useCookie('gql:default', { path: '/' });
 
-      initialised = true;
+      return !!(wooSessionToken || authToken.value || refreshToken.value || legacyGqlToken.value);
+    };
+
+    let authErrorHandlerRegistered = false;
+    const registerAuthErrorHandler = (): void => {
+      if (authErrorHandlerRegistered) return;
+      authErrorHandlerRegistered = true;
+
+      useGqlError((err: unknown) => {
+        const { isAuthError, message } = getErrorContext(err);
+        if (!isAuthError) return;
+
+        const { refreshAuthToken } = useAuthTokens();
+        void (async () => {
+          const refreshed = await refreshAuthToken(true);
+          const { refreshCart } = useCart();
+          if (refreshed) {
+            await refreshCart();
+            return;
+          }
+
+          const normalizedMessage = message?.toLowerCase() || '';
+          const fatalAuthErrors = ['the iss do not match with this server', 'invalid-secret-key'];
+          if (fatalAuthErrors.some((fatal) => normalizedMessage.includes(fatal))) {
+            clearAllCookies();
+            window.location.reload();
+            return;
+          }
+
+          clearAuthOnly();
+
+          await refreshCart();
+        })();
+      });
+    };
+
+    async function initFullCart(): Promise<void> {
+      registerAuthErrorHandler();
 
       const { refreshCart } = useCart();
-      let success: boolean = await refreshCart();
+      const success: boolean = await refreshCart();
 
-      useGqlError((err: any) => {
-        const serverErrors = ['The iss do not match with this server', 'Invalid session token'];
-        if (serverErrors.includes(err?.gqlErrors?.[0]?.message)) {
-          clearAllCookies();
-          window.location.reload();
-        }
-      });
-
-      // If cart refresh failed, clear cookies and try one more time
+      // If cart refresh failed, clear the Woo session header and retry once
       if (!success) {
-        clearAllCookies();
-        // clearAllLocalStorage();
-
-        // Remove the old session header
         useGqlHeaders({ 'woocommerce-session': '' });
-
-        // Retry the cart refresh with clean state
-        success = await refreshCart();
-
-        // If still failing, log out the user
-        if (!success) {
-          const { logoutUser } = useAuth();
-          await logoutUser();
-        }
+        await refreshCart();
       }
     }
 
     // If we are in development mode, we want to initialise the store immediately
     const isDev = import.meta.dev || process.env.NODE_ENV === 'development';
 
-    // Check if the current route path is one of the pages that need immediate initialization
+    // Pages that need the full cart payload before the page renders
     const pagesToInitializeRightAway = ['/checkout', '/my-account', '/order-summary'];
     const isPathThatRequiresInit = pagesToInitializeRightAway.some((page) => useRoute().path.includes(page));
 
-    const shouldInit = isDev || isPathThatRequiresInit || !storeSettings.initStoreOnUserActionToReduceServerLoad;
+    const shouldInitFullCart = isDev || isPathThatRequiresInit || !storeSettings.initStoreOnUserActionToReduceServerLoad;
 
-    if (shouldInit) {
-      initStore();
+    if (shouldInitFullCart) {
+      void initFullCart();
     } else {
-      eventsToFireOn.forEach((event) => {
-        window.addEventListener(event, initStore, { once: true });
-      });
+      registerAuthErrorHandler();
+
+      const { refreshCartSummary } = useCart();
+      let summaryLoaded = false;
+      const loadSummaryOnce = (): void => {
+        if (summaryLoaded) return;
+        summaryLoaded = true;
+        void refreshCartSummary();
+      };
+
+      if (hasKnownSession()) {
+        loadSummaryOnce();
+      } else {
+        ['mousedown', 'keydown', 'touchstart', 'click'].forEach((event) => {
+          window.addEventListener(event, loadSummaryOnce, { once: true });
+        });
+      }
     }
   }
 });

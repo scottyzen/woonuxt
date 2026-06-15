@@ -8,6 +8,25 @@ type EnvSpec = {
   hint?: string;
 };
 
+type WooNuxtSettings = {
+  primary_color?: string | null;
+  logo?: string | null;
+  publicIntrospectionEnabled?: boolean | null;
+  frontEndUrl?: string | null;
+  productsPerPage?: number | string | null;
+  maxPrice?: number | string | null;
+  global_attributes?: Record<string, unknown>[] | null;
+  stripeSettings?: {
+    enabled?: boolean | null;
+    testmode?: string | null;
+    test_publishable_key?: string | null;
+    publishable_key?: string | null;
+  } | null;
+  wooNuxtSEO?: Record<string, unknown>[] | null;
+  currencyCode?: string | null;
+  currencySymbol?: string | null;
+};
+
 const REQUIRED_ENV: EnvSpec[] = [
   {
     key: 'GQL_HOST',
@@ -39,12 +58,6 @@ function validateEnvironment() {
   }
 }
 
-const getVersionQuery = `query getVersion {
-  woonuxtSettings {
-    wooCommerceSettingsVersion
-  }
-}`;
-
 // Validate environment variables before module setup
 validateEnvironment();
 
@@ -58,29 +71,7 @@ export default defineNuxtModule({
 
     // Environment variables are guaranteed to be valid at this point
     const GQL_HOST = process.env.GQL_HOST!;
-    let WOONUXT_SETTINGS_PLUGIN_VERSION = 0;
-
-    // Get the version of the woonuxt-settings plugin
-    try {
-      const { data } = await $fetch(GQL_HOST, {
-        method: 'POST',
-        body: JSON.stringify({ query: getVersionQuery }),
-        headers: { Origin: process.env.APP_HOST || 'http://localhost:3000' },
-      });
-
-      const versionString = data.woonuxtSettings?.wooCommerceSettingsVersion || '0.0.0';
-      logger.success(`WooNuxt Settings Plugin: v${versionString}`);
-
-      // Convert semantic version to comparable number (e.g., "2.2.1" -> 20201, "1.0.55" -> 10055)
-      const versionParts = versionString.split('.').map((part: string) => parseInt(part.replace(/\D/g, ''), 10) || 0);
-      WOONUXT_SETTINGS_PLUGIN_VERSION = versionParts[0] * 10000 + versionParts[1] * 100 + versionParts[2];
-    } catch (error) {
-      logger.error(error);
-    }
-
-    const wooNuxtSEO = WOONUXT_SETTINGS_PLUGIN_VERSION > 10043 ? 'wooNuxtSEO { provider url handle }' : '';
-    const currencyCode = WOONUXT_SETTINGS_PLUGIN_VERSION > 10055 ? 'currencyCode' : '';
-    const currencySymbol = WOONUXT_SETTINGS_PLUGIN_VERSION > 10055 ? 'currencySymbol' : '';
+    const requestHeaders = { Origin: process.env.APP_HOST || 'http://localhost:3000' };
 
     const woonuxtSettings = `{
         primary_color
@@ -102,54 +93,81 @@ export default defineNuxtModule({
           test_publishable_key
           publishable_key
         }
-        ${wooNuxtSEO}
-        ${currencyCode}
-        ${currencySymbol}
+        wooNuxtSEO { provider url handle }
+        currencyCode
+        currencySymbol
     }`;
 
-    const query = `
-    query getWooNuxtSettings {
-      woonuxtSettings ${woonuxtSettings}
+    const coreSettingsQuery = `
+    query getWordPressSettings {
       generalSettings { title }
       allSettings { generalSettingsUrl }
     }`;
 
+    const woonuxtSettingsQuery = `
+    query getWooNuxtSettings {
+      woonuxtSettings ${woonuxtSettings}
+    }`;
+
+    let siteTitle = 'WooNuxt';
+    let backendUrl = '';
+    let settings: WooNuxtSettings = {};
+
     try {
       const { data } = await $fetch(GQL_HOST, {
         method: 'POST',
-        body: JSON.stringify({ query }),
-        headers: { Origin: process.env.APP_HOST || 'http://localhost:3000' },
+        body: JSON.stringify({ query: coreSettingsQuery }),
+        headers: requestHeaders,
       });
 
-      // Default env variables
-      process.env.PRIMARY_COLOR = data.woonuxtSettings?.primary_color || '#7F54B2';
-
-      // Default runtimeConfig
-      nuxt.options.runtimeConfig.public.PRIMARY_COLOR = data.woonuxtSettings?.primary_color || '#7F54B2';
-      nuxt.options.runtimeConfig.public.LOGO = data.woonuxtSettings?.logo || null;
-      nuxt.options.runtimeConfig.public.PRODUCTS_PER_PAGE = data.woonuxtSettings?.productsPerPage || process.env.PRODUCTS_PER_PAGE || 24;
-      nuxt.options.runtimeConfig.public.GLOBAL_PRODUCT_ATTRIBUTES = data.woonuxtSettings?.global_attributes || [];
-      nuxt.options.runtimeConfig.public.MAX_PRICE = data.woonuxtSettings?.maxPrice || 1000;
-      nuxt.options.runtimeConfig.public.FRONT_END_URL = data.woonuxtSettings?.frontEndUrl || null;
-      nuxt.options.runtimeConfig.public.BACKEND_URL = data.allSettings?.generalSettingsUrl || null;
-      nuxt.options.runtimeConfig.public.CURRENCY_CODE = data.woonuxtSettings?.currencyCode || null;
-      nuxt.options.runtimeConfig.public.CURRENCY_SYMBOL = data.woonuxtSettings?.currencySymbol || null;
-      nuxt.options.runtimeConfig.public.WOO_NUXT_SEO = data.woonuxtSettings?.wooNuxtSEO || null;
-      // Site title
-      process.env.SITE_TITLE = data.generalSettings?.title || 'WooNuxt';
-
-      // Stripe
-      if (data.woonuxtSettings?.stripeSettings?.enabled) {
-        nuxt.options.runtimeConfig.public.STRIPE_PUBLISHABLE_KEY =
-          data.woonuxtSettings?.stripeSettings?.testmode === 'yes'
-            ? data.woonuxtSettings?.stripeSettings?.test_publishable_key
-            : data.woonuxtSettings?.stripeSettings?.publishable_key;
-      }
+      siteTitle = data?.generalSettings?.title || siteTitle;
+      backendUrl = data?.allSettings?.generalSettingsUrl || backendUrl;
     } catch (error) {
       logger.error(error);
+      logger.warn('Error fetching WordPress settings. WooNuxt will continue with defaults.');
+    }
+
+    try {
+      const { data } = await $fetch(GQL_HOST, {
+        method: 'POST',
+        body: JSON.stringify({ query: woonuxtSettingsQuery }),
+        headers: requestHeaders,
+      });
+
+      settings = data?.woonuxtSettings || {};
+    } catch {
       logger.warn(
-        'Error fetching woonuxt settings. Make sure you have the latest version woonuxt-settings plugin installed on WordPress. https://github.com/scottyzen/woonuxt-settings',
+        'WooNuxt settings plugin not detected. Continuing with defaults so the store can run. Install the latest WooNuxt WordPress plugin to unlock store settings, Stripe keys, SEO profiles, colors, and filter defaults: https://github.com/scottyzen/woonuxt/releases',
       );
+    }
+
+    // Default env variables
+    process.env.PRIMARY_COLOR = settings.primary_color || '#7F54B2';
+
+    const configuredMaxPrice = Number(settings.maxPrice);
+    const resolvedMaxPrice = Number.isFinite(configuredMaxPrice) && configuredMaxPrice > 0 ? Math.ceil(configuredMaxPrice) : 1000;
+    const configuredProductsPerPage = Number(settings.productsPerPage || process.env.PRODUCTS_PER_PAGE);
+    const resolvedProductsPerPage = Number.isFinite(configuredProductsPerPage) && configuredProductsPerPage > 0 ? configuredProductsPerPage : 24;
+
+    // Default runtimeConfig
+    nuxt.options.runtimeConfig.public.PRIMARY_COLOR = settings.primary_color || '#7F54B2';
+    nuxt.options.runtimeConfig.public.LOGO = settings.logo || '';
+    nuxt.options.runtimeConfig.public.PRODUCTS_PER_PAGE = resolvedProductsPerPage;
+    nuxt.options.runtimeConfig.public.GLOBAL_PRODUCT_ATTRIBUTES = settings.global_attributes || [];
+    nuxt.options.runtimeConfig.public.MAX_PRICE = resolvedMaxPrice;
+    nuxt.options.runtimeConfig.public.FRONT_END_URL = settings.frontEndUrl || '';
+    nuxt.options.runtimeConfig.public.BACKEND_URL = backendUrl;
+    nuxt.options.runtimeConfig.public.CURRENCY_CODE = settings.currencyCode || '';
+    nuxt.options.runtimeConfig.public.CURRENCY_SYMBOL = settings.currencySymbol || '';
+    nuxt.options.runtimeConfig.public.WOO_NUXT_SEO = settings.wooNuxtSEO || [];
+    // Site title
+    process.env.SITE_TITLE = siteTitle;
+
+    // Stripe
+    if (settings.stripeSettings?.enabled) {
+      const stripePublishableKey =
+        settings.stripeSettings?.testmode === 'yes' ? settings.stripeSettings?.test_publishable_key : settings.stripeSettings?.publishable_key;
+      if (stripePublishableKey) nuxt.options.runtimeConfig.public.STRIPE_PUBLISHABLE_KEY = stripePublishableKey;
     }
   },
 });

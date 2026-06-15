@@ -71,15 +71,15 @@ useHead({
     <form class="mt-6 flex flex-col" @submit.prevent="handlePasswordReset">
       <label for="password" class="mb-4">
         {{ $t('account.newPassword') }} <span class="text-red-500">*</span><br />
-        <PasswordInput id="password" className=" border rounded-lg w-full p-3 px-4 bg-white" v-model="password" placeholder="New Password" :required="true" />
+        <PasswordInput id="password" v-model="password" class-name=" border rounded-lg w-full p-3 px-4 bg-white" placeholder="New Password" :required="true" />
       </label>
 
       <label for="confirmPassword" class="mb-4">
         {{ $t('account.confirmNewPassword') }} <span class="text-red-500">*</span><br />
         <PasswordInput
           id="confirmPassword"
-          className="border rounded-lg w-full p-3 px-4 bg-white"
           v-model="confirmPassword"
+          class-name="border rounded-lg w-full p-3 px-4 bg-white"
           placeholder="Confirm Password"
           :required="true" />
       </label>
@@ -108,10 +108,10 @@ useHead({
 @reference "#tailwind";
 
 input {
-  @apply border rounded-lg mb-4 w-full p-3 px-4 bg-white border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white;
+  @apply border rounded-lg mb-4 w-full p-3 px-4 bg-white border-gray-300;
 }
 
 form button {
-  @apply rounded-lg font-bold bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 py-3 px-8 hover:bg-gray-900 dark:hover:bg-gray-100 mb-4 w-full;
+  @apply rounded-lg font-bold bg-gray-800  text-white  py-3 px-8 hover:bg-gray-900  mb-4 w-full;
 }
 </style>

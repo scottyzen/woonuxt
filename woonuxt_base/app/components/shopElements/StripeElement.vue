@@ -1,125 +1,179 @@
 <script setup lang="ts">
-const { cart } = useCart();
-const { stripe } = defineProps(['stripe']);
-const appConfig = useAppConfig();
-const runtimeConfig = useRuntimeConfig();
+import type { Appearance, Stripe, StripeElements } from '@stripe/stripe-js';
 
-const rawCartTotal = computed(() => cart.value && parseFloat(cart.value.rawTotal as string) * 100);
+const props = defineProps<{
+  stripe: Stripe;
+  clientSecret?: string | null;
+  customerId?: string | null;
+  amount?: number | null;
+  currency?: string | null;
+  saveForFuture?: boolean;
+}>();
 const emit = defineEmits(['updateElement']);
-let elements = null as any;
-let paymentElement = null as any;
+let elements: StripeElements | null = null;
+let paymentElement: any = null;
+let elementsMode: 'intent' | 'deferred' | null = null;
 
-// Get the payment method type from config (default to 'payment' to match app.config.ts)
-const paymentMethodType = computed(() => appConfig.stripePaymentMethod || 'payment');
+const normalizedCurrency = computed(() => (props.currency || '').toLowerCase());
+const normalizedAmount = computed(() => (typeof props.amount === 'number' ? Math.max(0, props.amount) : null));
+const normalizedSetupFutureUsage = computed<'off_session' | null>(() => (props.saveForFuture ? 'off_session' : null));
 
-// Get currency from runtime config, fallback to 'usd' if not available
-const currency = computed(() => {
-  const currencyCode = runtimeConfig.public?.CURRENCY_CODE;
-  return currencyCode ? currencyCode.toLowerCase() : 'usd';
+/** Deferred mode has no customer association. If a customerId is set, wait for
+ * a clientSecret (intent mode) instead. */
+const canCreateDeferred = computed(() => !props.clientSecret && !props.customerId && !!normalizedCurrency.value && (normalizedAmount.value ?? 0) > 0);
+
+const resolveRootCssVariable = (name: string, fallback: string): string => {
+  if (!import.meta.client) return fallback;
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
+};
+
+const resolveBodyFontFamily = (): string => {
+  if (!import.meta.client) return 'inherit';
+  return getComputedStyle(document.body).fontFamily || 'inherit';
+};
+
+const stripeAppearance = computed<Appearance>(() => {
+  const primaryColor = resolveRootCssVariable('--color-primary', '#7f54b2');
+  const inputBorderColor = '#d1d5db';
+  const inputBackgroundColor = '#f9fafb';
+  const insetShadowColor = 'rgba(15, 23, 42, 0.06)';
+
+  return {
+    theme: 'flat',
+    labels: 'above' as const,
+    inputs: 'spaced' as const,
+    variables: {
+      colorPrimary: primaryColor,
+      colorDanger: '#ef4444',
+      fontFamily: resolveBodyFontFamily(),
+      fontSizeBase: '16px',
+      borderRadius: '6px',
+    },
+    rules: {
+      '.Input': {
+        backgroundColor: inputBackgroundColor,
+        border: `1px solid ${inputBorderColor}`,
+        padding: '10px 12px',
+        boxShadow: `inset 0 1px 2px ${insetShadowColor}`,
+      },
+      '.Input:focus': {
+        borderColor: 'var(--colorPrimary)',
+        boxShadow: '0 0 0 1px var(--colorPrimary)',
+      },
+      '.Input--invalid': {
+        borderColor: 'var(--colorDanger)',
+        boxShadow: '0 0 0 1px var(--colorDanger)',
+      },
+    },
+  };
 });
 
-const options = {
-  mode: 'payment' as const,
-  currency: currency.value,
-  amount: rawCartTotal.value || 100, // Ensure amount is always provided and never 0
-  // paymentMethodCreation: 'manual',
+const resetStripeElements = () => {
+  if (paymentElement) {
+    paymentElement.unmount();
+  }
+  paymentElement = null;
+  elements = null;
+  elementsMode = null;
+  emit('updateElement', null);
 };
 
 const createStripeElements = async () => {
-  elements = stripe.elements(options);
+  resetStripeElements();
 
-  // Create different element types based on config
-  switch (paymentMethodType.value) {
-    case 'payment':
-      // Modern Payment Element - supports multiple payment methods
-      paymentElement = elements.create('payment', {
-        layout: 'tabs',
-        paymentMethodOrder: ['card', 'apple_pay', 'google_pay', 'paypal'],
-        fields: {
-          billingDetails: {
-            name: 'auto',
-            email: 'auto',
-            phone: 'never',
-            address: 'never',
-          },
-        },
-        wallets: {
-          applePay: 'auto',
-          googlePay: 'auto',
-        },
-      });
-      paymentElement.mount('#payment-element');
-      break;
-
-    case 'card':
-    default:
-      // Traditional Card Element - single card input
-      // Check if dark mode is active
-      const isDarkMode = document.documentElement.classList.contains('dark');
-      paymentElement = elements.create('card', {
-        hidePostalCode: true,
-        style: {
-          base: {
-            fontSize: '16px',
-            color: isDarkMode ? '#f3f4f6' : '#424770',
-            backgroundColor: isDarkMode ? '#374151' : '#ffffff',
-            '::placeholder': {
-              color: isDarkMode ? '#9ca3af' : '#aab7c4',
-            },
-          },
-        },
-      });
-      paymentElement.mount('#card-element');
-      break;
+  if (props.clientSecret) {
+    const elementsOptions: any = {
+      clientSecret: props.clientSecret,
+      appearance: stripeAppearance.value,
+    };
+    elements = props.stripe.elements(elementsOptions);
+    elementsMode = 'intent';
+  } else {
+    if (!canCreateDeferred.value) return;
+    elements = props.stripe.elements({
+      mode: 'payment',
+      currency: normalizedCurrency.value,
+      amount: normalizedAmount.value ?? 0,
+      setupFutureUsage: normalizedSetupFutureUsage.value,
+      appearance: stripeAppearance.value,
+    });
+    elementsMode = 'deferred';
   }
 
-  emit('updateElement', elements);
+  paymentElement = elements.create('payment', {
+    layout: 'tabs',
+    paymentMethodOrder: ['card', 'apple_pay', 'google_pay', 'paypal'],
+    fields: {
+      billingDetails: {
+        name: 'auto',
+        email: 'auto',
+        phone: 'auto',
+        address: 'auto',
+      },
+    },
+    wallets: {
+      applePay: 'auto',
+      googlePay: 'auto',
+    },
+  });
+  paymentElement.mount('#payment-element');
+
+  if (elements) emit('updateElement', elements);
 };
 
-// Recreate elements when cart total or currency changes
 watch(
-  () => [rawCartTotal.value, currency.value],
-  ([newAmount, newCurrency]) => {
-    if (newAmount && elements && typeof newCurrency === 'string') {
-      // Update the options with new amount and currency
-      options.amount = Number(newAmount);
-      options.currency = newCurrency;
-      // Note: In v8.0.0, you would need to recreate elements for amount changes
-      // For now, we'll keep the existing element since amount changes are less critical for card setup
+  () => props.clientSecret,
+  () => {
+    if (!props.clientSecret && !canCreateDeferred.value) {
+      resetStripeElements();
+      return;
     }
+    createStripeElements();
   },
 );
 
-// Watch for payment method type changes and recreate elements
-watch(
-  () => paymentMethodType.value,
-  () => {
-    if (elements && paymentElement) {
-      // Unmount current element before creating new one
-      paymentElement.unmount();
-      createStripeElements();
-    }
-  },
-);
+watch([normalizedAmount, normalizedCurrency, normalizedSetupFutureUsage], async ([amount, currency, setupFutureUsage]) => {
+  if (!elements || elementsMode !== 'deferred') return;
+  if (!amount || !currency) return;
+
+  try {
+    await elements.update({
+      mode: 'payment',
+      amount,
+      currency,
+      setupFutureUsage,
+      appearance: stripeAppearance.value,
+    });
+  } catch (error) {
+    console.error('Failed to update Stripe elements:', error);
+  }
+});
+
+watch(canCreateDeferred, (canCreate) => {
+  if (!canCreate || elements) return;
+  createStripeElements();
+});
 
 onMounted(() => {
   createStripeElements();
+});
+
+onUnmounted(() => {
+  resetStripeElements();
 });
 </script>
 
 <template>
   <div class="stripe-elements-container">
-    <!-- Payment Element container (shows multiple payment methods in tabs/accordion) -->
-    <div
-      v-if="paymentMethodType === 'payment'"
-      id="payment-element"
-      class="stripe-element bg-white dark:bg-gray-700 rounded-md p-4 border border-gray-300 dark:border-gray-600">
-      <!-- Payment Element will be mounted here -->
-    </div>
-
-    <!-- Card Element container (traditional single card input) -->
-    <div v-else id="card-element" class="stripe-element bg-white dark:bg-gray-700 rounded-md p-4 border border-gray-300 dark:border-gray-600">
-      <!-- Card Element will be mounted here -->
-    </div>
+    <div id="payment-element" class="stripe-element"></div>
   </div>
 </template>
+
+<style scoped>
+@reference "#tailwind";
+
+.stripe-elements-container,
+.stripe-element {
+  @apply w-full;
+}
+</style>

@@ -28,7 +28,7 @@ query getProduct($slug: ID!, $frontEndUrl: String = "") {
         ...ExternalProduct
       }
     }
-    reviews {
+    reviews(first: 100) {
       averageRating
       edges {
         rating
@@ -54,7 +54,7 @@ fragment ProductAttribute on ProductAttribute {
   label
   scope
   ... on GlobalProductAttribute {
-    terms(where: { orderby: MENU_ORDER, order: ASC }) {
+    terms(where: { orderby: TERM_ORDER, order: ASC }) {
       nodes {
         name
         slug

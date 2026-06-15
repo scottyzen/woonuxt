@@ -44,7 +44,8 @@
     "contactUs": "Contact Us",
     "shippingReturns": "Shipping & Returns",
     "privacyPolicy": "Privacy Policy",
-    "termsConditions": "Terms & Conditions"
+    "termsConditions": "Terms & Conditions",
+    "updating": "Updating"
   },
   "account": {
     "changePassword": "Change Password",
@@ -110,6 +111,7 @@
     "close": "Close",
     "rateReview": "How would you rate your experience with this product? We strive for a 5 star experience",
     "rateContent": "How was your experience?",
+    "rateName": "Your name",
     "rateEmail": "Your email",
     "submit": "Submit",
     "order": "Order | Orders",
@@ -127,6 +129,7 @@
     "cartEmpty": "Your cart is empty.",
     "addProductsInYourCart": "Please, add some products to your cart.",
     "browseOurProducts": "Browse our products",
+    "viewCart": "View Cart",
     "checkout": "Checkout",
     "checkoutButton": "Checkout",
     "discount": "Discount",
@@ -160,7 +163,7 @@
     "country": "Country",
     "countryCode": "Country Code",
     "phone": "Phone",
-    "email": "Email",
+    "email": "Email Address",
     "paymentOptions": "Payment options",
     "creditCard": "Credit Card",
     "cashOnDelivery": "Cash on Delivery",

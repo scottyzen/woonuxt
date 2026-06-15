@@ -1,6 +1,9 @@
-import type { AddToCartInput, ApiResponse, Cart, PaymentGateways, ProductDetail, SimpleProduct, Variation } from '#types/gql';
+import type { AddToCartInput, ApiResponse, Cart, Customer, PaymentGateways, ProductDetail, SimpleProduct, Variation } from '#types/gql';
+
+import type { GetCartQuery, GetCartSummaryQuery } from '#gql/default';
 
 let cartMutationQueue: Promise<void> = Promise.resolve();
+let refreshCartInFlight: Promise<boolean> | null = null;
 
 /**
  * @name useCart
@@ -18,8 +21,10 @@ export function useCart() {
   const optimisticPendingMutations = useState<number>('optimisticPendingMutations', () => 0);
   const optimisticServerCart = useState<Cart | null>('optimisticServerCart', () => null);
   const optimisticHadError = useState<boolean>('optimisticHadError', () => false);
+  const cartItemCount = useState<number>('cartItemCount', () => 0);
   const paymentGateways = useState<PaymentGateways | null>('paymentGateways', () => null);
-  const { clearAllCookies, getErrorMessage } = useHelpers();
+  const { getDomain, getErrorContext, getErrorMessage } = useHelpers();
+  const gql = useWooGraphQL();
 
   type CartNode = NonNullable<NonNullable<Cart['contents']>['nodes']>[number];
   type CartItem = CartNode & { key: string };
@@ -28,14 +33,9 @@ export function useCart() {
     variation?: Variation | null;
   };
 
-  const normalizeQuantity = (value?: number | string | null): number => {
+  const normalizeQuantity = (value?: number | string | null, fallback = 1): number => {
     const qty = typeof value === 'number' ? value : Number(value);
-    return Number.isFinite(qty) && qty > 0 ? qty : 1;
-  };
-
-  const normalizeCountQuantity = (value?: number | string | null): number => {
-    const qty = typeof value === 'number' ? value : Number(value);
-    return Number.isFinite(qty) && qty > 0 ? qty : 0;
+    return Number.isFinite(qty) && qty > 0 ? qty : fallback;
   };
 
   const buildEmptyCart = (): Cart =>
@@ -46,7 +46,7 @@ export function useCart() {
         productCount: 0,
         nodes: [],
       },
-    }) as Cart;
+    }) as unknown as Cart;
 
   const getOptimisticBase = (): Cart => cart.value ?? buildEmptyCart();
 
@@ -86,7 +86,7 @@ export function useCart() {
         image: productNode.image,
       },
       variation: variationNode ? { node: variationNode } : null,
-    } as CartItem;
+    } as unknown as CartItem;
   };
 
   const matchesOptimisticTarget = (node: CartItem, payload: OptimisticAddPayload): boolean => {
@@ -154,7 +154,7 @@ export function useCart() {
       };
     }
 
-    const itemCount = nodes.reduce((sum, node) => sum + normalizeCountQuantity(node.quantity), 0);
+    const itemCount = nodes.reduce((sum, node) => sum + normalizeQuantity(node.quantity, 0), 0);
     const productCount = nodes.length;
 
     const nextCart: Cart = {
@@ -217,49 +217,187 @@ export function useCart() {
       });
   };
 
+  type CartQueryPayload = Partial<Pick<GetCartQuery, 'cart' | 'customer' | 'viewer' | 'paymentGateways' | 'loginClients'>>;
+  type CartSummaryQueryPayload = Partial<Pick<GetCartSummaryQuery, 'cart' | 'viewer'>>;
+
+  const syncWooSession = (token?: string | null): void => {
+    if (!token) return;
+    useGqlHeaders({ 'woocommerce-session': `Session ${token}` });
+
+    if (!import.meta.client) return;
+    const domain = getDomain(window.location.href);
+    const cookieOptions = domain ? { domain, path: '/' } : { path: '/' };
+    const sessionCookie = useCookie<string | null>('woocommerce-session', cookieOptions);
+    sessionCookie.value = token;
+  };
+
+  const applyCartSnapshot = (payload: CartQueryPayload): void => {
+    const { updateCustomer, updateViewer, updateLoginClients } = useAuth();
+    const { cart, customer, viewer, paymentGateways, loginClients } = payload;
+    const hasKey = (key: keyof CartQueryPayload) => Object.prototype.hasOwnProperty.call(payload, key);
+
+    if (hasKey('cart')) updateCart(cart ?? null);
+    if (hasKey('viewer')) updateViewer(viewer ?? null);
+    if (customer) updateCustomer(customer);
+    if (!customer?.sessionToken && viewer?.wooSessionToken) syncWooSession(viewer.wooSessionToken);
+
+    if (paymentGateways) updatePaymentGateways(paymentGateways);
+    if (loginClients) updateLoginClients(loginClients.filter((client) => client !== null));
+  };
+
+  const extractCartPayloadFromError = (error: unknown): CartQueryPayload | null => {
+    const candidate = (error as any)?.response?.data?.data ?? (error as any)?.response?.data ?? (error as any)?.data?.data ?? (error as any)?.data ?? null;
+
+    if (!candidate || typeof candidate !== 'object') return null;
+
+    const hasUsableCartFields =
+      Object.prototype.hasOwnProperty.call(candidate, 'cart') ||
+      Object.prototype.hasOwnProperty.call(candidate, 'customer') ||
+      Object.prototype.hasOwnProperty.call(candidate, 'viewer') ||
+      Object.prototype.hasOwnProperty.call(candidate, 'paymentGateways') ||
+      Object.prototype.hasOwnProperty.call(candidate, 'loginClients');
+
+    return hasUsableCartFields ? (candidate as CartQueryPayload) : null;
+  };
+
+  const fetchCartSnapshot = async (): Promise<CartQueryPayload> => {
+    const { getAuthTokenForRequest } = useAuthTokens();
+    const authToken = await getAuthTokenForRequest();
+    const requestHeaders = authToken ? { Authorization: `Bearer ${authToken}` } : undefined;
+
+    return await gql.getCart(undefined, requestHeaders);
+  };
+
+  const hasAuthCookies = (): boolean => {
+    const authToken = useCookie<string | null>('auth-token', { path: '/' });
+    const refreshToken = useCookie<string | null>('auth-refresh-token', { path: '/' });
+    return !!(authToken.value || refreshToken.value);
+  };
+
+  const fetchCartSummarySnapshot = async (): Promise<CartSummaryQueryPayload> => {
+    let requestHeaders: Record<string, string> | undefined;
+    if (hasAuthCookies()) {
+      const { getAuthTokenForRequest } = useAuthTokens();
+      const authToken = await getAuthTokenForRequest();
+      requestHeaders = authToken ? { Authorization: `Bearer ${authToken}` } : undefined;
+    }
+
+    return await gql.getCartSummary(undefined, requestHeaders);
+  };
+
+  async function refreshCartSummary(): Promise<boolean> {
+    try {
+      const payload = await fetchCartSummarySnapshot();
+      const { updateViewer } = useAuth();
+
+      cartItemCount.value = payload.cart?.contents?.itemCount ?? 0;
+      updateViewer(payload.viewer ?? null);
+      if (payload.viewer?.wooSessionToken) syncWooSession(payload.viewer.wooSessionToken);
+      return true;
+    } catch (error: unknown) {
+      const recoveredPayload = extractCartPayloadFromError(error);
+      if (recoveredPayload) {
+        applyCartSnapshot(recoveredPayload);
+        return true;
+      }
+
+      const { isAuthError } = getErrorContext(error);
+      if (!isAuthError) getErrorMessage(error);
+      return false;
+    }
+  }
+
   /** Refesh the cart from the server
    * @returns {Promise<boolean>} - A promise that resolves
    * to true if the cart was successfully refreshed
    */
   async function refreshCart(): Promise<boolean> {
-    try {
-      const { cart, customer, viewer, paymentGateways, loginClients } = await GqlGetCart();
-      const { updateCustomer, updateViewer, updateLoginClients } = useAuth();
+    if (refreshCartInFlight) return refreshCartInFlight;
 
-      if (cart) updateCart(cart);
-      if (customer) updateCustomer(customer);
-      if (viewer) updateViewer(viewer);
-      if (paymentGateways) updatePaymentGateways(paymentGateways);
-      if (loginClients) updateLoginClients(loginClients.filter((client) => client !== null));
+    refreshCartInFlight = (async () => {
+      try {
+        const payload = await fetchCartSnapshot();
+        applyCartSnapshot(payload as CartQueryPayload);
+        return true;
+      } catch (error: unknown) {
+        const recoveredPayload = extractCartPayloadFromError(error);
+        if (recoveredPayload) {
+          applyCartSnapshot(recoveredPayload);
+          return true;
+        }
 
-      return true; // Cart was successfully refreshed
-    } catch (error: unknown) {
-      const errorMsg = getErrorMessage(error);
-      console.error('Error refreshing cart:', errorMsg);
-      clearAllCookies();
-      resetInitialState();
-      return false; // Cart was not successfully refreshed
-    } finally {
-      isUpdatingCart.value = false;
-    }
+        const { isAuthError } = getErrorContext(error);
+
+        if (isAuthError) {
+          const { refreshAuthToken, clearActiveAuthToken } = useAuthTokens();
+          const refreshed = await refreshAuthToken(true);
+          if (refreshed) {
+            try {
+              const retryPayload = await fetchCartSnapshot();
+              applyCartSnapshot(retryPayload as CartQueryPayload);
+              return true;
+            } catch {
+              /* ignore retry error */
+            }
+          }
+
+          clearActiveAuthToken();
+          useGqlHeaders({ Authorization: '' });
+
+          const { updateCustomer, updateViewer } = useAuth();
+          updateViewer(null);
+
+          const sessionCookie = import.meta.client
+            ? useCookie<string | null>('woocommerce-session', { domain: getDomain(window.location.href), path: '/' }).value ||
+              useCookie<string | null>('woocommerce-session', { path: '/' }).value
+            : null;
+
+          if (!sessionCookie) {
+            updateCustomer({ billing: {}, shipping: {} } as Customer);
+          }
+        }
+
+        if (!isAuthError) {
+          getErrorMessage(error);
+        }
+        resetInitialState();
+        return false;
+      } finally {
+        isUpdatingCart.value = false;
+        refreshCartInFlight = null;
+      }
+    })();
+
+    return refreshCartInFlight;
   }
 
   function resetInitialState() {
     cart.value = null;
+    cartItemCount.value = 0;
     paymentGateways.value = null;
   }
 
   function updateCart(payload?: Cart | null): void {
     cart.value = payload || null;
+    cartItemCount.value = payload?.contents?.itemCount ?? 0;
   }
 
   function updatePaymentGateways(payload: PaymentGateways): void {
     paymentGateways.value = payload;
   }
 
+  /** Fetches the full cart from the server only when it is not already loaded. */
+  function refreshCartIfNeeded(): void {
+    if (cart.value || isUpdatingCart.value) return;
+    isUpdatingCart.value = true;
+    void refreshCart();
+  }
+
   // toggle the cart visibility
   function toggleCart(state: boolean | undefined = undefined): void {
-    isShowingCart.value = state ?? !isShowingCart.value;
+    const nextState = state ?? !isShowingCart.value;
+    isShowingCart.value = nextState;
+    if (nextState) refreshCartIfNeeded();
   }
 
   // add an item to the cart
@@ -281,7 +419,7 @@ export function useCart() {
             if (storeSettings.autoOpenCart && !isShowingCart.value) toggleCart(true);
           },
           async () => {
-            const { addToCart } = await GqlAddToCart({ input: { ...input, quantity } });
+            const { addToCart } = await gql.addToCart({ input: { ...input, quantity } });
             return addToCart?.cart ?? null;
           },
         );
@@ -289,7 +427,7 @@ export function useCart() {
       }
 
       await enqueueCartMutation(async () => {
-        const { addToCart } = await GqlAddToCart({ input: { ...input, quantity } });
+        const { addToCart } = await gql.addToCart({ input: { ...input, quantity } });
         return addToCart?.cart ?? null;
       }, false);
       // Auto open the cart when an item is added to the cart if the setting is enabled
@@ -313,11 +451,11 @@ export function useCart() {
     const canOptimistic = isOptimisticCartMode.value;
 
     if (canOptimistic) {
-      const safeQuantity = normalizeCountQuantity(quantity);
+      const safeQuantity = normalizeQuantity(quantity, 0);
       runOptimisticMutation(
         () => applyOptimisticQuantityChange(key, safeQuantity),
         async () => {
-          const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity: safeQuantity });
+          const { updateItemQuantities } = await gql.UpDateCartQuantity({ key, quantity: safeQuantity });
           return updateItemQuantities?.cart ?? null;
         },
       );
@@ -326,7 +464,7 @@ export function useCart() {
 
     isUpdatingCart.value = true;
     try {
-      const { updateItemQuantities } = await GqlUpDateCartQuantity({ key, quantity });
+      const { updateItemQuantities } = await gql.UpDateCartQuantity({ key, quantity });
       updateCart(updateItemQuantities?.cart);
     } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
@@ -341,19 +479,26 @@ export function useCart() {
     const canOptimistic = isOptimisticCartMode.value;
 
     if (canOptimistic) {
-      runOptimisticMutation(
-        () => applyOptimisticEmptyCart(),
-        async () => {
-          const { emptyCart } = await GqlEmptyCart();
+      applyOptimisticEmptyCart();
+      optimisticPendingMutations.value += 1;
+
+      try {
+        await enqueueCartMutation(async () => {
+          const { emptyCart } = await gql.EmptyCart();
           return emptyCart?.cart ?? null;
-        },
-      );
+        }, true);
+      } catch {
+        optimisticHadError.value = true;
+      } finally {
+        optimisticPendingMutations.value = Math.max(0, optimisticPendingMutations.value - 1);
+        await finalizeOptimisticMutations();
+      }
       return;
     }
 
     try {
       isUpdatingCart.value = true;
-      const { emptyCart } = await GqlEmptyCart();
+      const { emptyCart } = await gql.EmptyCart();
       updateCart(emptyCart?.cart);
     } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
@@ -370,7 +515,7 @@ export function useCart() {
   async function updateShippingMethod(shippingMethods: string): Promise<void> {
     isUpdatingCart.value = true;
     try {
-      const { updateShippingMethod } = await GqlChangeShippingMethod({ shippingMethods });
+      const { updateShippingMethod } = await gql.ChangeShippingMethod({ shippingMethods });
       updateCart(updateShippingMethod?.cart);
     } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
@@ -384,7 +529,7 @@ export function useCart() {
   async function applyCoupon(code: string): Promise<ApiResponse<Cart | null>> {
     try {
       isUpdatingCoupon.value = true;
-      const { applyCoupon } = await GqlApplyCoupon({ code });
+      const { applyCoupon } = await gql.applyCoupon({ code });
       updateCart(applyCoupon?.cart);
       return { success: true, data: applyCoupon?.cart || null };
     } catch (error: unknown) {
@@ -399,8 +544,8 @@ export function useCart() {
   async function removeCoupon(code: string): Promise<void> {
     try {
       isUpdatingCart.value = true;
-      const { removeCoupons } = await GqlRemoveCoupons({ codes: [code] });
-      updateCart(removeCoupons?.cart);
+      const { removeCoupons: removeCouponResponse } = await gql.removeCoupons({ codes: [code] });
+      updateCart(removeCouponResponse?.cart);
     } catch (error: unknown) {
       const errorMsg = getErrorMessage(error);
       console.error('Error removing coupon:', errorMsg);
@@ -411,6 +556,7 @@ export function useCart() {
 
   // Stop the loading spinner when the cart is updated
   watch(cart, () => {
+    cartItemCount.value = cart.value?.contents?.itemCount ?? 0;
     if (!isUpdatingCart.value) return;
     isUpdatingCart.value = false;
   });
@@ -421,6 +567,9 @@ export function useCart() {
     return nodes.length === 0 ? false : nodes.every((node) => (node.product?.node as SimpleProduct)?.virtual === true);
   });
 
+  // Unified cart mutation state for optimistic and non-optimistic flows.
+  const isCartMutating = computed(() => isUpdatingCart.value || optimisticPendingMutations.value > 0);
+
   // Check if the billing address is enabled
   const isBillingAddressEnabled = computed(() => (storeSettings.hideBillingAddressForVirtualProducts ? !allProductsAreVirtual.value : true));
 
@@ -428,13 +577,18 @@ export function useCart() {
     cart,
     isShowingCart,
     isUpdatingCart,
+    isCartMutating,
     isAddingToCart,
     isUpdatingCoupon,
+    optimisticPendingMutations,
+    cartItemCount,
     paymentGateways,
     isBillingAddressEnabled,
     isOptimisticCartMode,
     updateCart,
+    refreshCartSummary,
     refreshCart,
+    refreshCartIfNeeded,
     toggleCart,
     addToCart,
     removeItem,

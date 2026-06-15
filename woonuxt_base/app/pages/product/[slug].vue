@@ -1,16 +1,23 @@
 <script lang="ts" setup>
 import { StockStatusEnum, ProductTypesEnum, type AddToCartInput } from '#gql/default';
-import type { ExternalProduct, ProductDetail, SimpleProduct, VariableProduct, Variation, VariationAttribute } from '#types/gql';
+import type { ExternalProduct, ProductDetail, Variation, VariationAttribute } from '#types/gql';
 
 const route = useRoute();
-const router = useRouter();
 const { storeSettings } = useAppConfig();
 const { addToCart, isUpdatingCart, isAddingToCart, isOptimisticCartMode } = useCart();
-const { frontEndUrl } = useHelpers();
+const { frontEndUrl, getErrorMessage } = useHelpers();
 const { t } = useI18n();
+const gql = useWooGraphQL();
 const slug = route.params.slug as string;
 
-const { data } = await useAsyncGql('getProduct', { slug, frontEndUrl });
+const { data, error } = await useAsyncGql('getProduct', { slug, frontEndUrl });
+if (error.value) {
+  throw showError({
+    statusCode: 502,
+    statusMessage: getErrorMessage(error.value) || `Unable to load product "${slug}" from WordPress`,
+  });
+}
+
 if (!data.value?.product) {
   throw showError({ statusCode: 404, statusMessage: t('shop.productNotFound') });
 }
@@ -32,6 +39,7 @@ const stripPaPrefix = (value?: string | null): string => (value ?? '').toString(
 
 const normalizeMatchKey = (value?: string | null): string => normalizeMatchToken(stripPaPrefix(value));
 const normalizeMatchValue = (value?: string | null): string => normalizeMatchToken(value);
+type VariationSelection = Pick<VariationAttribute, 'name' | 'value'>;
 
 const toSelectionName = (name?: string | null): string => {
   if (!name) return '';
@@ -53,7 +61,7 @@ const normalizedVariations = computed(() => {
   });
 });
 
-const findMatchingVariation = (selected: VariationAttribute[]): Variation | null => {
+const findMatchingVariation = (selected: VariationSelection[]): Variation | null => {
   if (!selected?.length) return null;
 
   const selectedMap: Record<string, string> = {};
@@ -104,10 +112,10 @@ const findVariationById = (value?: string | number | null): Variation | null => 
   return product.value?.variations?.nodes?.find((node: Variation) => node.databaseId === parsed) ?? null;
 };
 
-const buildQuerySelections = (): VariationAttribute[] => {
+const buildQuerySelections = (): VariationSelection[] => {
   if (!product.value?.attributes?.nodes?.length) return [];
 
-  const selections: VariationAttribute[] = [];
+  const selections: VariationSelection[] = [];
   for (const attr of product.value.attributes.nodes) {
     const key = toSelectionName(attr?.name);
     if (!key) continue;
@@ -126,7 +134,10 @@ const buildQuerySelections = (): VariationAttribute[] => {
 
     if (!isValidValue) continue;
 
-    selections.push({ name: key, value: String(value) });
+    selections.push({
+      name: key,
+      value: String(value),
+    });
   }
 
   return selections;
@@ -139,6 +150,8 @@ if (variationFromQuery?.attributes?.nodes?.length) {
   variation.value = variationFromQuery.attributes.nodes.map((attr: VariationAttribute) => ({
     name: attr.name || '',
     value: attr.value || '',
+    attributeId: attr.attributeId ?? null,
+    label: attr.label ?? attr.name ?? '',
   }));
   activeVariation.value = variationFromQuery;
 } else {
@@ -149,10 +162,17 @@ if (variationFromQuery?.attributes?.nodes?.length) {
       variation.value = matched.attributes.nodes.map((attr: VariationAttribute) => ({
         name: attr.name || '',
         value: attr.value || '',
+        attributeId: attr.attributeId ?? null,
+        label: attr.label ?? attr.name ?? '',
       }));
       activeVariation.value = matched;
     } else {
-      variation.value = initialSelections;
+      variation.value = initialSelections.map((selection) => ({
+        name: selection.name || '',
+        value: selection.value || '',
+        attributeId: null,
+        label: selection.name || '',
+      }));
     }
   }
 }
@@ -164,9 +184,9 @@ const defaultAttributes = computed<{ nodes: VariationAttribute[] } | null>(() =>
   return product.value?.defaultAttributes ? { nodes: product.value.defaultAttributes.nodes ?? [] } : null;
 });
 
-const isSimpleProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.SIMPLE);
-const isVariableProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.VARIABLE);
-const isExternalProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.EXTERNAL);
+const isSimpleProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.Simple);
+const isVariableProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.Variable);
+const isExternalProduct = computed<boolean>(() => product.value?.type === ProductTypesEnum.External);
 const externalProduct = computed<ExternalProduct | null>(() => (isExternalProduct.value ? (product.value as ExternalProduct) : null));
 const shouldSkipStockRefresh = computed<boolean>(() => isExternalProduct.value);
 
@@ -191,7 +211,9 @@ const updateSelectedVariations = (variations: VariationAttribute[]): void => {
   activeVariation.value = findMatchingVariation(variations);
 
   selectProductInput.value.variationId = activeVariation.value?.databaseId ?? null;
-  selectProductInput.value.variation = activeVariation.value ? attrValues.value : null;
+  // Prefer the resolved variation ID once we have a match so spaced/display labels
+  // are not used as the source of truth for add-to-cart requests.
+  selectProductInput.value.variation = activeVariation.value ? null : attrValues.value;
   variation.value = variations;
 
   // Update URL with current selections for persistence and sharing (client-side only)
@@ -216,18 +238,26 @@ const updateSelectedVariations = (variations: VariationAttribute[]): void => {
 };
 
 const mergeLiveStockStatus = (payload: ProductDetail): void => {
-  product.value.stockStatus = payload.stockStatus ?? product.value.stockStatus;
-
-  payload.variations?.nodes?.forEach((variation: Variation, index: number) => {
-    if (product.value?.variations?.nodes?.[index]) {
-      product.value.variations.nodes[index].stockStatus = variation.stockStatus;
-    }
-  });
+  if (product.value) {
+    product.value = {
+      ...product.value,
+      stockStatus: payload.stockStatus ?? product.value.stockStatus,
+      variations: product.value.variations
+        ? {
+            ...product.value.variations,
+            nodes: product.value.variations.nodes?.map((node, index) => ({
+              ...node,
+              stockStatus: payload.variations?.nodes?.[index]?.stockStatus || node.stockStatus,
+            })),
+          }
+        : undefined,
+    };
+  }
 };
 
 const refreshStockStatus = async (): Promise<void> => {
   try {
-    const { product } = await GqlGetStockStatus({ slug });
+    const { product } = await gql.getStockStatus({ slug });
     if (product) mergeLiveStockStatus(product as ProductDetail);
   } catch (error: any) {
     const errorMessage = error?.gqlErrors?.[0]?.message;
@@ -283,17 +313,17 @@ onBeforeUnmount(() => {
 
 const stockStatus = computed(() => {
   if (isVariableProduct.value) {
-    return activeVariation.value?.stockStatus || StockStatusEnum.OUT_OF_STOCK;
+    return activeVariation.value?.stockStatus ?? product.value?.stockStatus ?? StockStatusEnum.OutOfStock;
   }
-  return (product.value as SimpleProduct | VariableProduct)?.stockStatus || StockStatusEnum.OUT_OF_STOCK;
+  return product.value?.stockStatus ?? StockStatusEnum.OutOfStock;
 });
 
 const disabledAddToCart = computed(() => {
-  const isOutOfStock = stockStatus.value === StockStatusEnum.OUT_OF_STOCK;
+  const canPurchaseWithCurrentStock = stockStatus.value === StockStatusEnum.InStock || stockStatus.value === StockStatusEnum.OnBackorder;
   const isInvalidType = !displayProduct.value;
   const isCartUpdating = isOptimisticCartMode.value ? false : isUpdatingCart.value || isAddingToCart.value;
-  const isValidActiveVariation = isVariableProduct.value ? !!activeVariation.value : true;
-  return isInvalidType || isOutOfStock || isCartUpdating || !isValidActiveVariation;
+  const hasValidVariation = !isVariableProduct.value || !!activeVariation.value;
+  return !canPurchaseWithCurrentStock || isCartUpdating || !hasValidVariation || isInvalidType;
 });
 
 const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : isUpdatingCart.value));
@@ -303,22 +333,17 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
   <main class="container relative py-6 xl:max-w-7xl">
     <div v-if="product">
       <SEOHead :info="product" />
-      <Breadcrumb :product class="mb-6" v-if="storeSettings.showBreadcrumbOnSingleProduct" />
+      <Breadcrumb v-if="storeSettings.showBreadcrumbOnSingleProduct" :product class="mb-6" />
 
       <div class="flex flex-col gap-10 md:flex-row md:justify-between lg:gap-24">
-        <div class="relative flex-1">
-          <ProductImageGallery
-            v-if="productImage"
-            class="w-full"
-            :main-image="productImage"
-            :gallery="productGallery"
-            :node="displayProduct"
-            :activeVariation="activeVariation || {}" />
-          <NuxtImg v-else class="w-full skeleton" src="/images/placeholder.jpg" :alt="product?.name || 'Product'" />
-
-          <!-- Hook: After product gallery -->
-          <HookOutlet name="product.gallery.after" :ctx="{ product: displayProduct }" as="div" />
-        </div>
+        <ProductImageGallery
+          v-if="productImage"
+          class="relative flex-1"
+          :main-image="productImage"
+          :gallery="productGallery"
+          :node="displayProduct"
+          :active-variation="activeVariation" />
+        <NuxtImg v-else class="relative flex-1 skeleton" src="/images/placeholder.jpg" :alt="product?.name || 'Product'" />
 
         <div class="w-full lg:max-w-md xl:max-w-lg md:py-2">
           <!-- Hook: Before product title -->
@@ -326,11 +351,11 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
 
           <div class="flex justify-between mb-4">
             <div class="flex-1">
-              <h1 class="flex flex-wrap items-center gap-2 mb-2 text-2xl font-sesmibold dark:text-white">
+              <h1 class="flex flex-wrap items-center gap-2 mb-2 text-2xl font-sesmibold">
                 {{ displayProduct.name }}
                 <LazyWPAdminLink :link="`/wp-admin/post.php?post=${product.databaseId}&action=edit`">Edit</LazyWPAdminLink>
               </h1>
-              <StarRating :rating="averageRating" :count="reviewCount" v-if="storeSettings.showReviews" />
+              <StarRating v-if="storeSettings.showReviews" :rating="averageRating" :count="reviewCount" />
             </div>
             <ProductPrice class="text-xl" :sale-price="priceTarget?.salePrice" :regular-price="priceTarget?.regularPrice" />
           </div>
@@ -340,39 +365,36 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
 
           <div class="grid gap-2 my-8 text-sm empty:hidden">
             <div v-if="!isExternalProduct" class="flex items-center gap-2">
-              <span class="text-gray-400 dark:text-gray-500">{{ $t('shop.availability') }}: </span>
-              <StockStatus :stockStatus @updated="mergeLiveStockStatus" />
+              <span class="text-gray-400">{{ $t('shop.availability') }}: </span>
+              <StockStatus :stock-status="stockStatus" @updated="mergeLiveStockStatus" />
             </div>
-            <div class="flex items-center gap-2" v-if="storeSettings.showSKU && product?.sku">
-              <span class="text-gray-400 dark:text-gray-500">{{ $t('shop.sku') }}: </span>
-              <span class="dark:text-gray-300">{{ product?.sku || 'N/A' }}</span>
+            <div v-if="storeSettings.showSKU && product?.sku" class="flex items-center gap-2">
+              <span class="text-gray-400">{{ $t('shop.sku') }}: </span>
+              <span class="">{{ product?.sku || 'N/A' }}</span>
             </div>
           </div>
 
-          <div class="mb-8 font-light prose dark:prose-invert" v-html="product.shortDescription || product.description" />
+          <div class="mb-8 font-light prose" v-html="product.shortDescription || product.description"></div>
 
-          <!-- Hook: After product description -->
-          <HookOutlet name="product.summary.afterDescription" :ctx="{ product: displayProduct }" as="div" />
-
-          <hr class="border-gray-300 dark:border-gray-600" />
+          <hr class="border-gray-300" />
 
           <form @submit.prevent="handleAddToCart">
             <AttributeSelections
               v-if="isVariableProduct && product?.attributes?.nodes?.length && product?.variations"
               class="mt-4 mb-8"
               :attributes="product.attributes.nodes"
-              :defaultAttributes="defaultAttributes"
+              :default-attributes="defaultAttributes"
               :variations="product.variations.nodes"
               @attrs-changed="updateSelectedVariations" />
             <div
               v-if="isVariableProduct || isSimpleProduct"
-              class="fixed bottom-0 left-0 z-10 flex items-center w-full gap-4 p-4 mt-12 shadow-lg bg-white/90 md:static md:bg-transparent md:p-0 md:shadow-none dark:shadow-gray-900">
+              class="fixed bottom-0 left-0 z-10 flex items-center w-full gap-4 p-4 mt-12 shadow-lg bg-white/90 md:static md:bg-transparent md:p-0 md:shadow-none">
               <input
                 v-model="quantity"
                 type="number"
                 min="1"
                 aria-label="Quantity"
-                class="flex items-center justify-center w-20 gap-4 p-2 text-left bg-white border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-hidden dark:text-white" />
+                class="flex items-center justify-center w-20 gap-4 p-2 text-left bg-white border border-gray-300 rounded-lg focus:outline-hidden" />
               <Button class="flex-1 w-full" :disabled="disabledAddToCart" :loading="addToCartLoading" type="submit">
                 {{ $t('shop.addToCart') }}
               </Button>
@@ -381,7 +403,7 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
               v-if="externalProduct?.externalUrl"
               :href="externalProduct.externalUrl"
               target="_blank"
-              class="rounded-lg flex font-bold bg-gray-800 dark:bg-gray-700 text-white text-center min-w-37.5 p-2.5 gap-4 items-center justify-center focus:outline-hidden hover:bg-gray-700 dark:hover:bg-gray-600">
+              class="rounded-lg flex font-bold bg-gray-800 text-white text-center min-w-37.5 p-2.5 gap-4 items-center justify-center focus:outline-hidden hover:bg-gray-700">
               {{ externalProduct?.buttonText || 'View product' }}
             </a>
           </form>
@@ -389,20 +411,20 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
           <div v-if="storeSettings.showProductCategoriesOnSingleProduct && product.productCategories">
             <div class="grid gap-2 my-8 text-sm">
               <div class="flex items-center gap-2">
-                <span class="text-gray-400 dark:text-gray-500">{{ $t('shop.category', 2) }}:</span>
+                <span class="text-gray-400">{{ $t('shop.category', 2) }}:</span>
                 <div class="product-categories">
                   <NuxtLink
                     v-for="category in product.productCategories.nodes"
                     :key="category.databaseId"
                     :to="`/product-category/${decodeURIComponent(category?.slug || '')}`"
-                    class="hover:text-primary dark:text-gray-300 dark:hover:text-primary"
+                    class="hover:text-primary"
                     :title="category.name || ''"
                     >{{ category.name }}<span class="comma">, </span>
                   </NuxtLink>
                 </div>
               </div>
             </div>
-            <hr class="border-gray-300 dark:border-gray-600" />
+            <hr class="border-gray-300" />
           </div>
 
           <div class="flex flex-wrap gap-4">
@@ -417,8 +439,8 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
         <!-- Hook: After product tabs -->
         <HookOutlet name="product.tabs.after" :ctx="{ product }" as="div" />
       </div>
-      <div class="my-32" v-if="product.related && storeSettings.showRelatedProducts">
-        <div class="mb-4 text-xl font-semibold dark:text-white">{{ $t('shop.youMayLike') }}</div>
+      <div v-if="product.related && storeSettings.showRelatedProducts" class="my-32">
+        <div class="mb-4 text-xl font-semibold">{{ $t('shop.youMayLike') }}</div>
         <LazyProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
       </div>
     </div>

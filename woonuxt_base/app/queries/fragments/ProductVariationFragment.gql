@@ -15,7 +15,7 @@ fragment ProductVariation on ProductVariation {
     title
     databaseId
     cartSourceUrl: sourceUrl(size: THUMBNAIL)
-    producCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
+    productCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
   }
   attributes {
     nodes {

@@ -1,21 +1,21 @@
 <template>
   <div class="flex flex-col justify-center max-w-lg mx-auto my-16 text-center min-h-150 align-center">
     <div class="flex flex-col my-8">
-      <h1 class="text-xl font-semibold text-gray-900 lg:text-3xl dark:text-white">{{ formTitle }}</h1>
-      <p v-if="formView === FormView.LOGIN" class="mt-2 text-gray-500 dark:text-gray-400">
+      <h1 class="text-xl font-semibold text-gray-900 lg:text-3xl">{{ formTitle }}</h1>
+      <p v-if="formView === FormView.LOGIN" class="mt-2 text-gray-500">
         {{ $t('account.noAccount') }}
         <a class="font-semibold cursor-pointer text-primary hover:underline" @click="navigate(FormView.REGISTER)"> {{ $t('account.accountRegister') }} </a>.
       </p>
-      <p v-else-if="formView === FormView.REGISTER" class="mt-2 text-gray-500 dark:text-gray-400">
+      <p v-else-if="formView === FormView.REGISTER" class="mt-2 text-gray-500">
         {{ $t('account.hasAccount') }}
-        <a @click="navigate(FormView.LOGIN)" class="cursor-pointer text-primary text-semibold hover:underline">Sign in</a>.
+        <a class="cursor-pointer text-primary text-semibold hover:underline" @click="navigate(FormView.LOGIN)">Sign in</a>.
       </p>
     </div>
 
-    <LoginProviders class="mb-8" v-if="formView === FormView.LOGIN || formView === FormView.REGISTER" />
+    <LoginProviders v-if="formView === FormView.LOGIN || formView === FormView.REGISTER" class="mb-8" />
 
     <form @submit.prevent="handleFormSubmit(userInfo)">
-      <p v-if="formView === FormView.FORGOT_PASSWORD" class="mb-8 text-sm text-gray-500 dark:text-gray-400">{{ $t('account.enterEmailOrUsernameForReset') }}</p>
+      <p v-if="formView === FormView.FORGOT_PASSWORD" class="mb-8 text-sm text-gray-500">{{ $t('account.enterEmailOrUsernameForReset') }}</p>
       <input
         v-if="formView === FormView.REGISTER || formView === FormView.FORGOT_PASSWORD"
         id="email"
@@ -41,12 +41,12 @@
         {{ buttonText }}
       </Button>
 
-      <div class="flex items-center justify-between mt-4" v-if="formView === FormView.LOGIN">
+      <div v-if="formView === FormView.LOGIN" class="flex items-center justify-between mt-4">
         <div class="text-sm font-semibold cursor-pointer text-primary hover:underline" @click="navigate(FormView.FORGOT_PASSWORD)">Forgot password?</div>
       </div>
     </form>
 
-    <div class="my-8 text-center cursor-pointer text-primary hover:underline" @click="navigate(FormView.LOGIN)" v-if="formView === FormView.FORGOT_PASSWORD">
+    <div v-if="formView === FormView.FORGOT_PASSWORD" class="my-8 text-center cursor-pointer text-primary hover:underline" @click="navigate(FormView.LOGIN)">
       {{ $t('account.backToLogin') }}
     </div>
 
@@ -157,6 +157,7 @@ const formTitle = computed(() => {
   } else if (formView.value === FormView.FORGOT_PASSWORD) {
     return t('account.forgotPassword');
   }
+  return undefined;
 });
 
 const buttonText = computed(() => {
@@ -167,10 +168,9 @@ const buttonText = computed(() => {
   } else if (formView.value === FormView.FORGOT_PASSWORD) {
     return t('account.sendPasswordResetEmail');
   }
+  return undefined;
 });
 
-const emailLabel = computed(() => (formView.value === FormView.REGISTER ? t('billing.email') : t('account.emailOrUsername')));
-const usernameLabel = computed(() => (formView.value === FormView.LOGIN ? t('account.emailOrUsername') : t('account.username')));
 const passwordLabel = computed(() => t('account.password'));
 
 const inputPlaceholder = computed(() => {
@@ -186,10 +186,10 @@ const inputPlaceholder = computed(() => {
 @reference "#tailwind";
 
 input[type='text'] {
-  @apply border rounded-lg mb-4 w-full p-3 px-4 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white;
+  @apply border rounded-lg mb-4 w-full p-3 px-4 bg-white  border-gray-300  text-gray-900;
 }
 
 form button {
-  @apply rounded-lg font-bold bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 py-3 px-8 hover:bg-gray-900 dark:hover:bg-gray-100 mb-4 w-full;
+  @apply rounded-lg font-bold bg-gray-800  text-white  py-3 px-8 hover:bg-gray-900  mb-4 w-full;
 }
 </style>

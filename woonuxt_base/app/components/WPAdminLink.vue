@@ -20,7 +20,7 @@ const linkStartsWithWpAdmin = link?.startsWith('/wp-admin') || false;
         class="wp-admin-link"
         title="This is a dev-only link, it will not be visible in production.">
         <span class="link">
-          <slot />
+          <slot></slot>
         </span>
         <Icon name="ion:open-outline" size="14" />
       </a>

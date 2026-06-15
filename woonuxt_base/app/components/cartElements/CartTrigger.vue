@@ -1,8 +1,8 @@
 <script setup>
-const { toggleCart, cart } = useCart();
+const { toggleCart, cartItemCount } = useCart();
 // Watch for changes in the cart count and animate the badge when the count increases
 watch(
-  () => cart.value?.contents?.itemCount ?? 0,
+  cartItemCount,
   (newCount, oldCount) => {
     if (newCount > oldCount) {
       const trigger = document.querySelector('.cart-trigger');
@@ -22,9 +22,9 @@ watch(
     <ClientOnly>
       <Transition name="popIn" mode="out-in">
         <span
-          v-if="cart?.contents?.itemCount > 0"
+          v-if="cartItemCount > 0"
           class="cart-badge bg-primary rounded-full text-white leading-none min-w-4 p-0.75 -top-1 -right-1 md:-right-2 text-[10px] absolute inline-flex justify-center items-center tabular-nums">
-          {{ cart?.contents?.itemCount }}
+          {{ cartItemCount }}
         </span>
       </Transition>
     </ClientOnly>

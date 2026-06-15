@@ -75,6 +75,8 @@ const emitSelection = () => {
     (row): VariationAttribute => ({
       name: toSelectionName(row?.name),
       value: selections.value[row?.name ?? ''] ?? '',
+      attributeId: null,
+      label: row?.label ?? row?.name ?? '',
     }),
   );
 
@@ -317,15 +319,15 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col justify-between gap-1" v-if="attributes">
+  <div v-if="attributes" class="flex flex-col justify-between gap-1 attribute-selections">
     <div v-for="(attr, i) in attributes" :key="i" class="relative flex flex-wrap justify-between py-2">
       <!-- LOCAL -->
       <div v-if="attr.scope == 'LOCAL'" class="grid gap-2">
-        <div class="text-sm dark:text-gray-300">
+        <div class="text-sm">
           {{ attr.label || attr.name }}
-          <span v-if="selections[attr.name || '']" class="text-gray-400 dark:text-gray-500">: {{ getSelectedName(attr, selections[attr.name || '']) }}</span>
+          <span v-if="selections[attr.name || '']" class="text-gray-400">: {{ getSelectedName(attr, selections[attr.name || '']) }}</span>
         </div>
-        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400 dark:text-gray-500">
+        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400">
           {{ getSelectionHint(attr) }}
         </div>
         <div class="flex gap-2">
@@ -333,12 +335,12 @@ watch(
             <label :for="`${option}_${index}`">
               <input
                 :id="`${option}_${index}`"
+                v-model="selections[attr.name || '']"
                 class="hidden"
                 type="radio"
                 :class="className(attr.name || '')"
                 :name="attr.name || ''"
                 :value="option"
-                v-model="selections[attr.name || '']"
                 :aria-disabled="!isOptionEnabled(attr.name || '', option)"
                 @change="handleSelectionChange(attr.name || '')" />
               <span
@@ -358,7 +360,7 @@ watch(
           {{ $t('general.color') }}
           <span v-if="selections[attr.name || '']" class="text-gray-400">{{ getSelectedName(attr, selections[attr.name || '']) }}</span>
         </div>
-        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400 dark:text-gray-500">
+        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400">
           {{ getSelectionHint(attr) }}
         </div>
         <div class="flex gap-2">
@@ -369,12 +371,12 @@ watch(
               <label :for="`${term.slug || ''}_${termIndex}`">
                 <input
                   :id="`${term.slug || ''}_${termIndex}`"
+                  v-model="selections[attr.name || '']"
                   class="hidden"
                   type="radio"
                   :class="className(attr.name || '')"
                   :name="attr.name || ''"
                   :value="term.slug || ''"
-                  v-model="selections[attr.name || '']"
                   :aria-disabled="!isOptionEnabled(attr.name || '', term.slug || '')"
                   @change="handleSelectionChange(attr.name || '')" />
                 <span
@@ -389,19 +391,19 @@ watch(
 
       <!-- DROPDOWN -->
       <div v-else-if="'terms' in attr && (attr.terms?.nodes?.length || 0) > 8" class="grid gap-2">
-        <div class="text-sm dark:text-gray-300">
+        <div class="text-sm">
           {{ attr.label || attr.name }}
-          <span v-if="selections[attr.name || '']" class="text-gray-400 dark:text-gray-500">{{ getSelectedName(attr, selections[attr.name || '']) }}</span>
+          <span v-if="selections[attr.name || '']" class="text-gray-400">{{ getSelectedName(attr, selections[attr.name || '']) }}</span>
         </div>
-        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400 dark:text-gray-500">
+        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400">
           {{ getSelectionHint(attr) }}
         </div>
         <select
           :id="attr.name || ''"
+          v-model="selections[attr.name || '']"
           :name="attr.name || ''"
           required
-          class="border-white shadow-xs select dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-          v-model="selections[attr.name || '']"
+          class="border-white shadow-xs select"
           @change="handleSelectionChange(attr.name || '')">
           <option disabled hidden>{{ $t('general.choose') }} {{ decodeURIComponent(attr.label || attr.name || '') }}</option>
           <option
@@ -409,17 +411,17 @@ watch(
             :key="term.slug || dropdownIndex"
             :value="term.slug || ''"
             :aria-disabled="!isOptionEnabled(attr.name || '', term.slug || '')"
-            v-html="term.name" />
+            v-html="term.name"></option>
         </select>
       </div>
 
       <!-- CHECKBOXES -->
       <div v-else class="grid gap-2">
-        <div class="text-sm dark:text-gray-300">
+        <div class="text-sm">
           {{ attr.label || attr.name }}
-          <span v-if="selections[attr.name || '']" class="text-gray-400 dark:text-gray-500">: {{ getSelectedName(attr, selections[attr.name || '']) }}</span>
+          <span v-if="selections[attr.name || '']" class="text-gray-400">: {{ getSelectedName(attr, selections[attr.name || '']) }}</span>
         </div>
-        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400 dark:text-gray-500">
+        <div v-if="getSelectionHint(attr)" class="text-xs text-gray-400">
           {{ getSelectionHint(attr) }}
         </div>
         <div class="flex gap-2">
@@ -427,12 +429,12 @@ watch(
             <label :for="`${term.slug}_${index}`">
               <input
                 :id="`${term.slug}_${index}`"
+                v-model="selections[attr.name || '']"
                 class="hidden"
                 type="radio"
                 :class="className(attr.name || '')"
                 :name="attr.name || ''"
                 :value="term.slug || ''"
-                v-model="selections[attr.name || '']"
                 :aria-disabled="!isOptionEnabled(attr.name || '', term.slug || '')"
                 @change="handleSelectionChange(attr.name || '')" />
               <span
@@ -453,21 +455,21 @@ watch(
 @reference "#tailwind";
 
 .radio-button {
-  @apply border-white dark:border-gray-700 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 border-2 text-sm text-center outline-2 outline-gray-100 dark:outline-gray-600 py-1.5 px-3 transition-all text-gray-800 dark:text-gray-200 inline-block hover:outline-gray-500;
+  @apply border-white  rounded-lg cursor-pointer bg-gray-50  border-2 text-sm text-center outline-2 outline-gray-100  py-1.5 px-3 transition-all text-gray-800  inline-block hover:outline-gray-500;
 }
 
 .radio-button.is-disabled {
-  @apply opacity-40 hover:outline-gray-100 dark:hover:outline-gray-600;
+  @apply opacity-40 hover:outline-gray-100;
 }
 
 .color-button {
-  @apply border-white dark:border-gray-700 cursor-pointer bg-gray-50 border-2 rounded-2xl text-sm text-center outline-2 outline-gray-100 dark:outline-gray-600 transition-all text-gray-800 inline-block hover:outline-gray-500;
+  @apply border-white  cursor-pointer bg-gray-50 border-2 rounded-2xl text-sm text-center outline-2 outline-gray-100  transition-all text-gray-800 inline-block hover:outline-gray-500;
   width: 2rem;
   height: 2rem;
 }
 
 .color-button.is-disabled {
-  @apply opacity-40 hover:outline-gray-100 dark:hover:outline-gray-600;
+  @apply opacity-40 hover:outline-gray-100;
 }
 
 .color-green {
@@ -498,7 +500,7 @@ watch(
   @apply bg-black;
 }
 
-input[type='radio']:checked ~ span {
-  @apply outline-2 outline-gray-500 dark:outline-gray-300;
+.attribute-selections input[type='radio']:checked ~ span {
+  @apply outline-2 outline-gray-500;
 }
 </style>

@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. I'll try my best to keep it updated.
 
+## v4.17.0 (19-04-2026)
+
+- feature: Saved card checkout — logged-in users can now pay with a previously saved card without re-entering card details
+- feature: Saved cards displayed at the top of the payment section with radio selection; "Use another payment method" link to switch to a new card
+- feature: `savedPaymentMethods` field on the GraphQL `User` type, exposing token id, last4, expiry, card type, default flag, and the owning Stripe customer ID sourced directly from the WooCommerce payment token (not stale user meta)
+- feature: `customerSessionClientSecret` on `stripePaymentIntent` response, enabling Stripe Elements to display saved methods in the Payment Element
+- fix: Stripe "payment_method belongs to Customer" error — PaymentIntent for a saved card now always uses the customer ID stored on the token itself, bypassing stale `wc_stripe_customer` user meta
+- fix: Logout now navigates immediately and fires `refreshCart` in the background, preventing a stale cart from persisting on screen
+- fix: `emptyCart` optimistic mutation now awaits the server round-trip before finalising, preventing a race condition where the cart could reappear
+- fix: `clearAllCookies` now expires cookies at `path=/` and both hostname and root-domain variants, ensuring WooCommerce session cookies are fully cleared on logout
+- fix: `formatPrice` now handles `number`, `null`, and `undefined` inputs and strips HTML/currency symbols before parsing, eliminating `€NaN` renders on the order summary page
+- fix: Order summary item totals rendered via `v-html` so WooCommerce-formatted price strings (which include HTML) display correctly
+- fix: Shipping address fallback in `ensureShippingRates` now correctly detects an empty `{}` shipping object and falls back to billing rather than treating it as populated
+- fix: `StripeElement` recreates itself when `customerSessionClientSecret` changes, so the Payment Element reflects the customer's saved methods after async load
+- fix: `AttributeSelections` radio outline scoped to `.attribute-selections` to prevent bleed into other radio inputs on the page
+- chore: `ShippingOptions` no longer reads `CURRENCY_SYMBOL` from runtime config (shipping rates already include formatted price strings from WooCommerce)
+- chore: `downloadUrl` field commented out of `DownloadableItem` fragment (field removed in recent WPGraphQL versions)
+- chore: Trailing whitespace cleaned up across `AttributeSelections.vue`
+
 ## v4.14.0 (07-02-2026)
 
 - chore: Consolidate GraphQL types under `#types/gql` and enums under `#gql/default`

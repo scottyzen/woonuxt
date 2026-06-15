@@ -13,7 +13,7 @@ const { hideCategories } = defineProps({ hideCategories: { type: Boolean, defaul
 const globalProductAttributes = (runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES as WooNuxtFilter[]) || [];
 const taxonomies = globalProductAttributes.map((attr) => attr?.slug?.toUpperCase().replace(/_/g, '')) as TaxonomyEnum[];
 
-const { data } = await useAsyncGql('getAllTerms', { taxonomies: [...taxonomies, TaxonomyEnum.PRODUCTCATEGORY] });
+const { data } = await useAsyncGql('getAllTerms', { taxonomies: [...taxonomies, TaxonomyEnum.Productcategory] });
 const terms = data.value?.terms?.nodes ?? [];
 
 // Filter out the product category terms and the global product attributes with their terms
@@ -26,7 +26,7 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({ ...attr, te
 <template>
   <aside id="filters">
     <OrderByDropdown class="block w-full md:hidden" />
-    <div class="relative z-30 grid mb-12 divide-y divide-gray-200 dark:divide-gray-700 filters-container">
+    <div class="relative z-30 grid mb-12 divide-y divide-gray-200 filters-container">
       <PriceFilter />
       <CategoryFilter v-if="!hideCategories" :terms="productCategoryTerms" />
       <div v-for="attribute in attributesWithTerms" :key="attribute.slug">
@@ -38,7 +38,7 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({ ...attr, te
       <LazyResetFiltersButton v-if="isFiltersActive" />
     </div>
   </aside>
-  <div class="fixed inset-0 z-50 hidden bg-black dark:bg-black opacity-25 dark:opacity-50 filter-overlay" @click="removeBodyClass('show-filters')"></div>
+  <div class="fixed inset-0 z-50 hidden bg-black opacity-25 filter-overlay" @click="removeBodyClass('show-filters')"></div>
 </template>
 
 <style>
@@ -73,7 +73,7 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({ ...attr, te
 
 @media (max-width: 768px) {
   #filters {
-    @apply bg-white dark:bg-gray-800 h-full p-8 transform pl-2 transition-all ease-in-out bottom-0 left-4 -translate-x-[110vw] duration-300 overflow-auto fixed;
+    @apply bg-white  h-full p-8 transform pl-2 transition-all ease-in-out bottom-0 left-4 translate-x-[-110vw] duration-300 overflow-auto fixed;
 
     box-shadow:
       -100px 0 0 white,

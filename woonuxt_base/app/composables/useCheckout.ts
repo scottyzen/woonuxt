@@ -2,18 +2,32 @@ import type { CheckoutInput, CreateAccountInput, UpdateCustomerInput } from '#ty
 
 export function useCheckout() {
   const { customer, loginUser } = useAuth();
-  const { cart, emptyCart, refreshCart, isUpdatingCart } = useCart();
+  const { cart, refreshCart, isUpdatingCart } = useCart();
+  const gql = useWooGraphQL();
+
+  const resolvePaymentMethodId = (paymentMethod: unknown): string => {
+    if (typeof paymentMethod === 'string') return paymentMethod;
+    if (paymentMethod && typeof paymentMethod === 'object' && 'id' in paymentMethod) {
+      return String((paymentMethod as { id?: string | null }).id ?? '');
+    }
+
+    return '';
+  };
 
   const orderInput = useState<any>('orderInput', () => {
     return {
       customerNote: '',
       paymentMethod: '',
+      createAccount: false,
+      username: '',
+      password: '',
       shipToDifferentAddress: false,
       metaData: [{ key: 'order_via', value: 'WooNuxt' }],
     };
   });
 
   const isProcessingOrder = useState<boolean>('isProcessingOrder', () => false);
+  const checkoutError = ref<string | null>(null);
 
   // Helper function to build checkout payload
   const buildCheckoutPayload = (isPaid = false): CheckoutInput => {
@@ -22,13 +36,14 @@ export function useCheckout() {
     const billingSource = shipToDifferentAddress ? customer.value?.billing : shippingSource;
     const billing = billingSource;
     const shipping = shipToDifferentAddress ? shippingSource : billingSource;
+    const paymentMethodId = resolvePaymentMethodId(orderInput.value.paymentMethod);
 
     const payload: CheckoutInput = {
       billing,
       shipping,
       shippingMethod: cart.value?.chosenShippingMethods,
       metaData: orderInput.value.metaData,
-      paymentMethod: orderInput.value.paymentMethod.id,
+      paymentMethod: paymentMethodId,
       customerNote: orderInput.value.customerNote,
       shipToDifferentAddress,
       transactionId: orderInput.value.transactionId,
@@ -47,19 +62,38 @@ export function useCheckout() {
 
   // Helper function to check if payment method is PayPal
   const isPayPalPayment = (): boolean => {
-    const paymentId = orderInput.value.paymentMethod.id;
+    const paymentId = resolvePaymentMethodId(orderInput.value.paymentMethod);
     return paymentId === 'paypal' || paymentId === 'ppcp-gateway';
   };
 
+  const createOrderFallbackKey = (checkoutOrder: any, orderId: string, orderKey: string): string => {
+    if (!import.meta.client) return '';
+
+    try {
+      const fallbackOrder = {
+        ...(checkoutOrder || {}),
+        databaseId: Number.parseInt(orderId, 10),
+        orderKey,
+      };
+      const fallbackKey = `woonuxt-order-${orderId}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+
+      window.localStorage.setItem(`woonuxt:order-fallback:${fallbackKey}`, JSON.stringify(fallbackOrder));
+      return fallbackKey;
+    } catch {
+      return '';
+    }
+  };
+
   // Helper function to handle PayPal redirect
-  const handlePayPalRedirect = async (checkout: any, orderId: string, orderKey: string): Promise<void> => {
+  const handlePayPalRedirect = async (checkout: any, orderId: string, orderKey: string, fallbackOrderKey = ''): Promise<void> => {
     const { replaceQueryParam } = useHelpers();
     const router = useRouter();
 
     const frontEndUrl = window.location.origin;
     let redirectUrl = checkout?.redirect ?? '';
+    const fallbackOrderQuery = fallbackOrderKey ? `&order_fallback_key=${fallbackOrderKey}` : '';
 
-    const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}&from_paypal=true`;
+    const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}&from_paypal=true${fallbackOrderQuery}`;
     const payPalCancelUrl = `${frontEndUrl}/checkout/?cancel_order=true&from_paypal=true`;
 
     redirectUrl = replaceQueryParam('return', payPalReturnUrl, redirectUrl);
@@ -69,7 +103,7 @@ export function useCheckout() {
     const isPayPalWindowClosed = await openPayPalWindow(redirectUrl);
 
     if (isPayPalWindowClosed) {
-      router.push(`/checkout/order-received/${orderId}/?key=${orderKey}&fetch_delay=true`);
+      router.push(`/checkout/order-received/${orderId}/?key=${orderKey}&fetch_delay=true${fallbackOrderQuery}`);
     }
   };
 
@@ -83,19 +117,8 @@ export function useCheckout() {
 
   // Helper function to finalize checkout
   const finalizeCheckout = async (checkout: any): Promise<void> => {
-    // For PayPal payments, clear the cart here since they handle redirect differently
-    // Only clear if cart has items to avoid "Cart is empty" errors
-    if (isPayPalPayment() && cart.value?.contents?.nodes?.length) {
-      await emptyCart();
-      await refreshCart();
-      return;
-    }
-
-    // For other payment methods, don't clear cart here to avoid flash
-    // Cart will be cleared on the order-received page
     if (checkout?.result !== 'success' && !checkout?.order?.databaseId) {
-      alert('There was an error processing your order. Please try again.');
-      window.location.reload();
+      checkoutError.value = 'There was an error processing your order. Please try again.';
     }
   };
 
@@ -110,22 +133,22 @@ export function useCheckout() {
         return { address1, address2, city, country, postcode, state };
       };
 
+      if (!orderInput.value.shipToDifferentAddress && customer.value?.billing) {
+        if (!customer.value.shipping) {
+          customer.value.shipping = { ...customer.value.billing };
+        } else {
+          Object.assign(customer.value.shipping, { ...customer.value.billing });
+        }
+      }
+
       const shippingSource = customer.value?.shipping ?? customer.value?.billing;
       const billingSource = orderInput.value.shipToDifferentAddress ? customer.value?.billing : shippingSource;
-
-      if (!orderInput.value.shipToDifferentAddress && customer.value?.billing && shippingSource) {
-        Object.assign(customer.value.billing, {
-          ...shippingSource,
-          email: customer.value.billing.email,
-        });
-      }
 
       const shipping = pickLocation(shippingSource);
       const billing = pickLocation(billingSource);
 
-      const { updateCustomer } = await GqlUpdateCustomer({
+      const { updateCustomer } = await gql.UpdateCustomer({
         input: {
-          isSession: true,
           shipping,
           billing,
         } as UpdateCustomerInput,
@@ -163,40 +186,49 @@ export function useCheckout() {
     const router = useRouter();
 
     isProcessingOrder.value = true;
+    checkoutError.value = null;
 
     try {
       // Build checkout payload
       const checkoutPayload = buildCheckoutPayload(isPaid);
 
       // Process the checkout
-      const { checkout } = await GqlCheckout(checkoutPayload);
+      const { checkout } = await gql.Checkout(checkoutPayload);
 
       // Handle account creation if requested
       await handleAccountCreation();
 
-      const orderId = checkout?.order?.databaseId;
+      const orderId = checkout?.order?.databaseId?.toString();
       const orderKey = checkout?.order?.orderKey;
 
       // Ensure we have required order details
       if (!orderId || !orderKey) {
+        if (checkout?.redirect && import.meta.client) {
+          await finalizeCheckout(checkout);
+          window.location.href = checkout.redirect;
+          return checkout;
+        }
         throw new Error('Order ID or order key is missing from checkout response');
       }
 
+      const fallbackOrderKey = createOrderFallbackKey(checkout?.order, orderId, orderKey);
+      const fallbackOrderQuery = fallbackOrderKey ? `&order_fallback_key=${fallbackOrderKey}` : '';
+
       // Handle PayPal redirect if needed
       if (checkout?.redirect && isPayPalPayment()) {
-        await handlePayPalRedirect(checkout, String(orderId), orderKey);
+        await handlePayPalRedirect(checkout, orderId, orderKey, fallbackOrderKey);
       } else {
         // Standard redirect to order received page
-        router.push(`/checkout/order-received/${orderId}/?key=${orderKey}`);
+        router.push(`/checkout/order-received/${orderId}/?key=${orderKey}${fallbackOrderQuery}`);
       }
 
-      // Finalize the checkout (this will also clear cart for PayPal)
+      // Finalize the checkout
       await finalizeCheckout(checkout);
 
       return checkout;
     } catch (error: unknown) {
       console.error('Checkout error:', error);
-      if (error instanceof Error && error.message) alert(error.message);
+      checkoutError.value = error instanceof Error && error.message ? error.message : 'An error occurred during checkout. Please try again.';
       return null;
     } finally {
       isProcessingOrder.value = false;
@@ -206,7 +238,9 @@ export function useCheckout() {
   return {
     orderInput,
     isProcessingOrder,
+    checkoutError,
     processCheckout,
     updateShippingLocation,
+    resolvePaymentMethodId,
   };
 }

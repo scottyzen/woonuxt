@@ -48,9 +48,19 @@ function parseYoastHeadSSR(html: string | undefined): SeoHeadData {
   while ((scriptMatch = scriptRegex.exec(html)) !== null) {
     const attrs = scriptMatch[1] || '';
     const typeMatch = /type=["']([^"']+)["']/i.exec(attrs);
+    const type = typeMatch?.[1] || 'application/ld+json';
     const innerHTML = scriptMatch[2] || '';
+
+    if (type !== 'application/ld+json') continue;
+
+    try {
+      JSON.parse(innerHTML);
+    } catch {
+      continue;
+    }
+
     script.push({
-      type: typeMatch?.[1] || 'application/ld+json',
+      type,
       innerHTML,
     });
   }

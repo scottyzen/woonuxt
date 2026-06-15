@@ -1,5 +1,5 @@
 <script setup>
-const { updateItemQuantity, cart } = useCart();
+const { updateItemQuantit } = useCart();
 const { addToWishlist } = useWishlist();
 const { FALLBACK_IMG } = useHelpers();
 const { storeSettings } = useAppConfig();
@@ -43,21 +43,11 @@ const moveToWishList = () => {
       </NuxtLink>
       <div class="flex-1">
         <div class="flex gap-x-2 gap-y-1 flex-wrap items-center">
-          <NuxtLink class="leading-tight line-clamp-2 text-gray-900 dark:text-gray-100 hover:text-primary dark:hover:text-primary" :to="productSlug">{{
-            productType.name
-          }}</NuxtLink>
-
-          <!-- Hook: After cart line item name -->
-          <HookOutlet name="cart.lineItem.afterName" :ctx="{ item, cart }" as="span" />
-
-          <span
-            v-if="productType.salePrice"
-            class="text-[10px] border-green-200 dark:border-green-800 leading-none bg-green-100 dark:bg-green-900/30 inline-block p-0.5 rounded-sm text-green-600 dark:text-green-400 border">
+          <NuxtLink class="leading-tight line-clamp-2 text-gray-900 hover:text-primary" :to="productSlug">{{ productType.name }}</NuxtLink>
+          <span v-if="productType.salePrice" class="text-[10px] border-green-200 leading-none bg-green-100 inline-block p-0.5 rounded-sm text-green-600 border">
             Save {{ salePercentage }}
           </span>
-          <span
-            v-if="isLowStock"
-            class="text-[10px] border-yellow-200 dark:border-yellow-800 leading-none bg-yellow-100 dark:bg-yellow-900/30 inline-block p-0.5 rounded-sm text-orange-500 dark:text-orange-400 border">
+          <span v-if="isLowStock" class="text-[10px] border-yellow-200 leading-none bg-yellow-100 inline-block p-0.5 rounded-sm text-orange-500 border">
             Low Stock
           </span>
         </div>
@@ -65,22 +55,22 @@ const moveToWishList = () => {
       </div>
       <div class="inline-flex gap-2 flex-col items-end">
         <QuantityInput :item />
-        <div class="text-xs text-gray-400 dark:text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300 flex leading-none items-center">
+        <div class="text-xs text-gray-400 group-hover:text-gray-700 flex leading-none items-center">
           <button
             v-if="storeSettings.showMoveToWishlist"
-            class="mr-2 pr-2 border-r border-gray-300 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
+            class="mr-2 pr-2 border-r border-gray-300 disabled:cursor-not-allowed disabled:opacity-50"
             :disabled="isOptimisticItem"
-            @click="moveToWishList"
-            type="button">
+            type="button"
+            @click="moveToWishList">
             Move to Wishlist
           </button>
           <button
             title="Remove Item"
             aria-label="Remove Item"
-            @click="removeItem"
             type="button"
             :disabled="isOptimisticItem"
-            class="flex items-center gap-1 hover:text-red-500 dark:hover:text-red-400 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50">
+            class="flex items-center gap-1 hover:text-red-500 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+            @click="removeItem">
             <Icon name="ion:trash" class="hidden md:inline-block" size="12" />
           </button>
         </div>

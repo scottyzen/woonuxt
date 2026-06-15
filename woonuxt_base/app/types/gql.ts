@@ -1,65 +1,71 @@
-export type * from '#gql';
 export type * from '#gql/default';
 
 import type {
+  AddressFragment,
   CartFragment,
+  CommentFragment,
   CustomerFragment,
-  ViewerFragment,
-  PaymentGatewayFragment,
-  OrderFragmentFragment,
+  DownloadableItemFragment,
+  ExternalProductFragment,
+  GetCartQuery,
+  GetProductCategoriesQuery,
   GetProductQuery,
   GetProductsQuery,
-  ImageFragment as BaseImageFragment,
-  SimpleProductFragment,
-  VariableProductFragment,
-  ExternalProductFragment,
-  ProductWithAttributesFragment,
-  ProductVariationFragment,
   ImageFragment,
-  DownloadableItemFragment,
-  ProductCategoryFragment,
-  AddressFragment,
+  LineItemFragment,
+  LoginClientFragment,
+  LoginMutation,
+  LoginWithProviderMutation,
+  OrderFragmentFragment,
+  PaymentGatewayFragment,
+  ProductAttributeFragment,
+  ProductVariationFragment,
+  ProductWithAttributesFragment,
+  SimpleProductFragment,
   TermsFragment,
   VariationAttributeFragment,
-  CommentFragment,
-  ProductAttributeFragment,
-  LoginClientFragment,
-} from '#gql';
-import type { StockStatusEnum } from '#gql/default';
+  VariableProductFragment,
+  ViewerFragment,
+} from '#gql/default';
+
+type ArrayItem<T> = NonNullable<T> extends ReadonlyArray<infer Item> ? NonNullable<Item> : never;
+type ConnectionNode<T> = NonNullable<T> extends { nodes: ReadonlyArray<infer Node> } ? NonNullable<Node> : never;
+type OptionalConnection<TNode> = { nodes?: TNode[] | null } | null;
+type Nullable<T> = T | null | undefined;
 
 export type Cart = CartFragment;
 export type Customer = CustomerFragment;
 export type Viewer = ViewerFragment;
 export type PaymentGateway = PaymentGatewayFragment;
+export type PaymentGateways = NonNullable<GetCartQuery['paymentGateways']>;
 export type Order = OrderFragmentFragment;
-export type ImageWithSizes = BaseImageFragment & {
+export type Address = AddressFragment;
+export type DownloadableItem = DownloadableItemFragment;
+export type ProductCategory = ConnectionNode<NonNullable<GetProductCategoriesQuery['productCategories']>>;
+export type Comment = CommentFragment;
+export type LoginClient = LoginClientFragment;
+export type LoginSession = NonNullable<LoginMutation['login']> | NonNullable<LoginWithProviderMutation['login']>;
+
+export type ImageWithSizes = ImageFragment & {
   cartSourceUrl?: string | null;
-  producCardSourceUrl?: string | null;
-};
-export type ProductBase = GetProductQuery['product'];
-export type ProductDetail = NonNullable<GetProductQuery['product']> &
-  ProductImageFields &
-  ProductPricingFields &
-  ProductReviewFields &
-  ProductDateFields &
-  ProductVariationFields &
-  ProductAttributeFields &
-  ProductStockFields;
-export type ProductListItem = NonNullable<NonNullable<GetProductsQuery['products']>['nodes'][number]> &
-  ProductImageFields &
-  ProductPricingFields &
-  ProductReviewFields &
-  ProductVariationFields & {
-    description?: string | null;
-    shortDescription?: string | null;
-    date?: string | null;
-  };
-type ProductImageFields = {
-  image?: ImageWithSizes | null;
-  galleryImages?: { nodes?: BaseImageFragment[] | null } | null;
+  productCardSourceUrl?: string | null;
 };
 
-type ProductPricingFields = {
+export type ProductImage = {
+  sourceUrl?: string | null;
+  cartSourceUrl?: string | null;
+  productCardSourceUrl?: string | null;
+  altText?: string | null;
+  title?: string | null;
+  databaseId?: number | null;
+};
+
+export type ProductImageFields = {
+  image?: ImageWithSizes | null;
+  galleryImages?: OptionalConnection<ImageFragment> | null;
+};
+
+export type ProductPricingFields = {
   price?: string | null;
   regularPrice?: string | null;
   salePrice?: string | null;
@@ -69,98 +75,69 @@ type ProductPricingFields = {
   onSale?: boolean | null;
 };
 
-type ProductReviewFields = {
+export type ProductReviewFields = {
   averageRating?: number | null;
   reviewCount?: number | null;
 };
 
-type ProductDateFields = {
+export type ProductDateFields = {
   date?: string | null;
 };
 
-type ProductVariationFields = {
-  variations?: { nodes?: ProductVariationFragment[] | null } | null;
-};
-
-type ProductAttributeFields = {
-  attributes?: { nodes?: ProductAttributeFragment[] | null } | null;
-  defaultAttributes?: { nodes?: VariationAttributeFragment[] | null } | null;
-};
-
-type ProductStockFields = {
-  stockStatus?: StockStatusEnum | null;
+export type ProductStockFields = {
+  stockStatus?: ProductVariationFragment['stockStatus'];
   stockQuantity?: number | null;
   lowStockAmount?: number | null;
 };
 
+export type ProductVariationFields = {
+  variations?: OptionalConnection<Variation> | null;
+};
+
+export type ProductAttributeFields = {
+  attributes?: OptionalConnection<ProductAttribute> | null;
+  defaultAttributes?: OptionalConnection<VariationAttribute> | null;
+};
+
+export type ProductBase = GetProductQuery['product'];
+export type ProductDetail = NonNullable<GetProductQuery['product']> &
+  ProductImageFields &
+  ProductPricingFields &
+  ProductReviewFields &
+  ProductDateFields &
+  ProductVariationFields &
+  ProductAttributeFields &
+  ProductStockFields;
+export type ProductListItem = ConnectionNode<NonNullable<GetProductsQuery['products']>> &
+  ProductImageFields &
+  ProductPricingFields &
+  ProductReviewFields &
+  ProductVariationFields & {
+    description?: string | null;
+    shortDescription?: string | null;
+    date?: string | null;
+  };
 export type Product = ProductDetail | ProductListItem;
+
 export type SimpleProduct = SimpleProductFragment;
 export type VariableProduct = VariableProductFragment;
 export type ExternalProduct = ExternalProductFragment;
 export type ProductWithAttributes = ProductWithAttributesFragment;
-export type DownloadableItem = DownloadableItemFragment;
-export type ProductCategory = ProductCategoryFragment;
-export type Address = AddressFragment;
-export type Terms = TermsFragment;
-export type VariationAttribute = VariationAttributeFragment;
-export type Comment = CommentFragment;
 export type ProductAttribute = ProductAttributeFragment;
-export type LoginClient = LoginClientFragment;
-
-export interface ProductAttributeInput {
-  attributeName: string;
-  attributeValue: string;
-}
-
-export interface PaymentGateways {
-  nodes: PaymentGateway[];
-}
-
-export interface Variation {
-  name?: string | null;
-  databaseId?: number;
-  price?: string | null;
-  regularPrice?: string | null;
-  salePrice?: string | null;
-  slug?: string | null;
-  stockQuantity?: number | null;
-  stockStatus?: StockStatusEnum | null;
-  hasAttributes?: boolean | null;
-  image?: ProductImage | null;
-  attributes?: { nodes?: VariationAttribute[] } | null;
+export type VariationAttribute = VariationAttributeFragment;
+export type Variation = ProductVariationFragment & {
+  rawRegularPrice?: string | null;
   node?: SimpleProduct | VariableProduct;
-}
+};
+export type Terms = TermsFragment;
 
-export interface ProductImage {
-  sourceUrl?: string | null | undefined;
-  cartSourceUrl?: string | null | undefined;
-  altText?: string | null | undefined;
-  title?: string | null | undefined;
-}
-
-export interface AppliedCoupon {
-  description?: string | null;
-  discountTax: string;
-  discountAmount: string;
-  code: string;
-}
-
-export interface ShippingMethodRate {
-  cost?: string | null;
-  id: string;
-  label?: string | null;
-}
+export type AppliedCoupon = ArrayItem<Cart['appliedCoupons']>;
+export type ShippingMethodRate = ArrayItem<ArrayItem<Cart['availableShippingMethods']>['rates']>;
+export type LineItem = LineItemFragment;
 
 export interface GeoLocation {
   code: string;
   name: string;
-}
-
-export interface LineItem {
-  quantity?: number | null;
-  total?: string | null;
-  product?: Product | null;
-  variation?: Variation | null;
 }
 
 export interface WooNuxtSEOItem {
@@ -184,21 +161,26 @@ export interface UserInfo {
   username: string;
 }
 
-// API Response Types
 export interface ApiResponse<T = void> {
   success: boolean;
   data?: T;
   error?: string;
 }
 
-export interface AuthResponse {
-  success: boolean;
-  error?: string;
-}
+export type AuthResponse = ApiResponse;
 
 export interface GQLError {
   message: string;
-  extensions?: any;
-  locations?: any[];
-  path?: string[];
+  extensions?: Record<string, unknown>;
+  locations?: Array<{ line?: number; column?: number }>;
+  path?: Array<string | number>;
+  response?: unknown;
+  cause?: unknown;
+  gqlErrors?: GQLError[];
+  data?: unknown;
+  networkError?: unknown;
+  graphQLErrors?: GQLError[];
+  statusCode?: number;
 }
+
+export type Maybe<T> = Nullable<T>;

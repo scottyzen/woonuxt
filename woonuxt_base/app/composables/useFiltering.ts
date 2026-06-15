@@ -31,7 +31,7 @@ export function useFiltering() {
    * @param {string[]}
    * @example Just like the example above, but in reverse. setFilter('pa_color', ['green', 'blue'])
    */
-  function setFilter(filterName: string, filterValue: string[]) {
+  async function setFilter(filterName: string, filterValue: string[]): Promise<void> {
     let newFilterQuery = filterQuery.value || '';
 
     // If there are filters and filterName is not one of them, add the filter query
@@ -53,41 +53,26 @@ export function useFiltering() {
     // Update the filter query
     filterQuery.value = newFilterQuery;
 
-    router.push({ query: { ...route.query, filter: newFilterQuery } });
-
     // remove pagination from the url
     const path = route.path.includes('/page/') ? route.path.split('/page/')[0] : route.path;
 
-    // if the filter query is empty, remove it from the url
-    if (!newFilterQuery) {
-      router.push({
-        path,
-        query: { ...route.query, filter: undefined },
-      });
-    } else {
-      router.push({
-        path,
-        query: { ...route.query, filter: newFilterQuery },
-      });
-    }
+    await router.push({
+      path,
+      query: { ...route.query, filter: newFilterQuery || undefined },
+    });
 
-    setTimeout(() => {
-      updateProductList();
-    }, 50);
+    await updateProductList();
   }
 
   /**
    * Reset the filter value in the url
    */
-  function resetFilter(): void {
+  async function resetFilter(): Promise<void> {
     const { scrollToTop } = useHelpers();
     filterQuery.value = '';
-    router.push({ query: { ...route.query, filter: undefined } });
-
-    setTimeout(() => {
-      updateProductList();
-      scrollToTop();
-    }, 50);
+    await router.push({ query: { ...route.query, filter: undefined } });
+    await updateProductList();
+    scrollToTop();
   }
 
   /**
@@ -110,7 +95,7 @@ export function useFiltering() {
       // price filter
       const priceRange = getFilter('price') || []; // ["0", "100"]
       // Variable products returns an array of prices, so we need to find the highest price.
-      const productPrice = product.rawPrice ? parseFloat([...product.rawPrice.split(',')].reduce((a, b) => String(Math.max(Number(a), Number(b))))) : 0;
+      const productPrice = product.rawPrice ? Math.max(...product.rawPrice.split(',').map(Number)) : 0;
       const priceCondition = priceRange.length
         ? productPrice >= parseFloat(priceRange[0] as string) && productPrice <= parseFloat(priceRange[1] as string)
         : true;

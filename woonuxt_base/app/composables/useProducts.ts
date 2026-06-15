@@ -1,10 +1,9 @@
 import type { Product } from '#types/gql';
 
-let allProducts = [] as Product[];
-
 export function useProducts() {
   // Declare the state variables and the setter functions
   const products = useState<Product[]>('products');
+  const allProducts = useState<Product[]>('allProducts', () => []);
 
   /**
    * Sets the products state variable and the allProducts variable.
@@ -15,11 +14,11 @@ export function useProducts() {
     // to empty arrays to avoid errors in the UI.
     if (!Array.isArray(newProducts)) {
       products.value = [];
-      allProducts = [];
+      allProducts.value = [];
       return;
     }
     products.value = [...newProducts];
-    allProducts = JSON.parse(JSON.stringify(newProducts));
+    allProducts.value = [...newProducts];
   }
 
   // Named function for product filtering pipeline
@@ -48,13 +47,13 @@ export function useProducts() {
 
     // return all products if no filters are active
     if (!isFiltersActive.value && !isSearchActive.value && !isSortingActive.value) {
-      products.value = allProducts;
+      products.value = [...allProducts.value];
       return;
     }
 
     // otherwise, apply filter, search and sorting in that order
     try {
-      products.value = applyProductFilters(allProducts);
+      products.value = applyProductFilters(allProducts.value);
     } catch (error) {
       console.error(error);
     }

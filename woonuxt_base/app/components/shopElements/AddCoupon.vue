@@ -22,9 +22,9 @@ async function submitCoupon(): Promise<void> {
         v-model="couponCode"
         type="text"
         :placeholder="$t('shop.couponCode')"
-        class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-xs outline-hidden dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        class="w-full bg-gray-50 border border-gray-300 rounded-md shadow-inner outline-hidden px-4 py-2 text-base text-gray-900"
         required />
-      <Button :loading="isUpdatingCoupon" :disabled="couponCode === ''" type="submit" variant="primary" class="min-w-20">
+      <Button :loading="isUpdatingCoupon" :disabled="couponCode === '' || isUpdatingCoupon" type="submit" variant="primary" class="min-w-20">
         {{ $t('general.apply') }}
       </Button>
     </form>
@@ -35,7 +35,7 @@ async function submitCoupon(): Promise<void> {
       <div v-if="cart && cart.appliedCoupons" class="text-xs font-semibold uppercase flex flex-wrap gap-2">
         <div v-for="(coupon, index) in cart.appliedCoupons" :key="coupon?.code || index" class="flex flex-wrap mt-2 flex-2">
           <div v-if="coupon?.code" class="bg-primary/5 border-primary/10 border rounded-md flex text-primary leading-none p-1.5 gap-1 items-center">
-            <span v-html="coupon.code" />
+            <span v-html="coupon.code"></span>
             <Icon name="ion:close" class="rounded-full cursor-pointer hover:bg-primary hover:text-white" @click="removeCoupon(coupon.code)" />
           </div>
         </div>

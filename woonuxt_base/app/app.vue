@@ -6,6 +6,10 @@ const { siteName } = useAppConfig();
 const config = useRuntimeConfig();
 
 const primaryColor = computed(() => config.public.PRIMARY_COLOR || '#7f54b2');
+const safePrimaryColor = computed(() => {
+  const color = String(primaryColor.value).trim();
+  return /^#[0-9a-f]{6}$/i.test(color) || /^#[0-9a-f]{3}$/i.test(color) ? color : '#7f54b2';
+});
 
 const closeCartAndMenu = () => {
   toggleCart(false);
@@ -25,7 +29,7 @@ useHead({
   titleTemplate: `%s - ${siteName}`,
   style: [
     {
-      innerHTML: `:root { --color-primary: ${primaryColor.value}; }`,
+      innerHTML: `:root { --color-primary: ${safePrimaryColor.value}; }`,
     },
   ],
 });
@@ -47,7 +51,7 @@ useHead({
     <NuxtPage />
 
     <Transition name="fade">
-      <div v-if="isShowingCart || isShowingMobileMenu" class="bg-black opacity-25 inset-0 z-40 fixed" @click="closeCartAndMenu" />
+      <div v-if="isShowingCart || isShowingMobileMenu" class="bg-black opacity-25 inset-0 z-40 fixed" @click="closeCartAndMenu"></div>
     </Transition>
 
     <LazyAppFooter hydrate-on-visible />
@@ -59,8 +63,12 @@ useHead({
 
 html,
 body {
-  @apply bg-gray-100 dark:bg-[#18202f] text-gray-900 dark:text-gray-100;
+  @apply bg-gray-100  text-gray-900;
   scroll-behavior: smooth;
+}
+
+html {
+  scrollbar-gutter: stable both-edges;
 }
 
 img {
@@ -205,7 +213,7 @@ img.skeleton {
 
 input[type='checkbox'],
 input[type='radio'] {
-  @apply bg-white border rounded-lg cursor-pointer font-sans outline-hidden border-gray-300 w-full p-3 transition-all duration-150 appearance-none hover:border-primary dark:bg-gray-700 dark:border-gray-600;
+  @apply bg-white border rounded-lg cursor-pointer font-sans outline-hidden border-gray-300 w-full p-3 transition-all duration-150 appearance-none hover:border-primary;
 
   width: 1em;
   height: 1em;
@@ -257,12 +265,12 @@ input[type='radio']:after {
 input[type='checkbox']:checked:after,
 input[type='checkbox'] + label,
 input[type='radio'] + label {
-  @apply cursor-pointer text-gray-600 dark:text-gray-400 hover:text-primary;
+  @apply cursor-pointer text-gray-600  hover:text-primary;
 }
 
 input[type='checkbox']:checked + label,
 input[type='radio']:checked + label {
-  @apply text-gray-800 dark:text-white hover:text-primary-dark;
+  @apply text-gray-800  hover:text-primary-dark;
 }
 
 input[type='checkbox']:checked,

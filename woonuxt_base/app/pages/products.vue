@@ -6,11 +6,15 @@ const route = useRoute();
 const { storeSettings } = useAppConfig();
 const { isQueryEmpty } = useHelpers();
 
-const { data } = await useAsyncGql('getProducts');
-const allProducts = data.value?.products?.nodes as Product[];
-setProducts(allProducts);
+const { data, error, status } = await useAsyncGql('getProducts');
+const allProducts = computed<Product[]>(() => (data.value?.products?.nodes ?? []) as Product[]);
+const isLoading = computed<boolean>(() => status.value === 'idle' || status.value === 'pending');
+const hasError = computed<boolean>(() => Boolean(error.value));
+const hasProducts = computed<boolean>(() => allProducts.value.length > 0);
 
-const hasProducts = computed<boolean>(() => Array.isArray(allProducts) && allProducts.length > 0);
+watchEffect(() => {
+  setProducts(allProducts.value);
+});
 
 onMounted(() => {
   if (!isQueryEmpty.value) updateProductList();
@@ -31,17 +35,23 @@ useHead({
 </script>
 
 <template>
-  <div class="container flex items-start gap-16" v-if="hasProducts">
-    <Filters v-if="storeSettings.showFilters" />
-
-    <div class="w-full">
-      <div class="flex items-center justify-between w-full gap-4 mt-8 md:gap-8">
-        <ProductResultCount />
-        <OrderByDropdown class="hidden md:inline-flex" v-if="storeSettings.showOrderByDropdown" />
-        <ShowFilterTrigger v-if="storeSettings.showFilters" class="md:hidden" />
-      </div>
-      <ProductGrid />
+  <main>
+    <div v-if="isLoading" class="container flex items-center justify-center min-h-96">
+      <LoadingIcon size="32" stroke="3" />
     </div>
-  </div>
-  <NoProductsFound v-else>No products found. Please try adjusting your filters or check back later.</NoProductsFound>
+    <div v-else-if="hasProducts" class="container flex items-start gap-16">
+      <Filters v-if="storeSettings.showFilters" />
+
+      <div class="w-full">
+        <div class="flex items-center justify-between w-full gap-4 mt-8 md:gap-8">
+          <ProductResultCount />
+          <OrderByDropdown v-if="storeSettings.showOrderByDropdown" class="hidden md:inline-flex" />
+          <ShowFilterTrigger v-if="storeSettings.showFilters" class="md:hidden" />
+        </div>
+        <ProductGrid />
+      </div>
+    </div>
+    <NoProductsFound v-else-if="hasError">Products could not be loaded. Please refresh or try again in a moment.</NoProductsFound>
+    <NoProductsFound v-else>No products found. Please try adjusting your filters or check back later.</NoProductsFound>
+  </main>
 </template>

@@ -44,7 +44,8 @@
     "contactUs": "Nous contacter",
     "shippingReturns": "Expédition et Retours",
     "privacyPolicy": "Politique de Confidentialité",
-    "termsConditions": "Conditions Générales"
+    "termsConditions": "Conditions Générales",
+    "updating": "Mise à jour"
   },
   "account": {
     "changePassword": "Modifier le mot de passe",
@@ -109,6 +110,7 @@
     "close": "Fermer",
     "rateReview": "Comment évaluez-vous votre expérience avec ce produit ? Nous visons une expérience 5 étoiles",
     "rateContent": "Comment s'est passée votre expérience ?",
+    "rateName": "Votre nom",
     "rateEmail": "Votre e-mail",
     "submit": "Valider",
     "order": "Commande | Commandes",
@@ -126,6 +128,7 @@
     "cartEmpty": "Votre panier est vide.",
     "addProductsInYourCart": "Veuillez ajouter des produits à votre panier.",
     "browseOurProducts": "Parcourez nos produits",
+    "viewCart": "Voir le panier",
     "checkout": "Commander",
     "checkoutButton": "Commander",
     "discount": "Remise",

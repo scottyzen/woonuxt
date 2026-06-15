@@ -1,4 +1,5 @@
 import type { CountriesEnum, GeoLocation } from '#types/gql';
+
 import { countries } from '#constants';
 
 export const useCountry = () => {
@@ -22,7 +23,8 @@ export const useCountry = () => {
     isLoadingAllowedCountries.value = true;
 
     try {
-      const response = await GqlGetAllowedCountries();
+      const { getAllowedCountries } = useWooGraphQL();
+      const response = await getAllowedCountries();
       if (response.allowedCountries) {
         // Filter out null values and store the result
         allowedCountries.value = response.allowedCountries.filter((country): country is CountriesEnum => country !== null);
@@ -46,7 +48,8 @@ export const useCountry = () => {
     isLoadingCountryStates.value[countryCode] = true;
 
     try {
-      const { countryStates } = await GqlGetStates({ country: countryCode });
+      const { getStates } = useWooGraphQL();
+      const { countryStates } = await getStates({ country: countryCode });
       if (countryStates) {
         countryStatesDict.value[countryCode] = countryStates as GeoLocation[];
       }

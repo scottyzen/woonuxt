@@ -22,7 +22,7 @@ fragment VariableProduct on VariableProduct {
     title
     databaseId
     cartSourceUrl: sourceUrl(size: THUMBNAIL)
-    producCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
+    productCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
   }
   averageRating
   reviewCount

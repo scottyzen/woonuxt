@@ -1,6 +1,6 @@
 mutation Checkout(
   $billing: CustomerAddressInput = {}
-  $metaData: [MetaDataInput] = { key: "", value: "" }
+  $metaData: [MetaDataInput] = []
   $paymentMethod: String = "stripe"
   $shipping: CustomerAddressInput = {}
   $customerNote: String = ""
@@ -8,6 +8,7 @@ mutation Checkout(
   $account: CreateAccountInput = { username: "", password: "" }
   $transactionId: String = ""
   $isPaid: Boolean = false
+  $shippingMethod: [String] = []
 ) {
   checkout(
     input: {
@@ -15,6 +16,7 @@ mutation Checkout(
       billing: $billing
       metaData: $metaData
       shipping: $shipping
+      shippingMethod: $shippingMethod
       customerNote: $customerNote
       shipToDifferentAddress: $shipToDifferentAddress
       account: $account

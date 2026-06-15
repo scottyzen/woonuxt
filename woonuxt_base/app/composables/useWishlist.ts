@@ -12,8 +12,9 @@ export function useWishlist() {
    * @example addToWishlist({ databaseId: 123, name: 'My Product' })
    */
   function addToWishlist(item: Product): void {
+    if (!item?.databaseId || isInList(item.databaseId)) return;
     theList.value.push(item);
-    localStorage.setItem('wishlist', JSON.stringify(theList.value));
+    if (import.meta.client) localStorage.setItem('wishlist', JSON.stringify(theList.value));
   }
 
   /**
@@ -23,7 +24,7 @@ export function useWishlist() {
    */
   function removeFromWishlist(databaseId: number): void {
     theList.value = theList.value.filter((item) => item.databaseId !== databaseId);
-    localStorage.setItem('wishlist', JSON.stringify(theList.value));
+    if (import.meta.client) localStorage.setItem('wishlist', JSON.stringify(theList.value));
   }
 
   /**
@@ -52,7 +53,7 @@ export function useWishlist() {
    */
   function clearWishlist(): void {
     theList.value = [];
-    localStorage.removeItem('wishlist');
+    if (import.meta.client) localStorage.removeItem('wishlist');
   }
 
   onMounted(() => {

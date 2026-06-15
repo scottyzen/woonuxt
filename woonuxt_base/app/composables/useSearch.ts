@@ -15,13 +15,11 @@ export function useSearching() {
     return route.query.search as string;
   }
 
-  function setSearchQuery(search: string): void {
+  async function setSearchQuery(search: string): Promise<void> {
     const { updateProductList } = useProducts();
     searchQuery.value = search;
-    router.push({ query: { ...route.query, search: search || undefined } });
-    setTimeout(() => {
-      updateProductList();
-    }, 50);
+    await router.push({ query: { ...route.query, search: search || undefined } });
+    await updateProductList();
   }
 
   function clearSearchQuery(): void {

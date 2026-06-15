@@ -11,7 +11,7 @@ export function useHelpers() {
   const productsPerPage: number = runtimeConfig.public?.PRODUCTS_PER_PAGE || 24;
   const wooNuxtSEO = Array.isArray(runtimeConfig.public?.WOO_NUXT_SEO) ? runtimeConfig.public?.WOO_NUXT_SEO : [];
   const frontEndUrl = runtimeConfig.public?.FRONT_END_URL?.replace(/\/$/, '') || requestOrigin;
-  const isDev: boolean = process.env.NODE_ENV === 'development';
+  const isDev: boolean = import.meta.dev;
   const FALLBACK_IMG = '/images/placeholder.jpg';
 
   /**
@@ -27,10 +27,16 @@ export function useHelpers() {
   function clearAllCookies(): void {
     if (!import.meta.client) return;
     const cookies = document.cookie.split(';');
+    const hostname = window.location.hostname;
+    const domain = hostname.includes('.') ? '.' + hostname.split('.').slice(-2).join('.') : hostname;
+    const past = 'Thu, 01 Jan 1970 00:00:00 GMT';
     for (const cookie of cookies) {
       const eqPos = cookie.indexOf('=');
-      const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
-      document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      const name = (eqPos > -1 ? cookie.substring(0, eqPos) : cookie).trim();
+      // Delete the cookie at every path/domain combination that could have set it.
+      document.cookie = `${name}=;expires=${past};path=/`;
+      document.cookie = `${name}=;expires=${past};path=/;domain=${hostname}`;
+      document.cookie = `${name}=;expires=${past};path=/;domain=${domain}`;
     }
   }
 
@@ -81,8 +87,7 @@ export function useHelpers() {
    */
   function toggleBodyClass(className: string): void {
     if (!import.meta.client) return;
-    const body = document.querySelector('body');
-    body?.classList.contains(className) ? body.classList.remove(className) : body?.classList.add(className);
+    document.body.classList.toggle(className);
   }
 
   /**
@@ -106,10 +111,26 @@ export function useHelpers() {
    * @param {string} price - The price string to format.
    * @returns {string} The formatted price string.
    */
-  const formatPrice = (price: string): string => {
-    const runtimeConfig = useRuntimeConfig();
+  const formatPrice = (price: string | number | null | undefined): string => {
     const currencyCode = runtimeConfig.public?.CURRENCY_CODE || 'USD';
-    return parseFloat(price).toLocaleString('en-US', { style: 'currency', currency: currencyCode });
+    if (price === null || price === undefined) return '';
+
+    if (typeof price === 'number') {
+      if (!Number.isFinite(price)) return '';
+      return price.toLocaleString('en-US', { style: 'currency', currency: currencyCode });
+    }
+
+    const normalized = stripHtml(price)
+      .replace(/[^0-9,.-]/g, '')
+      .trim();
+    const decimalNormalized = normalized.includes(',') && !normalized.includes('.') ? normalized.replace(',', '.') : normalized.replace(/,/g, '');
+    const parsed = Number.parseFloat(decimalNormalized);
+
+    if (!Number.isFinite(parsed)) {
+      return price;
+    }
+
+    return parsed.toLocaleString('en-US', { style: 'currency', currency: currencyCode });
   };
 
   /**
@@ -135,7 +156,7 @@ export function useHelpers() {
    * @param {number} delay - The delay in milliseconds.
    * @returns {Function} The debounced function.
    */
-  const debounce = (func: Function, delay: number = 100) => {
+  const debounce = (func: (...args: unknown[]) => unknown, delay: number = 100) => {
     let inDebounce: NodeJS.Timeout;
     return function (this: any, ...args: any[]) {
       clearTimeout(inDebounce);
@@ -144,22 +165,131 @@ export function useHelpers() {
   };
 
   type GqlErrorMessage = { message?: string | null };
-  type GqlErrorLike = { gqlErrors?: GqlErrorMessage[] };
+  type GqlErrorLike = {
+    gqlErrors?: GqlErrorMessage[];
+    message?: string | null;
+    response?: {
+      status?: number;
+      statusCode?: number;
+      errors?: GqlErrorMessage[];
+      data?: {
+        errors?: GqlErrorMessage[];
+        extensions?: {
+          debug?: Array<{ message?: string | null }>;
+        };
+      };
+    };
+    status?: number;
+    statusCode?: number;
+    cause?: {
+      response?: {
+        status?: number;
+        statusCode?: number;
+        data?: {
+          errors?: GqlErrorMessage[];
+          extensions?: {
+            debug?: Array<{ message?: string | null }>;
+          };
+        };
+      };
+    };
+  };
 
   const isGqlErrorLike = (value: unknown): value is GqlErrorLike => {
-    return typeof value === 'object' && value !== null && 'gqlErrors' in value;
+    return typeof value === 'object' && value !== null;
+  };
+
+  type ErrorContext = {
+    message?: string;
+    messages: string[];
+    status?: number;
+    isAuthError: boolean;
+  };
+
+  const hasGraphqlResponseData = (error: GqlErrorLike): boolean => {
+    const responseData =
+      (error.response as any)?.data?.data ??
+      (error.response as any)?.data ??
+      (error.cause?.response as any)?.data?.data ??
+      (error.cause?.response as any)?.data;
+
+    return (
+      !!responseData &&
+      typeof responseData === 'object' &&
+      ['cart', 'customer', 'viewer', 'orders', 'downloadableItems', 'paymentGateways', 'loginClients'].some((key) =>
+        Object.prototype.hasOwnProperty.call(responseData, key),
+      )
+    );
+  };
+
+  const getErrorContext = (error: unknown): ErrorContext => {
+    if (!isGqlErrorLike(error)) {
+      return {
+        message: undefined,
+        messages: [],
+        status: undefined,
+        isAuthError: false,
+      };
+    }
+
+    const messages: string[] = [];
+    const pushMessage = (value?: string | null) => {
+      if (!value) return;
+      const trimmed = value.trim();
+      if (!trimmed) return;
+      if (!messages.includes(trimmed)) messages.push(trimmed);
+    };
+
+    error.gqlErrors?.forEach((gqlError) => pushMessage(gqlError?.message));
+    error.response?.errors?.forEach((gqlError) => pushMessage(gqlError?.message));
+    error.response?.data?.errors?.forEach((gqlError) => pushMessage(gqlError?.message));
+    error.response?.data?.extensions?.debug?.forEach((debug) => pushMessage(debug?.message));
+    error.cause?.response?.data?.errors?.forEach((gqlError) => pushMessage(gqlError?.message));
+    error.cause?.response?.data?.extensions?.debug?.forEach((debug) => pushMessage(debug?.message));
+    pushMessage(error.message);
+
+    const status =
+      error.response?.status ??
+      error.response?.statusCode ??
+      error.status ??
+      error.statusCode ??
+      error.cause?.response?.status ??
+      error.cause?.response?.statusCode;
+    const lowerMessages = messages.map((msg) => msg.toLowerCase());
+    const authIndicators = [
+      'invalid session token',
+      'expired token',
+      'invalid-secret-key',
+      'forbidden',
+      'not authorized',
+      'not authenticated',
+      'authorization',
+      'authentication',
+      'jwt',
+      'the iss do not match with this server',
+    ];
+    const hasExplicitAuthIndicator = lowerMessages.some((msg) => authIndicators.some((indicator) => msg.includes(indicator.toLowerCase())));
+
+    const isAuthError = status === 401 || (status === 403 && (!hasGraphqlResponseData(error) || hasExplicitAuthIndicator)) || hasExplicitAuthIndicator;
+
+    return {
+      message: messages[0],
+      messages,
+      status,
+      isAuthError,
+    };
   };
 
   /**
-   * Extract GraphQL error message and optionally log it
+   * Extract GraphQL error message
    * @param error - GraphQL error object
    * @returns The error message or undefined
    */
   const getErrorMessage = (error: unknown): string | undefined => {
-    const errorMessage = isGqlErrorLike(error) ? (error.gqlErrors?.[0]?.message ?? undefined) : undefined;
+    const { message: errorMessage } = getErrorContext(error);
 
     // Check for server errors that require clearing cookies and reloading
-    const serverErrors = ['The iss do not match with this server', 'Invalid session token', 'expired token', 'invalid-secret-key'];
+    const serverErrors = ['The iss do not match with this server', 'invalid-secret-key'];
     const shouldClearAndReload = serverErrors.some((serverError) => errorMessage?.toLowerCase().includes(serverError.toLowerCase()));
 
     if (shouldClearAndReload && import.meta.client) {
@@ -180,13 +310,12 @@ export function useHelpers() {
     const debugMessages = response?.extensions?.debug;
     if (!Array.isArray(debugMessages)) return;
 
-    const serverErrors = ['invalid-secret-key', 'expired token', 'Invalid session token'];
+    const serverErrors = ['invalid-secret-key'];
     const hasAuthError = debugMessages.some((debug: any) =>
       serverErrors.some((serverError) => debug?.message?.toLowerCase().includes(serverError.toLowerCase())),
     );
 
     if (hasAuthError) {
-      console.warn('Authentication error detected in GraphQL response extensions. Clearing cookies and reloading...');
       clearAllCookies();
       clearAllLocalStorage();
       window.location.reload();
@@ -228,6 +357,7 @@ export function useHelpers() {
     scrollToTop,
     stripHtml,
     debounce,
+    getErrorContext,
     getErrorMessage,
     getDomain,
   };
