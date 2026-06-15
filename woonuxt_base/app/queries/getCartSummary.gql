@@ -7,6 +7,6 @@ query getCartSummary {
     }
   }
   viewer {
-    ...ViewerSummary
+    ...Viewer
   }
 }
