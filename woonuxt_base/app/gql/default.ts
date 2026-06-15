@@ -6,7 +6,7 @@
 type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 /** Internal type. DO NOT USE DIRECTLY. */
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
-import type { GraphQLClient, RequestOptions } from 'graphql-request';
+import { type GraphQLClient, type RequestOptions } from 'graphql-request';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -20530,8 +20530,6 @@ export type RootMutation = {
   restoreReview?: Maybe<RestoreReviewPayload>;
   /** Revokes the user secret and invalidates the JWT authentication token. */
   revokeUserSecret?: Maybe<RevokeUserSecretPayload>;
-  /** The sendEmail mutation */
-  sendEmail?: Maybe<SendEmailPayload>;
   /** Send password reset email to user */
   sendPasswordResetEmail?: Maybe<SendPasswordResetEmailPayload>;
   /** The setDefaultPaymentMethod mutation */
@@ -21146,12 +21144,6 @@ export type RootMutationRestoreReviewArgs = {
 /** The root mutation */
 export type RootMutationRevokeUserSecretArgs = {
   input: RevokeUserSecretInput;
-};
-
-
-/** The root mutation */
-export type RootMutationSendEmailArgs = {
-  input: SendEmailInput;
 };
 
 
@@ -25227,39 +25219,6 @@ export enum ScriptLoadingStrategyEnum {
   /** Download script in parallel but defer execution until page is fully parsed */
   Defer = 'DEFER'
 }
-
-/** Input for the sendEmail mutation. */
-export type SendEmailInput = {
-  /** Body of email */
-  body?: InputMaybe<Scalars['String']['input']>;
-  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
-  clientMutationId?: InputMaybe<Scalars['String']['input']>;
-  /** Who to send the email from */
-  from?: InputMaybe<Scalars['String']['input']>;
-  /** Reply to address */
-  replyTo?: InputMaybe<Scalars['String']['input']>;
-  /** Subject of email */
-  subject?: InputMaybe<Scalars['String']['input']>;
-  /** Who to send the email to */
-  to?: InputMaybe<Scalars['String']['input']>;
-};
-
-/** The payload for the sendEmail mutation. */
-export type SendEmailPayload = {
-  __typename?: 'SendEmailPayload';
-  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
-  clientMutationId?: Maybe<Scalars['String']['output']>;
-  /** Message */
-  message?: Maybe<Scalars['String']['output']>;
-  /** Origin that sent the request */
-  origin?: Maybe<Scalars['String']['output']>;
-  /** reply To address used */
-  replyTo?: Maybe<Scalars['String']['output']>;
-  /** Was the email sent */
-  sent?: Maybe<Scalars['Boolean']['output']>;
-  /** Who the email got sent to */
-  to?: Maybe<Scalars['String']['output']>;
-};
 
 /** Input for the sendPasswordResetEmail mutation. */
 export type SendPasswordResetEmailInput = {
@@ -31668,6 +31627,9 @@ export type WoonuxtOptionsPayPalSettings = {
 
 export type WoonuxtOptionsStripeSettings = {
   __typename?: 'WoonuxtOptionsStripeSettings';
+  account_id?: Maybe<Scalars['String']['output']>;
+  active_publishable_key?: Maybe<Scalars['String']['output']>;
+  apple_pay_merchant_identifier?: Maybe<Scalars['String']['output']>;
   enabled?: Maybe<Scalars['String']['output']>;
   publishable_key?: Maybe<Scalars['String']['output']>;
   test_publishable_key?: Maybe<Scalars['String']['output']>;
@@ -32589,6 +32551,8 @@ export type VariationAttributeFragment = { name: string | null, attributeId: num
 
 export type ViewerFragment = { lastName: string | null, email: string | null, databaseId: number, id: string, firstName: string | null, username: string | null, nicename: string | null, wooSessionToken: string | null, stripeCustomerId: string | null, savedPaymentMethods: Array<{ id: number | null, token: string | null, customerId: string | null, last4: string | null, expiryMonth: string | null, expiryYear: string | null, cardType: string | null, isDefault: boolean | null } | null> | null, avatar: { url: string | null } | null };
 
+export type ViewerSummaryFragment = { id: string, databaseId: number, firstName: string | null, lastName: string | null, username: string | null, nicename: string | null, email: string | null, wooSessionToken: string | null, avatar: { url: string | null } | null };
+
 export type GetAllTermsQueryVariables = Exact<{
   hideEmpty?: boolean | null | undefined;
   taxonomies: Array<TaxonomyEnum | null | undefined> | TaxonomyEnum;
@@ -32626,6 +32590,11 @@ export type GetCartQuery = { cart: { total: string | null, subtotal: string | nu
             | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, averageRating: number | null, weight: string | null, length: string | null, width: string | null, height: string | null, reviewCount: number | null, virtual: boolean | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
             | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, weight: string | null, length: string | null, width: string | null, height: string | null, averageRating: number | null, reviewCount: number | null, totalSales: number | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, defaultAttributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null, variations: { nodes: Array<{ name: string | null, databaseId: number, price: string | null, regularPrice: string | null, salePrice: string | null, slug: string | null, stockQuantity: number | null, stockStatus: StockStatusEnum | null, hasAttributes: boolean | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, attributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null }> } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
            } | null, variation: { node: { name: string | null, slug: string | null, price: string | null, stockStatus: StockStatusEnum | null, regularPrice: string | null, salePrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null } } | null }> } | null } | null, customer: { lastName: string | null, email: string | null, firstName: string | null, username: string | null, databaseId: number | null, sessionToken: string | null, isPayingCustomer: boolean | null, date: string | null, billing: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null, shipping: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null } | null, viewer: { lastName: string | null, email: string | null, databaseId: number, id: string, firstName: string | null, username: string | null, nicename: string | null, wooSessionToken: string | null, stripeCustomerId: string | null, savedPaymentMethods: Array<{ id: number | null, token: string | null, customerId: string | null, last4: string | null, expiryMonth: string | null, expiryYear: string | null, cardType: string | null, isDefault: boolean | null } | null> | null, avatar: { url: string | null } | null } | null, paymentGateways: { nodes: Array<{ title: string | null, id: string, description: string | null, icon: string | null }> } | null, loginClients: Array<{ name: string | null, provider: LoginProviderEnum | null, isEnabled: boolean | null, authorizationUrl: string | null } | null> | null };
+
+export type GetCartSummaryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCartSummaryQuery = { cart: { isEmpty: boolean | null, contents: { itemCount: number | null, productCount: number | null } | null } | null, viewer: { id: string, databaseId: number, firstName: string | null, lastName: string | null, username: string | null, nicename: string | null, email: string | null, wooSessionToken: string | null, avatar: { url: string | null } | null } | null };
 
 export type GetDownloadsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -33646,6 +33615,21 @@ export const ViewerFragmentDoc = gql`
   }
 }
     `;
+export const ViewerSummaryFragmentDoc = gql`
+    fragment ViewerSummary on User {
+  id
+  databaseId
+  firstName
+  lastName
+  username
+  nicename
+  email
+  wooSessionToken
+  avatar {
+    url
+  }
+}
+    `;
 export const ProductAttributeFragmentDoc = gql`
     fragment ProductAttribute on ProductAttribute {
   variation
@@ -33805,6 +33789,20 @@ ${CustomerFragmentDoc}
 ${ViewerFragmentDoc}
 ${PaymentGatewayFragmentDoc}
 ${LoginClientFragmentDoc}`;
+export const GetCartSummaryDocument = gql`
+    query getCartSummary {
+  cart {
+    isEmpty
+    contents(first: 1) {
+      itemCount
+      productCount
+    }
+  }
+  viewer {
+    ...ViewerSummary
+  }
+}
+    ${ViewerSummaryFragmentDoc}`;
 export const GetDownloadsDocument = gql`
     query getDownloads {
   customer {
@@ -34122,6 +34120,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     getCart(variables?: GetCartQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCartQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetCartQuery>({ document: GetCartDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'getCart', 'query', variables);
+    },
+    getCartSummary(variables?: GetCartSummaryQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCartSummaryQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCartSummaryQuery>({ document: GetCartSummaryDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'getCartSummary', 'query', variables);
     },
     getDownloads(variables?: GetDownloadsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetDownloadsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetDownloadsQuery>({ document: GetDownloadsDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'getDownloads', 'query', variables);
