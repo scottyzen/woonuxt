@@ -1,0 +1,12 @@
+query getCartSummary {
+  cart {
+    isEmpty
+    contents(first: 1) {
+      itemCount
+      productCount
+    }
+  }
+  viewer {
+    ...ViewerSummary
+  }
+}

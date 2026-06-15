@@ -46,6 +46,18 @@ Platform notes:
 - Vercel: uses Nuxt/Nitro ISR route rules directly.
 - Netlify: use server build mode (`nuxt build`) so route rules can run on the serverless/edge runtime. Static generate mode (`nuxt generate`) bypasses ISR.
 
+## Session Init Performance
+
+WooNuxt avoids loading the full WooCommerce session for every visitor on first paint. This keeps cached catalog pages fast, reduces unnecessary WPGraphQL traffic, and still gives returning customers a responsive account/cart header.
+
+The default flow is:
+
+- Anonymous first visit: no backend session/cart call is made until the visitor interacts with the page.
+- Returning or logged-in user: WooNuxt detects existing auth/session cookies and makes a small immediate `getCartSummary` request so the avatar and cart badge can appear quickly.
+- Full cart accuracy: the full `getCart` request is loaded only when the customer needs it, such as opening the cart drawer, visiting cart/checkout/account routes, or changing cart contents.
+
+This is controlled by `storeSettings.initStoreOnUserActionToReduceServerLoad` in `woonuxt_base/app/app.config.ts`. Keep it enabled for high-traffic storefronts. Disable it if your store prefers immediate full cart hydration over reducing backend calls.
+
 ## How to customize & extend WooNuxt 🎨
 
 WooNuxt now uses the Nuxt layers feature to make it easy to customize any part of WooNuxt just like you would with a WordPress theme with its child theme.

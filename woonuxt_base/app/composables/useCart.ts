@@ -1,8 +1,9 @@
 import type { AddToCartInput, ApiResponse, Cart, Customer, PaymentGateways, ProductDetail, SimpleProduct, Variation } from '#types/gql';
 
-import type { GetCartQuery } from '#gql/default';
+import type { GetCartQuery, GetCartSummaryQuery } from '#gql/default';
 
 let cartMutationQueue: Promise<void> = Promise.resolve();
+let refreshCartInFlight: Promise<boolean> | null = null;
 
 /**
  * @name useCart
@@ -20,6 +21,7 @@ export function useCart() {
   const optimisticPendingMutations = useState<number>('optimisticPendingMutations', () => 0);
   const optimisticServerCart = useState<Cart | null>('optimisticServerCart', () => null);
   const optimisticHadError = useState<boolean>('optimisticHadError', () => false);
+  const cartItemCount = useState<number>('cartItemCount', () => 0);
   const paymentGateways = useState<PaymentGateways | null>('paymentGateways', () => null);
   const { getDomain, getErrorContext, getErrorMessage } = useHelpers();
   const gql = useWooGraphQL();
@@ -216,6 +218,7 @@ export function useCart() {
   };
 
   type CartQueryPayload = Partial<Pick<GetCartQuery, 'cart' | 'customer' | 'viewer' | 'paymentGateways' | 'loginClients'>>;
+  type CartSummaryQueryPayload = Partial<Pick<GetCartSummaryQuery, 'cart' | 'viewer'>>;
 
   const syncWooSession = (token?: string | null): void => {
     if (!token) return;
@@ -265,15 +268,32 @@ export function useCart() {
     return await gql.getCart(undefined, requestHeaders);
   };
 
-  /** Refesh the cart from the server
-   * @returns {Promise<boolean>} - A promise that resolves
-   * to true if the cart was successfully refreshed
-   */
-  async function refreshCart(): Promise<boolean> {
+  const hasAuthCookies = (): boolean => {
+    const authToken = useCookie<string | null>('auth-token', { path: '/' });
+    const refreshToken = useCookie<string | null>('auth-refresh-token', { path: '/' });
+    return !!(authToken.value || refreshToken.value);
+  };
+
+  const fetchCartSummarySnapshot = async (): Promise<CartSummaryQueryPayload> => {
+    let requestHeaders: Record<string, string> | undefined;
+    if (hasAuthCookies()) {
+      const { getAuthTokenForRequest } = useAuthTokens();
+      const authToken = await getAuthTokenForRequest();
+      requestHeaders = authToken ? { Authorization: `Bearer ${authToken}` } : undefined;
+    }
+
+    return await gql.getCartSummary(undefined, requestHeaders);
+  };
+
+  async function refreshCartSummary(): Promise<boolean> {
     try {
-      const payload = await fetchCartSnapshot();
-      applyCartSnapshot(payload as CartQueryPayload);
-      return true; // Cart was successfully refreshed
+      const payload = await fetchCartSummarySnapshot();
+      const { updateViewer } = useAuth();
+
+      cartItemCount.value = payload.cart?.contents?.itemCount ?? 0;
+      updateViewer(payload.viewer ?? null);
+      if (payload.viewer?.wooSessionToken) syncWooSession(payload.viewer.wooSessionToken);
+      return true;
     } catch (error: unknown) {
       const recoveredPayload = extractCartPayloadFromError(error);
       if (recoveredPayload) {
@@ -282,62 +302,102 @@ export function useCart() {
       }
 
       const { isAuthError } = getErrorContext(error);
+      if (!isAuthError) getErrorMessage(error);
+      return false;
+    }
+  }
 
-      if (isAuthError) {
-        const { refreshAuthToken, clearActiveAuthToken } = useAuthTokens();
-        const refreshed = await refreshAuthToken(true);
-        if (refreshed) {
-          try {
-            const retryPayload = await fetchCartSnapshot();
-            applyCartSnapshot(retryPayload as CartQueryPayload);
-            return true;
-          } catch {
-            /* ignore retry error */
+  /** Refesh the cart from the server
+   * @returns {Promise<boolean>} - A promise that resolves
+   * to true if the cart was successfully refreshed
+   */
+  async function refreshCart(): Promise<boolean> {
+    if (refreshCartInFlight) return refreshCartInFlight;
+
+    refreshCartInFlight = (async () => {
+      try {
+        const payload = await fetchCartSnapshot();
+        applyCartSnapshot(payload as CartQueryPayload);
+        return true;
+      } catch (error: unknown) {
+        const recoveredPayload = extractCartPayloadFromError(error);
+        if (recoveredPayload) {
+          applyCartSnapshot(recoveredPayload);
+          return true;
+        }
+
+        const { isAuthError } = getErrorContext(error);
+
+        if (isAuthError) {
+          const { refreshAuthToken, clearActiveAuthToken } = useAuthTokens();
+          const refreshed = await refreshAuthToken(true);
+          if (refreshed) {
+            try {
+              const retryPayload = await fetchCartSnapshot();
+              applyCartSnapshot(retryPayload as CartQueryPayload);
+              return true;
+            } catch {
+              /* ignore retry error */
+            }
+          }
+
+          clearActiveAuthToken();
+          useGqlHeaders({ Authorization: '' });
+
+          const { updateCustomer, updateViewer } = useAuth();
+          updateViewer(null);
+
+          const sessionCookie = import.meta.client
+            ? useCookie<string | null>('woocommerce-session', { domain: getDomain(window.location.href), path: '/' }).value ||
+              useCookie<string | null>('woocommerce-session', { path: '/' }).value
+            : null;
+
+          if (!sessionCookie) {
+            updateCustomer({ billing: {}, shipping: {} } as Customer);
           }
         }
 
-        clearActiveAuthToken();
-        useGqlHeaders({ Authorization: '' });
-
-        const { updateCustomer, updateViewer } = useAuth();
-        updateViewer(null);
-
-        const sessionCookie = import.meta.client
-          ? useCookie<string | null>('woocommerce-session', { domain: getDomain(window.location.href), path: '/' }).value ||
-            useCookie<string | null>('woocommerce-session', { path: '/' }).value
-          : null;
-
-        if (!sessionCookie) {
-          updateCustomer({ billing: {}, shipping: {} } as Customer);
+        if (!isAuthError) {
+          getErrorMessage(error);
         }
+        resetInitialState();
+        return false;
+      } finally {
+        isUpdatingCart.value = false;
+        refreshCartInFlight = null;
       }
+    })();
 
-      if (!isAuthError) {
-        getErrorMessage(error);
-      }
-      resetInitialState();
-      return false; // Cart was not successfully refreshed
-    } finally {
-      isUpdatingCart.value = false;
-    }
+    return refreshCartInFlight;
   }
 
   function resetInitialState() {
     cart.value = null;
+    cartItemCount.value = 0;
     paymentGateways.value = null;
   }
 
   function updateCart(payload?: Cart | null): void {
     cart.value = payload || null;
+    cartItemCount.value = payload?.contents?.itemCount ?? 0;
   }
 
   function updatePaymentGateways(payload: PaymentGateways): void {
     paymentGateways.value = payload;
   }
 
+  /** Fetches the full cart from the server only when it is not already loaded. */
+  function refreshCartIfNeeded(): void {
+    if (cart.value || isUpdatingCart.value) return;
+    isUpdatingCart.value = true;
+    void refreshCart();
+  }
+
   // toggle the cart visibility
   function toggleCart(state: boolean | undefined = undefined): void {
-    isShowingCart.value = state ?? !isShowingCart.value;
+    const nextState = state ?? !isShowingCart.value;
+    isShowingCart.value = nextState;
+    if (nextState) refreshCartIfNeeded();
   }
 
   // add an item to the cart
@@ -496,6 +556,7 @@ export function useCart() {
 
   // Stop the loading spinner when the cart is updated
   watch(cart, () => {
+    cartItemCount.value = cart.value?.contents?.itemCount ?? 0;
     if (!isUpdatingCart.value) return;
     isUpdatingCart.value = false;
   });
@@ -520,11 +581,14 @@ export function useCart() {
     isAddingToCart,
     isUpdatingCoupon,
     optimisticPendingMutations,
+    cartItemCount,
     paymentGateways,
     isBillingAddressEnabled,
     isOptimisticCartMode,
     updateCart,
+    refreshCartSummary,
     refreshCart,
+    refreshCartIfNeeded,
     toggleCart,
     addToCart,
     removeItem,
