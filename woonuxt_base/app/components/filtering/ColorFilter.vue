@@ -9,19 +9,9 @@ const selectedTerms = ref(getFilter(attribute.slug) || []);
 const filterTitle = ref(attribute.label || attribute.slug);
 const isOpen = ref(attribute.openByDefault);
 
-const isValidColorValue = (value?: string) => {
+const swatchStyle = (value?: string) => {
   const color = value?.trim();
-  if (!color) return false;
-
-  if (import.meta.client && window.CSS) {
-    return CSS.supports('color', color);
-  }
-
-  return /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(color);
-};
-
-const swatchStyle = (color?: string) => {
-  return isValidColorValue(color) ? { '--color': color } : {};
+  return color ? { '--color': color } : {};
 };
 
 watch(isFiltersActive, () => {
