@@ -23,6 +23,7 @@ export default defineAppConfig({
     showMoveToWishlist: true,
     hideBillingAddressForVirtualProducts: false,
     initStoreOnUserActionToReduceServerLoad: true,
+    productGalleryThumbnailsPosition: 'bottom', // 'bottom' or 'left'
     saleBadge: 'percent', // 'percent', 'onSale' or 'hidden'
     socialLoginsDisplay: 'buttons', // 'buttons' or 'icons'
   },
