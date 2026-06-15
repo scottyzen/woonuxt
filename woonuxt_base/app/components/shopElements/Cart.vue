@@ -66,7 +66,7 @@ const { cart, toggleCart, isCartMutating } = useCart();
       </div>
     </ClientOnly>
     <!-- Cart Loading Overlay -->
-    <div v-if="isCartMutating" class="absolute inset-0 flex items-center justify-center bg-white/25">
+    <div v-if="cart && isCartMutating" class="absolute inset-0 flex items-center justify-center bg-white/25">
       <LoadingIcon />
     </div>
   </div>
