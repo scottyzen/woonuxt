@@ -32,7 +32,7 @@ export function useFiltering() {
    * @example Just like the example above, but in reverse. setFilter('pa_color', ['green', 'blue'])
    */
   async function setFilter(filterName: string, filterValue: string[]): Promise<void> {
-    let newFilterQuery = filterQuery.value || '';
+    let newFilterQuery: string;
 
     // If there are filters and filterName is not one of them, add the filter query
     if (!filterQuery.value?.includes(filterName)) {

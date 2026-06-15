@@ -200,7 +200,7 @@ export const registerHook = <T extends HookName>(options: {
 
   // Auto-detect source from stack trace in dev mode
   let source = options.source;
-  if (!source && process.dev) {
+  if (!source && import.meta.dev) {
     try {
       const stack = new Error().stack;
       const match = stack?.match(/at.*\((.*?):\d+:\d+\)/);
@@ -209,7 +209,7 @@ export const registerHook = <T extends HookName>(options: {
         const fileName = filePath.split('/').pop();
         source = fileName || 'unknown';
       }
-    } catch (e) {
+    } catch {
       // Ignore errors in source detection
     }
   }
