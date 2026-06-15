@@ -78,27 +78,136 @@ WooNuxt now includes a **Location Hooks** system that provides WordPress-like ex
 - ✅ **Type-safe** - Full TypeScript support
 - ✅ **Layer Compatible** - Works seamlessly with Nuxt layers
 
-**Available Hook Locations** (14 outlets):
+**Available Hook Locations:**
 
-- Layout (header/footer)
-- Product pages (title, price, gallery, tabs)
-- Cart (line items, totals)
-- Checkout (customer, shipping, payment, review)
+These outlets are currently rendered by WooNuxt:
 
-**Quick Example:**
+| Hook name | Context | Location |
+| --- | --- | --- |
+| `layout.header.beforeNav` | none | Before the header logo/navigation area |
+| `layout.footer.bottom` | none | Bottom of the footer |
+| `product.summary.beforeTitle` | `{ product }` | Product page, before the product title |
+| `product.summary.afterPrice` | `{ product }` | Product page, after the product price |
+| `product.tabs.after` | `{ product }` | Product page, after product tabs |
+| `checkout.review.after` | `{ checkout }` | Checkout page, after the order note/review area |
+
+If no hook is registered for an outlet, `HookOutlet` renders nothing and does not add a wrapper element to the DOM.
+
+**How to use hooks:**
+
+Create a `hooks` folder in your app or custom layer. WooNuxt automatically loads every `.ts` or `.js` file in that folder.
+
+```txt
+hooks/
+  product.ts
+components/
+  TrustBadge.vue
+```
+
+Register your hook from the hook file:
 
 ```ts
-// plugins/my-hooks.ts
+// hooks/product.ts
 import TrustBadge from "~/components/TrustBadge.vue";
 
-export default defineNuxtPlugin(() => {
+export default () => {
   registerHook({
     name: "product.summary.afterPrice",
     id: "trust-badge",
     renderer: TrustBadge,
   });
-});
+};
 ```
+
+The registered component receives the hook context as a `ctx` prop.
+
+```vue
+<!-- components/TrustBadge.vue -->
+<script setup lang="ts">
+defineProps<{
+  ctx: {
+    product: {
+      name?: string;
+      salePrice?: string | null;
+    };
+  };
+}>();
+</script>
+
+<template>
+  <div class="mt-3 text-sm text-gray-600">
+    Secure checkout and fast shipping
+  </div>
+</template>
+```
+
+**Example: add a product page trust message from your custom layer**
+
+Keep the custom component and hook registration outside `woonuxt_base`:
+
+```txt
+components/
+  ProductTrustMessage.vue
+hooks/
+  product.ts
+```
+
+Create the component:
+
+```vue
+<!-- components/ProductTrustMessage.vue -->
+<script setup lang="ts">
+defineProps<{
+  ctx: {
+    product: {
+      name?: string;
+    };
+  };
+}>();
+</script>
+
+<template>
+  <div class="mt-4 rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800">
+    Free returns and secure checkout for {{ ctx.product?.name || "this product" }}.
+  </div>
+</template>
+```
+
+Register it in a hook file:
+
+```ts
+// hooks/product.ts
+import ProductTrustMessage from "~/components/ProductTrustMessage.vue";
+
+export default () => {
+  registerHook({
+    name: "product.summary.afterPrice",
+    id: "product-trust-message",
+    renderer: ProductTrustMessage,
+    priority: 10,
+  });
+};
+```
+
+The message will now render after the product price anywhere WooNuxt renders the `product.summary.afterPrice` outlet. No core product page override is needed.
+
+Hooks can also use `priority` to control order and `when` to render conditionally.
+
+```ts
+import SaleNotice from "~/components/SaleNotice.vue";
+
+export default () => {
+  registerHook({
+    name: "product.summary.beforeTitle",
+    id: "sale-notice",
+    renderer: SaleNotice,
+    priority: 5,
+    when: ({ product }) => Boolean(product?.salePrice),
+  });
+};
+```
+
+Lower `priority` values render first. Hook `id` values must be unique per hook location.
 
 ### Progress
 

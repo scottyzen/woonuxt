@@ -177,15 +177,15 @@ export const useHooks = (): HookRegistry => {
  *
  * @example
  * ```ts
- * // In a plugin or module
- * export default defineNuxtPlugin(() => {
+ * // In hooks/product.ts
+ * export default () => {
  *   registerHook({
  *     name: 'product.summary.afterPrice',
  *     id: 'trust-badge',
  *     renderer: TrustBadge,
  *     priority: 5
  *   });
- * });
+ * };
  * ```
  */
 export const registerHook = <T extends HookName>(options: {

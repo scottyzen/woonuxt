@@ -1,6 +1,8 @@
-import { defineNuxtModule, useLogger } from '@nuxt/kit';
+import { addPluginTemplate, defineNuxtModule, useLogger } from '@nuxt/kit';
 
 import { $fetch } from 'ofetch';
+import { existsSync, readdirSync, statSync } from 'node:fs';
+import { join, relative } from 'node:path';
 
 type EnvSpec = {
   key: string;
@@ -61,6 +63,20 @@ function validateEnvironment() {
 // Validate environment variables before module setup
 validateEnvironment();
 
+function findHookFiles(dir: string): string[] {
+  if (!existsSync(dir)) return [];
+
+  return readdirSync(dir).flatMap((entry) => {
+    const path = join(dir, entry);
+    const stat = statSync(path);
+
+    if (stat.isDirectory()) return findHookFiles(path);
+    if (/\.(ts|js|mjs)$/.test(entry) && !entry.endsWith('.d.ts')) return [path];
+
+    return [];
+  });
+}
+
 export default defineNuxtModule({
   meta: {
     name: 'woonuxt-bridge',
@@ -68,6 +84,35 @@ export default defineNuxtModule({
   },
   async setup(_, nuxt) {
     const logger = useLogger('woonuxt-bridge');
+    const hookFiles = nuxt.options._layers
+      .flatMap((layer) => [join(layer.cwd, 'hooks'), join(layer.cwd, 'app/hooks')])
+      .flatMap(findHookFiles)
+      .filter((path, index, files) => files.indexOf(path) === index)
+      .sort();
+
+    if (hookFiles.length) {
+      addPluginTemplate({
+        filename: 'woonuxt-hooks.mjs',
+        getContents: () => {
+          const imports = hookFiles
+            .map((path, index) => `import hook${index} from ${JSON.stringify(path)};`)
+            .join('\n');
+          const calls = hookFiles
+            .map((path, index) => {
+              const label = relative(nuxt.options.rootDir, path);
+              return `  if (typeof hook${index} === 'function') hook${index}({ source: ${JSON.stringify(label)} });`;
+            })
+            .join('\n');
+
+          return `${imports}
+
+export default defineNuxtPlugin(() => {
+${calls}
+});
+`;
+        },
+      });
+    }
 
     // Environment variables are guaranteed to be valid at this point
     const GQL_HOST = process.env.GQL_HOST!;
