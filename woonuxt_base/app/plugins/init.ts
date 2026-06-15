@@ -58,12 +58,12 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
       registerAuthErrorHandler();
 
       const { refreshCart } = useCart();
-      let success: boolean = await refreshCart();
+      const success: boolean = await refreshCart();
 
       // If cart refresh failed, clear the Woo session header and retry once
       if (!success) {
         useGqlHeaders({ 'woocommerce-session': '' });
-        success = await refreshCart();
+        await refreshCart();
       }
     }
 
