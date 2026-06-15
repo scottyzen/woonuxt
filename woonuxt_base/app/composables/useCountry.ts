@@ -6,7 +6,6 @@ export const useCountry = () => {
   // State to store allowed countries
   const allowedCountries = useState<CountriesEnum[] | null>('allowedCountries', () => null);
   const isLoadingAllowedCountries = useState<boolean>('isLoadingAllowedCountries', () => false);
-  const gql = useWooGraphQL();
 
   // State to store the countries to be shown - init with static countries
   const countriesToShow = useState<GeoLocation[]>('countriesToShow', () => countries);
@@ -24,7 +23,8 @@ export const useCountry = () => {
     isLoadingAllowedCountries.value = true;
 
     try {
-      const response = await gql.getAllowedCountries();
+      const { getAllowedCountries } = useWooGraphQL();
+      const response = await getAllowedCountries();
       if (response.allowedCountries) {
         // Filter out null values and store the result
         allowedCountries.value = response.allowedCountries.filter((country): country is CountriesEnum => country !== null);
@@ -48,7 +48,8 @@ export const useCountry = () => {
     isLoadingCountryStates.value[countryCode] = true;
 
     try {
-      const { countryStates } = await gql.getStates({ country: countryCode });
+      const { getStates } = useWooGraphQL();
+      const { countryStates } = await getStates({ country: countryCode });
       if (countryStates) {
         countryStatesDict.value[countryCode] = countryStates as GeoLocation[];
       }
