@@ -104,7 +104,10 @@ export default defineNuxtConfig({
       // - Requests during TTL serve cached content
       // - After TTL, next request serves stale content and triggers background regeneration
       // Override with CATALOG_ISR_TTL environment variable (in seconds)
-      '/product/**': { isr: catalogIsrTtl },
+      // Product pages include customer/session-adjacent UI and hydrate a large
+      // product payload. Avoid caching SSR HTML for direct loads; list/category
+      // pages keep ISR below for catalog-scale performance.
+      '/product/**': { isr: false },
       '/product-category/**': { isr: catalogIsrTtl },
       '/products': { isr: catalogIsrTtl },
       '/products/**': { isr: catalogIsrTtl },
