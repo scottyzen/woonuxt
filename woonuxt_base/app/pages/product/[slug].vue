@@ -335,17 +335,21 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
       <SEOHead :info="product" />
       <Breadcrumb v-if="storeSettings.showBreadcrumbOnSingleProduct" :product class="mb-6" />
 
-      <div class="flex flex-col gap-10 md:flex-row md:justify-between lg:gap-24">
+      <div class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(26rem,34rem)] lg:gap-24">
         <ProductImageGallery
           v-if="productImage"
-          class="relative flex-1"
+          class="relative w-full min-w-0"
           :main-image="productImage"
           :gallery="productGallery"
           :node="displayProduct"
           :active-variation="activeVariation" />
-        <NuxtImg v-else class="relative flex-1 skeleton" src="/images/placeholder.jpg" :alt="product?.name || 'Product'" />
+        <NuxtImg
+          v-else
+          class="relative aspect-square w-full min-w-0 rounded-xl object-contain skeleton"
+          src="/images/placeholder.jpg"
+          :alt="product?.name || 'Product'" />
 
-        <div class="w-full lg:max-w-md xl:max-w-lg md:py-2">
+        <div class="w-full min-w-0 md:py-2">
           <div class="flex justify-between mb-4">
             <div class="flex-1">
               <h1 class="flex flex-wrap items-center gap-2 mb-2 text-2xl font-sesmibold">
