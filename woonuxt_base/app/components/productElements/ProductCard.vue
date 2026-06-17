@@ -137,21 +137,26 @@ const scrollToSlide = (index: number) => {
   container.scrollTo({ left: target.offsetLeft, behavior: 'smooth' });
 };
 
-watch(
-  () => [activeImageIndex.value, sliderImages.value.length],
-  () => {
-    nextTick(() => {
-      const container = sliderRef.value;
-      if (!container?.children?.length) return;
-      const target = container.querySelector(`[data-index="${activeImageIndex.value}"]`) as HTMLElement | null;
-      if (target) {
-        container.scrollTo({ left: target.offsetLeft, behavior: 'smooth' });
-      }
-      currentSlide.value = activeImageIndex.value;
-    });
-  },
-  { immediate: true },
-);
+const syncActiveSlide = () => {
+  nextTick(() => {
+    const container = sliderRef.value;
+    if (!container?.children?.length) return;
+    const target = container.querySelector(`[data-index="${activeImageIndex.value}"]`) as HTMLElement | null;
+    if (target) {
+      container.scrollTo({ left: target.offsetLeft, behavior: 'smooth' });
+    }
+    currentSlide.value = activeImageIndex.value;
+  });
+};
+
+onMounted(() => {
+  syncActiveSlide();
+
+  watch(
+    () => [activeImageIndex.value, sliderImages.value.length],
+    syncActiveSlide,
+  );
+});
 </script>
 
 <template>
