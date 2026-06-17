@@ -4,11 +4,16 @@ const props = defineProps({
 });
 
 const isOpen = ref(false);
+const requestUrl = useRequestURL();
+const currentUrl = computed(() => requestUrl.href);
+const encodedProductName = computed(() => encodeURIComponent(props.product.name || ''));
+const encodedCurrentUrl = computed(() => encodeURIComponent(currentUrl.value));
+const encodedImageUrl = computed(() => encodeURIComponent(props.product.image?.sourceUrl || ''));
 
-const twitterUrl = computed(() => `https://twitter.com/intent/tweet?text=${props.product.name}&url=${window.location.href}`);
-const facebookUrl = computed(() => `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`);
+const twitterUrl = computed(() => `https://twitter.com/intent/tweet?text=${encodedProductName.value}&url=${encodedCurrentUrl.value}`);
+const facebookUrl = computed(() => `https://www.facebook.com/sharer/sharer.php?u=${encodedCurrentUrl.value}`);
 const pinterestUrl = computed(
-  () => `https://pinterest.com/pin/create/button/?url=${window.location.href}&media=${props.product.image.sourceUrl}&description=${props.product.name}`,
+  () => `https://pinterest.com/pin/create/button/?url=${encodedCurrentUrl.value}&media=${encodedImageUrl.value}&description=${encodedProductName.value}`,
 );
 
 const showShare = () => {

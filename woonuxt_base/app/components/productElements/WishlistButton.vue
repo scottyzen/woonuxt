@@ -5,9 +5,14 @@ const { addToWishlist, removeFromWishlist, isInList } = useWishlist();
 
 const { product } = defineProps<{ product: Product }>();
 
-const isWishlisted = computed(() => (product.databaseId ? isInList(product.databaseId) : false));
+const isMounted = ref(false);
+const isWishlisted = computed(() => (isMounted.value && product.databaseId ? isInList(product.databaseId) : false));
 
 const toggleWishlist = () => (isWishlisted.value && product.databaseId ? removeFromWishlist(product.databaseId) : addToWishlist(product));
+
+onMounted(() => {
+  isMounted.value = true;
+});
 </script>
 
 <template>
