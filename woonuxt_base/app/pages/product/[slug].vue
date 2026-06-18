@@ -8,28 +8,20 @@ const { addToCart, isUpdatingCart, isAddingToCart, isOptimisticCartMode } = useC
 const { frontEndUrl, getErrorMessage } = useHelpers();
 const { t } = useI18n();
 const gql = useWooGraphQL();
-const nuxtApp = useNuxtApp();
 const slug = route.params.slug as string;
 
 const { data, error } = await useAsyncGql('getProduct', { slug, frontEndUrl });
-if (error.value) {
-  throw nuxtApp.runWithContext(() =>
-    showError({
-      statusCode: 502,
-      statusMessage: getErrorMessage(error.value) || `Unable to load product "${slug}" from WordPress`,
-    }),
-  );
-}
-
-if (!data.value?.product) {
-  throw nuxtApp.runWithContext(() => showError({ statusCode: 404, statusMessage: t('shop.productNotFound') }));
-}
-
-const product = ref<ProductDetail>(data?.value?.product);
+const product = ref<ProductDetail | null>(data.value?.product ?? null);
 const quantity = ref<number>(1);
 const activeVariation = ref<Variation | null>(null);
 const variation = ref<VariationAttribute[]>([]);
 const attrValues = ref();
+
+const productLoadError = computed(() => {
+  if (error.value) return getErrorMessage(error.value) || `Unable to load product "${slug}" from WordPress`;
+  if (!product.value) return t('shop.productNotFound');
+  return '';
+});
 
 const normalizeMatchToken = (value?: string | null): string =>
   (value ?? '')
@@ -193,8 +185,8 @@ const isExternalProduct = computed<boolean>(() => product.value?.type === Produc
 const externalProduct = computed<ExternalProduct | null>(() => (isExternalProduct.value ? (product.value as ExternalProduct) : null));
 const shouldSkipStockRefresh = computed<boolean>(() => isExternalProduct.value);
 
-const displayProduct = computed(() => activeVariation.value || product.value);
-const priceTarget = computed(() => activeVariation.value || product.value);
+const displayProduct = computed<ProductDetail | Variation>(() => activeVariation.value || product.value!);
+const priceTarget = computed<ProductDetail | Variation>(() => activeVariation.value || product.value!);
 const productImage = computed(() => product.value?.image || null);
 const productGallery = computed(() => ({ nodes: product.value?.galleryImages?.nodes ?? [] }));
 const averageRating = computed(() => product.value?.averageRating ?? 0);
@@ -441,6 +433,9 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
         <div class="mb-4 text-xl font-semibold">{{ $t('shop.youMayLike') }}</div>
         <LazyProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
       </div>
+    </div>
+    <div v-else class="my-24 text-center text-gray-500">
+      {{ productLoadError }}
     </div>
   </main>
 </template>
