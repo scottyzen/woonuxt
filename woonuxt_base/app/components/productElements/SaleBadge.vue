@@ -22,18 +22,7 @@ const textToDisplay = computed(() => {
 </script>
 
 <template>
-  <span v-if="showSaleBadge" class="red-badge">{{ textToDisplay }}</span>
+  <span v-if="showSaleBadge" class="z-10 rounded-md bg-red-400 px-1.5 text-xs leading-6 tracking-tight text-white">
+    {{ textToDisplay }}
+  </span>
 </template>
-
-<style scoped>
-@reference "#tailwind";
-
-.red-badge {
-  @apply rounded-md bg-red-400  text-xs text-white tracking-tight px-1.5 leading-6 z-10;
-  background: #000 linear-gradient(0deg, #f87171, #f87171);
-}
-
-.dark .red-badge {
-  background: #000 linear-gradient(0deg, #ef4444, #ef4444);
-}
-</style>

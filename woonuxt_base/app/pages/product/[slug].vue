@@ -17,11 +17,7 @@ const activeVariation = ref<Variation | null>(null);
 const variation = ref<VariationAttribute[]>([]);
 const attrValues = ref();
 
-const productLoadError = computed(() => {
-  if (error.value) return getErrorMessage(error.value) || `Unable to load product "${slug}" from WordPress`;
-  if (!product.value) return t('shop.productNotFound');
-  return '';
-});
+const productLoadError = error.value ? getErrorMessage(error.value) || `Unable to load product "${slug}" from WordPress` : t('shop.productNotFound');
 
 const normalizeMatchToken = (value?: string | null): string =>
   (value ?? '')
@@ -359,7 +355,7 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
           <div class="grid gap-2 my-8 text-sm empty:hidden">
             <div v-if="!isExternalProduct" class="flex items-center gap-2">
               <span class="text-gray-400">{{ $t('shop.availability') }}: </span>
-              <StockStatus :stock-status="stockStatus" @updated="mergeLiveStockStatus" />
+              <StockStatus :stock-status="stockStatus" />
             </div>
             <div v-if="storeSettings.showSKU && product?.sku" class="flex items-center gap-2">
               <span class="text-gray-400">{{ $t('shop.sku') }}: </span>

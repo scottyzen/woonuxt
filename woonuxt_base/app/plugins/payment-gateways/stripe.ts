@@ -5,7 +5,7 @@ import type { Stripe, StripeElements } from '@stripe/stripe-js';
 import type { GetStripePaymentIntentQueryVariables } from '#gql/default';
 import StripePaymentGateway from '../../components/payments/StripePaymentGateway.vue';
 import { StripePaymentMethodEnum } from '#gql/default';
-import { loadStripe } from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js/pure';
 
 type SavedPaymentMethod = {
   id: number;

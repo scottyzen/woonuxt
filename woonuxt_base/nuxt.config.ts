@@ -16,7 +16,7 @@ export default defineNuxtConfig({
 
   vite: {
     optimizeDeps: {
-      include: ['@stripe/stripe-js', '@vue/devtools-core', '@vue/devtools-kit', '@vueuse/core', 'graphql-request', 'graphql-tag', 'reka-ui', 'tailwind-merge'],
+      include: ['@vue/devtools-core', '@vue/devtools-kit', '@vueuse/core', 'graphql-request', 'graphql-tag', 'reka-ui', 'tailwind-merge'],
     },
   },
 
@@ -104,8 +104,6 @@ export default defineNuxtConfig({
       // - Requests during TTL serve cached content
       // - After TTL, next request serves stale content and triggers background regeneration
       // Override with CATALOG_ISR_TTL environment variable (in seconds)
-      // ISR for product pages can stay enabled; product detail components must
-      // keep their SSR/client render deterministic during hydration.
       '/product/**': { isr: catalogIsrTtl },
       '/product-category/**': { isr: catalogIsrTtl },
       '/products': { isr: catalogIsrTtl },

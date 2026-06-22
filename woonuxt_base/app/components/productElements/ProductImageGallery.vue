@@ -88,6 +88,8 @@ const thumbnailButtonClasses = (galleryImg: ImageFragment) => [
         class="h-full w-full object-contain"
         :width="imgWidth"
         :height="imgWidth"
+        sizes="412px:100vw sm:100vw md:50vw lg:50vw xl:640px"
+        densities="1x"
         :alt="imageToShow.altText || node.name"
         :title="imageToShow.title || node.name"
         :src="imageToShow.sourceUrl || FALLBACK_IMG"
