@@ -12,9 +12,7 @@ export function useSorting() {
   const router = useRouter();
   const { updateProductList } = useProducts();
 
-  const orderQuery = useState<string>('order', () => '');
-
-  orderQuery.value = route.query.orderby as string;
+  const orderQuery = computed(() => (typeof route.query.orderby === 'string' ? route.query.orderby : ''));
 
   function getOrderQuery(): { orderBy: string; order: string } {
     return { orderBy: route.query.orderby as string, order: route.query.order as string };
