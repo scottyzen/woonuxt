@@ -76,12 +76,9 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
 
     const shouldInitFullCart = isDev || isPathThatRequiresInit || !storeSettings.initStoreOnUserActionToReduceServerLoad;
 
-    onNuxtReady(() => {
-      if (shouldInitFullCart) {
-        void initFullCart();
-        return;
-      }
-
+    if (shouldInitFullCart) {
+      void initFullCart();
+    } else {
       registerAuthErrorHandler();
 
       const { refreshCartSummary } = useCart();
@@ -99,6 +96,6 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
           window.addEventListener(event, loadSummaryOnce, { once: true });
         });
       }
-    });
+    }
   }
 });

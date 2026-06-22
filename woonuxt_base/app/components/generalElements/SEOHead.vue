@@ -18,4 +18,6 @@ useHead({
 });
 </script>
 
-<template><!-- renderless component --></template>
+<template>
+  <div style="display: none"></div>
+</template>

@@ -328,7 +328,7 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
   <main class="container relative py-6 xl:max-w-7xl">
     <div v-if="product">
       <SEOHead :info="product" />
-      <Breadcrumb v-show="storeSettings.showBreadcrumbOnSingleProduct" :product class="mb-6" />
+      <Breadcrumb v-if="storeSettings.showBreadcrumbOnSingleProduct" :product class="mb-6" />
 
       <div class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(26rem,34rem)] lg:gap-24">
         <ProductImageGallery
