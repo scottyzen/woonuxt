@@ -94,6 +94,12 @@ To override base files, copy the same path into your root project or custom laye
 
 ### Progress
 
+### Location Hooks
+
+Location Hooks are documented in the project docs — see the quick guide and examples here:
+
+- Hooks documentation: https://github.com/scottyzen/WooNuxtGuide/blob/master/content/4.hooks/index.md
+
 | Feature                                                   | Ongoing Enhancements | In the Pipeline | In Progress | Done | Next |
 | --------------------------------------------------------- | -------------------- | --------------- | ----------- | ---- | ---- |
 | Performance                                               | 🔷                   |                 |             | ✅   |      |

@@ -304,6 +304,9 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
           :alt="product?.name || 'Product'" />
 
         <div class="w-full min-w-0 md:py-2">
+          <!-- Hook: Before product title -->
+          <HookOutlet name="product.summary.beforeTitle" :ctx="{ product: displayProduct }" as="div" />
+
           <div class="flex justify-between mb-4">
             <div class="flex-1">
               <h1 class="flex flex-wrap items-center gap-2 mb-2 text-2xl font-sesmibold">
@@ -314,6 +317,9 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
             </div>
             <ProductPrice class="text-xl" :sale-price="priceTarget?.salePrice" :regular-price="priceTarget?.regularPrice" />
           </div>
+
+          <!-- Hook: After product price -->
+          <HookOutlet name="product.summary.afterPrice" :ctx="{ product: displayProduct }" as="div" />
 
           <div class="grid gap-2 my-8 text-sm empty:hidden">
             <div v-if="!isExternalProduct" class="flex items-center gap-2">
@@ -387,6 +393,9 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
       </div>
       <div v-if="product.description || product.reviews" class="my-32">
         <ProductTabs :product />
+
+        <!-- Hook: After product tabs -->
+        <HookOutlet name="product.tabs.after" :ctx="{ product }" as="div" />
       </div>
       <div v-if="product.related && storeSettings.showRelatedProducts" class="my-32">
         <div class="mb-4 text-xl font-semibold">{{ $t('shop.youMayLike') }}</div>

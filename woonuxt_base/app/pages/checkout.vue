@@ -314,6 +314,9 @@ useSeoMeta({
               rows="4"
               :placeholder="$t('shop.orderNotePlaceholder')"></textarea>
           </div>
+
+          <!-- Hook: After checkout review/order note -->
+          <HookOutlet name="checkout.review.after" :ctx="{ checkout: orderInput }" as="div" />
         </div>
 
         <OrderSummary>

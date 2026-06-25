@@ -5,6 +5,9 @@ const { isShowingSearch } = useSearching();
 <template>
   <header class="sticky top-0 z-40 bg-white shadow-md shadow-gray-200 border-b border-transparent outline-gray-950/10 outline">
     <div class="container flex items-center justify-between py-4">
+      <!-- Hook: Before header navigation -->
+      <HookOutlet name="layout.header.beforeNav" as="div" />
+
       <div class="flex items-center">
         <MenuTrigger class="lg:hidden" />
         <Logo class="w-40" />

@@ -60,6 +60,9 @@ const { wooNuxtVersionInfo } = useHelpers();
       </div>
       <SocialIcons class="ml-auto" />
     </div>
+
+    <!-- Hook: Bottom of footer -->
+    <HookOutlet name="layout.footer.bottom" as="div" class="container pb-8" />
   </footer>
 </template>
 
