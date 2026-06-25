@@ -201,7 +201,7 @@ If you're not sure where to start:
 
 - Open a thread in [GitHub Discussions](https://github.com/scottyzen/woonuxt/discussions)
 - Create an issue for support
-- Tweet [@scottyzen](https://twitter.com/scottyzen)
+- Post on X [@scottyzen](https://x.com/scottyzen)
 
 ---
 

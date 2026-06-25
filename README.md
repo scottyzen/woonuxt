@@ -67,6 +67,31 @@ Example: I have created a pages directory and added a `contact.vue` file in the 
 Here is a [branch](https://github.com/scottyzen/woonuxt/tree/myshop) with an example of some basic customizations:
 And here is the live demo of the customized WooNuxt site: [My Shop](https://myshop.woonuxt.com/).
 
+### Nuxt layer customization example
+
+The root project is the child layer, and `woonuxt_base/` is the parent layer. In `nuxt.config.ts` you should use a single `extends` property with an array of parent layers.
+
+```ts
+export default defineNuxtConfig({
+  extends: ['./woonuxt_base'],
+});
+```
+
+If you do have an extra custom layer folder, add it in the same array:
+
+```ts
+export default defineNuxtConfig({
+  extends: ['./woonuxt_base', './my_theme'],
+});
+```
+
+Do not add `extends:` twice in the same config file. A duplicate key will overwrite the first one and prevent the layer system from working correctly.
+
+To override base files, copy the same path into your root project or custom layer. For example:
+
+- `woonuxt_base/app/components/ProductCard.vue` → `app/components/ProductCard.vue`
+- `woonuxt_base/app/pages/contact.vue` → `pages/contact.vue`
+
 ### Location Hooks System 🪝
 
 WooNuxt now includes a **Location Hooks** system that provides WordPress-like extensibility for headless storefronts. Instead of overriding entire components, you can inject custom UI and logic at predefined extension points throughout the site.
@@ -313,7 +338,7 @@ Run `npm run graphql:codegen` after changing GraphQL queries or updating the WPG
 
 This is an ongoing project but it wouldn't be possible without the help of the following people: [Jason Bahl](https://github.com/jasonbahl) & [Geoffrey K Taylor](https://github.com/kidunot89) for their ongoing work on WPGraphQL and WooGraphQL respectively. Also, a big thanks to the Nuxt team for all their hard work making Nuxt 3 a pleasure to build upon. And the [WooCommerce](https://woocommerce.com/) team for making such a great e-commerce platform. Some other honorable mentions are [Funkhaus](https://funkhaus.us/) for their work on the WPGraphQL Cors plugin. And the people who have contributed to making WooNuxt better every day, [Alex Lykesas](https://github.com/alexookah), [Zack Hatlen](https://github.com/zackha), [Galli](https://github.com/Zielgestalt), [Guillaume](https://github.com/GuillaumeDgr) Thank you all! 🙏
 
-I don't know where this project will go, but I'm excited to see what the future holds. If you have any questions or would like to contribute to the project please feel free to reach out to me on [Twitter](https://twitter.com/scottyzen) or [GitHub](https://github.com/scottyzen).
+I don't know where this project will go, but I'm excited to see what the future holds. If you have any questions or would like to contribute to the project please feel free to reach out to me on [X](https://x.com/scottyzen) or [GitHub](https://github.com/scottyzen).
 
 ## 🤝 Contributing
 

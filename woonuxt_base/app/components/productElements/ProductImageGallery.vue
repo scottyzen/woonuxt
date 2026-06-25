@@ -2,8 +2,10 @@
 import type { ImageFragment, Product, Variation } from '#types/gql';
 
 const { FALLBACK_IMG } = useHelpers();
+const { storeSettings } = useAppConfig();
 
 type Gallery = { nodes: ImageFragment[] };
+type ThumbnailPosition = 'bottom' | 'left';
 
 const props = defineProps({
   mainImage: { type: Object as PropType<ImageFragment>, required: true },
@@ -56,16 +58,38 @@ watch(
 );
 
 const imgWidth = 640;
+
+const thumbnailPosition = computed<ThumbnailPosition>(() => (storeSettings.productGalleryThumbnailsPosition === 'left' ? 'left' : 'bottom'));
+const showLeftThumbnails = computed(() => thumbnailPosition.value === 'left');
+
+const galleryRootClasses = computed(() => [
+  'w-full min-w-0',
+  { 'lg:grid lg:grid-cols-[88px_minmax(0,1fr)] lg:items-start lg:gap-4': showLeftThumbnails.value },
+]);
+
+const thumbnailListClasses = computed(() => [
+  'mt-4 flex gap-3 overflow-auto scrollbar-none p-1 [&::-webkit-scrollbar]:hidden',
+  showLeftThumbnails.value ? 'lg:order-first lg:mt-0 lg:max-h-[min(640px,calc(100vh-160px))] lg:w-24 lg:flex-col lg:overflow-x-hidden lg:overflow-y-auto' : '',
+]);
+
+const thumbnailButtonClasses = (galleryImg: ImageFragment) => [
+  'size-20 shrink-0 overflow-hidden rounded-xl bg-gray-100 ring-offset-2 transition',
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
+  showLeftThumbnails.value ? 'lg:size-22' : '',
+  galleryImg.databaseId === imageToShow.value.databaseId ? 'ring-2 ring-primary' : 'ring-1 ring-gray-200 hover:ring-gray-400',
+];
 </script>
 
 <template>
-  <div>
-    <div class="relative group">
+  <div :class="galleryRootClasses">
+    <div class="relative group aspect-square w-full min-w-0 overflow-hidden rounded-xl bg-gray-100">
       <SaleBadge :node class="absolute text-base top-4 right-4" />
       <NuxtImg
-        class="rounded-xl object-contain w-full min-w-87.5"
+        class="h-full w-full object-contain"
         :width="imgWidth"
         :height="imgWidth"
+        sizes="412px:100vw sm:100vw md:50vw lg:50vw xl:640px"
+        densities="1x"
         :alt="imageToShow.altText || node.name"
         :title="imageToShow.title || node.name"
         :src="imageToShow.sourceUrl || FALLBACK_IMG"
@@ -92,22 +116,25 @@ const imgWidth = 640;
       </button>
     </div>
 
-    <div
-      v-if="gallery.nodes.length"
-      class="my-4 flex gap-4 overflow-auto scrollbar-none md:grid md:grid-cols-[repeat(auto-fill,minmax(72px,1fr))] [&::-webkit-scrollbar]:hidden">
-      <NuxtImg
+    <div v-if="gallery.nodes.length" :class="thumbnailListClasses">
+      <button
         v-for="galleryImg in galleryImages"
         :key="galleryImg.databaseId"
-        class="aspect-5/6 w-18 cursor-pointer rounded-xl object-cover md:w-full"
-        :width="imgWidth"
-        :height="imgWidth"
-        :src="galleryImg.sourceUrl || FALLBACK_IMG"
-        :alt="galleryImg.altText || node.name"
-        :title="galleryImg.title || node.name"
-        placeholder
-        placeholder-class="blur-xl"
-        loading="lazy"
-        @click="changeImage(galleryImg)" />
+        :class="thumbnailButtonClasses(galleryImg)"
+        type="button"
+        :aria-label="`Show image for ${node.name}`"
+        :aria-pressed="galleryImg.databaseId === imageToShow.databaseId"
+        @click="changeImage(galleryImg)">
+        <NuxtImg
+          class="h-full w-full object-contain"
+          :width="160"
+          :height="160"
+          :src="galleryImg.sourceUrl || FALLBACK_IMG"
+          :alt="galleryImg.altText || node.name"
+          placeholder
+          placeholder-class="blur-xl"
+          loading="lazy" />
+      </button>
     </div>
   </div>
 </template>

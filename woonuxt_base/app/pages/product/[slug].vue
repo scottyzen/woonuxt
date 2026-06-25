@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { StockStatusEnum, ProductTypesEnum, type AddToCartInput } from '#gql/default';
+import { StockStatusEnum, ProductTypesEnum, type AddToCartInput, type ProductAttributeInput } from '#gql/default';
 import type { ExternalProduct, ProductDetail, Variation, VariationAttribute } from '#types/gql';
 
 const route = useRoute();
@@ -11,22 +11,13 @@ const gql = useWooGraphQL();
 const slug = route.params.slug as string;
 
 const { data, error } = await useAsyncGql('getProduct', { slug, frontEndUrl });
-if (error.value) {
-  throw showError({
-    statusCode: 502,
-    statusMessage: getErrorMessage(error.value) || `Unable to load product "${slug}" from WordPress`,
-  });
-}
-
-if (!data.value?.product) {
-  throw showError({ statusCode: 404, statusMessage: t('shop.productNotFound') });
-}
-
-const product = ref<ProductDetail>(data?.value?.product);
+const product = ref<ProductDetail | null>(data.value?.product ?? null);
 const quantity = ref<number>(1);
 const activeVariation = ref<Variation | null>(null);
 const variation = ref<VariationAttribute[]>([]);
-const attrValues = ref();
+const attrValues = ref<ProductAttributeInput[]>([]);
+
+const productLoadError = error.value ? getErrorMessage(error.value) || `Unable to load product "${slug}" from WordPress` : t('shop.productNotFound');
 
 const normalizeMatchToken = (value?: string | null): string =>
   (value ?? '')
@@ -190,14 +181,24 @@ const isExternalProduct = computed<boolean>(() => product.value?.type === Produc
 const externalProduct = computed<ExternalProduct | null>(() => (isExternalProduct.value ? (product.value as ExternalProduct) : null));
 const shouldSkipStockRefresh = computed<boolean>(() => isExternalProduct.value);
 
-const displayProduct = computed(() => activeVariation.value || product.value);
-const priceTarget = computed(() => activeVariation.value || product.value);
+const displayProduct = computed<ProductDetail | Variation>(() => activeVariation.value || product.value!);
+const priceTarget = computed<ProductDetail | Variation>(() => activeVariation.value || product.value!);
 const productImage = computed(() => product.value?.image || null);
 const productGallery = computed(() => ({ nodes: product.value?.galleryImages?.nodes ?? [] }));
 const averageRating = computed(() => product.value?.averageRating ?? 0);
 const reviewCount = computed(() => product.value?.reviewCount ?? 0);
 
-const selectProductInput = computed<any>(() => ({ productId: displayProduct.value?.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
+const selectProductInput = computed<AddToCartInput>(() => {
+  const input: AddToCartInput = {
+    productId: displayProduct.value.databaseId,
+    quantity: quantity.value,
+  };
+
+  if (activeVariation.value) input.variationId = activeVariation.value.databaseId;
+  else if (attrValues.value.length) input.variation = attrValues.value;
+
+  return input;
+});
 
 const handleAddToCart = (): void => {
   if (!product.value) return;
@@ -207,13 +208,8 @@ const handleAddToCart = (): void => {
 const updateSelectedVariations = (variations: VariationAttribute[]): void => {
   if (!product.value?.variations) return;
 
-  attrValues.value = variations.map((el) => ({ attributeName: el.name, attributeValue: el.value }));
+  attrValues.value = variations.map((el) => ({ attributeName: el.name || '', attributeValue: el.value }));
   activeVariation.value = findMatchingVariation(variations);
-
-  selectProductInput.value.variationId = activeVariation.value?.databaseId ?? null;
-  // Prefer the resolved variation ID once we have a match so spaced/display labels
-  // are not used as the source of truth for add-to-cart requests.
-  selectProductInput.value.variation = activeVariation.value ? null : attrValues.value;
   variation.value = variations;
 
   // Update URL with current selections for persistence and sharing (client-side only)
@@ -265,50 +261,8 @@ const refreshStockStatus = async (): Promise<void> => {
   }
 };
 
-type IdleCallback = (deadline: { didTimeout: boolean; timeRemaining: () => number }) => void;
-type IdleCallbackWindow = Window & {
-  requestIdleCallback?: (callback: IdleCallback, options?: { timeout: number }) => number;
-  cancelIdleCallback?: (handle: number) => void;
-};
-
-let stockRefreshHandle: number | null = null;
-let stockRefreshHandleType: 'idle' | 'timeout' | null = null;
-
-const scheduleStockRefresh = (): void => {
-  if (!import.meta.client || shouldSkipStockRefresh.value) return;
-
-  const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-  if (connection?.saveData) return;
-
-  if (stockRefreshHandle !== null) return;
-
-  const run = () => {
-    stockRefreshHandle = null;
-    stockRefreshHandleType = null;
-    void refreshStockStatus();
-  };
-
-  const idleWindow = window as IdleCallbackWindow;
-  if (idleWindow.requestIdleCallback) {
-    stockRefreshHandleType = 'idle';
-    stockRefreshHandle = idleWindow.requestIdleCallback(() => run(), { timeout: 2000 });
-  } else {
-    stockRefreshHandleType = 'timeout';
-    stockRefreshHandle = window.setTimeout(run, 900);
-  }
-};
-
-onMounted(scheduleStockRefresh);
-onBeforeUnmount(() => {
-  if (!import.meta.client || stockRefreshHandle === null) return;
-  const idleWindow = window as IdleCallbackWindow;
-  if (stockRefreshHandleType === 'idle' && idleWindow.cancelIdleCallback) {
-    idleWindow.cancelIdleCallback(stockRefreshHandle);
-  } else {
-    clearTimeout(stockRefreshHandle);
-  }
-  stockRefreshHandle = null;
-  stockRefreshHandleType = null;
+onMounted(() => {
+  if (!shouldSkipStockRefresh.value) void refreshStockStatus();
 });
 
 const stockStatus = computed(() => {
@@ -335,17 +289,21 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
       <SEOHead :info="product" />
       <Breadcrumb v-if="storeSettings.showBreadcrumbOnSingleProduct" :product class="mb-6" />
 
-      <div class="flex flex-col gap-10 md:flex-row md:justify-between lg:gap-24">
+      <div class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(26rem,34rem)] lg:gap-24">
         <ProductImageGallery
           v-if="productImage"
-          class="relative flex-1"
+          class="relative w-full min-w-0"
           :main-image="productImage"
           :gallery="productGallery"
           :node="displayProduct"
           :active-variation="activeVariation" />
-        <NuxtImg v-else class="relative flex-1 skeleton" src="/images/placeholder.jpg" :alt="product?.name || 'Product'" />
+        <NuxtImg
+          v-else
+          class="relative aspect-square w-full min-w-0 rounded-xl object-contain skeleton"
+          src="/images/placeholder.jpg"
+          :alt="product?.name || 'Product'" />
 
-        <div class="w-full lg:max-w-md xl:max-w-lg md:py-2">
+        <div class="w-full min-w-0 md:py-2">
           <!-- Hook: Before product title -->
           <HookOutlet name="product.summary.beforeTitle" :ctx="{ product: displayProduct }" as="div" />
 
@@ -366,7 +324,7 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
           <div class="grid gap-2 my-8 text-sm empty:hidden">
             <div v-if="!isExternalProduct" class="flex items-center gap-2">
               <span class="text-gray-400">{{ $t('shop.availability') }}: </span>
-              <StockStatus :stock-status="stockStatus" @updated="mergeLiveStockStatus" />
+              <StockStatus :stock-status="stockStatus" />
             </div>
             <div v-if="storeSettings.showSKU && product?.sku" class="flex items-center gap-2">
               <span class="text-gray-400">{{ $t('shop.sku') }}: </span>
@@ -443,6 +401,9 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
         <div class="mb-4 text-xl font-semibold">{{ $t('shop.youMayLike') }}</div>
         <LazyProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
       </div>
+    </div>
+    <div v-else class="my-24 text-center text-gray-500">
+      {{ productLoadError }}
     </div>
   </main>
 </template>

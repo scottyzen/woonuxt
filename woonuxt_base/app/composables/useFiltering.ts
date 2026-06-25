@@ -11,9 +11,7 @@ export function useFiltering() {
   const runtimeConfig = useRuntimeConfig(); // Declare a variable for the runtime config and the filter and order functions
   const { updateProductList } = useProducts();
 
-  const filterQuery = useState<string>('filter', () => '');
-
-  filterQuery.value = route.query.filter as string;
+  const filterQuery = computed(() => (typeof route.query.filter === 'string' ? route.query.filter : ''));
 
   /**
    * Get the filter value from the url
@@ -50,9 +48,6 @@ export function useFiltering() {
     // if there is 2 or more commas in a row, replace them with one
     newFilterQuery = newFilterQuery.replace(/,{2,}/g, ',');
 
-    // Update the filter query
-    filterQuery.value = newFilterQuery;
-
     // remove pagination from the url
     const path = route.path.includes('/page/') ? route.path.split('/page/')[0] : route.path;
 
@@ -69,7 +64,6 @@ export function useFiltering() {
    */
   async function resetFilter(): Promise<void> {
     const { scrollToTop } = useHelpers();
-    filterQuery.value = '';
     await router.push({ query: { ...route.query, filter: undefined } });
     await updateProductList();
     scrollToTop();

@@ -26,7 +26,7 @@ export function useSEOFallbacks(info: ProductDetail, path: string): SeoHeadData 
   const description = stripHtml(info.shortDescription || info.description || '');
 
   const facebook = (wooNuxtSEO as WooNuxtSEOItem[] | undefined)?.find((item) => item?.provider === 'facebook') ?? null;
-  const twitter = (wooNuxtSEO as WooNuxtSEOItem[] | undefined)?.find((item) => item?.provider === 'twitter') ?? null;
+  const xAccount = (wooNuxtSEO as WooNuxtSEOItem[] | undefined)?.find((item) => item?.provider === 'x' || item?.provider === 'twitter') ?? null;
 
   const meta = [
     description ? { name: 'description' as const, content: description } : undefined,
@@ -38,7 +38,7 @@ export function useSEOFallbacks(info: ProductDetail, path: string): SeoHeadData 
     { property: 'og:image' as const, content: ogImage },
     facebook && facebook.url ? { property: 'article:publisher' as const, content: facebook.url } : undefined,
     { name: 'twitter:card' as const, content: 'summary_large_image' },
-    twitter && twitter.handle ? { name: 'twitter:site' as const, content: twitter.handle } : undefined,
+    xAccount?.handle ? { name: 'twitter:site' as const, content: xAccount.handle } : undefined,
     info.name ? { name: 'twitter:title' as const, content: info.name } : undefined,
     description ? { name: 'twitter:description' as const, content: description } : undefined,
     { name: 'twitter:image' as const, content: twitterImage },
