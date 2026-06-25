@@ -103,19 +103,6 @@ WooNuxt now includes a **Location Hooks** system that provides WordPress-like ex
 - ✅ **Type-safe** - Full TypeScript support
 - ✅ **Layer Compatible** - Works seamlessly with Nuxt layers
 
-**Available Hook Locations:**
-
-These outlets are currently rendered by WooNuxt:
-
-| Hook name | Context | Location |
-| --- | --- | --- |
-| `layout.header.beforeNav` | none | Before the header logo/navigation area |
-| `layout.footer.bottom` | none | Bottom of the footer |
-| `product.summary.beforeTitle` | `{ product }` | Product page, before the product title |
-| `product.summary.afterPrice` | `{ product }` | Product page, after the product price |
-| `product.tabs.after` | `{ product }` | Product page, after product tabs |
-| `checkout.review.after` | `{ checkout }` | Checkout page, after the order note/review area |
-
 If no hook is registered for an outlet, `HookOutlet` renders nothing and does not add a wrapper element to the DOM.
 
 **How to use hooks:**
