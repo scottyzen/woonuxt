@@ -1,4 +1,8 @@
 import type { Component, VNode } from 'vue';
+import { HOOKS, ALL_HOOK_NAMES, type AllHookNames } from './hookConstants';
+
+export type HookRenderResult = VNode | VNode[] | null;
+export type HookRenderFunction<T extends HookName> = (ctx: HookContext<T>) => HookRenderResult;
 
 /**
  * Hook entry that can be registered at a specific outlet
@@ -10,31 +14,37 @@ export interface HookEntry {
   priority?: number;
   /** Conditional function to determine if hook should render */
   when?: (ctx: any) => boolean;
-  /** The component or render function to execute */
-  renderer: Component | ((ctx: any) => VNode | VNode[] | null);
+  /** The component to render with the hook context as a ctx prop */
+  component?: Component;
+  /** Custom render function for advanced hook output */
+  render?: (ctx: any) => HookRenderResult;
+  /** Internal registration order for stable same-priority sorting */
+  order: number;
   /** Source module/plugin name for debugging */
   source?: string;
 }
 
 /**
  * Context types for different hook locations
+ * Mapped from the HOOKS constants to ensure single source of truth
  */
 export interface HookContextMap {
   // Layout hooks
-  'layout.header.beforeNav': Record<string, never>;
-  'layout.footer.bottom': Record<string, never>;
+  [HOOKS.layout.header.beforeNav]: Record<string, never>;
+  [HOOKS.layout.footer.bottom]: Record<string, never>;
 
   // Product page hooks
-  'product.summary.beforeTitle': { product: any };
-  'product.summary.afterPrice': { product: any };
-  'product.tabs.after': { product: any };
+  [HOOKS.product.summary.beforeTitle]: { product: any };
+  [HOOKS.product.summary.afterPrice]: { product: any };
+  [HOOKS.product.tabs.after]: { product: any };
 
   // Checkout hooks
-  'checkout.review.after': { checkout: any };
+  [HOOKS.checkout.review.after]: { checkout: any };
 }
 
 /**
  * Hook names that can be used in the system
+ * Derived from HookContextMap keys and validated against constants
  */
 export type HookName = keyof HookContextMap;
 
@@ -43,16 +53,11 @@ export type HookName = keyof HookContextMap;
  */
 export type HookContext<T extends HookName> = HookContextMap[T];
 
-/**
- * Options for registering a hook
- */
-export interface RegisterHookOptions<T extends HookName> {
+interface RegisterHookBase<T extends HookName> {
   /** Hook location name */
   name: T;
   /** Unique identifier for this hook entry */
   id: string;
-  /** The component or render function */
-  renderer: Component | ((ctx: HookContext<T>) => VNode | VNode[] | null);
   /** Priority for sorting (lower numbers execute first, default: 10) */
   priority?: number;
   /** Conditional function to determine if hook should render */
@@ -60,6 +65,24 @@ export interface RegisterHookOptions<T extends HookName> {
   /** Source module/plugin name for debugging */
   source?: string;
 }
+
+export type RegisterHookComponentOptions<T extends HookName> = RegisterHookBase<T> & {
+  /** Component rendered with the hook context as a ctx prop */
+  component: Component;
+  render?: never;
+};
+
+export type RegisterHookRenderOptions<T extends HookName> = RegisterHookBase<T> & {
+  /** Custom render function for advanced hook output */
+  render: HookRenderFunction<T>;
+  component?: never;
+};
+
+/**
+ * Options for registering a hook
+ */
+export type RegisterHookOptions<T extends HookName> = RegisterHookComponentOptions<T> | RegisterHookRenderOptions<T>;
+export type AnyRegisterHookOptions = { [Name in HookName]: RegisterHookOptions<Name> }[HookName];
 
 /**
  * Hook registry interface
@@ -76,6 +99,7 @@ export interface HookRegistry {
  * Uses a Map to store hook entries by name
  */
 const hookRegistry = new Map<HookName, HookEntry[]>();
+let hookRegistrationOrder = 0;
 
 /**
  * Composable for managing WooNuxt hooks
@@ -86,19 +110,30 @@ export const useHooks = (): HookRegistry => {
    * Register a new hook entry
    */
   const register = <T extends HookName>(options: RegisterHookOptions<T>): void => {
-    const { name, id, renderer, priority = 10, when, source } = options;
+    const { name, id, priority = 10, when, source } = options;
 
     // Get existing entries for this hook name
     const entries = hookRegistry.get(name) || [];
+
+    const hasComponent = 'component' in options && Boolean(options.component);
+    const hasRender = 'render' in options && Boolean(options.render);
+    if (!hasComponent && !hasRender) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(
+          `[useHooks] Hook "${id}" for "${name}" must provide either a component or render function.` +
+            (source ? ` Source: ${source}.` : '') +
+            ' This registration will be ignored.',
+        );
+      }
+      return;
+    }
 
     // Check for duplicate IDs
     const isDuplicate = entries.some((entry) => entry.id === id);
     if (isDuplicate) {
       if (process.env.NODE_ENV !== 'production') {
         console.warn(
-          `[useHooks] Duplicate hook id "${id}" detected for hook "${name}".` +
-            (source ? ` Source: ${source}.` : '') +
-            ' This registration will be ignored.',
+          `[useHooks] Duplicate hook id "${id}" detected for hook "${name}".` + (source ? ` Source: ${source}.` : '') + ' This registration will be ignored.',
         );
       }
       return;
@@ -109,19 +144,21 @@ export const useHooks = (): HookRegistry => {
       id,
       priority,
       when,
-      renderer,
+      component: 'component' in options ? options.component : undefined,
+      render: 'render' in options ? options.render : undefined,
+      order: hookRegistrationOrder++,
       source: source || 'unknown',
     };
 
     // Add to registry
     entries.push(entry);
 
-    // Sort by priority (lower first), then by stable order (ID)
+    // Sort by priority (lower first), then by registration order.
     entries.sort((a, b) => {
       if (a.priority !== b.priority) {
         return (a.priority ?? 10) - (b.priority ?? 10);
       }
-      return a.id.localeCompare(b.id);
+      return a.order - b.order;
     });
 
     hookRegistry.set(name, entries);
@@ -166,24 +203,19 @@ export const useHooks = (): HookRegistry => {
  * @example
  * ```ts
  * // In hooks/product.ts
+ * import { registerHook, HOOKS } from '~/composables/useHooks'
+ *
  * export default () => {
  *   registerHook({
- *     name: 'product.summary.afterPrice',
+ *     name: HOOKS.product.summary.afterPrice,
  *     id: 'trust-badge',
- *     renderer: TrustBadge,
+ *     component: TrustBadge,
  *     priority: 5
  *   });
  * };
  * ```
  */
-export const registerHook = <T extends HookName>(options: {
-  name: T;
-  id: string;
-  renderer: Component | ((ctx: HookContext<T>) => VNode | VNode[] | null);
-  priority?: number;
-  when?: (ctx: HookContext<T>) => boolean;
-  source?: string;
-}): void => {
+export const registerHook = <T extends HookName>(options: RegisterHookOptions<T>): void => {
   const hooks = useHooks();
 
   // Auto-detect source from stack trace in dev mode
@@ -215,27 +247,23 @@ export const registerHook = <T extends HookName>(options: {
  * ```ts
  * registerHooks([
  *   {
- *     name: 'product.summary.afterPrice',
+ *     name: HOOKS.product.summary.afterPrice,
  *     id: 'trust-badge',
- *     renderer: TrustBadge
+ *     component: TrustBadge
  *   },
  *   {
- *     name: 'cart.summary.afterTotals',
- *     id: 'cart-upsell',
- *     renderer: CartUpsell
+ *     name: HOOKS.checkout.review.after,
+ *     id: 'checkout-message',
+ *     component: CheckoutMessage
  *   }
  * ]);
  * ```
  */
-export const registerHooks = (
-  hooks: Array<{
-    name: HookName;
-    id: string;
-    renderer: Component | ((ctx: any) => VNode | VNode[] | null);
-    priority?: number;
-    when?: (ctx: any) => boolean;
-    source?: string;
-  }>,
-): void => {
-  hooks.forEach((hook) => registerHook(hook as any));
+export const registerHooks = (hooks: AnyRegisterHookOptions[]): void => {
+  hooks.forEach((hook) => registerHook(hook as never));
 };
+
+/**
+ * Re-export hook constants for easy access throughout the app
+ */
+export { HOOKS, ALL_HOOK_NAMES, type AllHookNames } from './hookConstants';
