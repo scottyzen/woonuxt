@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. I'll try my best to keep it updated.
 
+## v4.25.0 (25-06-2026)
+
+- feature: Location Hooks system — add `HookOutlet` and runtime registration API to inject UI at predefined locations (SSR/SSG compatible, TypeScript friendly, Nuxt layer compatible)
+- chore: Move hook usage examples into documentation and link README to dedicated guide
+- docs: Add WooNuxtGuide Hooks page and update README to point to the guide
+
 ## v4.17.0 (19-04-2026)
 
 - feature: Saved card checkout — logged-in users can now pay with a previously saved card without re-entering card details
