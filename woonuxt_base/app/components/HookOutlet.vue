@@ -59,10 +59,16 @@ const entries = computed(() => {
  */
 const renderEntry = (entry: HookEntry) => {
   try {
-    if (typeof entry.renderer === 'function') {
-      return (entry.renderer as (ctx: HookContext<T>) => ReturnType<typeof h> | ReturnType<typeof h>[] | null)(props.ctx);
+    if (entry.render) {
+      return entry.render(props.ctx);
     }
-    return h(entry.renderer, { ctx: props.ctx });
+    if (entry.component) {
+      return h(entry.component, { ctx: props.ctx });
+    }
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(`[HookOutlet] Hook "${entry.id}" at outlet "${props.name}" has no component or render function.`);
+    }
+    return null;
   } catch (error) {
     if (process.env.NODE_ENV !== 'production') {
       console.error(`[HookOutlet] Error rendering hook "${entry.id}" at outlet "${props.name}":`, error);
