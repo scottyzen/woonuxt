@@ -94,47 +94,11 @@ To override base files, copy the same path into your root project or custom laye
 
 ### Progress
 
-### Location Hooks System 🪝
+### Location Hooks
 
-WooNuxt provides hook points where you can inject custom components without modifying core code. Perfect for adding trust badges, upsells, or custom messages.
+Location Hooks are documented in the project docs — see the quick guide and examples here:
 
-**Quick example:**
-
-```ts
-// In your app or custom layer: hooks/product.ts
-import TrustBadge from '~/components/TrustBadge.vue';
-
-export default () => {
-  registerHook({
-    name: 'product.summary.afterPrice',
-    id: 'trust-badge',
-    component: TrustBadge,
-  });
-};
-```
-
-Your component receives context as a prop:
-
-```vue
-<script setup>
-defineProps<{ ctx: { product: any } }>()
-</script>
-
-<template>
-  <div class="text-sm text-gray-600">✓ Secure & trusted</div>
-</template>
-```
-
-**Available hook locations:**
-
-- `layout.header.beforeNav` — Before header navigation
-- `layout.footer.bottom` — Bottom of footer
-- `product.summary.beforeTitle` — Before product title
-- `product.summary.afterPrice` — After product price
-- `product.tabs.after` — After product tabs
-- `checkout.review.after` — After checkout review
-
-For more examples and advanced usage, see the [Hooks documentation](https://github.com/scottyzen/WooNuxtGuide/blob/master/content/4.hooks/index.md).
+- Hooks documentation: https://github.com/scottyzen/WooNuxtGuide/blob/master/content/4.hooks/index.md
 
 | Feature                                                   | Ongoing Enhancements | In the Pipeline | In Progress | Done | Next |
 | --------------------------------------------------------- | -------------------- | --------------- | ----------- | ---- | ---- |
