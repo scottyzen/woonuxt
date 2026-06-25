@@ -102,15 +102,15 @@ WooNuxt provides hook points where you can inject custom components without modi
 
 ```ts
 // In your app or custom layer: hooks/product.ts
-import TrustBadge from '~/components/TrustBadge.vue'
+import TrustBadge from '~/components/TrustBadge.vue';
 
 export default () => {
   registerHook({
     name: 'product.summary.afterPrice',
     id: 'trust-badge',
-    component: TrustBadge
-  })
-}
+    component: TrustBadge,
+  });
+};
 ```
 
 Your component receives context as a prop:

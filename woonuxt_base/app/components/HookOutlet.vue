@@ -24,7 +24,8 @@ const entries = computed(() => {
  */
 const renderEntry = (entry: any) => {
   return h(entry.component, { ctx: props.ctx });
-};</script>
+};
+</script>
 
 <template>
   <div>

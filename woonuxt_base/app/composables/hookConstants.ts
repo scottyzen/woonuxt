@@ -21,6 +21,6 @@ export const ALL_HOOK_NAMES = [
   HOOKS.checkout.review.after,
 ] as const;
 
-export type AllHookNames = typeof ALL_HOOK_NAMES[number];
+export type AllHookNames = (typeof ALL_HOOK_NAMES)[number];
 
 export default HOOKS;
