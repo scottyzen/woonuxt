@@ -108,6 +108,7 @@ If no hook is registered for an outlet, `HookOutlet` renders nothing and does no
 **How to use hooks:**
 
 Create a `hooks` folder in your app or custom layer. WooNuxt automatically loads every `.ts` or `.js` file in that folder.
+Hook files are intended for static app and layer registrations that run during app startup.
 
 ```txt
 hooks/
@@ -126,7 +127,7 @@ export default () => {
   registerHook({
     name: "product.summary.afterPrice",
     id: "trust-badge",
-    renderer: TrustBadge,
+    component: TrustBadge,
   });
 };
 ```
@@ -195,7 +196,7 @@ export default () => {
   registerHook({
     name: "product.summary.afterPrice",
     id: "product-trust-message",
-    renderer: ProductTrustMessage,
+    component: ProductTrustMessage,
     priority: 10,
   });
 };
@@ -212,7 +213,7 @@ export default () => {
   registerHook({
     name: "product.summary.beforeTitle",
     id: "sale-notice",
-    renderer: SaleNotice,
+    component: SaleNotice,
     priority: 5,
     when: ({ product }) => Boolean(product?.salePrice),
   });
