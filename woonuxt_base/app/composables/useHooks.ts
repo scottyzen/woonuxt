@@ -22,26 +22,14 @@ export interface HookEntry {
 export interface HookContextMap {
   // Layout hooks
   'layout.header.beforeNav': Record<string, never>;
-  'layout.header.afterNav': Record<string, never>;
-  'layout.footer.top': Record<string, never>;
   'layout.footer.bottom': Record<string, never>;
 
   // Product page hooks
   'product.summary.beforeTitle': { product: any };
   'product.summary.afterPrice': { product: any };
-  'product.summary.afterDescription': { product: any };
-  'product.gallery.after': { product: any };
   'product.tabs.after': { product: any };
 
-  // Cart hooks
-  'cart.lineItem.afterName': { item: any; cart: any };
-  'cart.summary.beforeTotals': { cart: any };
-  'cart.summary.afterTotals': { cart: any };
-
   // Checkout hooks
-  'checkout.customer.before': { checkout: any };
-  'checkout.shipping.afterMethods': { checkout: any };
-  'checkout.payment.beforeMethods': { checkout: any };
   'checkout.review.after': { checkout: any };
 }
 
@@ -131,7 +119,7 @@ export const useHooks = (): HookRegistry => {
     // Sort by priority (lower first), then by stable order (ID)
     entries.sort((a, b) => {
       if (a.priority !== b.priority) {
-        return (a.priority || 10) - (b.priority || 10);
+        return (a.priority ?? 10) - (b.priority ?? 10);
       }
       return a.id.localeCompare(b.id);
     });

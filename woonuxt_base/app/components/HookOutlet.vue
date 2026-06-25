@@ -1,6 +1,10 @@
 <script setup lang="ts" generic="T extends HookName">
 import type { Component } from 'vue';
-import type { HookName, HookContext } from '../composables/useHooks';
+import type { HookEntry, HookName, HookContext } from '../composables/useHooks';
+
+defineOptions({
+  inheritAttrs: false,
+});
 
 interface Props {
   /** The name of the hook outlet */
@@ -19,6 +23,7 @@ const props = withDefaults(defineProps<Props>(), {
   required: false,
 });
 
+const attrs = useAttrs();
 const { get } = useHooks();
 
 // Warn in development if required outlet has no hooks
@@ -36,7 +41,7 @@ const entries = computed(() => {
   const allEntries = get(props.name);
 
   // Filter by when condition
-  return allEntries.filter((entry: any) => {
+  return allEntries.filter((entry: HookEntry) => {
     if (!entry.when) return true;
     try {
       return entry.when(props.ctx);
@@ -52,10 +57,10 @@ const entries = computed(() => {
 /**
  * Render a single hook entry
  */
-const renderEntry = (entry: any) => {
+const renderEntry = (entry: HookEntry) => {
   try {
     if (typeof entry.renderer === 'function') {
-      return entry.renderer(props.ctx);
+      return (entry.renderer as (ctx: HookContext<T>) => ReturnType<typeof h> | ReturnType<typeof h>[] | null)(props.ctx);
     }
     return h(entry.renderer, { ctx: props.ctx });
   } catch (error) {
@@ -69,7 +74,7 @@ const renderEntry = (entry: any) => {
 
 <template>
   <template v-if="entries.length > 0">
-    <component :is="as">
+    <component :is="as" v-bind="attrs">
       <component :is="() => renderEntry(entry)" v-for="entry in entries" :key="entry.id" />
     </component>
   </template>
