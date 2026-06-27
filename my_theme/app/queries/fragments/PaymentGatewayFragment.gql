@@ -1,0 +1,6 @@
+fragment PaymentGateway on PaymentGateway {
+  title
+  id
+  description
+  icon
+}

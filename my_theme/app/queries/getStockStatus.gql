@@ -1,0 +1,15 @@
+query getStockStatus($slug: ID!) {
+  product(id: $slug, idType: SLUG) {
+    ... on SimpleProduct {
+      stockStatus
+    }
+    ... on VariableProduct {
+      stockStatus
+      variations {
+        nodes {
+          stockStatus
+        }
+      }
+    }
+  }
+}

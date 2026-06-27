@@ -1,0 +1,10 @@
+fragment ProductCategories on Product {
+  productCategories {
+    nodes {
+      databaseId
+      slug
+      name
+      count
+    }
+  }
+}

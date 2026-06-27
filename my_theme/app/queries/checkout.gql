@@ -1,0 +1,54 @@
+mutation Checkout(
+  $billing: CustomerAddressInput = {}
+  $metaData: [MetaDataInput] = []
+  $paymentMethod: String = "stripe"
+  $shipping: CustomerAddressInput = {}
+  $customerNote: String = ""
+  $shipToDifferentAddress: Boolean = false
+  $account: CreateAccountInput = { username: "", password: "" }
+  $transactionId: String = ""
+  $isPaid: Boolean = false
+  $shippingMethod: [String] = []
+) {
+  checkout(
+    input: {
+      paymentMethod: $paymentMethod
+      billing: $billing
+      metaData: $metaData
+      shipping: $shipping
+      shippingMethod: $shippingMethod
+      customerNote: $customerNote
+      shipToDifferentAddress: $shipToDifferentAddress
+      account: $account
+      transactionId: $transactionId
+      isPaid: $isPaid
+    }
+  ) {
+    result
+    redirect
+    order {
+      needsPayment
+      needsProcessing
+      status
+      databaseId
+      orderKey
+      subtotal
+      total
+      subtotal
+      totalTax
+      shippingTotal
+      paymentMethodTitle
+      paymentMethod
+      date
+      subtotal
+      customer {
+        email
+      }
+      lineItems {
+        nodes {
+          ...LineItem
+        }
+      }
+    }
+  }
+}

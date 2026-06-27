@@ -1,0 +1,537 @@
+import type { AddToCartInput, ApiResponse, Cart, Customer, PaymentGateways, ProductDetail, SimpleProduct, Variation } from '#types/gql';
+
+import type { GetCartQuery } from '#gql/default';
+
+let cartMutationQueue: Promise<void> = Promise.resolve();
+
+/**
+ * @name useCart
+ * @description A composable that handles the cart in local storage
+ */
+export function useCart() {
+  const { storeSettings } = useAppConfig();
+  const isOptimisticCartMode = computed(() => (storeSettings.cartMode ?? 'optimistic') === 'optimistic');
+
+  const cart = useState<Cart | null>('cart', () => null);
+  const isShowingCart = useState<boolean>('isShowingCart', () => false);
+  const isUpdatingCart = useState<boolean>('isUpdatingCart', () => false);
+  const isAddingToCart = useState<boolean>('isAddingToCart', () => false);
+  const isUpdatingCoupon = useState<boolean>('isUpdatingCoupon', () => false);
+  const optimisticPendingMutations = useState<number>('optimisticPendingMutations', () => 0);
+  const optimisticServerCart = useState<Cart | null>('optimisticServerCart', () => null);
+  const optimisticHadError = useState<boolean>('optimisticHadError', () => false);
+  const paymentGateways = useState<PaymentGateways | null>('paymentGateways', () => null);
+  const { getDomain, getErrorContext, getErrorMessage } = useHelpers();
+  const gql = useWooGraphQL();
+
+  type CartNode = NonNullable<NonNullable<Cart['contents']>['nodes']>[number];
+  type CartItem = CartNode & { key: string };
+  type OptimisticAddPayload = {
+    product: ProductDetail;
+    variation?: Variation | null;
+  };
+
+  const normalizeQuantity = (value?: number | string | null, fallback = 1): number => {
+    const qty = typeof value === 'number' ? value : Number(value);
+    return Number.isFinite(qty) && qty > 0 ? qty : fallback;
+  };
+
+  const buildEmptyCart = (): Cart =>
+    ({
+      isEmpty: true,
+      contents: {
+        itemCount: 0,
+        productCount: 0,
+        nodes: [],
+      },
+    }) as unknown as Cart;
+
+  const getOptimisticBase = (): Cart => cart.value ?? buildEmptyCart();
+
+  const createOptimisticKey = (): string => `optimistic:${Date.now()}:${Math.random().toString(36).slice(2, 8)}`;
+
+  const buildOptimisticProductNode = (product: ProductDetail) => ({
+    name: product.name,
+    slug: product.slug,
+    databaseId: product.databaseId,
+    regularPrice: product.regularPrice,
+    rawRegularPrice: product.rawRegularPrice ?? product.regularPrice ?? null,
+    salePrice: product.salePrice,
+    rawSalePrice: product.rawSalePrice ?? product.salePrice ?? null,
+    stockQuantity: product.stockQuantity,
+    lowStockAmount: product.lowStockAmount,
+    image: product.image,
+  });
+
+  const buildOptimisticVariationNode = (variation?: Variation | null) => {
+    if (!variation) return null;
+    return {
+      ...variation,
+      rawRegularPrice: (variation as { rawRegularPrice?: string | null }).rawRegularPrice ?? variation.regularPrice ?? null,
+      rawSalePrice: (variation as { rawSalePrice?: string | null }).rawSalePrice ?? variation.salePrice ?? null,
+    };
+  };
+
+  const buildOptimisticItem = (payload: OptimisticAddPayload, quantity: number): CartItem => {
+    const productNode = buildOptimisticProductNode(payload.product);
+    const variationNode = buildOptimisticVariationNode(payload.variation);
+
+    return {
+      key: createOptimisticKey(),
+      quantity,
+      product: {
+        node: productNode,
+        image: productNode.image,
+      },
+      variation: variationNode ? { node: variationNode } : null,
+    } as unknown as CartItem;
+  };
+
+  const matchesOptimisticTarget = (node: CartItem, payload: OptimisticAddPayload): boolean => {
+    const nodeVariationId = (node.variation?.node as { databaseId?: number } | null)?.databaseId;
+    if (payload.variation?.databaseId && nodeVariationId) {
+      return nodeVariationId === payload.variation.databaseId;
+    }
+    if (payload.variation?.slug) {
+      return node.variation?.node?.slug === payload.variation.slug;
+    }
+    return node.product?.node?.databaseId === payload.product.databaseId;
+  };
+
+  const applyOptimisticAdd = (payload: OptimisticAddPayload, quantity: number): void => {
+    const base = getOptimisticBase();
+    const nodes = (base.contents?.nodes ?? []).filter((node): node is CartItem => !!node?.key);
+    const matchIndex = nodes.findIndex((node) => matchesOptimisticTarget(node, payload));
+
+    if (matchIndex >= 0) {
+      const existing = nodes[matchIndex];
+      if (!existing) return;
+      nodes[matchIndex] = {
+        ...existing,
+        quantity: normalizeQuantity(existing.quantity) + quantity,
+      };
+    } else {
+      nodes.unshift(buildOptimisticItem(payload, quantity));
+    }
+
+    const itemCount = nodes.reduce((sum, node) => sum + normalizeQuantity(node.quantity), 0);
+    const productCount = nodes.length;
+
+    const nextCart: Cart = {
+      ...base,
+      contents: {
+        ...(base.contents ?? {}),
+        nodes,
+        itemCount,
+        productCount,
+      },
+      isEmpty: nodes.length === 0,
+    };
+    cart.value = nextCart;
+  };
+
+  const applyOptimisticEmptyCart = (): void => {
+    cart.value = buildEmptyCart();
+  };
+
+  const applyOptimisticQuantityChange = (key: string, quantity: number): void => {
+    const base = getOptimisticBase();
+    const nodes = (base.contents?.nodes ?? []).filter((node): node is CartItem => !!node?.key);
+    const matchIndex = nodes.findIndex((node) => node.key === key);
+    if (matchIndex < 0) return;
+
+    const safeQuantity = Number.isFinite(quantity) && quantity > 0 ? quantity : 0;
+    if (safeQuantity === 0) {
+      nodes.splice(matchIndex, 1);
+    } else {
+      const existing = nodes[matchIndex];
+      if (!existing) return;
+      nodes[matchIndex] = {
+        ...existing,
+        quantity: safeQuantity,
+      };
+    }
+
+    const itemCount = nodes.reduce((sum, node) => sum + normalizeQuantity(node.quantity, 0), 0);
+    const productCount = nodes.length;
+
+    const nextCart: Cart = {
+      ...base,
+      contents: {
+        ...(base.contents ?? {}),
+        nodes,
+        itemCount,
+        productCount,
+      },
+      isEmpty: nodes.length === 0,
+    };
+    cart.value = nextCart;
+  };
+
+  const finalizeOptimisticMutations = async (): Promise<void> => {
+    if (optimisticPendingMutations.value !== 0) return;
+    if (optimisticHadError.value) {
+      optimisticHadError.value = false;
+      await refreshCart();
+      return;
+    }
+    if (optimisticServerCart.value) {
+      cart.value = optimisticServerCart.value;
+      optimisticServerCart.value = null;
+    }
+  };
+
+  const enqueueCartMutation = (fn: () => Promise<Cart | null>, optimistic: boolean): Promise<void> => {
+    const run = cartMutationQueue
+      .catch(() => {})
+      .then(async () => {
+        try {
+          const nextCart = await fn();
+          if (optimistic) {
+            if (nextCart) optimisticServerCart.value = nextCart;
+          } else if (nextCart) {
+            cart.value = nextCart;
+          }
+        } catch (error: unknown) {
+          const errorMsg = getErrorMessage(error);
+          console.error('Error updating cart:', errorMsg);
+          if (optimistic) optimisticHadError.value = true;
+          throw error;
+        }
+      });
+
+    cartMutationQueue = run.catch(() => {});
+    return run;
+  };
+
+  const runOptimisticMutation = (applyLocal: () => void, mutation: () => Promise<Cart | null>): void => {
+    applyLocal();
+    optimisticPendingMutations.value += 1;
+    void enqueueCartMutation(mutation, true)
+      .catch(() => {})
+      .finally(async () => {
+        optimisticPendingMutations.value = Math.max(0, optimisticPendingMutations.value - 1);
+        await finalizeOptimisticMutations();
+      });
+  };
+
+  type CartQueryPayload = Partial<Pick<GetCartQuery, 'cart' | 'customer' | 'viewer' | 'paymentGateways' | 'loginClients'>>;
+
+  const syncWooSession = (token?: string | null): void => {
+    if (!token) return;
+    useGqlHeaders({ 'woocommerce-session': `Session ${token}` });
+
+    if (!import.meta.client) return;
+    const domain = getDomain(window.location.href);
+    const cookieOptions = domain ? { domain, path: '/' } : { path: '/' };
+    const sessionCookie = useCookie<string | null>('woocommerce-session', cookieOptions);
+    sessionCookie.value = token;
+  };
+
+  const applyCartSnapshot = (payload: CartQueryPayload): void => {
+    const { updateCustomer, updateViewer, updateLoginClients } = useAuth();
+    const { cart, customer, viewer, paymentGateways, loginClients } = payload;
+    const hasKey = (key: keyof CartQueryPayload) => Object.prototype.hasOwnProperty.call(payload, key);
+
+    if (hasKey('cart')) updateCart(cart ?? null);
+    if (hasKey('viewer')) updateViewer(viewer ?? null);
+    if (customer) updateCustomer(customer);
+    if (!customer?.sessionToken && viewer?.wooSessionToken) syncWooSession(viewer.wooSessionToken);
+
+    if (paymentGateways) updatePaymentGateways(paymentGateways);
+    if (loginClients) updateLoginClients(loginClients.filter((client) => client !== null));
+  };
+
+  const extractCartPayloadFromError = (error: unknown): CartQueryPayload | null => {
+    const candidate = (error as any)?.response?.data?.data ?? (error as any)?.response?.data ?? (error as any)?.data?.data ?? (error as any)?.data ?? null;
+
+    if (!candidate || typeof candidate !== 'object') return null;
+
+    const hasUsableCartFields =
+      Object.prototype.hasOwnProperty.call(candidate, 'cart') ||
+      Object.prototype.hasOwnProperty.call(candidate, 'customer') ||
+      Object.prototype.hasOwnProperty.call(candidate, 'viewer') ||
+      Object.prototype.hasOwnProperty.call(candidate, 'paymentGateways') ||
+      Object.prototype.hasOwnProperty.call(candidate, 'loginClients');
+
+    return hasUsableCartFields ? (candidate as CartQueryPayload) : null;
+  };
+
+  const fetchCartSnapshot = async (): Promise<CartQueryPayload> => {
+    const { getAuthTokenForRequest } = useAuthTokens();
+    const authToken = await getAuthTokenForRequest();
+    const requestHeaders = authToken ? { Authorization: `Bearer ${authToken}` } : undefined;
+
+    return await gql.getCart(undefined, requestHeaders);
+  };
+
+  /** Refesh the cart from the server
+   * @returns {Promise<boolean>} - A promise that resolves
+   * to true if the cart was successfully refreshed
+   */
+  async function refreshCart(): Promise<boolean> {
+    try {
+      const payload = await fetchCartSnapshot();
+      applyCartSnapshot(payload as CartQueryPayload);
+      return true; // Cart was successfully refreshed
+    } catch (error: unknown) {
+      const recoveredPayload = extractCartPayloadFromError(error);
+      if (recoveredPayload) {
+        applyCartSnapshot(recoveredPayload);
+        return true;
+      }
+
+      const { isAuthError } = getErrorContext(error);
+
+      if (isAuthError) {
+        const { refreshAuthToken, clearActiveAuthToken } = useAuthTokens();
+        const refreshed = await refreshAuthToken(true);
+        if (refreshed) {
+          try {
+            const retryPayload = await fetchCartSnapshot();
+            applyCartSnapshot(retryPayload as CartQueryPayload);
+            return true;
+          } catch {
+            /* ignore retry error */
+          }
+        }
+
+        clearActiveAuthToken();
+        useGqlHeaders({ Authorization: '' });
+
+        const { updateCustomer, updateViewer } = useAuth();
+        updateViewer(null);
+
+        const sessionCookie = import.meta.client
+          ? useCookie<string | null>('woocommerce-session', { domain: getDomain(window.location.href), path: '/' }).value ||
+            useCookie<string | null>('woocommerce-session', { path: '/' }).value
+          : null;
+
+        if (!sessionCookie) {
+          updateCustomer({ billing: {}, shipping: {} } as Customer);
+        }
+      }
+
+      if (!isAuthError) {
+        getErrorMessage(error);
+      }
+      resetInitialState();
+      return false; // Cart was not successfully refreshed
+    } finally {
+      isUpdatingCart.value = false;
+    }
+  }
+
+  function resetInitialState() {
+    cart.value = null;
+    paymentGateways.value = null;
+  }
+
+  function updateCart(payload?: Cart | null): void {
+    cart.value = payload || null;
+  }
+
+  function updatePaymentGateways(payload: PaymentGateways): void {
+    paymentGateways.value = payload;
+  }
+
+  // toggle the cart visibility
+  function toggleCart(state: boolean | undefined = undefined): void {
+    isShowingCart.value = state ?? !isShowingCart.value;
+  }
+
+  // add an item to the cart
+  async function addToCart(input: AddToCartInput, optimistic?: OptimisticAddPayload): Promise<void> {
+    isAddingToCart.value = true;
+    const quantity = normalizeQuantity(input.quantity);
+    // cartMode controls whether we update UI immediately or wait for server confirmation.
+    const canOptimistic = !!optimistic?.product && isOptimisticCartMode.value;
+
+    if (!canOptimistic) {
+      isUpdatingCart.value = true;
+    }
+
+    try {
+      if (canOptimistic) {
+        runOptimisticMutation(
+          () => {
+            applyOptimisticAdd(optimistic, quantity);
+            if (storeSettings.autoOpenCart && !isShowingCart.value) toggleCart(true);
+          },
+          async () => {
+            const { addToCart } = await gql.addToCart({ input: { ...input, quantity } });
+            return addToCart?.cart ?? null;
+          },
+        );
+        return;
+      }
+
+      await enqueueCartMutation(async () => {
+        const { addToCart } = await gql.addToCart({ input: { ...input, quantity } });
+        return addToCart?.cart ?? null;
+      }, false);
+      // Auto open the cart when an item is added to the cart if the setting is enabled
+      if (!canOptimistic && storeSettings.autoOpenCart && !isShowingCart.value) toggleCart(true);
+    } catch (error: unknown) {
+      const errorMsg = getErrorMessage(error);
+      console.error('Error adding to cart:', errorMsg);
+    } finally {
+      isAddingToCart.value = false;
+      if (!canOptimistic) isUpdatingCart.value = false;
+    }
+  }
+
+  // remove an item from the cart
+  async function removeItem(key: string): Promise<void> {
+    await updateItemQuantity(key, 0);
+  }
+
+  // update the quantity of an item in the cart
+  async function updateItemQuantity(key: string, quantity: number): Promise<void> {
+    const canOptimistic = isOptimisticCartMode.value;
+
+    if (canOptimistic) {
+      const safeQuantity = normalizeQuantity(quantity, 0);
+      runOptimisticMutation(
+        () => applyOptimisticQuantityChange(key, safeQuantity),
+        async () => {
+          const { updateItemQuantities } = await gql.UpDateCartQuantity({ key, quantity: safeQuantity });
+          return updateItemQuantities?.cart ?? null;
+        },
+      );
+      return;
+    }
+
+    isUpdatingCart.value = true;
+    try {
+      const { updateItemQuantities } = await gql.UpDateCartQuantity({ key, quantity });
+      updateCart(updateItemQuantities?.cart);
+    } catch (error: unknown) {
+      const errorMsg = getErrorMessage(error);
+      console.error('Error updating item quantity:', errorMsg);
+    } finally {
+      isUpdatingCart.value = false;
+    }
+  }
+
+  // empty the cart
+  async function emptyCart(): Promise<void> {
+    const canOptimistic = isOptimisticCartMode.value;
+
+    if (canOptimistic) {
+      applyOptimisticEmptyCart();
+      optimisticPendingMutations.value += 1;
+
+      try {
+        await enqueueCartMutation(async () => {
+          const { emptyCart } = await gql.EmptyCart();
+          return emptyCart?.cart ?? null;
+        }, true);
+      } catch {
+        optimisticHadError.value = true;
+      } finally {
+        optimisticPendingMutations.value = Math.max(0, optimisticPendingMutations.value - 1);
+        await finalizeOptimisticMutations();
+      }
+      return;
+    }
+
+    try {
+      isUpdatingCart.value = true;
+      const { emptyCart } = await gql.EmptyCart();
+      updateCart(emptyCart?.cart);
+    } catch (error: unknown) {
+      const errorMsg = getErrorMessage(error);
+      // Don't log error if cart is already empty
+      if (errorMsg && !errorMsg.toLowerCase().includes('cart is empty')) {
+        console.error('Error emptying cart:', errorMsg);
+      }
+    } finally {
+      isUpdatingCart.value = false;
+    }
+  }
+
+  // Update shipping method
+  async function updateShippingMethod(shippingMethods: string): Promise<void> {
+    isUpdatingCart.value = true;
+    try {
+      const { updateShippingMethod } = await gql.ChangeShippingMethod({ shippingMethods });
+      updateCart(updateShippingMethod?.cart);
+    } catch (error: unknown) {
+      const errorMsg = getErrorMessage(error);
+      console.error('Error updating shipping method:', errorMsg);
+    } finally {
+      isUpdatingCart.value = false;
+    }
+  }
+
+  // Apply coupon
+  async function applyCoupon(code: string): Promise<ApiResponse<Cart | null>> {
+    try {
+      isUpdatingCoupon.value = true;
+      const { applyCoupon } = await gql.applyCoupon({ code });
+      updateCart(applyCoupon?.cart);
+      return { success: true, data: applyCoupon?.cart || null };
+    } catch (error: unknown) {
+      const errorMsg = getErrorMessage(error);
+      return { success: false, error: errorMsg };
+    } finally {
+      isUpdatingCoupon.value = false;
+    }
+  }
+
+  // Remove coupon
+  async function removeCoupon(code: string): Promise<void> {
+    try {
+      isUpdatingCart.value = true;
+      const { removeCoupons: removeCouponResponse } = await gql.removeCoupons({ codes: [code] });
+      updateCart(removeCouponResponse?.cart);
+    } catch (error: unknown) {
+      const errorMsg = getErrorMessage(error);
+      console.error('Error removing coupon:', errorMsg);
+    } finally {
+      isUpdatingCart.value = false;
+    }
+  }
+
+  // Stop the loading spinner when the cart is updated
+  watch(cart, () => {
+    if (!isUpdatingCart.value) return;
+    isUpdatingCart.value = false;
+  });
+
+  // Check if all products in the cart are virtual
+  const allProductsAreVirtual = computed(() => {
+    const nodes = cart.value?.contents?.nodes || [];
+    return nodes.length === 0 ? false : nodes.every((node) => (node.product?.node as SimpleProduct)?.virtual === true);
+  });
+
+  // Unified cart mutation state for optimistic and non-optimistic flows.
+  const isCartMutating = computed(() => isUpdatingCart.value || optimisticPendingMutations.value > 0);
+
+  // Check if the billing address is enabled
+  const isBillingAddressEnabled = computed(() => (storeSettings.hideBillingAddressForVirtualProducts ? !allProductsAreVirtual.value : true));
+
+  return {
+    cart,
+    isShowingCart,
+    isUpdatingCart,
+    isCartMutating,
+    isAddingToCart,
+    isUpdatingCoupon,
+    optimisticPendingMutations,
+    paymentGateways,
+    isBillingAddressEnabled,
+    isOptimisticCartMode,
+    updateCart,
+    refreshCart,
+    toggleCart,
+    addToCart,
+    removeItem,
+    updateItemQuantity,
+    emptyCart,
+    updateShippingMethod,
+    applyCoupon,
+    removeCoupon,
+  };
+}

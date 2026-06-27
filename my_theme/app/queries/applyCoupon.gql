@@ -1,0 +1,13 @@
+mutation applyCoupon($code: String!) {
+  applyCoupon(input: { code: $code }) {
+    applied {
+      code
+      description
+      discountTax
+      discountAmount
+    }
+    cart {
+      ...Cart
+    }
+  }
+}

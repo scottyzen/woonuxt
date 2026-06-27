@@ -1,0 +1,12 @@
+fragment DownloadableItem on DownloadableItem {
+  id
+  name
+  product {
+    name
+    slug
+  }
+  # downloadUrl
+  url
+  accessExpires
+  downloadsRemaining
+}

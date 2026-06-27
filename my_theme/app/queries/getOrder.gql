@@ -1,0 +1,9 @@
+query getOrder($id: String!) {
+  customer {
+    orders(where: { search: $id }) {
+      nodes {
+        ...OrderFragment
+      }
+    }
+  }
+}

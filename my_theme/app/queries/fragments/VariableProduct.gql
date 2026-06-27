@@ -1,0 +1,46 @@
+fragment VariableProduct on VariableProduct {
+  name
+  slug
+  price
+  rawPrice: price(format: RAW)
+  date
+  regularPrice
+  rawRegularPrice: regularPrice(format: RAW)
+  salePrice
+  rawSalePrice: salePrice(format: RAW)
+  stockStatus
+  stockQuantity
+  lowStockAmount
+  onSale
+  weight
+  length
+  width
+  height
+  image {
+    sourceUrl
+    altText
+    title
+    databaseId
+    cartSourceUrl: sourceUrl(size: THUMBNAIL)
+    productCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
+  }
+  averageRating
+  reviewCount
+  totalSales
+  defaultAttributes {
+    nodes {
+      ...VariationAttribute
+    }
+  }
+  variations(first: 100) {
+    nodes {
+      ...ProductVariation
+    }
+  }
+  galleryImages(first: 20) {
+    nodes {
+      ...Image
+      databaseId
+    }
+  }
+}

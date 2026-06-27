@@ -1,0 +1,66 @@
+query getProduct($slug: ID!, $frontEndUrl: String = "") {
+  product(id: $slug, idType: SLUG) {
+    name
+    type
+    databaseId
+    id
+    fullYoastHead(sanitize: true, frontendUrl: $frontEndUrl)
+    metaData {
+      id
+      key
+      value
+    }
+    slug
+    sku
+    description
+    rawDescription: description(format: RAW)
+    shortDescription
+    ...ProductWithAttributes
+    ...ProductCategories
+    ...Terms
+    ...SimpleProduct
+    ...VariableProduct
+    ...ExternalProduct
+    related(first: 5) {
+      nodes {
+        ...SimpleProduct
+        ...VariableProduct
+        ...ExternalProduct
+      }
+    }
+    reviews(first: 100) {
+      averageRating
+      edges {
+        rating
+        node {
+          ...Comment
+        }
+      }
+    }
+  }
+}
+fragment ProductWithAttributes on Product {
+  attributes {
+    nodes {
+      ...ProductAttribute
+    }
+  }
+}
+fragment ProductAttribute on ProductAttribute {
+  variation
+  name
+  id
+  options
+  label
+  scope
+  ... on GlobalProductAttribute {
+    terms(where: { orderby: TERM_ORDER, order: ASC }) {
+      nodes {
+        name
+        slug
+        taxonomyName
+        databaseId
+      }
+    }
+  }
+}

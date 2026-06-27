@@ -1,0 +1,32 @@
+fragment LineItemProduct on Product {
+  name
+  slug
+  image {
+    sourceUrl(size: THUMBNAIL)
+    altText
+    title
+  }
+}
+fragment LineItemVariation on ProductVariation {
+  name
+  image {
+    sourceUrl(size: THUMBNAIL)
+    altText
+    title
+  }
+}
+fragment LineItem on LineItem {
+  quantity
+  total
+  id
+  product {
+    node {
+      ...LineItemProduct
+    }
+  }
+  variation {
+    node {
+      ...LineItemVariation
+    }
+  }
+}

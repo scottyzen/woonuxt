@@ -1,0 +1,11 @@
+mutation UpdateCustomer($input: UpdateCustomerInput!) {
+  updateCustomer(input: $input) {
+    customer {
+      downloadableItems(first: 100) {
+        nodes {
+          ...DownloadableItem
+        }
+      }
+    }
+  }
+}

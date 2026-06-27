@@ -1,0 +1,7 @@
+mutation EmptyCart {
+  emptyCart(input: { clearPersistentCart: true }) {
+    cart {
+      ...Cart
+    }
+  }
+}

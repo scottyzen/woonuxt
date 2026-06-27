@@ -1,0 +1,36 @@
+fragment SimpleProduct on SimpleProduct {
+  name
+  slug
+  price
+  rawPrice: price(format: RAW)
+  date
+  regularPrice
+  rawRegularPrice: regularPrice(format: RAW)
+  salePrice
+  rawSalePrice: salePrice(format: RAW)
+  stockStatus
+  stockQuantity
+  lowStockAmount
+  onSale
+  averageRating
+  weight
+  length
+  width
+  height
+  reviewCount
+  virtual
+  image {
+    sourceUrl
+    altText
+    title
+    databaseId
+    cartSourceUrl: sourceUrl(size: THUMBNAIL)
+    productCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
+  }
+  galleryImages(first: 20) {
+    nodes {
+      ...Image
+      databaseId
+    }
+  }
+}

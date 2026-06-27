@@ -1,0 +1,24 @@
+fragment Viewer on User {
+  lastName
+  email
+  databaseId
+  id
+  firstName
+  username
+  nicename
+  wooSessionToken
+  stripeCustomerId
+  savedPaymentMethods {
+    id
+    token
+    customerId
+    last4
+    expiryMonth
+    expiryYear
+    cardType
+    isDefault
+  }
+  avatar {
+    url
+  }
+}
