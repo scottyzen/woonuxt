@@ -100,28 +100,28 @@ Location Hooks are documented in the project docs — see the quick guide and ex
 
 - Hooks documentation: https://github.com/scottyzen/WooNuxtGuide/blob/master/content/4.hooks/index.md
 
-| Feature                                                   | Ongoing Enhancements | In the Pipeline | In Progress | Done | Next |
-| --------------------------------------------------------- | -------------------- | --------------- | ----------- | ---- | ---- |
-| Performance                                               | 🔷                   |                 |             | ✅   |      |
-| SEO                                                       | 🔷                   |                 | ✅          |      |      |
-| Cart                                                      |                      |                 |             | ✅   |      |
-| Search                                                    |                      |                 |             | ✅   |      |
-| Shipping                                                  |                      |                 |             | ✅   |      |
-| Checkout (Stripe, PayPal, Cash on Delivery)               | 🔷                   |                 |             | ✅   | 🔶   |
-| Filtering                                                 | 🔷                   |                 |             | ✅   |      |
-| Wishlists                                                 |                      |                 |             | ✅   |      |
-| Account                                                   |                      |                 |             | ✅   |      |
-| Coupons                                                   |                      |                 |             | ✅   |      |
-| Product Reviews                                           |                      |                 | ✅          |      |      |
-| Product Category Pages                                    |                      |                 | ✅          |      |      |
-| WooNuxt Settings Module                                   | 🔷                   |                 | ✅          |      |      |
-| Better TypeScript Support                                 | 🔷                   |                 | ✅          |      |      |
-| Mobile layout                                             | 🔷                   |                 |             | ✅   |      |
-| Countries & States Enums                                  |                      |                 |             | ✅   |      |
-| Cookie Popup & GDPR Compliance                            |                      | ✅              |             |      |      |
-| Progressive Web App (PWA)                                 |                      |                 | ✅          |      |      |
-| Queuing System (for checking out when the server is busy) |                      | ✅              |             |      | 🔶   |
-| Language Support (i18n)                                   | 🔷                   |                 | ✅          |      |      |
+| Feature                                                   | Ongoing Enhancements | In the Pipeline | In Progress | Done |
+| --------------------------------------------------------- | -------------------- | --------------- | ----------- | ---- |
+| Performance                                               | 🔷                   |                 |             | ✅   |
+| SEO                                                       | 🔷                   |                 | ✅          |      |
+| Cart                                                      |                      |                 |             | ✅   |
+| Search                                                    |                      |                 |             | ✅   |
+| Shipping                                                  |                      |                 |             | ✅   |
+| Checkout (Stripe, PayPal, Cash on Delivery)               | 🔷                   |                 |             | ✅   |
+| Filtering                                                 | 🔷                   |                 |             | ✅   |
+| Wishlists                                                 |                      |                 |             | ✅   |
+| Account                                                   |                      |                 |             | ✅   |
+| Coupons                                                   |                      |                 |             | ✅   |
+| Product Reviews                                           |                      |                 | ✅          |      |
+| Product Category Pages                                    |                      |                 | ✅          |      |
+| WooNuxt Settings Module                                   | 🔷                   |                 | ✅          |      |
+| Better TypeScript Support                                 | 🔷                   |                 | ✅          |      |
+| Mobile layout                                             | 🔷                   |                 |             | ✅   |
+| Countries & States Enums                                  |                      |                 |             | ✅   |
+| Cookie Popup & GDPR Compliance                            |                      | ✅              |             |      |
+| Progressive Web App (PWA)                                 |                      |                 | ✅          |      |
+| Queuing System (for checking out when the server is busy) |                      | ✅              |             |      |
+| Language Support (i18n)                                   | 🔷                   |                 | ✅          |      |
 
 &nbsp;
 
