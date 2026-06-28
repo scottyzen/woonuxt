@@ -23,7 +23,7 @@
     "@vueuse/core": "^14.3.0",
     "graphql": "^16.14.2",
     "graphql-request": "^7.4.0",
-    "reka-ui": "^2.10.0",
+    "reka-ui": "^2.10.1",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.1"
   },
@@ -39,9 +39,9 @@
     "@nuxt/image": "2.0.0",
     "@nuxtjs/i18n": "^10.4.0",
     "@tailwindcss/typography": "^0.5.20",
-    "eslint": "^10.5.0",
+    "eslint": "^10.6.0",
     "nuxt": "^4.4.8",
-    "prettier": "^3.8.4",
+    "prettier": "^3.9.1",
     "typescript": "^6.0.3",
     "vue-tsc": "^3.3.5"
   }
