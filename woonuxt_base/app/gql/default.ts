@@ -5016,8 +5016,14 @@ export type DatabaseIdentifier = {
 export type DateInput = {
   /** Day of the month (from 1 to 31) */
   day?: InputMaybe<Scalars['Int']['input']>;
+  /** Hour of the day (from 0 to 23) */
+  hour?: InputMaybe<Scalars['Int']['input']>;
+  /** Minute of the hour (from 0 to 59) */
+  minute?: InputMaybe<Scalars['Int']['input']>;
   /** Month number (from 1 to 12) */
   month?: InputMaybe<Scalars['Int']['input']>;
+  /** Second of the minute (from 0 to 59) */
+  second?: InputMaybe<Scalars['Int']['input']>;
   /** 4 digit year (e.g. 2017) */
   year?: InputMaybe<Scalars['Int']['input']>;
 };
