@@ -156,6 +156,20 @@ This guide is for contributors working on the WooNuxt codebase or documentation.
    - Confirm that WPGraphQL queries resolve properly
    - If modifying the plugin, verify it within the WordPress admin
 
+Before opening a pull request, from the repository root run:
+
+```bash
+npm run graphql:codegen:check
+```
+
+This regenerates GraphQL types and fails if `woonuxt_base/app/gql/default.ts` is stale.
+
+If GraphQL codegen fails, check these first:
+
+- `GQL_HOST` points to a reachable GraphQL endpoint.
+- `APP_HOST` matches an allowed Origin for your backend.
+- Your `.gql` operations match the current WPGraphQL/WooGraphQL schema.
+
 5. **Stage and commit your changes** using [Conventional Commits](https://www.conventionalcommits.org/):
 
    ```bash
