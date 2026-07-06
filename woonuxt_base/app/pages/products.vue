@@ -23,7 +23,7 @@ onMounted(() => {
 watch(
   () => route.query,
   () => {
-    if (route.name !== 'products') return;
+    if (!['products', 'product-page-pager'].includes(String(route.name))) return;
     updateProductList();
   },
 );

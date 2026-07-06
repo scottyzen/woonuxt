@@ -40,16 +40,15 @@ export function useSearching() {
   }
 
   function searchProducts(products: Product[]): Product[] {
-    const name = route.name ?? 'products';
+    const name = String(route.name ?? 'products');
     const search = getSearchQuery();
 
     /**
      * If we are on a category page, we need to add the category slug to the
      * route, otherwise every search will redirect to the products page.
      */
-    if (route.name === 'product-category-slug') {
-      const categorySlug = route.params.categorySlug as string;
-      router.push({ name, params: { categorySlug }, query: { ...route.query, search } });
+    if (name.startsWith('product-category-')) {
+      router.push({ path: route.path, query: { ...route.query, search } });
     } else {
       router.push({ name: 'products', query: { ...route.query, search } });
     }

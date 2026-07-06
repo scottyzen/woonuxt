@@ -5,9 +5,10 @@ const { setProducts, updateProductList } = useProducts();
 const { isQueryEmpty } = useHelpers();
 const { storeSettings } = useAppConfig();
 const route = useRoute();
-const slug = route.params.slug;
+const routeSlug = route.params.slug ?? route.params.categorySlug;
+const slug = Array.isArray(routeSlug) ? routeSlug[0] : routeSlug;
 
-const { data, error, status } = await useAsyncGql('getProducts', { slug });
+const { data, error, status } = await useAsyncGql('getProducts', { slug: slug ? [slug] : undefined });
 const productsInCategory = computed<Product[]>(() => (data.value?.products?.nodes ?? []) as Product[]);
 const isLoading = computed<boolean>(() => status.value === 'idle' || status.value === 'pending');
 const hasError = computed<boolean>(() => Boolean(error.value));
@@ -23,7 +24,7 @@ onMounted(() => {
 watch(
   () => route.query,
   () => {
-    if (route.name !== 'product-category-slug') return;
+    if (!['product-category-slug', 'product-category-page', 'product-category-page-pager'].includes(String(route.name))) return;
     updateProductList();
   },
 );

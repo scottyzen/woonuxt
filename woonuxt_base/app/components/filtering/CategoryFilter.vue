@@ -12,7 +12,8 @@ const isOpen = ref(props.openByDefault);
 const selectedTerms = ref(getFilter('category') || []);
 
 const route = useRoute();
-const categorySlug = route.params.categorySlug;
+const routeSlug = route.params.slug ?? route.params.categorySlug;
+const categorySlug = Array.isArray(routeSlug) ? routeSlug[0] : routeSlug;
 if (categorySlug) selectedTerms.value = [categorySlug];
 
 watch(isFiltersActive, () => {

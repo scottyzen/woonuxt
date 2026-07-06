@@ -10,6 +10,17 @@ export default defineNuxtPlugin(() => {
   const wooSessionToken = sessionToken.value || fallbackSessionToken.value;
   if (wooSessionToken) useGqlHeaders({ 'woocommerce-session': `Session ${wooSessionToken}` });
 
+  if (import.meta.dev && 'serviceWorker' in navigator) {
+    void navigator.serviceWorker.getRegistrations().then(async (registrations) => {
+      if (!registrations.length) return;
+      await Promise.all(registrations.map((registration) => registration.unregister()));
+      if (navigator.serviceWorker.controller && sessionStorage.getItem('woonuxt:dev-sw-cleared') !== '1') {
+        sessionStorage.setItem('woonuxt:dev-sw-cleared', '1');
+        window.location.reload();
+      }
+    });
+  }
+
   const clearAuthOnly = (): void => {
     clearActiveAuthToken();
     useGqlHeaders({ Authorization: '' });

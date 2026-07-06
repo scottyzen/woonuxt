@@ -2,7 +2,7 @@
 const route = useRoute();
 const { productsPerPage } = useHelpers();
 const { products } = useProducts();
-const page = ref(parseInt(route.params.pageNumber as string) || 1);
+const page = computed(() => parseInt(route.params.pageNumber as string) || 1);
 const productsToShow = computed(() => products.value.slice((page.value - 1) * productsPerPage, page.value * productsPerPage));
 </script>
 
