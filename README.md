@@ -92,6 +92,74 @@ To override base files, copy the same path into your root project or custom laye
 - `woonuxt_base/app/components/ProductCard.vue` → `app/components/ProductCard.vue`
 - `woonuxt_base/app/pages/contact.vue` → `pages/contact.vue`
 
+### PWA configuration and extension
+
+WooNuxt includes `@vite-pwa/nuxt` in the base layer by default. You do not need extra setup to get a working baseline PWA.
+
+In other words, you get PWA support out of the box for free, and key defaults are automatically populated from your WordPress settings.
+
+Default behavior:
+
+- PWA module is enabled in `woonuxt_base/nuxt.config.ts`.
+- Base defaults are assembled in `woonuxt_base/modules/woonuxt-bridge.ts`.
+- `<NuxtPwaManifest />` is mounted in `woonuxt_base/app/app.vue`.
+
+How PWA values are resolved:
+
+1. **WordPress settings first**
+   - `generalSettings.title` → manifest `name` and app title
+   - `generalSettings.description` → manifest/head description
+   - `woonuxtSettings.primary_color` → manifest/head theme color
+2. **App config fallback**
+   - `siteName`
+   - `shortDescription` (or `description`)
+3. **Final fallback**
+   - Name falls back to `WooNuxt` if no title is available.
+
+You can set app-config fallback values in `woonuxt_base/app/app.config.ts` (or override from your child layer):
+
+```ts
+export default defineAppConfig({
+  siteName: 'My Store',
+  shortDescription: 'Headless WooCommerce storefront',
+});
+```
+
+To extend or override PWA behavior in your child layer, add a `pwa` block in your root `nuxt.config.ts`:
+
+```ts
+export default defineNuxtConfig({
+  extends: ['./woonuxt_base'],
+  pwa: {
+    manifest: {
+      short_name: 'MyStore',
+      start_url: '/',
+      display: 'standalone',
+      // Optional custom icon set
+      icons: [
+        { src: '/pwa-192x192.png', sizes: '192x192', type: 'image/png' },
+        { src: '/pwa-512x512.png', sizes: '512x512', type: 'image/png' },
+      ],
+    },
+    workbox: {
+      // Example: add runtime caching for API/media routes
+      runtimeCaching: [
+        {
+          urlPattern: /^https:\/\/secure\.woonuxt\.com\/graphql/,
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'graphql-cache',
+            networkTimeoutSeconds: 3,
+          },
+        },
+      ],
+    },
+  },
+});
+```
+
+Tip: PWA typically improves repeat-visit performance and resilience, not first-load speed.
+
 ### Progress
 
 ### Location Hooks
@@ -119,7 +187,7 @@ Location Hooks are documented in the project docs — see the quick guide and ex
 | Mobile layout                                             | 🔷                   |                 |             | ✅   |
 | Countries & States Enums                                  |                      |                 |             | ✅   |
 | Cookie Popup & GDPR Compliance                            |                      | ✅              |             |      |
-| Progressive Web App (PWA)                                 |                      |                 | ✅          |      |
+| Progressive Web App (PWA)                                 |                      |                 |             | ✅   |
 | Queuing System (for checking out when the server is busy) |                      | ✅              |             |      |
 | Language Support (i18n)                                   | 🔷                   |                 | ✅          |      |
 

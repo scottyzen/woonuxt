@@ -8,11 +8,15 @@ const currentQuery = computed(() => {
   return params ? decodeURIComponent(params) : '';
 });
 
-const page = ref(route.params.pageNumber ? parseInt(route.params.pageNumber as string) : 1);
+const page = computed(() => parseInt(route.params.pageNumber as string) || 1);
 const numberOfPages = computed<number>(() => Math.ceil(products.value.length / productsPerPage || 1));
+const categorySlug = computed(() => {
+  const slug = route.params.slug ?? route.params.categorySlug;
+  return Array.isArray(slug) ? slug[0] : slug;
+});
 
 const pageSrc = (pageNumber: number) => {
-  const base = `/products/page/${pageNumber}`;
+  const base = categorySlug.value ? `/product-category/${categorySlug.value}/page/${pageNumber}` : `/products/page/${pageNumber}`;
   return currentQuery.value ? `${base}/?${currentQuery.value}` : base;
 };
 

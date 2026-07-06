@@ -36,6 +36,7 @@ useHead({
 </script>
 
 <template>
+  <NuxtPwaManifest />
   <NuxtLoadingIndicator />
   <div class="flex flex-col min-h-screen">
     <AppHeader />

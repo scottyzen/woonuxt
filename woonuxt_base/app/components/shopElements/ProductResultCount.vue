@@ -2,7 +2,7 @@
 const route = useRoute();
 const { products } = useProducts();
 const { productsPerPage } = useHelpers();
-const page = ref(parseInt(route.params.pageNumber as string) || 1);
+const page = computed(() => parseInt(route.params.pageNumber as string) || 1);
 </script>
 
 <template>

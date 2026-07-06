@@ -12,18 +12,35 @@ const parsedCatalogIsrTtl = Number.parseInt(process.env.CATALOG_ISR_TTL || '3600
 const catalogIsrTtl = Number.isFinite(parsedCatalogIsrTtl) && parsedCatalogIsrTtl > 0 ? parsedCatalogIsrTtl : 3600;
 
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
+  // compatibilityDate: '2025-07-15',
+
+  experimental: {
+    appManifest: false,
+  },
 
   vite: {
     optimizeDeps: {
-      include: ['@vue/devtools-core', '@vue/devtools-kit', '@vueuse/core', 'graphql-request', 'graphql-tag', 'reka-ui', 'tailwind-merge'],
+      include: [
+        '@stripe/stripe-js/pure',
+        '@vue/devtools-core',
+        '@vue/devtools-kit',
+        '@vueuse/core',
+        'graphql-request',
+        'graphql-tag',
+        'reka-ui',
+        'tailwind-merge',
+        'workbox-window',
+      ],
     },
   },
 
   app: {
     head: {
       htmlAttrs: { lang: 'en' },
-      link: [{ rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' }],
+      link: [
+        { rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', sizes: '180x180' },
+      ],
     },
     pageTransition: { name: 'page', mode: 'default' },
   },
@@ -39,7 +56,7 @@ export default defineNuxtConfig({
 
   components: [{ path: resolve('./app/components'), pathPrefix: false }],
 
-  modules: [resolve('./modules/woonuxt-bridge.ts'), '@nuxt/icon', '@nuxt/image', '@nuxtjs/i18n', '@nuxt/eslint'],
+  modules: [resolve('./modules/woonuxt-bridge.ts'), '@nuxt/icon', '@nuxt/image', '@nuxtjs/i18n', '@nuxt/eslint', '@vite-pwa/nuxt'],
 
   postcss: {
     plugins: {
