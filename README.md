@@ -187,7 +187,7 @@ Location Hooks are documented in the project docs — see the quick guide and ex
 | Mobile layout                                             | 🔷                   |                 |             | ✅   |
 | Countries & States Enums                                  |                      |                 |             | ✅   |
 | Cookie Popup & GDPR Compliance                            |                      | ✅              |             |      |
-| Progressive Web App (PWA)                                 |                      |                 | ✅          |      |
+| Progressive Web App (PWA)                                 |                      |                 |             | ✅   |
 | Queuing System (for checking out when the server is busy) |                      | ✅              |             |      |
 | Language Support (i18n)                                   | 🔷                   |                 | ✅          |      |
 
