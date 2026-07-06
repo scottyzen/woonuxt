@@ -16,7 +16,17 @@ export default defineNuxtConfig({
 
   vite: {
     optimizeDeps: {
-      include: ['@vue/devtools-core', '@vue/devtools-kit', '@vueuse/core', 'graphql-request', 'graphql-tag', 'reka-ui', 'tailwind-merge'],
+      include: [
+        '@stripe/stripe-js/pure',
+        '@vue/devtools-core',
+        '@vue/devtools-kit',
+        '@vueuse/core',
+        'graphql-request',
+        'graphql-tag',
+        'reka-ui',
+        'tailwind-merge',
+        'workbox-window',
+      ],
     },
   },
 
@@ -39,7 +49,7 @@ export default defineNuxtConfig({
 
   components: [{ path: resolve('./app/components'), pathPrefix: false }],
 
-  modules: [resolve('./modules/woonuxt-bridge.ts'), '@nuxt/icon', '@nuxt/image', '@nuxtjs/i18n', '@nuxt/eslint'],
+  modules: [resolve('./modules/woonuxt-bridge.ts'), '@nuxt/icon', '@nuxt/image', '@nuxtjs/i18n', '@nuxt/eslint', '@vite-pwa/nuxt'],
 
   postcss: {
     plugins: {

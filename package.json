@@ -40,6 +40,7 @@
     "@nuxt/image": "2.0.0",
     "@nuxtjs/i18n": "^10.4.0",
     "@tailwindcss/typography": "^0.5.20",
+    "@vite-pwa/nuxt": "^1.1.1",
     "eslint": "^10.6.0",
     "nuxt": "^4.4.8",
     "prettier": "^3.9.4",
