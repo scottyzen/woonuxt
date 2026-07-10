@@ -220,7 +220,6 @@ Location Hooks are documented in the project docs — see the quick guide and ex
 
 - `GQL_HOST` - The GraphQL endpoint for your WordPress site, for example `https://wp.example.com/graphql`.
 - `NUXT_IMAGE_DOMAINS` - The WordPress/CDN hostnames used for optimized images, for example `wp.example.com,cdn.example.com`.
-- `NUXT_IMAGE_PROVIDER` (optional) - Image provider used by `@nuxt/image`. Defaults to `ipx`. Set `netlify` on Netlify deployments.
 
 The WooNuxt Settings plugin automatically provides the remaining storefront settings through GraphQL.
 
