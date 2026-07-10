@@ -4,7 +4,7 @@
       <h1>Privacy Policy</h1>
       <h2>Who we are</h2>
       <p>
-        Our website address is: https://v3.woonuxt.com. <br />
+        Our website address is: https://demo.woonuxt.com. <br />
         <span class="text-red-600">(This is a demo site and not a real business.)</span>
       </p>
       <h2>What personal data we collect and why we collect it</h2>

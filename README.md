@@ -8,7 +8,7 @@ The goal of WooNuxt is to provide a modern, fast, and SEO-friendly front-end for
 
 | Demo            | URL                            |
 | --------------- | ------------------------------ |
-| Netlify Demo    | https://v3.woonuxt.com/        |
+| Netlify Demo    | https://demo.woonuxt.com/      |
 | Vercel Demo     | https://woonuxt-v3.vercel.app/ |
 | NuxtHub Demo    | https://woo.nuxt.dev/          |
 | Customized Demo | https://myshop.woonuxt.com/    |
