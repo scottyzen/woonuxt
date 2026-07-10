@@ -6,6 +6,7 @@ const { resolve } = createResolver(import.meta.url);
 // Environment variables with fallbacks
 const GQL_HOST = process.env.GQL_HOST || 'http://localhost:4000/graphql';
 const APP_HOST = process.env.APP_HOST || 'http://localhost:3000';
+const imageProvider = (process.env.NUXT_IMAGE_PROVIDER || 'ipx').trim().toLowerCase();
 
 // ISR configuration for large catalogs
 const parsedCatalogIsrTtl = Number.parseInt(process.env.CATALOG_ISR_TTL || '3600', 10);
@@ -59,7 +60,7 @@ export default defineNuxtConfig({
   modules: [
     resolve('./modules/woonuxt-bridge.ts'),
     '@nuxt/icon',
-    ['@nuxt/image', { format: ['avif', 'webp'] }],
+    ['@nuxt/image', { provider: imageProvider, format: ['avif', 'webp'] }],
     '@nuxtjs/i18n',
     '@nuxt/eslint',
     '@vite-pwa/nuxt',
