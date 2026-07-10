@@ -55,7 +55,7 @@ const { wooNuxtVersionInfo } = useHelpers();
       <div class="border-t border-gray-200 pt-2 flex items-center justify-center mb-6">
         <div class="copywrite">
           <p class="py-4 text-xs text-center text-gray-600">
-            <a href="https://woonuxt.com" :title="`Built with WooNuxt v${wooNuxtVersionInfo}`">Built with WooNuxt v{{ wooNuxtVersionInfo }}</a>
+            <a href="https://woonuxt.com" :title="`Built with WooNuxt v${wooNuxtVersionInfo}`" target="_blank">Built with WooNuxt v{{ wooNuxtVersionInfo }}</a>
           </p>
         </div>
         <SocialIcons class="ml-auto" />
