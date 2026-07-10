@@ -56,7 +56,14 @@ export default defineNuxtConfig({
 
   components: [{ path: resolve('./app/components'), pathPrefix: false }],
 
-  modules: [resolve('./modules/woonuxt-bridge.ts'), '@nuxt/icon', '@nuxt/image', '@nuxtjs/i18n', '@nuxt/eslint', '@vite-pwa/nuxt'],
+  modules: [
+    resolve('./modules/woonuxt-bridge.ts'),
+    '@nuxt/icon',
+    ['@nuxt/image', { format: ['avif', 'webp'] }],
+    '@nuxtjs/i18n',
+    '@nuxt/eslint',
+    '@vite-pwa/nuxt',
+  ],
 
   postcss: {
     plugins: {
