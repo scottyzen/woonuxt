@@ -84,18 +84,15 @@ const thumbnailButtonClasses = (galleryImg: ImageFragment) => [
   <div :class="galleryRootClasses">
     <div class="relative group aspect-square w-full min-w-0 overflow-hidden rounded-xl bg-gray-100">
       <SaleBadge :node class="absolute text-base top-4 right-4" />
-      <NuxtImg
-        class="h-full w-full object-contain"
+      <NuxtPicture
         :width="imgWidth"
         :height="imgWidth"
         sizes="412px:100vw sm:100vw md:50vw lg:50vw xl:640px"
-        densities="1x"
         :alt="imageToShow.altText || node.name"
         :title="imageToShow.title || node.name"
         :src="imageToShow.sourceUrl || FALLBACK_IMG"
         :preload="{ fetchPriority: 'high' }"
-        placeholder
-        placeholder-class="blur-xl" />
+        :img-attrs="{ class: 'h-full w-full object-contain' }" />
 
       <button
         v-if="galleryImages.length > 1"
@@ -125,15 +122,13 @@ const thumbnailButtonClasses = (galleryImg: ImageFragment) => [
         :aria-label="`Show image for ${node.name}`"
         :aria-pressed="galleryImg.databaseId === imageToShow.databaseId"
         @click="changeImage(galleryImg)">
-        <NuxtImg
-          class="h-full w-full object-contain"
+        <NuxtPicture
           :width="160"
           :height="160"
           :src="galleryImg.sourceUrl || FALLBACK_IMG"
           :alt="galleryImg.altText || node.name"
-          placeholder
-          placeholder-class="blur-xl"
-          loading="lazy" />
+          loading="lazy"
+          :img-attrs="{ class: 'h-full w-full object-contain' }" />
       </button>
     </div>
   </div>

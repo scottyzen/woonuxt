@@ -173,7 +173,7 @@ onMounted(() => {
             class="product-card-slide block flex-[0_0_100%] snap-start snap-always aspect-8/9 overflow-hidden rounded-lg"
             :data-index="slideIndex"
             :to="productLink">
-            <NuxtImg
+            <NuxtPicture
               :width="imgWidth"
               :height="imgHeight"
               :src="image.src"
@@ -181,12 +181,10 @@ onMounted(() => {
               :title="image.title"
               :loading="slideIndex === 0 && index <= 3 ? 'eager' : 'lazy'"
               :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
-              class="object-cover object-top w-full h-full rounded-lg"
-              placeholder
-              placeholder-class="blur-xl" />
+              :img-attrs="{ class: 'object-cover object-top w-full h-full rounded-lg' }" />
           </NuxtLink>
           <div v-else class="product-card-slide block flex-[0_0_100%] snap-start snap-always aspect-8/9 overflow-hidden rounded-lg" :data-index="slideIndex">
-            <NuxtImg
+            <NuxtPicture
               :width="imgWidth"
               :height="imgHeight"
               :src="image.src"
@@ -194,9 +192,7 @@ onMounted(() => {
               :title="image.title"
               :loading="slideIndex === 0 && index <= 3 ? 'eager' : 'lazy'"
               :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
-              class="object-cover object-top w-full h-full rounded-lg"
-              placeholder
-              placeholder-class="blur-xl" />
+              :img-attrs="{ class: 'object-cover object-top w-full h-full rounded-lg' }" />
           </div>
         </template>
       </div>
