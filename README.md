@@ -258,6 +258,7 @@ Run `npm run graphql:codegen` after changing GraphQL queries or updating the WPG
 | French 🇫🇷     | fr   |
 | Italian 🇮🇹    | it   |
 | Portuguese 🇵🇹 | pt   |
+| Korean 🇰🇷     | ko   |
 
 ### Local SSL Setup
 
