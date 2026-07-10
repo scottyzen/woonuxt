@@ -32,14 +32,14 @@ const moveToWishList = () => {
   <SwipeCard :disabled="isOptimisticItem" @remove="removeItem">
     <div v-if="productType" class="flex items-center gap-3 group">
       <NuxtLink :to="productSlug">
-        <NuxtPicture
+        <NuxtImg
           width="64"
           height="64"
+          class="w-16 h-16 rounded-md skeleton"
           :src="imgScr"
           :alt="productType.image?.altText || productType.name"
           :title="productType.image?.title || productType.name"
-          loading="lazy"
-          :img-attrs="{ class: 'w-16 h-16 rounded-md skeleton' }" />
+          loading="lazy" />
       </NuxtLink>
       <div class="flex-1">
         <div class="flex gap-x-2 gap-y-1 flex-wrap items-center">

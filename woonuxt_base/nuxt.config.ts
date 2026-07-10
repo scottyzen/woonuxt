@@ -60,7 +60,7 @@ export default defineNuxtConfig({
   modules: [
     resolve('./modules/woonuxt-bridge.ts'),
     '@nuxt/icon',
-    ['@nuxt/image', { provider: imageProvider, format: ['avif', 'webp'] }],
+    ['@nuxt/image', { provider: imageProvider }],
     '@nuxtjs/i18n',
     '@nuxt/eslint',
     '@vite-pwa/nuxt',

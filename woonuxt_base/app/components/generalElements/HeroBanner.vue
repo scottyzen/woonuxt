@@ -1,14 +1,16 @@
 <template>
   <div class="relative mx-auto">
-    <NuxtPicture
+    <NuxtImg
       width="1400"
       height="800"
+      class="object-cover w-full h-[420px] lg:h-[560px] xl:h-[640px]"
       src="/images/hero-4.jpg"
       alt="Hero image"
       loading="eager"
-      sizes="sm:100vw md:100vw lg:100vw xl:100vw 2xl:1400px"
+      sizes="sm:100vw md:1400px"
       :preload="{ fetchPriority: 'high' }"
-      :img-attrs="{ class: 'object-cover w-full h-[420px] lg:h-[560px] xl:h-[640px]' }" />
+      placeholder
+      placeholder-class="blur-xl" />
     <div class="container absolute inset-0 flex flex-col items-start justify-center bg-linear-to-l from-gray-200 sm:bg-none">
       <h1 class="text-3xl font-bold md:mb-4 md:text-4xl lg:text-6xl">Just landed.</h1>
       <h2 class="text-lg font-bold md:mb-4 lg:text-3xl">The New Year Collection</h2>
