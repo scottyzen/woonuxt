@@ -51,18 +51,20 @@ const { wooNuxtVersionInfo } = useHelpers();
         </div>
       </div>
     </div>
-    <div class="container border-t border-gray-200 flex items-center justify-center mb-4">
-      <div class="copywrite">
-        <p class="py-4 text-xs text-center text-gray-600">
-          <a href="https://woonuxt.com" :title="`WooNuxt v${wooNuxtVersionInfo}`">{{ `WooNuxt v${wooNuxtVersionInfo}` }}</a> - by
-          <a href="https://scottyzen.com" title="Scott Kennedy - Web Developer" target="_blank">Scott Kennedy</a>
-        </p>
+    <div class="container">
+      <div class="border-t border-gray-200 pt-2 flex items-center justify-center mb-6">
+        <div class="copywrite">
+          <p class="py-4 text-xs text-center text-gray-600">
+            <a href="https://woonuxt.com" :title="`WooNuxt v${wooNuxtVersionInfo}`">{{ `WooNuxt v${wooNuxtVersionInfo}` }}</a> - by
+            <a href="https://scottyzen.com" title="Scott Kennedy - Web Developer" target="_blank">Scott Kennedy</a>
+          </p>
+        </div>
+        <SocialIcons class="ml-auto" />
       </div>
-      <SocialIcons class="ml-auto" />
     </div>
 
     <!-- Hook: Bottom of footer -->
-    <HookOutlet name="layout.footer.bottom" as="div" class="container pb-8" />
+    <HookOutlet name="layout.footer.bottom" as="div" />
   </footer>
 </template>
 
