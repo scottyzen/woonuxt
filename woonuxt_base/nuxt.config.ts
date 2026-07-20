@@ -1,5 +1,6 @@
 import { createResolver } from '@nuxt/kit';
 import { defineNuxtConfig } from 'nuxt/config';
+import tailwindcss from '@tailwindcss/vite';
 
 const { resolve } = createResolver(import.meta.url);
 
@@ -20,6 +21,7 @@ export default defineNuxtConfig({
   },
 
   vite: {
+    plugins: [tailwindcss()],
     optimizeDeps: {
       include: [
         '@stripe/stripe-js/pure',
@@ -65,12 +67,6 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@vite-pwa/nuxt',
   ],
-
-  postcss: {
-    plugins: {
-      '@tailwindcss/postcss': {},
-    },
-  },
 
   css: [resolve('./app/assets/css/main.css')],
 

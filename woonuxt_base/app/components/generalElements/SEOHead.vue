@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ResolvableLink, ResolvableMeta, ResolvableScript } from '@unhead/vue';
 import type { ProductDetail } from '#types/gql';
 import type { SeoHeadData } from '#types/seo-provider';
 
@@ -12,9 +13,9 @@ const seoData: SeoHeadData = typeof yoastHead === 'string' && yoastHead.trim() ?
 
 useHead({
   title: seoData.title,
-  meta: seoData.meta,
-  link: seoData.link,
-  script: seoData.script.map((item) => ({ type: item.type, innerHTML: item.innerHTML })),
+  meta: seoData.meta as ResolvableMeta[],
+  link: seoData.link as ResolvableLink[],
+  script: seoData.script.map((item) => ({ type: item.type, innerHTML: item.innerHTML })) as ResolvableScript[],
 });
 </script>
 

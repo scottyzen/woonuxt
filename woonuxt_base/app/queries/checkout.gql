@@ -9,6 +9,7 @@ mutation Checkout(
   $transactionId: String = ""
   $isPaid: Boolean = false
   $shippingMethod: [String] = []
+  $createdVia: String = "WooNuxt"
 ) {
   checkout(
     input: {
@@ -22,6 +23,7 @@ mutation Checkout(
       account: $account
       transactionId: $transactionId
       isPaid: $isPaid
+      createdVia: $createdVia
     }
   ) {
     result

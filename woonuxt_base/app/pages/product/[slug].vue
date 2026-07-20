@@ -241,10 +241,11 @@ const mergeLiveStockStatus = (payload: ProductDetail): void => {
       variations: product.value.variations
         ? {
             ...product.value.variations,
-            nodes: product.value.variations.nodes?.map((node, index) => ({
-              ...node,
-              stockStatus: payload.variations?.nodes?.[index]?.stockStatus || node.stockStatus,
-            })),
+            nodes:
+              product.value.variations.nodes?.map((node, index) => ({
+                ...node,
+                stockStatus: payload.variations?.nodes?.[index]?.stockStatus || node.stockStatus,
+              })) ?? [],
           }
         : undefined,
     };

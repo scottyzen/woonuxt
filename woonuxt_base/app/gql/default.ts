@@ -2,14 +2,15 @@
 // @ts-nocheck
 // This file is auto-generated. Do not edit manually — run `npm run graphql:codegen` to regenerate.
 
-/** Internal type. DO NOT USE DIRECTLY. */
-type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-/** Internal type. DO NOT USE DIRECTLY. */
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import { type GraphQLClient, type RequestOptions } from 'graphql-request';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 type GraphQLClientRequestHeaders = RequestOptions['requestHeaders'];
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -1241,6 +1242,8 @@ export type CheckoutInput = {
   billing?: InputMaybe<CustomerAddressInput>;
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** Source of the order. Useful when WooCommerce is driven from multiple sources. Defaults to "checkout". */
+  createdVia?: InputMaybe<Scalars['String']['input']>;
   /** Order customer note */
   customerNote?: InputMaybe<Scalars['String']['input']>;
   /** Fees to add to the order. */
@@ -3533,6 +3536,8 @@ export type CreateOrderInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** Coupons codes to be applied to order */
   coupons?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Source of the order. Useful when WooCommerce is driven from multiple sources. Defaults to "graphql-api". */
+  createdVia?: InputMaybe<Scalars['String']['input']>;
   /** Currency the order was created with, in ISO format. */
   currency?: InputMaybe<CurrencyEnum>;
   /** Order customer ID */
@@ -15333,6 +15338,8 @@ export type ProductBrand = DatabaseIdentifier & HierarchicalNode & HierarchicalT
   enqueuedStylesheets?: Maybe<TermNodeToEnqueuedStylesheetConnection>;
   /** The globally unique ID for the object */
   id: Scalars['ID']['output'];
+  /** Product brand image */
+  image?: Maybe<MediaItem>;
   /** Whether the node is a Comment */
   isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
@@ -28453,6 +28460,8 @@ export type UpdateOrderInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** Coupons codes to be applied to order */
   coupons?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Source of the order. Useful when WooCommerce is driven from multiple sources. Defaults to "graphql-api". */
+  createdVia?: InputMaybe<Scalars['String']['input']>;
   /** Currency the order was created with, in ISO format. */
   currency?: InputMaybe<CurrencyEnum>;
   /** Database ID or global ID of the customer for the order */
@@ -31688,709 +31697,123 @@ export type WritingSettings = {
   useSmilies?: Maybe<Scalars['Boolean']['output']>;
 };
 
-/** Input for the addToCart mutation. */
-export type AddToCartInput = {
-  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
-  clientMutationId?: string | null | undefined;
-  /** JSON string representation of extra cart item data */
-  extraData?: string | null | undefined;
-  /** Cart item product database ID or global ID */
-  productId: number;
-  /** Cart item quantity */
-  quantity?: number | null | undefined;
-  /** Cart item product variation attributes */
-  variation?: Array<ProductAttributeInput | null | undefined> | null | undefined;
-  /** Cart item product variation database ID or global ID */
-  variationId?: number | null | undefined;
-};
-
-/** Countries enumeration */
-export type CountriesEnum =
-  | 'AD'
-  | 'AE'
-  | 'AF'
-  | 'AG'
-  | 'AI'
-  | 'AL'
-  | 'AM'
-  | 'AO'
-  | 'AQ'
-  | 'AR'
-  | 'AS'
-  | 'AT'
-  | 'AU'
-  | 'AW'
-  | 'AX'
-  | 'AZ'
-  | 'BA'
-  | 'BB'
-  | 'BD'
-  | 'BE'
-  | 'BF'
-  | 'BG'
-  | 'BH'
-  | 'BI'
-  | 'BJ'
-  | 'BL'
-  | 'BM'
-  | 'BN'
-  | 'BO'
-  | 'BQ'
-  | 'BR'
-  | 'BS'
-  | 'BT'
-  | 'BV'
-  | 'BW'
-  | 'BY'
-  | 'BZ'
-  | 'CA'
-  | 'CC'
-  | 'CD'
-  | 'CF'
-  | 'CG'
-  | 'CH'
-  | 'CI'
-  | 'CK'
-  | 'CL'
-  | 'CM'
-  | 'CN'
-  | 'CO'
-  | 'CR'
-  | 'CU'
-  | 'CV'
-  | 'CW'
-  | 'CX'
-  | 'CY'
-  | 'CZ'
-  | 'DE'
-  | 'DJ'
-  | 'DK'
-  | 'DM'
-  | 'DO'
-  | 'DZ'
-  | 'EC'
-  | 'EE'
-  | 'EG'
-  | 'EH'
-  | 'ER'
-  | 'ES'
-  | 'ET'
-  | 'FI'
-  | 'FJ'
-  | 'FK'
-  | 'FM'
-  | 'FO'
-  | 'FR'
-  | 'GA'
-  | 'GB'
-  | 'GD'
-  | 'GE'
-  | 'GF'
-  | 'GG'
-  | 'GH'
-  | 'GI'
-  | 'GL'
-  | 'GM'
-  | 'GN'
-  | 'GP'
-  | 'GQ'
-  | 'GR'
-  | 'GS'
-  | 'GT'
-  | 'GU'
-  | 'GW'
-  | 'GY'
-  | 'HK'
-  | 'HM'
-  | 'HN'
-  | 'HR'
-  | 'HT'
-  | 'HU'
-  | 'ID'
-  | 'IE'
-  | 'IL'
-  | 'IM'
-  | 'IN'
-  | 'IO'
-  | 'IQ'
-  | 'IR'
-  | 'IS'
-  | 'IT'
-  | 'JE'
-  | 'JM'
-  | 'JO'
-  | 'JP'
-  | 'KE'
-  | 'KG'
-  | 'KH'
-  | 'KI'
-  | 'KM'
-  | 'KN'
-  | 'KP'
-  | 'KR'
-  | 'KW'
-  | 'KY'
-  | 'KZ'
-  | 'LA'
-  | 'LB'
-  | 'LC'
-  | 'LI'
-  | 'LK'
-  | 'LR'
-  | 'LS'
-  | 'LT'
-  | 'LU'
-  | 'LV'
-  | 'LY'
-  | 'MA'
-  | 'MC'
-  | 'MD'
-  | 'ME'
-  | 'MF'
-  | 'MG'
-  | 'MH'
-  | 'MK'
-  | 'ML'
-  | 'MM'
-  | 'MN'
-  | 'MO'
-  | 'MP'
-  | 'MQ'
-  | 'MR'
-  | 'MS'
-  | 'MT'
-  | 'MU'
-  | 'MV'
-  | 'MW'
-  | 'MX'
-  | 'MY'
-  | 'MZ'
-  | 'NA'
-  | 'NC'
-  | 'NE'
-  | 'NF'
-  | 'NG'
-  | 'NI'
-  | 'NL'
-  | 'NO'
-  | 'NP'
-  | 'NR'
-  | 'NU'
-  | 'NZ'
-  | 'OM'
-  | 'PA'
-  | 'PE'
-  | 'PF'
-  | 'PG'
-  | 'PH'
-  | 'PK'
-  | 'PL'
-  | 'PM'
-  | 'PN'
-  | 'PR'
-  | 'PS'
-  | 'PT'
-  | 'PW'
-  | 'PY'
-  | 'QA'
-  | 'RE'
-  | 'RO'
-  | 'RS'
-  | 'RU'
-  | 'RW'
-  | 'SA'
-  | 'SB'
-  | 'SC'
-  | 'SD'
-  | 'SE'
-  | 'SG'
-  | 'SH'
-  | 'SI'
-  | 'SJ'
-  | 'SK'
-  | 'SL'
-  | 'SM'
-  | 'SN'
-  | 'SO'
-  | 'SR'
-  | 'SS'
-  | 'ST'
-  | 'SV'
-  | 'SX'
-  | 'SY'
-  | 'SZ'
-  | 'TC'
-  | 'TD'
-  | 'TF'
-  | 'TG'
-  | 'TH'
-  | 'TJ'
-  | 'TK'
-  | 'TL'
-  | 'TM'
-  | 'TN'
-  | 'TO'
-  | 'TR'
-  | 'TT'
-  | 'TV'
-  | 'TW'
-  | 'TZ'
-  | 'UA'
-  | 'UG'
-  | 'UM'
-  | 'US'
-  | 'UY'
-  | 'UZ'
-  | 'VA'
-  | 'VC'
-  | 'VE'
-  | 'VG'
-  | 'VI'
-  | 'VN'
-  | 'VU'
-  | 'WF'
-  | 'WS'
-  | 'XK'
-  | 'YE'
-  | 'YT'
-  | 'ZA'
-  | 'ZM'
-  | 'ZW';
-
-/** Customer account credentials */
-export type CreateAccountInput = {
-  /** Set the current user to the newly created customer after checkout. */
-  authenticate?: boolean | null | undefined;
-  /** Customer password */
-  password: string;
-  /** Customer username */
-  username: string;
-};
-
-/** Customer address information */
-export type CustomerAddressInput = {
-  /** Address 1 */
-  address1?: string | null | undefined;
-  /** Address 2 */
-  address2?: string | null | undefined;
-  /** City */
-  city?: string | null | undefined;
-  /** Company */
-  company?: string | null | undefined;
-  /** Country */
-  country?: CountriesEnum | null | undefined;
-  /** E-mail */
-  email?: string | null | undefined;
-  /** First name */
-  firstName?: string | null | undefined;
-  /** Last name */
-  lastName?: string | null | undefined;
-  /** Clear old address data */
-  overwrite?: boolean | null | undefined;
-  /** Phone */
-  phone?: string | null | undefined;
-  /** Zip Postal Code */
-  postcode?: string | null | undefined;
-  /** State */
-  state?: string | null | undefined;
-};
-
-/** Input for the Login mutation. */
-export type LoginInput = {
-  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
-  clientMutationId?: string | null | undefined;
-  /** The WordPress user credentials. Required by the Password provider. */
-  credentials?: PasswordProviderResponseInput | null | undefined;
-  /** The user identity to use when logging in. Required by the SiteToken provider. */
-  identity?: string | null | undefined;
-  /** The parsed response from an OAuth2 Authentication Provider. */
-  oauthResponse?: OAuthProviderResponseInput | null | undefined;
-  /** The Headless Login provider to use when logging in. */
-  provider: LoginProviderEnum;
-};
-
-/** The Headless Login Provider. */
-export type LoginProviderEnum =
-  /** The Facebook provider. */
-  | 'FACEBOOK'
-  /** The GitHub provider. */
-  | 'GITHUB'
-  /** The Google provider. */
-  | 'GOOGLE'
-  /** The Instagram provider. */
-  | 'INSTAGRAM'
-  /** The LinkedIn provider. */
-  | 'LINKEDIN'
-  /** The OAuth2 (Generic) provider. */
-  | 'OAUTH2_GENERIC'
-  /** The Password provider. */
-  | 'PASSWORD'
-  /** The Site Token provider. */
-  | 'SITETOKEN';
-
-/** Meta data. */
-export type MetaDataInput = {
-  /** Meta ID. */
-  id?: string | null | undefined;
-  /** Meta key. */
-  key: string;
-  /** Meta value. */
-  value: string;
-};
-
-/** The parsed response from the OAuth Provider. */
-export type OAuthProviderResponseInput = {
-  /** The authorization code returned from the OAuth provider. */
-  code: string;
-  /** The state returned from the OAuth provider. */
-  state?: string | null | undefined;
-};
-
-/** Order status enumeration */
-export type OrderStatusEnum =
-  /** Cancelled */
-  | 'CANCELLED'
-  /** Draft */
-  | 'CHECKOUT_DRAFT'
-  /** Completed */
-  | 'COMPLETED'
-  /** Failed */
-  | 'FAILED'
-  /** On hold */
-  | 'ON_HOLD'
-  /** Pending payment */
-  | 'PENDING'
-  /** Processing */
-  | 'PROCESSING'
-  /** Refunded */
-  | 'REFUNDED';
-
-/** The parsed response from the Password Provider. */
-export type PasswordProviderResponseInput = {
-  /** The password for the WordPress user. */
-  password: string;
-  /** The WordPress username to authenticate ass */
-  username: string;
-};
-
-/** Options for ordering the connection */
-export type ProductAttributeInput = {
-  attributeName: string;
-  attributeValue?: string | null | undefined;
-  id?: number | null | undefined;
-};
-
-/** Product attribute type enumeration */
-export type ProductAttributeTypesEnum =
-  /** A global product attribute */
-  | 'GLOBAL'
-  /** A local product attribute */
-  | 'LOCAL';
-
-/** Product type enumeration */
-export type ProductTypesEnum =
-  /** An external product */
-  | 'EXTERNAL'
-  /** A product group */
-  | 'GROUPED'
-  /** A simple product */
-  | 'SIMPLE'
-  /** A variable product */
-  | 'VARIABLE'
-  /** A product variation */
-  | 'VARIATION';
-
-/** Fields to order the Products connection by */
-export type ProductsOrderByEnum =
-  /** Order by publish date */
-  | 'DATE'
-  /** Preserve the ID order given in the IN array */
-  | 'IN'
-  /** Order by the menu order value */
-  | 'MENU_ORDER'
-  /** Order by last modified date */
-  | 'MODIFIED'
-  /** Order by name */
-  | 'NAME'
-  /** Preserve slug order given in the NAME_IN array */
-  | 'NAME_IN'
-  /** Order by date product sale starts */
-  | 'ON_SALE_FROM'
-  /** Order by date product sale ends */
-  | 'ON_SALE_TO'
-  /** Order by parent ID */
-  | 'PARENT'
-  /** Order by product popularity */
-  | 'POPULARITY'
-  /** Order by product's current price */
-  | 'PRICE'
-  /** Order by product average rating */
-  | 'RATING'
-  /** Order by product's regular price */
-  | 'REGULAR_PRICE'
-  /** Order by number of reviews on product */
-  | 'REVIEW_COUNT'
-  /** Order by product's sale price */
-  | 'SALE_PRICE'
-  /** Order by slug */
-  | 'SLUG'
-  /** Order by total sales of products sold */
-  | 'TOTAL_SALES';
-
-/** Input for the registerCustomer mutation. */
-export type RegisterCustomerInput = {
-  /** User's AOL IM account. */
-  aim?: string | null | undefined;
-  /** Set the current user to the newly registered customer. Avoid using in GraphiQL or contexts where a nonce is sent, as it will cause nonce verification to fail. */
-  authenticate?: boolean | null | undefined;
-  /** Customer billing information */
-  billing?: CustomerAddressInput | null | undefined;
-  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
-  clientMutationId?: string | null | undefined;
-  /** A string containing content about the user. */
-  description?: string | null | undefined;
-  /** A string that will be shown on the site. Defaults to user's username. It is likely that you will want to change this, for both appearance and security through obscurity (that is if you dont use and delete the default admin user). */
-  displayName?: string | null | undefined;
-  /** A string containing the user's email address. */
-  email?: string | null | undefined;
-  /** The user's first name. */
-  firstName?: string | null | undefined;
-  /** User's Jabber account. */
-  jabber?: string | null | undefined;
-  /** The user's last name. */
-  lastName?: string | null | undefined;
-  /** User's locale. */
-  locale?: string | null | undefined;
-  /** Meta data. */
-  metaData?: Array<MetaDataInput | null | undefined> | null | undefined;
-  /** A string that contains a URL-friendly name for the user. The default is the user's username. */
-  nicename?: string | null | undefined;
-  /** The user's nickname, defaults to the user's username. */
-  nickname?: string | null | undefined;
-  /** A string that contains the plain text password for the user. */
-  password?: string | null | undefined;
-  /** The date the user registered. Format is Y-m-d H:i:s. */
-  registered?: string | null | undefined;
-  /** A string for whether to enable the rich editor or not. False if not empty. */
-  richEditing?: string | null | undefined;
-  /** Customer shipping address */
-  shipping?: CustomerAddressInput | null | undefined;
-  /** Customer shipping is identical to billing address */
-  shippingSameAsBilling?: boolean | null | undefined;
-  /** A string that contains the user's username. */
-  username?: string | null | undefined;
-  /** A string containing the user's URL for the user's web site. */
-  websiteUrl?: string | null | undefined;
-  /** User's Yahoo IM account. */
-  yim?: string | null | undefined;
-};
-
-/** Product stock status enumeration */
-export type StockStatusEnum =
-  | 'IN_STOCK'
-  | 'ON_BACKORDER'
-  | 'OUT_OF_STOCK';
-
-/** The Stripe Payment Method. Payment or Setup. */
-export type StripePaymentMethodEnum =
-  | 'PAYMENT'
-  | 'SETUP';
-
-/** Available classification systems for organizing content. Identifies the different taxonomy types that can be used for content categorization. */
-export type TaxonomyEnum =
-  /** Taxonomy enum category */
-  | 'CATEGORY'
-  /** Taxonomy enum graphql_document_group */
-  | 'GRAPHQLDOCUMENTGROUP'
-  /** Taxonomy enum pa_color */
-  | 'PACOLOR'
-  /** Taxonomy enum pa_range */
-  | 'PARANGE'
-  /** Taxonomy enum pa_size */
-  | 'PASIZE'
-  /** Taxonomy enum post_format */
-  | 'POSTFORMAT'
-  /** Taxonomy enum product_brand */
-  | 'PRODUCTBRAND'
-  /** Taxonomy enum product_cat */
-  | 'PRODUCTCATEGORY'
-  /** Taxonomy enum product_tag */
-  | 'PRODUCTTAG'
-  /** Taxonomy enum product_type */
-  | 'PRODUCTTYPE'
-  /** Taxonomy enum product_shipping_class */
-  | 'SHIPPINGCLASS'
-  /** Taxonomy enum post_tag */
-  | 'TAG'
-  /** Taxonomy enum product_visibility */
-  | 'VISIBLEPRODUCT';
-
-/** Input for the updateCustomer mutation. */
-export type UpdateCustomerInput = {
-  /** User's AOL IM account. */
-  aim?: string | null | undefined;
-  /** Customer billing information */
-  billing?: CustomerAddressInput | null | undefined;
-  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
-  clientMutationId?: string | null | undefined;
-  /** A string containing content about the user. */
-  description?: string | null | undefined;
-  /** A string that will be shown on the site. Defaults to user's username. It is likely that you will want to change this, for both appearance and security through obscurity (that is if you dont use and delete the default admin user). */
-  displayName?: string | null | undefined;
-  /** A string containing the user's email address. */
-  email?: string | null | undefined;
-  /** The user's first name. */
-  firstName?: string | null | undefined;
-  /** The ID of the user */
-  id?: string | number | null | undefined;
-  /** Whether to save changes on the session or in the database */
-  isSession?: boolean | null | undefined;
-  /** User's Jabber account. */
-  jabber?: string | null | undefined;
-  /** The user's last name. */
-  lastName?: string | null | undefined;
-  /** User's locale. */
-  locale?: string | null | undefined;
-  /** Meta data. */
-  metaData?: Array<MetaDataInput | null | undefined> | null | undefined;
-  /** A string that contains a URL-friendly name for the user. The default is the user's username. */
-  nicename?: string | null | undefined;
-  /** The user's nickname, defaults to the user's username. */
-  nickname?: string | null | undefined;
-  /** A string that contains the plain text password for the user. */
-  password?: string | null | undefined;
-  /** The date the user registered. Format is Y-m-d H:i:s. */
-  registered?: string | null | undefined;
-  /** A string for whether to enable the rich editor or not. False if not empty. */
-  richEditing?: string | null | undefined;
-  /** An array of roles to be assigned to the user. */
-  roles?: Array<string | null | undefined> | null | undefined;
-  /** Customer shipping address */
-  shipping?: CustomerAddressInput | null | undefined;
-  /** Customer shipping is identical to billing address */
-  shippingSameAsBilling?: boolean | null | undefined;
-  /** A string containing the user's URL for the user's web site. */
-  websiteUrl?: string | null | undefined;
-  /** User's Yahoo IM account. */
-  yim?: string | null | undefined;
-};
-
 export type AddToCartMutationVariables = Exact<{
   input: AddToCartInput;
 }>;
 
 
-export type AddToCartMutation = { addToCart: { cart: { total: string | null, subtotal: string | null, totalTax: string | null, discountTotal: string | null, shippingTotal: string | null, needsShippingAddress: boolean | null, chosenShippingMethods: Array<string | null> | null, isEmpty: boolean | null, rawTotal: string | null, rawDiscountTotal: string | null, availableShippingMethods: Array<{ rates: Array<{ cost: string | null, id: string, label: string | null } | null> | null } | null> | null, appliedCoupons: Array<{ description: string | null, discountTax: string, discountAmount: string, code: string } | null> | null, contents: { itemCount: number | null, productCount: number | null, nodes: Array<{ quantity: number | null, key: string, product: { node:
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, externalUrl: string | null, buttonText: string | null, onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, averageRating: number | null, weight: string | null, length: string | null, width: string | null, height: string | null, reviewCount: number | null, virtual: boolean | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, weight: string | null, length: string | null, width: string | null, height: string | null, averageRating: number | null, reviewCount: number | null, totalSales: number | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, defaultAttributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null, variations: { nodes: Array<{ name: string | null, databaseId: number, price: string | null, regularPrice: string | null, salePrice: string | null, slug: string | null, stockQuantity: number | null, stockStatus: StockStatusEnum | null, hasAttributes: boolean | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, attributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null }> } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-             } | null, variation: { node: { name: string | null, slug: string | null, price: string | null, stockStatus: StockStatusEnum | null, regularPrice: string | null, salePrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null } } | null }> } | null } | null } | null };
+export type AddToCartMutation = { __typename?: 'RootMutation', addToCart?: { __typename?: 'AddToCartPayload', cart?: { __typename?: 'Cart', total?: string | null, subtotal?: string | null, totalTax?: string | null, discountTotal?: string | null, shippingTotal?: string | null, needsShippingAddress?: boolean | null, chosenShippingMethods?: Array<string | null> | null, isEmpty?: boolean | null, rawTotal?: string | null, rawDiscountTotal?: string | null, availableShippingMethods?: Array<{ __typename?: 'ShippingPackage', rates?: Array<{ __typename?: 'ShippingRate', cost?: string | null, id: string, label?: string | null } | null> | null } | null> | null, appliedCoupons?: Array<{ __typename?: 'AppliedCoupon', description?: string | null, discountTax: string, discountAmount: string, code: string } | null> | null, contents?: { __typename?: 'CartToCartItemConnection', itemCount?: number | null, productCount?: number | null, nodes: Array<{ __typename?: 'SimpleCartItem', quantity?: number | null, key: string, product?: { __typename?: 'CartItemToProductConnectionEdge', node:
+              | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, externalUrl?: string | null, buttonText?: string | null, onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+              | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null }
+              | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, averageRating?: number | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, reviewCount?: number | null, virtual?: boolean | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+              | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, averageRating?: number | null, reviewCount?: number | null, totalSales?: number | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, defaultAttributes?: { __typename?: 'ProductWithAttributesToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null, variations?: { __typename?: 'ProductWithVariationsToProductVariationConnection', nodes: Array<{ __typename?: 'SimpleProductVariation', name?: string | null, databaseId: number, price?: string | null, regularPrice?: string | null, salePrice?: string | null, slug?: string | null, stockQuantity?: number | null, stockStatus?: StockStatusEnum | null, hasAttributes?: boolean | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, attributes?: { __typename?: 'ProductVariationToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null }> } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+             } | null, variation?: { __typename?: 'CartItemToProductVariationConnectionEdge', node: { __typename?: 'SimpleProductVariation', name?: string | null, slug?: string | null, price?: string | null, stockStatus?: StockStatusEnum | null, regularPrice?: string | null, salePrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null } } | null }> } | null } | null } | null };
 
 export type ApplyCouponMutationVariables = Exact<{
-  code: string;
+  code: Scalars['String']['input'];
 }>;
 
 
-export type ApplyCouponMutation = { applyCoupon: { applied: { code: string, description: string | null, discountTax: string, discountAmount: string } | null, cart: { total: string | null, subtotal: string | null, totalTax: string | null, discountTotal: string | null, shippingTotal: string | null, needsShippingAddress: boolean | null, chosenShippingMethods: Array<string | null> | null, isEmpty: boolean | null, rawTotal: string | null, rawDiscountTotal: string | null, availableShippingMethods: Array<{ rates: Array<{ cost: string | null, id: string, label: string | null } | null> | null } | null> | null, appliedCoupons: Array<{ description: string | null, discountTax: string, discountAmount: string, code: string } | null> | null, contents: { itemCount: number | null, productCount: number | null, nodes: Array<{ quantity: number | null, key: string, product: { node:
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, externalUrl: string | null, buttonText: string | null, onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, averageRating: number | null, weight: string | null, length: string | null, width: string | null, height: string | null, reviewCount: number | null, virtual: boolean | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, weight: string | null, length: string | null, width: string | null, height: string | null, averageRating: number | null, reviewCount: number | null, totalSales: number | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, defaultAttributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null, variations: { nodes: Array<{ name: string | null, databaseId: number, price: string | null, regularPrice: string | null, salePrice: string | null, slug: string | null, stockQuantity: number | null, stockStatus: StockStatusEnum | null, hasAttributes: boolean | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, attributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null }> } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-             } | null, variation: { node: { name: string | null, slug: string | null, price: string | null, stockStatus: StockStatusEnum | null, regularPrice: string | null, salePrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null } } | null }> } | null } | null } | null };
+export type ApplyCouponMutation = { __typename?: 'RootMutation', applyCoupon?: { __typename?: 'ApplyCouponPayload', applied?: { __typename?: 'AppliedCoupon', code: string, description?: string | null, discountTax: string, discountAmount: string } | null, cart?: { __typename?: 'Cart', total?: string | null, subtotal?: string | null, totalTax?: string | null, discountTotal?: string | null, shippingTotal?: string | null, needsShippingAddress?: boolean | null, chosenShippingMethods?: Array<string | null> | null, isEmpty?: boolean | null, rawTotal?: string | null, rawDiscountTotal?: string | null, availableShippingMethods?: Array<{ __typename?: 'ShippingPackage', rates?: Array<{ __typename?: 'ShippingRate', cost?: string | null, id: string, label?: string | null } | null> | null } | null> | null, appliedCoupons?: Array<{ __typename?: 'AppliedCoupon', description?: string | null, discountTax: string, discountAmount: string, code: string } | null> | null, contents?: { __typename?: 'CartToCartItemConnection', itemCount?: number | null, productCount?: number | null, nodes: Array<{ __typename?: 'SimpleCartItem', quantity?: number | null, key: string, product?: { __typename?: 'CartItemToProductConnectionEdge', node:
+              | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, externalUrl?: string | null, buttonText?: string | null, onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+              | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null }
+              | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, averageRating?: number | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, reviewCount?: number | null, virtual?: boolean | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+              | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, averageRating?: number | null, reviewCount?: number | null, totalSales?: number | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, defaultAttributes?: { __typename?: 'ProductWithAttributesToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null, variations?: { __typename?: 'ProductWithVariationsToProductVariationConnection', nodes: Array<{ __typename?: 'SimpleProductVariation', name?: string | null, databaseId: number, price?: string | null, regularPrice?: string | null, salePrice?: string | null, slug?: string | null, stockQuantity?: number | null, stockStatus?: StockStatusEnum | null, hasAttributes?: boolean | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, attributes?: { __typename?: 'ProductVariationToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null }> } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+             } | null, variation?: { __typename?: 'CartItemToProductVariationConnectionEdge', node: { __typename?: 'SimpleProductVariation', name?: string | null, slug?: string | null, price?: string | null, stockStatus?: StockStatusEnum | null, regularPrice?: string | null, salePrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null } } | null }> } | null } | null } | null };
 
 export type ChangeShippingCountyMutationVariables = Exact<{
-  shippingState?: string | null | undefined;
+  shippingState?: InputMaybe<Scalars['String']['input']>;
   shippingCountry: CountriesEnum;
-  billingState?: string | null | undefined;
+  billingState?: InputMaybe<Scalars['String']['input']>;
   billingCountry: CountriesEnum;
 }>;
 
 
-export type ChangeShippingCountyMutation = { updateCustomer: { customer: { calculatedShipping: boolean | null, hasCalculatedShipping: boolean | null } | null } | null };
+export type ChangeShippingCountyMutation = { __typename?: 'RootMutation', updateCustomer?: { __typename?: 'UpdateCustomerPayload', customer?: { __typename?: 'Customer', calculatedShipping?: boolean | null, hasCalculatedShipping?: boolean | null } | null } | null };
 
 export type ChangeShippingMethodMutationVariables = Exact<{
-  shippingMethods?: Array<string | null | undefined> | string | null | undefined;
+  shippingMethods?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>>;
 }>;
 
 
-export type ChangeShippingMethodMutation = { updateShippingMethod: { cart: { total: string | null, subtotal: string | null, totalTax: string | null, discountTotal: string | null, shippingTotal: string | null, needsShippingAddress: boolean | null, chosenShippingMethods: Array<string | null> | null, isEmpty: boolean | null, rawTotal: string | null, rawDiscountTotal: string | null, availableShippingMethods: Array<{ rates: Array<{ cost: string | null, id: string, label: string | null } | null> | null } | null> | null, appliedCoupons: Array<{ description: string | null, discountTax: string, discountAmount: string, code: string } | null> | null, contents: { itemCount: number | null, productCount: number | null, nodes: Array<{ quantity: number | null, key: string, product: { node:
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, externalUrl: string | null, buttonText: string | null, onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, averageRating: number | null, weight: string | null, length: string | null, width: string | null, height: string | null, reviewCount: number | null, virtual: boolean | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, weight: string | null, length: string | null, width: string | null, height: string | null, averageRating: number | null, reviewCount: number | null, totalSales: number | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, defaultAttributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null, variations: { nodes: Array<{ name: string | null, databaseId: number, price: string | null, regularPrice: string | null, salePrice: string | null, slug: string | null, stockQuantity: number | null, stockStatus: StockStatusEnum | null, hasAttributes: boolean | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, attributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null }> } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-             } | null, variation: { node: { name: string | null, slug: string | null, price: string | null, stockStatus: StockStatusEnum | null, regularPrice: string | null, salePrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null } } | null }> } | null } | null } | null };
+export type ChangeShippingMethodMutation = { __typename?: 'RootMutation', updateShippingMethod?: { __typename?: 'UpdateShippingMethodPayload', cart?: { __typename?: 'Cart', total?: string | null, subtotal?: string | null, totalTax?: string | null, discountTotal?: string | null, shippingTotal?: string | null, needsShippingAddress?: boolean | null, chosenShippingMethods?: Array<string | null> | null, isEmpty?: boolean | null, rawTotal?: string | null, rawDiscountTotal?: string | null, availableShippingMethods?: Array<{ __typename?: 'ShippingPackage', rates?: Array<{ __typename?: 'ShippingRate', cost?: string | null, id: string, label?: string | null } | null> | null } | null> | null, appliedCoupons?: Array<{ __typename?: 'AppliedCoupon', description?: string | null, discountTax: string, discountAmount: string, code: string } | null> | null, contents?: { __typename?: 'CartToCartItemConnection', itemCount?: number | null, productCount?: number | null, nodes: Array<{ __typename?: 'SimpleCartItem', quantity?: number | null, key: string, product?: { __typename?: 'CartItemToProductConnectionEdge', node:
+              | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, externalUrl?: string | null, buttonText?: string | null, onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+              | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null }
+              | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, averageRating?: number | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, reviewCount?: number | null, virtual?: boolean | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+              | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, averageRating?: number | null, reviewCount?: number | null, totalSales?: number | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, defaultAttributes?: { __typename?: 'ProductWithAttributesToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null, variations?: { __typename?: 'ProductWithVariationsToProductVariationConnection', nodes: Array<{ __typename?: 'SimpleProductVariation', name?: string | null, databaseId: number, price?: string | null, regularPrice?: string | null, salePrice?: string | null, slug?: string | null, stockQuantity?: number | null, stockStatus?: StockStatusEnum | null, hasAttributes?: boolean | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, attributes?: { __typename?: 'ProductVariationToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null }> } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+             } | null, variation?: { __typename?: 'CartItemToProductVariationConnectionEdge', node: { __typename?: 'SimpleProductVariation', name?: string | null, slug?: string | null, price?: string | null, stockStatus?: StockStatusEnum | null, regularPrice?: string | null, salePrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null } } | null }> } | null } | null } | null };
 
 export type CheckoutMutationVariables = Exact<{
-  billing?: CustomerAddressInput | null | undefined;
-  metaData?: Array<MetaDataInput | null | undefined> | MetaDataInput | null | undefined;
-  paymentMethod?: string | null | undefined;
-  shipping?: CustomerAddressInput | null | undefined;
-  customerNote?: string | null | undefined;
-  shipToDifferentAddress?: boolean | null | undefined;
-  account?: CreateAccountInput | null | undefined;
-  transactionId?: string | null | undefined;
-  isPaid?: boolean | null | undefined;
-  shippingMethod?: Array<string | null | undefined> | string | null | undefined;
+  billing?: InputMaybe<CustomerAddressInput>;
+  metaData?: InputMaybe<Array<InputMaybe<MetaDataInput>> | InputMaybe<MetaDataInput>>;
+  paymentMethod?: InputMaybe<Scalars['String']['input']>;
+  shipping?: InputMaybe<CustomerAddressInput>;
+  customerNote?: InputMaybe<Scalars['String']['input']>;
+  shipToDifferentAddress?: InputMaybe<Scalars['Boolean']['input']>;
+  account?: InputMaybe<CreateAccountInput>;
+  transactionId?: InputMaybe<Scalars['String']['input']>;
+  isPaid?: InputMaybe<Scalars['Boolean']['input']>;
+  shippingMethod?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>>;
+  createdVia?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type CheckoutMutation = { checkout: { result: string | null, redirect: string | null, order: { needsPayment: boolean | null, needsProcessing: boolean | null, status: OrderStatusEnum | null, databaseId: number | null, orderKey: string | null, subtotal: string | null, total: string | null, totalTax: string | null, shippingTotal: string | null, paymentMethodTitle: string | null, paymentMethod: string | null, date: string | null, customer: { email: string | null } | null, lineItems: { nodes: Array<{ quantity: number | null, total: string | null, id: string, product: { node:
-              | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-              | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-              | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-              | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-             } | null, variation: { node: { name: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null } } | null }> } | null } | null } | null };
+export type CheckoutMutation = { __typename?: 'RootMutation', checkout?: { __typename?: 'CheckoutPayload', result?: string | null, redirect?: string | null, order?: { __typename?: 'Order', needsPayment?: boolean | null, needsProcessing?: boolean | null, status?: OrderStatusEnum | null, databaseId?: number | null, orderKey?: string | null, subtotal?: string | null, total?: string | null, totalTax?: string | null, shippingTotal?: string | null, paymentMethodTitle?: string | null, paymentMethod?: string | null, date?: string | null, customer?: { __typename?: 'Customer', email?: string | null } | null, lineItems?: { __typename?: 'OrderToLineItemConnection', nodes: Array<{ __typename?: 'LineItem', quantity?: number | null, total?: string | null, id: string, product?: { __typename?: 'LineItemToProductConnectionEdge', node:
+              | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+              | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+              | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+              | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+             } | null, variation?: { __typename?: 'LineItemToProductVariationConnectionEdge', node: { __typename?: 'SimpleProductVariation', name?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null } } | null }> } | null } | null } | null };
 
 export type EmptyCartMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type EmptyCartMutation = { emptyCart: { cart: { total: string | null, subtotal: string | null, totalTax: string | null, discountTotal: string | null, shippingTotal: string | null, needsShippingAddress: boolean | null, chosenShippingMethods: Array<string | null> | null, isEmpty: boolean | null, rawTotal: string | null, rawDiscountTotal: string | null, availableShippingMethods: Array<{ rates: Array<{ cost: string | null, id: string, label: string | null } | null> | null } | null> | null, appliedCoupons: Array<{ description: string | null, discountTax: string, discountAmount: string, code: string } | null> | null, contents: { itemCount: number | null, productCount: number | null, nodes: Array<{ quantity: number | null, key: string, product: { node:
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, externalUrl: string | null, buttonText: string | null, onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, averageRating: number | null, weight: string | null, length: string | null, width: string | null, height: string | null, reviewCount: number | null, virtual: boolean | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, weight: string | null, length: string | null, width: string | null, height: string | null, averageRating: number | null, reviewCount: number | null, totalSales: number | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, defaultAttributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null, variations: { nodes: Array<{ name: string | null, databaseId: number, price: string | null, regularPrice: string | null, salePrice: string | null, slug: string | null, stockQuantity: number | null, stockStatus: StockStatusEnum | null, hasAttributes: boolean | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, attributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null }> } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-             } | null, variation: { node: { name: string | null, slug: string | null, price: string | null, stockStatus: StockStatusEnum | null, regularPrice: string | null, salePrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null } } | null }> } | null } | null } | null };
+export type EmptyCartMutation = { __typename?: 'RootMutation', emptyCart?: { __typename?: 'EmptyCartPayload', cart?: { __typename?: 'Cart', total?: string | null, subtotal?: string | null, totalTax?: string | null, discountTotal?: string | null, shippingTotal?: string | null, needsShippingAddress?: boolean | null, chosenShippingMethods?: Array<string | null> | null, isEmpty?: boolean | null, rawTotal?: string | null, rawDiscountTotal?: string | null, availableShippingMethods?: Array<{ __typename?: 'ShippingPackage', rates?: Array<{ __typename?: 'ShippingRate', cost?: string | null, id: string, label?: string | null } | null> | null } | null> | null, appliedCoupons?: Array<{ __typename?: 'AppliedCoupon', description?: string | null, discountTax: string, discountAmount: string, code: string } | null> | null, contents?: { __typename?: 'CartToCartItemConnection', itemCount?: number | null, productCount?: number | null, nodes: Array<{ __typename?: 'SimpleCartItem', quantity?: number | null, key: string, product?: { __typename?: 'CartItemToProductConnectionEdge', node:
+              | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, externalUrl?: string | null, buttonText?: string | null, onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+              | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null }
+              | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, averageRating?: number | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, reviewCount?: number | null, virtual?: boolean | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+              | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, averageRating?: number | null, reviewCount?: number | null, totalSales?: number | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, defaultAttributes?: { __typename?: 'ProductWithAttributesToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null, variations?: { __typename?: 'ProductWithVariationsToProductVariationConnection', nodes: Array<{ __typename?: 'SimpleProductVariation', name?: string | null, databaseId: number, price?: string | null, regularPrice?: string | null, salePrice?: string | null, slug?: string | null, stockQuantity?: number | null, stockStatus?: StockStatusEnum | null, hasAttributes?: boolean | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, attributes?: { __typename?: 'ProductVariationToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null }> } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+             } | null, variation?: { __typename?: 'CartItemToProductVariationConnectionEdge', node: { __typename?: 'SimpleProductVariation', name?: string | null, slug?: string | null, price?: string | null, stockStatus?: StockStatusEnum | null, regularPrice?: string | null, salePrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null } } | null }> } | null } | null } | null };
 
-export type CartFragment = { total: string | null, subtotal: string | null, totalTax: string | null, discountTotal: string | null, shippingTotal: string | null, needsShippingAddress: boolean | null, chosenShippingMethods: Array<string | null> | null, isEmpty: boolean | null, rawTotal: string | null, rawDiscountTotal: string | null, availableShippingMethods: Array<{ rates: Array<{ cost: string | null, id: string, label: string | null } | null> | null } | null> | null, appliedCoupons: Array<{ description: string | null, discountTax: string, discountAmount: string, code: string } | null> | null, contents: { itemCount: number | null, productCount: number | null, nodes: Array<{ quantity: number | null, key: string, product: { node:
-          | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, externalUrl: string | null, buttonText: string | null, onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-          | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null }
-          | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, averageRating: number | null, weight: string | null, length: string | null, width: string | null, height: string | null, reviewCount: number | null, virtual: boolean | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-          | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, weight: string | null, length: string | null, width: string | null, height: string | null, averageRating: number | null, reviewCount: number | null, totalSales: number | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, defaultAttributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null, variations: { nodes: Array<{ name: string | null, databaseId: number, price: string | null, regularPrice: string | null, salePrice: string | null, slug: string | null, stockQuantity: number | null, stockStatus: StockStatusEnum | null, hasAttributes: boolean | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, attributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null }> } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-         } | null, variation: { node: { name: string | null, slug: string | null, price: string | null, stockStatus: StockStatusEnum | null, regularPrice: string | null, salePrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null } } | null }> } | null };
+export type CartFragment = { __typename?: 'Cart', total?: string | null, subtotal?: string | null, totalTax?: string | null, discountTotal?: string | null, shippingTotal?: string | null, needsShippingAddress?: boolean | null, chosenShippingMethods?: Array<string | null> | null, isEmpty?: boolean | null, rawTotal?: string | null, rawDiscountTotal?: string | null, availableShippingMethods?: Array<{ __typename?: 'ShippingPackage', rates?: Array<{ __typename?: 'ShippingRate', cost?: string | null, id: string, label?: string | null } | null> | null } | null> | null, appliedCoupons?: Array<{ __typename?: 'AppliedCoupon', description?: string | null, discountTax: string, discountAmount: string, code: string } | null> | null, contents?: { __typename?: 'CartToCartItemConnection', itemCount?: number | null, productCount?: number | null, nodes: Array<{ __typename?: 'SimpleCartItem', quantity?: number | null, key: string, product?: { __typename?: 'CartItemToProductConnectionEdge', node:
+          | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, externalUrl?: string | null, buttonText?: string | null, onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+          | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null }
+          | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, averageRating?: number | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, reviewCount?: number | null, virtual?: boolean | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+          | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, averageRating?: number | null, reviewCount?: number | null, totalSales?: number | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, defaultAttributes?: { __typename?: 'ProductWithAttributesToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null, variations?: { __typename?: 'ProductWithVariationsToProductVariationConnection', nodes: Array<{ __typename?: 'SimpleProductVariation', name?: string | null, databaseId: number, price?: string | null, regularPrice?: string | null, salePrice?: string | null, slug?: string | null, stockQuantity?: number | null, stockStatus?: StockStatusEnum | null, hasAttributes?: boolean | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, attributes?: { __typename?: 'ProductVariationToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null }> } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+         } | null, variation?: { __typename?: 'CartItemToProductVariationConnectionEdge', node: { __typename?: 'SimpleProductVariation', name?: string | null, slug?: string | null, price?: string | null, stockStatus?: StockStatusEnum | null, regularPrice?: string | null, salePrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null } } | null }> } | null };
 
-export type CategoryImageFragment = { sourceUrl: string | null, altText: string | null, title: string | null };
+export type CategoryImageFragment = { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null };
 
-export type ProductCategoryFragment = { count: number | null, databaseId: number, id: string, name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null };
+export type ProductCategoryFragment = { __typename?: 'ProductCategory', count?: number | null, databaseId: number, id: string, name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null };
 
-export type CommentFragment = { content: string | null, id: string, date: string | null, author: { node:
-      | { name: string | null, avatar: { url: string | null } | null }
-      | { name: string | null, avatar: { url: string | null } | null }
+export type CommentFragment = { __typename?: 'Comment', content?: string | null, id: string, date?: string | null, author?: { __typename?: 'CommentToCommenterConnectionEdge', node:
+      | { __typename?: 'CommentAuthor', name?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null }
+      | { __typename?: 'User', name?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null }
      } | null };
 
-export type CustomerFragment = { lastName: string | null, email: string | null, firstName: string | null, username: string | null, databaseId: number | null, sessionToken: string | null, isPayingCustomer: boolean | null, date: string | null, billing: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null, shipping: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null };
+export type CustomerFragment = { __typename?: 'Customer', lastName?: string | null, email?: string | null, firstName?: string | null, username?: string | null, databaseId?: number | null, sessionToken?: string | null, isPayingCustomer?: boolean | null, date?: string | null, billing?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null, shipping?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null };
 
-export type AddressFragment = { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null };
+export type AddressFragment = { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null };
 
-export type DownloadableItemFragment = { id: string, name: string | null, url: string | null, accessExpires: string | null, downloadsRemaining: number | null, product:
-    | { name: string | null, slug: string | null }
-    | { name: string | null, slug: string | null }
-    | { name: string | null, slug: string | null }
-    | { name: string | null, slug: string | null }
-    | { name: string | null, slug: string | null }
+export type DownloadableItemFragment = { __typename?: 'DownloadableItem', id: string, name?: string | null, url?: string | null, accessExpires?: string | null, downloadsRemaining?: number | null, product?:
+    | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null }
+    | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null }
+    | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null }
+    | { __typename?: 'SimpleProductVariation', name?: string | null, slug?: string | null }
+    | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null }
    | null };
 
-export type ExternalProductFragment = { externalUrl: string | null, buttonText: string | null, onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null };
+export type ExternalProductFragment = { __typename?: 'ExternalProduct', externalUrl?: string | null, buttonText?: string | null, onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null };
 
-export type ImageFragment = { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number };
+export type ImageFragment = { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number };
 
-type LineItemProduct_ExternalProduct_Fragment = { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null };
+type LineItemProduct_ExternalProduct_Fragment = { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null };
 
-type LineItemProduct_GroupProduct_Fragment = { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null };
+type LineItemProduct_GroupProduct_Fragment = { __typename?: 'GroupProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null };
 
-type LineItemProduct_SimpleProduct_Fragment = { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null };
+type LineItemProduct_SimpleProduct_Fragment = { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null };
 
-type LineItemProduct_VariableProduct_Fragment = { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null };
+type LineItemProduct_VariableProduct_Fragment = { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null };
 
 export type LineItemProductFragment =
   | LineItemProduct_ExternalProduct_Fragment
@@ -32399,45 +31822,45 @@ export type LineItemProductFragment =
   | LineItemProduct_VariableProduct_Fragment
 ;
 
-export type LineItemVariationFragment = { name: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null };
+export type LineItemVariationFragment = { __typename?: 'SimpleProductVariation', name?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null };
 
-export type LineItemFragment = { quantity: number | null, total: string | null, id: string, product: { node:
-      | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-      | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-      | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-      | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-     } | null, variation: { node: { name: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null } } | null };
+export type LineItemFragment = { __typename?: 'LineItem', quantity?: number | null, total?: string | null, id: string, product?: { __typename?: 'LineItemToProductConnectionEdge', node:
+      | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+      | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+      | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+      | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+     } | null, variation?: { __typename?: 'LineItemToProductVariationConnectionEdge', node: { __typename?: 'SimpleProductVariation', name?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null } } | null };
 
-export type LoginClientFragment = { name: string | null, provider: LoginProviderEnum | null, isEnabled: boolean | null, authorizationUrl: string | null };
+export type LoginClientFragment = { __typename?: 'LoginClient', name?: string | null, provider?: LoginProviderEnum | null, isEnabled?: boolean | null, authorizationUrl?: string | null };
 
-export type OrderFragmentFragment = { orderNumber: string | null, date: string | null, status: OrderStatusEnum | null, needsPayment: boolean | null, needsProcessing: boolean | null, databaseId: number | null, orderKey: string | null, total: string | null, subtotal: string | null, discountTotal: string | null, totalTax: string | null, shippingTotal: string | null, paymentMethodTitle: string | null, paymentMethod: string | null, rawDiscountTotal: string | null, billing: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null, shipping: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null, customer: { lastName: string | null, email: string | null, firstName: string | null, username: string | null, databaseId: number | null, sessionToken: string | null, isPayingCustomer: boolean | null, date: string | null, downloadableItems: { nodes: Array<{ id: string, name: string | null, url: string | null, accessExpires: string | null, downloadsRemaining: number | null, product:
-          | { name: string | null, slug: string | null }
-          | { name: string | null, slug: string | null }
-          | { name: string | null, slug: string | null }
-          | { name: string | null, slug: string | null }
-          | { name: string | null, slug: string | null }
-         | null }> } | null, billing: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null, shipping: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null } | null, downloadableItems: { nodes: Array<{ id: string, name: string | null, url: string | null, accessExpires: string | null, downloadsRemaining: number | null, product:
-        | { name: string | null, slug: string | null }
-        | { name: string | null, slug: string | null }
-        | { name: string | null, slug: string | null }
-        | { name: string | null, slug: string | null }
-        | { name: string | null, slug: string | null }
-       | null }> } | null, lineItems: { nodes: Array<{ quantity: number | null, total: string | null, id: string, product: { node:
-          | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-          | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-          | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-          | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-         } | null, variation: { node: { name: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null } } | null }> } | null };
+export type OrderFragmentFragment = { __typename?: 'Order', orderNumber?: string | null, date?: string | null, status?: OrderStatusEnum | null, needsPayment?: boolean | null, needsProcessing?: boolean | null, databaseId?: number | null, orderKey?: string | null, total?: string | null, subtotal?: string | null, discountTotal?: string | null, totalTax?: string | null, shippingTotal?: string | null, paymentMethodTitle?: string | null, paymentMethod?: string | null, rawDiscountTotal?: string | null, billing?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null, shipping?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null, customer?: { __typename?: 'Customer', lastName?: string | null, email?: string | null, firstName?: string | null, username?: string | null, databaseId?: number | null, sessionToken?: string | null, isPayingCustomer?: boolean | null, date?: string | null, downloadableItems?: { __typename?: 'CustomerToDownloadableItemConnection', nodes: Array<{ __typename?: 'DownloadableItem', id: string, name?: string | null, url?: string | null, accessExpires?: string | null, downloadsRemaining?: number | null, product?:
+          | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null }
+          | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null }
+          | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null }
+          | { __typename?: 'SimpleProductVariation', name?: string | null, slug?: string | null }
+          | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null }
+         | null }> } | null, billing?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null, shipping?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null } | null, downloadableItems?: { __typename?: 'OrderToDownloadableItemConnection', nodes: Array<{ __typename?: 'DownloadableItem', id: string, name?: string | null, url?: string | null, accessExpires?: string | null, downloadsRemaining?: number | null, product?:
+        | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null }
+        | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null }
+        | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null }
+        | { __typename?: 'SimpleProductVariation', name?: string | null, slug?: string | null }
+        | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null }
+       | null }> } | null, lineItems?: { __typename?: 'OrderToLineItemConnection', nodes: Array<{ __typename?: 'LineItem', quantity?: number | null, total?: string | null, id: string, product?: { __typename?: 'LineItemToProductConnectionEdge', node:
+          | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+          | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+          | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+          | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+         } | null, variation?: { __typename?: 'LineItemToProductVariationConnectionEdge', node: { __typename?: 'SimpleProductVariation', name?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null } } | null }> } | null };
 
-export type PaymentGatewayFragment = { title: string | null, id: string, description: string | null, icon: string | null };
+export type PaymentGatewayFragment = { __typename?: 'PaymentGateway', title?: string | null, id: string, description?: string | null, icon?: string | null };
 
-type ProductCategories_ExternalProduct_Fragment = { productCategories: { nodes: Array<{ databaseId: number, slug: string | null, name: string | null, count: number | null }> } | null };
+type ProductCategories_ExternalProduct_Fragment = { __typename?: 'ExternalProduct', productCategories?: { __typename?: 'ProductToProductCategoryConnection', nodes: Array<{ __typename?: 'ProductCategory', databaseId: number, slug?: string | null, name?: string | null, count?: number | null }> } | null };
 
-type ProductCategories_GroupProduct_Fragment = { productCategories: { nodes: Array<{ databaseId: number, slug: string | null, name: string | null, count: number | null }> } | null };
+type ProductCategories_GroupProduct_Fragment = { __typename?: 'GroupProduct', productCategories?: { __typename?: 'ProductToProductCategoryConnection', nodes: Array<{ __typename?: 'ProductCategory', databaseId: number, slug?: string | null, name?: string | null, count?: number | null }> } | null };
 
-type ProductCategories_SimpleProduct_Fragment = { productCategories: { nodes: Array<{ databaseId: number, slug: string | null, name: string | null, count: number | null }> } | null };
+type ProductCategories_SimpleProduct_Fragment = { __typename?: 'SimpleProduct', productCategories?: { __typename?: 'ProductToProductCategoryConnection', nodes: Array<{ __typename?: 'ProductCategory', databaseId: number, slug?: string | null, name?: string | null, count?: number | null }> } | null };
 
-type ProductCategories_VariableProduct_Fragment = { productCategories: { nodes: Array<{ databaseId: number, slug: string | null, name: string | null, count: number | null }> } | null };
+type ProductCategories_VariableProduct_Fragment = { __typename?: 'VariableProduct', productCategories?: { __typename?: 'ProductToProductCategoryConnection', nodes: Array<{ __typename?: 'ProductCategory', databaseId: number, slug?: string | null, name?: string | null, count?: number | null }> } | null };
 
 export type ProductCategoriesFragment =
   | ProductCategories_ExternalProduct_Fragment
@@ -32446,15 +31869,15 @@ export type ProductCategoriesFragment =
   | ProductCategories_VariableProduct_Fragment
 ;
 
-type ProductPricing_ExternalProduct_Fragment = { onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null };
+type ProductPricing_ExternalProduct_Fragment = { __typename?: 'ExternalProduct', onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null };
 
-type ProductPricing_GroupProduct_Fragment = { onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null };
+type ProductPricing_GroupProduct_Fragment = { __typename?: 'GroupProduct', onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null };
 
-type ProductPricing_SimpleProduct_Fragment = { onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null };
+type ProductPricing_SimpleProduct_Fragment = { __typename?: 'SimpleProduct', onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null };
 
-type ProductPricing_SimpleProductVariation_Fragment = { onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null };
+type ProductPricing_SimpleProductVariation_Fragment = { __typename?: 'SimpleProductVariation', onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null };
 
-type ProductPricing_VariableProduct_Fragment = { onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null };
+type ProductPricing_VariableProduct_Fragment = { __typename?: 'VariableProduct', onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null };
 
 export type ProductPricingFragment =
   | ProductPricing_ExternalProduct_Fragment
@@ -32464,11 +31887,11 @@ export type ProductPricingFragment =
   | ProductPricing_VariableProduct_Fragment
 ;
 
-type ProductStock_SimpleProduct_Fragment = { stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null };
+type ProductStock_SimpleProduct_Fragment = { __typename?: 'SimpleProduct', stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null };
 
-type ProductStock_SimpleProductVariation_Fragment = { stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null };
+type ProductStock_SimpleProductVariation_Fragment = { __typename?: 'SimpleProductVariation', stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null };
 
-type ProductStock_VariableProduct_Fragment = { stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null };
+type ProductStock_VariableProduct_Fragment = { __typename?: 'VariableProduct', stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null };
 
 export type ProductStockFragment =
   | ProductStock_SimpleProduct_Fragment
@@ -32476,72 +31899,72 @@ export type ProductStockFragment =
   | ProductStock_VariableProduct_Fragment
 ;
 
-export type ProductVariationFragment = { name: string | null, databaseId: number, price: string | null, regularPrice: string | null, salePrice: string | null, slug: string | null, stockQuantity: number | null, stockStatus: StockStatusEnum | null, hasAttributes: boolean | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, attributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null };
+export type ProductVariationFragment = { __typename?: 'SimpleProductVariation', name?: string | null, databaseId: number, price?: string | null, regularPrice?: string | null, salePrice?: string | null, slug?: string | null, stockQuantity?: number | null, stockStatus?: StockStatusEnum | null, hasAttributes?: boolean | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, attributes?: { __typename?: 'ProductVariationToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null };
 
-export type SimpleProductFragment = { name: string | null, slug: string | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, averageRating: number | null, weight: string | null, length: string | null, width: string | null, height: string | null, reviewCount: number | null, virtual: boolean | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null };
+export type SimpleProductFragment = { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, averageRating?: number | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, reviewCount?: number | null, virtual?: boolean | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null };
 
-type Terms_ExternalProduct_Fragment = { terms: { nodes: Array<
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
+type Terms_ExternalProduct_Fragment = { __typename?: 'ExternalProduct', terms?: { __typename?: 'ProductToTermNodeConnection', nodes: Array<
+      | { __typename?: 'Category', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'GraphqlDocumentGroup', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'PaColor', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'PaRange', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'PaSize', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'PostFormat', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ProductBrand', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ProductCategory', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ProductTag', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ProductType', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ShippingClass', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'Tag', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'VisibleProduct', taxonomyName?: string | null, slug?: string | null }
     > } | null };
 
-type Terms_GroupProduct_Fragment = { terms: { nodes: Array<
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
+type Terms_GroupProduct_Fragment = { __typename?: 'GroupProduct', terms?: { __typename?: 'ProductToTermNodeConnection', nodes: Array<
+      | { __typename?: 'Category', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'GraphqlDocumentGroup', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'PaColor', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'PaRange', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'PaSize', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'PostFormat', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ProductBrand', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ProductCategory', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ProductTag', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ProductType', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ShippingClass', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'Tag', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'VisibleProduct', taxonomyName?: string | null, slug?: string | null }
     > } | null };
 
-type Terms_SimpleProduct_Fragment = { terms: { nodes: Array<
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
+type Terms_SimpleProduct_Fragment = { __typename?: 'SimpleProduct', terms?: { __typename?: 'ProductToTermNodeConnection', nodes: Array<
+      | { __typename?: 'Category', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'GraphqlDocumentGroup', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'PaColor', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'PaRange', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'PaSize', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'PostFormat', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ProductBrand', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ProductCategory', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ProductTag', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ProductType', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ShippingClass', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'Tag', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'VisibleProduct', taxonomyName?: string | null, slug?: string | null }
     > } | null };
 
-type Terms_VariableProduct_Fragment = { terms: { nodes: Array<
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
-      | { taxonomyName: string | null, slug: string | null }
+type Terms_VariableProduct_Fragment = { __typename?: 'VariableProduct', terms?: { __typename?: 'ProductToTermNodeConnection', nodes: Array<
+      | { __typename?: 'Category', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'GraphqlDocumentGroup', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'PaColor', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'PaRange', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'PaSize', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'PostFormat', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ProductBrand', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ProductCategory', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ProductTag', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ProductType', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'ShippingClass', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'Tag', taxonomyName?: string | null, slug?: string | null }
+      | { __typename?: 'VisibleProduct', taxonomyName?: string | null, slug?: string | null }
     > } | null };
 
 export type TermsFragment =
@@ -32551,357 +31974,361 @@ export type TermsFragment =
   | Terms_VariableProduct_Fragment
 ;
 
-export type VariableProductFragment = { name: string | null, slug: string | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, weight: string | null, length: string | null, width: string | null, height: string | null, averageRating: number | null, reviewCount: number | null, totalSales: number | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, defaultAttributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null, variations: { nodes: Array<{ name: string | null, databaseId: number, price: string | null, regularPrice: string | null, salePrice: string | null, slug: string | null, stockQuantity: number | null, stockStatus: StockStatusEnum | null, hasAttributes: boolean | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, attributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null }> } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null };
+export type VariableProductFragment = { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, averageRating?: number | null, reviewCount?: number | null, totalSales?: number | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, defaultAttributes?: { __typename?: 'ProductWithAttributesToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null, variations?: { __typename?: 'ProductWithVariationsToProductVariationConnection', nodes: Array<{ __typename?: 'SimpleProductVariation', name?: string | null, databaseId: number, price?: string | null, regularPrice?: string | null, salePrice?: string | null, slug?: string | null, stockQuantity?: number | null, stockStatus?: StockStatusEnum | null, hasAttributes?: boolean | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, attributes?: { __typename?: 'ProductVariationToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null }> } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null };
 
-export type VariationAttributeFragment = { name: string | null, attributeId: number | null, value: string | null, label: string | null };
+export type VariationAttributeFragment = { __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null };
 
-export type ViewerFragment = { lastName: string | null, email: string | null, databaseId: number, id: string, firstName: string | null, username: string | null, nicename: string | null, wooSessionToken: string | null, stripeCustomerId: string | null, savedPaymentMethods: Array<{ id: number | null, token: string | null, customerId: string | null, last4: string | null, expiryMonth: string | null, expiryYear: string | null, cardType: string | null, isDefault: boolean | null } | null> | null, avatar: { url: string | null } | null };
+export type ViewerFragment = { __typename?: 'User', lastName?: string | null, email?: string | null, databaseId: number, id: string, firstName?: string | null, username?: string | null, nicename?: string | null, wooSessionToken?: string | null, stripeCustomerId?: string | null, savedPaymentMethods?: Array<{ __typename?: 'SavedPaymentMethod', id?: number | null, token?: string | null, customerId?: string | null, last4?: string | null, expiryMonth?: string | null, expiryYear?: string | null, cardType?: string | null, isDefault?: boolean | null } | null> | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null };
 
-export type ViewerSummaryFragment = { id: string, databaseId: number, firstName: string | null, lastName: string | null, username: string | null, nicename: string | null, email: string | null, wooSessionToken: string | null, avatar: { url: string | null } | null };
+export type ViewerSummaryFragment = { __typename?: 'User', id: string, databaseId: number, firstName?: string | null, lastName?: string | null, username?: string | null, nicename?: string | null, email?: string | null, wooSessionToken?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null };
 
 export type GetAllTermsQueryVariables = Exact<{
-  hideEmpty?: boolean | null | undefined;
-  taxonomies: Array<TaxonomyEnum | null | undefined> | TaxonomyEnum;
-  first?: number | null | undefined;
+  hideEmpty?: InputMaybe<Scalars['Boolean']['input']>;
+  taxonomies: Array<InputMaybe<TaxonomyEnum>> | InputMaybe<TaxonomyEnum>;
+  first?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetAllTermsQuery = { terms: { nodes: Array<
-      | { taxonomyName: string | null, name: string | null, slug: string | null, count: number | null }
-      | { taxonomyName: string | null, name: string | null, slug: string | null, count: number | null }
-      | { taxonomyName: string | null, name: string | null, slug: string | null, count: number | null }
-      | { taxonomyName: string | null, name: string | null, slug: string | null, count: number | null }
-      | { taxonomyName: string | null, name: string | null, slug: string | null, count: number | null }
-      | { taxonomyName: string | null, name: string | null, slug: string | null, count: number | null }
-      | { taxonomyName: string | null, name: string | null, slug: string | null, count: number | null }
-      | { taxonomyName: string | null, name: string | null, slug: string | null, count: number | null }
-      | { taxonomyName: string | null, name: string | null, slug: string | null, count: number | null }
-      | { taxonomyName: string | null, name: string | null, slug: string | null, count: number | null }
-      | { taxonomyName: string | null, name: string | null, slug: string | null, count: number | null }
-      | { taxonomyName: string | null, name: string | null, slug: string | null, count: number | null }
-      | { taxonomyName: string | null, name: string | null, slug: string | null, count: number | null }
+export type GetAllTermsQuery = { __typename?: 'RootQuery', terms?: { __typename?: 'RootQueryToTermNodeConnection', nodes: Array<
+      | { __typename?: 'Category', taxonomyName?: string | null, name?: string | null, slug?: string | null, count?: number | null }
+      | { __typename?: 'GraphqlDocumentGroup', taxonomyName?: string | null, name?: string | null, slug?: string | null, count?: number | null }
+      | { __typename?: 'PaColor', taxonomyName?: string | null, name?: string | null, slug?: string | null, count?: number | null }
+      | { __typename?: 'PaRange', taxonomyName?: string | null, name?: string | null, slug?: string | null, count?: number | null }
+      | { __typename?: 'PaSize', taxonomyName?: string | null, name?: string | null, slug?: string | null, count?: number | null }
+      | { __typename?: 'PostFormat', taxonomyName?: string | null, name?: string | null, slug?: string | null, count?: number | null }
+      | { __typename?: 'ProductBrand', taxonomyName?: string | null, name?: string | null, slug?: string | null, count?: number | null }
+      | { __typename?: 'ProductCategory', taxonomyName?: string | null, name?: string | null, slug?: string | null, count?: number | null }
+      | { __typename?: 'ProductTag', taxonomyName?: string | null, name?: string | null, slug?: string | null, count?: number | null }
+      | { __typename?: 'ProductType', taxonomyName?: string | null, name?: string | null, slug?: string | null, count?: number | null }
+      | { __typename?: 'ShippingClass', taxonomyName?: string | null, name?: string | null, slug?: string | null, count?: number | null }
+      | { __typename?: 'Tag', taxonomyName?: string | null, name?: string | null, slug?: string | null, count?: number | null }
+      | { __typename?: 'VisibleProduct', taxonomyName?: string | null, name?: string | null, slug?: string | null, count?: number | null }
     > } | null };
 
 export type GetAllowedCountriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllowedCountriesQuery = { allowedCountries: Array<CountriesEnum | null> | null };
+export type GetAllowedCountriesQuery = { __typename?: 'RootQuery', allowedCountries?: Array<CountriesEnum | null> | null };
 
 export type GetCartQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCartQuery = { cart: { total: string | null, subtotal: string | null, totalTax: string | null, discountTotal: string | null, shippingTotal: string | null, needsShippingAddress: boolean | null, chosenShippingMethods: Array<string | null> | null, isEmpty: boolean | null, rawTotal: string | null, rawDiscountTotal: string | null, availableShippingMethods: Array<{ rates: Array<{ cost: string | null, id: string, label: string | null } | null> | null } | null> | null, appliedCoupons: Array<{ description: string | null, discountTax: string, discountAmount: string, code: string } | null> | null, contents: { itemCount: number | null, productCount: number | null, nodes: Array<{ quantity: number | null, key: string, product: { node:
-            | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, externalUrl: string | null, buttonText: string | null, onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-            | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null }
-            | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, averageRating: number | null, weight: string | null, length: string | null, width: string | null, height: string | null, reviewCount: number | null, virtual: boolean | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-            | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, weight: string | null, length: string | null, width: string | null, height: string | null, averageRating: number | null, reviewCount: number | null, totalSales: number | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, defaultAttributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null, variations: { nodes: Array<{ name: string | null, databaseId: number, price: string | null, regularPrice: string | null, salePrice: string | null, slug: string | null, stockQuantity: number | null, stockStatus: StockStatusEnum | null, hasAttributes: boolean | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, attributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null }> } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-           } | null, variation: { node: { name: string | null, slug: string | null, price: string | null, stockStatus: StockStatusEnum | null, regularPrice: string | null, salePrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null } } | null }> } | null } | null, customer: { lastName: string | null, email: string | null, firstName: string | null, username: string | null, databaseId: number | null, sessionToken: string | null, isPayingCustomer: boolean | null, date: string | null, billing: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null, shipping: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null } | null, viewer: { lastName: string | null, email: string | null, databaseId: number, id: string, firstName: string | null, username: string | null, nicename: string | null, wooSessionToken: string | null, stripeCustomerId: string | null, savedPaymentMethods: Array<{ id: number | null, token: string | null, customerId: string | null, last4: string | null, expiryMonth: string | null, expiryYear: string | null, cardType: string | null, isDefault: boolean | null } | null> | null, avatar: { url: string | null } | null } | null, paymentGateways: { nodes: Array<{ title: string | null, id: string, description: string | null, icon: string | null }> } | null, loginClients: Array<{ name: string | null, provider: LoginProviderEnum | null, isEnabled: boolean | null, authorizationUrl: string | null } | null> | null };
+export type GetCartQuery = { __typename?: 'RootQuery', cart?: { __typename?: 'Cart', total?: string | null, subtotal?: string | null, totalTax?: string | null, discountTotal?: string | null, shippingTotal?: string | null, needsShippingAddress?: boolean | null, chosenShippingMethods?: Array<string | null> | null, isEmpty?: boolean | null, rawTotal?: string | null, rawDiscountTotal?: string | null, availableShippingMethods?: Array<{ __typename?: 'ShippingPackage', rates?: Array<{ __typename?: 'ShippingRate', cost?: string | null, id: string, label?: string | null } | null> | null } | null> | null, appliedCoupons?: Array<{ __typename?: 'AppliedCoupon', description?: string | null, discountTax: string, discountAmount: string, code: string } | null> | null, contents?: { __typename?: 'CartToCartItemConnection', itemCount?: number | null, productCount?: number | null, nodes: Array<{ __typename?: 'SimpleCartItem', quantity?: number | null, key: string, product?: { __typename?: 'CartItemToProductConnectionEdge', node:
+            | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, externalUrl?: string | null, buttonText?: string | null, onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+            | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null }
+            | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, averageRating?: number | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, reviewCount?: number | null, virtual?: boolean | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+            | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, averageRating?: number | null, reviewCount?: number | null, totalSales?: number | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, defaultAttributes?: { __typename?: 'ProductWithAttributesToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null, variations?: { __typename?: 'ProductWithVariationsToProductVariationConnection', nodes: Array<{ __typename?: 'SimpleProductVariation', name?: string | null, databaseId: number, price?: string | null, regularPrice?: string | null, salePrice?: string | null, slug?: string | null, stockQuantity?: number | null, stockStatus?: StockStatusEnum | null, hasAttributes?: boolean | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, attributes?: { __typename?: 'ProductVariationToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null }> } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+           } | null, variation?: { __typename?: 'CartItemToProductVariationConnectionEdge', node: { __typename?: 'SimpleProductVariation', name?: string | null, slug?: string | null, price?: string | null, stockStatus?: StockStatusEnum | null, regularPrice?: string | null, salePrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null } } | null }> } | null } | null, customer?: { __typename?: 'Customer', lastName?: string | null, email?: string | null, firstName?: string | null, username?: string | null, databaseId?: number | null, sessionToken?: string | null, isPayingCustomer?: boolean | null, date?: string | null, billing?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null, shipping?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null } | null, viewer?: { __typename?: 'User', lastName?: string | null, email?: string | null, databaseId: number, id: string, firstName?: string | null, username?: string | null, nicename?: string | null, wooSessionToken?: string | null, stripeCustomerId?: string | null, savedPaymentMethods?: Array<{ __typename?: 'SavedPaymentMethod', id?: number | null, token?: string | null, customerId?: string | null, last4?: string | null, expiryMonth?: string | null, expiryYear?: string | null, cardType?: string | null, isDefault?: boolean | null } | null> | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null } | null, paymentGateways?: { __typename?: 'RootQueryToPaymentGatewayConnection', nodes: Array<{ __typename?: 'PaymentGateway', title?: string | null, id: string, description?: string | null, icon?: string | null }> } | null, loginClients?: Array<{ __typename?: 'LoginClient', name?: string | null, provider?: LoginProviderEnum | null, isEnabled?: boolean | null, authorizationUrl?: string | null } | null> | null };
 
 export type GetCartSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCartSummaryQuery = { cart: { isEmpty: boolean | null, contents: { itemCount: number | null, productCount: number | null } | null } | null, viewer: { lastName: string | null, email: string | null, databaseId: number, id: string, firstName: string | null, username: string | null, nicename: string | null, wooSessionToken: string | null, stripeCustomerId: string | null, savedPaymentMethods: Array<{ id: number | null, token: string | null, customerId: string | null, last4: string | null, expiryMonth: string | null, expiryYear: string | null, cardType: string | null, isDefault: boolean | null } | null> | null, avatar: { url: string | null } | null } | null };
+export type GetCartSummaryQuery = { __typename?: 'RootQuery', cart?: { __typename?: 'Cart', isEmpty?: boolean | null, contents?: { __typename?: 'CartToCartItemConnection', itemCount?: number | null, productCount?: number | null } | null } | null, viewer?: { __typename?: 'User', lastName?: string | null, email?: string | null, databaseId: number, id: string, firstName?: string | null, username?: string | null, nicename?: string | null, wooSessionToken?: string | null, stripeCustomerId?: string | null, savedPaymentMethods?: Array<{ __typename?: 'SavedPaymentMethod', id?: number | null, token?: string | null, customerId?: string | null, last4?: string | null, expiryMonth?: string | null, expiryYear?: string | null, cardType?: string | null, isDefault?: boolean | null } | null> | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null } | null };
 
 export type GetDownloadsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetDownloadsQuery = { customer: { downloadableItems: { nodes: Array<{ id: string, name: string | null, url: string | null, accessExpires: string | null, downloadsRemaining: number | null, product:
-          | { name: string | null, slug: string | null }
-          | { name: string | null, slug: string | null }
-          | { name: string | null, slug: string | null }
-          | { name: string | null, slug: string | null }
-          | { name: string | null, slug: string | null }
+export type GetDownloadsQuery = { __typename?: 'RootQuery', customer?: { __typename?: 'Customer', downloadableItems?: { __typename?: 'CustomerToDownloadableItemConnection', nodes: Array<{ __typename?: 'DownloadableItem', id: string, name?: string | null, url?: string | null, accessExpires?: string | null, downloadsRemaining?: number | null, product?:
+          | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null }
+          | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null }
+          | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null }
+          | { __typename?: 'SimpleProductVariation', name?: string | null, slug?: string | null }
+          | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null }
          | null }> } | null } | null };
 
 export type GetOrderQueryVariables = Exact<{
-  id: string;
+  id: Scalars['String']['input'];
 }>;
 
 
-export type GetOrderQuery = { customer: { orders: { nodes: Array<{ orderNumber: string | null, date: string | null, status: OrderStatusEnum | null, needsPayment: boolean | null, needsProcessing: boolean | null, databaseId: number | null, orderKey: string | null, total: string | null, subtotal: string | null, discountTotal: string | null, totalTax: string | null, shippingTotal: string | null, paymentMethodTitle: string | null, paymentMethod: string | null, rawDiscountTotal: string | null, billing: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null, shipping: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null, customer: { lastName: string | null, email: string | null, firstName: string | null, username: string | null, databaseId: number | null, sessionToken: string | null, isPayingCustomer: boolean | null, date: string | null, downloadableItems: { nodes: Array<{ id: string, name: string | null, url: string | null, accessExpires: string | null, downloadsRemaining: number | null, product:
-                | { name: string | null, slug: string | null }
-                | { name: string | null, slug: string | null }
-                | { name: string | null, slug: string | null }
-                | { name: string | null, slug: string | null }
-                | { name: string | null, slug: string | null }
-               | null }> } | null, billing: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null, shipping: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null } | null, downloadableItems: { nodes: Array<{ id: string, name: string | null, url: string | null, accessExpires: string | null, downloadsRemaining: number | null, product:
-              | { name: string | null, slug: string | null }
-              | { name: string | null, slug: string | null }
-              | { name: string | null, slug: string | null }
-              | { name: string | null, slug: string | null }
-              | { name: string | null, slug: string | null }
-             | null }> } | null, lineItems: { nodes: Array<{ quantity: number | null, total: string | null, id: string, product: { node:
-                | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-                | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-                | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-                | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-               } | null, variation: { node: { name: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null } } | null }> } | null }> } | null } | null };
+export type GetOrderQuery = { __typename?: 'RootQuery', customer?: { __typename?: 'Customer', orders?: { __typename?: 'CustomerToOrderConnection', nodes: Array<{ __typename?: 'Order', orderNumber?: string | null, date?: string | null, status?: OrderStatusEnum | null, needsPayment?: boolean | null, needsProcessing?: boolean | null, databaseId?: number | null, orderKey?: string | null, total?: string | null, subtotal?: string | null, discountTotal?: string | null, totalTax?: string | null, shippingTotal?: string | null, paymentMethodTitle?: string | null, paymentMethod?: string | null, rawDiscountTotal?: string | null, billing?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null, shipping?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null, customer?: { __typename?: 'Customer', lastName?: string | null, email?: string | null, firstName?: string | null, username?: string | null, databaseId?: number | null, sessionToken?: string | null, isPayingCustomer?: boolean | null, date?: string | null, downloadableItems?: { __typename?: 'CustomerToDownloadableItemConnection', nodes: Array<{ __typename?: 'DownloadableItem', id: string, name?: string | null, url?: string | null, accessExpires?: string | null, downloadsRemaining?: number | null, product?:
+                | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null }
+                | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null }
+                | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null }
+                | { __typename?: 'SimpleProductVariation', name?: string | null, slug?: string | null }
+                | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null }
+               | null }> } | null, billing?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null, shipping?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null } | null, downloadableItems?: { __typename?: 'OrderToDownloadableItemConnection', nodes: Array<{ __typename?: 'DownloadableItem', id: string, name?: string | null, url?: string | null, accessExpires?: string | null, downloadsRemaining?: number | null, product?:
+              | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null }
+              | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null }
+              | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null }
+              | { __typename?: 'SimpleProductVariation', name?: string | null, slug?: string | null }
+              | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null }
+             | null }> } | null, lineItems?: { __typename?: 'OrderToLineItemConnection', nodes: Array<{ __typename?: 'LineItem', quantity?: number | null, total?: string | null, id: string, product?: { __typename?: 'LineItemToProductConnectionEdge', node:
+                | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+                | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+                | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+                | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+               } | null, variation?: { __typename?: 'LineItemToProductVariationConnectionEdge', node: { __typename?: 'SimpleProductVariation', name?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null } } | null }> } | null }> } | null } | null };
 
 export type GetOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOrdersQuery = { customer: { orders: { nodes: Array<{ orderNumber: string | null, date: string | null, status: OrderStatusEnum | null, needsPayment: boolean | null, needsProcessing: boolean | null, databaseId: number | null, orderKey: string | null, total: string | null, subtotal: string | null, discountTotal: string | null, totalTax: string | null, shippingTotal: string | null, paymentMethodTitle: string | null, paymentMethod: string | null, rawDiscountTotal: string | null, billing: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null, shipping: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null, customer: { lastName: string | null, email: string | null, firstName: string | null, username: string | null, databaseId: number | null, sessionToken: string | null, isPayingCustomer: boolean | null, date: string | null, downloadableItems: { nodes: Array<{ id: string, name: string | null, url: string | null, accessExpires: string | null, downloadsRemaining: number | null, product:
-                | { name: string | null, slug: string | null }
-                | { name: string | null, slug: string | null }
-                | { name: string | null, slug: string | null }
-                | { name: string | null, slug: string | null }
-                | { name: string | null, slug: string | null }
-               | null }> } | null, billing: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null, shipping: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null } | null, downloadableItems: { nodes: Array<{ id: string, name: string | null, url: string | null, accessExpires: string | null, downloadsRemaining: number | null, product:
-              | { name: string | null, slug: string | null }
-              | { name: string | null, slug: string | null }
-              | { name: string | null, slug: string | null }
-              | { name: string | null, slug: string | null }
-              | { name: string | null, slug: string | null }
-             | null }> } | null, lineItems: { nodes: Array<{ quantity: number | null, total: string | null, id: string, product: { node:
-                | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-                | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-                | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-                | { name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }
-               } | null, variation: { node: { name: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null } } | null }> } | null }> } | null } | null };
+export type GetOrdersQuery = { __typename?: 'RootQuery', customer?: { __typename?: 'Customer', orders?: { __typename?: 'CustomerToOrderConnection', nodes: Array<{ __typename?: 'Order', orderNumber?: string | null, date?: string | null, status?: OrderStatusEnum | null, needsPayment?: boolean | null, needsProcessing?: boolean | null, databaseId?: number | null, orderKey?: string | null, total?: string | null, subtotal?: string | null, discountTotal?: string | null, totalTax?: string | null, shippingTotal?: string | null, paymentMethodTitle?: string | null, paymentMethod?: string | null, rawDiscountTotal?: string | null, billing?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null, shipping?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null, customer?: { __typename?: 'Customer', lastName?: string | null, email?: string | null, firstName?: string | null, username?: string | null, databaseId?: number | null, sessionToken?: string | null, isPayingCustomer?: boolean | null, date?: string | null, downloadableItems?: { __typename?: 'CustomerToDownloadableItemConnection', nodes: Array<{ __typename?: 'DownloadableItem', id: string, name?: string | null, url?: string | null, accessExpires?: string | null, downloadsRemaining?: number | null, product?:
+                | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null }
+                | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null }
+                | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null }
+                | { __typename?: 'SimpleProductVariation', name?: string | null, slug?: string | null }
+                | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null }
+               | null }> } | null, billing?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null, shipping?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null } | null, downloadableItems?: { __typename?: 'OrderToDownloadableItemConnection', nodes: Array<{ __typename?: 'DownloadableItem', id: string, name?: string | null, url?: string | null, accessExpires?: string | null, downloadsRemaining?: number | null, product?:
+              | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null }
+              | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null }
+              | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null }
+              | { __typename?: 'SimpleProductVariation', name?: string | null, slug?: string | null }
+              | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null }
+             | null }> } | null, lineItems?: { __typename?: 'OrderToLineItemConnection', nodes: Array<{ __typename?: 'LineItem', quantity?: number | null, total?: string | null, id: string, product?: { __typename?: 'LineItemToProductConnectionEdge', node:
+                | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+                | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+                | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+                | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }
+               } | null, variation?: { __typename?: 'LineItemToProductVariationConnectionEdge', node: { __typename?: 'SimpleProductVariation', name?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null } } | null }> } | null }> } | null } | null };
 
 export type GetProductQueryVariables = Exact<{
-  slug: string | number;
-  frontEndUrl?: string | null | undefined;
+  slug: Scalars['ID']['input'];
+  frontEndUrl?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetProductQuery = { product:
-    | { name: string | null, type: ProductTypesEnum | null, databaseId: number, id: string, fullYoastHead: string | null, slug: string | null, sku: string | null, description: string | null, shortDescription: string | null, externalUrl: string | null, buttonText: string | null, onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawDescription: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, metaData: Array<{ id: string | null, key: string, value: string | null } | null> | null, related: { nodes: Array<
-          | { externalUrl: string | null, buttonText: string | null, onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-          | { name: string | null, slug: string | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, averageRating: number | null, weight: string | null, length: string | null, width: string | null, height: string | null, reviewCount: number | null, virtual: boolean | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-          | { name: string | null, slug: string | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, weight: string | null, length: string | null, width: string | null, height: string | null, averageRating: number | null, reviewCount: number | null, totalSales: number | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, defaultAttributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null, variations: { nodes: Array<{ name: string | null, databaseId: number, price: string | null, regularPrice: string | null, salePrice: string | null, slug: string | null, stockQuantity: number | null, stockStatus: StockStatusEnum | null, hasAttributes: boolean | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, attributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null }> } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-          | Record<PropertyKey, never>
-        > } | null, reviews: { averageRating: number | null, edges: Array<{ rating: number | null, node: { content: string | null, id: string, date: string | null, author: { node:
-                | { name: string | null, avatar: { url: string | null } | null }
-                | { name: string | null, avatar: { url: string | null } | null }
-               } | null } }> } | null, attributes: { nodes: Array<
-          | { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum, terms: { nodes: Array<
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
+export type GetProductQuery = { __typename?: 'RootQuery', product?:
+    | { __typename?: 'ExternalProduct', name?: string | null, type?: ProductTypesEnum | null, databaseId: number, id: string, fullYoastHead?: string | null, slug?: string | null, sku?: string | null, description?: string | null, shortDescription?: string | null, externalUrl?: string | null, buttonText?: string | null, onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawDescription?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, metaData?: Array<{ __typename?: 'MetaData', id?: string | null, key: string, value?: string | null } | null> | null, related?: { __typename?: 'ProductToProductUnionConnection', nodes: Array<
+          | { __typename?: 'ExternalProduct', externalUrl?: string | null, buttonText?: string | null, onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+          | { __typename?: 'GroupProduct' }
+          | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, averageRating?: number | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, reviewCount?: number | null, virtual?: boolean | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+          | { __typename?: 'SimpleProductVariation' }
+          | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, averageRating?: number | null, reviewCount?: number | null, totalSales?: number | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, defaultAttributes?: { __typename?: 'ProductWithAttributesToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null, variations?: { __typename?: 'ProductWithVariationsToProductVariationConnection', nodes: Array<{ __typename?: 'SimpleProductVariation', name?: string | null, databaseId: number, price?: string | null, regularPrice?: string | null, salePrice?: string | null, slug?: string | null, stockQuantity?: number | null, stockStatus?: StockStatusEnum | null, hasAttributes?: boolean | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, attributes?: { __typename?: 'ProductVariationToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null }> } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+        > } | null, reviews?: { __typename?: 'ProductToCommentConnection', averageRating?: number | null, edges: Array<{ __typename?: 'ProductToCommentConnectionEdge', rating?: number | null, node: { __typename?: 'Comment', content?: string | null, id: string, date?: string | null, author?: { __typename?: 'CommentToCommenterConnectionEdge', node:
+                | { __typename?: 'CommentAuthor', name?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null }
+                | { __typename?: 'User', name?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null }
+               } | null } }> } | null, attributes?: { __typename?: 'ProductWithAttributesToProductAttributeConnection', nodes: Array<
+          | { __typename?: 'GlobalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum, terms?: { __typename?: 'GlobalProductAttributeToTermNodeConnection', nodes: Array<
+                | { __typename?: 'Category', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'GraphqlDocumentGroup', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'PaColor', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'PaRange', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'PaSize', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'PostFormat', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ProductBrand', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ProductCategory', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ProductTag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ProductType', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ShippingClass', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'Tag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'VisibleProduct', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
               > } | null }
-          | { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum }
-        > } | null, productCategories: { nodes: Array<{ databaseId: number, slug: string | null, name: string | null, count: number | null }> } | null, terms: { nodes: Array<
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-        > } | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-    | { name: string | null, type: ProductTypesEnum | null, databaseId: number, id: string, fullYoastHead: string | null, slug: string | null, sku: string | null, description: string | null, shortDescription: string | null, rawDescription: string | null, metaData: Array<{ id: string | null, key: string, value: string | null } | null> | null, related: { nodes: Array<
-          | { externalUrl: string | null, buttonText: string | null, onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-          | { name: string | null, slug: string | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, averageRating: number | null, weight: string | null, length: string | null, width: string | null, height: string | null, reviewCount: number | null, virtual: boolean | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-          | { name: string | null, slug: string | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, weight: string | null, length: string | null, width: string | null, height: string | null, averageRating: number | null, reviewCount: number | null, totalSales: number | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, defaultAttributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null, variations: { nodes: Array<{ name: string | null, databaseId: number, price: string | null, regularPrice: string | null, salePrice: string | null, slug: string | null, stockQuantity: number | null, stockStatus: StockStatusEnum | null, hasAttributes: boolean | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, attributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null }> } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-          | Record<PropertyKey, never>
-        > } | null, reviews: { averageRating: number | null, edges: Array<{ rating: number | null, node: { content: string | null, id: string, date: string | null, author: { node:
-                | { name: string | null, avatar: { url: string | null } | null }
-                | { name: string | null, avatar: { url: string | null } | null }
-               } | null } }> } | null, attributes: { nodes: Array<
-          | { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum, terms: { nodes: Array<
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
+          | { __typename?: 'LocalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum }
+        > } | null, productCategories?: { __typename?: 'ProductToProductCategoryConnection', nodes: Array<{ __typename?: 'ProductCategory', databaseId: number, slug?: string | null, name?: string | null, count?: number | null }> } | null, terms?: { __typename?: 'ProductToTermNodeConnection', nodes: Array<
+          | { __typename?: 'Category', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'GraphqlDocumentGroup', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'PaColor', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'PaRange', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'PaSize', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'PostFormat', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ProductBrand', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ProductCategory', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ProductTag', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ProductType', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ShippingClass', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'Tag', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'VisibleProduct', taxonomyName?: string | null, slug?: string | null }
+        > } | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+    | { __typename?: 'GroupProduct', name?: string | null, type?: ProductTypesEnum | null, databaseId: number, id: string, fullYoastHead?: string | null, slug?: string | null, sku?: string | null, description?: string | null, shortDescription?: string | null, rawDescription?: string | null, metaData?: Array<{ __typename?: 'MetaData', id?: string | null, key: string, value?: string | null } | null> | null, related?: { __typename?: 'ProductToProductUnionConnection', nodes: Array<
+          | { __typename?: 'ExternalProduct', externalUrl?: string | null, buttonText?: string | null, onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+          | { __typename?: 'GroupProduct' }
+          | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, averageRating?: number | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, reviewCount?: number | null, virtual?: boolean | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+          | { __typename?: 'SimpleProductVariation' }
+          | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, averageRating?: number | null, reviewCount?: number | null, totalSales?: number | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, defaultAttributes?: { __typename?: 'ProductWithAttributesToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null, variations?: { __typename?: 'ProductWithVariationsToProductVariationConnection', nodes: Array<{ __typename?: 'SimpleProductVariation', name?: string | null, databaseId: number, price?: string | null, regularPrice?: string | null, salePrice?: string | null, slug?: string | null, stockQuantity?: number | null, stockStatus?: StockStatusEnum | null, hasAttributes?: boolean | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, attributes?: { __typename?: 'ProductVariationToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null }> } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+        > } | null, reviews?: { __typename?: 'ProductToCommentConnection', averageRating?: number | null, edges: Array<{ __typename?: 'ProductToCommentConnectionEdge', rating?: number | null, node: { __typename?: 'Comment', content?: string | null, id: string, date?: string | null, author?: { __typename?: 'CommentToCommenterConnectionEdge', node:
+                | { __typename?: 'CommentAuthor', name?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null }
+                | { __typename?: 'User', name?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null }
+               } | null } }> } | null, attributes?: { __typename?: 'ProductWithAttributesToProductAttributeConnection', nodes: Array<
+          | { __typename?: 'GlobalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum, terms?: { __typename?: 'GlobalProductAttributeToTermNodeConnection', nodes: Array<
+                | { __typename?: 'Category', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'GraphqlDocumentGroup', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'PaColor', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'PaRange', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'PaSize', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'PostFormat', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ProductBrand', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ProductCategory', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ProductTag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ProductType', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ShippingClass', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'Tag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'VisibleProduct', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
               > } | null }
-          | { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum }
-        > } | null, productCategories: { nodes: Array<{ databaseId: number, slug: string | null, name: string | null, count: number | null }> } | null, terms: { nodes: Array<
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
+          | { __typename?: 'LocalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum }
+        > } | null, productCategories?: { __typename?: 'ProductToProductCategoryConnection', nodes: Array<{ __typename?: 'ProductCategory', databaseId: number, slug?: string | null, name?: string | null, count?: number | null }> } | null, terms?: { __typename?: 'ProductToTermNodeConnection', nodes: Array<
+          | { __typename?: 'Category', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'GraphqlDocumentGroup', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'PaColor', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'PaRange', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'PaSize', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'PostFormat', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ProductBrand', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ProductCategory', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ProductTag', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ProductType', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ShippingClass', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'Tag', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'VisibleProduct', taxonomyName?: string | null, slug?: string | null }
         > } | null }
-    | { name: string | null, type: ProductTypesEnum | null, databaseId: number, id: string, fullYoastHead: string | null, slug: string | null, sku: string | null, description: string | null, shortDescription: string | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, averageRating: number | null, weight: string | null, length: string | null, width: string | null, height: string | null, reviewCount: number | null, virtual: boolean | null, rawDescription: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, metaData: Array<{ id: string | null, key: string, value: string | null } | null> | null, related: { nodes: Array<
-          | { externalUrl: string | null, buttonText: string | null, onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-          | { name: string | null, slug: string | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, averageRating: number | null, weight: string | null, length: string | null, width: string | null, height: string | null, reviewCount: number | null, virtual: boolean | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-          | { name: string | null, slug: string | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, weight: string | null, length: string | null, width: string | null, height: string | null, averageRating: number | null, reviewCount: number | null, totalSales: number | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, defaultAttributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null, variations: { nodes: Array<{ name: string | null, databaseId: number, price: string | null, regularPrice: string | null, salePrice: string | null, slug: string | null, stockQuantity: number | null, stockStatus: StockStatusEnum | null, hasAttributes: boolean | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, attributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null }> } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-          | Record<PropertyKey, never>
-        > } | null, reviews: { averageRating: number | null, edges: Array<{ rating: number | null, node: { content: string | null, id: string, date: string | null, author: { node:
-                | { name: string | null, avatar: { url: string | null } | null }
-                | { name: string | null, avatar: { url: string | null } | null }
-               } | null } }> } | null, attributes: { nodes: Array<
-          | { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum, terms: { nodes: Array<
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
+    | { __typename?: 'SimpleProduct', name?: string | null, type?: ProductTypesEnum | null, databaseId: number, id: string, fullYoastHead?: string | null, slug?: string | null, sku?: string | null, description?: string | null, shortDescription?: string | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, averageRating?: number | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, reviewCount?: number | null, virtual?: boolean | null, rawDescription?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, metaData?: Array<{ __typename?: 'MetaData', id?: string | null, key: string, value?: string | null } | null> | null, related?: { __typename?: 'ProductToProductUnionConnection', nodes: Array<
+          | { __typename?: 'ExternalProduct', externalUrl?: string | null, buttonText?: string | null, onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+          | { __typename?: 'GroupProduct' }
+          | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, averageRating?: number | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, reviewCount?: number | null, virtual?: boolean | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+          | { __typename?: 'SimpleProductVariation' }
+          | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, averageRating?: number | null, reviewCount?: number | null, totalSales?: number | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, defaultAttributes?: { __typename?: 'ProductWithAttributesToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null, variations?: { __typename?: 'ProductWithVariationsToProductVariationConnection', nodes: Array<{ __typename?: 'SimpleProductVariation', name?: string | null, databaseId: number, price?: string | null, regularPrice?: string | null, salePrice?: string | null, slug?: string | null, stockQuantity?: number | null, stockStatus?: StockStatusEnum | null, hasAttributes?: boolean | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, attributes?: { __typename?: 'ProductVariationToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null }> } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+        > } | null, reviews?: { __typename?: 'ProductToCommentConnection', averageRating?: number | null, edges: Array<{ __typename?: 'ProductToCommentConnectionEdge', rating?: number | null, node: { __typename?: 'Comment', content?: string | null, id: string, date?: string | null, author?: { __typename?: 'CommentToCommenterConnectionEdge', node:
+                | { __typename?: 'CommentAuthor', name?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null }
+                | { __typename?: 'User', name?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null }
+               } | null } }> } | null, attributes?: { __typename?: 'ProductWithAttributesToProductAttributeConnection', nodes: Array<
+          | { __typename?: 'GlobalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum, terms?: { __typename?: 'GlobalProductAttributeToTermNodeConnection', nodes: Array<
+                | { __typename?: 'Category', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'GraphqlDocumentGroup', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'PaColor', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'PaRange', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'PaSize', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'PostFormat', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ProductBrand', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ProductCategory', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ProductTag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ProductType', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ShippingClass', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'Tag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'VisibleProduct', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
               > } | null }
-          | { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum }
-        > } | null, productCategories: { nodes: Array<{ databaseId: number, slug: string | null, name: string | null, count: number | null }> } | null, terms: { nodes: Array<
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-        > } | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-    | { name: string | null, type: ProductTypesEnum | null, databaseId: number, id: string, fullYoastHead: string | null, slug: string | null, sku: string | null, description: string | null, shortDescription: string | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, weight: string | null, length: string | null, width: string | null, height: string | null, averageRating: number | null, reviewCount: number | null, totalSales: number | null, rawDescription: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, metaData: Array<{ id: string | null, key: string, value: string | null } | null> | null, related: { nodes: Array<
-          | { externalUrl: string | null, buttonText: string | null, onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-          | { name: string | null, slug: string | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, averageRating: number | null, weight: string | null, length: string | null, width: string | null, height: string | null, reviewCount: number | null, virtual: boolean | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-          | { name: string | null, slug: string | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, weight: string | null, length: string | null, width: string | null, height: string | null, averageRating: number | null, reviewCount: number | null, totalSales: number | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, defaultAttributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null, variations: { nodes: Array<{ name: string | null, databaseId: number, price: string | null, regularPrice: string | null, salePrice: string | null, slug: string | null, stockQuantity: number | null, stockStatus: StockStatusEnum | null, hasAttributes: boolean | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, attributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null }> } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-          | Record<PropertyKey, never>
-        > } | null, reviews: { averageRating: number | null, edges: Array<{ rating: number | null, node: { content: string | null, id: string, date: string | null, author: { node:
-                | { name: string | null, avatar: { url: string | null } | null }
-                | { name: string | null, avatar: { url: string | null } | null }
-               } | null } }> } | null, attributes: { nodes: Array<
-          | { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum, terms: { nodes: Array<
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-                | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
+          | { __typename?: 'LocalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum }
+        > } | null, productCategories?: { __typename?: 'ProductToProductCategoryConnection', nodes: Array<{ __typename?: 'ProductCategory', databaseId: number, slug?: string | null, name?: string | null, count?: number | null }> } | null, terms?: { __typename?: 'ProductToTermNodeConnection', nodes: Array<
+          | { __typename?: 'Category', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'GraphqlDocumentGroup', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'PaColor', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'PaRange', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'PaSize', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'PostFormat', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ProductBrand', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ProductCategory', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ProductTag', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ProductType', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ShippingClass', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'Tag', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'VisibleProduct', taxonomyName?: string | null, slug?: string | null }
+        > } | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+    | { __typename?: 'VariableProduct', name?: string | null, type?: ProductTypesEnum | null, databaseId: number, id: string, fullYoastHead?: string | null, slug?: string | null, sku?: string | null, description?: string | null, shortDescription?: string | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, averageRating?: number | null, reviewCount?: number | null, totalSales?: number | null, rawDescription?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, metaData?: Array<{ __typename?: 'MetaData', id?: string | null, key: string, value?: string | null } | null> | null, related?: { __typename?: 'ProductToProductUnionConnection', nodes: Array<
+          | { __typename?: 'ExternalProduct', externalUrl?: string | null, buttonText?: string | null, onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+          | { __typename?: 'GroupProduct' }
+          | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, averageRating?: number | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, reviewCount?: number | null, virtual?: boolean | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+          | { __typename?: 'SimpleProductVariation' }
+          | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, averageRating?: number | null, reviewCount?: number | null, totalSales?: number | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, defaultAttributes?: { __typename?: 'ProductWithAttributesToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null, variations?: { __typename?: 'ProductWithVariationsToProductVariationConnection', nodes: Array<{ __typename?: 'SimpleProductVariation', name?: string | null, databaseId: number, price?: string | null, regularPrice?: string | null, salePrice?: string | null, slug?: string | null, stockQuantity?: number | null, stockStatus?: StockStatusEnum | null, hasAttributes?: boolean | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, attributes?: { __typename?: 'ProductVariationToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null }> } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+        > } | null, reviews?: { __typename?: 'ProductToCommentConnection', averageRating?: number | null, edges: Array<{ __typename?: 'ProductToCommentConnectionEdge', rating?: number | null, node: { __typename?: 'Comment', content?: string | null, id: string, date?: string | null, author?: { __typename?: 'CommentToCommenterConnectionEdge', node:
+                | { __typename?: 'CommentAuthor', name?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null }
+                | { __typename?: 'User', name?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null }
+               } | null } }> } | null, attributes?: { __typename?: 'ProductWithAttributesToProductAttributeConnection', nodes: Array<
+          | { __typename?: 'GlobalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum, terms?: { __typename?: 'GlobalProductAttributeToTermNodeConnection', nodes: Array<
+                | { __typename?: 'Category', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'GraphqlDocumentGroup', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'PaColor', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'PaRange', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'PaSize', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'PostFormat', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ProductBrand', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ProductCategory', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ProductTag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ProductType', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'ShippingClass', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'Tag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+                | { __typename?: 'VisibleProduct', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
               > } | null }
-          | { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum }
-        > } | null, productCategories: { nodes: Array<{ databaseId: number, slug: string | null, name: string | null, count: number | null }> } | null, terms: { nodes: Array<
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-          | { taxonomyName: string | null, slug: string | null }
-        > } | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, defaultAttributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null, variations: { nodes: Array<{ name: string | null, databaseId: number, price: string | null, regularPrice: string | null, salePrice: string | null, slug: string | null, stockQuantity: number | null, stockStatus: StockStatusEnum | null, hasAttributes: boolean | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, attributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null }> } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
+          | { __typename?: 'LocalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum }
+        > } | null, productCategories?: { __typename?: 'ProductToProductCategoryConnection', nodes: Array<{ __typename?: 'ProductCategory', databaseId: number, slug?: string | null, name?: string | null, count?: number | null }> } | null, terms?: { __typename?: 'ProductToTermNodeConnection', nodes: Array<
+          | { __typename?: 'Category', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'GraphqlDocumentGroup', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'PaColor', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'PaRange', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'PaSize', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'PostFormat', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ProductBrand', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ProductCategory', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ProductTag', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ProductType', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'ShippingClass', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'Tag', taxonomyName?: string | null, slug?: string | null }
+          | { __typename?: 'VisibleProduct', taxonomyName?: string | null, slug?: string | null }
+        > } | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, defaultAttributes?: { __typename?: 'ProductWithAttributesToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null, variations?: { __typename?: 'ProductWithVariationsToProductVariationConnection', nodes: Array<{ __typename?: 'SimpleProductVariation', name?: string | null, databaseId: number, price?: string | null, regularPrice?: string | null, salePrice?: string | null, slug?: string | null, stockQuantity?: number | null, stockStatus?: StockStatusEnum | null, hasAttributes?: boolean | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, attributes?: { __typename?: 'ProductVariationToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null }> } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
    | null };
 
-type ProductWithAttributes_ExternalProduct_Fragment = { attributes: { nodes: Array<
-      | { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum, terms: { nodes: Array<
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
+type ProductWithAttributes_ExternalProduct_Fragment = { __typename?: 'ExternalProduct', attributes?: { __typename?: 'ProductWithAttributesToProductAttributeConnection', nodes: Array<
+      | { __typename?: 'GlobalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum, terms?: { __typename?: 'GlobalProductAttributeToTermNodeConnection', nodes: Array<
+            | { __typename?: 'Category', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'GraphqlDocumentGroup', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'PaColor', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'PaRange', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'PaSize', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'PostFormat', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ProductBrand', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ProductCategory', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ProductTag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ProductType', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ShippingClass', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'Tag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'VisibleProduct', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
           > } | null }
-      | { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum }
+      | { __typename?: 'LocalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum }
     > } | null };
 
-type ProductWithAttributes_GroupProduct_Fragment = { attributes: { nodes: Array<
-      | { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum, terms: { nodes: Array<
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
+type ProductWithAttributes_GroupProduct_Fragment = { __typename?: 'GroupProduct', attributes?: { __typename?: 'ProductWithAttributesToProductAttributeConnection', nodes: Array<
+      | { __typename?: 'GlobalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum, terms?: { __typename?: 'GlobalProductAttributeToTermNodeConnection', nodes: Array<
+            | { __typename?: 'Category', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'GraphqlDocumentGroup', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'PaColor', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'PaRange', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'PaSize', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'PostFormat', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ProductBrand', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ProductCategory', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ProductTag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ProductType', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ShippingClass', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'Tag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'VisibleProduct', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
           > } | null }
-      | { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum }
+      | { __typename?: 'LocalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum }
     > } | null };
 
-type ProductWithAttributes_SimpleProduct_Fragment = { attributes: { nodes: Array<
-      | { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum, terms: { nodes: Array<
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
+type ProductWithAttributes_SimpleProduct_Fragment = { __typename?: 'SimpleProduct', attributes?: { __typename?: 'ProductWithAttributesToProductAttributeConnection', nodes: Array<
+      | { __typename?: 'GlobalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum, terms?: { __typename?: 'GlobalProductAttributeToTermNodeConnection', nodes: Array<
+            | { __typename?: 'Category', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'GraphqlDocumentGroup', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'PaColor', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'PaRange', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'PaSize', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'PostFormat', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ProductBrand', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ProductCategory', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ProductTag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ProductType', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ShippingClass', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'Tag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'VisibleProduct', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
           > } | null }
-      | { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum }
+      | { __typename?: 'LocalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum }
     > } | null };
 
-type ProductWithAttributes_VariableProduct_Fragment = { attributes: { nodes: Array<
-      | { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum, terms: { nodes: Array<
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-            | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
+type ProductWithAttributes_VariableProduct_Fragment = { __typename?: 'VariableProduct', attributes?: { __typename?: 'ProductWithAttributesToProductAttributeConnection', nodes: Array<
+      | { __typename?: 'GlobalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum, terms?: { __typename?: 'GlobalProductAttributeToTermNodeConnection', nodes: Array<
+            | { __typename?: 'Category', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'GraphqlDocumentGroup', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'PaColor', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'PaRange', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'PaSize', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'PostFormat', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ProductBrand', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ProductCategory', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ProductTag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ProductType', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'ShippingClass', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'Tag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+            | { __typename?: 'VisibleProduct', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
           > } | null }
-      | { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum }
+      | { __typename?: 'LocalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum }
     > } | null };
 
 export type ProductWithAttributesFragment =
@@ -32911,23 +32338,23 @@ export type ProductWithAttributesFragment =
   | ProductWithAttributes_VariableProduct_Fragment
 ;
 
-type ProductAttribute_GlobalProductAttribute_Fragment = { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum, terms: { nodes: Array<
-      | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-      | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-      | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-      | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-      | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-      | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-      | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-      | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-      | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-      | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-      | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-      | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
-      | { name: string | null, slug: string | null, taxonomyName: string | null, databaseId: number }
+type ProductAttribute_GlobalProductAttribute_Fragment = { __typename?: 'GlobalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum, terms?: { __typename?: 'GlobalProductAttributeToTermNodeConnection', nodes: Array<
+      | { __typename?: 'Category', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+      | { __typename?: 'GraphqlDocumentGroup', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+      | { __typename?: 'PaColor', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+      | { __typename?: 'PaRange', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+      | { __typename?: 'PaSize', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+      | { __typename?: 'PostFormat', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+      | { __typename?: 'ProductBrand', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+      | { __typename?: 'ProductCategory', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+      | { __typename?: 'ProductTag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+      | { __typename?: 'ProductType', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+      | { __typename?: 'ShippingClass', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+      | { __typename?: 'Tag', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
+      | { __typename?: 'VisibleProduct', name?: string | null, slug?: string | null, taxonomyName?: string | null, databaseId: number }
     > } | null };
 
-type ProductAttribute_LocalProductAttribute_Fragment = { variation: boolean | null, name: string | null, id: string, options: Array<string | null> | null, label: string | null, scope: ProductAttributeTypesEnum };
+type ProductAttribute_LocalProductAttribute_Fragment = { __typename?: 'LocalProductAttribute', variation?: boolean | null, name?: string | null, id: string, options?: Array<string | null> | null, label?: string | null, scope: ProductAttributeTypesEnum };
 
 export type ProductAttributeFragment =
   | ProductAttribute_GlobalProductAttribute_Fragment
@@ -32935,81 +32362,81 @@ export type ProductAttributeFragment =
 ;
 
 export type GetProductCategoriesQueryVariables = Exact<{
-  first?: number | null | undefined;
+  first?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetProductCategoriesQuery = { productCategories: { nodes: Array<{ count: number | null, databaseId: number, id: string, name: string | null, slug: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null }> } | null };
+export type GetProductCategoriesQuery = { __typename?: 'RootQuery', productCategories?: { __typename?: 'RootQueryToProductCategoryConnection', nodes: Array<{ __typename?: 'ProductCategory', count?: number | null, databaseId: number, id: string, name?: string | null, slug?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null }> } | null };
 
 export type GetProductsQueryVariables = Exact<{
-  after?: string | null | undefined;
-  slug?: Array<string | null | undefined> | string | null | undefined;
-  first?: number | null | undefined;
-  orderby?: ProductsOrderByEnum | null | undefined;
+  after?: InputMaybe<Scalars['String']['input']>;
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderby?: InputMaybe<ProductsOrderByEnum>;
 }>;
 
 
-export type GetProductsQuery = { products: { pageInfo: { hasNextPage: boolean, endCursor: string | null }, nodes: Array<
-      | { name: string | null, slug: string | null, type: ProductTypesEnum | null, databaseId: number, id: string, averageRating: number | null, reviewCount: number | null, externalUrl: string | null, buttonText: string | null, onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, terms: { nodes: Array<
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-          > } | null, productCategories: { nodes: Array<{ databaseId: number, slug: string | null, name: string | null, count: number | null }> } | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-      | { name: string | null, slug: string | null, type: ProductTypesEnum | null, databaseId: number, id: string, averageRating: number | null, reviewCount: number | null, terms: { nodes: Array<
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-          > } | null, productCategories: { nodes: Array<{ databaseId: number, slug: string | null, name: string | null, count: number | null }> } | null }
-      | { name: string | null, slug: string | null, type: ProductTypesEnum | null, databaseId: number, id: string, averageRating: number | null, reviewCount: number | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, weight: string | null, length: string | null, width: string | null, height: string | null, virtual: boolean | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, terms: { nodes: Array<
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-          > } | null, productCategories: { nodes: Array<{ databaseId: number, slug: string | null, name: string | null, count: number | null }> } | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-      | { name: string | null, slug: string | null, type: ProductTypesEnum | null, databaseId: number, id: string, averageRating: number | null, reviewCount: number | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, weight: string | null, length: string | null, width: string | null, height: string | null, totalSales: number | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, terms: { nodes: Array<
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-            | { taxonomyName: string | null, slug: string | null }
-          > } | null, productCategories: { nodes: Array<{ databaseId: number, slug: string | null, name: string | null, count: number | null }> } | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, defaultAttributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null, variations: { nodes: Array<{ name: string | null, databaseId: number, price: string | null, regularPrice: string | null, salePrice: string | null, slug: string | null, stockQuantity: number | null, stockStatus: StockStatusEnum | null, hasAttributes: boolean | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, attributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null }> } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
+export type GetProductsQuery = { __typename?: 'RootQuery', products?: { __typename?: 'RootQueryToProductConnection', pageInfo: { __typename?: 'RootQueryToProductConnectionPageInfo', hasNextPage: boolean, endCursor?: string | null }, nodes: Array<
+      | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null, type?: ProductTypesEnum | null, databaseId: number, id: string, averageRating?: number | null, reviewCount?: number | null, externalUrl?: string | null, buttonText?: string | null, onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, terms?: { __typename?: 'ProductToTermNodeConnection', nodes: Array<
+            | { __typename?: 'Category', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'GraphqlDocumentGroup', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'PaColor', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'PaRange', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'PaSize', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'PostFormat', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ProductBrand', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ProductCategory', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ProductTag', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ProductType', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ShippingClass', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'Tag', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'VisibleProduct', taxonomyName?: string | null, slug?: string | null }
+          > } | null, productCategories?: { __typename?: 'ProductToProductCategoryConnection', nodes: Array<{ __typename?: 'ProductCategory', databaseId: number, slug?: string | null, name?: string | null, count?: number | null }> } | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+      | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null, type?: ProductTypesEnum | null, databaseId: number, id: string, averageRating?: number | null, reviewCount?: number | null, terms?: { __typename?: 'ProductToTermNodeConnection', nodes: Array<
+            | { __typename?: 'Category', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'GraphqlDocumentGroup', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'PaColor', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'PaRange', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'PaSize', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'PostFormat', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ProductBrand', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ProductCategory', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ProductTag', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ProductType', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ShippingClass', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'Tag', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'VisibleProduct', taxonomyName?: string | null, slug?: string | null }
+          > } | null, productCategories?: { __typename?: 'ProductToProductCategoryConnection', nodes: Array<{ __typename?: 'ProductCategory', databaseId: number, slug?: string | null, name?: string | null, count?: number | null }> } | null }
+      | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, type?: ProductTypesEnum | null, databaseId: number, id: string, averageRating?: number | null, reviewCount?: number | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, virtual?: boolean | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, terms?: { __typename?: 'ProductToTermNodeConnection', nodes: Array<
+            | { __typename?: 'Category', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'GraphqlDocumentGroup', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'PaColor', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'PaRange', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'PaSize', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'PostFormat', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ProductBrand', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ProductCategory', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ProductTag', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ProductType', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ShippingClass', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'Tag', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'VisibleProduct', taxonomyName?: string | null, slug?: string | null }
+          > } | null, productCategories?: { __typename?: 'ProductToProductCategoryConnection', nodes: Array<{ __typename?: 'ProductCategory', databaseId: number, slug?: string | null, name?: string | null, count?: number | null }> } | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+      | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, type?: ProductTypesEnum | null, databaseId: number, id: string, averageRating?: number | null, reviewCount?: number | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, totalSales?: number | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, terms?: { __typename?: 'ProductToTermNodeConnection', nodes: Array<
+            | { __typename?: 'Category', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'GraphqlDocumentGroup', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'PaColor', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'PaRange', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'PaSize', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'PostFormat', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ProductBrand', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ProductCategory', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ProductTag', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ProductType', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'ShippingClass', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'Tag', taxonomyName?: string | null, slug?: string | null }
+            | { __typename?: 'VisibleProduct', taxonomyName?: string | null, slug?: string | null }
+          > } | null, productCategories?: { __typename?: 'ProductToProductCategoryConnection', nodes: Array<{ __typename?: 'ProductCategory', databaseId: number, slug?: string | null, name?: string | null, count?: number | null }> } | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, defaultAttributes?: { __typename?: 'ProductWithAttributesToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null, variations?: { __typename?: 'ProductWithVariationsToProductVariationConnection', nodes: Array<{ __typename?: 'SimpleProductVariation', name?: string | null, databaseId: number, price?: string | null, regularPrice?: string | null, salePrice?: string | null, slug?: string | null, stockQuantity?: number | null, stockStatus?: StockStatusEnum | null, hasAttributes?: boolean | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, attributes?: { __typename?: 'ProductVariationToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null }> } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
     > } | null };
 
 export type GetStatesQueryVariables = Exact<{
@@ -33017,127 +32444,128 @@ export type GetStatesQueryVariables = Exact<{
 }>;
 
 
-export type GetStatesQuery = { countryStates: Array<{ code: string, name: string } | null> | null };
+export type GetStatesQuery = { __typename?: 'RootQuery', countryStates?: Array<{ __typename?: 'CountryState', code: string, name: string } | null> | null };
 
 export type GetStockStatusQueryVariables = Exact<{
-  slug: string | number;
+  slug: Scalars['ID']['input'];
 }>;
 
 
-export type GetStockStatusQuery = { product:
-    | { stockStatus: StockStatusEnum | null }
-    | { stockStatus: StockStatusEnum | null, variations: { nodes: Array<{ stockStatus: StockStatusEnum | null }> } | null }
-    | Record<PropertyKey, never>
+export type GetStockStatusQuery = { __typename?: 'RootQuery', product?:
+    | { __typename?: 'ExternalProduct' }
+    | { __typename?: 'GroupProduct' }
+    | { __typename?: 'SimpleProduct', stockStatus?: StockStatusEnum | null }
+    | { __typename?: 'VariableProduct', stockStatus?: StockStatusEnum | null, variations?: { __typename?: 'ProductWithVariationsToProductVariationConnection', nodes: Array<{ __typename?: 'SimpleProductVariation', stockStatus?: StockStatusEnum | null }> } | null }
    | null };
 
 export type GetStripePaymentIntentQueryVariables = Exact<{
   stripePaymentMethod: StripePaymentMethodEnum;
-  customerId?: string | null | undefined;
-  saveForFuture?: boolean | null | undefined;
+  customerId?: InputMaybe<Scalars['String']['input']>;
+  saveForFuture?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 
-export type GetStripePaymentIntentQuery = { stripePaymentIntent: { amount: number | null, clientSecret: string | null, error: string | null, id: string | null, currency: string | null, stripePaymentMethod: string | null } | null };
+export type GetStripePaymentIntentQuery = { __typename?: 'RootQuery', stripePaymentIntent?: { __typename?: 'PaymentIntent', amount?: number | null, clientSecret?: string | null, error?: string | null, id?: string | null, currency?: string | null, stripePaymentMethod?: string | null } | null };
 
 export type LoginMutationVariables = Exact<{
-  username: string;
-  password: string;
+  username: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 }>;
 
 
-export type LoginMutation = { login: { authToken: string | null, authTokenExpiration: string | null, refreshToken: string | null, refreshTokenExpiration: string | null, sessionToken: string | null, user: { name: string | null, username: string | null } | null, customer: { databaseId: number | null, username: string | null, firstName: string | null, lastName: string | null } | null } | null };
+export type LoginMutation = { __typename?: 'RootMutation', login?: { __typename?: 'LoginPayload', authToken?: string | null, authTokenExpiration?: string | null, refreshToken?: string | null, refreshTokenExpiration?: string | null, sessionToken?: string | null, user?: { __typename?: 'User', name?: string | null, username?: string | null } | null, customer?: { __typename?: 'Customer', databaseId?: number | null, username?: string | null, firstName?: string | null, lastName?: string | null } | null } | null };
 
 export type LoginWithProviderMutationVariables = Exact<{
   input: LoginInput;
 }>;
 
 
-export type LoginWithProviderMutation = { login: { authToken: string | null, refreshToken: string | null, authTokenExpiration: string | null } | null };
+export type LoginWithProviderMutation = { __typename?: 'RootMutation', login?: { __typename?: 'LoginPayload', authToken?: string | null, refreshToken?: string | null, authTokenExpiration?: string | null } | null };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LogoutMutation = { logout: { success: boolean | null } | null };
+export type LogoutMutation = { __typename?: 'RootMutation', logout?: { __typename?: 'LogoutPayload', success?: boolean | null } | null };
 
 export type RegisterCustomerMutationVariables = Exact<{
   input: RegisterCustomerInput;
 }>;
 
 
-export type RegisterCustomerMutation = { registerCustomer: { customer: { lastName: string | null, email: string | null, firstName: string | null, username: string | null, databaseId: number | null, sessionToken: string | null, isPayingCustomer: boolean | null, date: string | null, billing: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null, shipping: { address1: string | null, address2: string | null, city: string | null, country: CountriesEnum | null, email: string | null, firstName: string | null, lastName: string | null, phone: string | null, postcode: string | null, company: string | null, state: string | null } | null } | null } | null };
+export type RegisterCustomerMutation = { __typename?: 'RootMutation', registerCustomer?: { __typename?: 'RegisterCustomerPayload', customer?: { __typename?: 'Customer', lastName?: string | null, email?: string | null, firstName?: string | null, username?: string | null, databaseId?: number | null, sessionToken?: string | null, isPayingCustomer?: boolean | null, date?: string | null, billing?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null, shipping?: { __typename?: 'CustomerAddress', address1?: string | null, address2?: string | null, city?: string | null, country?: CountriesEnum | null, email?: string | null, firstName?: string | null, lastName?: string | null, phone?: string | null, postcode?: string | null, company?: string | null, state?: string | null } | null } | null } | null };
 
 export type RemoveCouponsMutationVariables = Exact<{
-  codes: Array<string | null | undefined> | string;
+  codes: Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type RemoveCouponsMutation = { removeCoupons: { cart: { total: string | null, subtotal: string | null, totalTax: string | null, discountTotal: string | null, shippingTotal: string | null, needsShippingAddress: boolean | null, chosenShippingMethods: Array<string | null> | null, isEmpty: boolean | null, rawTotal: string | null, rawDiscountTotal: string | null, availableShippingMethods: Array<{ rates: Array<{ cost: string | null, id: string, label: string | null } | null> | null } | null> | null, appliedCoupons: Array<{ description: string | null, discountTax: string, discountAmount: string, code: string } | null> | null, contents: { itemCount: number | null, productCount: number | null, nodes: Array<{ quantity: number | null, key: string, product: { node:
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, externalUrl: string | null, buttonText: string | null, onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, averageRating: number | null, weight: string | null, length: string | null, width: string | null, height: string | null, reviewCount: number | null, virtual: boolean | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, weight: string | null, length: string | null, width: string | null, height: string | null, averageRating: number | null, reviewCount: number | null, totalSales: number | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, defaultAttributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null, variations: { nodes: Array<{ name: string | null, databaseId: number, price: string | null, regularPrice: string | null, salePrice: string | null, slug: string | null, stockQuantity: number | null, stockStatus: StockStatusEnum | null, hasAttributes: boolean | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, attributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null }> } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-             } | null, variation: { node: { name: string | null, slug: string | null, price: string | null, stockStatus: StockStatusEnum | null, regularPrice: string | null, salePrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null } } | null }> } | null } | null } | null };
+export type RemoveCouponsMutation = { __typename?: 'RootMutation', removeCoupons?: { __typename?: 'RemoveCouponsPayload', cart?: { __typename?: 'Cart', total?: string | null, subtotal?: string | null, totalTax?: string | null, discountTotal?: string | null, shippingTotal?: string | null, needsShippingAddress?: boolean | null, chosenShippingMethods?: Array<string | null> | null, isEmpty?: boolean | null, rawTotal?: string | null, rawDiscountTotal?: string | null, availableShippingMethods?: Array<{ __typename?: 'ShippingPackage', rates?: Array<{ __typename?: 'ShippingRate', cost?: string | null, id: string, label?: string | null } | null> | null } | null> | null, appliedCoupons?: Array<{ __typename?: 'AppliedCoupon', description?: string | null, discountTax: string, discountAmount: string, code: string } | null> | null, contents?: { __typename?: 'CartToCartItemConnection', itemCount?: number | null, productCount?: number | null, nodes: Array<{ __typename?: 'SimpleCartItem', quantity?: number | null, key: string, product?: { __typename?: 'CartItemToProductConnectionEdge', node:
+              | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, externalUrl?: string | null, buttonText?: string | null, onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+              | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null }
+              | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, averageRating?: number | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, reviewCount?: number | null, virtual?: boolean | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+              | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, averageRating?: number | null, reviewCount?: number | null, totalSales?: number | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, defaultAttributes?: { __typename?: 'ProductWithAttributesToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null, variations?: { __typename?: 'ProductWithVariationsToProductVariationConnection', nodes: Array<{ __typename?: 'SimpleProductVariation', name?: string | null, databaseId: number, price?: string | null, regularPrice?: string | null, salePrice?: string | null, slug?: string | null, stockQuantity?: number | null, stockStatus?: StockStatusEnum | null, hasAttributes?: boolean | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, attributes?: { __typename?: 'ProductVariationToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null }> } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+             } | null, variation?: { __typename?: 'CartItemToProductVariationConnectionEdge', node: { __typename?: 'SimpleProductVariation', name?: string | null, slug?: string | null, price?: string | null, stockStatus?: StockStatusEnum | null, regularPrice?: string | null, salePrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null } } | null }> } | null } | null } | null };
 
 export type ResetPasswordEmailMutationVariables = Exact<{
-  username: string;
+  username: Scalars['String']['input'];
 }>;
 
 
-export type ResetPasswordEmailMutation = { sendPasswordResetEmail: { success: boolean | null } | null };
+export type ResetPasswordEmailMutation = { __typename?: 'RootMutation', sendPasswordResetEmail?: { __typename?: 'SendPasswordResetEmailPayload', success?: boolean | null } | null };
 
 export type ResetPasswordKeyMutationVariables = Exact<{
-  key: string;
-  login: string;
-  password: string;
+  key: Scalars['String']['input'];
+  login: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 }>;
 
 
-export type ResetPasswordKeyMutation = { resetUserPassword: { user: { id: string } | null } | null };
+export type ResetPasswordKeyMutation = { __typename?: 'RootMutation', resetUserPassword?: { __typename?: 'ResetUserPasswordPayload', user?: { __typename?: 'User', id: string } | null } | null };
 
 export type UpDateCartQuantityMutationVariables = Exact<{
-  key: string | number;
-  quantity: number;
+  key: Scalars['ID']['input'];
+  quantity: Scalars['Int']['input'];
 }>;
 
 
-export type UpDateCartQuantityMutation = { updateItemQuantities: { cart: { total: string | null, subtotal: string | null, totalTax: string | null, discountTotal: string | null, shippingTotal: string | null, needsShippingAddress: boolean | null, chosenShippingMethods: Array<string | null> | null, isEmpty: boolean | null, rawTotal: string | null, rawDiscountTotal: string | null, availableShippingMethods: Array<{ rates: Array<{ cost: string | null, id: string, label: string | null } | null> | null } | null> | null, appliedCoupons: Array<{ description: string | null, discountTax: string, discountAmount: string, code: string } | null> | null, contents: { itemCount: number | null, productCount: number | null, nodes: Array<{ quantity: number | null, key: string, product: { node:
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, externalUrl: string | null, buttonText: string | null, onSale: boolean | null, price: string | null, regularPrice: string | null, salePrice: string | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, averageRating: number | null, weight: string | null, length: string | null, width: string | null, height: string | null, reviewCount: number | null, virtual: boolean | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-              | { name: string | null, slug: string | null, sku: string | null, databaseId: number, type: ProductTypesEnum | null, price: string | null, date: string | null, regularPrice: string | null, salePrice: string | null, stockStatus: StockStatusEnum | null, stockQuantity: number | null, lowStockAmount: number | null, onSale: boolean | null, weight: string | null, length: string | null, width: string | null, height: string | null, averageRating: number | null, reviewCount: number | null, totalSales: number | null, rawPrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, defaultAttributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null, variations: { nodes: Array<{ name: string | null, databaseId: number, price: string | null, regularPrice: string | null, salePrice: string | null, slug: string | null, stockQuantity: number | null, stockStatus: StockStatusEnum | null, hasAttributes: boolean | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null, databaseId: number, cartSourceUrl: string | null, productCardSourceUrl: string | null } | null, attributes: { nodes: Array<{ name: string | null, attributeId: number | null, value: string | null, label: string | null }> } | null }> } | null, galleryImages: { nodes: Array<{ databaseId: number, sourceUrl: string | null, altText: string | null, title: string | null }> } | null }
-             } | null, variation: { node: { name: string | null, slug: string | null, price: string | null, stockStatus: StockStatusEnum | null, regularPrice: string | null, salePrice: string | null, rawRegularPrice: string | null, rawSalePrice: string | null, image: { sourceUrl: string | null, altText: string | null, title: string | null } | null } } | null }> } | null } | null } | null };
+export type UpDateCartQuantityMutation = { __typename?: 'RootMutation', updateItemQuantities?: { __typename?: 'UpdateItemQuantitiesPayload', cart?: { __typename?: 'Cart', total?: string | null, subtotal?: string | null, totalTax?: string | null, discountTotal?: string | null, shippingTotal?: string | null, needsShippingAddress?: boolean | null, chosenShippingMethods?: Array<string | null> | null, isEmpty?: boolean | null, rawTotal?: string | null, rawDiscountTotal?: string | null, availableShippingMethods?: Array<{ __typename?: 'ShippingPackage', rates?: Array<{ __typename?: 'ShippingRate', cost?: string | null, id: string, label?: string | null } | null> | null } | null> | null, appliedCoupons?: Array<{ __typename?: 'AppliedCoupon', description?: string | null, discountTax: string, discountAmount: string, code: string } | null> | null, contents?: { __typename?: 'CartToCartItemConnection', itemCount?: number | null, productCount?: number | null, nodes: Array<{ __typename?: 'SimpleCartItem', quantity?: number | null, key: string, product?: { __typename?: 'CartItemToProductConnectionEdge', node:
+              | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, externalUrl?: string | null, buttonText?: string | null, onSale?: boolean | null, price?: string | null, regularPrice?: string | null, salePrice?: string | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+              | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null }
+              | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, averageRating?: number | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, reviewCount?: number | null, virtual?: boolean | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+              | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null, sku?: string | null, databaseId: number, type?: ProductTypesEnum | null, price?: string | null, date?: string | null, regularPrice?: string | null, salePrice?: string | null, stockStatus?: StockStatusEnum | null, stockQuantity?: number | null, lowStockAmount?: number | null, onSale?: boolean | null, weight?: string | null, length?: string | null, width?: string | null, height?: string | null, averageRating?: number | null, reviewCount?: number | null, totalSales?: number | null, rawPrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, defaultAttributes?: { __typename?: 'ProductWithAttributesToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null, variations?: { __typename?: 'ProductWithVariationsToProductVariationConnection', nodes: Array<{ __typename?: 'SimpleProductVariation', name?: string | null, databaseId: number, price?: string | null, regularPrice?: string | null, salePrice?: string | null, slug?: string | null, stockQuantity?: number | null, stockStatus?: StockStatusEnum | null, hasAttributes?: boolean | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null, databaseId: number, cartSourceUrl?: string | null, productCardSourceUrl?: string | null } | null, attributes?: { __typename?: 'ProductVariationToVariationAttributeConnection', nodes: Array<{ __typename?: 'VariationAttribute', name?: string | null, attributeId?: number | null, value?: string | null, label?: string | null }> } | null }> } | null, galleryImages?: { __typename?: 'ProductToMediaItemConnection', nodes: Array<{ __typename?: 'MediaItem', databaseId: number, sourceUrl?: string | null, altText?: string | null, title?: string | null }> } | null }
+             } | null, variation?: { __typename?: 'CartItemToProductVariationConnectionEdge', node: { __typename?: 'SimpleProductVariation', name?: string | null, slug?: string | null, price?: string | null, stockStatus?: StockStatusEnum | null, regularPrice?: string | null, salePrice?: string | null, rawRegularPrice?: string | null, rawSalePrice?: string | null, image?: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, title?: string | null } | null } } | null }> } | null } | null } | null };
 
 export type UpdateCustomerMutationVariables = Exact<{
   input: UpdateCustomerInput;
 }>;
 
 
-export type UpdateCustomerMutation = { updateCustomer: { customer: { downloadableItems: { nodes: Array<{ id: string, name: string | null, url: string | null, accessExpires: string | null, downloadsRemaining: number | null, product:
-            | { name: string | null, slug: string | null }
-            | { name: string | null, slug: string | null }
-            | { name: string | null, slug: string | null }
-            | { name: string | null, slug: string | null }
-            | { name: string | null, slug: string | null }
+export type UpdateCustomerMutation = { __typename?: 'RootMutation', updateCustomer?: { __typename?: 'UpdateCustomerPayload', customer?: { __typename?: 'Customer', downloadableItems?: { __typename?: 'CustomerToDownloadableItemConnection', nodes: Array<{ __typename?: 'DownloadableItem', id: string, name?: string | null, url?: string | null, accessExpires?: string | null, downloadsRemaining?: number | null, product?:
+            | { __typename?: 'ExternalProduct', name?: string | null, slug?: string | null }
+            | { __typename?: 'GroupProduct', name?: string | null, slug?: string | null }
+            | { __typename?: 'SimpleProduct', name?: string | null, slug?: string | null }
+            | { __typename?: 'SimpleProductVariation', name?: string | null, slug?: string | null }
+            | { __typename?: 'VariableProduct', name?: string | null, slug?: string | null }
            | null }> } | null } | null } | null };
 
 export type UpdatePasswordMutationVariables = Exact<{
-  id: string | number;
-  password: string;
+  id: Scalars['ID']['input'];
+  password: Scalars['String']['input'];
 }>;
 
 
-export type UpdatePasswordMutation = { updateUser: { user: { id: string } | null } | null };
+export type UpdatePasswordMutation = { __typename?: 'RootMutation', updateUser?: { __typename?: 'UpdateUserPayload', user?: { __typename?: 'User', id: string } | null } | null };
 
 export type WriteReviewMutationVariables = Exact<{
-  author: string;
-  commentOn: number;
-  content: string;
-  rating: number;
-  authorEmail: string;
+  author: Scalars['String']['input'];
+  commentOn: Scalars['Int']['input'];
+  content: Scalars['String']['input'];
+  rating: Scalars['Int']['input'];
+  authorEmail: Scalars['String']['input'];
 }>;
 
 
-export type WriteReviewMutation = { writeReview: { rating: number | null, review: { id: string } | null } | null };
+export type WriteReviewMutation = { __typename?: 'RootMutation', writeReview?: { __typename?: 'WriteReviewPayload', rating?: number | null, review?: { __typename?: 'Comment', id: string } | null } | null };
 
 export const ImageFragmentDoc = gql`
     fragment Image on MediaItem {
@@ -33711,9 +33139,9 @@ export const ChangeShippingMethodDocument = gql`
 }
     ${CartFragmentDoc}`;
 export const CheckoutDocument = gql`
-    mutation Checkout($billing: CustomerAddressInput = {}, $metaData: [MetaDataInput] = [], $paymentMethod: String = "stripe", $shipping: CustomerAddressInput = {}, $customerNote: String = "", $shipToDifferentAddress: Boolean = false, $account: CreateAccountInput = {username: "", password: ""}, $transactionId: String = "", $isPaid: Boolean = false, $shippingMethod: [String] = []) {
+    mutation Checkout($billing: CustomerAddressInput = {}, $metaData: [MetaDataInput] = [], $paymentMethod: String = "stripe", $shipping: CustomerAddressInput = {}, $customerNote: String = "", $shipToDifferentAddress: Boolean = false, $account: CreateAccountInput = {username: "", password: ""}, $transactionId: String = "", $isPaid: Boolean = false, $shippingMethod: [String] = [], $createdVia: String = "WooNuxt") {
   checkout(
-    input: {paymentMethod: $paymentMethod, billing: $billing, metaData: $metaData, shipping: $shipping, shippingMethod: $shippingMethod, customerNote: $customerNote, shipToDifferentAddress: $shipToDifferentAddress, account: $account, transactionId: $transactionId, isPaid: $isPaid}
+    input: {paymentMethod: $paymentMethod, billing: $billing, metaData: $metaData, shipping: $shipping, shippingMethod: $shippingMethod, customerNote: $customerNote, shipToDifferentAddress: $shipToDifferentAddress, account: $account, transactionId: $transactionId, isPaid: $isPaid, createdVia: $createdVia}
   ) {
     result
     redirect
