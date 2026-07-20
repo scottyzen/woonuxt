@@ -1,4 +1,4 @@
-@import '../../../../node_modules/tailwindcss/index.css';
+@import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
 /* Center container */

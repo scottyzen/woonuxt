@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@stripe/stripe-js": "^9.10.0",
-    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.3",
     "@vueuse/core": "^14.3.0",
     "graphql": "^16.14.2",
     "graphql-request": "^7.4.0",
