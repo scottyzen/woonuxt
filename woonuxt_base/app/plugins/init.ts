@@ -1,4 +1,4 @@
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin((nuxtApp) => {
   if (import.meta.server) return;
 
   const { storeSettings } = useAppConfig();
@@ -43,7 +43,10 @@ export default defineNuxtPlugin(() => {
       const { isAuthError, message } = getErrorContext(err);
       if (!isAuthError) return;
 
-      void (async () => {
+      // Wrapped with runWithContext because this calls composables (useGqlHeaders via clearAuthOnly,
+      // refreshCart, etc.) after several `await`s, where the ambient Nuxt instance can otherwise be
+      // lost on the client. See NUXT_E1001.
+      void nuxtApp.runWithContext(async () => {
         const refreshed = await refreshAuthToken(true);
         if (refreshed) {
           await refreshCart();
@@ -60,7 +63,7 @@ export default defineNuxtPlugin(() => {
 
         clearAuthOnly();
         await refreshCart();
-      })();
+      });
     });
   };
 
@@ -71,7 +74,9 @@ export default defineNuxtPlugin(() => {
 
     // If cart refresh failed, clear the Woo session header and retry once
     if (!success) {
-      useGqlHeaders({ 'woocommerce-session': '' });
+      // Wrapped with runWithContext: useGqlHeaders is called after an `await`, where the ambient Nuxt
+      // instance can otherwise be lost on the client. See NUXT_E1001.
+      nuxtApp.runWithContext(() => useGqlHeaders({ 'woocommerce-session': '' }));
       await refreshCart();
     }
   }

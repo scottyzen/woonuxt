@@ -18,6 +18,9 @@ export default defineNuxtConfig({
 
   experimental: {
     appManifest: false,
+    // Preserves the Nuxt SSR context across `await` boundaries in composables (native AsyncLocalStorage-based
+    // tracking) so calls like useAuthTokens/useCart/useAuth after an await don't trigger NUXT_E1001 on the server.
+    asyncContext: true,
   },
 
   vite: {

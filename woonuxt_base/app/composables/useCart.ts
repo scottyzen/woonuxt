@@ -1,5 +1,4 @@
 import type { AddToCartInput, ApiResponse, Cart, Customer, PaymentGateways, ProductDetail, SimpleProduct, Variation } from '#types/gql';
-
 import type { GetCartQuery, GetCartSummaryQuery } from '#gql/default';
 
 let cartMutationQueue: Promise<void> = Promise.resolve();
@@ -10,6 +9,7 @@ let refreshCartInFlight: Promise<boolean> | null = null;
  * @description A composable that handles the cart in local storage
  */
 export function useCart() {
+  const nuxtApp = useNuxtApp();
   const { storeSettings } = useAppConfig();
   const isOptimisticCartMode = computed(() => (storeSettings.cartMode ?? 'optimistic') === 'optimistic');
 
@@ -286,25 +286,29 @@ export function useCart() {
   };
 
   async function refreshCartSummary(): Promise<boolean> {
-    try {
-      const payload = await fetchCartSummarySnapshot();
-      const { updateViewer } = useAuth();
+    // Wrapped with runWithContext because this reads composables (useAuth) after an `await`, where the
+    // ambient Nuxt instance can otherwise be lost on the client. See NUXT_E1001.
+    return nuxtApp.runWithContext(async () => {
+      try {
+        const payload = await fetchCartSummarySnapshot();
+        const { updateViewer } = useAuth();
 
-      cartItemCount.value = payload.cart?.contents?.itemCount ?? 0;
-      updateViewer(payload.viewer ?? null);
-      if (payload.viewer?.wooSessionToken) syncWooSession(payload.viewer.wooSessionToken);
-      return true;
-    } catch (error: unknown) {
-      const recoveredPayload = extractCartPayloadFromError(error);
-      if (recoveredPayload) {
-        applyCartSnapshot(recoveredPayload);
+        cartItemCount.value = payload.cart?.contents?.itemCount ?? 0;
+        updateViewer(payload.viewer ?? null);
+        if (payload.viewer?.wooSessionToken) syncWooSession(payload.viewer.wooSessionToken);
         return true;
-      }
+      } catch (error: unknown) {
+        const recoveredPayload = extractCartPayloadFromError(error);
+        if (recoveredPayload) {
+          applyCartSnapshot(recoveredPayload);
+          return true;
+        }
 
-      const { isAuthError } = getErrorContext(error);
-      if (!isAuthError) getErrorMessage(error);
-      return false;
-    }
+        const { isAuthError } = getErrorContext(error);
+        if (!isAuthError) getErrorMessage(error);
+        return false;
+      }
+    });
   }
 
   /** Refesh the cart from the server
@@ -314,7 +318,9 @@ export function useCart() {
   async function refreshCart(): Promise<boolean> {
     if (refreshCartInFlight) return refreshCartInFlight;
 
-    refreshCartInFlight = (async () => {
+    // Wrapped with runWithContext because this calls composables (useAuthTokens, useGqlHeaders, useAuth,
+    // useCookie) after several `await`s, where the ambient Nuxt instance can otherwise be lost. See NUXT_E1001.
+    refreshCartInFlight = nuxtApp.runWithContext(async () => {
       try {
         const payload = await fetchCartSnapshot();
         applyCartSnapshot(payload as CartQueryPayload);
@@ -366,7 +372,7 @@ export function useCart() {
         isUpdatingCart.value = false;
         refreshCartInFlight = null;
       }
-    })();
+    });
 
     return refreshCartInFlight;
   }

@@ -24,6 +24,7 @@ const parseJwtExpiry = (token?: string | null): number => {
 };
 
 export const useAuthTokens = () => {
+  const nuxtApp = useNuxtApp();
   const { getDomain } = useHelpers();
   const runtimeConfig = useRuntimeConfig();
   const authToken = useState<string | null>('authToken', () => null);
@@ -49,8 +50,12 @@ export const useAuthTokens = () => {
     authToken.value = token;
     authTokenCookie.value = token;
     legacyGqlToken.value = null;
-    useGqlToken({ token, config: { name: 'Authorization', type: 'Bearer' } });
-    if (!token) useGqlHeaders({ Authorization: '' });
+    // Re-enter the Nuxt context in case this runs after an `await` (e.g. inside refreshAuthToken's
+    // async continuation), where the ambient Nuxt instance may otherwise be lost. See NUXT_E1001.
+    nuxtApp.runWithContext(() => {
+      useGqlToken({ token, config: { name: 'Authorization', type: 'Bearer' } });
+      if (!token) useGqlHeaders({ Authorization: '' });
+    });
   };
 
   const clearActiveAuthToken = (): void => {

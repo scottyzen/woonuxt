@@ -1,6 +1,7 @@
 import type { CheckoutInput, CreateAccountInput, UpdateCustomerInput } from '#types/gql';
 
 export function useCheckout() {
+  const nuxtApp = useNuxtApp();
   const { customer, loginUser } = useAuth();
   const { cart, refreshCart, isUpdatingCart } = useCart();
   const gql = useWooGraphQL();
@@ -86,25 +87,30 @@ export function useCheckout() {
 
   // Helper function to handle PayPal redirect
   const handlePayPalRedirect = async (checkout: any, orderId: string, orderKey: string, fallbackOrderKey = ''): Promise<void> => {
-    const { replaceQueryParam } = useHelpers();
-    const router = useRouter();
+    // Wrapped with runWithContext: this is invoked via `await handlePayPalRedirect(...)` from processCheckout
+    // after the checkout mutation has already awaited, where the ambient Nuxt instance can otherwise be
+    // lost on the client. See NUXT_E1001.
+    return nuxtApp.runWithContext(async () => {
+      const { replaceQueryParam } = useHelpers();
+      const router = useRouter();
 
-    const frontEndUrl = window.location.origin;
-    let redirectUrl = checkout?.redirect ?? '';
-    const fallbackOrderQuery = fallbackOrderKey ? `&order_fallback_key=${fallbackOrderKey}` : '';
+      const frontEndUrl = window.location.origin;
+      let redirectUrl = checkout?.redirect ?? '';
+      const fallbackOrderQuery = fallbackOrderKey ? `&order_fallback_key=${fallbackOrderKey}` : '';
 
-    const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}&from_paypal=true${fallbackOrderQuery}`;
-    const payPalCancelUrl = `${frontEndUrl}/checkout/?cancel_order=true&from_paypal=true`;
+      const payPalReturnUrl = `${frontEndUrl}/checkout/order-received/${orderId}/?key=${orderKey}&from_paypal=true${fallbackOrderQuery}`;
+      const payPalCancelUrl = `${frontEndUrl}/checkout/?cancel_order=true&from_paypal=true`;
 
-    redirectUrl = replaceQueryParam('return', payPalReturnUrl, redirectUrl);
-    redirectUrl = replaceQueryParam('cancel_return', payPalCancelUrl, redirectUrl);
-    redirectUrl = replaceQueryParam('bn', 'WooNuxt_Cart', redirectUrl);
+      redirectUrl = replaceQueryParam('return', payPalReturnUrl, redirectUrl);
+      redirectUrl = replaceQueryParam('cancel_return', payPalCancelUrl, redirectUrl);
+      redirectUrl = replaceQueryParam('bn', 'WooNuxt_Cart', redirectUrl);
 
-    const isPayPalWindowClosed = await openPayPalWindow(redirectUrl);
+      const isPayPalWindowClosed = await openPayPalWindow(redirectUrl);
 
-    if (isPayPalWindowClosed) {
-      router.push(`/checkout/order-received/${orderId}/?key=${orderKey}&fetch_delay=true${fallbackOrderQuery}`);
-    }
+      if (isPayPalWindowClosed) {
+        router.push(`/checkout/order-received/${orderId}/?key=${orderKey}&fetch_delay=true${fallbackOrderQuery}`);
+      }
+    });
   };
 
   // Helper function to handle post-checkout account creation
@@ -183,6 +189,9 @@ export function useCheckout() {
   }
 
   const processCheckout = async (isPaid = false): Promise<any> => {
+    // Captured before any `await` so it remains a plain reference; router.push() itself doesn't
+    // require an active Nuxt instance once obtained (it's a Vue Router API), but calling useRouter()
+    // itself must happen synchronously here.
     const router = useRouter();
 
     isProcessingOrder.value = true;
