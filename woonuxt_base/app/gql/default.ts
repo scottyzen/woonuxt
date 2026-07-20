@@ -1241,6 +1241,8 @@ export type CheckoutInput = {
   billing?: InputMaybe<CustomerAddressInput>;
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** Source of the order. Useful when WooCommerce is driven from multiple sources. Defaults to "checkout". */
+  createdVia?: InputMaybe<Scalars['String']['input']>;
   /** Order customer note */
   customerNote?: InputMaybe<Scalars['String']['input']>;
   /** Fees to add to the order. */
@@ -3533,6 +3535,8 @@ export type CreateOrderInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** Coupons codes to be applied to order */
   coupons?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Source of the order. Useful when WooCommerce is driven from multiple sources. Defaults to "graphql-api". */
+  createdVia?: InputMaybe<Scalars['String']['input']>;
   /** Currency the order was created with, in ISO format. */
   currency?: InputMaybe<CurrencyEnum>;
   /** Order customer ID */
@@ -15333,6 +15337,8 @@ export type ProductBrand = DatabaseIdentifier & HierarchicalNode & HierarchicalT
   enqueuedStylesheets?: Maybe<TermNodeToEnqueuedStylesheetConnection>;
   /** The globally unique ID for the object */
   id: Scalars['ID']['output'];
+  /** Product brand image */
+  image?: Maybe<MediaItem>;
   /** Whether the node is a Comment */
   isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
@@ -28453,6 +28459,8 @@ export type UpdateOrderInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** Coupons codes to be applied to order */
   coupons?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Source of the order. Useful when WooCommerce is driven from multiple sources. Defaults to "graphql-api". */
+  createdVia?: InputMaybe<Scalars['String']['input']>;
   /** Currency the order was created with, in ISO format. */
   currency?: InputMaybe<CurrencyEnum>;
   /** Database ID or global ID of the customer for the order */
@@ -32332,6 +32340,7 @@ export type CheckoutMutationVariables = Exact<{
   transactionId?: string | null | undefined;
   isPaid?: boolean | null | undefined;
   shippingMethod?: Array<string | null | undefined> | string | null | undefined;
+  createdVia?: string | null | undefined;
 }>;
 
 
@@ -33711,9 +33720,9 @@ export const ChangeShippingMethodDocument = gql`
 }
     ${CartFragmentDoc}`;
 export const CheckoutDocument = gql`
-    mutation Checkout($billing: CustomerAddressInput = {}, $metaData: [MetaDataInput] = [], $paymentMethod: String = "stripe", $shipping: CustomerAddressInput = {}, $customerNote: String = "", $shipToDifferentAddress: Boolean = false, $account: CreateAccountInput = {username: "", password: ""}, $transactionId: String = "", $isPaid: Boolean = false, $shippingMethod: [String] = []) {
+    mutation Checkout($billing: CustomerAddressInput = {}, $metaData: [MetaDataInput] = [], $paymentMethod: String = "stripe", $shipping: CustomerAddressInput = {}, $customerNote: String = "", $shipToDifferentAddress: Boolean = false, $account: CreateAccountInput = {username: "", password: ""}, $transactionId: String = "", $isPaid: Boolean = false, $shippingMethod: [String] = [], $createdVia: String = "WooNuxt") {
   checkout(
-    input: {paymentMethod: $paymentMethod, billing: $billing, metaData: $metaData, shipping: $shipping, shippingMethod: $shippingMethod, customerNote: $customerNote, shipToDifferentAddress: $shipToDifferentAddress, account: $account, transactionId: $transactionId, isPaid: $isPaid}
+    input: {paymentMethod: $paymentMethod, billing: $billing, metaData: $metaData, shipping: $shipping, shippingMethod: $shippingMethod, customerNote: $customerNote, shipToDifferentAddress: $shipToDifferentAddress, account: $account, transactionId: $transactionId, isPaid: $isPaid, createdVia: $createdVia}
   ) {
     result
     redirect
