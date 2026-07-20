@@ -242,7 +242,7 @@ Run `npm run graphql:codegen` after changing GraphQL queries or updating the WPG
 | WordPress                    | 7.0.1   |
 | WooCommerce                  | 10.9.4  |
 | WPGraphQL                    | 2.17.0  |
-| WooGraphQL                   | 1.0.2   |
+| WooGraphQL                   | 1.0.3   |
 | ~~WPGraphQL CORS~~           | ~~2.1~~ |
 | Headless Login for WPGraphQL | 0.4.4   |
 | Node                         | 22.22.2 |
