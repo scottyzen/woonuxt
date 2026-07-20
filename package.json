@@ -19,21 +19,21 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@stripe/stripe-js": "^9.9.0",
-    "@tailwindcss/postcss": "^4.3.2",
+    "@stripe/stripe-js": "^9.10.0",
+    "@tailwindcss/postcss": "^4.3.3",
     "@vueuse/core": "^14.3.0",
     "graphql": "^16.14.2",
     "graphql-request": "^7.4.0",
     "reka-ui": "^2.10.1",
     "tailwind-merge": "^3.6.0",
-    "tailwindcss": "^4.3.2"
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@graphql-codegen/add": "^7.1.0",
     "@graphql-codegen/cli": "^7.2.0",
     "@graphql-codegen/typescript": "^6.1.0",
     "@graphql-codegen/typescript-graphql-request": "^7.1.0",
-    "@graphql-codegen/typescript-operations": "^6.1.0",
+    "@graphql-codegen/typescript-operations": "^6.1.1",
     "@iconify-json/ion": "^1.2.7",
     "@nuxt/eslint": "^1.16.0",
     "@nuxt/icon": "^2.3.1",
@@ -42,7 +42,7 @@
     "@tailwindcss/typography": "^0.5.20",
     "@vite-pwa/nuxt": "^1.1.1",
     "eslint": "^10.7.0",
-    "nuxt": "^4.4.8",
+    "nuxt": "^4.5.0",
     "prettier": "^3.9.5",
     "typescript": "^6.0.3",
     "vue-tsc": "^3.3.7"
