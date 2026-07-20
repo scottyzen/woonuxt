@@ -59,7 +59,7 @@ useHead({
   </div>
 </template>
 
-<style lang="postcss">
+<style>
 @reference "#tailwind";
 
 html,

@@ -31,7 +31,7 @@ const setActiveOption = async (id) => {
   </div>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 @reference "#tailwind";
 
 .shipping-options {
