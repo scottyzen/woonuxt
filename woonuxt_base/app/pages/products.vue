@@ -51,7 +51,7 @@ useHead({
         <ProductGrid />
       </div>
     </div>
-    <NoProductsFound v-else-if="hasError">Products could not be loaded. Please refresh or try again in a moment.</NoProductsFound>
+    <NoProductsFound v-else-if="hasError">We couldn't load products right now. Please refresh and try again.</NoProductsFound>
     <NoProductsFound v-else>No products found. Please try adjusting your filters or check back later.</NoProductsFound>
   </main>
 </template>
