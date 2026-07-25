@@ -1089,6 +1089,8 @@ export type CategoryToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -1113,6 +1115,8 @@ export type CategoryToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -1185,6 +1189,8 @@ export type CategoryToPostConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -1221,6 +1227,8 @@ export type CategoryToPostConnectionWhereArgs = {
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -2032,6 +2040,12 @@ export type ContentTemplate = {
   templateName?: Maybe<Scalars['String']['output']>;
 };
 
+/** The templates that can be assigned to content. Used to filter a connection by the template its content uses. */
+export enum ContentTemplateEnum {
+  /** The default template, applied when no specific template is assigned. */
+  DefaultTemplate = 'DEFAULT_TEMPLATE'
+}
+
 /** An Post Type object */
 export type ContentType = Node & UniformResourceIdentifiable & {
   __typename?: 'ContentType';
@@ -2221,6 +2235,8 @@ export type ContentTypeToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -2245,6 +2261,8 @@ export type ContentTypeToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -5713,12 +5731,14 @@ export enum DiscountTypeEnum {
 }
 
 /** The discussion setting type */
-export type DiscussionSettings = {
+export type DiscussionSettings = Node & {
   __typename?: 'DiscussionSettings';
   /** Allow people to submit comments on new posts. */
   defaultCommentStatus?: Maybe<Scalars['String']['output']>;
   /** Allow link notifications from other blogs (pingbacks and trackbacks) on new articles. */
   defaultPingStatus?: Maybe<Scalars['String']['output']>;
+  /** The globally unique identifier of the settings group. */
+  id: Scalars['ID']['output'];
 };
 
 /** A downloadable item */
@@ -6614,7 +6634,7 @@ export type ForgetSessionPayload = {
 };
 
 /** The general setting type */
-export type GeneralSettings = {
+export type GeneralSettings = Node & {
   __typename?: 'GeneralSettings';
   /** A date format for all date strings. */
   dateFormat?: Maybe<Scalars['String']['output']>;
@@ -6622,6 +6642,10 @@ export type GeneralSettings = {
   description?: Maybe<Scalars['String']['output']>;
   /** This address is used for admin purposes, like new user notification. */
   email?: Maybe<Scalars['String']['output']>;
+  /** The address at which visitors reach the site&#039;s front end. Can differ from the `url` field when the front end and the content management backend are served from different addresses, such as on headless or decoupled installs. */
+  homeUrl?: Maybe<Scalars['String']['output']>;
+  /** The globally unique identifier of the settings group. */
+  id: Scalars['ID']['output'];
   /** WordPress locale code. */
   language?: Maybe<Scalars['String']['output']>;
   /** The media item representing the site icon configured in site settings, used as the site&#039;s favicon and app icon. */
@@ -7270,6 +7294,8 @@ export type GraphqlDocumentGroupToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -7294,6 +7320,8 @@ export type GraphqlDocumentGroupToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -7341,6 +7369,8 @@ export type GraphqlDocumentGroupToGraphqlDocumentConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -7365,6 +7395,8 @@ export type GraphqlDocumentGroupToGraphqlDocumentConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -7404,15 +7436,9 @@ export type GraphqlDocumentToGraphqlDocumentConnection = Connection & GraphqlDoc
 /** An edge in a connection */
 export type GraphqlDocumentToGraphqlDocumentConnectionEdge = Edge & GraphqlDocumentConnectionEdge & {
   __typename?: 'GraphqlDocumentToGraphqlDocumentConnectionEdge';
-  /**
-   * A cursor for use in pagination
-   * @deprecated This content type is not hierarchical and typically will not have ancestors
-   */
+  /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
-  /**
-   * The item at the end of the edge
-   * @deprecated This content type is not hierarchical and typically will not have ancestors
-   */
+  /** The item at the end of the edge */
   node: GraphqlDocument;
 };
 
@@ -7511,10 +7537,7 @@ export type GraphqlDocumentToParentConnectionEdge = Edge & GraphqlDocumentConnec
   __typename?: 'GraphqlDocumentToParentConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
-  /**
-   * The node of the connection, without the edges
-   * @deprecated This content type is not hierarchical and typically will not have a parent
-   */
+  /** The node of the connection, without the edges */
   node: GraphqlDocument;
 };
 
@@ -7523,10 +7546,7 @@ export type GraphqlDocumentToPreviewConnectionEdge = Edge & GraphqlDocumentConne
   __typename?: 'GraphqlDocumentToPreviewConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
-  /**
-   * The node of the connection, without the edges
-   * @deprecated The &quot;GraphqlDocument&quot; Type is not publicly queryable and does not support previews. This field will be removed in the future.
-   */
+  /** The node of the connection, without the edges */
   node: GraphqlDocument;
 };
 
@@ -8209,7 +8229,7 @@ export type GroupProductToProductUnionConnectionWhereArgs = {
 };
 
 /** The helloElementorSettings setting type */
-export type HelloElementorSettingsSettings = {
+export type HelloElementorSettingsSettings = Node & {
   __typename?: 'HelloElementorSettingsSettings';
   /** The string Settings Group */
   helloElementorSettingsDescriptionMetaTag?: Maybe<Scalars['String']['output']>;
@@ -8223,6 +8243,8 @@ export type HelloElementorSettingsSettings = {
   helloElementorSettingsPageTitle?: Maybe<Scalars['String']['output']>;
   /** The string Settings Group */
   helloElementorSettingsSkipLink?: Maybe<Scalars['String']['output']>;
+  /** The globally unique identifier of the settings group. */
+  id: Scalars['ID']['output'];
 };
 
 /** Content that can be organized in a parent-child structure. Provides fields for navigating up and down the hierarchy and maintaining structured relationships. */
@@ -8380,6 +8402,8 @@ export type HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -8404,6 +8428,8 @@ export type HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -8453,6 +8479,8 @@ export type HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -8477,6 +8505,8 @@ export type HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -11259,6 +11289,8 @@ export type PaColorToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -11283,6 +11315,8 @@ export type PaColorToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -11350,6 +11384,8 @@ export type PaColorToProductConnectionWhereArgs = {
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Limit result set to specific ids. */
   include?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Limit result set to products based on a maximum price. */
   maxPrice?: InputMaybe<Scalars['Float']['input']>;
   /** Get objects with a specific mimeType property */
@@ -11418,6 +11454,8 @@ export type PaColorToProductConnectionWhereArgs = {
   tagNotIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Limit result set with complex set of taxonomy filters. */
   taxonomyFilter?: InputMaybe<ProductTaxonomyInput>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
   /** Limit result set to products assigned a specific type. */
@@ -11759,6 +11797,8 @@ export type PaRangeToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -11783,6 +11823,8 @@ export type PaRangeToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -11850,6 +11892,8 @@ export type PaRangeToProductConnectionWhereArgs = {
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Limit result set to specific ids. */
   include?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Limit result set to products based on a maximum price. */
   maxPrice?: InputMaybe<Scalars['Float']['input']>;
   /** Get objects with a specific mimeType property */
@@ -11918,6 +11962,8 @@ export type PaRangeToProductConnectionWhereArgs = {
   tagNotIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Limit result set with complex set of taxonomy filters. */
   taxonomyFilter?: InputMaybe<ProductTaxonomyInput>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
   /** Limit result set to products assigned a specific type. */
@@ -12259,6 +12305,8 @@ export type PaSizeToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -12283,6 +12331,8 @@ export type PaSizeToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -12350,6 +12400,8 @@ export type PaSizeToProductConnectionWhereArgs = {
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Limit result set to specific ids. */
   include?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Limit result set to products based on a maximum price. */
   maxPrice?: InputMaybe<Scalars['Float']['input']>;
   /** Get objects with a specific mimeType property */
@@ -12418,6 +12470,8 @@ export type PaSizeToProductConnectionWhereArgs = {
   tagNotIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Limit result set with complex set of taxonomy filters. */
   taxonomyFilter?: InputMaybe<ProductTaxonomyInput>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
   /** Limit result set to products assigned a specific type. */
@@ -12967,6 +13021,8 @@ export type PageToRevisionConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -12991,6 +13047,8 @@ export type PageToRevisionConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -13122,6 +13180,19 @@ export type PaymentTokenInterface = {
   tokenId: Scalars['Int']['output'];
   /** Token type */
   type: Scalars['String']['output'];
+};
+
+/** The permalink setting type */
+export type PermalinkSettings = Node & {
+  __typename?: 'PermalinkSettings';
+  /** The prefix used in the URLs of category archive pages. */
+  categoryBase?: Maybe<Scalars['String']['output']>;
+  /** The globally unique identifier of the settings group. */
+  id: Scalars['ID']['output'];
+  /** The structure used to build the URLs for content on the site. */
+  structure?: Maybe<Scalars['String']['output']>;
+  /** The prefix used in the URLs of tag archive pages. */
+  tagBase?: Maybe<Scalars['String']['output']>;
 };
 
 /** An plugin object */
@@ -13661,6 +13732,8 @@ export type PostFormatToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -13685,6 +13758,8 @@ export type PostFormatToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -13748,6 +13823,8 @@ export type PostFormatToPostConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -13784,6 +13861,8 @@ export type PostFormatToPostConnectionWhereArgs = {
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -14118,10 +14197,7 @@ export type PostToParentConnectionEdge = Edge & OneToOneConnection & PostConnect
   __typename?: 'PostToParentConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
-  /**
-   * The node of the connection, without the edges
-   * @deprecated This content type is not hierarchical and typically will not have a parent
-   */
+  /** The node of the connection, without the edges */
   node: Post;
 };
 
@@ -14139,15 +14215,9 @@ export type PostToPostConnection = Connection & PostConnection & {
 /** An edge in a connection */
 export type PostToPostConnectionEdge = Edge & PostConnectionEdge & {
   __typename?: 'PostToPostConnectionEdge';
-  /**
-   * A cursor for use in pagination
-   * @deprecated This content type is not hierarchical and typically will not have ancestors
-   */
+  /** A cursor for use in pagination */
   cursor?: Maybe<Scalars['String']['output']>;
-  /**
-   * The item at the end of the edge
-   * @deprecated This content type is not hierarchical and typically will not have ancestors
-   */
+  /** The item at the end of the edge */
   node: Post;
 };
 
@@ -14309,6 +14379,8 @@ export type PostToRevisionConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -14345,6 +14417,8 @@ export type PostToRevisionConnectionWhereArgs = {
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -15562,6 +15636,8 @@ export type ProductBrandToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -15586,6 +15662,8 @@ export type ProductBrandToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -15739,6 +15817,8 @@ export type ProductBrandToProductConnectionWhereArgs = {
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Limit result set to specific ids. */
   include?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Limit result set to products based on a maximum price. */
   maxPrice?: InputMaybe<Scalars['Float']['input']>;
   /** Get objects with a specific mimeType property */
@@ -15807,6 +15887,8 @@ export type ProductBrandToProductConnectionWhereArgs = {
   tagNotIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Limit result set with complex set of taxonomy filters. */
   taxonomyFilter?: InputMaybe<ProductTaxonomyInput>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
   /** Limit result set to products assigned a specific type. */
@@ -16100,6 +16182,8 @@ export type ProductCategoryToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -16124,6 +16208,8 @@ export type ProductCategoryToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -16310,6 +16396,8 @@ export type ProductCategoryToProductConnectionWhereArgs = {
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Limit result set to specific ids. */
   include?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Limit result set to products based on a maximum price. */
   maxPrice?: InputMaybe<Scalars['Float']['input']>;
   /** Get objects with a specific mimeType property */
@@ -16378,6 +16466,8 @@ export type ProductCategoryToProductConnectionWhereArgs = {
   tagNotIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Limit result set with complex set of taxonomy filters. */
   taxonomyFilter?: InputMaybe<ProductTaxonomyInput>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
   /** Limit result set to products assigned a specific type. */
@@ -16675,6 +16765,8 @@ export type ProductTagToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -16699,6 +16791,8 @@ export type ProductTagToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -16766,6 +16860,8 @@ export type ProductTagToProductConnectionWhereArgs = {
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Limit result set to specific ids. */
   include?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Limit result set to products based on a maximum price. */
   maxPrice?: InputMaybe<Scalars['Float']['input']>;
   /** Get objects with a specific mimeType property */
@@ -16834,6 +16930,8 @@ export type ProductTagToProductConnectionWhereArgs = {
   tagNotIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Limit result set with complex set of taxonomy filters. */
   taxonomyFilter?: InputMaybe<ProductTaxonomyInput>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
   /** Limit result set to products assigned a specific type. */
@@ -17137,6 +17235,8 @@ export type ProductToMediaItemConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -17161,6 +17261,8 @@ export type ProductToMediaItemConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -18473,6 +18575,8 @@ export type ProductTypeToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -18497,6 +18601,8 @@ export type ProductTypeToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -18564,6 +18670,8 @@ export type ProductTypeToProductConnectionWhereArgs = {
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Limit result set to specific ids. */
   include?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Limit result set to products based on a maximum price. */
   maxPrice?: InputMaybe<Scalars['Float']['input']>;
   /** Get objects with a specific mimeType property */
@@ -18632,6 +18740,8 @@ export type ProductTypeToProductConnectionWhereArgs = {
   tagNotIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Limit result set with complex set of taxonomy filters. */
   taxonomyFilter?: InputMaybe<ProductTaxonomyInput>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
   /** Limit result set to products assigned a specific type. */
@@ -19970,8 +20080,10 @@ export type RatingCount = {
 };
 
 /** The reading setting type */
-export type ReadingSettings = {
+export type ReadingSettings = Node & {
   __typename?: 'ReadingSettings';
+  /** The globally unique identifier of the settings group. */
+  id: Scalars['ID']['output'];
   /** The ID of the page that should display the latest posts */
   pageForPosts?: Maybe<Scalars['Int']['output']>;
   /** The ID of the page that should be displayed on the front page */
@@ -21523,6 +21635,8 @@ export type RootQuery = {
   pages?: Maybe<RootQueryToPageConnection>;
   /** Connection between the RootQuery type and the PaymentGateway type */
   paymentGateways?: Maybe<RootQueryToPaymentGatewayConnection>;
+  /** Fields of the &#039;PermalinkSettings&#039; settings group */
+  permalinkSettings?: Maybe<PermalinkSettings>;
   /** A WordPress plugin */
   plugin?: Maybe<Plugin>;
   /** Connection between the RootQuery type and the Plugin type */
@@ -22676,6 +22790,8 @@ export type RootQueryToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -22700,6 +22816,8 @@ export type RootQueryToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -22983,6 +23101,8 @@ export type RootQueryToGraphqlDocumentConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -23007,6 +23127,8 @@ export type RootQueryToGraphqlDocumentConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -23139,6 +23261,8 @@ export type RootQueryToMediaItemConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -23163,6 +23287,8 @@ export type RootQueryToMediaItemConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -23600,6 +23726,8 @@ export type RootQueryToPageConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -23624,6 +23752,8 @@ export type RootQueryToPageConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -23769,6 +23899,8 @@ export type RootQueryToPostConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -23805,6 +23937,8 @@ export type RootQueryToPostConnectionWhereArgs = {
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -24548,6 +24682,8 @@ export type RootQueryToRevisionsConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -24572,6 +24708,8 @@ export type RootQueryToRevisionsConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -25277,53 +25415,61 @@ export type SetDefaultPaymentMethodPayload = {
 /** All of the registered settings */
 export type Settings = {
   __typename?: 'Settings';
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   discussionSettingsDefaultCommentStatus?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   discussionSettingsDefaultPingStatus?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   generalSettingsDateFormat?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   generalSettingsDescription?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   generalSettingsEmail?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
+  generalSettingsHomeUrl?: Maybe<Scalars['String']['output']>;
+  /** Settings of the string Settings Group */
   generalSettingsLanguage?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the integer Settings Group */
+  /** Settings of the integer Settings Group */
   generalSettingsStartOfWeek?: Maybe<Scalars['Int']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   generalSettingsTimeFormat?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   generalSettingsTimezone?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   generalSettingsTitle?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   generalSettingsUrl?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   helloElementorSettingsSettingsHelloElementorSettingsDescriptionMetaTag?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   helloElementorSettingsSettingsHelloElementorSettingsHeaderFooter?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   helloElementorSettingsSettingsHelloElementorSettingsHelloStyle?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   helloElementorSettingsSettingsHelloElementorSettingsHelloTheme?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   helloElementorSettingsSettingsHelloElementorSettingsPageTitle?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   helloElementorSettingsSettingsHelloElementorSettingsSkipLink?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the integer Settings Group */
+  /** Settings of the string Settings Group */
+  permalinkSettingsCategoryBase?: Maybe<Scalars['String']['output']>;
+  /** Settings of the string Settings Group */
+  permalinkSettingsStructure?: Maybe<Scalars['String']['output']>;
+  /** Settings of the string Settings Group */
+  permalinkSettingsTagBase?: Maybe<Scalars['String']['output']>;
+  /** Settings of the integer Settings Group */
   readingSettingsPageForPosts?: Maybe<Scalars['Int']['output']>;
-  /** Settings of the the integer Settings Group */
+  /** Settings of the integer Settings Group */
   readingSettingsPageOnFront?: Maybe<Scalars['Int']['output']>;
-  /** Settings of the the integer Settings Group */
+  /** Settings of the integer Settings Group */
   readingSettingsPostsPerPage?: Maybe<Scalars['Int']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   readingSettingsShowOnFront?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the integer Settings Group */
+  /** Settings of the integer Settings Group */
   writingSettingsDefaultCategory?: Maybe<Scalars['Int']['output']>;
-  /** Settings of the the string Settings Group */
+  /** Settings of the string Settings Group */
   writingSettingsDefaultPostFormat?: Maybe<Scalars['String']['output']>;
-  /** Settings of the the boolean Settings Group */
+  /** Settings of the boolean Settings Group */
   writingSettingsUseSmilies?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -25520,6 +25666,8 @@ export type ShippingClassToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -25544,6 +25692,8 @@ export type ShippingClassToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -25611,6 +25761,8 @@ export type ShippingClassToProductConnectionWhereArgs = {
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Limit result set to specific ids. */
   include?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Limit result set to products based on a maximum price. */
   maxPrice?: InputMaybe<Scalars['Float']['input']>;
   /** Get objects with a specific mimeType property */
@@ -25679,6 +25831,8 @@ export type ShippingClassToProductConnectionWhereArgs = {
   tagNotIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Limit result set with complex set of taxonomy filters. */
   taxonomyFilter?: InputMaybe<ProductTaxonomyInput>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
   /** Limit result set to products assigned a specific type. */
@@ -25734,6 +25888,8 @@ export type ShippingClassToProductVariationConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -25758,6 +25914,8 @@ export type ShippingClassToProductVariationConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -27291,6 +27449,8 @@ export type TagToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -27315,6 +27475,8 @@ export type TagToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -27378,6 +27540,8 @@ export type TagToPostConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -27414,6 +27578,8 @@ export type TagToPostConnectionWhereArgs = {
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -29108,8 +29274,6 @@ export type UpdateSettingsInput = {
   generalSettingsTimezone?: InputMaybe<Scalars['String']['input']>;
   /** Site title. */
   generalSettingsTitle?: InputMaybe<Scalars['String']['input']>;
-  /** Site URL. */
-  generalSettingsUrl?: InputMaybe<Scalars['String']['input']>;
   helloElementorSettingsSettingsHelloElementorSettingsDescriptionMetaTag?: InputMaybe<Scalars['String']['input']>;
   helloElementorSettingsSettingsHelloElementorSettingsHeaderFooter?: InputMaybe<Scalars['String']['input']>;
   helloElementorSettingsSettingsHelloElementorSettingsHelloStyle?: InputMaybe<Scalars['String']['input']>;
@@ -29145,6 +29309,8 @@ export type UpdateSettingsPayload = {
   generalSettings?: Maybe<GeneralSettings>;
   /** Update the HelloElementorSettingsSettings setting. */
   helloElementorSettingsSettings?: Maybe<HelloElementorSettingsSettings>;
+  /** Update the PermalinkSettings setting. */
+  permalinkSettings?: Maybe<PermalinkSettings>;
   /** Update the ReadingSettings setting. */
   readingSettings?: Maybe<ReadingSettings>;
   /** Update the WritingSettings setting. */
@@ -29679,15 +29845,15 @@ export type UserRoleConnectionPageInfo = {
 
 /** Permission levels for user accounts. Defines the standard access levels that control what actions users can perform within the system. */
 export enum UserRoleEnum {
-  /** User role with specific capabilities */
+  /** Full system access with ability to manage all aspects of the site. */
   Administrator = 'ADMINISTRATOR',
-  /** User role with specific capabilities */
+  /** Can publish and manage their own content. */
   Author = 'AUTHOR',
-  /** User role with specific capabilities */
+  /** Can write and manage their own content but cannot publish. */
   Contributor = 'CONTRIBUTOR',
   /** User role with specific capabilities */
   Customer = 'CUSTOMER',
-  /** User role with specific capabilities */
+  /** Content management access without administrative capabilities. */
   Editor = 'EDITOR',
   /** User role with specific capabilities */
   OutletManager = 'OUTLET_MANAGER',
@@ -29699,7 +29865,7 @@ export enum UserRoleEnum {
   SeoManager = 'SEO_MANAGER',
   /** User role with specific capabilities */
   ShopManager = 'SHOP_MANAGER',
-  /** User role with specific capabilities */
+  /** Can only manage their profile and read content. */
   Subscriber = 'SUBSCRIBER'
 }
 
@@ -29915,6 +30081,8 @@ export type UserToMediaItemConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -29939,6 +30107,8 @@ export type UserToMediaItemConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -29994,6 +30164,8 @@ export type UserToPageConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -30018,6 +30190,8 @@ export type UserToPageConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -30081,6 +30255,8 @@ export type UserToPostConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -30117,6 +30293,8 @@ export type UserToPostConnectionWhereArgs = {
   tagSlugAnd?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Array of tag slugs, used to include objects in ANY specified tags */
   tagSlugIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -30166,6 +30344,8 @@ export type UserToRevisionsConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -30190,6 +30370,8 @@ export type UserToRevisionsConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -31141,6 +31323,8 @@ export type VisibleProductToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -31165,6 +31349,8 @@ export type VisibleProductToContentNodeConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -31232,6 +31418,8 @@ export type VisibleProductToProductConnectionWhereArgs = {
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   /** Limit result set to specific ids. */
   include?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Limit result set to products based on a maximum price. */
   maxPrice?: InputMaybe<Scalars['Float']['input']>;
   /** Get objects with a specific mimeType property */
@@ -31300,6 +31488,8 @@ export type VisibleProductToProductConnectionWhereArgs = {
   tagNotIn?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Limit result set with complex set of taxonomy filters. */
   taxonomyFilter?: InputMaybe<ProductTaxonomyInput>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
   /** Limit result set to products assigned a specific type. */
@@ -31355,6 +31545,8 @@ export type VisibleProductToProductVariationConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  /** True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results. */
+  isSticky?: InputMaybe<Scalars['Boolean']['input']>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -31379,6 +31571,8 @@ export type VisibleProductToProductVariationConnectionWhereArgs = {
   stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
   /** Show posts with a specific status. */
   status?: InputMaybe<PostStatusEnum>;
+  /** Filter the connection to content assigned a specific template. */
+  template?: InputMaybe<ContentTemplateEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -31687,12 +31881,14 @@ export type WriteReviewPayload = {
 };
 
 /** The writing setting type */
-export type WritingSettings = {
+export type WritingSettings = Node & {
   __typename?: 'WritingSettings';
   /** Default post category. */
   defaultCategory?: Maybe<Scalars['Int']['output']>;
   /** Default post format. */
   defaultPostFormat?: Maybe<Scalars['String']['output']>;
+  /** The globally unique identifier of the settings group. */
+  id: Scalars['ID']['output'];
   /** Convert emoticons like :-) and :-P to graphics on display. */
   useSmilies?: Maybe<Scalars['Boolean']['output']>;
 };

@@ -3,15 +3,18 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 const endpoint = process.env.GQL_HOST || 'https://secure.woonuxt.com/graphql';
 const origin = process.env.APP_HOST || new URL(endpoint).origin;
 
+const schemaLoaderOptions: Record<string, unknown> = {
+  headers: {
+    Origin: origin,
+  },
+  assumeValid: true,
+};
+
 const config: CodegenConfig = {
   overwrite: true,
   schema: [
     {
-      [endpoint]: {
-        headers: {
-          Origin: origin,
-        },
-      },
+      [endpoint]: schemaLoaderOptions,
     },
   ],
   documents: ['woonuxt_base/app/queries/**/*.gql'],
