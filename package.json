@@ -1,6 +1,9 @@
 {
   "name": "woonuxt",
   "private": true,
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "build": "nuxt build",
     "graphql:codegen": "graphql-codegen --config codegen.ts",
@@ -37,13 +40,13 @@
     "@nuxt/eslint": "^1.16.0",
     "@nuxt/icon": "^2.3.1",
     "@nuxt/image": "2.0.0",
-    "@nuxtjs/i18n": "^10.4.1",
+    "@nuxtjs/i18n": "^10.5.0",
     "@tailwindcss/typography": "^0.5.20",
     "@vite-pwa/nuxt": "^1.1.1",
-    "eslint": "^10.7.0",
+    "eslint": "^10.8.0",
     "nuxt": "^4.5.0",
-    "prettier": "^3.9.5",
+    "prettier": "^3.9.6",
     "typescript": "^6.0.3",
-    "vue-tsc": "^3.3.7"
+    "vue-tsc": "^3.3.8"
   }
 }
