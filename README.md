@@ -62,7 +62,7 @@ This is controlled by `storeSettings.initStoreOnUserActionToReduceServerLoad` in
 
 WooNuxt now uses the Nuxt layers feature to make it easy to customize any part of WooNuxt just like you would with a WordPress theme with its child theme.
 
-Example: I have created a pages directory and added a `contact.vue` file in the pages directory. This will override the default contact page that comes with WooNuxt. You can do this with any page or component. So think of the `woonuxt_base` folder as the parent theme and the root folder as the child theme.
+Example: create `app/pages/contact.vue` to override the default contact page that comes with WooNuxt. You can do this with any page or component. Think of the `woonuxt_base` folder as the parent theme and the root folder as the child theme.
 
 Here is a [branch](https://github.com/scottyzen/woonuxt/tree/myshop) with an example of some basic customizations:
 And here is the live demo of the customized WooNuxt site: [My Shop](https://myshop.woonuxt.com/).
@@ -87,10 +87,10 @@ export default defineNuxtConfig({
 
 Do not add `extends:` twice in the same config file. A duplicate key will overwrite the first one and prevent the layer system from working correctly.
 
-To override base files, copy the same path into your root project or custom layer. For example:
+To override base files, add a file with the same public name to your root app. For example:
 
-- `woonuxt_base/app/components/ProductCard.vue` → `app/components/ProductCard.vue`
-- `woonuxt_base/app/pages/contact.vue` → `pages/contact.vue`
+- `woonuxt_base/app/components/productElements/ProductCard.vue` → `app/components/ProductCard.vue`
+- `woonuxt_base/app/pages/contact.vue` → `app/pages/contact.vue`
 
 ### PWA configuration and extension
 
