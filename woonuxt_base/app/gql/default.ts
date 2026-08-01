@@ -33396,7 +33396,7 @@ export const GetAllowedCountriesDocument = gql`
     `;
 export const GetCartDocument = gql`
     query getCart {
-  cart {
+  cart(recalculateTotals: true) {
     ...Cart
   }
   customer {
@@ -33421,7 +33421,7 @@ ${PaymentGatewayFragmentDoc}
 ${LoginClientFragmentDoc}`;
 export const GetCartSummaryDocument = gql`
     query getCartSummary {
-  cart {
+  cart(recalculateTotals: true) {
     isEmpty
     contents(first: 1) {
       itemCount

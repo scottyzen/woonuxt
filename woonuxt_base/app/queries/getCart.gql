@@ -1,5 +1,5 @@
 query getCart {
-  cart {
+  cart(recalculateTotals: true) {
     ...Cart
   }
   customer {

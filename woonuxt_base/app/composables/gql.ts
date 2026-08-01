@@ -64,7 +64,8 @@ const getRuntimeClientConfig = (): RuntimeGraphQLClientConfig => {
 };
 
 const getGraphQLEndpoint = (): string => {
-  const endpoint = getRuntimeClientConfig().host;
+  const clientConfig = getRuntimeClientConfig();
+  const endpoint = import.meta.client ? new URL('/api/graphql', window.location.origin).toString() : clientConfig.host;
   if (!endpoint) throw new Error('GraphQL endpoint is not configured. Set GQL_HOST in your environment.');
   return endpoint;
 };
@@ -188,9 +189,5 @@ export const useAsyncGql = <TMethod extends keyof Sdk>(
   const gql = useWooGraphQL();
   const method = gql[operation] as (...args: unknown[]) => Promise<Awaited<ReturnType<Sdk[TMethod]>>>;
 
-  return useAsyncData<Awaited<ReturnType<Sdk[TMethod]>>>(
-    key,
-    () => method(variables, options?.requestHeaders),
-    options?.asyncDataOptions,
-  );
+  return useAsyncData<Awaited<ReturnType<Sdk[TMethod]>>>(key, () => method(variables, options?.requestHeaders), options?.asyncDataOptions);
 };

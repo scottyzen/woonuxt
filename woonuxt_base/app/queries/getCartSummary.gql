@@ -1,5 +1,5 @@
 query getCartSummary {
-  cart {
+  cart(recalculateTotals: true) {
     isEmpty
     contents(first: 1) {
       itemCount
