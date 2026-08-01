@@ -7,6 +7,7 @@ const { resolve } = createResolver(import.meta.url);
 // Environment variables with fallbacks
 const GQL_HOST = process.env.GQL_HOST || 'http://localhost:4000/graphql';
 const APP_HOST = process.env.APP_HOST || 'http://localhost:3000';
+if (process.env.NETLIFY) process.env.NUXT_IMAGE_PROVIDER = 'netlify';
 const imageProvider = (process.env.NETLIFY ? 'netlify' : process.env.NUXT_IMAGE_PROVIDER || 'ipx').trim().toLowerCase();
 
 // ISR configuration for large catalogs
@@ -61,6 +62,18 @@ export default defineNuxtConfig({
   ],
 
   components: [{ path: resolve('./app/components'), pathPrefix: false }],
+
+  icon: {
+    provider: 'none',
+    fallbackToApi: false,
+    clientBundle: {
+      scan: true,
+    },
+  },
+
+  pwa: {
+    registerType: 'autoUpdate',
+  },
 
   modules: [
     resolve('./modules/woonuxt-bridge.ts'),
