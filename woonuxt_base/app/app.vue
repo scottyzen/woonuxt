@@ -46,7 +46,7 @@ useHead({
     </Transition>
 
     <Transition name="slide-from-left">
-      <MobileMenu v-if="isShowingMobileMenu" />
+      <LazyMobileMenu v-if="isShowingMobileMenu" />
     </Transition>
 
     <NuxtPage />
