@@ -18,7 +18,7 @@ type ProductImage = {
 
 const imgWidth = 280;
 const imgHeight = Math.round(imgWidth * 1.125);
-const isFirstRow = computed(() => props.index <= 1);
+const isFirstProduct = computed(() => props.index === 0);
 
 // example: ?filter=pa_color[green,blue],pa_size[large]
 const paColor = computed(() => (route.query?.filter as string | undefined)?.split('pa_color[')[1]?.split(']')[0]?.split(',') || []);
@@ -183,10 +183,13 @@ onMounted(() => {
               :src="image.src"
               :alt="image.alt"
               :title="image.title"
-              :loading="slideIndex === 0 && isFirstRow ? 'eager' : 'lazy'"
-              :preload="slideIndex === 0 && isFirstRow ? { fetchPriority: 'high' } : false"
+              :loading="slideIndex === 0 && isFirstProduct ? 'eager' : 'lazy'"
+              :preload="slideIndex === 0 && isFirstProduct ? { fetchPriority: 'high' } : false"
               :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
-              :img-attrs="{ class: 'object-cover object-top w-full h-full rounded-lg', fetchpriority: slideIndex === 0 && isFirstRow ? 'high' : undefined }" />
+              :img-attrs="{
+                class: 'object-cover object-top w-full h-full rounded-lg',
+                fetchpriority: slideIndex === 0 && isFirstProduct ? 'high' : undefined,
+              }" />
           </NuxtLink>
           <div v-else class="product-card-slide block flex-[0_0_100%] snap-start snap-always aspect-8/9 overflow-hidden rounded-lg" :data-index="slideIndex">
             <NuxtPicture
@@ -195,10 +198,13 @@ onMounted(() => {
               :src="image.src"
               :alt="image.alt"
               :title="image.title"
-              :loading="slideIndex === 0 && isFirstRow ? 'eager' : 'lazy'"
-              :preload="slideIndex === 0 && isFirstRow ? { fetchPriority: 'high' } : false"
+              :loading="slideIndex === 0 && isFirstProduct ? 'eager' : 'lazy'"
+              :preload="slideIndex === 0 && isFirstProduct ? { fetchPriority: 'high' } : false"
               :sizes="`sm:${imgWidth / 2}px md:${imgWidth}px`"
-              :img-attrs="{ class: 'object-cover object-top w-full h-full rounded-lg', fetchpriority: slideIndex === 0 && isFirstRow ? 'high' : undefined }" />
+              :img-attrs="{
+                class: 'object-cover object-top w-full h-full rounded-lg',
+                fetchpriority: slideIndex === 0 && isFirstProduct ? 'high' : undefined,
+              }" />
           </div>
         </template>
       </div>
