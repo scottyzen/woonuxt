@@ -64,8 +64,7 @@ const getRuntimeClientConfig = (): RuntimeGraphQLClientConfig => {
 };
 
 const getGraphQLEndpoint = (): string => {
-  const clientConfig = getRuntimeClientConfig();
-  const endpoint = import.meta.client ? new URL('/api/graphql', window.location.origin).toString() : clientConfig.host;
+  const endpoint = getRuntimeClientConfig().host;
   if (!endpoint) throw new Error('GraphQL endpoint is not configured. Set GQL_HOST in your environment.');
   return endpoint;
 };
