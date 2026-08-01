@@ -42,7 +42,7 @@ useHead({
     <AppHeader />
 
     <Transition name="slide-from-right">
-      <Cart v-if="isShowingCart" />
+      <LazyCart v-if="isShowingCart" />
     </Transition>
 
     <Transition name="slide-from-left">
