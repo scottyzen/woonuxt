@@ -140,13 +140,19 @@ const scrollToSlide = (index: number) => {
 
 const syncActiveSlide = () => {
   nextTick(() => {
+    const activeIndex = activeImageIndex.value;
+    if (activeIndex === 0) {
+      currentSlide.value = 0;
+      return;
+    }
+
     const container = sliderRef.value;
     if (!container?.children?.length) return;
-    const target = container.querySelector(`[data-index="${activeImageIndex.value}"]`) as HTMLElement | null;
+    const target = container.querySelector(`[data-index="${activeIndex}"]`) as HTMLElement | null;
     if (target) {
       container.scrollTo({ left: target.offsetLeft, behavior: 'smooth' });
     }
-    currentSlide.value = activeImageIndex.value;
+    currentSlide.value = activeIndex;
   });
 };
 
