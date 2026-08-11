@@ -1,4 +1,4 @@
 {
-  "framework": "nuxtjs",
-  "buildCommand": "npm run generate"
+  "buildCommand": "npm run generate",
+  "outputDirectory": ".vercel/output/static"
 }

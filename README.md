@@ -29,13 +29,30 @@ You can find some common errors and how to fix them [here](https://woonuxt.com/f
 
 ## Static Deployment
 
-WooNuxt deploys as a static Nuxt site by default. Configure static hosts with:
+WooNuxt's default deployment is a fully static Nuxt site. Use `npm run generate`; it prerenders the site during the build and does not require SSR or ISR hosting.
 
-- Build command: `npm run generate`
-- Netlify publish directory: `dist`
-- Vercel: leave the output directory unset so Nuxt's Vercel adapter can provide its generated deployment output
+The generated directory is provider-specific. This is intentional: Netlify's Nuxt adapter publishes `dist`, while Vercel's Nuxt adapter writes its [Build Output API](https://vercel.com/docs/build-output-api) artifacts to `.vercel/output`. Do not copy one provider's output-directory setting to the other.
 
-The committed `netlify.toml` and `vercel.json` use these defaults. A deployment owner can override them in their host configuration or fork.
+### Netlify
+
+1. Import the repository as a new Netlify site.
+2. Set `GQL_HOST` and `NUXT_IMAGE_DOMAINS` in **Site configuration → Environment variables**.
+3. In **Build & deploy → Build settings**, use build command `npm run generate` and publish directory `dist`. The committed `netlify.toml` already supplies both values for a new site.
+4. Deploy.
+
+### Vercel
+
+Vercel output directory: `.vercel/output/static` 2. Set `GQL_HOST` and `NUXT_IMAGE_DOMAINS` in **Settings → Environment Variables**. 3. Use build command `npm run generate`. The committed `vercel.json` supplies this static default. 4. Set **Output Directory** to `.vercel/output/static`. Nuxt creates this static artifact when it detects a Vercel build. 5. Deploy.
+
+### Repository configuration and dashboard overrides
+
+The committed provider files are the defaults for a fresh project. You may change build or publish settings for a custom deployment, but make the repository configuration and dashboard settings agree. Existing projects can retain old dashboard values even after this repository changes.
+
+If a deployment fails with `No Output Directory named "dist" found` on Netlify, confirm that its build command is `npm run generate` and its publish directory is `dist`.
+
+If Vercel reports that `.output/public` (or another output directory) does not exist, clear the project's Output Directory and any old build-command override, then deploy again.
+
+WooNuxt deliberately has no `.nvmrc` or `package.json#engines` entry. Use the current Node.js version supported by your host rather than adding a pin unless your own customization has a documented compatibility requirement.
 
 ## Large Catalog ISR Setup (10K+ Products)
 
