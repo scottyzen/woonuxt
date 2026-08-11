@@ -32,7 +32,8 @@ You can find some common errors and how to fix them [here](https://woonuxt.com/f
 WooNuxt deploys as a static Nuxt site by default. Configure static hosts with:
 
 - Build command: `npm run generate`
-- Publish directory: `dist`
+- Netlify publish directory: `dist`
+- Vercel: leave the output directory unset so Nuxt's Vercel adapter can provide its generated deployment output
 
 The committed `netlify.toml` and `vercel.json` use these defaults. A deployment owner can override them in their host configuration or fork.
 
