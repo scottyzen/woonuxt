@@ -4,7 +4,7 @@
 
 ## Introduction
 
-The goal of WooNuxt is to provide a modern, fast, and SEO-friendly front-end for WooCommerce. It's built on Nuxt 3 and uses the WPGraphQL API to retrieve all the data it needs. It's also fully customizable and can be extended with your custom components and modules. You can see a live demo of WooNuxt by clicking the button below.
+The goal of WooNuxt is to provide a modern, fast, and SEO-friendly front-end for WooCommerce. It's built on Nuxt 4 and uses the WPGraphQL API to retrieve all the data it needs. It's also fully customizable and can be extended with your custom components and modules. You can see a live demo of WooNuxt by clicking the button below.
 
 | Demo            | URL                            |
 | --------------- | ------------------------------ |
@@ -25,11 +25,20 @@ You can find some common errors and how to fix them [here](https://woonuxt.com/f
 - Once the plugin is activated, configure `GQL_HOST` and `NUXT_IMAGE_DOMAINS`. Check out the `.env.example` file for details.
 
 [![button](https://user-images.githubusercontent.com/5116925/218880214-a16287a7-fd8c-4299-9e65-0871136f0771.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/scottyzen/woonuxt) [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fscottyzen%2FWooNuxt3&repository-name=WooNuxt&env=GQL_HOST,NUXT_IMAGE_DOMAINS)
-[![Deploy to PandaStack](https://dashboard.pandastack.io/deploy-button.svg)](https://dashboard.pandastack.io/deploy?repo=scottyzen/woonuxt&type=static&buildCmd=npm+run+build&outputDir=dist)
+[![Deploy to PandaStack](https://dashboard.pandastack.io/deploy-button.svg)](https://dashboard.pandastack.io/deploy?repo=scottyzen/woonuxt&type=static&buildCmd=npm+run+generate&outputDir=.output%2Fpublic)
+
+## Static Deployment
+
+WooNuxt deploys as a static Nuxt site by default. Configure static hosts with:
+
+- Build command: `npm run generate`
+- Publish directory: `.output/public`
+
+The committed `netlify.toml` and `vercel.json` use these defaults. A deployment owner can override them in their host configuration or fork.
 
 ## Large Catalog ISR Setup (10K+ Products)
 
-For large catalogs, avoid full static generation and use Nuxt hybrid rendering with ISR.
+For large catalogs, an alternative to the default static deployment is Nuxt hybrid rendering with ISR.
 
 - Build with `nuxt build` (not `nuxt generate`).
 - Product catalog routes use Nitro `routeRules` with `isr` in `nuxt.config.ts`.
@@ -229,7 +238,7 @@ The WooNuxt Settings plugin automatically provides the remaining storefront sett
 
 WooNuxt uses a WooNuxt-owned GraphQL layer built on `graphql-request` and GraphQL Code Generator's `typescript-graphql-request` SDK.
 
-This keeps the existing `.gql` files, generated operation types, and imperative storefront calls while avoiding a dependency on a Nuxt-specific GraphQL wrapper. Apollo is too heavy for WooNuxt's ISR-heavy catalog flow, urql's cache provides little value for the current architecture, and `gql.tada` would require a high-churn migration away from the existing query files.
+This keeps the existing `.gql` files, generated operation types, and imperative storefront calls while avoiding a dependency on a Nuxt-specific GraphQL wrapper. Apollo is too heavy for WooNuxt's optional ISR catalog flow, urql's cache provides little value for the current architecture, and `gql.tada` would require a high-churn migration away from the existing query files.
 
 Run `npm run graphql:codegen` after changing GraphQL queries or updating the WPGraphQL schema. The generated SDK is committed at `woonuxt_base/app/gql/default.ts` so the template can typecheck and build without relying on Nuxt's generated `.nuxt/gql` output.
 
