@@ -134,6 +134,8 @@ export default defineNuxtConfig({
       ignore: ['/.netlify/images'],
     },
     routeRules: {
+      // Serve the LCP-critical homepage from the CDN instead of fetching catalog data per request.
+      '/': { prerender: true },
       // Disable prerendering for dynamic checkout/order pages
       '/checkout/order-received/**': { prerender: false },
       '/order-summary/**': { prerender: false },

@@ -2,10 +2,12 @@
 import { ProductsOrderByEnum } from '#gql/default';
 const { siteName, description, shortDescription, siteImage } = useAppConfig();
 
-const { data } = await useAsyncGql('getProductCategories', { first: 6 });
-const productCategories = data.value?.productCategories?.nodes || [];
+const [{ data }, { data: productData }] = await Promise.all([
+  useAsyncGql('getProductCategories', { first: 6 }),
+  useAsyncGql('getProducts', { first: 5, orderby: ProductsOrderByEnum.Popularity }),
+]);
 
-const { data: productData } = await useAsyncGql('getProducts', { first: 5, orderby: ProductsOrderByEnum.Popularity });
+const productCategories = data.value?.productCategories?.nodes || [];
 const popularProducts = productData.value?.products?.nodes || [];
 
 useSeoMeta({
