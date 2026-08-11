@@ -17,8 +17,15 @@ export function useSearching() {
 
   async function setSearchQuery(search: string): Promise<void> {
     const { updateProductList } = useProducts();
+    const routeName = String(route.name ?? 'products');
+    const query = { ...route.query, search: search || undefined };
+
     searchQuery.value = search;
-    await router.push({ query: { ...route.query, search: search || undefined } });
+    if (routeName.startsWith('product-category-')) {
+      await router.push({ path: route.path, query });
+    } else {
+      await router.push({ name: 'products', query });
+    }
     await updateProductList();
   }
 
@@ -40,19 +47,7 @@ export function useSearching() {
   }
 
   function searchProducts(products: Product[]): Product[] {
-    const name = String(route.name ?? 'products');
     const search = getSearchQuery();
-
-    /**
-     * If we are on a category page, we need to add the category slug to the
-     * route, otherwise every search will redirect to the products page.
-     */
-    if (name.startsWith('product-category-')) {
-      router.push({ path: route.path, query: { ...route.query, search } });
-    } else {
-      router.push({ name: 'products', query: { ...route.query, search } });
-    }
-
     return search ? products.filter((product: Product) => productMatchesSearch(product, search)) : products;
   }
 

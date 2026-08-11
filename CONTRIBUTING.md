@@ -140,14 +140,18 @@ This guide is for contributors working on the WooNuxt codebase or documentation.
    ```
 
 3. **Make your changes** in the appropriate part of the codebase:
-   - `woonuxt_base/` — Nuxt 3 frontend
+   - `woonuxt_base/` — the parent Nuxt layer that supplies WooNuxt's storefront.
+   - `app/` — your optional child-layer overrides and customizations.
+
+   Keep package installation and npm commands at the repository root. `woonuxt_base/` is a Nuxt layer, not a separately runnable package.
 
 4. **Test your changes locally**:
 
+   From the repository root, create `.env` from `.env.example` and set the required storefront connection values. Then run:
+
    ```bash
-   cd woonuxt_base
-   yarn install
-   yarn dev
+   npm install
+   npm run dev
    ```
 
    Then:
