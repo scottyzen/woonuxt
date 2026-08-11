@@ -17,8 +17,15 @@ export function useSearching() {
 
   async function setSearchQuery(search: string): Promise<void> {
     const { updateProductList } = useProducts();
+    const routeName = String(route.name ?? 'products');
+    const query = { ...route.query, search: search || undefined };
+
     searchQuery.value = search;
-    await router.push({ query: { ...route.query, search: search || undefined } });
+    if (routeName.startsWith('product-category-')) {
+      await router.push({ path: route.path, query });
+    } else {
+      await router.push({ name: 'products', query });
+    }
     await updateProductList();
   }
 
