@@ -42,11 +42,14 @@ The generated directory is provider-specific. This is intentional: Netlify's Nux
 
 ### Vercel
 
-Vercel output directory: `.vercel/output/static` 2. Set `GQL_HOST` and `NUXT_IMAGE_DOMAINS` in **Settings → Environment Variables**. 3. Use build command `npm run generate`. The committed `vercel.json` supplies this static default. 4. Set **Output Directory** to `.vercel/output/static`. Nuxt creates this static artifact when it detects a Vercel build. 5. Deploy.
+1. Import the repository as a Vercel project. Nuxt is detected automatically.
+2. Set `GQL_HOST` and `NUXT_IMAGE_DOMAINS` in **Settings → Environment Variables**.
+3. Leave the Build Command and Output Directory overrides disabled. Vercel runs Nuxt's native `npm run build` and uses its Build Output API artifact automatically.
+4. Deploy.
 
 ### Repository configuration and dashboard overrides
 
-The committed provider files are the defaults for a fresh project. You may change build or publish settings for a custom deployment, but make the repository configuration and dashboard settings agree. Existing projects can retain old dashboard values even after this repository changes.
+The committed Netlify configuration supplies its static defaults. Vercel uses automatic Nuxt detection, so leave its build and output-directory overrides disabled.
 
 If a deployment fails with `No Output Directory named "dist" found` on Netlify, confirm that its build command is `npm run generate` and its publish directory is `dist`.
 
