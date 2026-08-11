@@ -44,16 +44,16 @@ The generated directory is provider-specific. This is intentional: Netlify's Nux
 
 1. Import the repository as a Vercel project. Nuxt is detected automatically.
 2. Set `GQL_HOST` and `NUXT_IMAGE_DOMAINS` in **Settings → Environment Variables**.
-3. Leave the Build Command and Output Directory overrides disabled. Vercel runs Nuxt's native `npm run build` and uses its Build Output API artifact automatically.
+3. Set the Build Command override to `npm run generate` and leave the Output Directory override disabled.
 4. Deploy.
 
 ### Repository configuration and dashboard overrides
 
-The committed Netlify configuration supplies its static defaults. Vercel uses automatic Nuxt detection, so leave its build and output-directory overrides disabled.
+The committed Netlify configuration supplies its static defaults. On Vercel, use `npm run generate` and leave the Output Directory override disabled.
 
 If a deployment fails with `No Output Directory named "dist" found` on Netlify, confirm that its build command is `npm run generate` and its publish directory is `dist`.
 
-If Vercel reports that `.output/public` (or another output directory) does not exist, clear the project's Output Directory and any old build-command override, then deploy again.
+If Vercel reports that an output directory does not exist, clear the project's Output Directory override, then deploy again.
 
 WooNuxt deliberately has no `.nvmrc` or `package.json#engines` entry. Use the current Node.js version supported by your host rather than adding a pin unless your own customization has a documented compatibility requirement.
 
