@@ -31,29 +31,20 @@ You can find some common errors and how to fix them [here](https://woonuxt.com/f
 
 WooNuxt's default deployment is a fully static Nuxt site. Use `npm run generate`; it prerenders the site during the build and does not require SSR or ISR hosting.
 
-The generated directory is provider-specific. This is intentional: Netlify's Nuxt adapter publishes `dist`, while Vercel's Nuxt adapter writes its [Build Output API](https://vercel.com/docs/build-output-api) artifacts to `.vercel/output`. Do not copy one provider's output-directory setting to the other.
+The committed provider configuration files handle the build command and output for Netlify and Vercel.
 
 ### Netlify
 
 1. Import the repository as a new Netlify site.
 2. Set `GQL_HOST` and `NUXT_IMAGE_DOMAINS` in **Site configuration → Environment variables**.
-3. In **Build & deploy → Build settings**, use build command `npm run generate` and publish directory `dist`. The committed `netlify.toml` already supplies both values for a new site.
-4. Deploy.
+3. Deploy.
 
 ### Vercel
 
 1. Import the repository as a Vercel project. Nuxt is detected automatically.
 2. Set `GQL_HOST` and `NUXT_IMAGE_DOMAINS` in **Settings → Environment Variables**.
-3. Set the Build Command override to `npm run generate` and leave the Output Directory override disabled.
+3. Leave the Output Directory override disabled.
 4. Deploy.
-
-### Repository configuration and dashboard overrides
-
-The committed Netlify configuration supplies its static defaults. On Vercel, use `npm run generate` and leave the Output Directory override disabled.
-
-If a deployment fails with `No Output Directory named "dist" found` on Netlify, confirm that its build command is `npm run generate` and its publish directory is `dist`.
-
-If Vercel reports that an output directory does not exist, clear the project's Output Directory override, then deploy again.
 
 WooNuxt deliberately has no `.nvmrc` or `package.json#engines` entry. Use the current Node.js version supported by your host rather than adding a pin unless your own customization has a documented compatibility requirement.
 
