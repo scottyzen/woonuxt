@@ -10,6 +10,9 @@ dist
 # Node dependencies
 node_modules
 
+# Generated from each developer's configured GraphQL endpoint
+woonuxt_base/app/gql/default.ts
+
 # Logs
 logs
 *.log
