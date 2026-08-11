@@ -27,6 +27,17 @@ You can find some common errors and how to fix them [here](https://woonuxt.com/f
 [![button](https://user-images.githubusercontent.com/5116925/218880214-a16287a7-fd8c-4299-9e65-0871136f0771.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/scottyzen/woonuxt) [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fscottyzen%2FWooNuxt3&repository-name=WooNuxt&env=GQL_HOST,NUXT_IMAGE_DOMAINS)
 [![Deploy to PandaStack](https://dashboard.pandastack.io/deploy-button.svg)](https://dashboard.pandastack.io/deploy?repo=scottyzen/woonuxt&type=static&buildCmd=npm+run+generate&outputDir=dist)
 
+### Local development
+
+Run all project commands from the repository root. Create `.env` from `.env.example`, set `GQL_HOST` and `NUXT_IMAGE_DOMAINS`, then run:
+
+```bash
+npm install
+npm run dev
+```
+
+`woonuxt_base/` is the parent Nuxt layer that provides WooNuxt's storefront; it is not a separately runnable package. Add custom pages, components, and configuration in the root project as a child layer.
+
 ## Static Deployment
 
 WooNuxt's default deployment is a fully static Nuxt site. Use `npm run generate`; it prerenders the site during the build and does not require SSR or ISR hosting.
