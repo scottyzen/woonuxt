@@ -1,4 +1,0 @@
-{
-  "buildCommand": "npm run generate",
-  "outputDirectory": ".vercel/output/static"
-}
