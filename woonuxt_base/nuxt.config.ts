@@ -8,6 +8,7 @@ const { resolve } = createResolver(import.meta.url);
 const GQL_HOST = process.env.GQL_HOST || 'http://localhost:4000/graphql';
 const APP_HOST = process.env.APP_HOST || 'http://localhost:3000';
 if (process.env.NETLIFY) process.env.NUXT_IMAGE_PROVIDER = 'netlify';
+else if (process.env.VERCEL) process.env.NUXT_IMAGE_PROVIDER = 'vercel';
 const imageProvider = (process.env.NETLIFY ? 'netlify' : process.env.NUXT_IMAGE_PROVIDER || 'ipx').trim().toLowerCase();
 
 // ISR configuration for large catalogs
