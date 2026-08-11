@@ -156,6 +156,7 @@ export default defineNuxtConfig({
       { code: 'es_ES', file: 'es-ES.json', name: 'Español 🇪🇸' },
       { code: 'fr_FR', file: 'fr-FR.json', name: 'Français 🇫🇷' },
       { code: 'it_IT', file: 'it-IT.json', name: 'Italiano 🇮🇹' },
+      { code: 'nl_NL', file: 'nl-NL.json', name: 'Nederlands 🇳🇱' },
       { code: 'pt_BR', file: 'pt-BR.json', name: 'Português 🇧🇷' },
       { code: 'ko_KR', file: 'ko-KR.json', name: '한국어 🇰🇷' },
     ],
