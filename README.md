@@ -25,14 +25,14 @@ You can find some common errors and how to fix them [here](https://woonuxt.com/f
 - Once the plugin is activated, configure `GQL_HOST` and `NUXT_IMAGE_DOMAINS`. Check out the `.env.example` file for details.
 
 [![button](https://user-images.githubusercontent.com/5116925/218880214-a16287a7-fd8c-4299-9e65-0871136f0771.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/scottyzen/woonuxt) [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fscottyzen%2FWooNuxt3&repository-name=WooNuxt&env=GQL_HOST,NUXT_IMAGE_DOMAINS)
-[![Deploy to PandaStack](https://dashboard.pandastack.io/deploy-button.svg)](https://dashboard.pandastack.io/deploy?repo=scottyzen/woonuxt&type=static&buildCmd=npm+run+generate&outputDir=.output%2Fpublic)
+[![Deploy to PandaStack](https://dashboard.pandastack.io/deploy-button.svg)](https://dashboard.pandastack.io/deploy?repo=scottyzen/woonuxt&type=static&buildCmd=npm+run+generate&outputDir=dist)
 
 ## Static Deployment
 
 WooNuxt deploys as a static Nuxt site by default. Configure static hosts with:
 
 - Build command: `npm run generate`
-- Publish directory: `.output/public`
+- Publish directory: `dist`
 
 The committed `netlify.toml` and `vercel.json` use these defaults. A deployment owner can override them in their host configuration or fork.
 
