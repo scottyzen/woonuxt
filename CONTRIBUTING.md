@@ -171,7 +171,7 @@ This generates GraphQL types for the configured endpoint, then type-checks WooNu
 If GraphQL codegen fails, check these first:
 
 - `GQL_HOST` points to a reachable GraphQL endpoint.
-- `APP_HOST` matches an allowed Origin for your backend.
+- When the storefront and WordPress backend use different origins, `APP_HOST` matches an allowed Origin for your backend. Otherwise, it defaults to the origin of `GQL_HOST`.
 - Your `.gql` operations match the current WPGraphQL/WooGraphQL schema.
 
 5. **Stage and commit your changes** using [Conventional Commits](https://www.conventionalcommits.org/):

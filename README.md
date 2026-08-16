@@ -246,16 +246,16 @@ Location Hooks are documented in the project docs — see the quick guide and ex
 | Payment Method                                                      | Supported |
 | ------------------------------------------------------------------- | --------- |
 | [Stripe](https://wordpress.org/plugins/woocommerce-gateway-stripe/) | ✅        |
-| PayPal / PayPal Payments                                             | ✅        |
-| Cash on Delivery                                                     | ✅        |
-| Cheque payments                                                      | ✅        |
+| PayPal / PayPal Payments                                            | ✅        |
+| Cash on Delivery                                                    | ✅        |
+| Cheque payments                                                     | ✅        |
 
 ### Required Environment Variables
 
 - `GQL_HOST` - The GraphQL endpoint for your WordPress site, for example `https://wp.example.com/graphql`.
 - `NUXT_IMAGE_DOMAINS` - The WordPress/CDN hostnames used for optimized images, for example `wp.example.com,cdn.example.com`.
 
-The WooNuxt Settings plugin automatically provides the remaining storefront settings through GraphQL.
+The WooNuxt Settings plugin automatically provides the remaining storefront settings through GraphQL. `APP_HOST` is optional and only needed when your deployed storefront uses a different origin from WordPress; otherwise it is derived from `GQL_HOST`.
 
 &nbsp;
 

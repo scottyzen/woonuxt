@@ -122,7 +122,7 @@ ${calls}
 
     // Environment variables are guaranteed to be valid at this point
     const GQL_HOST = process.env.GQL_HOST!;
-    const requestHeaders = { Origin: process.env.APP_HOST || 'http://localhost:3000' };
+    const requestHeaders = { Origin: process.env.APP_HOST || new URL(GQL_HOST).origin };
 
     const woonuxtSettings = `{
         primary_color

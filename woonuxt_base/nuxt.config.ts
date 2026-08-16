@@ -6,6 +6,9 @@ import tailwindcss from '@tailwindcss/vite';
 
 const { resolve } = createResolver(import.meta.url);
 
+const gqlHost = process.env.GQL_HOST || 'http://localhost:4000/graphql';
+const appHost = process.env.APP_HOST || new URL(gqlHost).origin;
+
 // ISR configuration for large catalogs
 const parsedCatalogIsrTtl = Number.parseInt(process.env.CATALOG_ISR_TTL || '3600', 10);
 const catalogIsrTtl = Number.isFinite(parsedCatalogIsrTtl) && parsedCatalogIsrTtl > 0 ? parsedCatalogIsrTtl : 3600;
@@ -102,8 +105,8 @@ export default defineNuxtConfig({
       'graphql-client': {
         clients: {
           default: {
-            host: process.env.GQL_HOST || 'http://localhost:4000/graphql',
-            headers: { Origin: process.env.APP_HOST || 'http://localhost:3000' },
+            host: gqlHost,
+            headers: { Origin: appHost },
             tokenStorage: false,
             fetchOptions: {
               mode: 'cors',
