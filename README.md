@@ -55,7 +55,7 @@ The committed provider configuration files handle the build command and output f
 
 1. Import the repository as a Vercel project. Nuxt is detected automatically.
 2. Set `GQL_HOST` and `NUXT_IMAGE_DOMAINS` in **Settings → Environment Variables**.
-3. Leave the Output Directory override disabled.
+3. Do not override the output directory in the Vercel dashboard; `vercel.json` publishes the generated `.output/public` directory.
 4. Deploy.
 
 WooNuxt deliberately has no `.nvmrc` or `package.json#engines` entry. Use the current Node.js version supported by your host rather than adding a pin unless your own customization has a documented compatibility requirement.
