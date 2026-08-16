@@ -1,22 +1,32 @@
+import type {} from '../.nuxt/types/modules.d.ts';
+
 import { createResolver } from '@nuxt/kit';
 import { defineNuxtConfig } from 'nuxt/config';
 import tailwindcss from '@tailwindcss/vite';
 
 const { resolve } = createResolver(import.meta.url);
 
-// Environment variables with fallbacks
-const GQL_HOST = process.env.GQL_HOST || 'http://localhost:4000/graphql';
-const APP_HOST = process.env.APP_HOST || 'http://localhost:3000';
-if (process.env.NETLIFY) process.env.NUXT_IMAGE_PROVIDER = 'netlify';
-else if (process.env.VERCEL) process.env.NUXT_IMAGE_PROVIDER = 'vercel';
-const imageProvider = (process.env.NETLIFY ? 'netlify' : process.env.NUXT_IMAGE_PROVIDER || 'ipx').trim().toLowerCase();
-
 // ISR configuration for large catalogs
 const parsedCatalogIsrTtl = Number.parseInt(process.env.CATALOG_ISR_TTL || '3600', 10);
 const catalogIsrTtl = Number.isFinite(parsedCatalogIsrTtl) && parsedCatalogIsrTtl > 0 ? parsedCatalogIsrTtl : 3600;
 
+const getImageProvider = () => {
+  const provider = process.env.NUXT_IMAGE_PROVIDER || 'ipx';
+  switch (provider.trim().toLowerCase()) {
+    case 'netlify':
+      return 'netlify';
+    case 'vercel':
+      return 'vercel';
+    case 'cloudflare':
+      return 'cloudflare';
+    case 'ipx':
+    default:
+      return 'ipx';
+  }
+};
+
 export default defineNuxtConfig({
-  compatibilityDate: '2026-07-10',
+  compatibilityDate: '2026-08-16',
 
   experimental: {
     appManifest: false,
@@ -79,7 +89,7 @@ export default defineNuxtConfig({
   modules: [
     resolve('./modules/woonuxt-bridge.ts'),
     '@nuxt/icon',
-    ['@nuxt/image', { provider: imageProvider, format: ['avif', 'webp'] }],
+    ['@nuxt/image', { provider: getImageProvider(), format: ['avif', 'webp'] }],
     '@nuxtjs/i18n',
     '@nuxt/eslint',
     '@vite-pwa/nuxt',
@@ -92,8 +102,8 @@ export default defineNuxtConfig({
       'graphql-client': {
         clients: {
           default: {
-            host: GQL_HOST,
-            headers: { Origin: APP_HOST },
+            host: process.env.GQL_HOST || 'http://localhost:4000/graphql',
+            headers: { Origin: process.env.APP_HOST || 'http://localhost:3000' },
             tokenStorage: false,
             fetchOptions: {
               mode: 'cors',
