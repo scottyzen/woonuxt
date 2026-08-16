@@ -4,14 +4,15 @@
 
 ## Introduction
 
-The goal of WooNuxt is to provide a modern, fast, and SEO-friendly front-end for WooCommerce. It's built on Nuxt 4 and uses the WPGraphQL API to retrieve all the data it needs. It's also fully customizable and can be extended with your custom components and modules. You can see a live demo of WooNuxt by clicking the button below.
+WooNuxt is a modern, fast, and SEO-friendly front-end for WooCommerce. Built on Nuxt 4 and WPGraphQL, it supports both fully static deployment and hybrid ISR rendering for large catalogs. It is fully customizable and can be extended with custom components and modules. You can see a live demo below.
 
-| Demo            | URL                            |
-| --------------- | ------------------------------ |
-| Netlify Demo    | https://demo.woonuxt.com/      |
-| Vercel Demo     | https://woonuxt-v3.vercel.app/ |
-| NuxtHub Demo    | https://woo.nuxt.dev/          |
-| Customized Demo | https://myshop.woonuxt.com/    |
+The primary live demo is [demo.woonuxt.com](https://demo.woonuxt.com/).
+
+| Other live examples | URL                            |
+| ------------------- | ------------------------------ |
+| Vercel              | https://woonuxt-v3.vercel.app/ |
+| NuxtHub             | https://woo.nuxt.dev/          |
+| Customized store    | https://myshop.woonuxt.com/    |
 
 ## Troubleshooting
 
@@ -245,8 +246,9 @@ Location Hooks are documented in the project docs — see the quick guide and ex
 | Payment Method                                                      | Supported |
 | ------------------------------------------------------------------- | --------- |
 | [Stripe](https://wordpress.org/plugins/woocommerce-gateway-stripe/) | ✅        |
-| [PayPal Standard](https://woo.com/document/paypal-standard/)        | ✅        |
-| Cash on Delivery                                                    | ✅        |
+| PayPal / PayPal Payments                                             | ✅        |
+| Cash on Delivery                                                     | ✅        |
+| Cheque payments                                                      | ✅        |
 
 ### Required Environment Variables
 
