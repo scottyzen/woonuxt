@@ -1,4 +1,4 @@
 {
-  "buildCommand": "NITRO_PRESET=static npm run generate",
+  "buildCommand": "npm run generate",
   "outputDirectory": ".output/public"
 }
