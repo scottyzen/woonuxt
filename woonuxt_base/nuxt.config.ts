@@ -14,9 +14,6 @@ const parsedCatalogIsrTtl = Number.parseInt(process.env.CATALOG_ISR_TTL || '3600
 const catalogIsrTtl = Number.isFinite(parsedCatalogIsrTtl) && parsedCatalogIsrTtl > 0 ? parsedCatalogIsrTtl : 3600;
 
 const getImageProvider = () => {
-  if (process.env.NETLIFY) return 'netlify';
-  if (process.env.VERCEL) return 'vercel';
-
   const provider = process.env.NUXT_IMAGE_PROVIDER || 'none';
   switch (provider.trim().toLowerCase()) {
     case 'netlify':

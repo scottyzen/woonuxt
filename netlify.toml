@@ -3,8 +3,8 @@
   NUXT_IMAGE_DOMAINS = "Comma separated list of domains. example.com,example2.com"
 
 [build]
-  command = "npm run generate"
-  publish = "dist"
+  command = "NITRO_PRESET=static npm run generate"
+  publish = ".output/public"
 
 [images]
   # Repclace with your own domain to allow remote images to be optimized
