@@ -24,8 +24,6 @@ const getImageProvider = () => {
       return 'cloudflare';
     case 'ipx':
       return 'ipx';
-    case 'ipxstatic':
-      return 'ipxStatic';
     default:
       return 'none';
   }
