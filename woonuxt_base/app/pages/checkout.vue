@@ -235,18 +235,26 @@ useSeoMeta({
             </div>
             <div v-if="!viewer && orderInput.createAccount" class="flex w-full mt-4 gap-4">
               <div class="flex-1">
-                <label for="username">{{ $t('account.username') }}</label>
+                <label for="checkout-username">{{ $t('account.username') }}</label>
                 <input
+                  id="checkout-username"
                   v-model="orderInput.username"
                   placeholder="johndoe"
                   autocomplete="username"
                   type="text"
                   name="username"
+                  autocapitalize="none"
                   :required="orderInput.createAccount" />
               </div>
               <div class="flex-1">
-                <label for="email">{{ $t('account.password') }}</label>
-                <PasswordInput id="password" v-model="orderInput.password" placeholder="••••••••••" :required="orderInput.createAccount" />
+                <label for="checkout-password">{{ $t('account.password') }}</label>
+                <PasswordInput
+                  id="checkout-password"
+                  v-model="orderInput.password"
+                  name="new-password"
+                  placeholder="••••••••••"
+                  autocomplete="new-password"
+                  :required="orderInput.createAccount" />
               </div>
             </div>
             <div v-if="!viewer" class="flex items-center gap-2 mt-4">
@@ -256,7 +264,7 @@ useSeoMeta({
             <hr v-if="!viewer" class="flex-1 my-6 border-gray-300" />
 
             <div :class="viewer ? 'mt-4' : 'mt-6'">
-              <AddressForm v-if="customer?.billing" v-model="customer.billing" :show-address-fields="isBillingAddressEnabled" />
+              <AddressForm v-if="customer?.billing" v-model="customer.billing" address-type="billing" :show-address-fields="isBillingAddressEnabled" />
             </div>
 
             <div v-if="shouldShowShippingFlow" class="flex items-center gap-3 mt-6">
@@ -278,7 +286,7 @@ useSeoMeta({
                 <span>{{ $t('general.shippingAddress') }}</span>
               </h3>
             </div>
-            <AddressForm v-if="customer?.shipping" v-model="customer.shipping" />
+            <AddressForm v-if="customer?.shipping" v-model="customer.shipping" address-type="shipping" />
           </div>
           <!-- Shipping methods -->
           <div v-if="shouldShowShippingFlow && hasAvailableShippingMethods && cart?.chosenShippingMethods?.[0]" class="checkout-section">

@@ -71,7 +71,14 @@ useHead({
     <form class="mt-6 flex flex-col" @submit.prevent="handlePasswordReset">
       <label for="password" class="mb-4">
         {{ $t('account.newPassword') }} <span class="text-red-500">*</span><br />
-        <PasswordInput id="password" v-model="password" class-name=" border rounded-lg w-full p-3 px-4 bg-white" placeholder="New Password" :required="true" />
+        <PasswordInput
+          id="password"
+          v-model="password"
+          name="new-password"
+          class-name=" border rounded-lg w-full p-3 px-4 bg-white"
+          placeholder="New Password"
+          autocomplete="new-password"
+          :required="true" />
       </label>
 
       <label for="confirmPassword" class="mb-4">
@@ -79,8 +86,10 @@ useHead({
         <PasswordInput
           id="confirmPassword"
           v-model="confirmPassword"
+          name="new-password-confirm"
           class-name="border rounded-lg w-full p-3 px-4 bg-white"
           placeholder="Confirm Password"
+          autocomplete="new-password"
           :required="true" />
       </label>
 

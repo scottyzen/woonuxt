@@ -59,7 +59,7 @@ Netlify uses a static Nuxt build and Netlify Image CDN. Vercel uses Nitro's Verc
 4. Deploy.
 
 ::warning
-Never set `NUXT_IMAGE_PROVIDER=ipx` on Netlify static hosting or any static export. IPX needs a running Nuxt server. Use `netlify` for Netlify, `vercel` for Vercel, and reserve `ipx` for a self-hosted Nuxt server.
+Never set `NUXT_IMAGE_PROVIDER=ipx` on Netlify static hosting or any static export. IPX needs a running Nuxt server. Use `netlify` for Netlify, `vercel` for Vercel, and reserve `ipx` for a self-hosted Nuxt server. When unset, WooNuxt uses Nuxt Image's portable `none` provider.
 ::
 
 WooNuxt deliberately has no `.nvmrc` or `package.json#engines` entry. Use the current Node.js version supported by your host rather than adding a pin unless your own customization has a documented compatibility requirement.
@@ -258,7 +258,7 @@ Location Hooks are documented in the project docs — see the quick guide and ex
 
 - `GQL_HOST` - The GraphQL endpoint for your WordPress site, for example `https://wp.example.com/graphql`.
 - `NUXT_IMAGE_DOMAINS` - The WordPress/CDN hostnames used for optimized images, for example `wp.example.com,cdn.example.com`.
-- `NUXT_IMAGE_PROVIDER` - Optional override. Local and self-hosted Nuxt servers default to `ipx`; Netlify and Vercel set their native providers through the committed build configuration.
+- `NUXT_IMAGE_PROVIDER` - Optional override. Defaults to Nuxt Image's portable `none` provider. Netlify and Vercel set their native providers through the committed build configuration; self-hosted Nuxt servers can opt into `ipx`.
 
 The WooNuxt Settings plugin automatically provides the remaining storefront settings through GraphQL. `APP_HOST` is optional and only needed when your deployed storefront uses a different origin from WordPress; otherwise it is derived from `GQL_HOST`.
 

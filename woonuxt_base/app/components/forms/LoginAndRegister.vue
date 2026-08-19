@@ -16,19 +16,36 @@
 
     <form @submit.prevent="handleFormSubmit(userInfo)">
       <p v-if="formView === FormView.FORGOT_PASSWORD" class="mb-8 text-sm text-gray-500">{{ $t('account.enterEmailOrUsernameForReset') }}</p>
-      <input
-        v-if="formView === FormView.REGISTER || formView === FormView.FORGOT_PASSWORD"
-        id="email"
-        v-model="userInfo.email"
-        :placeholder="inputPlaceholder.email"
-        autocomplete="email"
-        type="text"
-        required />
+      <template v-if="formView === FormView.REGISTER || formView === FormView.FORGOT_PASSWORD">
+        <label class="sr-only" for="email">{{ $t('billing.email') }}</label>
+        <input
+          id="email"
+          v-model="userInfo.email"
+          :placeholder="inputPlaceholder.email"
+          autocomplete="email"
+          name="email"
+          type="email"
+          inputmode="email"
+          autocapitalize="none"
+          required />
+      </template>
       <div v-if="formView !== FormView.FORGOT_PASSWORD">
-        <input v-model="userInfo.username" :placeholder="inputPlaceholder.username" autocomplete="username" type="text" required />
+        <label class="sr-only" for="username">{{ $t('account.username') }}</label>
+        <input
+          id="username"
+          v-model="userInfo.username"
+          :placeholder="inputPlaceholder.username"
+          autocomplete="username"
+          name="username"
+          type="text"
+          autocapitalize="none"
+          required />
+        <label class="sr-only" for="password">{{ passwordLabel }}</label>
         <PasswordInput
+          id="password"
           v-model="userInfo.password"
           :placeholder="passwordLabel"
+          name="password"
           :autocomplete="formView === FormView.LOGIN ? 'current-password' : 'new-password'"
           :required="true" />
       </div>
