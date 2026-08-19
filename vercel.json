@@ -1,4 +1,3 @@
 {
-  "buildCommand": "npm run generate",
-  "outputDirectory": ".output/public"
+  "buildCommand": "NITRO_PRESET=vercel npm run build"
 }

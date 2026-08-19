@@ -41,30 +41,26 @@ npm run dev
 
 `woonuxt_base/` is the parent Nuxt layer that provides WooNuxt's storefront; it is not a separately runnable package. Add custom pages, components, and configuration in the root project as a child layer.
 
-## Static Deployment
+## Deployment
 
-WooNuxt's default deployment is a fully static Nuxt site. Use `npm run generate`; it prerenders the site during the build and does not require SSR or ISR hosting, and does not require any `NITRO_PRESET` override — `nuxt generate` always produces a static build on its own.
-
-The committed provider configuration files handle the build command and output for Netlify and Vercel. Publishing the `dist` folder instead of `.output/public` serves prerendered HTML without Nuxt's hashed `/_nuxt` JS/CSS bundle — the deploy loads a blank/broken page. Always publish `.output/public`.
+Netlify uses a static Nuxt build and Netlify Image CDN. Vercel uses Nitro's Vercel server preset so Vercel Image Optimization and WooNuxt's ISR route rules run at request time. Publishing the `dist` folder instead of `.output/public` for a static build serves prerendered HTML without Nuxt's hashed `/_nuxt` JS/CSS bundle — the deploy loads a blank/broken page.
 
 ### Netlify
 
 1. Import the repository as a new Netlify site.
 2. Confirm `netlify.toml` build command is `npm run generate` and publish directory is `.output/public` (don't override these in the dashboard).
-3. Set `GQL_HOST` and `NUXT_IMAGE_DOMAINS` in **Site configuration → Environment variables**.
-4. `NUXT_IMAGE_PROVIDER` is optional. Leave it unset for the safe `none` provider (serves original image URLs). Only set `NUXT_IMAGE_PROVIDER=netlify` if you deliberately want Netlify's image CDN.
-5. Deploy.
+3. Set `GQL_HOST`, `NUXT_IMAGE_DOMAINS`, and `NUXT_IMAGE_PROVIDER=netlify` in **Site configuration → Environment variables**.
+4. Deploy.
 
 ### Vercel
 
 1. Import the repository as a Vercel project. Nuxt is detected automatically.
-2. Set `GQL_HOST` and `NUXT_IMAGE_DOMAINS` in **Settings → Environment Variables**.
-3. `NUXT_IMAGE_PROVIDER` is optional. Leave it unset for the safe `none` provider. Only set `NUXT_IMAGE_PROVIDER=vercel` if you deliberately want Vercel's image optimization.
-4. Do not override the build command or output directory in the Vercel dashboard; `vercel.json` already sets `npm run generate` and publishes the generated `.output/public` directory.
-5. Deploy.
+2. Set `GQL_HOST`, `NUXT_IMAGE_DOMAINS`, and `NUXT_IMAGE_PROVIDER=vercel` in **Settings → Environment Variables**.
+3. Do not override the build command or output directory in the Vercel dashboard; `vercel.json` builds with `NITRO_PRESET=vercel npm run build` and emits Vercel's server/function output.
+4. Deploy.
 
 ::warning
-Never set `NUXT_IMAGE_PROVIDER=ipx` on a static deployment — `ipx` requires a running Nuxt server. It only breaks image rendering; it does not cause the missing `/_nuxt` bundle problem above.
+Never set `NUXT_IMAGE_PROVIDER=ipx` on Netlify static hosting or any static export. IPX needs a running Nuxt server. Use `netlify` for Netlify, `vercel` for Vercel, and reserve `ipx` for a self-hosted Nuxt server.
 ::
 
 WooNuxt deliberately has no `.nvmrc` or `package.json#engines` entry. Use the current Node.js version supported by your host rather than adding a pin unless your own customization has a documented compatibility requirement.
@@ -263,7 +259,7 @@ Location Hooks are documented in the project docs — see the quick guide and ex
 
 - `GQL_HOST` - The GraphQL endpoint for your WordPress site, for example `https://wp.example.com/graphql`.
 - `NUXT_IMAGE_DOMAINS` - The WordPress/CDN hostnames used for optimized images, for example `wp.example.com,cdn.example.com`.
-- `NUXT_IMAGE_PROVIDER` - The image provider for the deployment: `netlify`, `vercel`, `cloudflare`, `ipx`, or `none`. Set `netlify` on Netlify and `vercel` on Vercel.
+- `NUXT_IMAGE_PROVIDER` - The image provider for the deployment. Use `netlify` for static Netlify builds, `vercel` for Vercel's server build, `ipx` only for a self-hosted Nuxt server, or `none` to serve original URLs.
 
 The WooNuxt Settings plugin automatically provides the remaining storefront settings through GraphQL. `APP_HOST` is optional and only needed when your deployed storefront uses a different origin from WordPress; otherwise it is derived from `GQL_HOST`.
 
