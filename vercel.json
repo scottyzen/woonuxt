@@ -1,3 +1,6 @@
 {
-  "buildCommand": "NUXT_IMAGE_PROVIDER=vercel NITRO_PRESET=vercel npm run build"
+  "buildCommand": "NITRO_PRESET=vercel npm run build",
+  "env": {
+    "NUXT_IMAGE_PROVIDER": "vercel"
+  }
 }

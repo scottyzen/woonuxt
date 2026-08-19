@@ -2,9 +2,13 @@
   GQL_HOST = "WordPress URL http://example.com"
   NUXT_IMAGE_DOMAINS = "Comma separated list of domains. example.com,example2.com"
 
+[build.environment]
+  NUXT_IMAGE_PROVIDER = "netlify"
+  NITRO_PRESET = "static"
+
 [build]
   # Critical for static hosting: publish .output/public with the hashed /_nuxt bundle.
-  command = "NUXT_IMAGE_PROVIDER=netlify NITRO_PRESET=static npm run generate"
+  command = "npm run generate"
   publish = ".output/public"
 
 [images]
