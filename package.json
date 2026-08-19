@@ -1,6 +1,9 @@
 {
   "name": "woonuxt",
   "private": true,
+  "engines": {
+    "node": ">=22.19.0"
+  },
   "scripts": {
     "build": "nuxt build",
     "prebuild": "npm run graphql:codegen",
