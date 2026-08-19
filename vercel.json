@@ -1,5 +1,6 @@
 {
   "buildCommand": "NITRO_PRESET=vercel npm run build",
+  "outputDirectory": ".vercel/output",
   "env": {
     "NUXT_IMAGE_PROVIDER": "vercel"
   }
