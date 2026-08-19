@@ -27,8 +27,7 @@ You can find some common errors and how to fix them [here](https://woonuxt.com/f
 - Once the plugin is activated you are ready to deploy WooNuxt on whatever hosting you like or click one of the fast deploy buttons below.
 - Once the plugin is activated, configure `GQL_HOST` and `NUXT_IMAGE_DOMAINS`. Check out the `.env.example` file for details.
 
-[![button](https://user-images.githubusercontent.com/5116925/218880214-a16287a7-fd8c-4299-9e65-0871136f0771.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/scottyzen/woonuxt) [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fscottyzen%2FWooNuxt3&repository-name=WooNuxt&env=GQL_HOST,NUXT_IMAGE_DOMAINS)
-[![Deploy to PandaStack](https://dashboard.pandastack.io/deploy-button.svg)](https://dashboard.pandastack.io/deploy?repo=scottyzen/woonuxt&type=static&buildCmd=npm+run+generate&outputDir=dist)
+[![button](https://user-images.githubusercontent.com/5116925/218880214-a16287a7-fd8c-4299-9e65-0871136f0771.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/scottyzen/woonuxt) [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fscottyzen%2Fwoonuxt&repository-name=WooNuxt&env=GQL_HOST,NUXT_IMAGE_DOMAINS)
 
 ### Local development
 
@@ -48,15 +47,15 @@ Netlify uses a static Nuxt build and Netlify Image CDN. Vercel uses Nitro's Verc
 ### Netlify
 
 1. Import the repository as a new Netlify site.
-2. Confirm `netlify.toml` build command is `NITRO_PRESET=static npm run generate` and publish directory is `.output/public` (don't override these in the dashboard).
-3. Set `GQL_HOST`, `NUXT_IMAGE_DOMAINS`, and `NUXT_IMAGE_PROVIDER=netlify` in **Site configuration → Environment variables**.
+2. Confirm `netlify.toml` build command is `NUXT_IMAGE_PROVIDER=netlify NITRO_PRESET=static npm run generate` and publish directory is `.output/public` (don't override these in the dashboard).
+3. Set `GQL_HOST` and `NUXT_IMAGE_DOMAINS` in **Site configuration → Environment variables**.
 4. Deploy.
 
 ### Vercel
 
 1. Import the repository as a Vercel project. Nuxt is detected automatically.
-2. Set `GQL_HOST`, `NUXT_IMAGE_DOMAINS`, and `NUXT_IMAGE_PROVIDER=vercel` in **Settings → Environment Variables**.
-3. Do not override the build command or output directory in the Vercel dashboard; `vercel.json` builds with `NITRO_PRESET=vercel npm run build` and emits Vercel's server/function output.
+2. Set `GQL_HOST` and `NUXT_IMAGE_DOMAINS` in **Settings → Environment Variables**.
+3. Do not override the build command or output directory in the Vercel dashboard; `vercel.json` builds with `NUXT_IMAGE_PROVIDER=vercel NITRO_PRESET=vercel npm run build` and emits Vercel's server/function output.
 4. Deploy.
 
 ::warning
@@ -255,11 +254,11 @@ Location Hooks are documented in the project docs — see the quick guide and ex
 | Cash on Delivery                                                    | ✅        |
 | Cheque payments                                                     | ✅        |
 
-### Required Environment Variables
+### Environment Variables
 
 - `GQL_HOST` - The GraphQL endpoint for your WordPress site, for example `https://wp.example.com/graphql`.
 - `NUXT_IMAGE_DOMAINS` - The WordPress/CDN hostnames used for optimized images, for example `wp.example.com,cdn.example.com`.
-- `NUXT_IMAGE_PROVIDER` - The only image-provider setting. Use `netlify` for static Netlify builds, `vercel` for Vercel's server build, `ipx` only for a self-hosted Nuxt server, or leave it unset for `none` and original URLs.
+- `NUXT_IMAGE_PROVIDER` - Optional override. Local and self-hosted Nuxt servers default to `ipx`; Netlify and Vercel set their native providers through the committed build configuration.
 
 The WooNuxt Settings plugin automatically provides the remaining storefront settings through GraphQL. `APP_HOST` is optional and only needed when your deployed storefront uses a different origin from WordPress; otherwise it is derived from `GQL_HOST`.
 

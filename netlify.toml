@@ -4,7 +4,7 @@
 
 [build]
   # Critical for static hosting: publish .output/public with the hashed /_nuxt bundle.
-  command = "NITRO_PRESET=static npm run generate"
+  command = "NUXT_IMAGE_PROVIDER=netlify NITRO_PRESET=static npm run generate"
   publish = ".output/public"
 
 [images]
