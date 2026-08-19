@@ -14,12 +14,19 @@
       <div class="grid gap-6 p-6 md:p-8 md:grid-cols-2">
         <div class="w-full space-y-2">
           <label for="first-name" class="block text-sm font-medium text-gray-700">{{ $t('billing.firstName') }}</label>
-          <input id="first-name" v-model="customer.firstName" placeholder="John" autocomplete="given-name" type="text" />
+          <input
+            id="first-name"
+            v-model="customer.firstName"
+            placeholder="John"
+            name="first-name"
+            autocomplete="given-name"
+            type="text"
+            autocapitalize="words" />
         </div>
 
         <div class="w-full space-y-2">
           <label for="last-name" class="block text-sm font-medium text-gray-700">{{ $t('billing.lastName') }}</label>
-          <input id="last-name" v-model="customer.lastName" placeholder="Doe" autocomplete="family-name" type="text" />
+          <input id="last-name" v-model="customer.lastName" placeholder="Doe" name="last-name" autocomplete="family-name" type="text" autocapitalize="words" />
         </div>
 
         <div class="w-full space-y-2">
@@ -30,8 +37,10 @@
             id="username"
             v-model="customer.username"
             placeholder="johndoe"
+            name="username"
             autocomplete="username"
             type="text"
+            autocapitalize="none"
             disabled
             class="bg-gray-200 text-gray-600 cursor-not-allowed opacity-60" />
         </div>
@@ -40,7 +49,15 @@
           <label for="email" class="block text-sm font-medium text-gray-700">
             {{ $t('billing.email') }}
           </label>
-          <input id="email" v-model="customer.email" placeholder="johndoe@email.com" autocomplete="email" type="email" />
+          <input
+            id="email"
+            v-model="customer.email"
+            placeholder="johndoe@email.com"
+            name="email"
+            autocomplete="email"
+            type="email"
+            inputmode="email"
+            autocapitalize="none" />
         </div>
       </div>
 

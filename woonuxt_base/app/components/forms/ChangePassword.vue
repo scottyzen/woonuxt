@@ -16,12 +16,18 @@
 
         <div class="w-full space-y-2">
           <label for="new-password" class="block text-sm font-medium text-gray-700">{{ $t('account.newPassword') }}</label>
-          <PasswordInput id="new-password" v-model="password.new" placeholder="••••••••••" type="text" required />
+          <PasswordInput id="new-password" v-model="password.new" name="new-password" placeholder="••••••••••" autocomplete="new-password" required />
         </div>
 
         <div class="w-full space-y-2">
           <label for="new-password-confirm" class="block text-sm font-medium text-gray-700">{{ $t('account.confirmNewPassword') }}</label>
-          <PasswordInput id="new-password-confirm" v-model="password.confirm" placeholder="••••••••••" type="text" required />
+          <PasswordInput
+            id="new-password-confirm"
+            v-model="password.confirm"
+            name="new-password-confirm"
+            placeholder="••••••••••"
+            autocomplete="new-password"
+            required />
         </div>
 
         <!-- Password Requirements -->
