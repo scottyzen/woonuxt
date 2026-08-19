@@ -13,21 +13,7 @@ const appHost = process.env.APP_HOST || new URL(gqlHost).origin;
 const parsedCatalogIsrTtl = Number.parseInt(process.env.CATALOG_ISR_TTL || '3600', 10);
 const catalogIsrTtl = Number.isFinite(parsedCatalogIsrTtl) && parsedCatalogIsrTtl > 0 ? parsedCatalogIsrTtl : 3600;
 
-const getImageProvider = () => {
-  const provider = process.env.NUXT_IMAGE_PROVIDER || 'none';
-  switch (provider.trim().toLowerCase()) {
-    case 'netlify':
-      return 'netlify';
-    case 'vercel':
-      return 'vercel';
-    case 'cloudflare':
-      return 'cloudflare';
-    case 'ipx':
-      return 'ipx';
-    default:
-      return 'none';
-  }
-};
+const getImageProvider = () => process.env.NUXT_IMAGE_PROVIDER?.trim().toLowerCase() || 'ipx';
 
 export default defineNuxtConfig({
   compatibilityDate: '2026-08-16',

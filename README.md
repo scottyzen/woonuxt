@@ -48,7 +48,7 @@ Netlify uses a static Nuxt build and Netlify Image CDN. Vercel uses Nitro's Verc
 ### Netlify
 
 1. Import the repository as a new Netlify site.
-2. Confirm `netlify.toml` build command is `npm run generate` and publish directory is `.output/public` (don't override these in the dashboard).
+2. Confirm `netlify.toml` build command is `NITRO_PRESET=static npm run generate` and publish directory is `.output/public` (don't override these in the dashboard).
 3. Set `GQL_HOST`, `NUXT_IMAGE_DOMAINS`, and `NUXT_IMAGE_PROVIDER=netlify` in **Site configuration → Environment variables**.
 4. Deploy.
 
@@ -259,7 +259,7 @@ Location Hooks are documented in the project docs — see the quick guide and ex
 
 - `GQL_HOST` - The GraphQL endpoint for your WordPress site, for example `https://wp.example.com/graphql`.
 - `NUXT_IMAGE_DOMAINS` - The WordPress/CDN hostnames used for optimized images, for example `wp.example.com,cdn.example.com`.
-- `NUXT_IMAGE_PROVIDER` - The image provider for the deployment. Use `netlify` for static Netlify builds, `vercel` for Vercel's server build, `ipx` only for a self-hosted Nuxt server, or `none` to serve original URLs.
+- `NUXT_IMAGE_PROVIDER` - The only image-provider setting. Use `netlify` for static Netlify builds, `vercel` for Vercel's server build, `ipx` only for a self-hosted Nuxt server, or leave it unset for `none` and original URLs.
 
 The WooNuxt Settings plugin automatically provides the remaining storefront settings through GraphQL. `APP_HOST` is optional and only needed when your deployed storefront uses a different origin from WordPress; otherwise it is derived from `GQL_HOST`.
 
