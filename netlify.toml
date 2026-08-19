@@ -5,8 +5,8 @@
   NUXT_IMAGE_PROVIDER = "netlify"
 
 [build]
-  # Critical for static hosting: publishes .output/public (with the hashed /_nuxt bundle), not dist. `nuxt generate` always targets a static preset on its own.
-  command = "npm run generate"
+  # Critical for static hosting: publish .output/public with the hashed /_nuxt bundle.
+  command = "NITRO_PRESET=static npm run generate"
   publish = ".output/public"
 
 [images]
