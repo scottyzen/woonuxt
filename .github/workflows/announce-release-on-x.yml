@@ -3,6 +3,12 @@ name: Announce release on X
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing release tag to post
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -10,7 +16,7 @@ permissions:
 jobs:
   post:
     name: Post release announcement
-    if: github.event.release.prerelease == false
+    if: github.event_name == 'workflow_dispatch' || github.event.release.prerelease == false
     runs-on: ubuntu-latest
     steps:
       - name: Install X API client
@@ -18,6 +24,8 @@ jobs:
 
       - name: Post to X
         env:
+          GITHUB_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
           X_API_KEY: ${{ secrets.X_API_KEY }}
           X_API_SECRET: ${{ secrets.X_API_SECRET }}
           X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
@@ -28,7 +36,21 @@ jobs:
           const { TwitterApi } = require('twitter-api-v2');
 
           const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
-          const release = event.release;
+          let release = event.release;
+
+          if (!release) {
+            const response = await fetch(
+              `https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/releases/tags/${process.env.RELEASE_TAG}`,
+              {
+                headers: {
+                  Accept: 'application/vnd.github+json',
+                  Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+                },
+              },
+            );
+            if (!response.ok) throw new Error(`Could not fetch release: ${response.status}`);
+            release = await response.json();
+          }
 
           const plainNotes = (release.body || '')
             .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
