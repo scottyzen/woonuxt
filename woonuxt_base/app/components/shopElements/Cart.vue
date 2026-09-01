@@ -33,10 +33,10 @@ const { cart, toggleCart, isCartMutating } = useCart();
             <!-- Shipping -->
             <div v-if="cart.shippingTotal" class="flex justify-between">
               <span>{{ $t('general.shipping') }}</span>
-              <span class="text-gray-800"> {{ parseFloat(cart.shippingTotal) > 0 ? '+' : '' }} <span v-html="cart.shippingTotal"></span> </span>
+              <span class="text-gray-800"> {{ Number.parseFloat(cart.shippingTotal) > 0 ? '+' : '' }} <span v-html="cart.shippingTotal"></span> </span>
             </div>
             <!-- Discount -->
-            <div v-if="cart.discountTotal && parseFloat(cart.rawDiscountTotal || '0') > 0" class="flex justify-between">
+            <div v-if="cart.discountTotal && Number.parseFloat(cart.rawDiscountTotal || '0') > 0" class="flex justify-between">
               <span>{{ $t('shop.discount') }}</span>
               <span class="text-primary">- <span v-html="cart.discountTotal"></span></span>
             </div>

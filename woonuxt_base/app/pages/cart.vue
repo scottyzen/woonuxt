@@ -37,10 +37,12 @@ useSeoMeta({
 
               <div v-if="cart.shippingTotal" class="flex justify-between text-gray-700">
                 <span>{{ $t('general.shipping') }}</span>
-                <span class="font-medium tabular-nums"> {{ parseFloat(cart.shippingTotal) > 0 ? '+' : '' }} <span v-html="cart.shippingTotal"></span> </span>
+                <span class="font-medium tabular-nums">
+                  {{ Number.parseFloat(cart.shippingTotal) > 0 ? '+' : '' }} <span v-html="cart.shippingTotal"></span>
+                </span>
               </div>
 
-              <div v-if="cart.discountTotal && parseFloat(cart.rawDiscountTotal || '0') > 0" class="flex justify-between text-primary">
+              <div v-if="cart.discountTotal && Number.parseFloat(cart.rawDiscountTotal || '0') > 0" class="flex justify-between text-primary">
                 <span>{{ $t('shop.discount') }}</span>
                 <span class="font-medium tabular-nums">- <span v-html="cart.discountTotal"></span></span>
               </div>

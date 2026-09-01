@@ -91,12 +91,12 @@ export function useFiltering() {
       // Variable products returns an array of prices, so we need to find the highest price.
       const productPrice = product.rawPrice ? Math.max(...product.rawPrice.split(',').map(Number)) : 0;
       const priceCondition = priceRange.length
-        ? productPrice >= parseFloat(priceRange[0] as string) && productPrice <= parseFloat(priceRange[1] as string)
+        ? productPrice >= Number.parseFloat(priceRange[0] as string) && productPrice <= Number.parseFloat(priceRange[1] as string)
         : true;
 
       // Star rating filter
       const starRating = getFilter('rating') || [];
-      const ratingCondition = starRating.length ? (product?.averageRating || 0) >= parseFloat(starRating[0] as string) : true;
+      const ratingCondition = starRating.length ? (product?.averageRating || 0) >= Number.parseFloat(starRating[0] as string) : true;
 
       // Product attribute filters
       const globalProductAttributes = runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES?.map((attribute: any) => attribute.slug) || [];

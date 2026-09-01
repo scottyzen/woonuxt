@@ -8,7 +8,7 @@ const currentQuery = computed(() => {
   return params ? decodeURIComponent(params) : '';
 });
 
-const page = computed(() => parseInt(route.params.pageNumber as string) || 1);
+const page = computed(() => Number.parseInt(route.params.pageNumber as string) || 1);
 const numberOfPages = computed<number>(() => Math.ceil(products.value.length / productsPerPage || 1));
 const categorySlug = computed(() => {
   const slug = route.params.slug ?? route.params.categorySlug;
