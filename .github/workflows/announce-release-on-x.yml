@@ -80,7 +80,11 @@ jobs:
             const { data } = await client.v2.tweet(tweet);
             console.log(`Posted X post ${data.id}`);
           })().catch((error) => {
-            console.error(error);
-            process.exit(1);
-          });
-          NODE
+              if (error?.code === 402 && error?.data?.type === 'https://api.x.com/2/problems/credits-depleted') {
+                console.warn('Skipping X release announcement because API credits are depleted.');
+                process.exit(0);
+              }
+              console.error(error);
+              process.exit(1);
+            });
+            NODE
