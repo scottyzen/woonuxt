@@ -35,51 +35,52 @@ jobs:
           const fs = require('node:fs');
           const { TwitterApi } = require('twitter-api-v2');
 
-          const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
-          let release = event.release;
+          (async () => {
+            const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
+            let release = event.release;
 
-          if (!release) {
-            const response = await fetch(
-              `https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/releases/tags/${process.env.RELEASE_TAG}`,
-              {
-                headers: {
-                  Accept: 'application/vnd.github+json',
-                  Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+            if (!release) {
+              const response = await fetch(
+                `https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/releases/tags/${process.env.RELEASE_TAG}`,
+                {
+                  headers: {
+                    Accept: 'application/vnd.github+json',
+                    Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+                  },
                 },
-              },
-            );
-            if (!response.ok) throw new Error(`Could not fetch release: ${response.status}`);
-            release = await response.json();
-          }
+              );
+              if (!response.ok) throw new Error(`Could not fetch release: ${response.status}`);
+              release = await response.json();
+            }
 
-          const plainNotes = (release.body || '')
-            .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
-            .replace(/[*_`#]/g, '')
-            .split('\n')
-            .map((line) => line.trim())
-            .find((line) => /^[-•]\s+/.test(line))
-            ?.replace(/^[-•]\s+/, '')
-            || 'A new WooNuxt update is ready.';
+            const plainNotes = (release.body || '')
+              .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+              .replace(/[*_`#]/g, '')
+              .split('\n')
+              .map((line) => line.trim())
+              .find((line) => /^[-•]\s+/.test(line))
+              ?.replace(/^[-•]\s+/, '')
+              || 'A new WooNuxt update is ready.';
 
-          const intro = `WooNuxt v${release.tag_name} is out 🚀\n\n`;
-          const outro = `\n\nFull release: ${release.html_url}`;
-          const available = 280 - intro.length - outro.length;
-          const highlight = plainNotes.length > available
-            ? `${plainNotes.slice(0, available - 1).trimEnd()}…`
-            : plainNotes;
+            const intro = `WooNuxt v${release.tag_name} is out 🚀\n\n`;
+            const outro = `\n\nFull release: ${release.html_url}`;
+            const available = 280 - intro.length - outro.length;
+            const highlight = plainNotes.length > available
+              ? `${plainNotes.slice(0, available - 1).trimEnd()}…`
+              : plainNotes;
 
-          const tweet = `${intro}${highlight}${outro}`;
-          const client = new TwitterApi({
-            appKey: process.env.X_API_KEY,
-            appSecret: process.env.X_API_SECRET,
-            accessToken: process.env.X_ACCESS_TOKEN,
-            accessSecret: process.env.X_ACCESS_SECRET,
-          });
-
-          client.v2.tweet(tweet)
-            .then(({ data }) => console.log(`Posted X post ${data.id}`))
-            .catch((error) => {
-              console.error(error);
-              process.exit(1);
+            const tweet = `${intro}${highlight}${outro}`;
+            const client = new TwitterApi({
+              appKey: process.env.X_API_KEY,
+              appSecret: process.env.X_API_SECRET,
+              accessToken: process.env.X_ACCESS_TOKEN,
+              accessSecret: process.env.X_ACCESS_SECRET,
             });
+
+            const { data } = await client.v2.tweet(tweet);
+            console.log(`Posted X post ${data.id}`);
+          })().catch((error) => {
+            console.error(error);
+            process.exit(1);
+          });
           NODE
