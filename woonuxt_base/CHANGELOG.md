@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. I'll try my best to keep it updated.
 
+## v4.27.0 (01-09-2026)
+
+- feature: Codegen overhaul — `@graphql-codegen` packages bumped to v6.x, with `codegen.ts` output paths/config restructured so generated `schema.ts` and `default.ts` land in `woonuxt_base/app/gql/` and are excluded via `.gitignore`
+- chore: Remove `graphql-sock` dependency (added then reverted during the codegen migration) and drop `package-lock.json` bloat from the old codegen toolchain
+- chore: Remove unused `AccountActivity` component and its nav link/TODO from the My Account page — activity logs aren't supported by the backend yet
+- chore: Remove unused `isQueryEmpty` helper from `useHelpers.ts` and simplify query-empty checks directly in `products.vue` / `product-category/[slug].vue`
+- chore: Refactor Stripe plugin to derive the current path from `useRoute()` instead of `window.location`, making it SSR-safe
+- chore: Replace `parseFloat` with `Number.parseFloat` across cart, filtering, and product components for consistency
+- fix: Accessibility and `autocomplete` attributes improved across form and address components (`AddressForm`, `BillingAndShipping`, `CountrySelect`)
+- chore: Update `@stripe/stripe-js` and `@graphql-codegen/cli` to their latest versions
+
 ## v4.25.0 (25-06-2026)
 
 - feature: Location Hooks system — add `HookOutlet` and runtime registration API to inject UI at predefined locations (SSR/SSG compatible, TypeScript friendly, Nuxt layer compatible)
