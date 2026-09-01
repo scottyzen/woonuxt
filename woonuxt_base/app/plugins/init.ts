@@ -86,7 +86,8 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   // Pages that need the full cart payload before the page renders
   const pagesToInitializeRightAway = ['/checkout', '/my-account', '/order-summary'];
-  const isPathThatRequiresInit = pagesToInitializeRightAway.some((page) => useRoute().path.includes(page));
+  const currentPath = window.location.pathname;
+  const isPathThatRequiresInit = pagesToInitializeRightAway.some((page) => currentPath === page || currentPath.startsWith(`${page}/`));
 
   const shouldInitFullCart = isDev || isPathThatRequiresInit || !storeSettings.initStoreOnUserActionToReduceServerLoad;
 

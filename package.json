@@ -34,9 +34,9 @@
   "devDependencies": {
     "@graphql-codegen/add": "^7.1.0",
     "@graphql-codegen/cli": "^7.4.0",
-    "@graphql-codegen/typescript": "5.0.10",
+    "@graphql-codegen/typescript": "6.1.0",
     "@graphql-codegen/typescript-graphql-request": "^7.1.0",
-    "@graphql-codegen/typescript-operations": "5.1.0",
+    "@graphql-codegen/typescript-operations": "6.1.6",
     "@iconify-json/ion": "^1.2.7",
     "@nuxt/eslint": "^1.17.0",
     "@nuxt/icon": "^2.5.1",

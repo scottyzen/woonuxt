@@ -2,7 +2,6 @@ import pkg from '../../../woonuxt_base/package.json';
 
 // A collection of helper functions.
 export function useHelpers() {
-  const route = useRoute();
   const runtimeConfig = useRuntimeConfig();
   const requestOrigin = import.meta.server ? useRequestURL().origin : import.meta.client ? window.location.origin : undefined;
 
@@ -89,12 +88,6 @@ export function useHelpers() {
     if (!import.meta.client) return;
     document.body.classList.toggle(className);
   }
-
-  /**
-   * Determines if the route query is empty.
-   * @returns {boolean} True if the route query is empty, false otherwise.
-   */
-  const isQueryEmpty = computed<boolean>(() => Object.keys(route.query).length === 0);
 
   /**
    * Formats a date string.
@@ -339,7 +332,6 @@ export function useHelpers() {
     isShowingMobileMenu,
     wooNuxtVersionInfo,
     productsPerPage,
-    isQueryEmpty,
     wooNuxtSEO,
     frontEndUrl,
     isDev,

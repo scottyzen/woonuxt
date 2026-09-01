@@ -2,7 +2,6 @@
 import type { Product } from '#types/gql';
 
 const { setProducts, updateProductList } = useProducts();
-const { isQueryEmpty } = useHelpers();
 const { storeSettings } = useAppConfig();
 const route = useRoute();
 const routeSlug = route.params.slug ?? route.params.categorySlug;
@@ -18,7 +17,7 @@ watchEffect(() => {
 });
 
 onMounted(() => {
-  if (!isQueryEmpty.value) updateProductList();
+  if (Object.keys(route.query).length > 0) updateProductList();
 });
 
 watch(

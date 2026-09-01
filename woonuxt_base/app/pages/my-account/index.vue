@@ -67,11 +67,6 @@ useSeoMeta({
               <Icon name="ion:lock-closed-outline" size="20" />
               <span>Password</span>
             </NuxtLink>
-            <!--  TODO: Enable when backend support is added for activity logs -->
-            <!-- <NuxtLink to="/my-account?tab=activity" class="nav-link" :class="{ active: activeTab == 'activity' }">
-              <Icon name="ion:time-outline" size="20" />
-              <span>Account Activity</span>
-            </NuxtLink> -->
             <div class="h-px my-2 bg-gray-200"></div>
             <NuxtLink to="/my-account?tab=orders" class="nav-link" :class="{ active: activeTab == 'orders' }">
               <Icon name="ion:bag-check-outline" size="20" />
@@ -102,7 +97,6 @@ useSeoMeta({
           <PersonalInformation v-if="activeTab === 'personal-info'" />
           <BillingAndShipping v-else-if="activeTab === 'addresses'" />
           <ChangePassword v-else-if="activeTab === 'password'" />
-          <AccountActivity v-else-if="activeTab === 'activity'" />
           <OrderList v-else-if="activeTab === 'orders'" />
           <DownloadList v-else-if="activeTab === 'downloads'" />
           <WishList v-else-if="activeTab === 'wishlist'" />

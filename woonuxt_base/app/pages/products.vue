@@ -4,7 +4,6 @@ import type { Product } from '#types/gql';
 const { setProducts, updateProductList } = useProducts();
 const route = useRoute();
 const { storeSettings } = useAppConfig();
-const { isQueryEmpty } = useHelpers();
 
 const { data, error, status } = await useAsyncGql('getProducts');
 const allProducts = computed<Product[]>(() => (data.value?.products?.nodes ?? []) as Product[]);
@@ -17,7 +16,7 @@ watchEffect(() => {
 });
 
 onMounted(() => {
-  if (!isQueryEmpty.value) updateProductList();
+  if (Object.keys(route.query).length > 0) updateProductList();
 });
 
 watch(

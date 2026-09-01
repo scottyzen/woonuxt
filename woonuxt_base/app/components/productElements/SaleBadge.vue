@@ -8,8 +8,8 @@ const { storeSettings } = useAppConfig();
 
 const salePercentage = computed((): string => {
   if (!node?.rawSalePrice || !node?.rawRegularPrice) return '';
-  const salePrice = parseFloat(node?.rawSalePrice);
-  const regularPrice = parseFloat(node?.rawRegularPrice);
+  const salePrice = Number.parseFloat(node?.rawSalePrice);
+  const regularPrice = Number.parseFloat(node?.rawRegularPrice);
   return Math.round(((salePrice - regularPrice) / regularPrice) * 100) + ` %`;
 });
 

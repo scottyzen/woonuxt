@@ -12,6 +12,7 @@ node_modules
 
 # Generated from each developer's configured GraphQL endpoint
 woonuxt_base/app/gql/default.ts
+woonuxt_base/app/gql/schema.ts
 
 # Logs
 logs

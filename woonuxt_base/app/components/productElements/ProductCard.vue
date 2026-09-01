@@ -107,7 +107,7 @@ const activeVariationImageSrc = computed<string | null>(() => {
 const activeImageIndex = computed<number>(() => {
   if (!activeVariationImageSrc.value) return 0;
   const index = sliderImages.value.findIndex((image) => image.src === activeVariationImageSrc.value);
-  return index >= 0 ? index : 0;
+  return Math.max(index, 0);
 });
 
 const productLink = computed<string>(() => {
@@ -124,7 +124,7 @@ const updateCurrentSlide = () => {
   const firstSlide = container.querySelector('.product-card-slide') as HTMLElement | null;
   const slideWidth = firstSlide?.offsetWidth || container.clientWidth;
   const styles = getComputedStyle(container);
-  const gap = parseFloat(styles.columnGap || styles.gap || '0');
+  const gap = Number.parseFloat(styles.columnGap || styles.gap || '0');
   const stride = slideWidth + gap;
   const index = stride ? Math.round(container.scrollLeft / stride) : 0;
   currentSlide.value = Math.min(Math.max(index, 0), Math.max(sliderImages.value.length - 1, 0));
