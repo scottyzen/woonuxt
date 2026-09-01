@@ -107,7 +107,7 @@ const activeVariationImageSrc = computed<string | null>(() => {
 const activeImageIndex = computed<number>(() => {
   if (!activeVariationImageSrc.value) return 0;
   const index = sliderImages.value.findIndex((image) => image.src === activeVariationImageSrc.value);
-  return index >= 0 ? index : 0;
+  return Math.max(index, 0);
 });
 
 const productLink = computed<string>(() => {

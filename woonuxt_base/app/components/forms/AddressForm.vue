@@ -11,7 +11,7 @@ const props = defineProps({
 
 const address = toRef(props, 'modelValue');
 const fieldId = (field: string) => `${props.addressType}-${field}`;
-const autocomplete = (token: string) => `section-${props.addressType} ${token}`;
+const autocomplete = (token: string) => `section-${props.addressType} ${props.addressType} ${token}`;
 </script>
 
 <template>
