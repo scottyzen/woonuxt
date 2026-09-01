@@ -19,7 +19,7 @@ const config: CodegenConfig = {
   ],
   documents: ['woonuxt_base/app/queries/**/*.gql'],
   generates: {
-    'woonuxt_base/app/gql/default.ts': {
+    'woonuxt_base/app/gql/schema.ts': {
       plugins: [
         {
           add: {
@@ -28,12 +28,26 @@ const config: CodegenConfig = {
           },
         },
         'typescript',
+      ],
+      config: {
+        useTypeImports: true,
+      },
+    },
+    'woonuxt_base/app/gql/default.ts': {
+      plugins: [
+        {
+          add: {
+            content:
+              "/* eslint-disable */\n// @ts-nocheck\n// This file is auto-generated. Do not edit manually — run `npm run graphql:codegen` to regenerate.\nexport * from './schema';\n",
+          },
+        },
         'typescript-operations',
         'typescript-graphql-request',
       ],
       config: {
         rawRequest: false,
         useTypeImports: true,
+        importSchemaTypesFrom: 'woonuxt_base/app/gql/schema',
       },
     },
   },
