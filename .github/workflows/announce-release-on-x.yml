@@ -1,0 +1,63 @@
+name: Announce release on X
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  post:
+    name: Post release announcement
+    if: github.event.release.prerelease == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install X API client
+        run: npm install --no-save --ignore-scripts twitter-api-v2
+
+      - name: Post to X
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const { TwitterApi } = require('twitter-api-v2');
+
+          const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
+          const release = event.release;
+
+          const plainNotes = (release.body || '')
+            .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+            .replace(/[*_`#]/g, '')
+            .split('\n')
+            .map((line) => line.trim())
+            .find((line) => /^[-•]\s+/.test(line))
+            ?.replace(/^[-•]\s+/, '')
+            || 'A new WooNuxt update is ready.';
+
+          const intro = `WooNuxt v${release.tag_name} is out 🚀\n\n`;
+          const outro = `\n\nFull release: ${release.html_url}`;
+          const available = 280 - intro.length - outro.length;
+          const highlight = plainNotes.length > available
+            ? `${plainNotes.slice(0, available - 1).trimEnd()}…`
+            : plainNotes;
+
+          const tweet = `${intro}${highlight}${outro}`;
+          const client = new TwitterApi({
+            appKey: process.env.X_API_KEY,
+            appSecret: process.env.X_API_SECRET,
+            accessToken: process.env.X_ACCESS_TOKEN,
+            accessSecret: process.env.X_ACCESS_SECRET,
+          });
+
+          client.v2.tweet(tweet)
+            .then(({ data }) => console.log(`Posted X post ${data.id}`))
+            .catch((error) => {
+              console.error(error);
+              process.exit(1);
+            });
+          NODE
