@@ -76,7 +76,7 @@ export function useCheckout() {
         databaseId: Number.parseInt(orderId, 10),
         orderKey,
       };
-      const fallbackKey = `woonuxt-order-${orderId}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+      const fallbackKey = `woonuxt-order-${orderId}-${Date.now()}-${crypto.randomUUID()}`;
 
       window.localStorage.setItem(`woonuxt:order-fallback:${fallbackKey}`, JSON.stringify(fallbackOrder));
       return fallbackKey;
