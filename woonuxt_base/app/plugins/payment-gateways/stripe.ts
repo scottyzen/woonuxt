@@ -60,13 +60,13 @@ const cardBrandIcon = (cardType?: string | null): string | null => {
   return brand === 'card' ? null : `/icons/payment/${brand}.svg`;
 };
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(() => {
   const { registerGateway } = usePaymentGateways();
   const { cart, paymentGateways } = useCart();
   const { customer, viewer } = useAuth();
   const { orderInput, checkoutError, resolvePaymentMethodId } = useCheckout();
   const runtimeConfig = useRuntimeConfig();
-  const currentPath = computed(() => nuxtApp.$router.currentRoute.value.path);
+  const route = useRoute();
   const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
   const gql = useWooGraphQL();
 
@@ -87,7 +87,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const stripeCurrency = computed(() => (runtimeConfig.public?.CURRENCY_CODE || 'USD').toLowerCase());
   const stripeAmount = computed(() => resolveStripeAmount(cart.value?.rawTotal ?? '0', stripeCurrency.value));
   const selectedPaymentMethodId = computed<string>(() => resolvePaymentMethodId(orderInput.value.paymentMethod));
-  const isCheckoutRoute = computed<boolean>(() => currentPath.value === '/checkout' || currentPath.value === '/checkout/');
+  const isCheckoutRoute = computed<boolean>(() => route.path === '/checkout' || route.path === '/checkout/');
   const isStripeSelected = computed<boolean>(() => selectedPaymentMethodId.value === 'stripe');
   const isStripeCheckoutDisabled = computed<boolean>(() => {
     if (!isStripeSelected.value) return false;
