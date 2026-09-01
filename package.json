@@ -22,7 +22,7 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@stripe/stripe-js": "^9.14.0",
+    "@stripe/stripe-js": "^9.15.0",
     "@tailwindcss/vite": "^4.3.3",
     "@vueuse/core": "^14.4.0",
     "graphql": "^16.14.2",
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@graphql-codegen/add": "^7.1.0",
-    "@graphql-codegen/cli": "^7.3.1",
+    "@graphql-codegen/cli": "^7.4.0",
     "@graphql-codegen/typescript": "5.0.10",
     "@graphql-codegen/typescript-graphql-request": "^7.1.0",
     "@graphql-codegen/typescript-operations": "5.1.0",
