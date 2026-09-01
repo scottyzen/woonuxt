@@ -116,7 +116,7 @@
               name="billing-state"
               :default-value="customer.billing.state"
               :country-code="customer.billing.country"
-              autocomplete="section-billing billing address-level1" />
+              autocomplete="section-billing address-level1" />
           </div>
 
           <div v-if="customer.billing.country" class="w-full space-y-2">

@@ -33,6 +33,7 @@ const radioClicked = (rating: string): void => {
         <input id="star-five" v-model="selectedTerms" type="radio" value="5" aria-label="5 stars" @click="radioClicked('5')" />
         <label class="flex items-center" for="star-five">
           <StarRating :rating="5" :size="16" />
+          <span class="sr-only">5 stars</span>
         </label>
       </div>
       <div class="cursor-pointer flex gap-2 items-center">
@@ -40,6 +41,7 @@ const radioClicked = (rating: string): void => {
         <label class="flex items-center" for="star-four">
           <StarRating :rating="4" :size="16" />
           <span class="ml-1 text-xs">& {{ $t('general.up') }}</span>
+          <span class="sr-only">4 stars and up</span>
         </label>
       </div>
       <div class="cursor-pointer flex gap-2 items-center">
@@ -47,6 +49,7 @@ const radioClicked = (rating: string): void => {
         <label class="flex items-center" for="star-three">
           <StarRating :rating="3" :size="16" />
           <span class="ml-1 text-xs">& {{ $t('general.up') }}</span>
+          <span class="sr-only">3 stars and up</span>
         </label>
       </div>
       <div class="cursor-pointer flex gap-2 items-center">
@@ -54,6 +57,7 @@ const radioClicked = (rating: string): void => {
         <label class="flex items-center" for="star-two">
           <StarRating :rating="2" :size="16" />
           <span class="ml-1 text-xs">& {{ $t('general.up') }}</span>
+          <span class="sr-only">2 stars and up</span>
         </label>
       </div>
       <div class="cursor-pointer flex gap-2 items-center">
@@ -61,6 +65,7 @@ const radioClicked = (rating: string): void => {
         <label class="flex items-center" for="star-one">
           <StarRating :rating="1" :size="16" />
           <span class="ml-1 text-xs">& {{ $t('general.up') }}</span>
+          <span class="sr-only">1 star and up</span>
         </label>
       </div>
     </div>
