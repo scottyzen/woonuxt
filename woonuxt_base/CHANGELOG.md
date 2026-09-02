@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. I'll try my best to keep it updated.
 
+## v4.27.1 (02-09-2026)
+
+- fix: `autocomplete` attributes across `BillingAndShipping`, `AddressForm`, and related billing/shipping fields simplified and corrected for consistency and accessibility
+- fix: Accessibility labels for star rating inputs corrected and associated with their controls
+- fix: Optimistic cart/checkout keys now use `crypto.randomUUID()` instead of a manual random string, avoiding collisions
+- chore: Update TypeScript to 6.0.3
+
 ## v4.27.0 (01-09-2026)
 
 - feature: Codegen overhaul — `@graphql-codegen` packages bumped to v6.x, with `codegen.ts` output paths/config restructured so generated `schema.ts` and `default.ts` land in `woonuxt_base/app/gql/` and are excluded via `.gitignore`
