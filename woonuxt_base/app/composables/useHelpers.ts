@@ -140,7 +140,7 @@ export function useHelpers() {
    * @returns {string} The stripped string.
    */
   const stripHtml = (str: string | null | undefined = ''): string => {
-    return str === null ? '' : str.replace(/(<([^>]+)>)/gi, '');
+    return str === null ? '' : str.replace(/<[^>]+>/g, '');
   };
 
   /**

@@ -40,7 +40,7 @@ useSeoMeta({
           <!-- User Profile Card -->
           <div class="p-5 mb-6 bg-white border border-gray-100 rounded-lg shadow-xs">
             <div class="flex items-center gap-6">
-              <img v-if="avatar" :src="avatar" class="rounded-full aspect-square ring-4 ring-primary/10" alt="user-image" width="64" height="64" />
+              <img v-if="avatar" :src="avatar" class="rounded-full aspect-square ring-4 ring-primary/10" alt="User avatar" width="64" height="64" />
               <div
                 v-else
                 class="flex items-center justify-center w-16 h-16 text-2xl font-bold text-white rounded-full bg-linear-to-br from-primary to-primary-dark">

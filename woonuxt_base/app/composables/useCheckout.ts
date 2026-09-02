@@ -1,4 +1,8 @@
-import type { CheckoutInput, CreateAccountInput, UpdateCustomerInput } from '#types/gql';
+import type { Address, CheckoutInput, CreateAccountInput, UpdateCustomerInput } from '#types/gql';
+
+import type { CheckoutMutation } from '#gql/default';
+
+type CheckoutOrder = NonNullable<CheckoutMutation['checkout']>;
 
 export function useCheckout() {
   const nuxtApp = useNuxtApp();
@@ -67,7 +71,7 @@ export function useCheckout() {
     return paymentId === 'paypal' || paymentId === 'ppcp-gateway';
   };
 
-  const createOrderFallbackKey = (checkoutOrder: any, orderId: string, orderKey: string): string => {
+  const createOrderFallbackKey = (checkoutOrder: CheckoutOrder['order'], orderId: string, orderKey: string): string => {
     if (!import.meta.client) return '';
 
     try {
@@ -86,7 +90,7 @@ export function useCheckout() {
   };
 
   // Helper function to handle PayPal redirect
-  const handlePayPalRedirect = async (checkout: any, orderId: string, orderKey: string, fallbackOrderKey = ''): Promise<void> => {
+  const handlePayPalRedirect = async (checkout: CheckoutOrder, orderId: string, orderKey: string, fallbackOrderKey = ''): Promise<void> => {
     // Wrapped with runWithContext: this is invoked via `await handlePayPalRedirect(...)` from processCheckout
     // after the checkout mutation has already awaited, where the ambient Nuxt instance can otherwise be
     // lost on the client. See NUXT_E1001.
@@ -122,7 +126,7 @@ export function useCheckout() {
   };
 
   // Helper function to finalize checkout
-  const finalizeCheckout = async (checkout: any): Promise<void> => {
+  const finalizeCheckout = async (checkout: CheckoutOrder | null | undefined): Promise<void> => {
     if (checkout?.result !== 'success' && !checkout?.order?.databaseId) {
       checkoutError.value = 'There was an error processing your order. Please try again.';
     }
@@ -133,7 +137,7 @@ export function useCheckout() {
     isUpdatingCart.value = true;
 
     try {
-      const pickLocation = (address: any) => {
+      const pickLocation = (address: Address | null | undefined): Partial<Address> => {
         if (!address) return {};
         const { address1, address2, city, country, postcode, state } = address;
         return { address1, address2, city, country, postcode, state };
@@ -188,7 +192,7 @@ export function useCheckout() {
     });
   }
 
-  const processCheckout = async (isPaid = false): Promise<any> => {
+  const processCheckout = async (isPaid = false): Promise<CheckoutOrder | null> => {
     // Captured before any `await` so it remains a plain reference; router.push() itself doesn't
     // require an active Nuxt instance once obtained (it's a Vue Router API), but calling useRouter()
     // itself must happen synchronously here.

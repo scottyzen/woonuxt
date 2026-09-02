@@ -246,7 +246,10 @@ export function useCart() {
   };
 
   const extractCartPayloadFromError = (error: unknown): CartQueryPayload | null => {
-    const candidate = (error as any)?.response?.data?.data ?? (error as any)?.response?.data ?? (error as any)?.data?.data ?? (error as any)?.data ?? null;
+    type ErrorWithData = { response?: { data?: { data?: unknown } }; data?: { data?: unknown } };
+    const errorData = error as ErrorWithData;
+    const responseData = errorData?.response?.data;
+    const candidate = responseData?.data ?? responseData ?? errorData?.data?.data ?? errorData?.data ?? null;
 
     if (!candidate || typeof candidate !== 'object') return null;
 

@@ -15,7 +15,7 @@ const checkoutPaymentGateways = paymentGateways;
 const selectedPaymentMethodId = computed<string>(() => resolvePaymentMethodId(orderInput.value.paymentMethod));
 
 const isInvalidEmail = ref<boolean>(false);
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const emailRegex = /^[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}$/;
 
 type CheckoutViewerSummary = {
   email?: string | null;

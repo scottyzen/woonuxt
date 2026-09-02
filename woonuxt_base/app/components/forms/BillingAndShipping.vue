@@ -21,7 +21,7 @@
               v-model="customer.billing.firstName"
               placeholder="John"
               name="billing-first-name"
-              autocomplete="section-billing billing given-name"
+              autocomplete="billing given-name"
               type="text"
               autocapitalize="words"
               required />
@@ -34,7 +34,7 @@
               v-model="customer.billing.lastName"
               placeholder="Doe"
               name="billing-last-name"
-              autocomplete="section-billing billing family-name"
+              autocomplete="billing family-name"
               type="text"
               autocapitalize="words"
               required />
@@ -49,7 +49,7 @@
               v-model="customer.billing.phone"
               placeholder="+1 234 567 8901"
               name="billing-phone"
-              autocomplete="section-billing billing tel"
+              autocomplete="billing tel"
               type="tel"
               inputmode="tel" />
           </div>
@@ -63,7 +63,7 @@
               v-model="customer.billing.company"
               placeholder="Company Name"
               name="billing-company"
-              autocomplete="section-billing billing organization"
+              autocomplete="billing organization"
               type="text"
               autocapitalize="words" />
           </div>
@@ -75,7 +75,7 @@
               v-model="customer.billing.address1"
               placeholder="123 Main St"
               name="billing-address"
-              autocomplete="section-billing billing address-line1"
+              autocomplete="billing address-line1"
               type="text"
               autocapitalize="words" />
           </div>
@@ -89,7 +89,7 @@
               v-model="customer.billing.address2"
               placeholder="Apartment, studio, or floor"
               name="billing-address-2"
-              autocomplete="section-billing billing address-line2"
+              autocomplete="billing address-line2"
               type="text"
               autocapitalize="words" />
           </div>
@@ -101,7 +101,7 @@
               v-model="customer.billing.city"
               placeholder="New York"
               name="billing-city"
-              autocomplete="section-billing billing address-level2"
+              autocomplete="billing address-level2"
               type="text"
               autocapitalize="words" />
           </div>
@@ -116,7 +116,7 @@
               name="billing-state"
               :default-value="customer.billing.state"
               :country-code="customer.billing.country"
-              autocomplete="section-billing address-level1" />
+              autocomplete="billing address-level1" />
           </div>
 
           <div v-if="customer.billing.country" class="w-full space-y-2">
@@ -126,7 +126,7 @@
               v-model="customer.billing.country"
               name="billing-country"
               :default-value="customer.billing.country"
-              autocomplete="section-billing billing country" />
+              autocomplete="billing country" />
           </div>
 
           <div class="w-full space-y-2">
@@ -136,7 +136,7 @@
               v-model="customer.billing.postcode"
               placeholder="10001"
               name="billing-zip"
-              autocomplete="section-billing billing postal-code"
+              autocomplete="billing postal-code"
               type="text"
               autocapitalize="characters" />
           </div>
@@ -150,7 +150,7 @@
               v-model="customer.billing.email"
               placeholder="johndoe@email.com"
               name="billing-email"
-              autocomplete="section-billing billing email"
+              autocomplete="billing email"
               type="email"
               inputmode="email"
               autocapitalize="none"
@@ -173,7 +173,7 @@
               v-model="customer.shipping.firstName"
               placeholder="John"
               name="shipping-first-name"
-              autocomplete="section-shipping shipping given-name"
+              autocomplete="shipping given-name"
               type="text"
               autocapitalize="words"
               required />
@@ -186,7 +186,7 @@
               v-model="customer.shipping.lastName"
               placeholder="Doe"
               name="shipping-last-name"
-              autocomplete="section-shipping shipping family-name"
+              autocomplete="shipping family-name"
               type="text"
               autocapitalize="words"
               required />
@@ -201,7 +201,7 @@
               v-model="customer.shipping.phone"
               placeholder="+1 234 567 8901"
               name="shipping-phone"
-              autocomplete="section-shipping shipping tel"
+              autocomplete="shipping tel"
               type="tel"
               inputmode="tel" />
           </div>
@@ -215,7 +215,7 @@
               v-model="customer.shipping.company"
               placeholder="Company Name"
               name="shipping-company"
-              autocomplete="section-shipping shipping organization"
+              autocomplete="shipping organization"
               type="text"
               autocapitalize="words" />
           </div>
@@ -227,7 +227,7 @@
               v-model="customer.shipping.address1"
               placeholder="O'Connell Street 47"
               name="shipping-address"
-              autocomplete="section-shipping shipping address-line1"
+              autocomplete="shipping address-line1"
               type="text"
               autocapitalize="words" />
           </div>
@@ -241,7 +241,7 @@
               v-model="customer.shipping.address2"
               placeholder="Apartment, studio, or floor"
               name="shipping-address-2"
-              autocomplete="section-shipping shipping address-line2"
+              autocomplete="shipping address-line2"
               type="text"
               autocapitalize="words" />
           </div>
@@ -253,7 +253,7 @@
               v-model="customer.shipping.city"
               placeholder="New York"
               name="shipping-city"
-              autocomplete="section-shipping shipping address-level2"
+              autocomplete="shipping address-level2"
               type="text"
               autocapitalize="words" />
           </div>
@@ -268,7 +268,7 @@
               name="shipping-state"
               :default-value="customer.shipping.state"
               :country-code="customer.shipping.country"
-              autocomplete="section-shipping shipping address-level1" />
+              autocomplete="shipping address-level1" />
           </div>
 
           <div v-if="customer.shipping.country" class="w-full space-y-2">
@@ -278,7 +278,7 @@
               v-model="customer.shipping.country"
               name="shipping-country"
               :default-value="customer.shipping?.country"
-              autocomplete="section-shipping shipping country" />
+              autocomplete="shipping country" />
           </div>
 
           <div class="w-full space-y-2">
@@ -288,7 +288,7 @@
               v-model="customer.shipping.postcode"
               placeholder="10001"
               name="shipping-zip"
-              autocomplete="section-shipping shipping postal-code"
+              autocomplete="shipping postal-code"
               type="text"
               autocapitalize="characters" />
           </div>

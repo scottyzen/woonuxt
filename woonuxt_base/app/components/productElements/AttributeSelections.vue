@@ -71,14 +71,12 @@ const getSelectedName = (attr: ProductAttribute, value?: string) => {
 };
 
 const emitSelection = () => {
-  const selectedVariations = attributes.map(
-    (row): VariationAttribute => ({
-      name: toSelectionName(row?.name),
-      value: selections.value[row?.name ?? ''] ?? '',
-      attributeId: null,
-      label: row?.label ?? row?.name ?? '',
-    }),
-  );
+  const selectedVariations = attributes.map((row): VariationAttribute => ({
+    name: toSelectionName(row?.name),
+    value: selections.value[row?.name ?? ''] ?? '',
+    attributeId: null,
+    label: row?.label ?? row?.name ?? '',
+  }));
 
   emit('attrs-changed', selectedVariations);
 };
