@@ -5,12 +5,13 @@ const route = useRoute();
 
 const { t } = useI18n();
 const { query } = route;
-const { cart, paymentGateways, isBillingAddressEnabled } = useCart();
+const { cart, paymentGateways, isBillingAddressEnabled, isUpdatingCart } = useCart();
 const { customer, viewer, navigateToLogin } = useAuth();
 const { orderInput, isProcessingOrder, processCheckout, checkoutError, resolvePaymentMethodId } = useCheckout();
 const { setActiveGateway, isActiveGatewayReady, processActiveGatewayPayment, getActiveGatewayDisabledMessage, resetActiveGateway } = usePaymentGateways();
 
-const buttonText = ref<string>(isProcessingOrder.value ? t('general.processing') : t('shop.checkoutButton'));
+const isSubmitting = ref(false);
+const buttonText = computed(() => isSubmitting.value || isProcessingOrder.value ? t('general.processing') : t('shop.checkoutButton'));
 const checkoutPaymentGateways = paymentGateways;
 const selectedPaymentMethodId = computed<string>(() => resolvePaymentMethodId(orderInput.value.paymentMethod));
 
@@ -33,7 +34,7 @@ const viewerGreeting = computed<string>(() => {
   return name ? `Welcome back, ${name}` : 'Welcome';
 });
 const isCheckoutDisabled = computed<boolean>(() => {
-  if (isProcessingOrder.value || !selectedPaymentMethodId.value) return true;
+  if (isSubmitting.value || isProcessingOrder.value || isUpdatingCart.value || !selectedPaymentMethodId.value) return true;
   return !isActiveGatewayReady.value;
 });
 
@@ -126,34 +127,28 @@ const handleGatewaySelect = (gateway: PaymentGateway): void => {
 };
 
 const payNow = async () => {
-  buttonText.value = t('general.processing');
+  if (isCheckoutDisabled.value) return;
+  // Lock before the first await, covering gateway confirmation as well as order creation.
+  isSubmitting.value = true;
   checkoutError.value = null;
-  await setActiveGateway(orderInput.value.paymentMethod);
-  resetActiveGateway();
-  orderInput.value.transactionId = '';
-
-  if (isCheckoutDisabled.value) {
-    checkoutError.value = getActiveGatewayDisabledMessage() || 'Please select a payment method before checking out.';
-    buttonText.value = t('shop.checkoutButton');
-    return;
-  }
-
-  let paymentResult;
   try {
-    paymentResult = await processActiveGatewayPayment();
-    if (!paymentResult.success) {
-      checkoutError.value = paymentResult.error || 'Payment processing failed. Please try again.';
-      buttonText.value = t('shop.checkoutButton');
-      return;
+    await setActiveGateway(orderInput.value.paymentMethod);
+    resetActiveGateway();
+    orderInput.value.transactionId = '';
+    if (!isActiveGatewayReady.value) {
+      throw new Error(getActiveGatewayDisabledMessage() || 'Please select a payment method before checking out.');
     }
+    const paymentResult = await processActiveGatewayPayment();
+    if (!paymentResult.success) {
+      throw new Error(paymentResult.error || 'Payment processing failed. Please try again.');
+    }
+    await processCheckout(paymentResult.isPaid);
   } catch (error) {
     console.error('Checkout error:', error);
     checkoutError.value = error instanceof Error ? error.message : 'An unexpected error occurred during checkout';
-    buttonText.value = t('shop.checkoutButton');
-    return;
+  } finally {
+    isSubmitting.value = false;
   }
-
-  await processCheckout(paymentResult.isPaid);
 };
 
 const checkEmailOnBlur = (email?: string | null): void => {
@@ -329,7 +324,7 @@ useSeoMeta({
 
         <OrderSummary>
           <p v-if="checkoutError" role="alert" class="text-red-500 text-sm mt-2">{{ checkoutError }}</p>
-          <Button :loading="isProcessingOrder" :disabled="isCheckoutDisabled" size="lg" type="submit" class="mt-4 w-full">
+          <Button :loading="isSubmitting || isProcessingOrder" :disabled="isCheckoutDisabled" size="lg" type="submit" class="mt-4 w-full">
             {{ buttonText }}
           </Button>
         </OrderSummary>
