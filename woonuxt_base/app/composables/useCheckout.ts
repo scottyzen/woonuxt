@@ -208,6 +208,10 @@ export function useCheckout() {
       // Process the checkout
       const { checkout } = await gql.Checkout(checkoutPayload);
 
+      if (checkout?.result !== 'success') {
+        throw new Error('Your order could not be confirmed. If you already paid, contact the shop before attempting another payment.');
+      }
+
       // Handle account creation if requested
       await handleAccountCreation();
 
