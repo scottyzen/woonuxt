@@ -170,6 +170,9 @@ export default defineNuxtPlugin(() => {
   };
 
   const applyStripePaymentIntent = (paymentIntent: { id: string; payment_method?: unknown; amount: number; currency: string; status: string }): boolean => {
+    if (paymentIntent.status !== 'succeeded') {
+      throw new Error('Your payment is not yet confirmed. Please contact the shop before trying another payment.');
+    }
     upsertOrderMeta('_stripe_payment_intent_id', paymentIntent.id);
     if (paymentIntent.payment_method) {
       upsertOrderMeta('_stripe_payment_method_id', String(paymentIntent.payment_method));
@@ -178,7 +181,7 @@ export default defineNuxtPlugin(() => {
     upsertOrderMeta('_stripe_charge_captured', 'yes');
     upsertOrderMeta('_wc_stripe_payment_method_type', 'card');
     orderInput.value.transactionId = paymentIntent.id;
-    return paymentIntent.status === 'succeeded' || paymentIntent.status === 'processing';
+    return true;
   };
 
   const confirmSavedPaymentMethod = async (): Promise<boolean> => {
@@ -418,7 +421,7 @@ export default defineNuxtPlugin(() => {
     reset: resetStripeOrderMeta,
     processPayment: async () => {
       const paymentIsPaid = await confirmStripePayment();
-      return { success: true, isPaid: paymentIsPaid };
+      return { success: paymentIsPaid, isPaid: paymentIsPaid, error: paymentIsPaid ? undefined : 'Payment was not confirmed. Please check its status before retrying.' };
     },
     getComponentProps: () => ({
       stripe: stripe.value,
