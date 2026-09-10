@@ -1,6 +1,12 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
+import { existsSync } from 'node:fs';
+import { loadEnvFile } from 'node:process';
 
-const endpoint = process.env.GQL_HOST || 'https://secure.woonuxt.com/graphql';
+// Codegen runs before Nuxt, so it must load .env itself.
+if (existsSync('.env')) loadEnvFile('.env');
+
+const endpoint = process.env.GQL_HOST?.trim();
+if (!endpoint) throw new Error('Set GQL_HOST in .env to your WordPress GraphQL endpoint.');
 const origin = process.env.APP_HOST || new URL(endpoint).origin;
 
 const schemaLoaderOptions: Record<string, unknown> = {
