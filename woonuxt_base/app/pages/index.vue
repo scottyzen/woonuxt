@@ -20,7 +20,6 @@ useSeoMeta({
 <template>
   <main>
     <HeroBanner />
-
     <section class="container my-16">
       <div class="flex items-end justify-between">
         <h2 class="text-lg font-semibold md:text-2xl">{{ $t('shop.shopByCategory') }}</h2>
