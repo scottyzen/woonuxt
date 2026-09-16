@@ -399,7 +399,7 @@ const addToCartLoading = computed(() => (isOptimisticCartMode.value ? false : is
       </div>
       <div v-if="product.related && storeSettings.showRelatedProducts" class="my-32">
         <div class="mb-4 text-xl font-semibold">{{ $t('shop.youMayLike') }}</div>
-        <LazyProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
+        <LazyProductRow :products="product.related.nodes" class="grid-cols-2 md:grid-cols-4 lg:grid-cols-4" />
       </div>
     </div>
     <div v-else class="my-24 text-center text-gray-500">
