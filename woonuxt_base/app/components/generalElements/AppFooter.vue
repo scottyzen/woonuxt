@@ -9,7 +9,7 @@ const { wishlistLink } = useAuth();
       <div class="mr-auto">
         <template>
   <NuxtLink to="/" class="inline-flex items-center gap-2">
-    <img src="/images/logo-black2026.svg" alt="Logo" class="object-contain h-10" />
+    <img src="/images/acsweet-black2026.svg" alt="Logo" class="object-contain h-10" />
   </NuxtLink>
 </template>
         <WebsiteShortDescription />
