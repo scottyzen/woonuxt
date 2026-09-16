@@ -21,7 +21,7 @@ query getProduct($slug: ID!, $frontEndUrl: String = "") {
     ...SimpleProduct
     ...VariableProduct
     ...ExternalProduct
-    related(first: 4) {
+    related(first: 5) {
       nodes {
         ...SimpleProduct
         ...VariableProduct
