@@ -1,7 +1,7 @@
 export default defineNuxtConfig({
   // Get all the pages, components, composables and plugins from the parent theme
   devtools: { enabled: false },
-  extends: ['./woonuxt_base', './my_theme'],
+  extends: ['./my_theme', './woonuxt_base'],
   components: [{ path: './components', pathPrefix: false }],
   /**
    * Depending on your servers capabilities, you may need to adjust the following settings.
