@@ -11,7 +11,7 @@ We believe that jewelry isn’t just an accessory; it’s an expression of who y
 <h3>Our Materials: Built to Last</h3>
 We carefully select premium, skin-friendly materials designed for everyday wear, longevity, and shine:
 ﻿
-925 Sterling Silver: Classic, timeless, and elegant.
+925 Sterling Silver: Classic, timeless, and elegant...
 ﻿
 Titanium Steel: Ultra-durable, hypoallergenic, and perfect for sensitive skin.
 ﻿
