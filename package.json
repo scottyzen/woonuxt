@@ -24,19 +24,19 @@
   "dependencies": {
     "@stripe/stripe-js": "^9.16.0",
     "@tailwindcss/vite": "^4.3.3",
-    "@vueuse/core": "^14.4.0",
+    "@vueuse/core": "^15.0.0",
     "graphql": "^16.14.2",
     "graphql-request": "^7.4.0",
     "reka-ui": "^2.10.4",
-    "tailwind-merge": "^3.6.0",
+    "tailwind-merge": "^3.7.0",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@graphql-codegen/add": "^7.1.0",
-    "@graphql-codegen/cli": "^7.4.1",
+    "@graphql-codegen/cli": "^7.4.2",
     "@graphql-codegen/typescript": "6.1.0",
     "@graphql-codegen/typescript-graphql-request": "^7.1.0",
-    "@graphql-codegen/typescript-operations": "6.1.6",
+    "@graphql-codegen/typescript-operations": "6.1.7",
     "@iconify-json/ion": "^1.2.7",
     "@nuxt/eslint": "^1.17.0",
     "@nuxt/icon": "^2.5.1",
@@ -44,9 +44,9 @@
     "@nuxtjs/i18n": "^10.6.0",
     "@tailwindcss/typography": "^0.5.20",
     "@vite-pwa/nuxt": "^1.1.1",
-    "eslint": "^10.10.0",
+    "eslint": "^10.11.0",
     "nuxt": "^4.5.2",
-    "prettier": "^3.9.6",
+    "prettier": "^3.9.8",
     "typescript": "6.0.3",
     "vue-tsc": "^3.3.11"
   }
