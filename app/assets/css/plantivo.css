@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import 'tailwindcss';
+
+html {
+  font-family: 'Manrope', sans-serif;
+}
+h1,
+h2,
+h3,
+.plant-display {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+/* Plant Shop catalog polish layered on top of WooNuxt's upstream filter controls. */
+#filters {
+  border-right: 1px solid #e7ece4;
+  padding-right: 1.75rem;
+}
+#filters .filters-container > div {
+  padding-block: 1.45rem;
+}
+#filters .filters-container > div:first-child {
+  padding-top: 0;
+}
+#filters .filters-container > div > div:first-child {
+  color: #173f2b;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+#filters label {
+  color: #4d6256;
+  transition: color 0.15s ease;
+}
+#filters label:hover {
+  color: #0d5134;
+}
+#filters input[type='checkbox']:checked + label {
+  color: #0d5134;
+  font-weight: 700;
+}
+#filters .slider-connect {
+  background: #0d5134 !important;
+}
+#filters [role='slider'] {
+  border-color: #0d5134 !important;
+  box-shadow: 0 0 0 4px #f6c51e55;
+}
+#filters .price-input {
+  border-color: #dbe4db;
+  background: #fbfcf9;
+}
+
+.product-grid > article {
+  border-radius: 1rem;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+.product-grid > article:hover {
+  box-shadow: 0 12px 28px rgb(13 81 52 / 0.12);
+  transform: translateY(-3px);
+}
