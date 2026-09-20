@@ -67,7 +67,4 @@ const selectTab = (index: number) => {
 .tabs button.active {
   @apply border-primary text-primary;
 }
-
-.tab-contents {
-}
 </style>
