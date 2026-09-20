@@ -6,17 +6,20 @@ const { node } = defineProps({
 
 const { storeSettings } = useAppConfig();
 
-const salePercentage = computed((): string => {
-  if (!node?.rawSalePrice || !node?.rawRegularPrice) return '';
-  const salePrice = Number.parseFloat(node?.rawSalePrice);
-  const regularPrice = Number.parseFloat(node?.rawRegularPrice);
-  return Math.round(((salePrice - regularPrice) / regularPrice) * 100) + ` %`;
+const salePercentage = computed((): string | null => {
+  const salePrice = Number(node?.rawSalePrice);
+  const regularPrice = Number(node?.rawRegularPrice);
+
+  if (!Number.isFinite(salePrice) || !Number.isFinite(regularPrice) || regularPrice <= 0) return null;
+
+  const percentage = Math.round(((salePrice - regularPrice) / regularPrice) * 100);
+  return Number.isFinite(percentage) ? `${percentage} %` : null;
 });
 
 const showSaleBadge = computed(() => node.rawSalePrice && storeSettings.saleBadge !== 'hidden');
 
 const textToDisplay = computed(() => {
-  if (storeSettings?.saleBadge === 'percent') return salePercentage.value;
+  if (storeSettings?.saleBadge === 'percent' && salePercentage.value) return salePercentage.value;
   return t('shop.onSale') ? t('shop.onSale') : 'Sale';
 });
 </script>

@@ -114,20 +114,14 @@ export default defineNuxtConfig({
 });
 ```
 
-If you do have an extra custom layer folder, add it in the same array:
-
-```ts
-export default defineNuxtConfig({
-  extends: ['./woonuxt_base', './my_theme'],
-});
-```
-
-Do not add `extends:` twice in the same config file. A duplicate key will overwrite the first one and prevent the layer system from working correctly.
+Use the root project's `app/` directory for storefront customizations. Do not add `extends:` twice in the same config file; a duplicate key will overwrite the first one and prevent the layer system from working correctly.
 
 To override base files, add a file with the same public name to your root app. For example:
 
 - `woonuxt_base/app/components/productElements/ProductCard.vue` → `app/components/ProductCard.vue`
 - `woonuxt_base/app/pages/contact.vue` → `app/pages/contact.vue`
+
+For nested component overrides, retain the component's public name rather than its parent folders. For example, `woonuxt_base/app/components/productElements/ProductImageGallery.vue` is available as `ProductImageGallery`, so add `app/components/ProductImageGallery.vue` in the root project. Restart the Nuxt dev server after adding or moving an override.
 
 ### PWA configuration and extension
 
