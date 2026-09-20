@@ -1,6 +1,13 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
+/*
+ * A child Nuxt layer is outside Tailwind's automatic source detection. Keep
+ * the parent app explicit so its utility classes are included when WooNuxt is
+ * extended by another storefront.
+ */
+@source '../../';
+
 /* Center container */
 .container {
   @apply mx-auto px-4 md:px-12 max-w-360;
@@ -89,5 +96,75 @@
   .wn-form textarea[aria-invalid='true'],
   .wn-form select[aria-invalid='true'] {
     @apply border-red-500 ring-2 ring-red-500/25;
+  }
+}
+
+@layer base {
+  input[type='checkbox'],
+  input[type='radio'] {
+    @apply appearance-none cursor-pointer border border-gray-300 bg-white transition-colors duration-150 hover:border-primary focus-visible:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
+
+    width: 1rem;
+    height: 1rem;
+    flex: none;
+    position: relative;
+  }
+
+  input[type='checkbox'] {
+    border-radius: 0.25rem;
+  }
+
+  input[type='radio'] {
+    border-radius: 50%;
+  }
+
+  input[type='checkbox']::after,
+  input[type='radio']::after {
+    content: '';
+    display: block;
+    opacity: 0;
+    transition: all 150ms ease-out;
+  }
+
+  input[type='checkbox']::after {
+    width: 0.3rem;
+    height: 0.55rem;
+    border: solid #fff;
+    border-width: 0 0.125rem 0.125rem 0;
+    position: absolute;
+    top: 0.1rem;
+    left: 0.3rem;
+    transform: rotate(45deg) scale(0.75);
+  }
+
+  input[type='radio']::after {
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 50%;
+    position: absolute;
+    top: 0.1875rem;
+    left: 0.1875rem;
+    background: #fff;
+    transform: scale(0);
+  }
+
+  input[type='checkbox']:checked,
+  input[type='radio']:checked {
+    @apply border-primary bg-primary;
+  }
+
+  input[type='checkbox']:checked::after {
+    opacity: 1;
+    transform: rotate(45deg) scale(1);
+  }
+
+  input[type='radio']:checked::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  input[type='checkbox']:disabled,
+  input[type='radio']:disabled {
+    @apply cursor-not-allowed border-gray-200 bg-gray-100 opacity-70;
   }
 }
