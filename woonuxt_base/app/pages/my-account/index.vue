@@ -36,7 +36,7 @@ useSeoMeta({
       <LazyLoginAndRegister v-if="!viewer" />
       <div v-else class="flex flex-col items-start justify-between w-full gap-8 mb-24 lg:flex-row">
         <!-- Enhanced Sidebar -->
-        <aside class="w-full lg:w-72 lg:sticky lg:top-20 shrink-0">
+        <aside class="w-full lg:max-w-sm lg:w-72 lg:sticky lg:top-20 shrink-0">
           <!-- User Profile Card -->
           <div class="p-5 mb-6 bg-white border border-gray-100 rounded-lg shadow-xs">
             <div class="flex items-center gap-6">
