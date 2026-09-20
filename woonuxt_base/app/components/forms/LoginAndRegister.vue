@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col justify-center max-w-lg mx-auto my-16 text-center min-h-150 align-center">
+  <div class="flex flex-col justify-center max-w-lg mx-auto my-16 text-center align-center">
     <div class="flex flex-col my-8">
       <h1 class="text-xl font-semibold text-gray-900 lg:text-3xl">{{ formTitle }}</h1>
       <p v-if="formView === FormView.LOGIN" class="mt-2 text-gray-500">

@@ -62,7 +62,7 @@ useHead({
 </script>
 
 <template>
-  <div class="max-w-lg mx-auto my-16 min-h-150 lg:my-24">
+  <div class="max-w-lg mx-auto my-16 lg:my-24">
     <div class="flex flex-col items-center">
       <Logo class="mb-6 scale-125" />
       <h1 class="text-xl font-semibold lg:text-3xl">{{ $t('account.resetPassword') }}</h1>
