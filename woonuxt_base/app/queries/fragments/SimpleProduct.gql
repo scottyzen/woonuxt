@@ -24,6 +24,10 @@ fragment SimpleProduct on SimpleProduct {
     altText
     title
     databaseId
+    mediaDetails {
+      width
+      height
+    }
     cartSourceUrl: sourceUrl(size: THUMBNAIL)
     productCardSourceUrl: sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
   }

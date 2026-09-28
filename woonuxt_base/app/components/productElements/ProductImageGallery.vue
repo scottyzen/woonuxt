@@ -19,6 +19,7 @@ const primaryImage = computed<ImageFragment>(() => ({
   title: props.mainImage.title,
   altText: props.mainImage.altText,
   databaseId: props.mainImage.databaseId,
+  mediaDetails: props.mainImage.mediaDetails,
 }));
 
 const imageToShow = ref<ImageFragment>(primaryImage.value);
@@ -59,6 +60,15 @@ watch(
 
 const imgWidth = 640;
 
+const imageAspectRatio = computed(() => {
+  const { width, height } = imageToShow.value.mediaDetails || {};
+  if (!width || !height || !Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return 1;
+  return width / height;
+});
+
+const imageHeight = computed(() => Math.round(imgWidth / imageAspectRatio.value));
+const galleryImageStyle = computed(() => ({ aspectRatio: `${imageAspectRatio.value}` }));
+
 const thumbnailPosition = computed<ThumbnailPosition>(() => (storeSettings.productGalleryThumbnailsPosition === 'left' ? 'left' : 'bottom'));
 const showLeftThumbnails = computed(() => thumbnailPosition.value === 'left');
 
@@ -82,11 +92,13 @@ const thumbnailButtonClasses = (galleryImg: ImageFragment) => [
 
 <template>
   <div :class="galleryRootClasses">
-    <div class="relative group aspect-square w-full min-w-0 overflow-hidden rounded-xl bg-gray-100">
+    <div
+      class="relative group w-full min-w-0 overflow-hidden rounded-xl bg-gray-100 transition-[aspect-ratio] duration-[250ms] ease-out"
+      :style="galleryImageStyle">
       <SaleBadge :node class="absolute text-base top-4 right-4" />
       <NuxtPicture
         :width="imgWidth"
-        :height="imgWidth"
+        :height="imageHeight"
         sizes="412px:100vw sm:100vw md:50vw lg:50vw xl:640px"
         :alt="imageToShow.altText || node.name"
         :title="imageToShow.title || node.name"
@@ -128,7 +140,7 @@ const thumbnailButtonClasses = (galleryImg: ImageFragment) => [
           :src="galleryImg.sourceUrl || FALLBACK_IMG"
           :alt="galleryImg.altText || node.name"
           loading="lazy"
-          :img-attrs="{ class: 'h-full w-full object-contain' }" />
+          :img-attrs="{ class: 'h-full w-full object-cover' }" />
       </button>
     </div>
   </div>
