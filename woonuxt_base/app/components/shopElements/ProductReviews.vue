@@ -3,36 +3,6 @@ const props = defineProps({
   product: { type: Object, default: null },
 });
 </script>
-
-<!--<template>
-  <pre class="bg-gray-900 text-green-400 p-4 rounded text-xs overflow-auto max-h-96">
-  {{ JSON.stringify(product.reviews, null, 2) }}
-</pre
-  >
-
-  <div class="flex flex-wrap gap-32 items-start mt-8">
-    <div class="flex max-w-sm gap-4 prose dark:prose-invert">
-      <ReviewsScore v-if="product.reviews" :reviews="product.reviews" :productId="product.databaseId" />
-    </div>
-    <div class="divide-y border-color dark:border-color flex-1" v-if="product.reviews?.edges && product.reviews.edges.length">
-      <div v-for="review in product.reviews.edges" :key="review.id" class="my-2 py-8">
-        <div class="flex gap-4 items-center">
-          <img v-if="review.node.author.node.avatar" :src="review.node.author.node.avatar.url" class="rounded-full h-12 w-12" />
-          <div class="grid gap-1">
-            <div class="text-sm">
-              <span class="font-semibold dark:text-gray-200">{{ review.node.author.node.name }}</span>
-              <span class="italic alt-text dark:alt-text">
-                – {{ new Date(review.node.date).toLocaleString($t('general.langCode'), { month: 'long', day: 'numeric', year: 'numeric' }) }}</span
-              >
-            </div>
-            <StarRating :rating="review.rating" :hide-count="true" class="text-sm" />
-          </div>
-        </div>
-        <div class="mt-4 text-color dark:text-color italic prose-sm dark:prose-invert" v-html="review.node.content"></div>
-      </div>
-    </div>
-  </div>
-</template>-->
 <template>
   <div class="flex flex-wrap gap-32 items-start mt-8">
     <div class="flex max-w-sm gap-4 prose dark:prose-invert">
