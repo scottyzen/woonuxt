@@ -1,6 +1,7 @@
-fragment Comment on Comment {
-  content
+fragment CommentFields on Comment {
   id
+  parentId
+  content
   date
   author {
     node {
@@ -8,6 +9,15 @@ fragment Comment on Comment {
       avatar {
         url
       }
+    }
+  }
+}
+
+fragment Comment on Comment {
+  ...CommentFields
+  replies {
+    nodes {
+      ...CommentFields
     }
   }
 }
