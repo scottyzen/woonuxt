@@ -59,14 +59,7 @@
       </Button>
 
       <div v-if="formView === FormView.LOGIN" class="flex items-center justify-between mt-4">
-        <div
-          class="text-sm font-semibold cursor-pointer text-primary hover:underline"
-          role="button"
-          tabindex="0"
-          @click="navigate(FormView.FORGOT_PASSWORD)"
-          @keydown.enter.space.prevent="navigate(FormView.FORGOT_PASSWORD)">
-          Forgot password?
-        </div>
+        <div class="text-sm font-semibold cursor-pointer text-primary hover:underline" @click="navigate(FormView.FORGOT_PASSWORD)">Forgot password?</div>
       </div>
     </form>
 
