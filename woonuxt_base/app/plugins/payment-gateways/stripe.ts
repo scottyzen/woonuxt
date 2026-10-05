@@ -174,11 +174,10 @@ export default defineNuxtPlugin(() => {
       throw new Error('Your payment is not yet confirmed. Please contact the shop before trying another payment.');
     }
     upsertOrderMeta('_stripe_payment_intent_id', paymentIntent.id);
-    if (paymentIntent.payment_method) {
-      upsertOrderMeta(
-        '_stripe_payment_method_id',
-        typeof paymentIntent.payment_method === 'string' ? paymentIntent.payment_method : ((paymentIntent.payment_method as { id?: string }).id ?? ''),
-      );
+    const paymentMethod = paymentIntent.payment_method;
+    const paymentMethodId = typeof paymentMethod === 'string' ? paymentMethod : (paymentMethod as { id?: string } | null | undefined)?.id;
+    if (paymentMethodId) {
+      upsertOrderMeta('_stripe_payment_method_id', paymentMethodId);
     }
     upsertOrderMeta('_stripe_source_id', paymentIntent.id);
     upsertOrderMeta('_stripe_charge_captured', 'yes');
