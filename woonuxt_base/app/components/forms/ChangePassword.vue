@@ -12,22 +12,17 @@
       </div>
       <!-- Form Fields -->
       <div class="grid p-6 md:p-8 gap-6 md:grid-cols-2">
-        <input type="text" :value="viewer?.username || ''" name="username" autocomplete="username" style="display: none" />
+        <label for="change-password-username" class="sr-only">Username</label>
+        <input id="change-password-username" type="text" :value="viewer?.username || ''" name="username" autocomplete="username" class="sr-only" />
 
         <div class="w-full space-y-2">
           <label for="new-password" class="block text-sm font-medium text-gray-700">{{ $t('account.newPassword') }}</label>
-          <PasswordInput id="new-password" v-model="password.new" name="new-password" placeholder="••••••••••" autocomplete="new-password" required />
+          <PasswordInput id="new-password" v-model="password.new" name="new-password" placeholder="••••••••••" required />
         </div>
 
         <div class="w-full space-y-2">
           <label for="new-password-confirm" class="block text-sm font-medium text-gray-700">{{ $t('account.confirmNewPassword') }}</label>
-          <PasswordInput
-            id="new-password-confirm"
-            v-model="password.confirm"
-            name="new-password-confirm"
-            placeholder="••••••••••"
-            autocomplete="new-password"
-            required />
+          <PasswordInput id="new-password-confirm" v-model="password.confirm" name="new-password-confirm" placeholder="••••••••••" required />
         </div>
 
         <!-- Password Requirements -->
