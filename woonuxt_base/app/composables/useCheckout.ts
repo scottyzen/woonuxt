@@ -113,6 +113,9 @@ export function useCheckout() {
 
       if (isPayPalWindowClosed) {
         void router.push(`/checkout/order-received/${orderId}/?key=${orderKey}&fetch_delay=true${fallbackOrderQuery}`);
+      } else {
+        // Popup was blocked: continue in this tab. PayPal returns to the order-received URL set above.
+        window.location.href = redirectUrl;
       }
     });
   };
@@ -183,6 +186,10 @@ export function useCheckout() {
       const left = window.innerWidth / 2 - width / 2;
       const top = window.innerHeight / 2 - height / 2 + 80;
       const payPalWindow = window.open(redirectUrl, '', `width=${width},height=${height},top=${top},left=${left}`);
+      if (!payPalWindow) {
+        resolve(false);
+        return;
+      }
       const timer = setInterval(() => {
         if (payPalWindow?.closed) {
           clearInterval(timer);
