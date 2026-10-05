@@ -21,7 +21,7 @@ function select(evt: Event) {
 </script>
 
 <template>
-  <select :id="name ?? 'country-select'" v-bind="$attrs" :value="modelValue ?? ''" required @change="select">
+  <select :id="name ?? 'country-select'" :name="name ?? undefined" v-bind="$attrs" :value="modelValue ?? ''" required @change="select">
     <option value="" disabled>Select a country</option>
     <option v-for="country in countriesToShow" :key="country.code" :value="country.code">
       {{ country.name }}
