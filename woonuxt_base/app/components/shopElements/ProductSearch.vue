@@ -23,6 +23,7 @@ watch(
       v-model="searchQuery"
       type="text"
       :placeholder="$t('shop.searchProducts')"
+      :aria-label="$t('shop.searchProducts')"
       class="z-0 inline-flex items-center w-full p-2 pl-10 text-sm text-gray-500 border border-gray-300 rounded-md shadow-inner outline-hidden bg-gray-50 shadow-gray-200 placeholder:text-gray-400" />
     <span
       v-if="searchQuery"
