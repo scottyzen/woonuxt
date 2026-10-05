@@ -77,7 +77,6 @@ useHead({
           name="new-password"
           class-name=" border rounded-lg w-full p-3 px-4 bg-white"
           placeholder="New Password"
-          autocomplete="new-password"
           :required="true" />
       </label>
 
@@ -89,7 +88,6 @@ useHead({
           name="confirm-password"
           class-name="border rounded-lg w-full p-3 px-4 bg-white"
           placeholder="Confirm Password"
-          autocomplete="new-password"
           :required="true" />
       </label>
 
