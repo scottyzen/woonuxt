@@ -32,7 +32,7 @@ const checkboxChanged = () => {
   </div>
   <div v-show="isOpen" class="mr-6 max-h-60 grid gap-1.5 swatches overflow-auto custom-scrollbar">
     <div v-for="color in attribute.terms" :key="color.slug" :style="swatchStyle(color.slug)" :title="color.name">
-      <input :id="color.slug" v-model="selectedTerms" class="hidden" type="checkbox" :value="color.slug" @change="checkboxChanged" />
+      <input :id="color.slug" v-model="selectedTerms" class="sr-only" type="checkbox" :value="color.slug" @change="checkboxChanged" />
       <label :for="color.slug" class="cursor-pointer m-0">
         <span class="sr-only">{{ color.name }}</span>
       </label>
@@ -58,6 +58,10 @@ const checkboxChanged = () => {
 .swatches label:hover,
 .swatches input:checked + label {
   filter: saturate(1);
+}
+
+.swatches input:focus-visible + label {
+  @apply outline-2 outline-offset-2 outline-primary;
 }
 
 /* tick */
