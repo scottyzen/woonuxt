@@ -29,7 +29,12 @@ const checkboxChanged = () => {
 
 <template>
   <div v-if="terms.length">
-    <div class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center text-gray-900" @click="isOpen = !isOpen">
+    <div
+      class="cursor-pointer flex font-semibold mt-8 leading-none justify-between items-center text-gray-900"
+      role="button"
+      tabindex="0"
+      @click="isOpen = !isOpen"
+      @keydown.enter.space.prevent="isOpen = !isOpen">
       <span>{{ label || $t('shop.category', 2) }}</span>
       <Icon name="ion:chevron-down-outline" class="transform text-gray-600" :class="isOpen ? 'rotate-180' : ''" />
     </div>
