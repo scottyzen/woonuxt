@@ -11,7 +11,7 @@ const { orderInput, isProcessingOrder, processCheckout, checkoutError, resolvePa
 const { setActiveGateway, isActiveGatewayReady, processActiveGatewayPayment, getActiveGatewayDisabledMessage, resetActiveGateway } = usePaymentGateways();
 
 const isSubmitting = ref(false);
-const buttonText = computed(() => isSubmitting.value || isProcessingOrder.value ? t('general.processing') : t('shop.checkoutButton'));
+const buttonText = computed(() => (isSubmitting.value || isProcessingOrder.value ? t('general.processing') : t('shop.checkoutButton')));
 const checkoutPaymentGateways = paymentGateways;
 const selectedPaymentMethodId = computed<string>(() => resolvePaymentMethodId(orderInput.value.paymentMethod));
 
@@ -215,6 +215,7 @@ useSeoMeta({
             <div v-if="!viewer" class="w-full mt-4">
               <label for="email">{{ $t('billing.email') }}</label>
               <input
+                id="email"
                 v-model="customer.billing.email"
                 placeholder="johndoe@email.com"
                 autocomplete="email"
@@ -248,7 +249,6 @@ useSeoMeta({
                   v-model="orderInput.password"
                   name="new-password"
                   placeholder="••••••••••"
-                  autocomplete="new-password"
                   :required="orderInput.createAccount" />
               </div>
             </div>
@@ -308,7 +308,7 @@ useSeoMeta({
 
           <!-- Order note -->
           <div class="checkout-section">
-            <h3 class="mb-4 text-xl font-semibold leading-none">{{ $t('shop.orderNote') }} ({{ $t('general.optional') }})</h3>
+            <label for="order-note" class="mb-4 block text-xl font-semibold leading-none">{{ $t('shop.orderNote') }} ({{ $t('general.optional') }})</label>
             <textarea
               id="order-note"
               v-model="orderInput.customerNote"
