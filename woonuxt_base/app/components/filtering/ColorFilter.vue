@@ -60,10 +60,6 @@ const checkboxChanged = () => {
   filter: saturate(1);
 }
 
-.swatches input:focus-visible + label {
-  @apply outline-2 outline-offset-2 outline-primary;
-}
-
 /* tick */
 .swatches input:checked + label::after {
   content: '';
