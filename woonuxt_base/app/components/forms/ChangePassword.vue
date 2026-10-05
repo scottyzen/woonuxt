@@ -13,7 +13,7 @@
       <!-- Form Fields -->
       <div class="grid p-6 md:p-8 gap-6 md:grid-cols-2">
         <label for="change-password-username" class="sr-only">Username</label>
-        <input id="change-password-username" type="text" :value="viewer?.username || ''" name="username" autocomplete="username" class="sr-only" />
+        <input id="change-password-username" type="text" :value="viewer?.username || ''" name="username" autocomplete="username" class="sr-only" tabindex="-1" readonly />
 
         <div class="w-full space-y-2">
           <label for="new-password" class="block text-sm font-medium text-gray-700">{{ $t('account.newPassword') }}</label>
