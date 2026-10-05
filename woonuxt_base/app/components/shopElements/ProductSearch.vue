@@ -28,7 +28,10 @@ watch(
     <span
       v-if="searchQuery"
       class="absolute z-10 flex items-center gap-1 px-2 py-1 text-xs rounded-sm cursor-pointer bg-primary/10 hover:bg-primary/20 text-primary right-2"
-      @click="reset">
+      role="button"
+      tabindex="0"
+      @click="reset"
+      @keydown.enter.space.prevent="reset">
       <span>{{ $t('general.clear') }}</span>
       <Icon name="ion:close-outline" size="18" />
     </span>
