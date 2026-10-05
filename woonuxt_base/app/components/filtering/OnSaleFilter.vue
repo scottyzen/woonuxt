@@ -22,12 +22,7 @@ const checkboxClicked = (e) => {
 
 <template>
   <div>
-    <div
-      class="cursor-pointer flex font-semibold pt-8 pb-4 leading-none justify-between items-center text-gray-900"
-      role="button"
-      tabindex="0"
-      @click="isOpen = !isOpen"
-      @keydown.enter.space.prevent="isOpen = !isOpen">
+    <div class="cursor-pointer flex font-semibold pt-8 pb-4 leading-none justify-between items-center text-gray-900" @click="isOpen = !isOpen">
       <span>Sale Products Only</span>
       <Icon name="ion:chevron-down-outline" class="transform text-gray-600" :class="isOpen ? 'rotate-180' : ''" />
     </div>
