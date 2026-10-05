@@ -34,7 +34,9 @@ const goToOrder = (databaseId?: string | number | null): void => {
             v-for="order in orders"
             :key="order.orderNumber || String(order.databaseId)"
             class="cursor-pointer hover:bg-gray-50 transition-colors"
-            @click="goToOrder(order.databaseId)">
+            tabindex="0"
+            @click="goToOrder(order.databaseId)"
+            @keydown.enter.self="goToOrder(order.databaseId)">
             <td class="rounded-l-lg">{{ order.orderNumber }}</td>
             <td>{{ formatDate(order.date) }}</td>
             <td><OrderStatusLabel v-if="order.status" :order="order" /></td>
