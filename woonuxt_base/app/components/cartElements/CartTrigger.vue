@@ -1,26 +1,23 @@
 <script setup>
 const { toggleCart, cartItemCount } = useCart();
 // Watch for changes in the cart count and animate the badge when the count increases
-watch(cartItemCount, (newCount, oldCount) => {
-  if (newCount > oldCount) {
-    const trigger = document.querySelector('.cart-trigger');
-    const badge = trigger?.querySelector('.cart-badge');
-    if (badge) {
-      badge.classList.add('animate-popIn');
-      setTimeout(() => badge.classList.remove('animate-popIn'), 300);
+watch(
+  cartItemCount,
+  (newCount, oldCount) => {
+    if (newCount > oldCount) {
+      const trigger = document.querySelector('.cart-trigger');
+      const badge = trigger?.querySelector('.cart-badge');
+      if (badge) {
+        badge.classList.add('animate-popIn');
+        setTimeout(() => badge.classList.remove('animate-popIn'), 300);
+      }
     }
-  }
-});
+  },
+);
 </script>
 
 <template>
-  <div
-    class="cart-trigger relative cursor-pointer inline-flex"
-    title="Cart"
-    role="button"
-    tabindex="0"
-    @click="toggleCart"
-    @keydown.enter.space.prevent="toggleCart">
+  <div class="cart-trigger relative cursor-pointer inline-flex" title="Cart" @click="toggleCart">
     <Icon name="ion:cart-outline" size="22" class="mr-1 md:mr-0" />
     <ClientOnly>
       <Transition name="popIn" mode="out-in">
