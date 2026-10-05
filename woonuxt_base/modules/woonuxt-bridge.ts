@@ -165,30 +165,34 @@ ${calls}
     let backendUrl = '';
     let settings: WooNuxtSettings = {};
 
-    try {
-      const { data } = await $fetch(GQL_HOST, {
+    const [coreSettingsResult, woonuxtSettingsResult] = await Promise.allSettled([
+      $fetch(GQL_HOST, {
         method: 'POST',
         body: JSON.stringify({ query: coreSettingsQuery }),
         headers: requestHeaders,
-      });
-
-      siteTitle = data?.generalSettings?.title || siteTitle;
-      siteDescription = data?.generalSettings?.description || siteDescription;
-      backendUrl = data?.allSettings?.generalSettingsUrl || backendUrl;
-    } catch (error) {
-      logger.error(error);
-      logger.warn('Error fetching WordPress settings. WooNuxt will continue with defaults.');
-    }
-
-    try {
-      const { data } = await $fetch(GQL_HOST, {
+      }),
+      $fetch(GQL_HOST, {
         method: 'POST',
         body: JSON.stringify({ query: woonuxtSettingsQuery }),
         headers: requestHeaders,
-      });
+      }),
+    ]);
 
+    if (coreSettingsResult.status === 'fulfilled') {
+      const { data } = coreSettingsResult.value;
+      siteTitle = data?.generalSettings?.title || siteTitle;
+      siteDescription = data?.generalSettings?.description || siteDescription;
+      backendUrl = data?.allSettings?.generalSettingsUrl || backendUrl;
+    } else {
+      logger.error(coreSettingsResult.reason);
+      logger.warn('Error fetching WordPress settings. WooNuxt will continue with defaults.');
+    }
+
+    if (woonuxtSettingsResult.status === 'fulfilled') {
+      const { data } = woonuxtSettingsResult.value;
       settings = data?.woonuxtSettings || {};
-    } catch {
+    } else {
+      logger.error(woonuxtSettingsResult.reason);
       logger.warn(
         'WooNuxt settings plugin not detected. Continuing with defaults so the store can run. Install the latest WooNuxt WordPress plugin to unlock store settings, Stripe keys, SEO profiles, colors, and filter defaults: https://github.com/scottyzen/woonuxt/releases',
       );
