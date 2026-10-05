@@ -36,7 +36,7 @@ export function useSEOFallbacks(info: ProductDetail, path: string): SeoHeadData 
     info.name ? { property: 'og:title' as const, content: info.name } : undefined,
     description ? { property: 'og:description' as const, content: description } : undefined,
     { property: 'og:image' as const, content: ogImage },
-    facebook && facebook.url ? { property: 'article:publisher' as const, content: facebook.url } : undefined,
+    facebook?.url ? { property: 'article:publisher' as const, content: facebook.url } : undefined,
     { name: 'twitter:card' as const, content: 'summary_large_image' },
     xAccount?.handle ? { name: 'twitter:site' as const, content: xAccount.handle } : undefined,
     info.name ? { name: 'twitter:title' as const, content: info.name } : undefined,
