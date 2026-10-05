@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({
+defineProps({
   product: { type: Object, default: null },
 });
 </script>

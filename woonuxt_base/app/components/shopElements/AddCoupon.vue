@@ -22,6 +22,7 @@ async function submitCoupon(): Promise<void> {
         v-model="couponCode"
         type="text"
         :placeholder="$t('shop.couponCode')"
+        :aria-label="$t('shop.couponCode')"
         class="w-full bg-gray-50 border border-gray-300 rounded-md shadow-inner outline-hidden px-4 py-2 text-base text-gray-900"
         required />
       <Button :loading="isUpdatingCoupon" :disabled="couponCode === '' || isUpdatingCoupon" type="submit" variant="primary" class="min-w-20">

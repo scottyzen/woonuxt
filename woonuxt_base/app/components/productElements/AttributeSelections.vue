@@ -292,7 +292,6 @@ const setInitialSelections = () => {
     const defaultValue = defaults.get(matchKey);
     if (defaultValue !== undefined) {
       nextSelections[key] = defaultValue ?? '';
-      return;
     }
   });
 
@@ -307,7 +306,7 @@ const setInitialSelections = () => {
   emitSelection();
 };
 
-const className = (name: string) => (name ? `name-${name.toLowerCase().split(' ').join('-')}` : '');
+const className = (name: string) => (name ? `name-${name.toLowerCase().replaceAll(' ', '-')}` : '');
 
 watch(
   () => [attributes, defaultAttributes, variations],
@@ -334,7 +333,7 @@ watch(
               <input
                 :id="`${option}_${index}`"
                 v-model="selections[attr.name || '']"
-                class="hidden"
+                class="sr-only"
                 type="radio"
                 :class="className(attr.name || '')"
                 :name="attr.name || ''"
@@ -370,11 +369,12 @@ watch(
                 <input
                   :id="`${term.slug || ''}_${termIndex}`"
                   v-model="selections[attr.name || '']"
-                  class="hidden"
+                  class="sr-only"
                   type="radio"
                   :class="className(attr.name || '')"
                   :name="attr.name || ''"
                   :value="term.slug || ''"
+                  :aria-label="term.name || term.slug || ''"
                   :aria-disabled="!isOptionEnabled(attr.name || '', term.slug || '')"
                   @change="handleSelectionChange(attr.name || '')" />
                 <span
@@ -428,7 +428,7 @@ watch(
               <input
                 :id="`${term.slug}_${index}`"
                 v-model="selections[attr.name || '']"
-                class="hidden"
+                class="sr-only"
                 type="radio"
                 :class="className(attr.name || '')"
                 :name="attr.name || ''"
@@ -500,5 +500,9 @@ watch(
 
 .attribute-selections input[type='radio']:checked ~ span {
   @apply outline-2 outline-gray-500;
+}
+
+.attribute-selections input[type='radio']:focus-visible ~ span {
+  @apply outline-2 outline-offset-2 outline-primary;
 }
 </style>

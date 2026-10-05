@@ -30,7 +30,7 @@ export function useSearching() {
   }
 
   function clearSearchQuery(): void {
-    setSearchQuery('');
+    void setSearchQuery('');
   }
 
   const toggleSearch = (): void => {

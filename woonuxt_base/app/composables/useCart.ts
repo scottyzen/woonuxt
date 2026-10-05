@@ -122,7 +122,7 @@ export function useCart() {
     const nextCart: Cart = {
       ...base,
       contents: {
-        ...(base.contents ?? {}),
+        ...base.contents,
         nodes,
         itemCount,
         productCount,
@@ -160,7 +160,7 @@ export function useCart() {
     const nextCart: Cart = {
       ...base,
       contents: {
-        ...(base.contents ?? {}),
+        ...base.contents,
         nodes,
         itemCount,
         productCount,

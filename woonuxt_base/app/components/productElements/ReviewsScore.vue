@@ -127,11 +127,11 @@ async function addComment() {
                 <label
                   v-for="i in 5"
                   :key="i"
-                  class="grid p-1 rounded-sm"
+                  class="grid p-1 rounded-sm focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-primary"
                   :class="(rating ?? 0) < i && i > hovered ? 'disable-star' : 'checked-star'"
                   @mouseover="setHovered(i)"
                   @mouseout="resetHovered">
-                  <input v-model="rating" type="radio" class="overflow-hidden hidden appearance-none opacity-0 absolute" name="rating" :value="i" required />
+                  <input v-model="rating" type="radio" class="sr-only" name="rating" :value="i" :aria-label="`${i} out of 5 stars`" required />
                   <Icon name="ion:star" :size="size + ''" />
                 </label>
               </div>
