@@ -175,7 +175,10 @@ export default defineNuxtPlugin(() => {
     }
     upsertOrderMeta('_stripe_payment_intent_id', paymentIntent.id);
     if (paymentIntent.payment_method) {
-      upsertOrderMeta('_stripe_payment_method_id', String(paymentIntent.payment_method));
+      upsertOrderMeta(
+        '_stripe_payment_method_id',
+        typeof paymentIntent.payment_method === 'string' ? paymentIntent.payment_method : ((paymentIntent.payment_method as { id?: string }).id ?? ''),
+      );
     }
     upsertOrderMeta('_stripe_source_id', paymentIntent.id);
     upsertOrderMeta('_stripe_charge_captured', 'yes');
@@ -396,7 +399,7 @@ export default defineNuxtPlugin(() => {
     if (selectedSavedToken.value) return;
     if (newId && newId !== oldId) {
       clearStripePaymentIntent();
-      initStripePaymentIntent(canSavePaymentMethod.value && savePaymentMethod.value);
+      void initStripePaymentIntent(canSavePaymentMethod.value && savePaymentMethod.value);
     }
   });
 
@@ -421,7 +424,11 @@ export default defineNuxtPlugin(() => {
     reset: resetStripeOrderMeta,
     processPayment: async () => {
       const paymentIsPaid = await confirmStripePayment();
-      return { success: paymentIsPaid, isPaid: paymentIsPaid, error: paymentIsPaid ? undefined : 'Payment was not confirmed. Please check its status before retrying.' };
+      return {
+        success: paymentIsPaid,
+        isPaid: paymentIsPaid,
+        error: paymentIsPaid ? undefined : 'Payment was not confirmed. Please check its status before retrying.',
+      };
     },
     getComponentProps: () => ({
       stripe: stripe.value,
