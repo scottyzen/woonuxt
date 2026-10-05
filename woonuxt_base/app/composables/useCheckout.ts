@@ -76,7 +76,7 @@ export function useCheckout() {
 
     try {
       const fallbackOrder = {
-        ...(checkoutOrder || {}),
+        ...checkoutOrder,
         databaseId: Number.parseInt(orderId, 10),
         orderKey,
       };
@@ -112,7 +112,7 @@ export function useCheckout() {
       const isPayPalWindowClosed = await openPayPalWindow(redirectUrl);
 
       if (isPayPalWindowClosed) {
-        router.push(`/checkout/order-received/${orderId}/?key=${orderKey}&fetch_delay=true${fallbackOrderQuery}`);
+        void router.push(`/checkout/order-received/${orderId}/?key=${orderKey}&fetch_delay=true${fallbackOrderQuery}`);
       }
     });
   };
@@ -126,7 +126,7 @@ export function useCheckout() {
   };
 
   // Helper function to finalize checkout
-  const finalizeCheckout = async (checkout: CheckoutOrder | null | undefined): Promise<void> => {
+  const finalizeCheckout = (checkout: CheckoutOrder | null | undefined): void => {
     if (checkout?.result !== 'success' && !checkout?.order?.databaseId) {
       checkoutError.value = 'There was an error processing your order. Please try again.';
     }
@@ -184,7 +184,7 @@ export function useCheckout() {
       const top = window.innerHeight / 2 - height / 2 + 80;
       const payPalWindow = window.open(redirectUrl, '', `width=${width},height=${height},top=${top},left=${left}`);
       const timer = setInterval(() => {
-        if (payPalWindow && payPalWindow.closed) {
+        if (payPalWindow?.closed) {
           clearInterval(timer);
           resolve(true);
         }
@@ -221,7 +221,7 @@ export function useCheckout() {
       // Ensure we have required order details
       if (!orderId || !orderKey) {
         if (checkout?.redirect && import.meta.client) {
-          await finalizeCheckout(checkout);
+          finalizeCheckout(checkout);
           window.location.href = checkout.redirect;
           return checkout;
         }
@@ -236,11 +236,11 @@ export function useCheckout() {
         await handlePayPalRedirect(checkout, orderId, orderKey, fallbackOrderKey);
       } else {
         // Standard redirect to order received page
-        router.push(`/checkout/order-received/${orderId}/?key=${orderKey}${fallbackOrderQuery}`);
+        void router.push(`/checkout/order-received/${orderId}/?key=${orderKey}${fallbackOrderQuery}`);
       }
 
       // Finalize the checkout
-      await finalizeCheckout(checkout);
+      finalizeCheckout(checkout);
 
       return checkout;
     } catch (error: unknown) {
