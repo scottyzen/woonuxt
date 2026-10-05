@@ -7,7 +7,7 @@ const maxPrice = Number(runtimeConfig?.public?.MAX_PRICE) || 1000;
 const currencySymbol = runtimeConfig?.public?.CURRENCY_SYMBOL || '$';
 
 const activeFilters = ref(getFilter('price'));
-const price = activeFilters.value.length ? ref(activeFilters.value.map((value) => Number(value))) : ref([0, maxPrice]);
+const price = activeFilters.value.length ? ref(activeFilters.value.map(Number)) : ref([0, maxPrice]);
 const isOpen = ref(true);
 
 const resetSlider = () => {

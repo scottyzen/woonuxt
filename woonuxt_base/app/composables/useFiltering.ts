@@ -106,7 +106,7 @@ export function useFiltering() {
           if (!attributeValues.length) return true;
           return product.terms?.nodes?.find((node: any) => node.taxonomyName === attribute && attributeValues.includes(node.slug));
         })
-        .every((condition: any) => condition);
+        .every(Boolean);
 
       // onSale filter
       const onSale = getFilter('sale');

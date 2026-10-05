@@ -234,7 +234,7 @@ export function useCart() {
   const applyCartSnapshot = (payload: CartQueryPayload): void => {
     const { updateCustomer, updateViewer, updateLoginClients } = useAuth();
     const { cart, customer, viewer, paymentGateways, loginClients } = payload;
-    const hasKey = (key: keyof CartQueryPayload) => Object.prototype.hasOwnProperty.call(payload, key);
+    const hasKey = (key: keyof CartQueryPayload) => Object.hasOwn(payload, key);
 
     if (hasKey('cart')) updateCart(cart ?? null);
     if (hasKey('viewer')) updateViewer(viewer ?? null);
@@ -254,11 +254,11 @@ export function useCart() {
     if (!candidate || typeof candidate !== 'object') return null;
 
     const hasUsableCartFields =
-      Object.prototype.hasOwnProperty.call(candidate, 'cart') ||
-      Object.prototype.hasOwnProperty.call(candidate, 'customer') ||
-      Object.prototype.hasOwnProperty.call(candidate, 'viewer') ||
-      Object.prototype.hasOwnProperty.call(candidate, 'paymentGateways') ||
-      Object.prototype.hasOwnProperty.call(candidate, 'loginClients');
+      Object.hasOwn(candidate, 'cart') ||
+      Object.hasOwn(candidate, 'customer') ||
+      Object.hasOwn(candidate, 'viewer') ||
+      Object.hasOwn(candidate, 'paymentGateways') ||
+      Object.hasOwn(candidate, 'loginClients');
 
     return hasUsableCartFields ? (candidate as CartQueryPayload) : null;
   };

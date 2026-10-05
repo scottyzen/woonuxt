@@ -11,7 +11,7 @@ const { storeSettings } = useAppConfig();
 const { hideCategories } = defineProps({ hideCategories: { type: Boolean, default: false } });
 
 const globalProductAttributes = (runtimeConfig?.public?.GLOBAL_PRODUCT_ATTRIBUTES as WooNuxtFilter[]) || [];
-const taxonomies = globalProductAttributes.map((attr) => attr?.slug?.toUpperCase().replace(/_/g, '')) as TaxonomyEnum[];
+const taxonomies = globalProductAttributes.map((attr) => attr?.slug?.toUpperCase().replaceAll('_', '')) as TaxonomyEnum[];
 
 const { data } = await useAsyncGql('getAllTerms', { taxonomies: [...taxonomies, TaxonomyEnum.Productcategory] });
 const terms = data.value?.terms?.nodes ?? [];

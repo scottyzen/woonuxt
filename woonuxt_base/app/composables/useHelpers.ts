@@ -116,7 +116,7 @@ export function useHelpers() {
     const normalized = stripHtml(price)
       .replace(/[^0-9,.-]/g, '')
       .trim();
-    const decimalNormalized = normalized.includes(',') && !normalized.includes('.') ? normalized.replace(',', '.') : normalized.replace(/,/g, '');
+    const decimalNormalized = normalized.includes(',') && !normalized.includes('.') ? normalized.replace(',', '.') : normalized.replaceAll(',', '');
     const parsed = Number.parseFloat(decimalNormalized);
 
     if (!Number.isFinite(parsed)) {
@@ -209,9 +209,7 @@ export function useHelpers() {
     return (
       !!responseData &&
       typeof responseData === 'object' &&
-      ['cart', 'customer', 'viewer', 'orders', 'downloadableItems', 'paymentGateways', 'loginClients'].some((key) =>
-        Object.prototype.hasOwnProperty.call(responseData, key),
-      )
+      ['cart', 'customer', 'viewer', 'orders', 'downloadableItems', 'paymentGateways', 'loginClients'].some((key) => Object.hasOwn(responseData, key))
     );
   };
 
