@@ -194,7 +194,7 @@ ${calls}
     } else {
       logger.error(woonuxtSettingsResult.reason);
       logger.warn(
-        'WooNuxt settings plugin not detected. Continuing with defaults so the store can run. Install the latest WooNuxt WordPress plugin to unlock store settings, Stripe keys, SEO profiles, colors, and filter defaults: https://github.com/scottyzen/woonuxt/releases',
+        'WooNuxt settings plugin not detected. Continuing with defaults so the store can run. Install the latest Settings for WooNuxt plugin to unlock store settings, Stripe keys, SEO profiles, colors, and filter defaults: https://wordpress.org/plugins/settings-for-woonuxt/',
       );
     }
 
