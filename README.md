@@ -22,8 +22,8 @@ You can find some common errors and how to fix them [here](https://woonuxt.com/f
 
 ## Get Started
 
-- Download the latest WooNuxt Settings plugin from the [woonuxt-settings releases](https://github.com/scottyzen/woonuxt-settings/releases).
-- Install and activate the plugin on your WordPress site. This will install all the required plugins for WooNuxt, add some useful fields to the WPGraphQL schema, and automatically retrieve the WooCommerce payment gateway settings for [Stripe](https://wordpress.org/plugins/woocommerce-gateway-stripe/) and [PayPal](https://woo.com/document/paypal-standard/).
+- Install the [Settings for WooNuxt](https://wordpress.org/plugins/settings-for-woonuxt/) plugin from the WordPress plugin directory (**Plugins > Add New**, search for "Settings for WooNuxt").
+- Activate it, then go to **Settings > WooNuxt** to install the required plugins and configure your storefront. This will install all the required plugins for WooNuxt, add some useful fields to the WPGraphQL schema, and automatically retrieve the WooCommerce payment gateway settings for [Stripe](https://wordpress.org/plugins/woocommerce-gateway-stripe/) and [PayPal](https://woo.com/document/paypal-standard/).
 - Once the plugin is activated you are ready to deploy WooNuxt on whatever hosting you like or click one of the fast deploy buttons below.
 - Once the plugin is activated, configure `GQL_HOST` and `NUXT_IMAGE_DOMAINS`. Check out the `.env.example` file for details.
 
@@ -239,9 +239,9 @@ Location Hooks are documented in the project docs — see the quick guide and ex
 | [WooGraphQL](https://woographql.com/)                                              | GraphQL API for WooCommerce              |
 | ~~[WPGraphQL Cors](https://github.com/funkhaus/wp-graphql-cors)~~                  | ~~Enable CORS for WPGraphQL~~            |
 | [Headless Login for WPGraphQL](https://github.com/AxeWP/wp-graphql-headless-login) | Enable headless login for WPGraphQL      |
-| [woonuxt-settings.zip](https://github.com/scottyzen/woonuxt-settings/releases)     | WooNuxt Settings plugin                  |
+| [Settings for WooNuxt](https://wordpress.org/plugins/settings-for-woonuxt/)        | WooNuxt Settings plugin                  |
 
-> **Note** The [woonuxt-settings.zip](https://github.com/scottyzen/woonuxt-settings/releases) plugin will help you install all the required plugins.
+> **Note** The [Settings for WooNuxt](https://wordpress.org/plugins/settings-for-woonuxt/) plugin will help you install all the required plugins.
 
 &nbsp;
 
