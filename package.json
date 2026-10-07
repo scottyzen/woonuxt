@@ -52,8 +52,5 @@
     "prettier": "^3.9.9",
     "typescript": "6.0.3",
     "vue-tsc": "^3.3.12"
-  },
-  "overrides": {
-    "@nuxt/devtools": "4.0.0-beta.4"
   }
 }
