@@ -1,13 +1,16 @@
 {
   "name": "woonuxt",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "nuxt build",
     "prebuild": "npm run graphql:codegen",
     "graphql:codegen": "graphql-codegen --config codegen.ts",
-    "dev": "nuxt dev --host 0.0.0.0",
+    "dev": "nuxt dev",
     "predev": "npm run graphql:codegen",
-    "dev:ssl": "NODE_TLS_REJECT_UNAUTHORIZED=0 nuxt dev --host 0.0.0.0 --https --ssl-cert localhost.pem --ssl-key localhost-key.pem",
+    "dev:host": "nuxt dev --host 0.0.0.0",
+    "predev:host": "npm run graphql:codegen",
+    "dev:ssl": "NODE_TLS_REJECT_UNAUTHORIZED=0 nuxt dev --https --ssl-cert localhost.pem --ssl-key localhost-key.pem",
     "predev:ssl": "npm run graphql:codegen",
     "generate": "nuxt generate",
     "pregenerate": "npm run graphql:codegen",
@@ -33,7 +36,7 @@
   },
   "devDependencies": {
     "@graphql-codegen/add": "^7.1.1",
-    "@graphql-codegen/cli": "^7.4.4",
+    "@graphql-codegen/cli": "^7.4.5",
     "@graphql-codegen/typescript": "6.1.1",
     "@graphql-codegen/typescript-graphql-request": "^7.1.0",
     "@graphql-codegen/typescript-operations": "6.1.10",
@@ -45,9 +48,12 @@
     "@tailwindcss/typography": "^0.5.20",
     "@vite-pwa/nuxt": "^1.1.1",
     "eslint": "^10.12.0",
-    "nuxt": "^4.5.2",
+    "nuxt": "^4.6.0",
     "prettier": "^3.9.9",
     "typescript": "6.0.3",
     "vue-tsc": "^3.3.12"
+  },
+  "overrides": {
+    "@nuxt/devtools": "4.0.0-beta.4"
   }
 }
