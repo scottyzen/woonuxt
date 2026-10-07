@@ -38,6 +38,8 @@ npm install
 npm run dev
 ```
 
+`npm run dev` binds to localhost only. Use `npm run dev:host` to expose the dev server on your network (for example to test on a phone); Nuxt warns in that mode because the dev server has no authentication.
+
 `woonuxt_base/` is the parent Nuxt layer that provides WooNuxt's storefront; it is not a separately runnable package. Add custom pages, components, and configuration in the root project as a child layer.
 
 ## Deployment
@@ -62,7 +64,7 @@ Netlify uses a static Nuxt build and Netlify Image CDN. Vercel uses Nitro's Verc
 Never set `NUXT_IMAGE_PROVIDER=ipx` on Netlify static hosting or any static export. IPX needs a running Nuxt server. Use `netlify` for Netlify, `vercel` for Vercel, and reserve `ipx` for a self-hosted Nuxt server. When unset, WooNuxt uses Nuxt Image's portable `none` provider.
 ::
 
-WooNuxt deliberately has no `.nvmrc` or `package.json#engines` entry. Use the current Node.js version supported by your host rather than adding a pin unless your own customization has a documented compatibility requirement.
+Nuxt 4.6 requires Node.js `^22.22.3 || ^24.15.0 || >=26.0.0`. Make sure your local, CI, and hosting runtimes use a supported version. WooNuxt deliberately has no `.nvmrc` or `package.json#engines` entry; configure the Node.js version in your environment rather than adding a repository pin unless your own customization has a documented compatibility requirement.
 
 ## Large Catalog ISR Setup (10K+ Products)
 
