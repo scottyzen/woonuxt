@@ -135,6 +135,7 @@ export default defineNuxtConfig({
   routeRules: {
     // Serve the LCP-critical homepage from the CDN instead of fetching catalog data per request.
     '/': { prerender: true },
+    '/categories': { prerender: true },
     // Disable prerendering for dynamic checkout/order pages
     '/checkout/order-received/**': { prerender: false },
     '/order-summary/**': { prerender: false },
