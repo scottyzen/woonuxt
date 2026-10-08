@@ -67,7 +67,7 @@ export default defineNuxtPlugin(() => {
   const { orderInput, checkoutError, resolvePaymentMethodId } = useCheckout();
   const runtimeConfig = useRuntimeConfig();
   const route = useRoute();
-  const stripeKey = runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY || null;
+  const stripeKey = typeof runtimeConfig.public?.STRIPE_PUBLISHABLE_KEY === 'string' ? runtimeConfig.public.STRIPE_PUBLISHABLE_KEY.trim() : '';
   const gql = useWooGraphQL();
 
   const stripe = useState<Stripe | null>('stripeClient', () => null);

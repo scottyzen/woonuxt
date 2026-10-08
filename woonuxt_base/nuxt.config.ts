@@ -54,7 +54,6 @@ export default defineNuxtConfig({
   },
 
   plugins: [
-    resolve('./app/plugins/gql-auth.ts'),
     resolve('./app/plugins/init.ts'),
     resolve('./app/plugins/payment-gateways/stripe.ts'),
     resolve('./app/plugins/payment-gateways/paypal.ts'),

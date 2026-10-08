@@ -1,5 +1,5 @@
 import { GraphQLClient, type RequestOptions } from 'graphql-request';
-import { ref, type Ref } from 'vue';
+import type { Ref } from 'vue';
 import type { AsyncDataOptions } from 'nuxt/app';
 import { getSdk, type Sdk, type SdkFunctionWrapper } from '#gql/default';
 
@@ -74,23 +74,22 @@ const getBaseHeaders = (): GqlHeaders => {
 };
 
 const getRequestHeaders = async ({
-  nuxtApp,
+  getAuthTokenForRequest,
   baseHeaders,
   headerState,
   requestHeaders,
 }: {
-  nuxtApp: ReturnType<typeof useNuxtApp>;
+  getAuthTokenForRequest: () => Promise<string | null>;
   baseHeaders: GqlHeaders;
   headerState: Ref<GqlHeaders>;
   requestHeaders?: GraphQLClientRequestHeaders;
 }): Promise<GqlHeaders> => {
-  const token = ref<string | undefined>();
-  await nuxtApp.callHook('gql:auth:init', { client: 'default', token });
+  const token = await getAuthTokenForRequest();
 
   return cleanHeaders({
     ...baseHeaders,
     ...headerState.value,
-    ...(token.value ? { Authorization: `Bearer ${token.value}` } : {}),
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...headersToRecord(requestHeaders),
   });
 };
@@ -147,7 +146,7 @@ export const useGqlError = (handler: GqlErrorHandler): (() => void) => {
 };
 
 export const useWooGraphQL = (): Sdk => {
-  const nuxtApp = useNuxtApp();
+  const { getAuthTokenForRequest } = useAuthTokens();
   const headerState = useGqlHeaderState();
   const clientConfig = getRuntimeClientConfig();
   const baseHeaders = getBaseHeaders();
@@ -161,7 +160,7 @@ export const useWooGraphQL = (): Sdk => {
     try {
       return await action(
         await getRequestHeaders({
-          nuxtApp,
+          getAuthTokenForRequest,
           baseHeaders,
           headerState,
         }),
