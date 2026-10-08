@@ -23,7 +23,7 @@ const config: CodegenConfig = {
       [endpoint]: schemaLoaderOptions,
     },
   ],
-  documents: ['woonuxt_base/app/queries/**/*.gql'],
+  documents: ['**/app/queries/**/*.gql'],
   generates: {
     'woonuxt_base/app/gql/schema.ts': {
       plugins: [

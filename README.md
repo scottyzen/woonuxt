@@ -274,7 +274,7 @@ This keeps the existing `.gql` files, generated operation types, and imperative 
 
 Code generation loads the root `.env` file before Nuxt starts; exported deployment variables take precedence. `GQL_HOST` is required for code generation.
 
-The SDK is regenerated automatically before `dev`, `dev:ssl`, `build`, `generate`, and `typecheck`, using the configured `GQL_HOST`. The generated `woonuxt_base/app/gql/default.ts` is ignored because it reflects each storefront's backend. Run `npm run graphql:codegen` directly when editing `.gql` files and you want immediate type updates without restarting Nuxt. Installation intentionally does not run codegen, so dependency installation stays independent of backend availability.
+The SDK is regenerated automatically before `dev`, `dev:ssl`, `build`, `generate`, and `typecheck`, using the configured `GQL_HOST`. Put custom operations and fragments in `app/queries/` (including subfolders); Codegen automatically finds every `app/queries/**/*.gql` file in the project and its Nuxt layers, so you never need to edit `codegen.ts` when adding a query. The generated `woonuxt_base/app/gql/default.ts` is ignored because it reflects each storefront's backend. Run `npm run graphql:codegen` directly when editing `.gql` files and you want immediate type updates without restarting Nuxt. Installation intentionally does not run codegen, so dependency installation stays independent of backend availability.
 
 &nbsp;
 

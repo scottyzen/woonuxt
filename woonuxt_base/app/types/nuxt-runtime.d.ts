@@ -1,5 +1,3 @@
-import type { Ref } from 'vue';
-
 type WooNuxtRuntimeGraphQLClient = {
   host: string;
   headers?: Record<string, string | undefined>;
@@ -24,11 +22,6 @@ type WooNuxtSEOConfig = {
   handle?: string | null;
 };
 
-type GqlAuthInitHookParams = {
-  client: string;
-  token: Ref<string | undefined>;
-};
-
 declare module 'nuxt/schema' {
   interface PublicRuntimeConfig {
     PRIMARY_COLOR: string;
@@ -47,18 +40,6 @@ declare module 'nuxt/schema' {
         default: WooNuxtRuntimeGraphQLClient;
       };
     };
-  }
-}
-
-declare module 'nuxt/app' {
-  interface RuntimeNuxtHooks {
-    'gql:auth:init': (params: GqlAuthInitHookParams) => void | Promise<void>;
-  }
-}
-
-declare module '#app' {
-  interface RuntimeNuxtHooks {
-    'gql:auth:init': (params: GqlAuthInitHookParams) => void | Promise<void>;
   }
 }
 
