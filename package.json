@@ -36,8 +36,8 @@
   },
   "devDependencies": {
     "@graphql-codegen/add": "^7.1.1",
-    "@graphql-codegen/cli": "^7.4.5",
-    "@graphql-codegen/typescript": "6.1.1",
+    "@graphql-codegen/cli": "^7.4.6",
+    "@graphql-codegen/typescript": "6.1.2",
     "@graphql-codegen/typescript-graphql-request": "^7.1.0",
     "@graphql-codegen/typescript-operations": "6.1.10",
     "@iconify-json/ion": "^1.2.7",
@@ -48,9 +48,9 @@
     "@tailwindcss/typography": "^0.5.20",
     "@vite-pwa/nuxt": "^1.1.1",
     "eslint": "^10.12.0",
-    "nuxt": "^4.6.0",
-    "prettier": "^3.9.9",
+    "nuxt": "^4.6.1",
+    "prettier": "^3.9.10",
     "typescript": "6.0.3",
-    "vue-tsc": "^3.3.12"
+    "vue-tsc": "^3.3.13"
   }
 }
