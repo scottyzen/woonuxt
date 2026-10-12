@@ -284,11 +284,11 @@ The SDK is regenerated automatically before `dev`, `dev:ssl`, `build`, `generate
 | ---------------------------- | ------- |
 | WordPress                    | 7.0.1   |
 | WooCommerce                  | 10.9.4  |
-| WPGraphQL                    | 2.18.0  |
+| WPGraphQL                    | 2.23.1  |
 | WooGraphQL                   | 1.0.3   |
 | ~~WPGraphQL CORS~~           | ~~2.1~~ |
 | Headless Login for WPGraphQL | 0.4.4   |
-| Node                         | 22.22.2 |
+| Node                         | 22.22.3 |
 | PHP                          | 8.4     |
 
 ### Current translations
