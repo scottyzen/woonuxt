@@ -56,7 +56,7 @@ export function useFiltering() {
       query: { ...route.query, filter: newFilterQuery || undefined },
     });
 
-    await updateProductList();
+    updateProductList();
   }
 
   /**
@@ -65,7 +65,7 @@ export function useFiltering() {
   async function resetFilter(): Promise<void> {
     const { scrollToTop } = useHelpers();
     await router.push({ query: { ...route.query, filter: undefined } });
-    await updateProductList();
+    updateProductList();
     scrollToTop();
   }
 

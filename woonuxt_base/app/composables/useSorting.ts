@@ -20,7 +20,7 @@ export function useSorting() {
 
   async function setOrderQuery(orderby: string, order?: string): Promise<void> {
     await router.push({ query: { ...route.query, orderby: orderby ?? undefined, order: order ?? undefined } });
-    await updateProductList();
+    updateProductList();
   }
 
   const isSortingActive = computed<boolean>(() => !!orderQuery.value);
