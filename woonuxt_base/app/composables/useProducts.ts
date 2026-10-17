@@ -35,8 +35,7 @@ export function useProducts() {
     return newProducts;
   }
 
-  // Named async function for better performance and debugging
-  async function updateProductList(): Promise<void> {
+  function updateProductList(): void {
     const { scrollToTop } = useHelpers();
     const { isSortingActive } = useSorting();
     const { isFiltersActive } = useFiltering();
