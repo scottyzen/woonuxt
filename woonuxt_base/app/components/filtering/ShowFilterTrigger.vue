@@ -1,6 +1,6 @@
 <script setup>
 const { toggleBodyClass, removeBodyClass } = useHelpers();
-const { isFiltersActive } = await useFiltering();
+const { isFiltersActive } = useFiltering();
 onBeforeUnmount(() => {
   removeBodyClass('show-filters');
 });
