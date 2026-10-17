@@ -1,5 +1,5 @@
 <script setup>
-const { getOrderQuery, setOrderQuery } = await useSorting();
+const { getOrderQuery, setOrderQuery } = useSorting();
 const { storeSettings } = useAppConfig();
 const selectedOrder = ref(getOrderQuery());
 const orderby = ref(selectedOrder.value.orderBy || 'date');
