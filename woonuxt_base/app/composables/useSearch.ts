@@ -26,7 +26,7 @@ export function useSearching() {
     } else {
       await router.push({ name: 'products', query });
     }
-    await updateProductList();
+    updateProductList();
   }
 
   function clearSearchQuery(): void {
