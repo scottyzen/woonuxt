@@ -50,7 +50,7 @@
           :required="true" />
       </div>
       <Transition name="scale-y" mode="out-in">
-        <div v-if="message" class="my-4 text-sm text-green-500" v-html="message"></div>
+        <div v-if="message" class="my-4 text-sm text-green-500">{{ message }}</div>
       </Transition>
 
       <!-- Login button -->
@@ -68,7 +68,7 @@
     </div>
 
     <Transition name="scale-y" mode="out-in">
-      <div v-if="errorMessage" class="my-4 text-sm text-red-500" v-html="errorMessage"></div>
+      <div v-if="errorMessage" class="my-4 text-sm text-red-500">{{ errorMessage }}</div>
     </Transition>
   </div>
 </template>
