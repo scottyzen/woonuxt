@@ -1,4 +1,5 @@
 import pkg from '../../../woonuxt_base/package.json';
+import { useToggle } from '@vueuse/core';
 
 // A collection of helper functions.
 export function useHelpers() {
@@ -13,12 +14,15 @@ export function useHelpers() {
   const isDev: boolean = import.meta.dev;
   const FALLBACK_IMG = '/images/placeholder.jpg';
 
-  /**
-   * Toggles the mobile menu.
-   */
-  function toggleMobileMenu(state: boolean | undefined = undefined): void {
-    isShowingMobileMenu.value = state ?? !isShowingMobileMenu.value;
-  }
+  /** Cookie options shared by client-managed storefront sessions. */
+  const getSessionCookieOptions = (domain?: string) => ({
+    path: '/',
+    sameSite: 'lax' as const,
+    secure: requestOrigin?.startsWith('https://') ?? false,
+    ...(domain ? { domain } : {}),
+  });
+
+  const toggleMobileMenu = useToggle(isShowingMobileMenu);
 
   /**
    * Clears all cookies.
@@ -55,9 +59,24 @@ export function useHelpers() {
    * @returns {string} The updated URL.
    */
   function replaceQueryParam(param: string, newval: string, search: string): string {
-    const regex = new RegExp('([?;&])' + param + '[^&;]*[;&]?');
-    const query = search.replace(regex, '$1').replace(/&$/, '');
-    return (query.length > 2 ? query + '&' : '?') + (newval ? param + '=' + newval : '');
+    try {
+      const url = new URL(search, requestOrigin || 'http://localhost');
+      url.searchParams.set(param, newval);
+      return url.toString();
+    } catch {
+      return search;
+    }
+  }
+
+  /** Only permit web URLs before navigating to a payment-provider response. */
+  function getSafeRedirectUrl(url: string | null | undefined): string | null {
+    if (!import.meta.client || !url) return null;
+    try {
+      const parsed = new URL(url, window.location.origin);
+      return parsed.protocol === 'https:' || (parsed.protocol === 'http:' && parsed.origin === window.location.origin) ? parsed.href : null;
+    } catch {
+      return null;
+    }
   }
 
   /**
@@ -141,20 +160,6 @@ export function useHelpers() {
    */
   const stripHtml = (str: string | null | undefined = ''): string => {
     return str === null ? '' : str.replace(/<[^>]+>/g, '');
-  };
-
-  /**
-   * Debounces a function.
-   * @param {Function}
-   * @param {number} delay - The delay in milliseconds.
-   * @returns {Function} The debounced function.
-   */
-  const debounce = (func: (...args: unknown[]) => unknown, delay: number = 100) => {
-    let inDebounce: NodeJS.Timeout;
-    return function (this: any, ...args: any[]) {
-      clearTimeout(inDebounce);
-      inDebounce = setTimeout(() => func.apply(this, args), delay);
-    };
   };
 
   type GqlErrorMessage = { message?: string | null };
@@ -333,11 +338,13 @@ export function useHelpers() {
     wooNuxtSEO,
     frontEndUrl,
     isDev,
+    getSessionCookieOptions,
     checkGraphQLExtensions,
     FALLBACK_IMG,
     clearAllCookies,
     clearAllLocalStorage,
     replaceQueryParam,
+    getSafeRedirectUrl,
     addBodyClass,
     removeBodyClass,
     toggleBodyClass,
@@ -346,7 +353,6 @@ export function useHelpers() {
     formatPrice,
     scrollToTop,
     stripHtml,
-    debounce,
     getErrorContext,
     getErrorMessage,
     getDomain,
