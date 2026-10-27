@@ -2,11 +2,11 @@ export default defineNuxtPlugin((nuxtApp) => {
   if (import.meta.server) return;
 
   const { storeSettings } = useAppConfig();
-  const { clearAllCookies, getDomain, getErrorContext } = useHelpers();
+  const { clearAllCookies, getDomain, getErrorContext, getSessionCookieOptions } = useHelpers();
   const { clearActiveAuthToken, refreshAuthToken } = useAuthTokens();
   const { refreshCart, refreshCartSummary } = useCart();
-  const sessionToken = useCookie('woocommerce-session', { domain: getDomain(window.location.href), path: '/' });
-  const fallbackSessionToken = useCookie('woocommerce-session', { path: '/' });
+  const sessionToken = useCookie('woocommerce-session', getSessionCookieOptions(getDomain(window.location.href)));
+  const fallbackSessionToken = useCookie('woocommerce-session', getSessionCookieOptions());
   const wooSessionToken = sessionToken.value || fallbackSessionToken.value;
   if (wooSessionToken) useGqlHeaders({ 'woocommerce-session': `Session ${wooSessionToken}` });
 
@@ -27,9 +27,9 @@ export default defineNuxtPlugin((nuxtApp) => {
   };
 
   const hasKnownSession = (): boolean => {
-    const authToken = useCookie('auth-token', { path: '/' });
-    const refreshToken = useCookie('auth-refresh-token', { path: '/' });
-    const legacyGqlToken = useCookie('gql:default', { path: '/' });
+    const authToken = useCookie('auth-token', getSessionCookieOptions());
+    const refreshToken = useCookie('auth-refresh-token', getSessionCookieOptions());
+    const legacyGqlToken = useCookie('gql:default', getSessionCookieOptions());
 
     return !!(wooSessionToken || authToken.value || refreshToken.value || legacyGqlToken.value);
   };
