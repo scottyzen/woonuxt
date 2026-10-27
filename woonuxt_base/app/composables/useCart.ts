@@ -23,7 +23,7 @@ export function useCart() {
   const optimisticHadError = useState<boolean>('optimisticHadError', () => false);
   const cartItemCount = useState<number>('cartItemCount', () => 0);
   const paymentGateways = useState<PaymentGateways | null>('paymentGateways', () => null);
-  const { getDomain, getErrorContext, getErrorMessage } = useHelpers();
+  const { getDomain, getErrorContext, getErrorMessage, getSessionCookieOptions } = useHelpers();
   const gql = useWooGraphQL();
 
   type CartNode = NonNullable<NonNullable<Cart['contents']>['nodes']>[number];
@@ -226,8 +226,7 @@ export function useCart() {
 
     if (!import.meta.client) return;
     const domain = getDomain(window.location.href);
-    const cookieOptions = domain ? { domain, path: '/' } : { path: '/' };
-    const sessionCookie = useCookie<string | null>('woocommerce-session', cookieOptions);
+    const sessionCookie = useCookie<string | null>('woocommerce-session', getSessionCookieOptions(domain || undefined));
     sessionCookie.value = token;
   };
 
@@ -272,8 +271,8 @@ export function useCart() {
   };
 
   const hasAuthCookies = (): boolean => {
-    const authToken = useCookie<string | null>('auth-token', { path: '/' });
-    const refreshToken = useCookie<string | null>('auth-refresh-token', { path: '/' });
+    const authToken = useCookie<string | null>('auth-token', getSessionCookieOptions());
+    const refreshToken = useCookie<string | null>('auth-refresh-token', getSessionCookieOptions());
     return !!(authToken.value || refreshToken.value);
   };
 
@@ -357,8 +356,8 @@ export function useCart() {
           updateViewer(null);
 
           const sessionCookie = import.meta.client
-            ? useCookie<string | null>('woocommerce-session', { domain: getDomain(window.location.href), path: '/' }).value ||
-              useCookie<string | null>('woocommerce-session', { path: '/' }).value
+            ? useCookie<string | null>('woocommerce-session', getSessionCookieOptions(getDomain(window.location.href))).value ||
+              useCookie<string | null>('woocommerce-session', getSessionCookieOptions()).value
             : null;
 
           if (!sessionCookie) {
