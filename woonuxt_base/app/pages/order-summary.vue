@@ -30,8 +30,8 @@ const readStoredOrderFallback = (): Order | null => {
   const storageKey = `woonuxt:order-fallback:${fallbackKey}`;
 
   try {
-    const rawFallback = window.localStorage.getItem(storageKey);
-    window.localStorage.removeItem(storageKey);
+    const rawFallback = window.sessionStorage.getItem(storageKey);
+    window.sessionStorage.removeItem(storageKey);
     if (!rawFallback) return null;
 
     const parsedFallback = JSON.parse(rawFallback) as Order;
@@ -42,7 +42,7 @@ const readStoredOrderFallback = (): Order | null => {
 
     return parsedFallback;
   } catch {
-    window.localStorage.removeItem(storageKey);
+    window.sessionStorage.removeItem(storageKey);
     return null;
   }
 };

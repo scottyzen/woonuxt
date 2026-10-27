@@ -13,7 +13,15 @@
       <!-- Form Fields -->
       <div class="grid p-6 md:p-8 gap-6 md:grid-cols-2">
         <label for="change-password-username" class="sr-only">Username</label>
-        <input id="change-password-username" type="text" :value="viewer?.username || ''" name="username" autocomplete="username" class="sr-only" tabindex="-1" readonly />
+        <input
+          id="change-password-username"
+          type="text"
+          :value="viewer?.username || ''"
+          name="username"
+          autocomplete="username"
+          class="sr-only"
+          tabindex="-1"
+          readonly />
 
         <div class="w-full space-y-2">
           <label for="new-password" class="block text-sm font-medium text-gray-700">{{ $t('account.newPassword') }}</label>
@@ -55,7 +63,7 @@
         <Transition name="scale-y" mode="out-in">
           <div v-if="errorMessage" class="col-span-full p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
             <Icon name="ion:alert-circle" size="20" class="text-red-600 shrink-0 mt-0.5" />
-            <div class="text-sm text-red-800" v-html="errorMessage"></div>
+            <div class="text-sm text-red-800">{{ errorMessage }}</div>
           </div>
         </Transition>
       </div>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { useDebounceFn } from '@vueuse/core';
+
 const { updateItemQuantity, isUpdatingCart, cart } = useCart();
-const { debounce } = useHelpers();
 
 const { item } = defineProps({ item: { type: Object, required: true } });
 
@@ -12,11 +13,15 @@ const isOptimisticItem = computed(() => String(item.key || '').startsWith('optim
 const incrementQuantity = () => quantity.value++;
 const decrementQuantity = () => quantity.value--;
 
-const debouncedUpdateQuantity = debounce((qty: unknown) => {
-  if (Number.isFinite(qty as number) && (qty as number) >= 0) updateItemQuantity(item.key, qty as number);
+const debouncedUpdateQuantity = useDebounceFn((qty: number) => {
+  if (Number.isFinite(qty) && qty >= 0) void updateItemQuantity(item.key, qty);
 }, 250);
 
-watch(quantity, debouncedUpdateQuantity);
+watch(quantity, (value) => void debouncedUpdateQuantity(Number(value)));
+
+// Preserve a cart change when navigation or a conditional render unmounts this
+// component before the debounce delay expires.
+onBeforeUnmount(() => void debouncedUpdateQuantity.flush());
 
 const onFocusOut = () => {
   if (quantity.value === '') {
@@ -26,6 +31,7 @@ const onFocusOut = () => {
       quantity.value = cartItem.quantity;
     }
   }
+  void debouncedUpdateQuantity.flush();
 };
 </script>
 

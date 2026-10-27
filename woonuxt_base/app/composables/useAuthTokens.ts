@@ -25,12 +25,12 @@ const parseJwtExpiry = (token?: string | null): number => {
 
 export const useAuthTokens = () => {
   const nuxtApp = useNuxtApp();
-  const { getDomain } = useHelpers();
+  const { getDomain, getSessionCookieOptions } = useHelpers();
   const runtimeConfig = useRuntimeConfig();
   const authToken = useState<string | null>('authToken', () => null);
-  const authTokenCookie = useCookie<string | null>(AUTH_TOKEN_COOKIE, { path: '/', sameSite: 'lax' });
-  const refreshToken = useCookie<string | null>(REFRESH_TOKEN_COOKIE, { path: '/', sameSite: 'lax' });
-  const legacyGqlToken = useCookie<string | null>(LEGACY_GQL_TOKEN_COOKIE, { path: '/' });
+  const authTokenCookie = useCookie<string | null>(AUTH_TOKEN_COOKIE, getSessionCookieOptions());
+  const refreshToken = useCookie<string | null>(REFRESH_TOKEN_COOKIE, getSessionCookieOptions());
+  const legacyGqlToken = useCookie<string | null>(LEGACY_GQL_TOKEN_COOKIE, getSessionCookieOptions());
 
   const now = () => Math.floor(Date.now() / 1000);
 
@@ -81,8 +81,8 @@ export const useAuthTokens = () => {
     if (!endpoint) return null;
 
     const wooSession = import.meta.client
-      ? useCookie<string | null>('woocommerce-session', { domain: getDomain(window.location.href), path: '/' }).value ||
-        useCookie<string | null>('woocommerce-session', { path: '/' }).value
+      ? useCookie<string | null>('woocommerce-session', getSessionCookieOptions(getDomain(window.location.href))).value ||
+        useCookie<string | null>('woocommerce-session', getSessionCookieOptions()).value
       : null;
 
     const controller = new AbortController();

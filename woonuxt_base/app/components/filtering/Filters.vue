@@ -2,6 +2,8 @@
 import { TaxonomyEnum } from '#gql/default';
 import type { WooNuxtFilter } from '#types/gql';
 
+defineOptions({ inheritAttrs: false });
+
 const { isFiltersActive } = useFiltering();
 const { removeBodyClass } = useHelpers();
 const runtimeConfig = useRuntimeConfig();
@@ -24,7 +26,7 @@ const attributesWithTerms = globalProductAttributes.map((attr) => ({ ...attr, te
 </script>
 
 <template>
-  <aside id="filters">
+  <aside id="filters" v-bind="$attrs">
     <OrderByDropdown class="block w-full md:hidden" />
     <div class="relative z-30 grid mb-12 divide-y divide-gray-200 filters-container">
       <PriceFilter />

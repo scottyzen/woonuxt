@@ -20,7 +20,7 @@ const OAUTH_LOGIN_ERROR =
 
 export const useAuth = () => {
   const { refreshCart, updateCart } = useCart();
-  const { clearAllCookies, getDomain, getErrorMessage } = useHelpers();
+  const { clearAllCookies, getDomain, getErrorMessage, getSessionCookieOptions } = useHelpers();
   const { refreshAuthToken, clearAuthSession, setAuthSessionFromLogin } = useAuthTokens();
   const router = useRouter();
   const gql = useWooGraphQL();
@@ -52,17 +52,17 @@ export const useAuth = () => {
 
     useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken}` });
     const domain = import.meta.client ? getDomain(window.location.href) : '';
-    useCookie<string | null>('woocommerce-session', domain ? { domain, path: '/' } : { path: '/' }).value = sessionToken;
+    useCookie<string | null>('woocommerce-session', getSessionCookieOptions(domain || undefined)).value = sessionToken;
   };
 
   const clearWooSession = (): void => {
     useGqlHeaders({ 'woocommerce-session': '' });
     if (!import.meta.client) return;
 
-    useCookie<string | null>('woocommerce-session', { path: '/' }).value = null;
+    useCookie<string | null>('woocommerce-session', getSessionCookieOptions()).value = null;
     const domain = getDomain(window.location.href);
     if (domain) {
-      useCookie<string | null>('woocommerce-session', { domain, path: '/' }).value = null;
+      useCookie<string | null>('woocommerce-session', getSessionCookieOptions(domain)).value = null;
     }
   };
 
