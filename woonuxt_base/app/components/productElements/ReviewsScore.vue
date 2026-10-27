@@ -156,10 +156,10 @@ async function addComment() {
                 required />
             </div>
             <Transition name="scale-y" mode="out-in">
-              <div v-if="errorMessage" class="my-4 text-sm text-red-500" v-html="errorMessage"></div>
+              <div v-if="errorMessage" class="my-4 text-sm text-red-500">{{ errorMessage }}</div>
             </Transition>
             <Transition name="scale-y" mode="out-in">
-              <div v-if="successMessage" class="my-4 text-sm text-green-500" v-html="successMessage"></div>
+              <div v-if="successMessage" class="my-4 text-sm text-green-500">{{ successMessage }}</div>
             </Transition>
             <div class="w-full col-span-full text-center mt-3">
               <Button :loading="isPending" type="submit" variant="primary" class="w-full">
