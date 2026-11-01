@@ -42,16 +42,16 @@
     "@graphql-codegen/typescript-operations": "6.2.0",
     "@iconify-json/ion": "^1.2.7",
     "@nuxt/eslint": "^1.17.0",
-    "@nuxt/icon": "^2.6.1",
-    "@nuxt/image": "2.2.0",
+    "@nuxt/icon": "^2.6.2",
+    "@nuxt/image": "2.2.1",
     "@nuxtjs/i18n": "^10.6.0",
     "@tailwindcss/typography": "^0.5.20",
     "@vite-pwa/nuxt": "^1.1.1",
-    "eslint": "^10.13.0",
+    "eslint": "^10.14.0",
     "nuxt": "^4.6.3",
     "prettier": "^3.9.10",
     "typescript": "6.0.3",
-    "vue-i18n": "11.4.16",
-    "vue-tsc": "^3.3.13"
+    "vue-i18n": "11.4.17",
+    "vue-tsc": "^3.3.14"
   }
 }
