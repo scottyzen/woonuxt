@@ -1,8 +1,12 @@
 import type { AddToCartInput, ApiResponse, Cart, Customer, PaymentGateways, ProductDetail, SimpleProduct, Variation } from '#types/gql';
+import { createEmptyCart, WOO_SESSION_KEY } from '#constants';
 import type { GetCartQuery, GetCartSummaryQuery } from '#gql/default';
 
 let cartMutationQueue: Promise<void> = Promise.resolve();
 let refreshCartInFlight: Promise<boolean> | null = null;
+// Add-to-cart mutations that are queued but have not been sent yet, keyed by product/variation/extra data.
+// Rapid repeat clicks add to the queued quantity instead of queueing another network request.
+const pendingAddToCart = new Map<string, { quantity: number }>();
 
 /**
  * @name useCart
@@ -38,15 +42,7 @@ export function useCart() {
     return Number.isFinite(qty) && qty > 0 ? qty : fallback;
   };
 
-  const buildEmptyCart = (): Cart =>
-    ({
-      isEmpty: true,
-      contents: {
-        itemCount: 0,
-        productCount: 0,
-        nodes: [],
-      },
-    }) as unknown as Cart;
+  const buildEmptyCart = (): Cart => createEmptyCart() as unknown as Cart;
 
   const getOptimisticBase = (): Cart => cart.value ?? buildEmptyCart();
 
@@ -222,11 +218,11 @@ export function useCart() {
 
   const syncWooSession = (token?: string | null): void => {
     if (!token) return;
-    useGqlHeaders({ 'woocommerce-session': `Session ${token}` });
+    useGqlHeaders({ [WOO_SESSION_KEY]: `Session ${token}` });
 
     if (!import.meta.client) return;
     const domain = getDomain(window.location.href);
-    const sessionCookie = useCookie<string | null>('woocommerce-session', getSessionCookieOptions(domain || undefined));
+    const sessionCookie = useCookie<string | null>(WOO_SESSION_KEY, getSessionCookieOptions(domain || undefined));
     sessionCookie.value = token;
   };
 
@@ -356,8 +352,8 @@ export function useCart() {
           updateViewer(null);
 
           const sessionCookie = import.meta.client
-            ? useCookie<string | null>('woocommerce-session', getSessionCookieOptions(getDomain(window.location.href))).value ||
-              useCookie<string | null>('woocommerce-session', getSessionCookieOptions()).value
+            ? useCookie<string | null>(WOO_SESSION_KEY, getSessionCookieOptions(getDomain(window.location.href))).value ||
+              useCookie<string | null>(WOO_SESSION_KEY, getSessionCookieOptions()).value
             : null;
 
           if (!sessionCookie) {
@@ -421,16 +417,28 @@ export function useCart() {
 
     try {
       if (canOptimistic) {
-        runOptimisticMutation(
-          () => {
-            applyOptimisticAdd(optimistic, quantity);
-            if (storeSettings.autoOpenCart && !isShowingCart.value) toggleCart(true);
-          },
-          async () => {
-            const { addToCart } = await gql.addToCart({ input: { ...input, quantity } });
-            return addToCart?.cart ?? null;
-          },
-        );
+        const showOptimisticAdd = () => {
+          applyOptimisticAdd(optimistic, quantity);
+          if (storeSettings.autoOpenCart && !isShowingCart.value) toggleCart(true);
+        };
+
+        const batchKey = JSON.stringify({ ...input, quantity: undefined });
+        const queued = pendingAddToCart.get(batchKey);
+
+        if (queued) {
+          queued.quantity += quantity;
+          showOptimisticAdd();
+          return;
+        }
+
+        const batch = { quantity };
+        pendingAddToCart.set(batchKey, batch);
+        runOptimisticMutation(showOptimisticAdd, async () => {
+          // Stop accepting clicks into this batch once the request is about to be sent.
+          pendingAddToCart.delete(batchKey);
+          const { addToCart } = await gql.addToCart({ input: { ...input, quantity: batch.quantity } });
+          return addToCart?.cart ?? null;
+        });
         return;
       }
 

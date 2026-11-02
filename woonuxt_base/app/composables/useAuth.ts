@@ -1,3 +1,4 @@
+import { WOO_SESSION_KEY } from '#constants';
 import type {
   ApiResponse,
   AuthResponse,
@@ -50,19 +51,19 @@ export const useAuth = () => {
   const setWooSession = (sessionToken?: string | null): void => {
     if (!sessionToken) return;
 
-    useGqlHeaders({ 'woocommerce-session': `Session ${sessionToken}` });
+    useGqlHeaders({ [WOO_SESSION_KEY]: `Session ${sessionToken}` });
     const domain = import.meta.client ? getDomain(window.location.href) : '';
-    useCookie<string | null>('woocommerce-session', getSessionCookieOptions(domain || undefined)).value = sessionToken;
+    useCookie<string | null>(WOO_SESSION_KEY, getSessionCookieOptions(domain || undefined)).value = sessionToken;
   };
 
   const clearWooSession = (): void => {
-    useGqlHeaders({ 'woocommerce-session': '' });
+    useGqlHeaders({ [WOO_SESSION_KEY]: '' });
     if (!import.meta.client) return;
 
-    useCookie<string | null>('woocommerce-session', getSessionCookieOptions()).value = null;
+    useCookie<string | null>(WOO_SESSION_KEY, getSessionCookieOptions()).value = null;
     const domain = getDomain(window.location.href);
     if (domain) {
-      useCookie<string | null>('woocommerce-session', getSessionCookieOptions(domain)).value = null;
+      useCookie<string | null>(WOO_SESSION_KEY, getSessionCookieOptions(domain)).value = null;
     }
   };
 

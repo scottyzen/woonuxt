@@ -1,3 +1,4 @@
+import { WOO_SESSION_KEY } from '#constants';
 import { GraphQLClient, type RequestOptions } from 'graphql-request';
 import type { Ref } from 'vue';
 import type { AsyncDataOptions } from 'nuxt/app';
@@ -145,6 +146,26 @@ export const useGqlError = (handler: GqlErrorHandler): (() => void) => {
   return () => errorHandlers.delete(handler);
 };
 
+// WPGraphQL-WooCommerce returns the guest session token on every response. It must be stored and sent back,
+// otherwise each mutation (e.g. addToCart) starts a brand new session and the cart never accumulates.
+const createSessionAwareFetch = (headerState: Ref<GqlHeaders>): typeof fetch => {
+  const { getDomain, getSessionCookieOptions } = useHelpers();
+  // Created up front so the cookie can be written later without needing the Nuxt context.
+  const sessionCookie = import.meta.client
+    ? useCookie<string | null>(WOO_SESSION_KEY, getSessionCookieOptions(getDomain(window.location.href) || undefined))
+    : null;
+
+  return async (input, init) => {
+    const response = await fetch(input, init);
+    const token = response.headers.get(WOO_SESSION_KEY)?.replace(/^Session\s+/i, '');
+    if (token && headerState.value[WOO_SESSION_KEY] !== `Session ${token}`) {
+      headerState.value[WOO_SESSION_KEY] = `Session ${token}`;
+      if (sessionCookie) sessionCookie.value = token;
+    }
+    return response;
+  };
+};
+
 export const useWooGraphQL = (): Sdk => {
   const { getAuthTokenForRequest } = useAuthTokens();
   const headerState = useGqlHeaderState();
@@ -154,6 +175,7 @@ export const useWooGraphQL = (): Sdk => {
     credentials: clientConfig.fetchOptions?.credentials ?? 'include',
     mode: clientConfig.fetchOptions?.mode ?? 'cors',
     headers: baseHeaders,
+    fetch: createSessionAwareFetch(headerState),
   });
 
   const wrapper: SdkFunctionWrapper = async (action, _operationName, _operationType, _variables) => {

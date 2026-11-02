@@ -1,3 +1,4 @@
+import { WOO_SESSION_KEY } from '#constants';
 export default defineNuxtPlugin((nuxtApp) => {
   if (import.meta.server) return;
 
@@ -5,10 +6,10 @@ export default defineNuxtPlugin((nuxtApp) => {
   const { clearAllCookies, getDomain, getErrorContext, getSessionCookieOptions } = useHelpers();
   const { clearActiveAuthToken, refreshAuthToken } = useAuthTokens();
   const { refreshCart, refreshCartSummary } = useCart();
-  const sessionToken = useCookie('woocommerce-session', getSessionCookieOptions(getDomain(window.location.href)));
-  const fallbackSessionToken = useCookie('woocommerce-session', getSessionCookieOptions());
+  const sessionToken = useCookie(WOO_SESSION_KEY, getSessionCookieOptions(getDomain(window.location.href)));
+  const fallbackSessionToken = useCookie(WOO_SESSION_KEY, getSessionCookieOptions());
   const wooSessionToken = sessionToken.value || fallbackSessionToken.value;
-  if (wooSessionToken) useGqlHeaders({ 'woocommerce-session': `Session ${wooSessionToken}` });
+  if (wooSessionToken) useGqlHeaders({ [WOO_SESSION_KEY]: `Session ${wooSessionToken}` });
 
   if (import.meta.dev && 'serviceWorker' in navigator) {
     void navigator.serviceWorker.getRegistrations().then(async (registrations) => {
@@ -76,7 +77,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     if (!success) {
       // Wrapped with runWithContext: useGqlHeaders is called after an `await`, where the ambient Nuxt
       // instance can otherwise be lost on the client. See NUXT_E1001.
-      nuxtApp.runWithContext(() => useGqlHeaders({ 'woocommerce-session': '' }));
+      nuxtApp.runWithContext(() => useGqlHeaders({ [WOO_SESSION_KEY]: '' }));
       await refreshCart();
     }
   }

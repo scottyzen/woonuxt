@@ -1,3 +1,4 @@
+import { WOO_SESSION_KEY } from '#constants';
 import type { LoginSession } from '#types/gql';
 
 const REFRESH_TOKEN_COOKIE = 'auth-refresh-token';
@@ -81,8 +82,8 @@ export const useAuthTokens = () => {
     if (!endpoint) return null;
 
     const wooSession = import.meta.client
-      ? useCookie<string | null>('woocommerce-session', getSessionCookieOptions(getDomain(window.location.href))).value ||
-        useCookie<string | null>('woocommerce-session', getSessionCookieOptions()).value
+      ? useCookie<string | null>(WOO_SESSION_KEY, getSessionCookieOptions(getDomain(window.location.href))).value ||
+        useCookie<string | null>(WOO_SESSION_KEY, getSessionCookieOptions()).value
       : null;
 
     const controller = new AbortController();
@@ -96,7 +97,7 @@ export const useAuthTokens = () => {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/graphql-response+json, application/json',
-        ...(wooSession ? { 'woocommerce-session': `Session ${wooSession}` } : {}),
+        ...(wooSession ? { [WOO_SESSION_KEY]: `Session ${wooSession}` } : {}),
       },
       body: JSON.stringify({
         query: `mutation refreshToken($token: String!) {
