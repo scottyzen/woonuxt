@@ -42,6 +42,17 @@ npm run dev
 
 `woonuxt_base/` is the parent Nuxt layer that provides WooNuxt's storefront; it is not a separately runnable package. Add custom pages, components, and configuration in the root project as a child layer.
 
+## Updating WooNuxt
+
+Forks and customized storefronts can pull in the latest WooNuxt release with:
+
+```bash
+npm run update:woonuxt -- --dry-run   # preview what would change
+npm run update:woonuxt                # update to the latest release
+```
+
+The script does a 3-way merge between the upstream release matching your current `woonuxt_base/package.json` version, the latest upstream release, and your files. Untouched files are updated, customized files are merged, and overlapping edits are left with `<<<<<<<` conflict markers to resolve. Commit your work first so you can review the result with `git diff`. Options: `--tag <version>` to pin a release, `--no-install` to skip `npm install`.
+
 ## Deployment
 
 Netlify uses a static Nuxt build and Netlify Image CDN. Vercel uses Nitro's Vercel server preset so Vercel Image Optimization and WooNuxt's ISR route rules run at request time. Publishing the `dist` folder instead of `.output/public` for a static build serves prerendered HTML without Nuxt's hashed `/_nuxt` JS/CSS bundle — the deploy loads a blank/broken page.
@@ -284,7 +295,7 @@ The SDK is regenerated automatically before `dev`, `dev:ssl`, `build`, `generate
 | ---------------------------- | ------- |
 | WordPress                    | 7.0.1   |
 | WooCommerce                  | 10.9.4  |
-| WPGraphQL                    | 2.23.1  |
+| WPGraphQL                    | 2.26.0  |
 | WooGraphQL                   | 1.0.3   |
 | ~~WPGraphQL CORS~~           | ~~2.1~~ |
 | Headless Login for WPGraphQL | 0.4.4   |
