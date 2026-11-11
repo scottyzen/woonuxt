@@ -29,6 +29,14 @@ You can find some common errors and how to fix them [here](https://woonuxt.com/f
 
 [![button](https://user-images.githubusercontent.com/5116925/218880214-a16287a7-fd8c-4299-9e65-0871136f0771.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/scottyzen/woonuxt) [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fscottyzen%2Fwoonuxt&repository-name=WooNuxt&env=GQL_HOST,NUXT_IMAGE_DOMAINS)
 
+### Deploy on Deplo
+
+Copy WooNuxt into your Git account and deploy the storefront on your own [Deplo](https://deplo.build) instance:
+
+[![Deploy on Deplo](https://deplo.build/button.svg)](https://deplo.build/deploy?repo=https://github.com/scottyzen/woonuxt)
+
+Requires Deplo 0.8.2 or later. Complete the WordPress setup above and set `GQL_HOST` and `NUXT_IMAGE_DOMAINS` in Deplo before deploying. See [`.env.example`](./.env.example) for the storefront settings and the [deploy button guide](https://deplo.build/docs/guides/deploy/deploy-button) for the button flow.
+
 ### Local development
 
 Run all project commands from the repository root. Create `.env` from `.env.example`, set `GQL_HOST` and `NUXT_IMAGE_DOMAINS`, then run:
