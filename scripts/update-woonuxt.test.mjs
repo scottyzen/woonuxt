@@ -15,6 +15,10 @@ const write = (root, path, content) => {
 const read = (root, path) => readFileSync(join(root, path), 'utf8');
 const lines = (n) => Array.from({ length: n }, (_, i) => `line ${i + 1}`).join('\n') + '\n';
 const setVersion = (root, version) => write(root, 'woonuxt_base/package.json', JSON.stringify({ version }));
+const commit = (root, message) => {
+  git(root, 'add', '-A');
+  git(root, 'commit', '-qm', message);
+};
 
 let tmp;
 let upstream;
@@ -25,11 +29,14 @@ const makeFork = () => {
   cpSync(upstream.at402, fork, { recursive: true });
   mkdirSync(join(fork, 'scripts'));
   cpSync(SCRIPT, join(fork, 'scripts/update-woonuxt.mjs'));
+  git(fork, 'init', '-q');
+  git(fork, 'add', '-A');
+  git(fork, 'commit', '-qm', 'fork base');
   return fork;
 };
 
-const update = (fork, ...args) =>
-  spawnSync('node', ['scripts/update-woonuxt.mjs', '--no-install', ...args], {
+const update = (fork) =>
+  spawnSync('node', ['scripts/update-woonuxt.mjs'], {
     cwd: fork,
     encoding: 'utf8',
     env: { ...process.env, WOONUXT_REPO_URL: upstream.dir },
@@ -42,6 +49,7 @@ before(() => {
   git(dir, 'init', '-q');
 
   setVersion(dir, '4.30.2');
+  write(dir, 'package.json', '{"private":true}\n');
   write(dir, 'woonuxt_base/app/a.vue', lines(30));
   write(dir, 'woonuxt_base/app/b.vue', lines(30));
   write(dir, 'woonuxt_base/app/removed.vue', 'gone soon\n');
@@ -91,6 +99,7 @@ describe('update-woonuxt', () => {
   it('merges local edits that do not overlap with upstream', () => {
     const fork = makeFork();
     write(fork, 'woonuxt_base/app/b.vue', lines(30).replace('line 15\n', 'my line 15\n'));
+    commit(fork, 'customise b');
     const result = update(fork);
     assert.equal(result.status, 0, result.stdout + result.stderr);
     const merged = read(fork, 'woonuxt_base/app/b.vue');
@@ -101,34 +110,40 @@ describe('update-woonuxt', () => {
   it('leaves conflict markers and exits non-zero on overlapping edits', () => {
     const fork = makeFork();
     write(fork, 'woonuxt_base/app/a.vue', lines(30).replace('line 1\n', 'my line 1\n'));
+    commit(fork, 'customise a');
     const result = update(fork);
     assert.equal(result.status, 1);
     assert.match(result.stdout, /CONFLICTS/);
     assert.match(read(fork, 'woonuxt_base/app/a.vue'), /<<<<<<< local/);
   });
 
+  it('stops before writing when the working tree has uncommitted changes', () => {
+    const fork = makeFork();
+    write(fork, 'woonuxt_base/app/b.vue', 'uncommitted change\n');
+    const result = update(fork);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /Working tree has uncommitted changes/);
+    assert.equal(JSON.parse(read(fork, 'woonuxt_base/package.json')).version, '4.30.2');
+  });
+
   it('keeps files the fork deleted and customised removals', () => {
     const fork = makeFork();
     rmSync(join(fork, 'woonuxt_base/app/b.vue'));
     write(fork, 'woonuxt_base/app/removed.vue', 'customised\n');
+    commit(fork, 'customise removals');
     const result = update(fork);
     assert.equal(result.status, 0, result.stdout + result.stderr);
     assert.throws(() => read(fork, 'woonuxt_base/app/b.vue'));
     assert.equal(read(fork, 'woonuxt_base/app/removed.vue'), 'customised\n');
   });
 
-  it('writes nothing on --dry-run', () => {
+  it('stops when the current version is not an upstream release tag', () => {
     const fork = makeFork();
-    const result = update(fork, '--dry-run');
-    assert.equal(result.status, 0, result.stdout + result.stderr);
-    assert.equal(JSON.parse(read(fork, 'woonuxt_base/package.json')).version, '4.30.2');
-    assert.throws(() => read(fork, 'woonuxt_base/app/new.vue'));
-  });
-
-  it('reports up to date when already on the target tag', () => {
-    const fork = makeFork();
-    const result = update(fork, '--tag', '4.30.2');
-    assert.equal(result.status, 0);
-    assert.match(result.stdout, /Already up to date/);
+    setVersion(fork, '4.30.1');
+    commit(fork, 'set invalid version');
+    const result = update(fork);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /No WooNuxt release tag matches/);
+    assert.equal(JSON.parse(read(fork, 'woonuxt_base/package.json')).version, '4.30.1');
   });
 });
