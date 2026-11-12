@@ -3,13 +3,13 @@
  * Pulls the latest WooNuxt release into this storefront using a 3-way merge.
  *
  *   base   = upstream tag matching the version in woonuxt_base/package.json
- *   theirs = latest upstream tag (or --tag <tag>)
+ *   theirs = latest upstream tag
  *   ours   = the files in this repository
  *
  * Files you never changed are updated, files you customised are merged, and
  * overlapping edits are left with conflict markers (<<<<<<<) to resolve.
  *
- * Usage: node scripts/update-woonuxt.mjs [--tag 4.30.2] [--dry-run] [--no-install]
+ * Usage: node scripts/update-woonuxt.mjs
  */
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -37,11 +37,6 @@ const SYNC_FILES = [
 // Generated or storefront-specific content that must never be overwritten.
 const IGNORE = [/^woonuxt_base\/app\/gql\/(default|schema)\.ts$/, /^woonuxt_base\/public\//];
 
-const args = process.argv.slice(2);
-const dryRun = args.includes('--dry-run');
-const skipInstall = args.includes('--no-install');
-const tagArg = args.includes('--tag') ? args[args.indexOf('--tag') + 1] : null;
-
 const run = (cmd, cmdArgs, opts = {}) => execFileSync(cmd, cmdArgs, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'], ...opts });
 const parse = (v) =>
   v
@@ -62,8 +57,8 @@ const tags = run('git', ['ls-remote', '--tags', '--refs', REPO_URL])
   .filter((t) => t && /^v?\d+\.\d+\.\d+$/.test(t));
 const findTag = (version) => tags.find((t) => t.replace(/^v/, '') === version.replace(/^v/, ''));
 
-const latestTag = tagArg || [...tags].sort(compare).pop();
-if (!latestTag || !tags.includes(latestTag)) throw new Error(`Upstream tag not found: ${latestTag}`);
+const latestTag = [...tags].sort(compare).pop();
+if (!latestTag) throw new Error('No WooNuxt release tags were found.');
 const baseTag = findTag(currentVersion);
 
 console.log(`Current: ${currentVersion}  Target: ${latestTag}`);
@@ -71,7 +66,11 @@ if (compare(currentVersion, latestTag) === 0) {
   console.log('Already up to date.');
   process.exit(0);
 }
-if (!baseTag) console.warn(`No upstream tag for ${currentVersion}; treating every differing file as a potential conflict.`);
+if (!baseTag) throw new Error(`No WooNuxt release tag matches the current version (${currentVersion}).`);
+
+if (run('git', ['status', '--porcelain'], { cwd: ROOT }).trim()) {
+  throw new Error('Working tree has uncommitted changes. Commit or stash them before updating.');
+}
 
 const tmp = mkdtempSync(join(tmpdir(), 'woonuxt-'));
 try {
@@ -87,7 +86,6 @@ try {
 
   const result = { added: [], updated: [], merged: [], conflicts: [], deleted: [], kept: [] };
   const write = (p, data) => {
-    if (dryRun) return;
     mkdirSync(dirname(join(ROOT, p)), { recursive: true });
     writeFileSync(join(ROOT, p), data);
   };
@@ -103,7 +101,7 @@ try {
       // Removed upstream: delete only if the local copy is untouched.
       if (!local) continue;
       if (base && local.equals(base)) {
-        if (!dryRun) rmSync(join(ROOT, p));
+        rmSync(join(ROOT, p));
         result.deleted.push(p);
       } else result.kept.push(p);
       continue;
@@ -149,7 +147,6 @@ try {
   }
 
   const section = (title, items) => items.length && console.log(`\n${title} (${items.length})\n${items.map((i) => `  ${i}`).join('\n')}`);
-  console.log(dryRun ? '\n[dry run] no files were written' : '');
   section('Added', result.added);
   section('Updated', result.updated);
   section('Merged with local changes', result.merged);
@@ -157,18 +154,14 @@ try {
   section('Deleted upstream', result.deleted);
   section('Kept (locally deleted, or removed upstream but customised)', result.kept);
 
-  if (dryRun) process.exit(0);
-
   if (result.conflicts.length) {
     console.log(
       '\nResolve the conflicts by hand, then run `npm install` and commit.\nRe-running this script will not redo the merge: the version is already updated.',
     );
     process.exit(1);
   }
-  if (!skipInstall) {
-    console.log('\nRunning npm install to refresh package-lock.json...');
-    execFileSync('npm', ['install', '--no-audit', '--no-fund'], { cwd: ROOT, stdio: 'inherit' });
-  }
+  console.log('\nRunning npm install to refresh package-lock.json...');
+  execFileSync('npm', ['install', '--no-audit', '--no-fund'], { cwd: ROOT, stdio: 'inherit' });
   console.log(`\nUpdated to ${latestTag}. Review with \`git diff\`, then commit and push to deploy.`);
 } finally {
   rmSync(tmp, { recursive: true, force: true });

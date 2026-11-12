@@ -55,11 +55,15 @@ npm run dev
 Forks and customized storefronts can pull in the latest WooNuxt release with:
 
 ```bash
-npm run update:woonuxt -- --dry-run   # preview what would change
-npm run update:woonuxt                # update to the latest release
+npm run update:woonuxt
 ```
 
-The script does a 3-way merge between the upstream release matching your current `woonuxt_base/package.json` version, the latest upstream release, and your files. Untouched files are updated, customized files are merged, and overlapping edits are left with `<<<<<<<` conflict markers to resolve. Commit your work first so you can review the result with `git diff`. Options: `--tag <version>` to pin a release, `--no-install` to skip `npm install`.
+Commit or stash any work in progress, then run the command. The script pulls the latest release, uses a 3-way merge to preserve your customizations, and runs `npm install` after a conflict-free update. If it finds an overlap, it leaves `<<<<<<<` markers for you to resolve.
+
+Important:
+
+- Don't hand-edit the `version` in `woonuxt_base/package.json`; the updater uses it to find the merge base tag.
+- After resolving conflicts, run `npm install`, then commit the result.
 
 ## Deployment
 
