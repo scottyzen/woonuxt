@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. I'll try my best to keep it updated.
 
+## v4.31.1 (12-11-2026)
+
+- feature: Forked storefronts can update to the latest WooNuxt release with `npm run update:woonuxt`. The updater preserves committed customizations with a 3-way merge, protects uncommitted work, and refreshes dependencies after a conflict-free update.
+
 ## v4.27.1 (02-09-2026)
 
 - fix: `autocomplete` attributes across `BillingAndShipping`, `AddressForm`, and related billing/shipping fields simplified and corrected for consistency and accessibility
