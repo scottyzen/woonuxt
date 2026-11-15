@@ -16,7 +16,9 @@ const catalogIsrTtl = Number.isFinite(parsedCatalogIsrTtl) && parsedCatalogIsrTt
 const getImageProvider = () => process.env.NUXT_IMAGE_PROVIDER?.trim().toLowerCase() || 'none';
 
 export default defineNuxtConfig({
-  compatibilityDate: '2026-10-07',
+  compatibilityDate: '2026-11-15',
+
+  devServer: { host: 'localhost' },
 
   experimental: {
     appManifest: false,
