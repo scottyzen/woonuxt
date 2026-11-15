@@ -165,36 +165,17 @@ To override base files, add a file with the same public name to your root app. F
 
 ### PWA configuration and extension
 
-WooNuxt includes `@vite-pwa/nuxt` in the base layer by default. You do not need extra setup to get a working baseline PWA.
-
-In other words, you get PWA support out of the box for free, and key defaults are automatically populated from your WordPress settings.
+WooNuxt includes `@vite-pwa/nuxt` in the base layer by default, with a service worker and a basic manifest.
 
 Default behavior:
 
 - PWA module is enabled in `woonuxt_base/nuxt.config.ts`.
-- Base defaults are assembled in `woonuxt_base/modules/woonuxt-bridge.ts`.
+- Manifest and service-worker defaults are configured in `woonuxt_base/nuxt.config.ts`.
 - `<NuxtPwaManifest />` is mounted in `woonuxt_base/app/app.vue`.
+- The service worker precaches `logo.svg` and `apple-touch-icon.png` from the generated public directory, including child-layer overrides.
+- Unmatched precache globs produce warnings rather than build errors because Nuxt payload files are not generated for every deployment preset. Set `workbox.globStrict` to `true` to enforce strict matching.
 
-How PWA values are resolved:
-
-1. **WordPress settings first**
-   - `generalSettings.title` → manifest `name` and app title
-   - `generalSettings.description` → manifest/head description
-   - `woonuxtSettings.primary_color` → manifest/head theme color
-2. **App config fallback**
-   - `siteName`
-   - `shortDescription` (or `description`)
-3. **Final fallback**
-   - Name falls back to `WooNuxt` if no title is available.
-
-You can set app-config fallback values in `woonuxt_base/app/app.config.ts` (or override from your child layer):
-
-```ts
-export default defineAppConfig({
-  siteName: 'My Store',
-  shortDescription: 'Headless WooCommerce storefront',
-});
-```
+The manifest uses generic WooNuxt branding and is no longer populated from WordPress or app config. Existing stores should set their own name, description, colors and icons in their child-layer config. Page title, description and theme-color metadata continue to use WordPress settings.
 
 To extend or override PWA behavior in your child layer, add a `pwa` block in your root `nuxt.config.ts`:
 
@@ -203,33 +184,18 @@ export default defineNuxtConfig({
   extends: ['./woonuxt_base'],
   pwa: {
     manifest: {
+      name: 'My Store',
       short_name: 'MyStore',
-      start_url: '/',
-      display: 'standalone',
-      // Optional custom icon set
-      icons: [
-        { src: '/pwa-192x192.png', sizes: '192x192', type: 'image/png' },
-        { src: '/pwa-512x512.png', sizes: '512x512', type: 'image/png' },
-      ],
-    },
-    workbox: {
-      // Example: add runtime caching for API/media routes
-      runtimeCaching: [
-        {
-          urlPattern: /^https:\/\/secure\.woonuxt\.com\/graphql/,
-          handler: 'NetworkFirst',
-          options: {
-            cacheName: 'graphql-cache',
-            networkTimeoutSeconds: 3,
-          },
-        },
-      ],
+      description: 'My online store',
+      theme_color: '#7f54b2',
     },
   },
 });
 ```
 
-Tip: PWA typically improves repeat-visit performance and resilience, not first-load speed.
+Replace `pwa-192x192.png` and `pwa-512x512.png` in your child layer's `public/` directory with your own icons. Nuxt merges layer configuration arrays, so adding `manifest.icons` can also retain the base icons.
+
+Review any custom caching rules carefully: cart, account, checkout and other personalized data should not be shared through a service-worker cache. PWA support does not make checkout available offline.
 
 ### Progress
 
