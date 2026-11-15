@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. I'll try my best to keep it updated.
 
+## v4.31.1 (15-11-2026)
+
+- change: Replace the custom fork updater with a documented Git upstream workflow. Storefronts now fetch WooNuxt release tags and merge the release they choose.
+
 ## v4.27.1 (02-09-2026)
 
 - fix: `autocomplete` attributes across `BillingAndShipping`, `AddressForm`, and related billing/shipping fields simplified and corrected for consistency and accessibility
