@@ -218,10 +218,9 @@ ${calls}
     nuxt.options.runtimeConfig.public.CURRENCY_SYMBOL = settings.currencySymbol || '';
     nuxt.options.runtimeConfig.public.WOO_NUXT_SEO = settings.wooNuxtSEO || [];
 
-    const resolvedPwaName = String(siteTitle || appConfigSiteName || 'WooNuxt').trim();
-    const resolvedPwaShortName = resolvedPwaName.slice(0, 12);
-    const resolvedPwaDescription = String(siteDescription || appConfigDescription || '').trim();
-    const resolvedPwaThemeColor = String(settings.primary_color || process.env.PRIMARY_COLOR || nuxt.options.runtimeConfig.public.PRIMARY_COLOR || '').trim();
+    const resolvedSiteName = String(siteTitle || appConfigSiteName || 'WooNuxt').trim();
+    const resolvedDescription = String(siteDescription || appConfigDescription || '').trim();
+    const resolvedThemeColor = String(settings.primary_color || process.env.PRIMARY_COLOR || nuxt.options.runtimeConfig.public.PRIMARY_COLOR || '').trim();
 
     const headMeta = Array.isArray(nuxt.options.app.head.meta) ? [...nuxt.options.app.head.meta] : [];
     const upsertMeta = (name: string, content: string) => {
@@ -230,49 +229,10 @@ ${calls}
       else headMeta.push({ name, content });
     };
 
-    nuxt.options.app.head.title = resolvedPwaName;
-    if (resolvedPwaDescription) upsertMeta('description', resolvedPwaDescription);
-    if (resolvedPwaThemeColor) upsertMeta('theme-color', resolvedPwaThemeColor);
+    nuxt.options.app.head.title = resolvedSiteName;
+    if (resolvedDescription) upsertMeta('description', resolvedDescription);
+    if (resolvedThemeColor) upsertMeta('theme-color', resolvedThemeColor);
     nuxt.options.app.head.meta = headMeta;
-
-    if (nuxt.options.pwa !== false) {
-      const currentPwa = nuxt.options.pwa || {};
-      const currentManifest = (currentPwa.manifest || {}) as Record<string, unknown>;
-      const currentDevOptions = (currentPwa.devOptions || {}) as Record<string, unknown>;
-      const currentWorkbox = (currentPwa.workbox || {}) as Record<string, unknown>;
-      const workboxPatterns = Array.isArray(currentWorkbox.globPatterns) ? currentWorkbox.globPatterns : [nuxt.options.dev ? '**/*.map' : '**/*.{js,css,html}'];
-      const currentIcons = Array.isArray(currentManifest.icons) && currentManifest.icons.length > 0 ? currentManifest.icons : undefined;
-      const devPwaEnabled = typeof currentDevOptions.enabled === 'boolean' ? currentDevOptions.enabled : false;
-
-      nuxt.options.pwa = {
-        ...currentPwa,
-        registerType: (currentPwa.registerType as string) || 'autoUpdate',
-        devOptions: {
-          ...currentDevOptions,
-          enabled: devPwaEnabled,
-        },
-        workbox: {
-          ...currentWorkbox,
-          globPatterns: Array.from(new Set([...workboxPatterns, 'logo.svg', 'apple-touch-icon.png'])),
-        },
-        manifest: {
-          ...currentManifest,
-          name: resolvedPwaName,
-          short_name: resolvedPwaShortName,
-          ...(resolvedPwaDescription ? { description: resolvedPwaDescription } : {}),
-          ...(resolvedPwaThemeColor ? { theme_color: resolvedPwaThemeColor } : {}),
-          background_color: (currentManifest.background_color as string) || '#ffffff',
-          display: (currentManifest.display as string) || 'standalone',
-          start_url: (currentManifest.start_url as string) || '/',
-          scope: (currentManifest.scope as string) || '/',
-          icons: currentIcons || [
-            { src: '/pwa-192x192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
-            { src: '/pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
-            { src: '/pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
-          ],
-        },
-      } as typeof nuxt.options.pwa;
-    }
 
     // Site title
     process.env.SITE_TITLE = siteTitle;
