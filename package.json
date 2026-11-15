@@ -22,9 +22,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "update:woonuxt": "node scripts/update-woonuxt.mjs",
-    "test:update": "node --test scripts/update-woonuxt.test.mjs"
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@stripe/stripe-js": "^9.17.0",

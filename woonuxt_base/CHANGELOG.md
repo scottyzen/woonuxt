@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file. I'll try my best to keep it updated.
 
-## v4.31.1 (12-11-2026)
+## v4.31.1 (15-11-2026)
 
-- feature: Forked storefronts can update to the latest WooNuxt release with `npm run update:woonuxt`. The updater preserves committed customizations with a 3-way merge, protects uncommitted work, and refreshes dependencies after a conflict-free update.
+- change: Replace the custom fork updater with a documented Git upstream workflow. Storefronts now fetch WooNuxt release tags and merge the release they choose.
 
 ## v4.27.1 (02-09-2026)
 

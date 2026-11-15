@@ -50,20 +50,29 @@ npm run dev
 
 `woonuxt_base/` is the parent Nuxt layer that provides WooNuxt's storefront; it is not a separately runnable package. Add custom pages, components, and configuration in the root project as a child layer.
 
-## Updating WooNuxt
+## Updating a fork
 
-Forks and customized storefronts can pull in the latest WooNuxt release with:
+Keep store-specific customizations in the root child layer, not in
+`woonuxt_base/`. For example, copy a base component into the equivalent path
+under `app/` before changing it. This keeps your overrides separate from
+WooNuxt updates.
+
+Configure the official WooNuxt repository once in your local fork:
 
 ```bash
-npm run update:woonuxt
+git remote add upstream https://github.com/scottyzen/woonuxt.git
 ```
 
-Commit or stash any work in progress, then run the command. The script pulls the latest release, uses a 3-way merge to preserve your customizations, and runs `npm install` after a conflict-free update. If it finds an overlap, it leaves `<<<<<<<` markers for you to resolve.
+To update to a released WooNuxt version, commit or stash your work, then:
 
-Important:
+```bash
+git fetch upstream --tags
+git merge <release-tag>
+npm install
+git push origin master
+```
 
-- Don't hand-edit the `version` in `woonuxt_base/package.json`; the updater uses it to find the merge base tag.
-- After resolving conflicts, run `npm install`, then commit the result.
+Replace `<release-tag>` with a version from the [WooNuxt releases](https://github.com/scottyzen/woonuxt/releases), such as `4.31.1`. `git fetch` only downloads releases; `git merge` applies the selected release to your fork. If Git reports a conflict, resolve it, run `git add` on the resolved files, and commit before pushing.
 
 ## Deployment
 
