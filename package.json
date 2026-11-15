@@ -47,6 +47,7 @@
     "@nuxtjs/i18n": "^10.6.0",
     "@tailwindcss/typography": "^0.5.20",
     "@vite-pwa/nuxt": "^2.0.1",
+    "esbuild": "^0.28.2",
     "eslint": "^10.15.0",
     "nuxt": "^4.6.4",
     "prettier": "^3.10.1",
