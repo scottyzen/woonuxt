@@ -236,25 +236,24 @@ ${calls}
     nuxt.options.app.head.meta = headMeta;
 
     if (nuxt.options.pwa !== false) {
-      const currentPwa = (nuxt.options.pwa || {}) as Record<string, unknown>;
+      const currentPwa = nuxt.options.pwa || {};
       const currentManifest = (currentPwa.manifest || {}) as Record<string, unknown>;
       const currentDevOptions = (currentPwa.devOptions || {}) as Record<string, unknown>;
       const currentWorkbox = (currentPwa.workbox || {}) as Record<string, unknown>;
-      const defaultWorkbox = nuxt.options.dev && !Array.isArray(currentWorkbox.globPatterns) ? { globPatterns: ['**/*.map'] } : {};
+      const workboxPatterns = Array.isArray(currentWorkbox.globPatterns) ? currentWorkbox.globPatterns : [nuxt.options.dev ? '**/*.map' : '**/*.{js,css,html}'];
       const currentIcons = Array.isArray(currentManifest.icons) && currentManifest.icons.length > 0 ? currentManifest.icons : undefined;
       const devPwaEnabled = typeof currentDevOptions.enabled === 'boolean' ? currentDevOptions.enabled : false;
 
       nuxt.options.pwa = {
         ...currentPwa,
         registerType: (currentPwa.registerType as string) || 'autoUpdate',
-        includeAssets: Array.from(new Set([...(Array.isArray(currentPwa.includeAssets) ? currentPwa.includeAssets : []), 'logo.svg', 'apple-touch-icon.png'])),
         devOptions: {
           ...currentDevOptions,
           enabled: devPwaEnabled,
         },
         workbox: {
-          ...defaultWorkbox,
           ...currentWorkbox,
+          globPatterns: Array.from(new Set([...workboxPatterns, 'logo.svg', 'apple-touch-icon.png'])),
         },
         manifest: {
           ...currentManifest,

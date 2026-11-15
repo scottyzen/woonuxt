@@ -77,6 +77,8 @@ export default defineNuxtConfig({
     registerType: 'autoUpdate',
     workbox: {
       navigateFallback: null,
+      // Nuxt's optional payload files may not exist for every deployment preset.
+      globStrict: false,
     },
   },
 
