@@ -25,7 +25,7 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@stripe/stripe-js": "^9.17.0",
+    "@stripe/stripe-js": "^10.3.0",
     "@tailwindcss/vite": "^4.3.5",
     "@vueuse/core": "^15.0.0",
     "graphql": "^16.14.2",
@@ -46,7 +46,7 @@
     "@nuxt/image": "2.2.1",
     "@nuxtjs/i18n": "^10.6.0",
     "@tailwindcss/typography": "^0.5.20",
-    "@vite-pwa/nuxt": "^1.1.1",
+    "@vite-pwa/nuxt": "^2.0.1",
     "eslint": "^10.15.0",
     "nuxt": "^4.6.4",
     "prettier": "^3.10.1",
