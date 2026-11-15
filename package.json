@@ -35,11 +35,11 @@
     "tailwindcss": "^4.3.5"
   },
   "devDependencies": {
-    "@graphql-codegen/add": "^7.1.1",
-    "@graphql-codegen/cli": "^7.4.6",
-    "@graphql-codegen/typescript": "6.1.2",
-    "@graphql-codegen/typescript-graphql-request": "^7.1.0",
-    "@graphql-codegen/typescript-operations": "6.2.0",
+    "@graphql-codegen/add": "^8.0.0",
+    "@graphql-codegen/cli": "^8.0.0",
+    "@graphql-codegen/typescript": "7.0.1",
+    "@graphql-codegen/typescript-graphql-request": "^8.0.2",
+    "@graphql-codegen/typescript-operations": "7.0.1",
     "@iconify-json/ion": "^1.2.7",
     "@nuxt/eslint": "^1.17.0",
     "@nuxt/icon": "^2.6.2",
