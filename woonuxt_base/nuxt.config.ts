@@ -16,7 +16,9 @@ const catalogIsrTtl = Number.isFinite(parsedCatalogIsrTtl) && parsedCatalogIsrTt
 const getImageProvider = () => process.env.NUXT_IMAGE_PROVIDER?.trim().toLowerCase() || 'none';
 
 export default defineNuxtConfig({
-  compatibilityDate: '2026-10-07',
+  compatibilityDate: '2026-11-15',
+
+  devServer: { host: 'localhost' },
 
   experimental: {
     appManifest: false,
@@ -73,8 +75,25 @@ export default defineNuxtConfig({
 
   pwa: {
     registerType: 'autoUpdate',
+    manifest: {
+      name: 'WooNuxt',
+      short_name: 'WooNuxt',
+      theme_color: '#7f54b2',
+      background_color: '#ffffff',
+      display: 'standalone',
+      start_url: '/',
+      scope: '/',
+      icons: [
+        { src: '/pwa-192x192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+        { src: '/pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+        { src: '/pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+      ],
+    },
     workbox: {
       navigateFallback: null,
+      // Nuxt's optional payload files may not exist for every deployment preset.
+      globStrict: false,
+      globPatterns: ['**/*.{js,css,html}', 'logo.svg', 'apple-touch-icon.png'],
     },
   },
 
