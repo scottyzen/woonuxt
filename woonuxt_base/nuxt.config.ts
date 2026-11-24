@@ -39,7 +39,6 @@ export default defineNuxtConfig({
         'graphql-tag',
         'reka-ui',
         'tailwind-merge',
-        'workbox-window',
       ],
     },
   },
@@ -89,7 +88,7 @@ export default defineNuxtConfig({
         { src: '/pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
       ],
     },
-    workbox: {
+    generateSW: {
       navigateFallback: null,
       // Nuxt's optional payload files may not exist for every deployment preset.
       globStrict: false,
@@ -143,7 +142,7 @@ export default defineNuxtConfig({
       addPage('product-category-page', '/product-category/:categorySlug', 'product-category/[slug].vue');
       addPage('product-category-page-pager', '/product-category/:categorySlug/page/:pageNumber', 'product-category/[slug].vue');
       addPage('order-received', '/checkout/order-received/:orderId', 'order-summary.vue');
-      addPage('order-summary', '/order-summary/:orderId', 'order-summary.vue');
+      addPage('order-summary-detail', '/order-summary/:orderId', 'order-summary.vue');
     },
   },
 
