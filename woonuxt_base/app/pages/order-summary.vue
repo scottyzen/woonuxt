@@ -14,7 +14,7 @@ const delayLength = 2500;
 const isLoaded = ref<boolean>(false);
 const errorMessage = ref('');
 
-const isSummaryPage = computed<boolean>(() => name === 'order-summary');
+const isSummaryPage = computed<boolean>(() => name === 'order-summary' || name === 'order-summary-detail');
 const isCheckoutPage = computed<boolean>(() => name === 'order-received');
 const orderIsNotCompleted = computed<boolean>(() => order.value?.status !== OrderStatusEnum.Completed);
 const hasDiscount = computed<boolean>(() => !!Number.parseFloat(order.value?.rawDiscountTotal || '0'));
