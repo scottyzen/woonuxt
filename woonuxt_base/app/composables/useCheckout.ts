@@ -37,10 +37,10 @@ export function useCheckout() {
   // Helper function to build checkout payload
   const buildCheckoutPayload = (isPaid = false): CheckoutInput => {
     const { username, password, shipToDifferentAddress } = orderInput.value;
-    const shippingSource = customer.value?.shipping ?? customer.value?.billing;
-    const billingSource = shipToDifferentAddress ? customer.value?.billing : shippingSource;
-    const billing = billingSource;
-    const shipping = shipToDifferentAddress ? shippingSource : billingSource;
+    // The billing form edits customer.billing, so the order's billing always comes from it.
+    // customer.shipping is only the shopper's own entry when shipping to a different address.
+    const billing = customer.value?.billing;
+    const shipping = shipToDifferentAddress ? (customer.value?.shipping ?? billing) : billing;
     const paymentMethodId = resolvePaymentMethodId(orderInput.value.paymentMethod);
 
     const payload: CheckoutInput = {
@@ -140,30 +140,30 @@ export function useCheckout() {
     isUpdatingCart.value = true;
 
     try {
+      const locationKeys = ['address1', 'address2', 'city', 'country', 'postcode', 'state'] as const;
+      const isLocationKey = (key: string): boolean => (locationKeys as readonly string[]).includes(key);
+
       const pickLocation = (address: Address | null | undefined): Partial<Address> => {
         if (!address) return {};
         const { address1, address2, city, country, postcode, state } = address;
         return { address1, address2, city, country, postcode, state };
       };
 
-      if (!orderInput.value.shipToDifferentAddress && customer.value?.billing) {
-        if (!customer.value.shipping) {
-          customer.value.shipping = { ...customer.value.billing };
-        } else {
-          Object.assign(customer.value.shipping, { ...customer.value.billing });
-        }
-      }
+      // Only the location goes to WooCommerce here (a half-typed e-mail would fail validation),
+      // so refreshCart() comes back with the session's names, e-mail and phone, which are empty
+      // for a guest. Keep what the shopper typed in those fields and put it back afterwards.
+      const pickContact = (address: Address | null | undefined): Partial<Address> =>
+        Object.fromEntries(Object.entries(address ?? {}).filter(([key]) => !isLocationKey(key))) as Partial<Address>;
 
-      const shippingSource = customer.value?.shipping ?? customer.value?.billing;
-      const billingSource = orderInput.value.shipToDifferentAddress ? customer.value?.billing : shippingSource;
-
-      const shipping = pickLocation(shippingSource);
-      const billing = pickLocation(billingSource);
+      const billingAddress = customer.value?.billing;
+      const shippingAddress = orderInput.value.shipToDifferentAddress ? (customer.value?.shipping ?? billingAddress) : billingAddress;
+      const typedBilling = pickContact(customer.value?.billing);
+      const typedShipping = pickContact(customer.value?.shipping);
 
       const { updateCustomer } = await gql.UpdateCustomer({
         input: {
-          shipping,
-          billing,
+          shipping: pickLocation(shippingAddress),
+          billing: pickLocation(billingAddress),
         } as UpdateCustomerInput,
       });
 
@@ -172,6 +172,9 @@ export function useCheckout() {
       }
 
       await refreshCart();
+
+      if (customer.value?.billing) Object.assign(customer.value.billing, typedBilling);
+      if (customer.value?.shipping) Object.assign(customer.value.shipping, typedShipping);
     } catch (error) {
       console.error('Error updating shipping location:', error);
     } finally {
