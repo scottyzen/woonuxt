@@ -82,7 +82,7 @@ export function useCheckout() {
       };
       const fallbackKey = `woonuxt-order-${orderId}-${Date.now()}-${crypto.randomUUID()}`;
 
-      window.localStorage.setItem(`woonuxt:order-fallback:${fallbackKey}`, JSON.stringify(fallbackOrder));
+      window.sessionStorage.setItem(`woonuxt:order-fallback:${fallbackKey}`, JSON.stringify(fallbackOrder));
       return fallbackKey;
     } catch {
       return '';
